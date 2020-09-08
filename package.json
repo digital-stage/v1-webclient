@@ -1,5 +1,5 @@
 {
-  "name": "server-next",
+  "name": "@digitalstage/react-hooks",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,8 +8,25 @@
     "start": "next start"
   },
   "dependencies": {
+    "baseui": "^9.98.0",
+    "firebase": "^7.19.1",
+    "formik": "^2.1.5",
+    "js-cookie": "^2.2.1",
     "next": "9.5.3",
+    "npm-check-updates": "^8.1.1",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "styletron-engine-atomic": "^1.4.6",
+    "styletron-react": "^5.2.7",
+    "yup": "^0.29.3"
+  },
+  "devDependencies": {
+    "@types/node": "^14.6.4",
+    "@types/socket.io-client": "^1.4.33",
+    "@types/styletron-engine-atomic": "^1.1.0",
+    "@types/styletron-react": "^5.0.2",
+    "@types/styletron-standard": "^2.0.1",
+    "socket.io-client": "^2.3.0",
+    "typescript": "^4.0.2"
   }
 }
