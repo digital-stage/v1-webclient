@@ -4,8 +4,9 @@ import {styletron, debug} from '../styletron'
 import {AuthContextProvider} from "../lib/useAuth";
 import {SocketContextProvider} from "../lib/useSocket";
 import {BaseProvider, DarkTheme} from "baseui";
+import React from "react";
 
-export default class MyApp extends App {
+class MyApp extends App {
     render() {
         const {Component, pageProps} = this.props
         return (
@@ -21,3 +22,5 @@ export default class MyApp extends App {
         )
     }
 }
+
+export default MyApp;

@@ -1,4 +1,3 @@
-import {Device} from "../lib/useStage/model.common";
 import {useDevice} from "../lib/useDevice";
 import React from "react";
 import {useStyletron} from "styletron-react";
@@ -8,6 +7,7 @@ import {Checkbox} from "baseui/checkbox/index";
 import {Check, Delete} from "baseui/icon/index";
 import {Button, KIND} from "baseui/button/index";
 import {ButtonGroup} from "baseui/button-group/index";
+import {Device} from "../lib/useSocket/model.common";
 
 
 const CardTitle = styled("div", {

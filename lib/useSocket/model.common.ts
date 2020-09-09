@@ -8,6 +8,12 @@ export type RouterId = string;
 export type ProducerId = string;
 export type CustomGroupVolumeId = string;
 export type CustomStageMemberVolumeId = string;
+export type MediaDeviceId = string;
+
+export interface MediaDevice {
+    id: MediaDeviceId;
+    label: string;
+}
 
 export interface Device {
     _id: DeviceId;
@@ -21,16 +27,19 @@ export interface Device {
     sendAudio: boolean;
     receiveVideo: boolean;
     receiveAudio: boolean;
-    audioDevices?: {
-        [id: string]: {
-            name: string;
-        }
-    }
-    inputAudioDevice?: string;
-    outputAudioDevice?: string;
+
+    // Producer handling
     videoProducer: ProducerId[];
     audioProducer: ProducerId[];
     ovProducer: ProducerId[];
+
+    // Media device handling
+    inputVideoDevices?: MediaDevice[];
+    inputAudioDevices?: MediaDevice[];
+    outputAudioDevices?: MediaDevice[];
+    inputVideoDevice?: MediaDeviceId;
+    inputAudioDevice?: MediaDeviceId;
+    outputAudioDevice?: MediaDeviceId;
 }
 
 export interface Producer {
