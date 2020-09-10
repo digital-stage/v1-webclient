@@ -4,47 +4,32 @@ import io from "socket.io-client";
 
 const ENDPOINT = "http://127.0.0.1:4000";
 
-export interface SocketProps {
-    socket: SocketIOClient.Socket | undefined;
-}
+const SocketContext = React.createContext<SocketIOClient.Socket>(undefined);
 
-const SocketContext = React.createContext<SocketProps>({
-    socket: undefined
-});
-
-export const useSocket = (): SocketProps => React.useContext<SocketProps>(SocketContext);
+export const useSocket = (): SocketIOClient.Socket => React.useContext<SocketIOClient.Socket>(SocketContext);
 
 export const SocketContextProvider = (props: {
     children: React.ReactNode
 }) => {
     const {token} = useAuth();
-    const [socket, setSocket] = useState<SocketIOClient.Socket>();
+    const [socket, setSocket] = useState<SocketIOClient.Socket>(null);
 
     useEffect(() => {
         if (token) {
-            console.log("on server or client?");
-
-            setSocket(io(ENDPOINT, {
+            console.log("TOKEN");
+            const socketIO: SocketIOClient.Socket = io(ENDPOINT, {
                 transports: ['websocket'],
                 secure: process.env.NODE_ENV !== "development",
                 query: {
-                    token: token,
-                    device: JSON.stringify({
-                        name: "Browser",
-                        canVideo: true,
-                        canAudio: true,
-                        sendAudio: true,
-                        sendVideo: false
-                    })
+                    token: token
                 }
-            }));
+            });
+            setSocket(socketIO);
         }
     }, [token]);
 
     return (
-        <SocketContext.Provider value={{
-            socket: socket
-        }}>
+        <SocketContext.Provider value={socket}>
             {props.children}
         </SocketContext.Provider>
     );

@@ -2,11 +2,11 @@ import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from "baseui/mo
 import {FormControl} from "baseui/form-control/index";
 import {Input} from "baseui/input/index";
 import React from "react";
-import useStage from "../lib/useStage";
 import {KIND} from "baseui/button/index";
 import * as Yup from "yup";
 import {useFormik} from "formik";
-import Client from "../lib/useStage/model.client";
+import Client from "../lib/useSocket/model.client";
+import {useStages} from "../lib/useStages";
 
 const Schema = Yup.object().shape({
     name: Yup.string()
@@ -21,9 +21,9 @@ const Schema = Yup.object().shape({
 export const UpdateStageModal = (props: {
     isOpen?: boolean;
     onClose?: () => any;
-    stage?: Client.StageDescription;
+    stage?: Client.StagePrototype;
 }) => {
-    const {updateStage} = useStage();
+    const {updateStage} = useStages();
     const formik = useFormik({
         validateOnMount: true,
         initialValues: {

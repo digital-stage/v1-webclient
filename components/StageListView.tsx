@@ -1,21 +1,21 @@
 import {useStyletron} from "baseui";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ListItem, ListItemLabel} from "baseui/list/index";
 import {Button} from "baseui/button/index";
 import CreateStageModal from "./CreateStageModal";
-import useStage from "../lib/useStage";
-import Client from "../../server/src/model.client";
 import {HeadingSmall} from "baseui/typography/index";
+import {useStages} from "../lib/useStages";
 
 
 const StageListView = () => {
     const [css] = useStyletron();
-    const {stages, joinStage, deleteStage} = useStage();
+    const {stages, joinStage, removeStage} = useStages();
     const [isCreateStageModalOpen, setCreateStageModalOpen] = useState<boolean>();
-    const [isModifyStageModalOpen, setModifyStageModalOpen] = useState<boolean>();
-    const [selectedStage, setSelectedStage] = useState<Client.StagePrototype>();
 
-    console.log(stages);
+    useEffect(() => {
+        console.log("STAGES IS NOW:");
+        console.log(stages);
+    }, [stages]);
 
     return (
         <>
@@ -36,7 +36,7 @@ const StageListView = () => {
                                     Ändern
                                 </Button>
                                 <Button
-                                    onClick={() => deleteStage(stage._id)}
+                                    onClick={() => removeStage(stage._id)}
                                     size="compact" kind="secondary" shape="pill">
                                     Löschen
                                 </Button>

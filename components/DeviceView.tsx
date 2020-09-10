@@ -1,4 +1,3 @@
-import {useDevice} from "../lib/useDevice";
 import React from "react";
 import {useStyletron} from "styletron-react";
 import {styled} from "baseui";
@@ -8,6 +7,8 @@ import {Check, Delete} from "baseui/icon/index";
 import {Button, KIND} from "baseui/button/index";
 import {ButtonGroup} from "baseui/button-group/index";
 import {Device} from "../lib/useSocket/model.common";
+import SingleSelect from "./atomic/SingleSelect";
+import {useDevices} from "../lib/useDevice";
 
 
 const CardTitle = styled("div", {
@@ -19,10 +20,8 @@ const CardTitle = styled("div", {
 const DeviceView = (props: {
     device: Device
 }) => {
-    const {updateDevice} = useDevice();
+    const {updateDevice} = useDevices();
     const [css] = useStyletron();
-
-    console.log("SENDAUDIO: " + props.device.sendAudio);
 
     return (
         <Card
@@ -88,6 +87,32 @@ const DeviceView = (props: {
                         Receive Audio
                     </Button>
                 </ButtonGroup>
+                <div className={css({
+                    width: '100%',
+                    display: 'flex',
+                })}>
+                    <SingleSelect
+                        options={props.device.inputAudioDevices || []}
+                        id={props.device.inputAudioDevice}
+                        onSelect={(id) => updateDevice(props.device._id, {
+                            inputAudioDevice: id
+                        })}
+                    />
+                    <SingleSelect
+                        options={props.device.outputAudioDevices || []}
+                        id={props.device.outputAudioDevice}
+                        onSelect={(id) => updateDevice(props.device._id, {
+                            outputAudioDevice: id
+                        })}
+                    />
+                    <SingleSelect
+                        options={props.device.inputVideoDevices || []}
+                        id={props.device.inputVideoDevice}
+                        onSelect={(id) => updateDevice(props.device._id, {
+                            inputVideoDevice: id
+                        })}
+                    />
+                </div>
             </StyledAction>
         </Card>
     )

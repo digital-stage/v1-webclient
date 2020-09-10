@@ -1,16 +1,28 @@
-import {useDevice} from "../lib/useDevice";
 import DeviceView from "../components/DeviceView";
 import {HeadingLarge} from "baseui/typography/index";
 import StageListView from "../components/StageListView";
 import React from "react";
-import LocalDeviceSettings from "../components/LocalDeviceSettings";
+import {useAuth} from "../lib/useAuth";
+import LoginForm from "../components/account/LoginForm";
+import {useDevices} from "../lib/useDevice";
 
 const Index = () => {
-    const {localDevice, remoteDevices} = useDevice();
+    const {localDevice, remoteDevices} = useDevices();
+
+    const {loading, user} = useAuth();
+
+    if (loading) {
+        return <div>
+            Loading...
+        </div>
+    }
+
+    if (!user) {
+        return <LoginForm/>
+    }
 
     return (
         <>
-            <LocalDeviceSettings/>
             <>
                 <HeadingLarge>Stages</HeadingLarge>
                 <StageListView/>
