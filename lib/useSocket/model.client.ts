@@ -54,7 +54,6 @@ namespace Client {
     export interface CustomStageMemberVolume {
         _id: CustomStageMemberVolumeId;
         userId: UserId;
-        stageId: StageId;
         stageMemberId: StageMemberId;
         volume: number;
     }

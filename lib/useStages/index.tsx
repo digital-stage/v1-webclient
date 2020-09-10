@@ -43,7 +43,7 @@ export const StagesContextProvider = (props: {
     const [groupPrototypes, setGroupPrototypes] = useState<Client.GroupPrototype[]>([]);
     const [stageMemberPrototypes, setStageMemberPrototypes] = useState<Client.StageMemberPrototype[]>([]);
 
-    const [stages, setStages] = useState<Client.Stage[]>();
+    const [stages, setStages] = useState<Client.Stage[]>([]);
 
     useEffect(() => {
         const stages: Client.Stage[] = stagePrototypes.map(stagePrototype => {
@@ -64,7 +64,7 @@ export const StagesContextProvider = (props: {
             }
         })
         setStages(stages);
-    }, [stages, stagePrototypes, groupPrototypes, stageMemberPrototypes]);
+    }, [stagePrototypes, groupPrototypes, stageMemberPrototypes]);
 
     useEffect(() => {
         if (socket) {
