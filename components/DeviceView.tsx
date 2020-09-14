@@ -8,7 +8,7 @@ import {Button, KIND} from "baseui/button/index";
 import {ButtonGroup} from "baseui/button-group/index";
 import {Device} from "../lib/useSocket/model.common";
 import SingleSelect from "./atomic/SingleSelect";
-import {useDevices} from "../lib/useDevice";
+import {useDevices} from "../lib/useDevices";
 
 
 const CardTitle = styled("div", {

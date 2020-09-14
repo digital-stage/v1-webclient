@@ -3,12 +3,11 @@ import {Input} from "baseui/input";
 import * as Yup from "yup";
 import {Button, KIND} from "baseui/button";
 import {useFormik} from "formik";
-import * as firebase from "firebase/app";
-import 'firebase/auth';
 import Link from "next/link";
 import Router from "next/router";
 import {Notification} from "baseui/notification";
 import {FormControl} from "baseui/form-control";
+import {useAuth} from "../../lib/useAuth";
 
 const Schema = Yup.object().shape({
     email: Yup.string()
@@ -18,12 +17,13 @@ const Schema = Yup.object().shape({
         .required('Wird benötigt')
 });
 
-export default (props: {
+const LoginForm = (props: {
     onCompleted?: () => void,
     targetUrl?: string,
     backLink?: string
 }) => {
     const [error, setError] = useState<string>(null);
+    const {signInWithEmailAndPassword} = useAuth();
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -33,20 +33,16 @@ export default (props: {
         onSubmit: (values: {
             email: string,
             password: string
-        }) => {
-            firebase.auth().signInWithEmailAndPassword(
-                values.email, values.password
-            ).then(
-                () => {
+        }) =>
+            signInWithEmailAndPassword(values.email, values.password)
+                .then(() => {
                     if (props.onCompleted)
                         props.onCompleted();
                     if (props.targetUrl)
-                        Router.push(props.targetUrl);
-                }
-            ).catch(
+                        return Router.push(props.targetUrl);
+                }).catch(
                 (error) => setError(error.message)
-            );
-        },
+            )
     });
 
     return (
@@ -93,3 +89,4 @@ export default (props: {
         </form>
     );
 }
+export default LoginForm;

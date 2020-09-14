@@ -1,57 +1,52 @@
-import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from "baseui/modal/index";
-import {FormControl} from "baseui/form-control/index";
-import {Input} from "baseui/input/index";
-import React from "react";
-import {KIND} from "baseui/button/index";
 import * as Yup from "yup";
 import {useFormik} from "formik";
-import {useStages} from "../lib/useStages";
+import {useStages} from "../../../lib/useStages";
+import Client from "../../../lib/useSocket/model.client";
+import React from "react";
+import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from "baseui/modal/index";
+import {Input} from "baseui/input/index";
+import {FormControl} from "baseui/form-control/index";
+import {KIND} from "baseui/button/index";
 
 const Schema = Yup.object().shape({
     name: Yup.string()
         .min(2, 'Zu kurz')
         .max(100, 'Zu lang')
-        .required('Wird benötigt'),
-    password: Yup.string()
-        .min(5, 'Zu kurz')
-        .max(50, 'Zu lang')
+        .required('Wird benötigt')
 });
 
-const CreateStageModal = (props: {
+const CreateGroupModal = (props: {
+    stage: Client.Stage;
     isOpen?: boolean;
     onClose?: () => any;
+
 }) => {
-    const {createStage} = useStages();
+    const {createGroup} = useStages();
     const formik = useFormik({
         validateOnMount: true,
         initialValues: {
-            name: '',
-            password: '',
-            confirmPassword: ''
+            name: ''
         },
         validationSchema: Schema,
         onSubmit: (values) => {
-            console.log("Submitting");
-            createStage(values.name, values.password);
+            createGroup(props.stage._id, values.name);
             // Close modal
             props.onClose();
-            console.log("Finished submitting");
         },
     });
 
     return (
         <Modal
+            closeable
             isOpen={props.isOpen}
             onClose={props.onClose}
-            closeable={true}
-            unstable_ModalBackdropScroll={true}
         >
             <form onSubmit={formik.handleSubmit}>
-                <ModalHeader>Neue Bühne erstellen</ModalHeader>
+                <ModalHeader>Neue Gruppe erstellen</ModalHeader>
                 <ModalBody>
                     <FormControl
                         label={() => "Name"}
-                        caption={() => "Gib der Bühne einen aussagekräftigen Namen"}
+                        caption={() => "Gib der Gruppe einen aussagekräftigen Namen"}
                         error={formik.errors.name}
                     >
                         <Input
@@ -63,30 +58,17 @@ const CreateStageModal = (props: {
                             onBlur={formik.handleBlur}
                         />
                     </FormControl>
-                    <FormControl
-                        label={() => "Passwort"}
-                        caption={() => "Optional: Verwende ein Zugangspasswort"}
-                        error={formik.errors.password}
-                    >
-                        <Input
-                            type="text"
-                            name="password"
-                            required={false}
-                            value={formik.values.password}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                        />
-                    </FormControl>
                 </ModalBody>
                 <ModalFooter>
                     <ModalButton kind={KIND.tertiary} onClick={props.onClose}>Abbrechen</ModalButton>
                     <ModalButton
                         disabled={!formik.isValid}
                         type="submit"
-                    >Erstellen</ModalButton>
+                    >Gruppe erstellen</ModalButton>
                 </ModalFooter>
             </form>
         </Modal>
     )
 }
-export default CreateStageModal
+
+export default CreateGroupModal;

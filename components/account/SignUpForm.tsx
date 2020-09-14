@@ -2,17 +2,16 @@ import * as Yup from "yup";
 import {useFormik} from "formik";
 import Router from "next/router";
 import {useState} from "react";
-import * as firebase from "firebase/app";
-import "firebase/auth";
 import {FormControl} from "baseui/form-control";
 import {Input} from "baseui/input";
 import {Notification} from "baseui/notification";
 import {Button, KIND} from "baseui/button";
 import Link from "next/link";
 import {Checkbox, LABEL_PLACEMENT} from "baseui/checkbox";
+import {useAuth} from "../../lib/useAuth";
 
 const Schema = Yup.object().shape({
-    displayName: Yup.string()
+    name: Yup.string()
         .min(2, 'Zu kurz')
         .max(50, 'Zu lang'),
     email: Yup.string()
@@ -35,48 +34,36 @@ const Schema = Yup.object().shape({
         ),
 });
 
-export default (props: {
+const SignUpForm = (props: {
     onCompleted?: () => void,
     targetUrl?: string,
     backLink?: string
 }) => {
     const [error, setError] = useState<string>(null);
+    const {createUserWithEmailAndPassword} = useAuth();
 
     const formik = useFormik({
         initialValues: {
-            displayName: '',
+            name: '',
             email: '',
             password: '',
             confirmPassword: '',
             agreeToTerms: false
         },
         validationSchema: Schema,
-        onSubmit: (values) => {
-            firebase.auth()
-                .createUserWithEmailAndPassword(
-                    values.email,
-                    values.password
-                ).then(
-                (user) => {
-                    user.user.updateProfile({
-                        displayName: values.displayName
-                    })
-                        .then(
-                            () => {
-                                if (props.onCompleted)
-                                    props.onCompleted();
-                                if (props.targetUrl)
-                                    Router.push(props.targetUrl);
-                            }
-                        )
-                        .catch(
-                            error => setError(error.message)
-                        );
-                })
-                .catch(
-                    error => setError(error.message)
-                );
-        },
+        onSubmit: (values) =>
+            createUserWithEmailAndPassword(values.email, values.password, {
+                name: values.name
+            })
+                .then(
+                    () => {
+                        if (props.onCompleted)
+                            props.onCompleted();
+                        if (props.targetUrl)
+                            return Router.push(props.targetUrl);
+                    }
+                )
+                .catch(error => setError(error.message))
     });
 
 
@@ -84,12 +71,12 @@ export default (props: {
         <form onSubmit={formik.handleSubmit}>
             <FormControl
                 label="Name"
-                error={formik.errors.displayName}
+                error={formik.errors.name}
             >
                 <Input
                     required
-                    name="displayName"
-                    value={formik.values.displayName}
+                    name="name"
+                    value={formik.values.name}
                     onChange={formik.handleChange}
                 />
             </FormControl>
@@ -154,7 +141,7 @@ export default (props: {
                 </Notification>
             )}
 
-            <Button isLoading={formik.isSubmitting} disabled={!formik.isValid} type="submit">
+            <Button disabled={!formik.isValid} type="submit">
                 Registrieren
             </Button>
             {props.backLink && (
@@ -168,3 +155,4 @@ export default (props: {
         </form>
     )
 };
+export default SignUpForm;

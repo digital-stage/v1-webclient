@@ -1,9 +1,9 @@
 import {
     CustomGroupVolumeId,
     CustomStageMemberVolumeId,
-    GroupId, Producer,
-    StageId,
-    StageMemberId,
+    GroupId, GroupMemberId,
+    Producer,
+    StageId, StageMemberId,
     UserId
 } from "./model.common";
 
@@ -13,6 +13,8 @@ namespace Client {
         name: string;
 
         password: string | null;
+
+        admins: UserId[];
 
         // 3D Room specific
         width: number;
@@ -25,7 +27,7 @@ namespace Client {
     export interface GroupPrototype {
         _id: GroupId;
         name: string;
-        stageId: string;
+        stageId: StageId;
         volume: number;
     }
 
@@ -33,10 +35,8 @@ namespace Client {
         _id: StageMemberId;
         stageId: StageId;
         groupId: GroupId;
-        isDirector: boolean;
         userId: UserId;
-        name?: string;
-        avatarUrl?: string | null;
+        isDirector: boolean;
         volume: number;
         x: number;
         y: number;
@@ -66,7 +66,13 @@ namespace Client {
         members: GroupMember[];
     }
 
-    export interface GroupMember extends StageMemberPrototype {
+    export interface GroupMemberPrototype extends StageMemberPrototype {
+        _id: GroupMemberId;
+        name: string;
+        avatarUrl?: string;
+    }
+
+    export interface GroupMember extends GroupMemberPrototype {
         videoProducers: Producer[];
         audioProducers: Producer[];
         ovProducers: Producer[];

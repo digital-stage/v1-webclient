@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {useAuth} from "../useAuth";
 import io from "socket.io-client";
+import {useAuth} from "../useAuth";
 
 const ENDPOINT = "http://127.0.0.1:4000";
 

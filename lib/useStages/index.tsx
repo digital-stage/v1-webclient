@@ -1,12 +1,13 @@
-import {useSocket} from "../useSocket";
 import React, {useCallback, useEffect, useState} from "react";
 import Client from "../useSocket/model.client";
 import {GroupId, StageId, StageMemberId} from "../useSocket/model.common";
+import {useDevices} from "../useDevices";
+import {ClientStageEvents, ServerStageEvents} from "../useSocket/events";
 
 export interface StagesProps {
     stages: Client.Stage[];
 
-    createStage(name: string, password: string | null);
+    createStage(name: string, password: string | null, width?: number, length?: number, height?: number, reflection?: number, absorption?: number);
 
     updateStage(id: StageId, stage: Partial<Client.StagePrototype>);
 
@@ -37,11 +38,11 @@ let isSocketInitialized = false;
 export const StagesContextProvider = (props: {
     children: React.ReactNode
 }) => {
-    const socket = useSocket();
+    const {socket} = useDevices();
 
     const [stagePrototypes, setStagePrototypes] = useState<Client.StagePrototype[]>([]);
     const [groupPrototypes, setGroupPrototypes] = useState<Client.GroupPrototype[]>([]);
-    const [stageMemberPrototypes, setStageMemberPrototypes] = useState<Client.StageMemberPrototype[]>([]);
+    const [groupMemberPrototypes, setGroupMemberPrototypes] = useState<Client.GroupMemberPrototype[]>([]);
 
     const [stages, setStages] = useState<Client.Stage[]>([]);
 
@@ -52,9 +53,9 @@ export const StagesContextProvider = (props: {
                 groups: groupPrototypes.filter(groupPrototype => groupPrototype.stageId === stagePrototype._id)
                     .map(groupPrototype => ({
                         ...groupPrototype,
-                        members: stageMemberPrototypes.filter(stageMemberPrototype => stageMemberPrototype.groupId === groupPrototype._id)
-                            .map(stageMemberPrototype => ({
-                                ...stageMemberPrototype,
+                        members: groupMemberPrototypes.filter(groupMemberPrototype => groupMemberPrototype.groupId === groupPrototype._id)
+                            .map(groupMemberPrototype => ({
+                                ...groupMemberPrototype,
                                 // Use empty producers for non-active stages
                                 videoProducers: [],
                                 audioProducers: [],
@@ -64,74 +65,91 @@ export const StagesContextProvider = (props: {
             }
         })
         setStages(stages);
-    }, [stagePrototypes, groupPrototypes, stageMemberPrototypes]);
+    }, [stagePrototypes, groupPrototypes, groupMemberPrototypes]);
 
     useEffect(() => {
         if (socket) {
             console.log("useStages: socket changed");
             console.log("Register stage changes");
-            socket.on("stage-added", (stage: Client.StagePrototype) => {
+            socket.on(ServerStageEvents.STAGE_ADDED, (stage: Client.StagePrototype) => {
                 console.log("stage-added");
                 console.log(stage);
                 setStagePrototypes(prevState => [...prevState, stage]);
             });
-            socket.on("stage-changed", (stage: Client.StagePrototype) => {
+            socket.on(ServerStageEvents.STAGE_CHANGED, (payload: { id: StageId, stage: Client.StagePrototype }) => {
                 console.log("stage-changed");
-                console.log(stage);
-                setStagePrototypes(prevState => prevState.map(s => s._id === stage._id ? {...s, ...stage} : s));
+                console.log(payload);
+                setStagePrototypes(prevState => prevState.map(s => {
+                    if (s._id === payload.id) {
+                        console.log("Found stage");
+                        return {...s, ...payload.stage};
+                    }
+                    return s;
+                }))
             });
-            socket.on("stage-removed", (stageId: string) => {
+            socket.on(ServerStageEvents.STAGE_REMOVED, (stageId: string) => {
                 console.log("stage-removed");
                 console.log(stageId);
                 setStagePrototypes(prevState => prevState.filter(stage => stage._id !== stageId));
             });
-            socket.on("group-added", (group: Client.GroupPrototype) => {
+            socket.on(ServerStageEvents.GROUP_ADDED, (group: Client.GroupPrototype) => {
                 console.log("group-added");
                 console.log(group);
                 setGroupPrototypes(prevState => [...prevState, group])
             });
-            socket.on("group-changed", (group: Client.StageMemberPrototype) => {
+            socket.on(ServerStageEvents.GROUP_CHANGED, (payload: { id: GroupId, group: Client.StageMemberPrototype }) => {
                 console.log("group-changed");
-                console.log(group);
-                setGroupPrototypes(prevState => prevState.map(s => s._id === group._id ? {...s, ...group} : s));
+                console.log(payload);
+                setGroupPrototypes(prevState => prevState.map(s => s._id === payload.id ? {...s, ...payload.group} : s));
             });
-            socket.on("group-removed", (groupId: string) => {
+            socket.on(ServerStageEvents.GROUP_REMOVED, (groupId: string) => {
                 console.log("group-removed");
                 console.log(groupId);
                 setGroupPrototypes(prevState => prevState.filter(group => group._id !== groupId));
             });
-            socket.on("stage-member-added", (stageMember: Client.StageMemberPrototype) => {
+            socket.on(ServerStageEvents.GROUP_MEMBER_ADDED, (stageMember: Client.GroupMemberPrototype) => {
                 console.log("stage-member-added");
                 console.log(stageMember);
-                setStageMemberPrototypes(prevState => [...prevState, stageMember])
+                setGroupMemberPrototypes(prevState => [...prevState, stageMember])
             });
-            socket.on("stage-member-changed", (stageMember: Client.StageMemberPrototype) => {
+            socket.on(ServerStageEvents.GROUP_MEMBER_CHANGED, (payload: { id: StageMemberId, stageMember: Client.GroupMemberPrototype }) => {
                 console.log("stage-member-changed");
-                console.log(stageMember);
-                setStageMemberPrototypes(prevState => prevState.map(s => s._id === stageMember._id ? {...s, ...stageMember} : s));
+                console.log(payload);
+                setGroupMemberPrototypes(prevState => prevState.map(s => s._id === payload.id ? {...s, ...payload.stageMember} : s));
             });
-            socket.on("stage-member-removed", (stageMemberId: string) => {
+            socket.on(ServerStageEvents.GROUP_MEMBER_REMOVED, (stageMemberId: string) => {
                 console.log("stage-member-removed");
                 console.log(stageMemberId);
-                setStageMemberPrototypes(prevState => prevState.filter(stageMember => stageMember._id !== stageMemberId));
+                setGroupMemberPrototypes(prevState => prevState.filter(stageMember => stageMember._id !== stageMemberId));
+            });
+            socket.on("disconnect", () => {
+                setStages([]);
+                setStagePrototypes([]);
+                setGroupPrototypes([]);
+                setGroupMemberPrototypes([]);
             });
             isSocketInitialized = true;
         }
     }, [socket]);
 
 
-    const createStage = useCallback((name: string, password: string) => {
+    const createStage = useCallback((name: string, password: string, width?: number, length?: number, height?: number, reflection?: number, absorption?: number) => {
         if (socket) {
-            socket.emit("add-stage", {
+            socket.emit(ClientStageEvents.ADD_STAGE, {
                 name: name,
-                password: password
+                password: password,
+                width: width || 25,
+                length: length || 13,
+                height: height || 7.5,
+                reflection: reflection || 0.7,
+                absorption: absorption || 0.6,
             });
         }
     }, [socket]);
 
     const updateStage = useCallback((id: StageId, stage: Partial<Client.StagePrototype>) => {
         if (socket) {
-            socket.emit("update-stage", {
+            socket.emit(ClientStageEvents.CHANGE_STAGE, {
                 id: id,
                 stage: stage
             });
@@ -146,25 +164,25 @@ export const StagesContextProvider = (props: {
                 password: password || undefined
             }
             console.log(payload);
-            socket.emit("join-stage", payload);
+            socket.emit(ClientStageEvents.JOIN_STAGE, payload);
         }
     }, [socket]);
 
     const leaveStage = useCallback(() => {
         if (socket) {
-            socket.emit("leave-stage");
+            socket.emit(ClientStageEvents.LEAVE_STAGE);
         }
     }, [socket]);
 
     const removeStage = useCallback((id: StageId) => {
         if (socket) {
-            socket.emit("remove-stage", id);
+            socket.emit(ClientStageEvents.REMOVE_STAGE, id);
         }
     }, [socket]);
 
     const createGroup = useCallback((stageId: StageId, name: string) => {
         if (socket) {
-            socket.emit("add-group", {
+            socket.emit(ClientStageEvents.ADD_GROUP, {
                 stageId: stageId,
                 name: name
             });
@@ -173,22 +191,22 @@ export const StagesContextProvider = (props: {
 
     const updateGroup = useCallback((id: GroupId, group: Partial<Client.GroupPrototype>) => {
         if (socket) {
-            socket.emit("update-stage", {
+            socket.emit(ClientStageEvents.CHANGE_GROUP, {
                 id: id,
-                stage: group
+                group: group
             });
         }
     }, [socket]);
 
     const removeGroup = useCallback((id: GroupId) => {
         if (socket) {
-            socket.emit("remove-group", id);
+            socket.emit(ClientStageEvents.REMOVE_GROUP, id);
         }
     }, [socket]);
 
     const updateStageMember = useCallback((id: StageMemberId, stageMember: Partial<Client.StageMemberPrototype>) => {
         if (socket) {
-            socket.emit("update-stage-member", {
+            socket.emit(ClientStageEvents.CHANGE_GROUP_MEMBER, {
                 id: id,
                 stageMember: stageMember
             });

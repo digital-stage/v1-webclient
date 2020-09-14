@@ -1,64 +1,134 @@
-import React, {useEffect, useState} from "react";
-import firebase from "firebase/app";
-import "firebase/auth";
+import React, {useCallback, useEffect, useState} from "react";
 import cookie from 'js-cookie';
-import {FIREBASE_CONFIG} from "../env";
 
-if (!firebase.apps.length) {
-    firebase.initializeApp(FIREBASE_CONFIG);
+const URL: string = "http://localhost:5000";
+
+export interface AuthUser {
+    _id: string;
+    name: string;
+    email: string;
+    password: string;
 }
 
 export interface AuthProps {
-    user: firebase.User | null;
+    user: AuthUser;
     loading: boolean;
     token: string | null;
+
+    createUserWithEmailAndPassword(email: string, password: string, optional?: {
+        name: string;
+        avatarUrl?: string;
+    });
+
+    signInWithEmailAndPassword(email: string, password: string);
+
+    logout();
 }
 
 const AuthContext = React.createContext<AuthProps>({
     user: null,
     loading: true,
-    token: null
+    token: null,
+    createUserWithEmailAndPassword: () => {
+    },
+    signInWithEmailAndPassword: () => {
+    },
+    logout: () => {
+    }
 });
 
 export const useAuth = (): AuthProps => React.useContext<AuthProps>(AuthContext);
 
+const getUserByToken = (token: string): Promise<AuthUser> => fetch(URL + "/profile", {
+    headers: {
+        'Content-Type': 'application/json',
+        Authorization: "Bearer " + token
+    }
+}).then(result => result.json()).then(json => json as AuthUser);
+
 export const AuthContextProvider = (props: {
     children: React.ReactNode
 }) => {
-    const [user, setUser] = useState<firebase.User | null>(firebase.auth().currentUser);
-    const [loading, setLoading] = useState<boolean>(!user);
-    const [token, setToken] = useState<string | null>(null);
+    const [isCookieRead, setCookieRead] = useState<boolean>(false);
+    const [token, setToken] = useState<string>();
+    const [user, setUser] = useState<AuthUser>();
+    const [loading, setLoading] = useState<boolean>(true);
 
-    const handleChange = (user: firebase.User | null) => {
-        setUser(user);
-        setLoading(false);
-        if (user) {
-            user.getIdToken().then(
-                (token: string) => {
-                    cookie.set('token', token, {expires: 1});
-                }
-            );
-        } else {
-            cookie.remove('token');
-        }
-    };
+    const createUserWithEmailAndPassword = useCallback((email: string, password: string, additional?: {
+        name: string;
+        avatarUrl?: string;
+    }) => {
+        setLoading(true);
+        return fetch(URL + "/signup", {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                email: email,
+                password: password,
+                name: additional ? additional.name : "",
+                avatarUrl: additional ? additional.avatarUrl : "",
+            })
+        })
+            .then(result => result.json())
+            .then(result => {
+                console.log(result);
+                return result;
+            })
+            .then(result => setToken(result))
+            .then(() => setLoading(false));
+    }, []);
 
-    useEffect(() => {
-        const unsubscribe: firebase.Unsubscribe = firebase.auth().onAuthStateChanged(handleChange);
-        return () => unsubscribe();
+    const signInWithEmailAndPassword = useCallback((email: string, password: string) => {
+        setLoading(true);
+        return fetch(URL + "/login", {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        })
+            .then(result => result.json())
+            .then(result => setToken(result))
+            .then(() => setLoading(false));
+    }, []);
+
+    const logout = useCallback(() => {
+        cookie.remove('token');
+        setToken(undefined);
+        setUser(undefined);
     }, []);
 
     useEffect(() => {
-        if (user) {
-            user.getIdToken()
-                .then(token => setToken(token));
-        } else {
-            setToken(null);
+        if (token) {
+            cookie.set('token', token, {expires: 1});
+            getUserByToken(token).then(user => {
+                setUser(user);
+                setLoading(false);
+            });
+        } else if (isCookieRead) {
+            setUser(undefined);
+            cookie.remove('token');
         }
-    }, [user]);
+    }, [token, isCookieRead]);
+
+    useEffect(() => {
+        const token = cookie.get('token');
+        if (token) {
+            setToken(token);
+        }
+        setCookieRead(true);
+    }, []);
 
     return (
         <AuthContext.Provider value={{
+            createUserWithEmailAndPassword: createUserWithEmailAndPassword,
+            signInWithEmailAndPassword: signInWithEmailAndPassword,
+            logout: logout,
             user: user,
             loading: loading,
             token: token
