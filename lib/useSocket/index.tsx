@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
 import io from "socket.io-client";
 import {useAuth} from "../useAuth";
-
-const ENDPOINT = "http://127.0.0.1:4000";
+import {API_URL} from "../../env";
 
 const SocketContext = React.createContext<SocketIOClient.Socket>(undefined);
 
@@ -17,7 +16,7 @@ export const SocketContextProvider = (props: {
     useEffect(() => {
         if (token) {
             console.log("TOKEN");
-            const socketIO: SocketIOClient.Socket = io(ENDPOINT, {
+            const socketIO: SocketIOClient.Socket = io(API_URL, {
                 transports: ['websocket'],
                 secure: process.env.NODE_ENV !== "development",
                 query: {

@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import cookie from 'js-cookie';
-
-const URL: string = "http://localhost:5000";
+import {AUTH_URL} from "../env";
 
 export interface AuthUser {
     _id: string;
@@ -39,7 +38,7 @@ const AuthContext = React.createContext<AuthProps>({
 
 export const useAuth = (): AuthProps => React.useContext<AuthProps>(AuthContext);
 
-const getUserByToken = (token: string): Promise<AuthUser> => fetch(URL + "/profile", {
+const getUserByToken = (token: string): Promise<AuthUser> => fetch(AUTH_URL + "/profile", {
     headers: {
         'Content-Type': 'application/json',
         Authorization: "Bearer " + token
@@ -59,7 +58,7 @@ export const AuthContextProvider = (props: {
         avatarUrl?: string;
     }) => {
         setLoading(true);
-        return fetch(URL + "/signup", {
+        return fetch(AUTH_URL + "/signup", {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -82,7 +81,7 @@ export const AuthContextProvider = (props: {
 
     const signInWithEmailAndPassword = useCallback((email: string, password: string) => {
         setLoading(true);
-        return fetch(URL + "/login", {
+        return fetch(AUTH_URL + "/login", {
             headers: {
                 'Content-Type': 'application/json'
             },

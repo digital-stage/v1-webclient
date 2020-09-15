@@ -5,6 +5,7 @@ import {enumerateDevices} from "./util";
 import * as Bowser from "bowser";
 import {ClientDeviceEvents, ServerDeviceEvents} from "../useSocket/events";
 import {useAuth} from "../useAuth";
+import {API_URL} from "../../env";
 
 export interface DeviceProps {
     socket: SocketIOClient.Socket;
@@ -21,8 +22,6 @@ export const useDevices = (): DeviceProps => React.useContext<DeviceProps>(Devic
 
 
 let isSocketInitialized = false;
-
-const ENDPOINT = "http://127.0.0.1:4000";
 
 export const DeviceContextProvider = (props: {
     children: React.ReactNode
@@ -42,7 +41,7 @@ export const DeviceContextProvider = (props: {
             const browser = bowser.getBrowserName();
             enumerateDevices()
                 .then(devices => {
-                    const socketIO: SocketIOClient.Socket = io(ENDPOINT, {
+                    const socketIO: SocketIOClient.Socket = io(API_URL, {
                         transports: ['websocket'],
                         secure: process.env.NODE_ENV !== "development",
                         query: {
