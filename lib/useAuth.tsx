@@ -119,8 +119,10 @@ export const AuthContextProvider = (props: {
         const token = cookie.get('token');
         if (token) {
             setToken(token);
+        } else {
+            setCookieRead(true);
+            setLoading(false);
         }
-        setCookieRead(true);
     }, []);
 
     return (

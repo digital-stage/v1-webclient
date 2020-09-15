@@ -16,16 +16,22 @@ export const SocketContextProvider = (props: {
     useEffect(() => {
         if (token) {
             console.log("TOKEN");
-            const socketIO: SocketIOClient.Socket = io(API_URL, {
-                transports: ['websocket'],
-                secure: process.env.NODE_ENV !== "development",
-                query: {
-                    token: token
-                }
-            });
-            setSocket(socketIO);
+            if (!socket) {
+                const socketIO: SocketIOClient.Socket = io(API_URL, {
+                    transports: ['websocket'],
+                    secure: process.env.NODE_ENV !== "development",
+                    query: {
+                        token: token
+                    },
+                    reconnection: false
+                });
+                socketIO.on("disconnect", () => {
+                    setSocket(undefined);
+                });
+                setSocket(socketIO);
+            }
         }
-    }, [token]);
+    }, [token, socket]);
 
     return (
         <SocketContext.Provider value={socket}>
