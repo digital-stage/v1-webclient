@@ -10,6 +10,7 @@ const StageJoiner = () => {
     const {ready} = useDevices();
     const {stageId, groupId, password, setRequest} = useRequest();
     const {joinStage} = useStages();
+    const [retries, setRetries] = useState<number>(0);
     const [wrongPassword, setWrongPassword] = useState<boolean>();
     const [notFound, setNotFound] = useState<boolean>();
     const passwordRef = useRef<HTMLInputElement>();
@@ -26,11 +27,13 @@ const StageJoiner = () => {
             });
     }, [stageId, groupId, password]);
 
+
     useEffect(() => {
         if (ready) {
             if (stageId && groupId) {
                 setNotFound(false);
                 setWrongPassword(false);
+                console.log("Connecting");
                 retryJoiningStage();
             }
         }
@@ -45,15 +48,15 @@ const StageJoiner = () => {
                 </ModalFooter>
             </Modal>
             <Modal isOpen={wrongPassword} onClose={() => setWrongPassword(false)}>
-                <ModalHeader>Falsches Passwort</ModalHeader>
+                <ModalHeader>{retries === 0 ? "Passwort notwendig" : "Falsches Passwort"}</ModalHeader>
                 <ModalBody>
                     <Input inputRef={passwordRef} type="password"/>
-
                 </ModalBody>
                 <ModalFooter>
-                    <ModalButton>Abbrechen</ModalButton>
+                    <ModalButton onClick={() => setWrongPassword(false)}>Abbrechen</ModalButton>
                     <ModalButton isSelected={true} onClick={() => {
                         const password = passwordRef.current.value;
+                        setRetries(prevState => ++prevState);
                         setRequest(stageId, groupId, password);
                     }}>Erneut versuchen</ModalButton>
                 </ModalFooter>

@@ -12,6 +12,7 @@ import ModifyGroupModal from "./ModifyGroupModal";
 import ModifyStageModal from "./ModifyStageModal";
 import {Tag} from "baseui/tag";
 import InviteModal from "./InviteModal";
+import {useRequest} from "../../../lib/useRequest";
 
 const Label = styled("div", {})
 const GlobalActions = styled("div", {
@@ -71,7 +72,8 @@ const GroupAdminActions = styled("div", {
 })
 
 const StageListView = () => {
-    const {stageId, stages, removeStage, removeGroup, joinStage, leaveStage} = useStages();
+    const {stageId, stages, removeStage, removeGroup, leaveStage} = useStages();
+    const {setRequest} = useRequest();
     const [currentStage, setCurrentStage] = useState<Stage>();
     const [currentGroup, setCurrentGroup] = useState<Group>();
     const [isCreateGroupOpen, setCreateGroupIsOpen] = useState<boolean>(false);
@@ -82,6 +84,12 @@ const StageListView = () => {
 
     return (
         <>
+            <GlobalActions>
+                <Button size="compact" shape="pill" startEnhancer={<Plus/>}
+                        onClick={() => setCreateStageIsOpen(prevState => !prevState)}>
+                    Neue Bühne hinzufügen
+                </Button>
+            </GlobalActions>
             <Accordion>
                 {stages.map(stage => (
                     <Panel title={(
@@ -141,16 +149,17 @@ const StageListView = () => {
                                     <Tag
                                         size="large"
                                         closeable={false}
-                                        kind={stage._id === stageId ? "orange" : "positive"}
+                                        kind={stageId && stage._id === stageId.stageId && group._id === stageId.groupId ? "orange" : "positive"}
                                         onClick={() => {
-                                            if (stage._id === stageId) {
+                                            if (stageId && stage._id === stageId.stageId && group._id === stageId.groupId) {
                                                 leaveStage();
                                             } else {
-                                                joinStage(stage._id, group._id, stage.password);
+                                                console.log("Request");
+                                                setRequest(stage._id, group._id, stage.password);
                                             }
                                         }}
                                     >
-                                        {stage._id === stageId ? "Verlassen" : "Beitreten"}
+                                        {stageId && stage._id === stageId.stageId && group._id === stageId.groupId ? "Verlassen" : "Beitreten"}
                                     </Tag>
                                     <Tag
                                         size="large"
@@ -169,7 +178,7 @@ const StageListView = () => {
                         {stage.isAdmin && (
                             <StageBottomActions>
                                 <Button
-                                    size="mini"
+                                    size="mini" shape="pill"
                                     startEnhancer={<Plus/>}
                                     onClick={() => {
                                         setCurrentStage(stage);
@@ -182,13 +191,6 @@ const StageListView = () => {
                     </Panel>
                 ))}
             </Accordion>
-            <GlobalActions>
-                <ButtonGroup kind="primary" size="compact">
-                    <Button startEnhancer={<Plus/>} onClick={() => setCreateStageIsOpen(prevState => !prevState)}>
-                        Neue Bühne hinzufügen
-                    </Button>
-                </ButtonGroup>
-            </GlobalActions>
             <CreateStageModal isOpen={isCreateStageOpen}
                               onClose={() => setCreateStageIsOpen(false)}/>
             <CreateGroupModal stage={currentStage} isOpen={isCreateGroupOpen}

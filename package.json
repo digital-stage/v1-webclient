@@ -20,7 +20,7 @@
     "yup": "^0.29.3"
   },
   "devDependencies": {
-    "@types/node": "^14.10.1",
+    "@types/node": "^14.10.2",
     "@types/react-copy-to-clipboard": "^4.3.0",
     "@types/socket.io-client": "^1.4.33",
     "@types/styletron-engine-atomic": "^1.1.0",

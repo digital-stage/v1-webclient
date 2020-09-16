@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import React, {useEffect} from "react";
 import LoginForm from "../components/account/LoginForm";
 import {useAuth} from "../lib/digitalstage/useAuth";
 import {useRouter} from "next/router";
@@ -8,7 +8,12 @@ const Login = () => {
     const {user} = useAuth();
     const router = useRouter();
 
-    if( user ) {
+    useEffect(() => {
+        // Prefetch the dashboard page
+        router.prefetch('/')
+    }, []);
+
+    if (user) {
         router.push("/");
     }
 

@@ -4,13 +4,14 @@ import {CustomGroupVolumeId, CustomStageMemberVolumeId, GroupId, StageId, StageM
 import {useDevices} from "../useDevices";
 import {ClientStageEvents, ServerStageEvents} from "../common/events";
 import useMediasoup from "../useMediasoup";
+import {useRequest} from "../../useRequest";
 
 export interface StagesProps {
     stages: Stage[];
 
     stage: Stage;
 
-    stageId: StageId;
+    stageId?: { stageId: StageId, groupId: GroupId };
 
     createStage(name: string, password: string | null, width?: number, length?: number, height?: number, reflection?: number, absorption?: number);
 
@@ -49,7 +50,8 @@ export const StagesContextProvider = (props: {
     children: React.ReactNode
 }) => {
     const {socket, user} = useDevices();
-    const [stageId, setStageId] = useState<StageId>();
+    const [stageId, setStageId] = useState<{ stageId: StageId, groupId: GroupId }>();
+    const {setRequest} = useRequest();
 
     // Prototypes
     const [stagePrototypes, setStagePrototypes] = useState<Server.StagePrototype[]>([]);
@@ -97,7 +99,7 @@ export const StagesContextProvider = (props: {
     // Assign active stage
     useEffect(() => {
         if (stageId) {
-            setStage(stages.find(stage => stage._id === stageId));
+            setStage(stages.find(stage => stage._id === stageId.stageId));
         } else {
             setStage(undefined);
         }
@@ -191,7 +193,7 @@ export const StagesContextProvider = (props: {
             // We don't need to filter by stage, since volumes are send for active stages only
             setCustomStageMemberVolumes(prevState => prevState.filter(customStageMemberVolume => customStageMemberVolume._id !== id));
         });
-        socket.on(ServerStageEvents.STAGE_JOINED, (stageId: StageId) => setStageId(stageId));
+        socket.on(ServerStageEvents.STAGE_JOINED, (payload: { stageId: StageId, groupId: GroupId }) => setStageId(payload));
         socket.on(ServerStageEvents.STAGE_LEFT, () => setStageId(undefined));
         socket.on("disconnect", () => {
             setStages([]);
@@ -242,10 +244,11 @@ export const StagesContextProvider = (props: {
             console.log(payload);
             return new Promise<void>((resolve, reject) => {
                 socket.emit(ClientStageEvents.JOIN_STAGE, payload, (error) => {
+                    console.log(error);
                     if (!error)
                         resolve();
-                    console.error(error);
-                    reject(error);
+                    else
+                        reject(error);
                 });
             })
         }
@@ -255,6 +258,7 @@ export const StagesContextProvider = (props: {
         if (socket) {
             socket.emit(ClientStageEvents.LEAVE_STAGE);
         }
+        setRequest(undefined, undefined, null);
     }, [socket]);
 
     const removeStage = useCallback((id: StageId) => {

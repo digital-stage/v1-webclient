@@ -23,7 +23,6 @@ const TextArea = styled("textarea", {
 const Index = () => {
     const {localDevice, remoteDevices, logs} = useDevices();
     const {stage, leaveStage} = useStages();
-    const {stageId, groupId} = useRequest();
 
     const {loading, user} = useAuth();
 
@@ -39,9 +38,7 @@ const Index = () => {
 
     return (
         <Container>
-            {stageId && groupId && (
-                <StageJoiner/>
-            )}
+            <StageJoiner/>
             {DEBUG && <TextArea rows={10} cols={50} value={logs}/>}
             <>
                 <HeadingLarge>Meine Bühnen</HeadingLarge>
