@@ -5,7 +5,7 @@ import React from "react";
 import {KIND} from "baseui/button/index";
 import * as Yup from "yup";
 import {useFormik} from "formik";
-import {useStages} from "../../../lib/useStages";
+import {useStages} from "../../../lib/digitalstage/useStages";
 import {Accordion, Panel} from "baseui/accordion/index";
 
 const Schema = Yup.object().shape({

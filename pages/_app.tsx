@@ -1,12 +1,12 @@
 import App from 'next/app'
 import {Provider as StyletronProvider} from 'styletron-react'
 import {styletron, debug} from '../styletron'
-import {AuthContextProvider} from "../lib/useAuth";
+import {AuthContextProvider} from "../lib/digitalstage/useAuth";
 import {BaseProvider, DarkTheme} from "baseui";
 import React from "react";
-import {DeviceContextProvider} from "../lib/useDevices";
+import {DeviceContextProvider} from "../lib/digitalstage/useDevices";
 import {StageContextProvider} from "../lib/useStage";
-import {StagesContextProvider} from "../lib/useStages";
+import {StagesContextProvider} from "../lib/digitalstage/useStages";
 
 class MyApp extends App {
     render() {
@@ -16,11 +16,9 @@ class MyApp extends App {
                 <BaseProvider theme={DarkTheme}>
                     <AuthContextProvider>
                         <DeviceContextProvider>
-                            <StageContextProvider>
-                                <StagesContextProvider>
-                                    <Component {...pageProps} />
-                                </StagesContextProvider>
-                            </StageContextProvider>
+                            <StagesContextProvider>
+                                <Component {...pageProps} />
+                            </StagesContextProvider>
                         </DeviceContextProvider>
                     </AuthContextProvider>
                 </BaseProvider>

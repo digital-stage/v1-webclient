@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import SingleSelect from "./atomic/SingleSelect";
-import {MediaDevice, MediaDeviceId} from "../lib/useSocket/model.common";
+import {MediaDevice, MediaDeviceId} from "../lib/digitalstage/common/model.common";
 
 const LocalDeviceSettings = () => {
     const [videoDevices, setVideoDevices] = useState<MediaDevice[]>([]);

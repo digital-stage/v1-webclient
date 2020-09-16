@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import cookie from 'js-cookie';
-import {AUTH_URL} from "../env";
+import {AUTH_URL} from "../../../env";
 
 export interface AuthUser {
     _id: string;
@@ -92,7 +92,7 @@ export const AuthContextProvider = (props: {
             })
         })
             .then(result => result.json())
-            .then(result => setToken(result))
+            .then(token => setToken(token))
             .then(() => setLoading(false));
     }, []);
 

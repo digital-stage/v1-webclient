@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import SignUpForm from "../components/account/SignUpForm";
-import {useAuth} from "../lib/useAuth";
+import {useAuth} from "../lib/digitalstage/useAuth";
 import {useRouter} from "next/router";
 
 const SignUp = () => {

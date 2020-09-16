@@ -1,11 +1,13 @@
 import DeviceView from "../components/DeviceView";
-import {HeadingLarge} from "baseui/typography/index";
+import {HeadingLarge} from "baseui/typography";
 import React from "react";
-import {useDevices} from "../lib/useDevices";
+import {useDevices} from "../lib/digitalstage/useDevices";
 import StageListView from "../components/stage/StageListView";
-import {useAuth} from "../lib/useAuth";
+import {useAuth} from "../lib/digitalstage/useAuth";
 import Login from "./login";
 import {styled} from "baseui";
+import {useStages} from "../lib/digitalstage/useStages";
+import {Button} from "baseui/button";
 
 const TextArea = styled("textarea", {
     width: "100%",
@@ -14,6 +16,7 @@ const TextArea = styled("textarea", {
 
 const Index = () => {
     const {localDevice, remoteDevices, logs} = useDevices();
+    const {stage, leaveStage} = useStages();
 
     const {loading, user} = useAuth();
 
@@ -34,6 +37,17 @@ const Index = () => {
                 <HeadingLarge>Stages</HeadingLarge>
                 <StageListView/>
             </>
+            {stage && (
+                <div>
+                    <HeadingLarge>STAGE</HeadingLarge>
+                    <pre>
+                        {JSON.stringify(stage, null, 2)}
+                    </pre>
+                    <Button onClick={() => leaveStage()}>
+                        Bühne verlassen
+                    </Button>
+                </div>
+            )}
             <>
                 <HeadingLarge>Devices</HeadingLarge>
             </>

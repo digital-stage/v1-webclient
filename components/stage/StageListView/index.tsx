@@ -2,14 +2,16 @@ import {styled} from "baseui";
 import React, {useState} from "react";
 import {Button} from "baseui/button/index";
 import {Accordion, Panel} from "baseui/accordion/index";
-import {useStages} from "../../../lib/useStages";
-import Client from "../../../lib/useSocket/model.client";
+import {useStages} from "../../../lib/digitalstage/useStages";
+import Server from "../../../lib/digitalstage/common/model.client";
 import {ButtonGroup} from "baseui/button-group/index";
 import {Delete, Overflow, Plus} from "baseui/icon/index";
 import CreateGroupModal from "./CreateGroupModal";
 import CreateStageModal from "./CreateStageModal";
 import ModifyGroupModal from "./ModifyGroupModal";
 import ModifyStageModal from "./ModifyStageModal";
+import {useAuth} from "../../../lib/digitalstage/useAuth";
+import {useDevices} from "../../../lib/digitalstage/useDevices";
 
 const Label = styled("div", {})
 const GlobalActions = styled("div", {
@@ -33,9 +35,9 @@ const GroupActions = styled("div", {
 });
 
 const StageListView = () => {
-    const {stages, removeStage, removeGroup} = useStages();
-    const [currentStage, setCurrentStage] = useState<Client.Stage>();
-    const [currentGroup, setCurrentGroup] = useState<Client.Group>();
+    const {stages, removeStage, removeGroup, joinStage} = useStages();
+    const [currentStage, setCurrentStage] = useState<Server.Stage>();
+    const [currentGroup, setCurrentGroup] = useState<Server.Group>();
     const [isCreateGroupOpen, setCreateGroupIsOpen] = React.useState(false);
     const [isModifyGroupOpen, setModifyGroupIsOpen] = React.useState(false);
     const [isCreateStageOpen, setCreateStageIsOpen] = React.useState(false);
@@ -49,24 +51,32 @@ const StageListView = () => {
                         {stage.groups.map(group => (
                             <GroupRow>
                                 <Label>{group.name}</Label>
-                                {stage.admins.length > 0 && (
-                                    <GroupActions>
-                                        <ButtonGroup kind="primary" size="compact">
-                                            <Button startEnhancer={<Overflow/>} onClick={() => {
-                                                setCurrentGroup(group);
-                                                setModifyGroupIsOpen(true);
-                                            }}>
-                                                Ändern
-                                            </Button>
-                                            <Button startEnhancer={<Delete/>} onClick={() => removeGroup(group._id)}>
-                                                Entfernen
-                                            </Button>
-                                        </ButtonGroup>
-                                    </GroupActions>
-                                )}
+                                <GroupActions>
+                                    <ButtonGroup kind="primary" size="compact">
+                                        <Button startEnhancer={<Overflow/>} onClick={() => {
+                                            joinStage(stage._id, group._id, stage.password);
+                                        }}>
+                                            Beitreten
+                                        </Button>
+                                        {stage.isAdmin && (
+                                            <>
+                                                <Button startEnhancer={<Overflow/>} onClick={() => {
+                                                    setCurrentGroup(group);
+                                                    setModifyGroupIsOpen(true);
+                                                }}>
+                                                    Ändern
+                                                </Button>
+                                                <Button startEnhancer={<Delete/>}
+                                                        onClick={() => removeGroup(group._id)}>
+                                                    Entfernen
+                                                </Button>
+                                            </>
+                                        )}
+                                    </ButtonGroup>
+                                </GroupActions>
                             </GroupRow>
                         ))}
-                        {stage.admins.length > 0 && (
+                        {stage.isAdmin && (
                             <StageActions>
                                 <ButtonGroup kind="primary" size="compact">
                                     <Button

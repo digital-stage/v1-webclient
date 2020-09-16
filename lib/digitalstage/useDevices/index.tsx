@@ -1,11 +1,11 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Device, DeviceId} from "../useSocket/model.common";
+import {Device, DeviceId, User} from "../common/model.common";
 import io from "socket.io-client";
 import {enumerateDevices} from "./util";
 import * as Bowser from "bowser";
-import {ClientDeviceEvents, ServerDeviceEvents} from "../useSocket/events";
+import {ClientDeviceEvents, ClientUserEvents, ServerDeviceEvents, ServerUserEvents} from "../common/events";
 import {useAuth} from "../useAuth";
-import {API_URL} from "../../env";
+import {API_URL} from "../../../env";
 
 export interface DeviceProps {
     socket: SocketIOClient.Socket;
@@ -13,21 +13,22 @@ export interface DeviceProps {
     devices: Device[];
     remoteDevices: Device[];
     logs: string[];
+    user: User;
 
     updateDevice(id: DeviceId, device: Partial<Device>);
+
+    updateUser(name: string, avatarUrl?: string);
 }
 
 const DeviceContext = React.createContext<DeviceProps>(undefined);
 
 export const useDevices = (): DeviceProps => React.useContext<DeviceProps>(DeviceContext);
 
-
-//let isSocketInitialized = false;
-
 export const DeviceContextProvider = (props: {
     children: React.ReactNode
 }) => {
     const {token} = useAuth();
+    const [user, setUser] = useState<User>();
     const [logs, setLogs] = useState<string[]>([]);
     const [socket, setSocket] = useState<SocketIOClient.Socket>(null);
     const [localDeviceId, setLocalDeviceId] = useState<string>();
@@ -68,17 +69,19 @@ export const DeviceContextProvider = (props: {
                         });
                         socketIO.on("reconnect", () => {
                             log("Socket reconnected");
-                            //registerDeviceEvents(socket);
                         });
                         socketIO.on("disconnect", () => {
-                            log("Disconnected from server");
-                            //setSocket(undefined);
+                            log("Disconnected from server, try to reconnect but reset state");
+                            setDevices([]);
+                            setRemoteDevices([]);
+                            setLocalDeviceId(undefined);
+                            setLocalDevice(undefined);
                         });
                         setSocket(socketIO);
                     });
             }
         } else {
-            if( socket  ) {
+            if (socket) {
                 log("Token invalid, reset socket connection");
                 socket.disconnect();
                 setSocket(undefined);
@@ -101,17 +104,6 @@ export const DeviceContextProvider = (props: {
         }
     }, [devices, localDeviceId]);
 
-    const updateDevice = useCallback((deviceId: string, device: Partial<Omit<Device, "_id">>) => {
-        if (socket) {
-            socket.emit(ClientDeviceEvents.UPDATE_DEVICE, {
-                ...device,
-                _id: deviceId
-            });
-        } else {
-            console.error("SOCKET NOT READY");
-        }
-    }, [socket]);
-
     const log = useCallback((message: string) => {
         setLogs(prevState => [...prevState, message + "\n"]);
     }, []);
@@ -119,6 +111,7 @@ export const DeviceContextProvider = (props: {
     const registerDeviceEvents = (socket) => {
         log("Register device changes");
         console.log("Register device changes");
+        socket.on(ServerUserEvents.USER_READY, (user) => setUser(user));
         socket.on(ServerDeviceEvents.DEVICE_ADDED, () => console.log("device-added"));
         socket.on(ServerDeviceEvents.DEVICE_ADDED, (device: Device) => setDevices(prevState => [...prevState, device]));
         socket.on(ServerDeviceEvents.DEVICE_CHANGED, (device: Device) => setDevices(prevState => prevState.map(d => d._id === device._id ? {...d, ...device} : d)));
@@ -146,10 +139,6 @@ export const DeviceContextProvider = (props: {
             console.log("useDevice: socket changed");
             log("Socket available");
             registerDeviceEvents(socket);
-            //if (!isSocketInitialized) {
-            //    registerDeviceEvents(socket);
-            //}
-            //isSocketInitialized = true;
         } else {
             log("Socket not available - reset devices");
             setLocalDeviceId(undefined);
@@ -159,13 +148,37 @@ export const DeviceContextProvider = (props: {
         }
     }, [socket]);
 
+    const updateDevice = useCallback((deviceId: string, device: Partial<Omit<Device, "_id">>) => {
+        if (socket) {
+            socket.emit(ClientDeviceEvents.UPDATE_DEVICE, {
+                ...device,
+                _id: deviceId
+            });
+        } else {
+            console.error("SOCKET NOT READY");
+        }
+    }, [socket]);
+
+    const updateUser = useCallback((name: string, avatarUrl?: string) => {
+        if (socket) {
+            socket.emit(ClientUserEvents.CHANGE_USER, {
+                name: name,
+                avatarUrl: avatarUrl
+            });
+        } else {
+            console.error("SOCKET NOT READY");
+        }
+    }, [socket]);
+
     return (
         <DeviceContext.Provider value={{
             socket: socket,
+            user: user,
             localDevice: localDevice,
             devices: devices,
             remoteDevices: remoteDevices,
             updateDevice: updateDevice,
+            updateUser: updateUser,
             logs: logs
         }}>
             {props.children}

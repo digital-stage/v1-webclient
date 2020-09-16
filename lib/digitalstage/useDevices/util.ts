@@ -1,4 +1,4 @@
-import {MediaDevice} from "../useSocket/model.common";
+import {MediaDevice} from "../common/model.common";
 
 export const enumerateDevices = (): Promise<{
     inputAudioDevices: MediaDevice[],

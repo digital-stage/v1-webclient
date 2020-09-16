@@ -8,7 +8,7 @@ import {Notification} from "baseui/notification";
 import {Button, KIND} from "baseui/button";
 import Link from "next/link";
 import {Checkbox, LABEL_PLACEMENT} from "baseui/checkbox";
-import {useAuth} from "../../lib/useAuth";
+import {useAuth} from "../../lib/digitalstage/useAuth";
 
 const Schema = Yup.object().shape({
     name: Yup.string()

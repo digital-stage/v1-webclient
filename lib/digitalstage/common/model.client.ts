@@ -7,7 +7,7 @@ import {
     UserId
 } from "./model.common";
 
-namespace Client {
+namespace Server {
     export interface StagePrototype {
         _id: StageId;
         name: string;
@@ -43,7 +43,7 @@ namespace Client {
         z: number;
     }
 
-    export interface CustomGroupVolume {
+    export interface CustomGroupVolumePrototype {
         _id: CustomGroupVolumeId;
         userId: UserId;
         stageId: StageId;
@@ -51,19 +51,11 @@ namespace Client {
         volume: number;
     }
 
-    export interface CustomStageMemberVolume {
+    export interface CustomStageMemberVolumePrototype {
         _id: CustomStageMemberVolumeId;
         userId: UserId;
         stageMemberId: StageMemberId;
         volume: number;
-    }
-
-    export interface Stage extends StagePrototype {
-        groups: Group[];
-    }
-
-    export interface Group extends GroupPrototype {
-        members: GroupMember[];
     }
 
     export interface GroupMemberPrototype extends StageMemberPrototype {
@@ -71,12 +63,23 @@ namespace Client {
         name: string;
         avatarUrl?: string;
     }
-
-    export interface GroupMember extends GroupMemberPrototype {
-        videoProducers: Producer[];
-        audioProducers: Producer[];
-        ovProducers: Producer[];
-    }
 }
 
-export default Client;
+export interface Stage extends Server.StagePrototype {
+    isAdmin: boolean;
+    groups: Group[];
+}
+
+export interface Group extends Server.GroupPrototype {
+    customVolume?: number;
+    members: GroupMember[];
+}
+
+export interface GroupMember extends Server.GroupMemberPrototype {
+    customVolume?: number;
+    videoProducers: Producer[];
+    audioProducers: Producer[];
+    ovProducers: Producer[];
+}
+
+export default Server;

@@ -4,11 +4,10 @@ import {styled} from "baseui";
 import {Card, StyledAction, StyledBody} from "baseui/card/index";
 import {Checkbox} from "baseui/checkbox/index";
 import {Check, Delete} from "baseui/icon/index";
-import {Button, KIND} from "baseui/button/index";
-import {ButtonGroup} from "baseui/button-group/index";
-import {Device} from "../lib/useSocket/model.common";
+import {Button, KIND, SIZE} from "baseui/button/index";
+import {Device} from "../lib/digitalstage/common/model.common";
 import SingleSelect from "./atomic/SingleSelect";
-import {useDevices} from "../lib/useDevices";
+import {useDevices} from "../lib/digitalstage/useDevices";
 
 
 const CardTitle = styled("div", {
@@ -44,9 +43,13 @@ const DeviceView = (props: {
                 </Checkbox>
             </StyledBody>
             <StyledAction>
-                <ButtonGroup>
+                <div className={css({
+                    width: "100%",
+                    display: "flex"
+                })}>
                     <Button
-                        kind={props.device.sendVideo ? KIND.secondary : KIND.primary}
+                        size={SIZE.compact}
+                        kind={props.device.sendVideo ? KIND.primary : KIND.secondary}
                         onClick={() => {
                             updateDevice(props.device._id, {
                                 sendVideo: !props.device.sendVideo
@@ -56,6 +59,7 @@ const DeviceView = (props: {
                         Send video
                     </Button>
                     <Button
+                        size={SIZE.compact}
                         isSelected={props.device.sendAudio}
                         kind={props.device.sendAudio ? KIND.primary : KIND.secondary}
                         onClick={() => {
@@ -64,10 +68,11 @@ const DeviceView = (props: {
                             });
                         }}
                     >
-                        Send Audio {props.device.sendAudio ? "X" : "0"}
+                        Send Audio
                     </Button>
                     <Button
-                        kind={props.device.receiveVideo ? KIND.secondary : KIND.primary}
+                        size={SIZE.compact}
+                        kind={props.device.receiveVideo ? KIND.primary : KIND.secondary}
                         onClick={() => {
                             updateDevice(props.device._id, {
                                 receiveVideo: !props.device.receiveVideo
@@ -77,21 +82,28 @@ const DeviceView = (props: {
                         Receive Video
                     </Button>
                     <Button
-                        kind={props.device.receiveAudio ? KIND.secondary : KIND.primary}
+                        size={SIZE.compact}
+                        kind={props.device.receiveAudio ? KIND.primary : KIND.secondary}
                         onClick={() => {
                             updateDevice(props.device._id, {
-                                sendAudio: !props.device.receiveAudio
+                                receiveAudio: !props.device.receiveAudio
                             });
                         }}
                     >
                         Receive Audio
                     </Button>
-                </ButtonGroup>
+                </div>
                 <div className={css({
                     width: '100%',
                     display: 'flex',
+                    flexWrap: 'wrap'
                 })}>
                     <SingleSelect
+                        className={css({
+                            flexBasis: 0,
+                            maxWidth: "100%",
+                            flexGrow: 1
+                        })}
                         options={props.device.inputAudioDevices || []}
                         id={props.device.inputAudioDevice}
                         onSelect={(id) => updateDevice(props.device._id, {
@@ -99,6 +111,11 @@ const DeviceView = (props: {
                         })}
                     />
                     <SingleSelect
+                        className={css({
+                            flexBasis: 0,
+                            maxWidth: "100%",
+                            flexGrow: 1
+                        })}
                         options={props.device.outputAudioDevices || []}
                         id={props.device.outputAudioDevice}
                         onSelect={(id) => updateDevice(props.device._id, {
@@ -106,6 +123,11 @@ const DeviceView = (props: {
                         })}
                     />
                     <SingleSelect
+                        className={css({
+                            flexBasis: 0,
+                            maxWidth: "100%",
+                            flexGrow: 1
+                        })}
                         options={props.device.inputVideoDevices || []}
                         id={props.device.inputVideoDevice}
                         onSelect={(id) => updateDevice(props.device._id, {

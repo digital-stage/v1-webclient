@@ -7,7 +7,7 @@ import Link from "next/link";
 import Router from "next/router";
 import {Notification} from "baseui/notification";
 import {FormControl} from "baseui/form-control";
-import {useAuth} from "../../lib/useAuth";
+import {useAuth} from "../../lib/digitalstage/useAuth";
 
 const Schema = Yup.object().shape({
     email: Yup.string()
