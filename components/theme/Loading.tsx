@@ -20,7 +20,7 @@ const Text = styled("div", {
     animationName: "bounce"
 });
 
-export default (props: {
+const Loading = (props: {
     children: React.ReactNode
 }) => (
     <Wrapper>
@@ -29,3 +29,5 @@ export default (props: {
         </Text>
     </Wrapper>
 );
+
+export default Loading;

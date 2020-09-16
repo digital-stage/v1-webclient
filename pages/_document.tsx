@@ -31,7 +31,6 @@ class MyDocument extends Document<DocProps> {
                             key={i}
                         />
                     ))}
-                    <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 </Head>
                 <body>
                 <Main/>

@@ -2,6 +2,8 @@ import React from "react";
 import {useRouter} from "next/router";
 import {useRequest} from "../../../lib/useRequest";
 import Loading from "../../../components/theme/Loading";
+import {DisplayMedium} from "baseui/typography";
+import Error from 'next/error';
 
 const Join = () => {
     const router = useRouter()
@@ -9,15 +11,16 @@ const Join = () => {
 
     const {setRequest} = useRequest();
 
-    if (stageId && groupId) {
+    if (stageId
+        && groupId
+        && !Array.isArray(stageId)
+        && !Array.isArray(groupId)) {
         setRequest(stageId, groupId);
         router.push("/");
+        return <Loading><DisplayMedium>Lade...</DisplayMedium></Loading>
     }
-
     return (
-        <Loading>
-            Willkommen
-        </Loading>
+        <Error statusCode={404}/>
     )
 }
 
