@@ -1,4 +1,4 @@
-import Document, {Html, Head, Main, NextScript, DocumentProps} from 'next/document'
+import Document, {DocumentProps, Head, Html, Main, NextScript} from 'next/document'
 import {Provider as StyletronProvider} from 'styletron-react'
 import {styletron} from '../styletron'
 
@@ -31,6 +31,7 @@ class MyDocument extends Document<DocProps> {
                             key={i}
                         />
                     ))}
+                    <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 </Head>
                 <body>
                 <Main/>

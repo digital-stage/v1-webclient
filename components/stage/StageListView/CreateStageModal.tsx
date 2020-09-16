@@ -1,12 +1,12 @@
-import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from "baseui/modal/index";
-import {FormControl} from "baseui/form-control/index";
-import {Input} from "baseui/input/index";
+import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from "baseui/modal";
+import {FormControl} from "baseui/form-control";
+import {Input} from "baseui/input";
 import React from "react";
-import {KIND} from "baseui/button/index";
+import {KIND} from "baseui/button";
 import * as Yup from "yup";
 import {useFormik} from "formik";
 import {useStages} from "../../../lib/digitalstage/useStages";
-import {Accordion, Panel} from "baseui/accordion/index";
+import {Accordion, Panel} from "baseui/accordion";
 
 const Schema = Yup.object().shape({
     name: Yup.string()

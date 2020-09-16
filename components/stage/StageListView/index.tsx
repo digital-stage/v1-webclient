@@ -3,15 +3,15 @@ import React, {useState} from "react";
 import {Button} from "baseui/button/index";
 import {Accordion, Panel} from "baseui/accordion/index";
 import {useStages} from "../../../lib/digitalstage/useStages";
-import Server from "../../../lib/digitalstage/common/model.client";
+import {Group, Stage} from "../../../lib/digitalstage/common/model.client";
 import {ButtonGroup} from "baseui/button-group/index";
-import {Delete, Overflow, Plus} from "baseui/icon/index";
+import {Plus} from "baseui/icon/index";
 import CreateGroupModal from "./CreateGroupModal";
 import CreateStageModal from "./CreateStageModal";
 import ModifyGroupModal from "./ModifyGroupModal";
 import ModifyStageModal from "./ModifyStageModal";
-import {useAuth} from "../../../lib/digitalstage/useAuth";
-import {useDevices} from "../../../lib/digitalstage/useDevices";
+import {Tag} from "baseui/tag";
+import InviteModal from "./InviteModal";
 
 const Label = styled("div", {})
 const GlobalActions = styled("div", {
@@ -20,84 +20,164 @@ const GlobalActions = styled("div", {
     alignItems: 'center',
     justifyContent: 'flex-end'
 })
-const StageActions = styled("div", {
+const StageTitle = styled("div", {
+    width: '100%',
+});
+const StageTopActions = styled("div", ({$theme}) => ({
     width: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-start',
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    borderBottomColor: 'rgb(203, 203, 203)',
+    backgroundColor: $theme.colors.primary100
+}));
+const StageBottomActions = styled("div", {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingTop: '1rem'
 });
-const GroupRow = styled("div", {});
+const GroupRow = styled("div", {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    borderBottomColor: 'rgb(203, 203, 203)'
+});
+const GroupTitle = styled("div", {
+    display: 'flex',
+    paddingTop: '1rem',
+    paddingBottom: '1rem',
+    alignItems: 'center',
+    flexGrow: 2
+})
 const GroupActions = styled("div", {
-    width: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    paddingTop: '1rem',
+    paddingBottom: '1rem',
+    flexGrow: 1
 });
+const GroupAdminActions = styled("div", {
+    display: 'flex',
+    paddingLeft: '1rem'
+})
 
 const StageListView = () => {
-    const {stages, removeStage, removeGroup, joinStage} = useStages();
-    const [currentStage, setCurrentStage] = useState<Server.Stage>();
-    const [currentGroup, setCurrentGroup] = useState<Server.Group>();
-    const [isCreateGroupOpen, setCreateGroupIsOpen] = React.useState(false);
-    const [isModifyGroupOpen, setModifyGroupIsOpen] = React.useState(false);
-    const [isCreateStageOpen, setCreateStageIsOpen] = React.useState(false);
-    const [isModifyStageOpen, setModifyStageIsOpen] = React.useState(false);
+    const {stageId, stages, removeStage, removeGroup, joinStage, leaveStage} = useStages();
+    const [currentStage, setCurrentStage] = useState<Stage>();
+    const [currentGroup, setCurrentGroup] = useState<Group>();
+    const [isCreateGroupOpen, setCreateGroupIsOpen] = useState<boolean>(false);
+    const [isModifyGroupOpen, setModifyGroupIsOpen] = useState<boolean>(false);
+    const [isCreateStageOpen, setCreateStageIsOpen] = useState<boolean>(false);
+    const [isModifyStageOpen, setModifyStageIsOpen] = useState<boolean>(false);
+    const [isCopyLinkOpen, setCopyLinkOpen] = useState<boolean>();
 
     return (
         <>
             <Accordion>
                 {stages.map(stage => (
-                    <Panel title={stage.name}>
+                    <Panel title={(
+                        <StageTitle>
+                            {stage.name}
+                        </StageTitle>
+                    )}>
+                        {stage.isAdmin && (
+                            <StageTopActions>
+                                <Tag
+                                    closeable={false}
+                                    kind="accent"
+                                    onClick={() => {
+                                        setCurrentStage(stage);
+                                        setModifyStageIsOpen(true)
+                                    }}
+                                >
+                                    Bühne ändern
+                                </Tag>
+                                <Tag
+                                    closeable={false}
+                                    kind="negative"
+                                    onClick={() => removeStage(stage._id)}
+                                >
+                                    Bühne entfernen
+                                </Tag>
+                            </StageTopActions>
+                        )}
                         {stage.groups.map(group => (
                             <GroupRow>
-                                <Label>{group.name}</Label>
-                                <GroupActions>
-                                    <ButtonGroup kind="primary" size="compact">
-                                        <Button startEnhancer={<Overflow/>} onClick={() => {
-                                            joinStage(stage._id, group._id, stage.password);
-                                        }}>
-                                            Beitreten
-                                        </Button>
-                                        {stage.isAdmin && (
-                                            <>
-                                                <Button startEnhancer={<Overflow/>} onClick={() => {
+                                <GroupTitle>
+                                    <Label>{group.name}</Label>
+
+                                    {stage.isAdmin && (
+                                        <GroupAdminActions>
+                                            <Tag
+                                                closeable={false}
+                                                kind="accent"
+                                                onClick={() => {
                                                     setCurrentGroup(group);
                                                     setModifyGroupIsOpen(true);
-                                                }}>
-                                                    Ändern
-                                                </Button>
-                                                <Button startEnhancer={<Delete/>}
-                                                        onClick={() => removeGroup(group._id)}>
-                                                    Entfernen
-                                                </Button>
-                                            </>
-                                        )}
-                                    </ButtonGroup>
+                                                }}
+                                            >
+                                                Gruppe ändern
+                                            </Tag>
+                                            <Tag
+                                                closeable={false}
+                                                kind="negative"
+                                                onClick={() => removeGroup(group._id)}
+                                            >
+                                                Gruppe entfernen
+                                            </Tag>
+                                        </GroupAdminActions>
+                                    )}
+                                </GroupTitle>
+                                <GroupActions>
+                                    <Tag
+                                        size="large"
+                                        closeable={false}
+                                        kind={stage._id === stageId ? "orange" : "positive"}
+                                        onClick={() => {
+                                            if (stage._id === stageId) {
+                                                leaveStage();
+                                            } else {
+                                                joinStage(stage._id, group._id, stage.password);
+                                            }
+                                        }}
+                                    >
+                                        {stage._id === stageId ? "Verlassen" : "Beitreten"}
+                                    </Tag>
+                                    <Tag
+                                        size="large"
+                                        closeable={false}
+                                        onClick={() => {
+                                            setCurrentStage(stage);
+                                            setCurrentGroup(group);
+                                            setCopyLinkOpen(prevState => !prevState);
+                                        }}
+                                    >
+                                        Einladen
+                                    </Tag>
                                 </GroupActions>
                             </GroupRow>
                         ))}
                         {stage.isAdmin && (
-                            <StageActions>
-                                <ButtonGroup kind="primary" size="compact">
-                                    <Button
-                                        startEnhancer={<Plus/>}
-                                        onClick={() => {
-                                            setCurrentStage(stage);
-                                            setCreateGroupIsOpen(true)
-                                        }}>
-                                        Neue Gruppe hinzufügen
-                                    </Button>
-                                    <Button startEnhancer={<Overflow/>} onClick={() => {
+                            <StageBottomActions>
+                                <Button
+                                    size="mini"
+                                    startEnhancer={<Plus/>}
+                                    onClick={() => {
                                         setCurrentStage(stage);
-                                        setModifyStageIsOpen(true)
+                                        setCreateGroupIsOpen(true)
                                     }}>
-                                        Bühne ändern
-                                    </Button>
-                                    <Button startEnhancer={<Delete/>} onClick={() => removeStage(stage._id)}>
-                                        Bühne entfernen
-                                    </Button>
-                                </ButtonGroup>
-                            </StageActions>
+                                    Neue Gruppe hinzufügen
+                                </Button>
+                            </StageBottomActions>
                         )}
                     </Panel>
                 ))}
@@ -117,6 +197,8 @@ const StageListView = () => {
                               onClose={() => setModifyGroupIsOpen(false)}/>
             <ModifyStageModal stage={currentStage} isOpen={isModifyStageOpen}
                               onClose={() => setModifyStageIsOpen(false)}/>
+            <InviteModal stage={currentStage} group={currentGroup} onClose={() => setCopyLinkOpen(false)}
+                         isOpen={isCopyLinkOpen}/>
         </>
     )
 }

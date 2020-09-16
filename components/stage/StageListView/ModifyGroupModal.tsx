@@ -1,12 +1,12 @@
 import * as Yup from "yup";
 import {useFormik} from "formik";
 import {useStages} from "../../../lib/digitalstage/useStages";
-import Server from "../../../lib/digitalstage/common/model.client";
 import React, {useEffect} from "react";
 import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from "baseui/modal/index";
 import {Input} from "baseui/input/index";
 import {FormControl} from "baseui/form-control/index";
 import {KIND} from "baseui/button/index";
+import {Group} from "../../../lib/digitalstage/common/model.client";
 
 const Schema = Yup.object().shape({
     name: Yup.string()
@@ -16,7 +16,7 @@ const Schema = Yup.object().shape({
 });
 
 const ModifyGroupModal = (props: {
-    group: Server.Group;
+    group: Group;
     isOpen?: boolean;
     onClose?: () => any;
 

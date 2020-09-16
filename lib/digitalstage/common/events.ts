@@ -1,4 +1,7 @@
 
+export enum ServerGlobalEvents {
+    READY = "ready"
+}
 export enum ServerUserEvents {
     USER_READY = "user-ready",
     USER_CHANGED = "user-changed"
@@ -16,7 +19,6 @@ export enum ServerDeviceEvents {
 export enum ClientDeviceEvents {
     UPDATE_DEVICE = "update-device"
 }
-
 
 export enum ServerStageEvents {
     STAGE_READY = "stage-ready",

@@ -3,12 +3,19 @@ import {Device, DeviceId, User} from "../common/model.common";
 import io from "socket.io-client";
 import {enumerateDevices} from "./util";
 import * as Bowser from "bowser";
-import {ClientDeviceEvents, ClientUserEvents, ServerDeviceEvents, ServerUserEvents} from "../common/events";
+import {
+    ClientDeviceEvents,
+    ClientUserEvents,
+    ServerDeviceEvents,
+    ServerGlobalEvents,
+    ServerUserEvents
+} from "../common/events";
 import {useAuth} from "../useAuth";
 import {API_URL} from "../../../env";
 
 export interface DeviceProps {
     socket: SocketIOClient.Socket;
+    ready: boolean;
     localDevice: Device;
     devices: Device[];
     remoteDevices: Device[];
@@ -28,6 +35,7 @@ export const DeviceContextProvider = (props: {
     children: React.ReactNode
 }) => {
     const {token} = useAuth();
+    const [ready, setReady] = useState<boolean>(false);
     const [user, setUser] = useState<User>();
     const [logs, setLogs] = useState<string[]>([]);
     const [socket, setSocket] = useState<SocketIOClient.Socket>(null);
@@ -111,6 +119,7 @@ export const DeviceContextProvider = (props: {
     const registerDeviceEvents = (socket) => {
         log("Register device changes");
         console.log("Register device changes");
+        socket.on(ServerGlobalEvents.READY, () => setReady(true));
         socket.on(ServerUserEvents.USER_READY, (user) => setUser(user));
         socket.on(ServerDeviceEvents.DEVICE_ADDED, () => console.log("device-added"));
         socket.on(ServerDeviceEvents.DEVICE_ADDED, (device: Device) => setDevices(prevState => [...prevState, device]));
@@ -132,6 +141,13 @@ export const DeviceContextProvider = (props: {
                     });
                 });
         });
+        socket.on("disconnect", () => {
+            setLocalDeviceId(undefined);
+            setLocalDevice(undefined);
+            setRemoteDevices([]);
+            setDevices([]);
+            setReady(false);
+        })
     }
 
     useEffect(() => {
@@ -145,6 +161,7 @@ export const DeviceContextProvider = (props: {
             setLocalDevice(undefined);
             setRemoteDevices([]);
             setDevices([]);
+            setReady(false);
         }
     }, [socket]);
 
@@ -173,6 +190,7 @@ export const DeviceContextProvider = (props: {
     return (
         <DeviceContext.Provider value={{
             socket: socket,
+            ready: ready,
             user: user,
             localDevice: localDevice,
             devices: devices,
