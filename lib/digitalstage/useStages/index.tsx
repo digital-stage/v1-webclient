@@ -21,6 +21,8 @@ export interface StagesProps {
 
     leaveStage();
 
+    leaveStageForGood(id: StageId);
+
     removeStage(id: StageId);
 
     createGroup(stageId: StageId, name: string);
@@ -107,13 +109,9 @@ export const StagesContextProvider = (props: {
 
     const registerDeviceEvents = (socket) => {
         socket.on(ServerStageEvents.STAGE_ADDED, (stage: Server.StagePrototype) => {
-            console.log("stage-added");
-            console.log(stage);
             setStagePrototypes(prevState => [...prevState, stage]);
         });
         socket.on(ServerStageEvents.STAGE_CHANGED, (payload: { id: StageId, stage: Server.StagePrototype }) => {
-            console.log("stage-changed");
-            console.log(payload);
             setStagePrototypes(prevState => prevState.map(s => {
                 if (s._id === payload.id) {
                     console.log("Found stage");
@@ -123,23 +121,15 @@ export const StagesContextProvider = (props: {
             }))
         });
         socket.on(ServerStageEvents.STAGE_REMOVED, (stageId: string) => {
-            console.log("stage-removed");
-            console.log(stageId);
             setStagePrototypes(prevState => prevState.filter(stage => stage._id !== stageId));
         });
         socket.on(ServerStageEvents.GROUP_ADDED, (group: Server.GroupPrototype) => {
-            console.log("group-added");
-            console.log(group);
             setGroupPrototypes(prevState => [...prevState, group])
         });
         socket.on(ServerStageEvents.GROUP_CHANGED, (payload: { id: GroupId, group: Server.StageMemberPrototype }) => {
-            console.log("group-changed");
-            console.log(payload);
             setGroupPrototypes(prevState => prevState.map(s => s._id === payload.id ? {...s, ...payload.group} : s));
         });
         socket.on(ServerStageEvents.GROUP_REMOVED, (groupId: string) => {
-            console.log("group-removed");
-            console.log(groupId);
             setGroupPrototypes(prevState => prevState.filter(group => group._id !== groupId));
         });
         socket.on(ServerStageEvents.GROUP_MEMBER_ADDED, (stageMember: Server.GroupMemberPrototype) => {
@@ -261,6 +251,15 @@ export const StagesContextProvider = (props: {
         setRequest(undefined, undefined, null);
     }, [socket]);
 
+    const leaveStageForGood = useCallback((id: StageId) => {
+        if (socket) {
+            socket.emit(ClientStageEvents.LEAVE_STAGE_FOR_GOOD, id);
+        }
+        if (stageId && stageId.stageId === id) {
+            setRequest(undefined, undefined, null);
+        }
+    }, [socket]);
+
     const removeStage = useCallback((id: StageId) => {
         if (socket) {
             socket.emit(ClientStageEvents.REMOVE_STAGE, id);
@@ -344,7 +343,8 @@ export const StagesContextProvider = (props: {
             setGroupVolume,
             setStageMemberVolume,
             setCustomGroupVolume: setCustomGroupVolume,
-            setCustomGroupMemberVolume: setCustomGroupMemberVolume
+            setCustomGroupMemberVolume: setCustomGroupMemberVolume,
+            leaveStageForGood: leaveStageForGood
         }}>
             {props.children}
         </StagesContext.Provider>

@@ -72,7 +72,7 @@ const GroupAdminActions = styled("div", {
 })
 
 const StageListView = () => {
-    const {stageId, stages, removeStage, removeGroup, leaveStage} = useStages();
+    const {stageId, stages, removeStage, removeGroup, leaveStage, leaveStageForGood} = useStages();
     const {setRequest} = useRequest();
     const [currentStage, setCurrentStage] = useState<Stage>();
     const [currentGroup, setCurrentGroup] = useState<Group>();
@@ -97,27 +97,37 @@ const StageListView = () => {
                             {stage.name}
                         </StageTitle>
                     )}>
-                        {stage.isAdmin && (
-                            <StageTopActions>
-                                <Tag
-                                    closeable={false}
-                                    kind="accent"
-                                    onClick={() => {
-                                        setCurrentStage(stage);
-                                        setModifyStageIsOpen(true)
-                                    }}
-                                >
-                                    Bühne ändern
-                                </Tag>
+                        <StageTopActions>
+                            {stage.isAdmin ? (
+                                <>
+                                    <Tag
+                                        closeable={false}
+                                        kind="accent"
+                                        onClick={() => {
+                                            setCurrentStage(stage);
+                                            setModifyStageIsOpen(true)
+                                        }}
+                                    >
+                                        Bühne ändern
+                                    </Tag>
+                                    <Tag
+                                        closeable={false}
+                                        kind="negative"
+                                        onClick={() => removeStage(stage._id)}
+                                    >
+                                        Bühne entfernen
+                                    </Tag>
+                                </>
+                            ) : (
                                 <Tag
                                     closeable={false}
                                     kind="negative"
-                                    onClick={() => removeStage(stage._id)}
+                                    onClick={() => leaveStageForGood(stage._id)}
                                 >
-                                    Bühne entfernen
+                                    Bühne entgültig verlassen
                                 </Tag>
-                            </StageTopActions>
-                        )}
+                            )}
+                        </StageTopActions>
                         {stage.groups.map(group => (
                             <GroupRow>
                                 <GroupTitle>

@@ -11,6 +11,7 @@
     "baseui": "^9.99.0",
     "formik": "^2.1.5",
     "js-cookie": "^2.2.1",
+    "mediasoup-client": "^3.6.15",
     "next": "9.5.3",
     "react": "16.13.1",
     "react-copy-to-clipboard": "^5.0.2",

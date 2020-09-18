@@ -2,12 +2,15 @@ import App from 'next/app'
 import {Provider as StyletronProvider} from 'styletron-react'
 import {debug, styletron} from '../styletron'
 import {AuthContextProvider} from "../lib/digitalstage/useAuth";
-import {BaseProvider, DarkTheme, LightTheme} from "baseui";
+import {BaseProvider, DarkTheme, LightTheme, styled} from "baseui";
 import React from "react";
 import {DeviceContextProvider} from "../lib/digitalstage/useDevices";
 import {StagesContextConsumer, StagesContextProvider} from "../lib/digitalstage/useStages";
 import {RequestContextProvider} from "../lib/useRequest";
 import Head from 'next/head'
+import AppNavigation from "../components/AppNavigation";
+import StageJoiner from "../components/stage/StageJoiner";
+import {Block} from 'baseui/block';
 
 class MyApp extends App {
     render() {
@@ -46,7 +49,11 @@ class MyApp extends App {
                                             }
                                         `}
                                                 </style>
-                                                <Component {...pageProps} />
+                                                <AppNavigation/>
+                                                <StageJoiner/>
+                                                <Block marginTop={['52px', '52px', '72px']}>
+                                                    <Component {...pageProps} />
+                                                </Block>
                                             </BaseProvider>
                                         )}
                                     </StagesContextConsumer>

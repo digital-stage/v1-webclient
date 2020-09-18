@@ -5,9 +5,9 @@ import {Card, StyledAction, StyledBody} from "baseui/card/index";
 import {Checkbox} from "baseui/checkbox/index";
 import {Check, Delete} from "baseui/icon/index";
 import {Button, KIND, SIZE} from "baseui/button/index";
-import {Device} from "../lib/digitalstage/common/model.common";
-import SingleSelect from "./atomic/SingleSelect";
-import {useDevices} from "../lib/digitalstage/useDevices";
+import {Device} from "../../lib/digitalstage/common/model.common";
+import SingleSelect from "../theme/SingleSelect";
+import {useDevices} from "../../lib/digitalstage/useDevices";
 
 
 const CardTitle = styled("div", {

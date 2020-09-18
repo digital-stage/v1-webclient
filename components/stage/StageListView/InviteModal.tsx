@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from "baseui/modal";
 import CopyToClipboard from 'react-copy-to-clipboard';
 import {Input} from "baseui/input";
 import {Group, Stage} from "../../../lib/digitalstage/common/model.client";
-import {Button} from "baseui/button";
 import {Checkbox} from "baseui/checkbox";
 
 const InviteModal = (props: {
@@ -11,6 +10,7 @@ const InviteModal = (props: {
     group: Group;
     isOpen?: boolean;
     onClose?: () => any;
+    usePassword?: boolean;
 }) => {
     const [includePassword, setIncludePassword] = useState<boolean>(false);
     const [link, setLink] = useState<string>();
@@ -19,9 +19,14 @@ const InviteModal = (props: {
     useEffect(() => {
         setCopied(false);
         if (props.stage && props.group) {
-            setLink(window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/join/" + props.stage._id + "/" + props.group._id + (includePassword && "?password=" + props.stage.password));
+            const port: string = window.location.port ? ":" + window.location.port : "";
+            let link: string = window.location.protocol + "//" + window.location.hostname + port + "/join/" + props.stage._id + "/" + props.group._id;
+            if (props.usePassword && props.stage.password && includePassword) {
+                link += "?password=" + props.stage.password;
+            }
+            setLink(link);
         }
-    }, [props.stage, props.group, includePassword]);
+    }, [props.stage, props.group, props.usePassword, includePassword]);
 
     if (!props.stage || !props.group) {
         return null;
@@ -33,14 +38,16 @@ const InviteModal = (props: {
                 Leute einladen
             </ModalHeader>
             <ModalBody>
-                {props.stage.password &&
+                {props.usePassword && props.stage.password &&
                 <Checkbox checked={includePassword} onChange={event => setIncludePassword(event.currentTarget.checked)}>
                     Füge Passwort mit an
                 </Checkbox>}
                 <Input type="text"
                        value={link}/>
-                <CopyToClipboard text={link} onCopy={() => setCopied(true)}>
-                    <Button>{isCopied ? "Link in der Zwischenablage!" : "Kopiere Link"}</Button>
+                <CopyToClipboard text={link} onCopy={() => {
+                    setCopied(true);
+                }}>
+                    <ModalButton autoFocus>{isCopied ? "Link in der Zwischenablage!" : "Kopiere Link"}</ModalButton>
                 </CopyToClipboard>
             </ModalBody>
             <ModalFooter>

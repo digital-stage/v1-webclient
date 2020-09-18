@@ -1,14 +1,16 @@
-
 export enum ServerGlobalEvents {
     READY = "ready"
 }
+
 export enum ServerUserEvents {
     USER_READY = "user-ready",
     USER_CHANGED = "user-changed"
 }
+
 export enum ClientUserEvents {
     CHANGE_USER = "change-user"
 }
+
 export enum ServerDeviceEvents {
     LOCAL_DEVICE_READY = "local-device-ready",
     DEVICE_ADDED = "device-added",
@@ -56,6 +58,7 @@ export enum ClientStageEvents {
 
     JOIN_STAGE = "join-stage",
     LEAVE_STAGE = "leave-stage",
+    LEAVE_STAGE_FOR_GOOD = "leave-stage-for-good",
 
     SET_CUSTOM_GROUP_VOLUME = "set-custom-group-volume",
     SET_CUSTOM_GROUP_MEMBER_VOLUME = "set-custom-group-member-volume",
@@ -73,4 +76,5 @@ export enum ClientStageEvents {
     REMOVE_GROUP = "remove-group",
 
     CHANGE_GROUP_MEMBER = "update-group-member",
+    REMOVE_GROUP_MEMBER = "remove-group-member"
 }

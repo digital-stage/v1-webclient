@@ -3,6 +3,9 @@ import React, {useEffect} from "react";
 import LoginForm from "../components/account/LoginForm";
 import {useAuth} from "../lib/digitalstage/useAuth";
 import {useRouter} from "next/router";
+import Container from "../components/theme/Container";
+import {HeadingLarge, ParagraphMedium} from "baseui/typography";
+import TextLink from "../components/theme/TextLink";
 
 const Login = () => {
     const {user} = useAuth();
@@ -18,10 +21,13 @@ const Login = () => {
     }
 
     return (
-        <>
+        <Container>
+            <HeadingLarge>Anmeldung</HeadingLarge>
             <LoginForm/>
-            oder <Link href="/signup"><a>erstelle ein Konto</a></Link>
-        </>
+            <ParagraphMedium>
+                oder <TextLink animateUnderline href="/signup">erstelle ein Konto</TextLink>
+            </ParagraphMedium>
+        </Container>
     )
 };
 export default Login;

@@ -1,4 +1,4 @@
-import DeviceView from "../components/DeviceView";
+import DeviceView from "../components/devices/DeviceView";
 import {DisplayMedium, HeadingLarge} from "baseui/typography";
 import React from "react";
 import {useDevices} from "../lib/digitalstage/useDevices";
@@ -10,8 +10,6 @@ import {useStages} from "../lib/digitalstage/useStages";
 import {Button} from "baseui/button";
 import Container from "../components/theme/Container";
 import Loading from "../components/theme/Loading";
-import {useRequest} from "../lib/useRequest";
-import StageJoiner from "../components/stage/StageJoiner";
 
 const DEBUG = false;
 
@@ -38,7 +36,6 @@ const Index = () => {
 
     return (
         <Container>
-            <StageJoiner/>
             {DEBUG && <TextArea rows={10} cols={50} value={logs}/>}
             <>
                 <HeadingLarge>Meine Bühnen</HeadingLarge>
