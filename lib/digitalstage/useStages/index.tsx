@@ -78,7 +78,7 @@ export const StagesContextProvider = (props: {
                     const group: Group = {
                         ...groupPrototype,
                         customVolume: customVolume ? customVolume.volume : undefined,
-                        members: groupMemberPrototypes.map(groupMemberPrototype => {
+                        members: groupMemberPrototypes.filter(groupMemberPrototype => groupMemberPrototype.groupId === groupPrototype._id).map(groupMemberPrototype => {
                             const customVolume = customStageMemberVolumes.find(customStageMemberVolume => customStageMemberVolume.stageMemberId === groupMemberPrototype._id);
                             const member: GroupMember = {
                                 ...groupMemberPrototype,
@@ -127,6 +127,7 @@ export const StagesContextProvider = (props: {
             setGroupPrototypes(prevState => [...prevState, group])
         });
         socket.on(ServerStageEvents.GROUP_CHANGED, (payload: { id: GroupId, group: Server.StageMemberPrototype }) => {
+            console.log(payload);
             setGroupPrototypes(prevState => prevState.map(s => s._id === payload.id ? {...s, ...payload.group} : s));
         });
         socket.on(ServerStageEvents.GROUP_REMOVED, (groupId: string) => {
@@ -137,10 +138,10 @@ export const StagesContextProvider = (props: {
             console.log(stageMember);
             setGroupMemberPrototypes(prevState => [...prevState, stageMember])
         });
-        socket.on(ServerStageEvents.GROUP_MEMBER_CHANGED, (payload: { id: StageMemberId, stageMember: Server.GroupMemberPrototype }) => {
+        socket.on(ServerStageEvents.GROUP_MEMBER_CHANGED, (payload: Partial<Server.GroupMemberPrototype>) => {
             console.log("stage-member-changed");
             console.log(payload);
-            setGroupMemberPrototypes(prevState => prevState.map(s => s._id === payload.id ? {...s, ...payload.stageMember} : s));
+            setGroupMemberPrototypes(prevState => prevState.map(s => s._id === payload._id ? {...s, ...payload} : s));
         });
         socket.on(ServerStageEvents.GROUP_MEMBER_REMOVED, (stageMemberId: string) => {
             console.log("stage-member-removed");

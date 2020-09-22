@@ -46,6 +46,7 @@ const useMediasoup = () => {
         userId: string;
         volume: number
     }[]>([]);
+    const [error, setError] = useState<string>();
 
     useEffect(() => {
         connect();
@@ -71,14 +72,20 @@ const useMediasoup = () => {
                                     .then(transport => setReceiveTransport(transport));
                             })
                     });
-            });
-    }, []);
+            })
+            .catch(error => {
+                console.error(error);
+                setError(error);
+            })
+    }, [])
 
     const disconnect = useCallback(() => {
     }, [device]);
 
     const sendVideo = useCallback(() => {
-        navigator.mediaDevices.getUserMedia({
+        console.log("SEND VIDEO");
+        /*
+        return navigator.mediaDevices.getUserMedia({
             video: {
                 deviceId: localDevice.inputVideoDevice
             }
@@ -91,7 +98,7 @@ const useMediasoup = () => {
                         });
                 })
 
-            });
+            });*/
     }, [localDevice, sendTransport]);
 
     const stopSendingVideo = useCallback(() => {
@@ -107,7 +114,7 @@ const useMediasoup = () => {
     }, [localDevice, sendTransport]);
 
     const sendAudio = useCallback(() => {
-        navigator.mediaDevices.getUserMedia({
+        return navigator.mediaDevices.getUserMedia({
             audio: {
                 deviceId: localDevice.inputAudioDevice,
                 autoGainControl: false,
@@ -147,16 +154,16 @@ const useMediasoup = () => {
         if (localDevice && sendTransport && receiveTransport) {
             if (!lastDevice || localDevice.sendVideo !== lastDevice.sendVideo) {
                 if (localDevice.sendVideo) {
-                    sendVideo();
+                    //sendVideo();
                 } else {
-                    stopSendingVideo();
+                    //stopSendingVideo();
                 }
             }
             if (!lastDevice || localDevice.sendAudio !== lastDevice.sendAudio) {
                 if (localDevice.sendAudio) {
-                    sendAudio();
+                    //sendAudio();
                 } else {
-                    stopSendingAudio();
+                    //stopSendingAudio();
                 }
             }
             if (!lastDevice || localDevice.receiveVideo !== lastDevice.receiveVideo) {
