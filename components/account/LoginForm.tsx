@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Input} from "baseui/input";
 import * as Yup from "yup";
 import {Button, KIND} from "baseui/button";
@@ -8,6 +8,7 @@ import Router from "next/router";
 import {Notification} from "baseui/notification";
 import {FormControl} from "baseui/form-control";
 import {useAuth} from "../../lib/digitalstage/useAuth";
+import {ParagraphMedium} from "baseui/typography";
 
 const Schema = Yup.object().shape({
     email: Yup.string()
@@ -22,7 +23,7 @@ const LoginForm = (props: {
     targetUrl?: string,
     backLink?: string
 }) => {
-    const [error, setError] = useState<string>(null);
+    const [loginError, setError] = useState<string>();
     const {signInWithEmailAndPassword} = useAuth();
     const formik = useFormik({
         initialValues: {
@@ -36,14 +37,27 @@ const LoginForm = (props: {
         }) =>
             signInWithEmailAndPassword(values.email, values.password)
                 .then(() => {
+                    setError(undefined);
                     if (props.onCompleted)
                         props.onCompleted();
                     if (props.targetUrl)
                         return Router.push(props.targetUrl);
-                }).catch(
-                (error) => setError(error.message)
-            )
+                })
+                .catch(err => {
+                    if (err.message === "Unauthorized") {
+                        console.log("CALLED 1");
+                        setError("Falsches Passwort oder unbekannte E-Mail Adresse")
+                    } else {
+                        console.log("CALLED 2");
+                        setError("Unbekannter Fehler: " + err.message);
+                    }
+                })
     });
+
+    useEffect(() => {
+        console.log("error is now");
+        console.log(loginError);
+    }, [loginError])
 
     return (
         <form onSubmit={formik.handleSubmit}>
@@ -70,9 +84,10 @@ const LoginForm = (props: {
                        onBlur={formik.handleBlur}/>
             </FormControl>
 
-            {error && (
+
+            {loginError && (
                 <Notification kind='negative'>
-                    {error}
+                    {loginError}
                 </Notification>
             )}
 

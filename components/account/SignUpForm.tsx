@@ -57,6 +57,7 @@ const SignUpForm = (props: {
             })
                 .then(
                     () => {
+                        setError(undefined);
                         if (props.onCompleted)
                             props.onCompleted();
                         if (props.targetUrl)

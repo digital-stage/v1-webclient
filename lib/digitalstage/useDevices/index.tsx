@@ -93,6 +93,11 @@ export const DeviceContextProvider = (props: {
                 log("Token invalid, reset socket connection");
                 socket.disconnect();
                 setSocket(undefined);
+                setLocalDeviceId(undefined);
+                setLocalDevice(undefined);
+                setRemoteDevices([]);
+                setDevices([]);
+                setReady(false);
             }
         }
     }, [token]);
@@ -162,6 +167,7 @@ export const DeviceContextProvider = (props: {
             setRemoteDevices([]);
             setDevices([]);
             setReady(false);
+            setUser(undefined);
         }
     }, [socket]);
 

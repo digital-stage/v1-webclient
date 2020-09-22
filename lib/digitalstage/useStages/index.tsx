@@ -96,7 +96,7 @@ export const StagesContextProvider = (props: {
             return stage;
         })
         setStages(stages);
-    }, [stagePrototypes, groupPrototypes, groupMemberPrototypes, customGroupVolumes, customStageMemberVolumes, videoProducers, audioProducers, ovProducers]);
+    }, [user, stagePrototypes, groupPrototypes, groupMemberPrototypes, customGroupVolumes, customStageMemberVolumes, videoProducers, audioProducers, ovProducers]);
 
     // Assign active stage
     useEffect(() => {
@@ -198,6 +198,15 @@ export const StagesContextProvider = (props: {
     useEffect(() => {
         if (socket) {
             registerDeviceEvents(socket);
+        } else {
+            console.log("RESET ALL");
+            setStageId(undefined);
+            setStages([]);
+            setStagePrototypes([]);
+            setGroupPrototypes([]);
+            setGroupMemberPrototypes([]);
+            setCustomGroupVolumes([]);
+            setCustomStageMemberVolumes([]);
         }
     }, [socket]);
 

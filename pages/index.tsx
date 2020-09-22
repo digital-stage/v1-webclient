@@ -10,6 +10,7 @@ import {useStages} from "../lib/digitalstage/useStages";
 import {Button} from "baseui/button";
 import Container from "../components/theme/Container";
 import Loading from "../components/theme/Loading";
+import {useRouter} from "next/router";
 
 const DEBUG = false;
 
@@ -21,6 +22,7 @@ const TextArea = styled("textarea", {
 const Index = () => {
     const {localDevice, remoteDevices, logs} = useDevices();
     const {stage, leaveStage} = useStages();
+    const router = useRouter();
 
     const {loading, user} = useAuth();
 
@@ -31,7 +33,8 @@ const Index = () => {
     }
 
     if (!user) {
-        return <Login/>
+        console.log("Forwarding to login");
+        router.push("/login");
     }
 
     return (

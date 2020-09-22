@@ -17,24 +17,14 @@ export interface AuthProps {
     createUserWithEmailAndPassword(email: string, password: string, optional?: {
         name: string;
         avatarUrl?: string;
-    });
+    }): Promise<any>;
 
-    signInWithEmailAndPassword(email: string, password: string);
+    signInWithEmailAndPassword(email: string, password: string): Promise<any>;
 
-    logout();
+    logout(): Promise<any>;
 }
 
-const AuthContext = React.createContext<AuthProps>({
-    user: null,
-    loading: true,
-    token: null,
-    createUserWithEmailAndPassword: () => {
-    },
-    signInWithEmailAndPassword: () => {
-    },
-    logout: () => {
-    }
-});
+const AuthContext = React.createContext<AuthProps>(undefined);
 
 export const useAuth = (): AuthProps => React.useContext<AuthProps>(AuthContext);
 
@@ -70,13 +60,16 @@ export const AuthContextProvider = (props: {
                 avatarUrl: additional ? additional.avatarUrl : "",
             })
         })
-            .then(result => result.json())
             .then(result => {
-                console.log(result);
-                return result;
+                if (result.ok)
+                    return result.json();
+                throw new Error(result.statusText);
             })
             .then(result => setToken(result))
-            .then(() => setLoading(false));
+            .catch(err => {
+                setLoading(false);
+                throw err;
+            });
     }, []);
 
     const signInWithEmailAndPassword = useCallback((email: string, password: string) => {
@@ -91,16 +84,41 @@ export const AuthContextProvider = (props: {
                 password: password
             })
         })
-            .then(result => result.json())
+            .then(result => {
+                if (result.ok)
+                    return result.json();
+                throw new Error(result.statusText);
+            })
             .then(token => setToken(token))
-            .then(() => setLoading(false));
+            .catch(err => {
+                setLoading(false);
+                throw err;
+            });
     }, []);
 
     const logout = useCallback(() => {
-        cookie.remove('token');
-        setToken(undefined);
-        setUser(undefined);
-    }, []);
+        setLoading(true);
+        return fetch(AUTH_URL + "/logout",
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: "Bearer " + token
+                },
+                method: "POST"
+            }
+        )
+            .then(result => {
+                if (result.ok) {
+                    cookie.remove('token');
+                    setToken(undefined);
+                    setUser(undefined);
+                }
+            })
+            .catch(err => {
+                setLoading(false);
+                throw err;
+            })
+    }, [token]);
 
     useEffect(() => {
         if (token) {
@@ -112,6 +130,7 @@ export const AuthContextProvider = (props: {
         } else if (isCookieRead) {
             setUser(undefined);
             cookie.remove('token');
+            setLoading(false);
         }
     }, [token, isCookieRead]);
 
