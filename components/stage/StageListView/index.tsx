@@ -3,7 +3,6 @@ import React, {useEffect, useState} from "react";
 import {Button} from "baseui/button/index";
 import {Accordion, Panel} from "baseui/accordion/index";
 import {useStages} from "../../../lib/digitalstage/useStages";
-import {Group, Stage} from "../../../lib/digitalstage/common/model.client";
 import {Plus} from "baseui/icon/index";
 import CreateGroupModal from "./CreateGroupModal";
 import CreateStageModal from "./CreateStageModal";
@@ -12,6 +11,7 @@ import ModifyStageModal from "./ModifyStageModal";
 import {Tag} from "baseui/tag";
 import InviteModal from "./InviteModal";
 import {useRequest} from "../../../lib/useRequest";
+import Client from "../../../lib/digitalstage/common/model.client";
 
 const Label = styled("div", {})
 const GlobalActions = styled("div", {
@@ -73,8 +73,8 @@ const GroupAdminActions = styled("div", {
 const StageListView = () => {
     const {stageId, stages, removeStage, removeGroup, leaveStage, leaveStageForGood} = useStages();
     const {setRequest} = useRequest();
-    const [currentStage, setCurrentStage] = useState<Stage>();
-    const [currentGroup, setCurrentGroup] = useState<Group>();
+    const [currentStage, setCurrentStage] = useState<Client.Stage>();
+    const [currentGroup, setCurrentGroup] = useState<Client.Group>();
     const [isCreateGroupOpen, setCreateGroupIsOpen] = useState<boolean>(false);
     const [isModifyGroupOpen, setModifyGroupIsOpen] = useState<boolean>(false);
     const [isCreateStageOpen, setCreateStageIsOpen] = useState<boolean>(false);
@@ -87,11 +87,11 @@ const StageListView = () => {
     useEffect(() => {
         let numMembers = 0;
         let numOnlineMembers = 0;
-        for(const stage of stages) {
-            for(const group of stage.groups) {
+        for (const stage of stages) {
+            for (const group of stage.groups) {
                 numMembers += group.members.length;
                 group.members.forEach(m => {
-                    if( m.online ) {
+                    if (m.online) {
                         numOnlineMembers++;
                     }
                 })

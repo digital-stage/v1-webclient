@@ -1,13 +1,13 @@
 import * as Yup from "yup";
 import {useFormik} from "formik";
 import {useStages} from "../../../lib/digitalstage/useStages";
-import {Stage} from "../../../lib/digitalstage/common/model.client";
 import React, {useEffect} from "react";
 import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from "baseui/modal/index";
 import {Input} from "baseui/input/index";
 import {FormControl} from "baseui/form-control/index";
 import {KIND} from "baseui/button/index";
 import {Accordion, Panel} from "baseui/accordion/index";
+import Client from "../../../lib/digitalstage/common/model.client";
 
 const Schema = Yup.object().shape({
     name: Yup.string()
@@ -25,7 +25,7 @@ const Schema = Yup.object().shape({
 });
 
 const ModifyStageModal = (props: {
-    stage: Stage;
+    stage: Client.Stage;
     isOpen?: boolean;
     onClose?: () => any;
 

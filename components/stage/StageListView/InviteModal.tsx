@@ -2,12 +2,12 @@ import React, {useEffect, useRef, useState} from "react";
 import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from "baseui/modal";
 import CopyToClipboard from 'react-copy-to-clipboard';
 import {Input} from "baseui/input";
-import {Group, Stage} from "../../../lib/digitalstage/common/model.client";
 import {Checkbox} from "baseui/checkbox";
+import Client from "../../../lib/digitalstage/common/model.client";
 
 const InviteModal = (props: {
-    stage: Stage;
-    group: Group;
+    stage: Client.Stage;
+    group: Client.Group;
     isOpen?: boolean;
     onClose?: () => any;
     usePassword?: boolean;
