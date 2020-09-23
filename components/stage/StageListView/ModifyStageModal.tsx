@@ -79,6 +79,7 @@ const ModifyStageModal = (props: {
             closeable
             isOpen={props.isOpen}
             onClose={props.onClose}
+            unstable_ModalBackdropScroll={true}
         >
             <form onSubmit={formik.handleSubmit}>
                 <ModalHeader>Bühne ändern</ModalHeader>

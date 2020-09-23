@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
-import Container from "../components/theme/Container";
-import {useAuth} from "../lib/digitalstage/useAuth";
+import Container from "../../components/theme/Container";
+import {useAuth} from "../../lib/digitalstage/useAuth";
 import {DisplayMedium, HeadingLarge} from "baseui/typography";
-import Loading from "../components/theme/Loading";
+import Loading from "../../components/theme/Loading";
 import {useRouter} from "next/router";
 
 const Logout = () => {
@@ -14,11 +14,11 @@ const Logout = () => {
         logout()
             .then(() => {
                 setLoggedOut(true);
-                router.push("/");
+                router.push("/account/login");
             })
     }, []);
 
-    if( !loading ) {
+    if (!loading) {
         if (loggedOut) {
             return (
                 <Container>

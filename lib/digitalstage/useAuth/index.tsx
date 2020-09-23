@@ -21,6 +21,10 @@ export interface AuthProps {
 
     signInWithEmailAndPassword(email: string, password: string): Promise<any>;
 
+    requestPasswordReset(email: string): Promise<any>;
+
+    resetPassword(resetToken: string, password: string): Promise<any>;
+
     logout(): Promise<any>;
 }
 
@@ -38,7 +42,6 @@ const getUserByToken = (token: string): Promise<AuthUser> => fetch(AUTH_URL + "/
 export const AuthContextProvider = (props: {
     children: React.ReactNode
 }) => {
-    const [isCookieRead, setCookieRead] = useState<boolean>(false);
     const [token, setToken] = useState<string>();
     const [user, setUser] = useState<AuthUser>();
     const [loading, setLoading] = useState<boolean>(true);
@@ -65,10 +68,14 @@ export const AuthContextProvider = (props: {
                     return result.json();
                 throw new Error(result.statusText);
             })
-            .then(result => setToken(result))
-            .catch(err => {
+            .then(token => getUserByToken(token)
+                .then(user => {
+                    setUser(user);
+                    setToken(token);
+                    cookie.set('token', token, {expires: 7});
+                }))
+            .finally(() => {
                 setLoading(false);
-                throw err;
             });
     }, []);
 
@@ -89,10 +96,53 @@ export const AuthContextProvider = (props: {
                     return result.json();
                 throw new Error(result.statusText);
             })
-            .then(token => setToken(token))
-            .catch(err => {
+            .then(token => getUserByToken(token)
+                .then(user => {
+                    setUser(user);
+                    setToken(token);
+                    cookie.set('token', token, {expires: 7});
+                }))
+            .finally(() => {
                 setLoading(false);
-                throw err;
+            });
+    }, []);
+
+    const requestPasswordReset = useCallback((email: string) => {
+        return fetch(AUTH_URL + "/forgot",
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    email: email
+                })
+            }
+        )
+            .then(result => {
+                if (!result.ok) {
+                    throw new Error("Unbekannte E-Mail Adresse")
+                }
+            });
+    }, []);
+
+    const resetPassword = useCallback((resetToken: string, password: string) => {
+        return fetch(AUTH_URL + "/reset",
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({
+                    token: resetToken,
+                    password: password
+                })
+            }
+        )
+            .then(result => {
+                if (!result.ok) {
+                    throw new Error("Abgelaufener Link")
+                }
             });
     }, []);
 
@@ -114,32 +164,32 @@ export const AuthContextProvider = (props: {
                     setUser(undefined);
                 }
             })
-            .catch(err => {
+            .finally(() => {
                 setLoading(false);
-                throw err;
             })
     }, [token]);
 
     useEffect(() => {
-        if (token) {
-            cookie.set('token', token, {expires: 1});
-            getUserByToken(token).then(user => {
-                setUser(user);
-                setLoading(false);
-            });
-        } else if (isCookieRead) {
-            setUser(undefined);
-            cookie.remove('token');
-            setLoading(false);
-        }
-    }, [token, isCookieRead]);
-
-    useEffect(() => {
+        // First get cookie
         const token = cookie.get('token');
         if (token) {
-            setToken(token);
+            // Try to use the token to login
+            getUserByToken(token)
+                .then(user => {
+                    setUser(user);
+                    setToken(token);
+                })
+                .catch(error => {
+                    console.error(error);
+                    setUser(undefined);
+                    setToken(undefined);
+                    cookie.remove('token');
+                })
+                .finally(() => {
+                    setLoading(false);
+                })
         } else {
-            setCookieRead(true);
+            setUser(undefined);
             setLoading(false);
         }
     }, []);
@@ -148,6 +198,8 @@ export const AuthContextProvider = (props: {
         <AuthContext.Provider value={{
             createUserWithEmailAndPassword: createUserWithEmailAndPassword,
             signInWithEmailAndPassword: signInWithEmailAndPassword,
+            requestPasswordReset: requestPasswordReset,
+            resetPassword: resetPassword,
             logout: logout,
             user: user,
             loading: loading,

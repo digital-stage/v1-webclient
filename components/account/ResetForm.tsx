@@ -11,12 +11,6 @@ import {Checkbox, LABEL_PLACEMENT} from "baseui/checkbox";
 import {useAuth} from "../../lib/digitalstage/useAuth";
 
 const Schema = Yup.object().shape({
-    name: Yup.string()
-        .min(2, 'Zu kurz')
-        .max(50, 'Zu lang'),
-    email: Yup.string()
-        .email('Ungültige E-Mail Adresse')
-        .required('Wird benötigt'),
     password: Yup.string()
         .min(10, 'Zu kurz')
         .max(50, 'Zu lang')
@@ -25,36 +19,26 @@ const Schema = Yup.object().shape({
         .required()
         .test('passwords-match', 'Die Passwörter stimmen nicht überein', function (value) {
             return this.parent.password === value;
-        }),
-    agreeToTerms: Yup.boolean()
-        .test(
-            'is-true',
-            'Bitte lese und akzeptiere unsere Datenschutzbestimmungen',
-            value => value === true
-        ),
+        })
 });
 
-const SignUpForm = (props: {
+const ResetForm = (props: {
+    resetToken: string,
     onCompleted?: () => void,
     targetUrl?: string,
     backLink?: string
 }) => {
     const [error, setError] = useState<string>(null);
-    const {createUserWithEmailAndPassword} = useAuth();
+    const {resetPassword} = useAuth();
 
     const formik = useFormik({
         initialValues: {
-            name: '',
-            email: '',
             password: '',
-            confirmPassword: '',
-            agreeToTerms: false
+            confirmPassword: ''
         },
         validationSchema: Schema,
         onSubmit: (values) =>
-            createUserWithEmailAndPassword(values.email, values.password, {
-                name: values.name
-            })
+            resetPassword(props.resetToken, values.password)
                 .then(
                     () => {
                         setError(undefined);
@@ -70,30 +54,6 @@ const SignUpForm = (props: {
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            <FormControl
-                label="Name"
-                error={formik.errors.name}
-            >
-                <Input
-                    required
-                    name="name"
-                    value={formik.values.name}
-                    onChange={formik.handleChange}
-                />
-            </FormControl>
-
-            <FormControl
-                label="E-Mail Adresse"
-                error={formik.errors.email}
-            >
-                <Input
-                    required
-                    name="email"
-                    value={formik.values.email}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                />
-            </FormControl>
             <FormControl
                 label="Passwort"
                 error={formik.errors.password}
@@ -120,21 +80,6 @@ const SignUpForm = (props: {
                     onBlur={formik.handleBlur}
                 />
             </FormControl>
-            <FormControl
-                error={formik.errors.agreeToTerms}
-            >
-                <Checkbox
-                    required
-                    name="agreeToTerms"
-                    labelPlacement={LABEL_PLACEMENT.right}
-                    checked={formik.values.agreeToTerms}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                >
-                    Durch die Nutzung dieser Website stimmst du der Verwendung von Cookies zu. Weitere
-                    Informationen dazu findest du in unserer Datenschutzerklärung / Impressum.
-                </Checkbox>
-            </FormControl>
 
             {error && (
                 <Notification kind='negative'>
@@ -143,7 +88,7 @@ const SignUpForm = (props: {
             )}
 
             <Button disabled={!formik.isValid} type="submit">
-                Registrieren
+                Passwort zurücksetzen
             </Button>
             {props.backLink && (
                 <Link href={props.backLink}>
@@ -156,4 +101,4 @@ const SignUpForm = (props: {
         </form>
     )
 };
-export default SignUpForm;
+export default ResetForm;

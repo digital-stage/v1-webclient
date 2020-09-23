@@ -25,7 +25,7 @@ const StageJoiner = () => {
                     setNotFound(true);
                 }
             });
-    }, [stageId, groupId, password]);
+    }, [joinStage, stageId, groupId, password]);
 
 
     useEffect(() => {
@@ -41,13 +41,21 @@ const StageJoiner = () => {
 
     return (
         <>
-            <Modal isOpen={notFound} onClose={() => setNotFound(false)}>
+            <Modal
+                isOpen={notFound}
+                onClose={() => setNotFound(false)}
+                unstable_ModalBackdropScroll={true}
+            >
                 <ModalHeader>Bühne nicht gefunden</ModalHeader>
                 <ModalFooter>
                     <ModalButton isSelected={true} onClick={() => setNotFound(false)}>Verstanden</ModalButton>
                 </ModalFooter>
             </Modal>
-            <Modal isOpen={wrongPassword} onClose={() => setWrongPassword(false)}>
+            <Modal
+                isOpen={wrongPassword}
+                onClose={() => setWrongPassword(false)}
+                unstable_ModalBackdropScroll={true}
+            >
                 <ModalHeader>{retries === 0 ? "Passwort notwendig" : "Falsches Passwort"}</ModalHeader>
                 <ModalBody>
                     <Input inputRef={passwordRef} type="password"/>

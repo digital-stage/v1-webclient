@@ -1,21 +1,22 @@
 import React, {useCallback, useEffect, useState} from "react";
-import Server, {Group, GroupMember, Stage} from "../common/model.client";
+import Server from "../common/model.server";
 import {CustomGroupVolumeId, CustomStageMemberVolumeId, GroupId, StageId, StageMemberId} from "../common/model.common";
 import {useDevices} from "../useDevices";
 import {ClientStageEvents, ServerStageEvents} from "../common/events";
 import useMediasoup from "../useMediasoup";
 import {useRequest} from "../../useRequest";
+import Client from "../common/model.client";
 
 export interface StagesProps {
-    stages: Stage[];
+    stages: Client.Stage[];
 
-    stage: Stage;
+    stage: Client.Stage;
 
     stageId?: { stageId: StageId, groupId: GroupId };
 
     createStage(name: string, password: string | null, width?: number, length?: number, height?: number, reflection?: number, absorption?: number);
 
-    updateStage(id: StageId, stage: Partial<Server.StagePrototype>);
+    updateStage(id: StageId, stage: Partial<Server.Stage>);
 
     joinStage(stageId: StageId, groupId: GroupId, password: string | null): Promise<void>;
 
@@ -27,13 +28,13 @@ export interface StagesProps {
 
     createGroup(stageId: StageId, name: string);
 
-    updateGroup(id: GroupId, group: Partial<Server.GroupPrototype>);
+    updateGroup(id: GroupId, group: Partial<Server.Group>);
 
     setGroupVolume(id: GroupId, volume: number);
 
     removeGroup(id: GroupId);
 
-    updateStageMember(id: StageMemberId, stageMember: Partial<Server.StageMemberPrototype>);
+    updateStageMember(id: StageMemberId, stageMember: Partial<Server.StageMember>);
 
     setStageMemberVolume(id: StageMemberId, volume: number);
 
@@ -56,31 +57,31 @@ export const StagesContextProvider = (props: {
     const {setRequest} = useRequest();
 
     // Prototypes
-    const [stagePrototypes, setStagePrototypes] = useState<Server.StagePrototype[]>([]);
-    const [groupPrototypes, setGroupPrototypes] = useState<Server.GroupPrototype[]>([]);
-    const [groupMemberPrototypes, setGroupMemberPrototypes] = useState<Server.GroupMemberPrototype[]>([]);
-    const [customGroupVolumes, setCustomGroupVolumes] = useState<Server.CustomGroupVolumePrototype[]>([]);
-    const [customStageMemberVolumes, setCustomStageMemberVolumes] = useState<Server.CustomStageMemberVolumePrototype[]>([]);
+    const [stagePrototypes, setStagePrototypes] = useState<Server.Stage[]>([]);
+    const [groupPrototypes, setGroupPrototypes] = useState<Server.Group[]>([]);
+    const [customGroupVolumes, setCustomGroupVolumes] = useState<Server.CustomGroupVolume[]>([]);
+    const [stageMemberPrototypes, setStageMemberPrototypes] = useState<Server.StageMember[]>([]);
+    const [customStageMemberVolumes, setCustomStageMemberVolumes] = useState<Server.CustomStageMemberVolume[]>([]);
     const {videoProducers, ovProducers, audioProducers} = useMediasoup();
 
     // Resolved Objects
-    const [stage, setStage] = useState<Stage>();
-    const [stages, setStages] = useState<Stage[]>([]);
+    const [stage, setStage] = useState<Client.Stage>();
+    const [stages, setStages] = useState<Client.Stage[]>([]);
 
     // Resolve stage objects
     useEffect(() => {
-        const stages: Stage[] = stagePrototypes.map(stagePrototype => {
-            const stage: Stage = {
+        const stages: Client.Stage[] = stagePrototypes.map(stagePrototype => {
+            const stage: Client.Stage = {
                 ...stagePrototype,
                 isAdmin: user && stagePrototype.admins.indexOf(user._id) !== -1,
                 groups: groupPrototypes.filter(groupPrototype => groupPrototype.stageId === stagePrototype._id).map(groupPrototype => {
                     const customVolume = customGroupVolumes.find(customGroupVolume => customGroupVolume.groupId === groupPrototype._id);
-                    const group: Group = {
+                    const group: Client.Group = {
                         ...groupPrototype,
                         customVolume: customVolume ? customVolume.volume : undefined,
-                        members: groupMemberPrototypes.filter(groupMemberPrototype => groupMemberPrototype.groupId === groupPrototype._id).map(groupMemberPrototype => {
+                        members: stageMemberPrototypes.filter(groupMemberPrototype => groupMemberPrototype.groupId === groupPrototype._id).map(groupMemberPrototype => {
                             const customVolume = customStageMemberVolumes.find(customStageMemberVolume => customStageMemberVolume.stageMemberId === groupMemberPrototype._id);
-                            const member: GroupMember = {
+                            const member: Client.GroupMember = {
                                 ...groupMemberPrototype,
                                 customVolume: customVolume ? customVolume.volume : undefined,
                                 audioProducers: audioProducers.filter(producer => producer.userId === groupMemberPrototype.userId),
@@ -96,7 +97,7 @@ export const StagesContextProvider = (props: {
             return stage;
         })
         setStages(stages);
-    }, [user, stagePrototypes, groupPrototypes, groupMemberPrototypes, customGroupVolumes, customStageMemberVolumes, videoProducers, audioProducers, ovProducers]);
+    }, [user, stagePrototypes, groupPrototypes, stageMemberPrototypes, customGroupVolumes, customStageMemberVolumes, videoProducers, audioProducers, ovProducers]);
 
     // Assign active stage
     useEffect(() => {
@@ -108,10 +109,10 @@ export const StagesContextProvider = (props: {
     }, [stageId, stages]);
 
     const registerDeviceEvents = (socket) => {
-        socket.on(ServerStageEvents.STAGE_ADDED, (stage: Server.StagePrototype) => {
+        socket.on(ServerStageEvents.STAGE_ADDED, (stage: Server.Stage) => {
             setStagePrototypes(prevState => [...prevState, stage]);
         });
-        socket.on(ServerStageEvents.STAGE_CHANGED, (payload: { id: StageId, stage: Server.StagePrototype }) => {
+        socket.on(ServerStageEvents.STAGE_CHANGED, (payload: { id: StageId, stage: Server.Stage }) => {
             setStagePrototypes(prevState => prevState.map(s => {
                 if (s._id === payload.id) {
                     console.log("Found stage");
@@ -123,38 +124,38 @@ export const StagesContextProvider = (props: {
         socket.on(ServerStageEvents.STAGE_REMOVED, (stageId: string) => {
             setStagePrototypes(prevState => prevState.filter(stage => stage._id !== stageId));
         });
-        socket.on(ServerStageEvents.GROUP_ADDED, (group: Server.GroupPrototype) => {
+        socket.on(ServerStageEvents.GROUP_ADDED, (group: Server.Group) => {
             setGroupPrototypes(prevState => [...prevState, group])
         });
-        socket.on(ServerStageEvents.GROUP_CHANGED, (payload: { id: GroupId, group: Server.StageMemberPrototype }) => {
+        socket.on(ServerStageEvents.GROUP_CHANGED, (payload: { id: GroupId, group: Server.Group }) => {
             console.log(payload);
             setGroupPrototypes(prevState => prevState.map(s => s._id === payload.id ? {...s, ...payload.group} : s));
         });
         socket.on(ServerStageEvents.GROUP_REMOVED, (groupId: string) => {
             setGroupPrototypes(prevState => prevState.filter(group => group._id !== groupId));
         });
-        socket.on(ServerStageEvents.GROUP_MEMBER_ADDED, (stageMember: Server.GroupMemberPrototype) => {
+        socket.on(ServerStageEvents.GROUP_MEMBER_ADDED, (stageMember: Server.StageMember) => {
             console.log("stage-member-added");
             console.log(stageMember);
-            setGroupMemberPrototypes(prevState => [...prevState, stageMember])
+            setStageMemberPrototypes(prevState => [...prevState, stageMember])
         });
-        socket.on(ServerStageEvents.GROUP_MEMBER_CHANGED, (payload: Partial<Server.GroupMemberPrototype>) => {
+        socket.on(ServerStageEvents.GROUP_MEMBER_CHANGED, (payload: Partial<Server.StageMember>) => {
             console.log("stage-member-changed");
             console.log(payload);
-            setGroupMemberPrototypes(prevState => prevState.map(s => s._id === payload._id ? {...s, ...payload} : s));
+            setStageMemberPrototypes(prevState => prevState.map(s => s._id === payload._id ? {...s, ...payload} : s));
         });
         socket.on(ServerStageEvents.GROUP_MEMBER_REMOVED, (stageMemberId: string) => {
             console.log("stage-member-removed");
             console.log(stageMemberId);
-            setGroupMemberPrototypes(prevState => prevState.filter(stageMember => stageMember._id !== stageMemberId));
+            setStageMemberPrototypes(prevState => prevState.filter(stageMember => stageMember._id !== stageMemberId));
         });
-        socket.on(ServerStageEvents.CUSTOM_GROUP_VOLUME_ADDED, (customGroupVolume: Server.CustomGroupVolumePrototype) => {
+        socket.on(ServerStageEvents.CUSTOM_GROUP_VOLUME_ADDED, (customGroupVolume: Server.CustomGroupVolume) => {
             console.log("custom-group-volume-added");
             console.log(customGroupVolume);
             // We don't need to filter by stage, since volumes are send for active stages only
             setCustomGroupVolumes(prevState => [...prevState, customGroupVolume]);
         });
-        socket.on(ServerStageEvents.CUSTOM_GROUP_VOLUME_CHANGED, (customGroupVolume: Server.CustomGroupVolumePrototype) => {
+        socket.on(ServerStageEvents.CUSTOM_GROUP_VOLUME_CHANGED, (customGroupVolume: Server.CustomGroupVolume) => {
             console.log("custom-group-volume-changed");
             console.log(customGroupVolume);
             // We don't need to filter by stage, since volumes are send for active stages only
@@ -166,13 +167,13 @@ export const StagesContextProvider = (props: {
             // We don't need to filter by stage, since volumes are send for active stages only
             setCustomGroupVolumes(prevState => prevState.filter(customGroupVolume => customGroupVolume._id !== id));
         });
-        socket.on(ServerStageEvents.CUSTOM_GROUP_MEMBER_VOLUME_ADDED, (customStageMemberVolume: Server.CustomStageMemberVolumePrototype) => {
+        socket.on(ServerStageEvents.CUSTOM_GROUP_MEMBER_VOLUME_ADDED, (customStageMemberVolume: Server.CustomStageMemberVolume) => {
             console.log("custom-stage-member-volume-added");
             console.log(customStageMemberVolume);
             // We don't need to filter by stage, since volumes are send for active stages only
             setCustomStageMemberVolumes(prevState => [...prevState, customStageMemberVolume]);
         });
-        socket.on(ServerStageEvents.CUSTOM_GROUP_MEMBER_CHANGED, (customStageMemberVolume: Server.CustomStageMemberVolumePrototype) => {
+        socket.on(ServerStageEvents.CUSTOM_GROUP_MEMBER_CHANGED, (customStageMemberVolume: Server.CustomStageMemberVolume) => {
             console.log("custom-stage-member-volume-changed");
             console.log(customStageMemberVolume);
             // We don't need to filter by stage, since volumes are send for active stages only
@@ -190,7 +191,7 @@ export const StagesContextProvider = (props: {
             setStages([]);
             setStagePrototypes([]);
             setGroupPrototypes([]);
-            setGroupMemberPrototypes([]);
+            setStageMemberPrototypes([]);
             setCustomGroupVolumes([]);
             setCustomStageMemberVolumes([]);
         });
@@ -204,7 +205,7 @@ export const StagesContextProvider = (props: {
             setStages([]);
             setStagePrototypes([]);
             setGroupPrototypes([]);
-            setGroupMemberPrototypes([]);
+            setStageMemberPrototypes([]);
             setCustomGroupVolumes([]);
             setCustomStageMemberVolumes([]);
         }
@@ -225,7 +226,7 @@ export const StagesContextProvider = (props: {
         }
     }, [socket]);
 
-    const updateStage = useCallback((id: StageId, stage: Partial<Server.StagePrototype>) => {
+    const updateStage = useCallback((id: StageId, stage: Partial<Server.Stage>) => {
         if (socket) {
             socket.emit(ClientStageEvents.CHANGE_STAGE, {
                 id: id,
@@ -285,7 +286,7 @@ export const StagesContextProvider = (props: {
         }
     }, [socket]);
 
-    const updateGroup = useCallback((id: GroupId, group: Partial<Server.GroupPrototype>) => {
+    const updateGroup = useCallback((id: GroupId, group: Partial<Server.Group>) => {
         if (socket) {
             socket.emit(ClientStageEvents.CHANGE_GROUP, {
                 id: id,
@@ -296,11 +297,12 @@ export const StagesContextProvider = (props: {
 
     const removeGroup = useCallback((id: GroupId) => {
         if (socket) {
+            console.log("remove " + id);
             socket.emit(ClientStageEvents.REMOVE_GROUP, id);
         }
     }, [socket]);
 
-    const updateStageMember = useCallback((id: StageMemberId, stageMember: Partial<Server.StageMemberPrototype>) => {
+    const updateStageMember = useCallback((id: StageMemberId, stageMember: Partial<Server.StageMember>) => {
         if (socket) {
             socket.emit(ClientStageEvents.CHANGE_GROUP_MEMBER, {
                 id: id,

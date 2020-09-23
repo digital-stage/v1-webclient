@@ -46,7 +46,6 @@ export const DeviceContextProvider = (props: {
 
     useEffect(() => {
         if (token) {
-            console.log("TOKEN");
             if (!socket) {
                 const bowser = Bowser.getParser(window.navigator.userAgent);
                 const os = bowser.getOSName();
@@ -123,16 +122,12 @@ export const DeviceContextProvider = (props: {
 
     const registerDeviceEvents = (socket) => {
         log("Register device changes");
-        console.log("Register device changes");
         socket.on(ServerGlobalEvents.READY, () => setReady(true));
         socket.on(ServerUserEvents.USER_READY, (user) => setUser(user));
-        socket.on(ServerDeviceEvents.DEVICE_ADDED, () => console.log("device-added"));
         socket.on(ServerDeviceEvents.DEVICE_ADDED, (device: Device) => setDevices(prevState => [...prevState, device]));
         socket.on(ServerDeviceEvents.DEVICE_CHANGED, (device: Device) => setDevices(prevState => prevState.map(d => d._id === device._id ? {...d, ...device} : d)));
         socket.on(ServerDeviceEvents.DEVICE_REMOVED, (device: Device) => setDevices(prevState => prevState.filter(d => d._id !== device._id)));
         socket.on(ServerDeviceEvents.LOCAL_DEVICE_READY, (device: Device) => {
-            console.log("local-device-ready");
-            console.log(device);
             setLocalDeviceId(device._id);
             setDevices(prevState => [...prevState, device]);
             navigator.mediaDevices.ondevicechange = () => enumerateDevices()
@@ -157,7 +152,6 @@ export const DeviceContextProvider = (props: {
 
     useEffect(() => {
         if (socket) {
-            console.log("useDevice: socket changed");
             log("Socket available");
             registerDeviceEvents(socket);
         } else {

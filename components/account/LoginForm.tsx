@@ -8,7 +8,6 @@ import Router from "next/router";
 import {Notification} from "baseui/notification";
 import {FormControl} from "baseui/form-control";
 import {useAuth} from "../../lib/digitalstage/useAuth";
-import {ParagraphMedium} from "baseui/typography";
 
 const Schema = Yup.object().shape({
     email: Yup.string()

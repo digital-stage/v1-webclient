@@ -33,7 +33,11 @@ const InviteModal = (props: {
     }
 
     return (
-        <Modal isOpen={props.isOpen} onClose={props.onClose}>
+        <Modal
+            isOpen={props.isOpen}
+            onClose={props.onClose}
+            unstable_ModalBackdropScroll={true}
+        >
             <ModalHeader>
                 Leute einladen
             </ModalHeader>

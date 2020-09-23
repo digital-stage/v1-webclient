@@ -69,7 +69,7 @@ export const USER_NAV: UserNavItem[] = [
         icon: UserIcon,
         item: {
             label: 'Profil',
-            path: '/profile'
+            path: '/account/profile'
         },
         mapItemToNode: renderItem,
         mapItemToString: renderItem,
@@ -78,7 +78,7 @@ export const USER_NAV: UserNavItem[] = [
         icon: UserIcon,
         item: {
             label: 'Abmelden',
-            path: '/logout'
+            path: '/account/logout'
         },
         mapItemToNode: renderItem,
         mapItemToString: renderItem,
@@ -90,7 +90,7 @@ export const NO_USER_NAV: UserNavItem[] = [
         icon: Icon,
         item: {
             label: 'Registrieren',
-            path: '/signup'
+            path: '/account/signup'
         },
         mapItemToNode: renderItem,
         mapItemToString: renderItem,
@@ -99,7 +99,7 @@ export const NO_USER_NAV: UserNavItem[] = [
         icon: Icon,
         item: {
             label: 'Anmelden',
-            path: '/login'
+            path: '/account/login'
         },
         mapItemToNode: renderItem,
         mapItemToString: renderItem,

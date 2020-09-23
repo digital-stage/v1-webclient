@@ -17,7 +17,6 @@ import {useRouter} from "next/router";
 import {useStages} from "../../lib/digitalstage/useStages";
 import {useDevices} from "../../lib/digitalstage/useDevices";
 import TextLink from "../theme/TextLink";
-import {Upload as Icon} from "baseui/icon";
 
 
 const AppNavigation = () => {
@@ -73,7 +72,7 @@ const AppNavigation = () => {
         <Layer>
             <div className={containerStyles}>
                 <AppNavBar
-                    appDisplayName={<TextLink href={"/"}>Digital Stage</TextLink>}
+                    appDisplayName={<TextLink hideUnderline={true} href={"/"}>Digital Stage</TextLink>}
                     mainNav={mainNav}
                     isNavItemActive={({item}: any) => {
                         return (item.item.path && router.pathname === item.item.path) || isActive(mainNav, item, activeNavItem);
@@ -82,7 +81,6 @@ const AppNavigation = () => {
                         if (item === activeNavItem) return;
                         setActiveNavItem(item);
                         if (item.item.path) {
-                            console.log("Navigating to " + item.item.path);
                             router.push(item.item.path);
                         }
                     }}

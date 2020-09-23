@@ -1,8 +1,8 @@
 import {HeadingLarge} from "baseui/typography";
 import React from "react";
-import Container from "../components/theme/Container";
-import {useDevices} from "../lib/digitalstage/useDevices";
-import {useAuth} from "../lib/digitalstage/useAuth";
+import Container from "../../components/theme/Container";
+import {useDevices} from "../../lib/digitalstage/useDevices";
+import {useAuth} from "../../lib/digitalstage/useAuth";
 
 const Profile = () => {
     const {user: authUser} = useAuth();

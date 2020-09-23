@@ -6,6 +6,7 @@ import {UrlObject} from "url";
 declare type Url = string | UrlObject;
 const TextLink = (props: {
     href: Url;
+    hideUnderline?: boolean;
     animateUnderline?: boolean;
     children: React.ReactNode;
 }) => {
@@ -13,13 +14,15 @@ const TextLink = (props: {
         <Link href={props.href}>
             <StyledLink
                 $style={{
-                    textDecoration: 'none',
+                    textDecoration: props.hideUnderline ? "none" : "underline",
                     color: 'inherit',
                     cursor: 'pointer',
-                    ':hover': {color: 'inherit'},
+                    ':hover': {
+                        color: 'inherit'
+                    },
                     ':visited': {color: 'inherit'},
                 }}
-                animateUnderline={props.animateUnderline}
+                //animateUnderline={props.animateUnderline}
             >
                 {props.children}
             </StyledLink>

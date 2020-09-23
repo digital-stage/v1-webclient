@@ -1,10 +1,9 @@
 import {styled} from "baseui";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button} from "baseui/button/index";
 import {Accordion, Panel} from "baseui/accordion/index";
 import {useStages} from "../../../lib/digitalstage/useStages";
 import {Group, Stage} from "../../../lib/digitalstage/common/model.client";
-import {ButtonGroup} from "baseui/button-group/index";
 import {Plus} from "baseui/icon/index";
 import CreateGroupModal from "./CreateGroupModal";
 import CreateStageModal from "./CreateStageModal";
@@ -82,6 +81,26 @@ const StageListView = () => {
     const [isModifyStageOpen, setModifyStageIsOpen] = useState<boolean>(false);
     const [isCopyLinkOpen, setCopyLinkOpen] = useState<boolean>();
 
+    const [numMembers, setNumMembers] = useState<number>();
+    const [numOnlineMembers, setNumOnlineMembers] = useState<number>();
+
+    useEffect(() => {
+        let numMembers = 0;
+        let numOnlineMembers = 0;
+        for(const stage of stages) {
+            for(const group of stage.groups) {
+                numMembers += group.members.length;
+                group.members.forEach(m => {
+                    if( m.online ) {
+                        numOnlineMembers++;
+                    }
+                })
+            }
+        }
+        setNumMembers(numMembers);
+        setNumOnlineMembers(numMembers);
+    }, [stages])
+
     return (
         <>
             <GlobalActions>
@@ -92,11 +111,14 @@ const StageListView = () => {
             </GlobalActions>
             <Accordion>
                 {stages.map(stage => (
-                    <Panel title={(
-                        <StageTitle>
-                            {stage.name}
-                        </StageTitle>
-                    )}>
+                    <Panel
+                        key={stage._id}
+                        title={(
+                            <StageTitle>
+                                {stage.name}
+                            </StageTitle>
+                        )}
+                    >
                         <StageTopActions>
                             {stage.isAdmin ? (
                                 <>
@@ -129,7 +151,7 @@ const StageListView = () => {
                             )}
                         </StageTopActions>
                         {stage.groups.map(group => (
-                            <GroupRow>
+                            <GroupRow key={group._id}>
                                 <GroupTitle>
                                     <Label>{group.name}</Label>
 
@@ -201,6 +223,9 @@ const StageListView = () => {
                     </Panel>
                 ))}
             </Accordion>
+            <div>
+                {numMembers} Members
+            </div>
             <CreateStageModal isOpen={isCreateStageOpen}
                               onClose={() => setCreateStageIsOpen(false)}/>
             <CreateGroupModal stage={currentStage} isOpen={isCreateGroupOpen}
