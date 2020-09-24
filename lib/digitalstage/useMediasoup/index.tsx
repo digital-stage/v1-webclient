@@ -1,51 +1,53 @@
 import {useCallback, useEffect, useState} from "react";
 import {Device, Producer, Router} from "../common/model.common";
 import {useDevices} from "../useDevices";
-import {ServerStageEvents} from "../common/events";
+import {ClientDeviceEvents, ServerStageEvents} from "../common/events";
 import mediasoupClient from 'mediasoup-client';
 import {Device as MediasoupDevice} from 'mediasoup-client/lib/Device'
 import {createProducer, createWebRTCTransport, getFastestRouter, getUrl, RouterGetUrls, stopProducer} from "./util";
 
-export interface Consumer {
+export type RemoteProducer = Producer;
 
-}
-
-export interface ResolvedProducer extends Producer {
+export interface AudioConsumer extends Producer {
     actualVolume: number;
+    msConsumer: mediasoupClient.types.Consumer
 }
 
-export interface OVProducer extends Producer {
-
+export interface VideoConsumer extends Producer {
+    msConsumer: mediasoupClient.types.Consumer
 }
 
-export interface AudioProducer extends ResolvedProducer {
-
+export interface OvConsumer extends Producer {
 }
 
-export interface VideoProducer extends ResolvedProducer {
-
+export interface LocalProducer extends Producer {
+    msProducer: mediasoupClient.types.Producer
 }
-
-const createConsumer = (producer: Producer) => {
-
-};
 
 
 const useMediasoup = () => {
     const {socket, localDevice} = useDevices();
     const [lastDevice, setLastDevice] = useState<Device>();
-    const [audioProducers, setAudioProducers] = useState<AudioProducer[]>([]);
-    const [videoProducers, setVideoProducers] = useState<VideoProducer[]>([]);
-    const [ovProducers, setOvProducers] = useState<OVProducer[]>([]);
-    const [device, setDevice] = useState<MediasoupDevice>();
     const [router, setRouter] = useState<Router>();
+
+    const [working, setWorking] = useState<boolean>(false);
+
+    // For mediasoup
     const [sendTransport, setSendTransport] = useState<mediasoupClient.types.Transport>();
     const [receiveTransport, setReceiveTransport] = useState<mediasoupClient.types.Transport>();
-    const [producers, setProducers] = useState<mediasoupClient.types.Producer[]>([]);
-    const [volumes, setVolumes] = useState<{
-        userId: string;
-        volume: number
-    }[]>([]);
+
+    // Remote offers
+    const [remoteProducers, setRemoteProducers] = useState<RemoteProducer[]>([]);
+
+    // Consumers
+    const [audioConsumers, setAudioConsumers] = useState<AudioConsumer[]>([]);
+    const [videoConsumers, setVideoConsumers] = useState<VideoConsumer[]>([]);
+    const [ovConsumers, setOvConsumer] = useState<OvConsumer[]>([]);
+
+
+    // Local producers
+    const [localProducers, setLocalProducers] = useState<LocalProducer[]>([]);
+
     const [error, setError] = useState<string>();
 
     useEffect(() => {
@@ -64,7 +66,6 @@ const useMediasoup = () => {
                         };
                         const device = new MediasoupDevice();
                         device.load({routerRtpCapabilities: rtpCapabilities})
-                            .then(() => setDevice(device))
                             .then(() => {
                                 createWebRTCTransport(router, device, 'send', handleDisconnect)
                                     .then(transport => setSendTransport(transport));
@@ -79,148 +80,143 @@ const useMediasoup = () => {
             })
     }, [])
 
-    const disconnect = useCallback(() => {
-    }, [device]);
 
-    const sendVideo = useCallback(() => {
-        console.log("SEND VIDEO");
-        /*
-        return navigator.mediaDevices.getUserMedia({
-            video: {
+    const startSending = useCallback((kind: "audio" | "video") => {
+        setWorking(true);
+        navigator.mediaDevices.getUserMedia({
+            video: kind === "video" ? {
                 deviceId: localDevice.inputVideoDevice
-            }
-        })
-            .then(stream => {
-                stream.getVideoTracks().forEach(track => {
-                    createProducer(sendTransport, track)
-                        .then(producer => {
-                            setProducers(prevState => [...prevState, producer]);
-                        });
-                })
-
-            });*/
-    }, [localDevice, sendTransport]);
-
-    const stopSendingVideo = useCallback(() => {
-        producers.forEach(producer => {
-            if (producer.kind === "video") {
-                stopProducer(router, producer)
-                    .then(() => {
-                        setProducers(prevState => prevState.filter(p => p.id === producer.id));
-                    })
-            }
-        })
-
-    }, [localDevice, sendTransport]);
-
-    const sendAudio = useCallback(() => {
-        return navigator.mediaDevices.getUserMedia({
-            audio: {
+            } : undefined,
+            audio: kind === "audio" ? {
                 deviceId: localDevice.inputAudioDevice,
                 autoGainControl: false,
                 echoCancellation: false,
                 noiseSuppression: false
-            }
+            } : undefined,
         })
-            .then(stream => {
-                stream.getAudioTracks().forEach(track => {
+            .then(stream => kind === "audio" ? stream.getAudioTracks() : stream.getVideoTracks())
+            .then(tracks =>
+                Promise.all(tracks.map(track =>
                     createProducer(sendTransport, track)
-                        .then(producer => {
-                            setProducers(prevState => [...prevState, producer]);
-                        });
-                })
-
-            });
+                        .then(msProducer => {
+                            return new Promise(resolve => {
+                                socket.emit(ClientDeviceEvents.ADD_PRODUCER, {
+                                    kind: kind,
+                                    routerId: router._id
+                                }, (producer: Producer) => {
+                                    setLocalProducers(prevState => [...prevState, {
+                                        ...producer,
+                                        msProducer: msProducer
+                                    }]);
+                                    resolve();
+                                });
+                            });
+                        })
+                ))
+            )
+            .finally(() => setWorking(false));
     }, [localDevice, sendTransport]);
 
-    const stopSendingAudio = useCallback(() => {
-        producers.forEach(producer => {
-            if (producer.kind === "audio") {
-                stopProducer(router, producer)
-                    .then(() => {
-                        setProducers(prevState => prevState.filter(p => p.id === producer.id));
-                    })
-            }
-        })
-
-    }, [localDevice, sendTransport]);
-
-    useEffect(() => {
-        console.log("Producers changed");
-        console.log(producers);
-    }, [producers]);
+    const stopSending = useCallback((kind: "audio" | "video") => {
+        setWorking(true);
+        Promise.all(localProducers.filter(msProducer => msProducer.kind === kind)
+            .map(producer => stopProducer(router, producer.msProducer)
+                .then(() => new Promise(resolve => {
+                    socket.emit(ClientDeviceEvents.REMOVE_PRODUCER, producer._id, () => {
+                        setLocalProducers(prevState => prevState.filter(p => p._id !== producer._id));
+                        resolve();
+                    });
+                }))
+            ))
+            .finally(() => setWorking(false));
+    }, [localDevice, sendTransport, localProducers]);
 
     useEffect(() => {
-        if (localDevice && sendTransport && receiveTransport) {
-            if (!lastDevice || localDevice.sendVideo !== lastDevice.sendVideo) {
-                if (localDevice.sendVideo) {
-                    //sendVideo();
-                } else {
-                    //stopSendingVideo();
+        if (!working) {
+            if (localDevice && sendTransport && receiveTransport) {
+                if (!lastDevice || localDevice.sendVideo !== lastDevice.sendVideo) {
+                    if (localDevice.sendVideo) {
+                        startSending("video");
+                    } else {
+                        stopSending("video");
+                    }
+                }
+                if (!lastDevice || localDevice.sendAudio !== lastDevice.sendAudio) {
+                    if (localDevice.sendAudio) {
+                        startSending("audio");
+                    } else {
+                        stopSending("audio");
+                    }
+                }
+                if (!lastDevice || localDevice.receiveVideo !== lastDevice.receiveVideo) {
+                    console.log("receive video changed");
+                }
+                if (!lastDevice || localDevice.receiveAudio !== lastDevice.receiveAudio) {
+                    console.log("receive audio changed");
+                }
+                if (!lastDevice || localDevice.inputVideoDevice !== lastDevice.inputVideoDevice) {
+                    if (localDevice.sendVideo) {
+                        stopSending("video");
+                        startSending("video");
+                    }
+                }
+                if (!lastDevice || localDevice.inputAudioDevice !== lastDevice.inputAudioDevice) {
+                    if (localDevice.sendAudio) {
+                        stopSending("audio");
+                        startSending("audio");
+                    }
                 }
             }
-            if (!lastDevice || localDevice.sendAudio !== lastDevice.sendAudio) {
-                if (localDevice.sendAudio) {
-                    //sendAudio();
-                } else {
-                    //stopSendingAudio();
-                }
-            }
-            if (!lastDevice || localDevice.receiveVideo !== lastDevice.receiveVideo) {
-                console.log("receive video changed");
-            }
-            if (!lastDevice || localDevice.receiveAudio !== lastDevice.receiveAudio) {
-                console.log("receive audio changed");
-            }
-            if (!lastDevice || localDevice.inputVideoDevice !== lastDevice.inputVideoDevice) {
-                stopSendingVideo();
-                sendVideo();
-            }
-            if (!lastDevice || localDevice.inputAudioDevice !== lastDevice.inputAudioDevice) {
-                stopSendingAudio();
-                sendAudio();
-            }
+            setLastDevice(localDevice);
         }
-        setLastDevice(localDevice);
-    }, [localDevice, sendTransport, receiveTransport]);
+    }, [localDevice, sendTransport, receiveTransport, working]);
 
     useEffect(() => {
         if (socket) {
-            socket.on(ServerStageEvents.GROUP_ADDED, (producer: Producer) => {
+            socket.on(ServerStageEvents.STAGE_PRODUCER_ADDED, (producer: Producer) => {
+                setRemoteProducers(prevState => [...prevState, producer]);
             });
-            socket.on(ServerStageEvents.GROUP_CHANGED, (producer: Producer) => {
+            socket.on(ServerStageEvents.STAGE_PRODUCER_CHANGED, (producer: Producer) => {
+                setRemoteProducers(prevState => prevState.map(p => p._id === producer._id ? {...p, ...producer} : p));
             });
-            socket.on(ServerStageEvents.GROUP_REMOVED, (producer: Producer) => {
+            socket.on(ServerStageEvents.STAGE_PRODUCER_REMOVED, (producerId: string) => {
+                setRemoteProducers(prevState => prevState.filter(p => p._id !== producerId));
             });
-            socket.on(ServerStageEvents.CUSTOM_GROUP_VOLUME_ADDED, (producer: Producer) => {
+            socket.on(ServerStageEvents.STAGE_JOINED, (payload: {
+                producers: Producer[];
+            }) => {
+                // Remove all stage data (stage and groups exclusive)
+                setRemoteProducers(prevState => [...prevState, ...payload.producers]);
             });
-            socket.on(ServerStageEvents.CUSTOM_GROUP_VOLUME_CHANGED, (producer: Producer) => {
-            });
-            socket.on(ServerStageEvents.CUSTOM_GROUP_VOLUME_REMOVED, (producer: Producer) => {
-            });
-            socket.on(ServerStageEvents.PRODUCER_ADDED, (producer: Producer) => {
-            });
-            socket.on(ServerStageEvents.PRODUCER_CHANGED, (producer: Producer) => {
-            });
-            socket.on(ServerStageEvents.PRODUCER_REMOVED, (producerId: string) => {
+            socket.on(ServerStageEvents.STAGE_LEFT, (payload: {
+                producers: Producer[];
+            }) => {
+                // Remove all stage data (stage and groups exclusive)
+                setRemoteProducers([]);
             });
             socket.on("disconnect", () => {
-                setAudioProducers([]);
-                setVideoProducers([]);
-                setOvProducers([]);
+                setRemoteProducers([]);
+                setLocalProducers([]);
+                setAudioConsumers([]);
+                setVideoConsumers([]);
+                setOvConsumer([]);
             })
         } else {
-            setAudioProducers([]);
-            setVideoProducers([]);
-            setOvProducers([]);
+            setRemoteProducers([]);
+            setLocalProducers([]);
+            setAudioConsumers([]);
+            setVideoConsumers([]);
+            setOvConsumer([]);
         }
     }, [socket]);
 
 
     return {
-        audioProducers,
-        videoProducers,
-        ovProducers
+        audioConsumers,
+        videoConsumers,
+        ovConsumers,
+        localProducers,
+        error
     }
 }
 export default useMediasoup;

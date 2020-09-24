@@ -6,6 +6,7 @@ import {ClientStageEvents, ServerStageEvents} from "../common/events";
 import useMediasoup from "../useMediasoup";
 import {useRequest} from "../../useRequest";
 import Client from "../common/model.client";
+import {Producer} from "../../../../server/src/model.common";
 
 export interface StagesProps {
     stages: Client.Stage[];
@@ -59,10 +60,10 @@ export const StagesContextProvider = (props: {
     // Prototypes
     const [stagePrototypes, setStagePrototypes] = useState<Server.Stage[]>([]);
     const [groupPrototypes, setGroupPrototypes] = useState<Server.Group[]>([]);
-    const [customGroupVolumes, setCustomGroupVolumes] = useState<Server.CustomGroupVolume[]>([]);
     const [stageMemberPrototypes, setStageMemberPrototypes] = useState<Server.StageMember[]>([]);
+    const [customGroupVolumes, setCustomGroupVolumes] = useState<Server.CustomGroupVolume[]>([]);
     const [customStageMemberVolumes, setCustomStageMemberVolumes] = useState<Server.CustomStageMemberVolume[]>([]);
-    const {videoProducers, ovProducers, audioProducers} = useMediasoup();
+    const {audioConsumers, videoConsumers, ovConsumers} = useMediasoup();
 
     // Resolved Objects
     const [stage, setStage] = useState<Client.Stage>();
@@ -84,9 +85,9 @@ export const StagesContextProvider = (props: {
                             const member: Client.GroupMember = {
                                 ...groupMemberPrototype,
                                 customVolume: customVolume ? customVolume.volume : undefined,
-                                audioProducers: audioProducers.filter(producer => producer.userId === groupMemberPrototype.userId),
-                                videoProducers: videoProducers.filter(producer => producer.userId === groupMemberPrototype.userId),
-                                ovProducers: ovProducers.filter(producer => producer.userId === groupMemberPrototype.userId)
+                                audioProducers: audioConsumers.filter(producer => producer.userId === groupMemberPrototype.userId),
+                                videoProducers: videoConsumers.filter(producer => producer.userId === groupMemberPrototype.userId),
+                                ovProducers: ovConsumers.filter(producer => producer.userId === groupMemberPrototype.userId)
                             }
                             return member;
                         })
@@ -97,7 +98,7 @@ export const StagesContextProvider = (props: {
             return stage;
         })
         setStages(stages);
-    }, [user, stagePrototypes, groupPrototypes, stageMemberPrototypes, customGroupVolumes, customStageMemberVolumes, videoProducers, audioProducers, ovProducers]);
+    }, [user, stagePrototypes, groupPrototypes, stageMemberPrototypes, customGroupVolumes, customStageMemberVolumes, ovConsumers, audioConsumers, videoConsumers]);
 
     // Assign active stage
     useEffect(() => {
@@ -115,7 +116,6 @@ export const StagesContextProvider = (props: {
         socket.on(ServerStageEvents.STAGE_CHANGED, (payload: { id: StageId, stage: Server.Stage }) => {
             setStagePrototypes(prevState => prevState.map(s => {
                 if (s._id === payload.id) {
-                    console.log("Found stage");
                     return {...s, ...payload.stage};
                 }
                 return s;
@@ -128,25 +128,21 @@ export const StagesContextProvider = (props: {
             setGroupPrototypes(prevState => [...prevState, group])
         });
         socket.on(ServerStageEvents.GROUP_CHANGED, (payload: { id: GroupId, group: Server.Group }) => {
-            console.log(payload);
             setGroupPrototypes(prevState => prevState.map(s => s._id === payload.id ? {...s, ...payload.group} : s));
         });
         socket.on(ServerStageEvents.GROUP_REMOVED, (groupId: string) => {
             setGroupPrototypes(prevState => prevState.filter(group => group._id !== groupId));
         });
         socket.on(ServerStageEvents.GROUP_MEMBER_ADDED, (stageMember: Server.StageMember) => {
-            console.log("stage-member-added");
-            console.log(stageMember);
+            console.log(ServerStageEvents.GROUP_MEMBER_ADDED);
             setStageMemberPrototypes(prevState => [...prevState, stageMember])
         });
         socket.on(ServerStageEvents.GROUP_MEMBER_CHANGED, (payload: Partial<Server.StageMember>) => {
-            console.log("stage-member-changed");
-            console.log(payload);
+            console.log(ServerStageEvents.GROUP_MEMBER_CHANGED);
             setStageMemberPrototypes(prevState => prevState.map(s => s._id === payload._id ? {...s, ...payload} : s));
         });
         socket.on(ServerStageEvents.GROUP_MEMBER_REMOVED, (stageMemberId: string) => {
-            console.log("stage-member-removed");
-            console.log(stageMemberId);
+            console.log(ServerStageEvents.GROUP_MEMBER_REMOVED);
             setStageMemberPrototypes(prevState => prevState.filter(stageMember => stageMember._id !== stageMemberId));
         });
         socket.on(ServerStageEvents.CUSTOM_GROUP_VOLUME_ADDED, (customGroupVolume: Server.CustomGroupVolume) => {
@@ -185,8 +181,36 @@ export const StagesContextProvider = (props: {
             // We don't need to filter by stage, since volumes are send for active stages only
             setCustomStageMemberVolumes(prevState => prevState.filter(customStageMemberVolume => customStageMemberVolume._id !== id));
         });
-        socket.on(ServerStageEvents.STAGE_JOINED, (payload: { stageId: StageId, groupId: GroupId }) => setStageId(payload));
-        socket.on(ServerStageEvents.STAGE_LEFT, () => setStageId(undefined));
+        socket.on(ServerStageEvents.STAGE_JOINED, (payload: {
+            stageId: StageId,
+            groupId: GroupId,
+            stage?: Server.Stage;
+            groups?: Server.Group[];
+            stageMembers: Server.StageMember[];
+            customGroupVolumes: Server.CustomGroupVolume[];
+            customStageMemberVolumes: Server.CustomStageMemberVolume[];
+            producers: Producer[];
+        }) => {
+            setStageId({
+                stageId: payload.stageId,
+                groupId: payload.groupId
+            });
+            if (payload.stage) {
+                setStagePrototypes(prevState => [...prevState, payload.stage]);
+            }
+            if (payload.groups) {
+                setGroupPrototypes(prevState => [...prevState, ...payload.groups]);
+            }
+            setStageMemberPrototypes(payload.stageMembers);
+            setCustomGroupVolumes(payload.customGroupVolumes);
+            setCustomStageMemberVolumes(payload.customStageMemberVolumes);
+        });
+        socket.on(ServerStageEvents.STAGE_LEFT, () => {
+            setStageId(undefined);
+            setStageMemberPrototypes([]);
+            setCustomStageMemberVolumes([]);
+            setCustomGroupVolumes([]);
+        });
         socket.on("disconnect", () => {
             setStages([]);
             setStagePrototypes([]);
@@ -242,10 +266,8 @@ export const StagesContextProvider = (props: {
                 groupId: groupId,
                 password: password || undefined
             }
-            console.log(payload);
             return new Promise<void>((resolve, reject) => {
                 socket.emit(ClientStageEvents.JOIN_STAGE, payload, (error) => {
-                    console.log(error);
                     if (!error)
                         resolve();
                     else
@@ -297,7 +319,6 @@ export const StagesContextProvider = (props: {
 
     const removeGroup = useCallback((id: GroupId) => {
         if (socket) {
-            console.log("remove " + id);
             socket.emit(ClientStageEvents.REMOVE_GROUP, id);
         }
     }, [socket]);
@@ -337,6 +358,16 @@ export const StagesContextProvider = (props: {
             });
         }
     }, [socket]);
+
+    // DEBUG
+    useEffect(() => {
+        console.log("stageId changed:");
+        console.log(stageId);
+    }, [stageId])
+
+    useEffect(() => {
+        console.log("stage changed");
+    }, [stage])
 
     return (
         <StagesContext.Provider value={{

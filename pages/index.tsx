@@ -10,6 +10,7 @@ import {Button} from "baseui/button";
 import Container from "../components/theme/Container";
 import Loading from "../components/theme/Loading";
 import {useRouter} from "next/router";
+import useMediasoup from "../lib/digitalstage/useMediasoup";
 
 const DEBUG = false;
 
@@ -22,6 +23,7 @@ const Index = () => {
     const {localDevice, remoteDevices, logs} = useDevices();
     const {stage, leaveStage} = useStages();
     const router = useRouter();
+    const {localProducers} = useMediasoup();
 
     const {loading, user} = useAuth();
 
@@ -31,6 +33,9 @@ const Index = () => {
         } else {
             return (
                 <Container>
+                    <div>
+                        {localProducers.length}
+                    </div>
                     {DEBUG && <TextArea rows={10} cols={50} value={logs}/>}
                     <>
                         <HeadingLarge>Meine Bühnen</HeadingLarge>

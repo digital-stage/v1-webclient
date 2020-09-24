@@ -81,8 +81,8 @@ const StageListView = () => {
     const [isModifyStageOpen, setModifyStageIsOpen] = useState<boolean>(false);
     const [isCopyLinkOpen, setCopyLinkOpen] = useState<boolean>();
 
-    const [numMembers, setNumMembers] = useState<number>();
-    const [numOnlineMembers, setNumOnlineMembers] = useState<number>();
+    const [numMembers, setNumMembers] = useState<number>(0);
+    const [numOnlineMembers, setNumOnlineMembers] = useState<number>(0);
 
     useEffect(() => {
         let numMembers = 0;
@@ -98,7 +98,7 @@ const StageListView = () => {
             }
         }
         setNumMembers(numMembers);
-        setNumOnlineMembers(numMembers);
+        setNumOnlineMembers(numOnlineMembers);
     }, [stages])
 
     return (
@@ -224,7 +224,7 @@ const StageListView = () => {
                 ))}
             </Accordion>
             <div>
-                {numMembers} Members
+                {numMembers} Members ({numOnlineMembers} online)
             </div>
             <CreateStageModal isOpen={isCreateStageOpen}
                               onClose={() => setCreateStageIsOpen(false)}/>

@@ -111,7 +111,6 @@ export const createWebRTCTransport = (
         )
 }
 
-
 export const createProducer = (transport: mediasoupClient.types.Transport, track: MediaStreamTrack): Promise<mediasoupClient.types.Producer> => {
     return transport
         .produce({
