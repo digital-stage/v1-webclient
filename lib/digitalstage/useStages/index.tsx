@@ -1,12 +1,18 @@
 import React, {useCallback, useEffect, useState} from "react";
 import Server from "../common/model.server";
-import {CustomGroupVolumeId, CustomStageMemberVolumeId, GroupId, StageId, StageMemberId} from "../common/model.common";
+import {
+    CustomGroupVolumeId,
+    CustomStageMemberVolumeId,
+    GroupId,
+    Producer,
+    StageId,
+    StageMemberId
+} from "../common/model.common";
 import {useDevices} from "../useDevices";
 import {ClientStageEvents, ServerStageEvents} from "../common/events";
 import useMediasoup from "../useMediasoup";
 import {useRequest} from "../../useRequest";
 import Client from "../common/model.client";
-import {Producer} from "../../../../server/src/model.common";
 
 export interface StagesProps {
     stages: Client.Stage[];
