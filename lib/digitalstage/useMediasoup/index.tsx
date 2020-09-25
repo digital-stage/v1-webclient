@@ -4,18 +4,29 @@ import {useDevices} from "../useDevices";
 import {ClientDeviceEvents, ServerStageEvents} from "../common/events";
 import mediasoupClient from 'mediasoup-client';
 import {Device as MediasoupDevice} from 'mediasoup-client/lib/Device'
-import {createProducer, createWebRTCTransport, getFastestRouter, getUrl, RouterGetUrls, stopProducer} from "./util";
+import {
+    closeConsumer,
+    createConsumer,
+    createProducer,
+    createWebRTCTransport,
+    getFastestRouter,
+    getUrl,
+    RouterGetUrls,
+    stopProducer
+} from "./util";
 
 export type RemoteProducer = Producer;
 
-export interface AudioConsumer extends Producer {
-    actualVolume: number;
+export interface MediasoupConsumer {
+    remoteProducer: RemoteProducer;
     msConsumer: mediasoupClient.types.Consumer
 }
 
-export interface VideoConsumer extends Producer {
-    msConsumer: mediasoupClient.types.Consumer
+export interface AudioConsumer extends MediasoupConsumer {
+    actualVolume: number;
 }
+
+export type VideoConsumer = MediasoupConsumer;
 
 export interface OvConsumer extends Producer {
 }
@@ -33,6 +44,7 @@ const useMediasoup = () => {
     const [working, setWorking] = useState<boolean>(false);
 
     // For mediasoup
+    const [device, setDevice] = useState<mediasoupClient.types.Device>();
     const [sendTransport, setSendTransport] = useState<mediasoupClient.types.Transport>();
     const [receiveTransport, setReceiveTransport] = useState<mediasoupClient.types.Transport>();
 
@@ -72,6 +84,7 @@ const useMediasoup = () => {
                                 createWebRTCTransport(router, device, 'receive', handleDisconnect)
                                     .then(transport => setReceiveTransport(transport));
                             })
+                            .then(() => setDevice(device));
                     });
             })
             .catch(error => {
@@ -131,6 +144,37 @@ const useMediasoup = () => {
             .finally(() => setWorking(false));
     }, [localDevice, sendTransport, localProducers]);
 
+    const addConsumer = useCallback((remoteProducer: RemoteProducer) => {
+        if (router && device && receiveTransport) {
+            createConsumer(router, device, receiveTransport, remoteProducer)
+                .then(consumer => {
+                    if (consumer.msConsumer.kind === "audio") {
+                        const audioConsumer: AudioConsumer = {
+                            ...consumer,
+                            //TODO: Volume
+                            actualVolume: 1
+                        }
+                        setAudioConsumers(prevState => [...prevState, audioConsumer]);
+                    } else {
+                        setVideoConsumers(prevState => [...prevState, consumer]);
+                    }
+                })
+        } else {
+            console.log("All null...");
+        }
+    }, [remoteProducers, router, device, receiveTransport]);
+
+    const remoteConsumer = useCallback((consumer: MediasoupConsumer) => {
+        closeConsumer(router, consumer)
+            .then(() => {
+                if (consumer.msConsumer.kind === "audio") {
+                    setAudioConsumers(prevState => prevState.filter(c => c.remoteProducer._id === consumer.remoteProducer._id));
+                } else {
+                    setVideoConsumers(prevState => prevState.filter(c => c.remoteProducer._id === consumer.remoteProducer._id));
+                }
+            });
+    }, [remoteProducers, router]);
+
     useEffect(() => {
         if (!working) {
             if (localDevice && sendTransport && receiveTransport) {
@@ -149,7 +193,11 @@ const useMediasoup = () => {
                     }
                 }
                 if (!lastDevice || localDevice.receiveVideo !== lastDevice.receiveVideo) {
-                    console.log("receive video changed");
+                    if (localDevice.receiveVideo) {
+                        remoteProducers.filter(producer => producer.kind === "video").forEach(producer => addConsumer(producer));
+                    } else {
+                        videoConsumers.forEach(consumer => remoteConsumer(consumer));
+                    }
                 }
                 if (!lastDevice || localDevice.receiveAudio !== lastDevice.receiveAudio) {
                     console.log("receive audio changed");
