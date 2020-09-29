@@ -1,29 +1,14 @@
-import DeviceView from "../components/devices/DeviceView";
-import {DisplayMedium, HeadingLarge} from "baseui/typography";
+import {DisplayMedium} from "baseui/typography";
 import React from "react";
-import {useDevices} from "../lib/digitalstage/useDevices";
-import StageListView from "../components/stage/StageListView";
 import {useAuth} from "../lib/digitalstage/useAuth";
-import {styled} from "baseui";
 import {useStages} from "../lib/digitalstage/useStages";
-import {Button} from "baseui/button";
-import Container from "../components/theme/Container";
 import Loading from "../components/theme/Loading";
 import {useRouter} from "next/router";
-import useMediasoup from "../lib/digitalstage/useMediasoup";
-
-const DEBUG = false;
-
-const TextArea = styled("textarea", {
-    width: "100%",
-    minHeight: "300px"
-});
+import MemberGrid from "../components/stage/MemberGrid";
 
 const Index = () => {
-    const {localDevice, remoteDevices, logs} = useDevices();
-    const {stage, leaveStage} = useStages();
+    const {stage} = useStages();
     const router = useRouter();
-    const {localProducers} = useMediasoup();
 
     const {loading, user} = useAuth();
 
@@ -31,39 +16,17 @@ const Index = () => {
         if (!user) {
             router.push("/account/login");
         } else {
-            return (
-                <Container>
-                    <div>
-                        {localProducers.length}
-                    </div>
-                    {DEBUG && <TextArea rows={10} cols={50} value={logs}/>}
+            if (!stage) {
+                router.push("/stages");
+            } else {
+                return stage.groups.map(group => (
                     <>
-                        <HeadingLarge>Meine Bühnen</HeadingLarge>
-                        <StageListView/>
+                        <DisplayMedium>{group.name}</DisplayMedium>
+                        <MemberGrid members={group.members}/>
                     </>
-                    {stage && (
-                        <div>
-                            <HeadingLarge>Aktuelle Bühne</HeadingLarge>
-                            <pre>
-                        {JSON.stringify(stage, null, 2)}
-                    </pre>
-                            <Button onClick={() => leaveStage()}>
-                                Bühne verlassen
-                            </Button>
-                        </div>
-                    )}
-                    <>
-                        <HeadingLarge>Dieses Gerät</HeadingLarge>
-                    </>
-                    {localDevice && <DeviceView device={localDevice}/>}
-                    {remoteDevices && (
-                        <>
-                            <h2>Meine anderen Geräte</h2>
-                            {remoteDevices.map(remoteDevices => <DeviceView device={remoteDevices}/>)}
-                        </>
-                    )}
-                </Container>
-            );
+                ))
+            }
+            ;
         }
     }
 

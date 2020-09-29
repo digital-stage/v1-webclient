@@ -10,7 +10,7 @@ import {
 } from "../common/model.common";
 import {useDevices} from "../useDevices";
 import {ClientStageEvents, ServerStageEvents} from "../common/events";
-import useMediasoup from "../useMediasoup";
+import useMediasoup from "../useMediasoup2";
 import {useRequest} from "../../useRequest";
 import Client from "../common/model.client";
 
@@ -69,11 +69,12 @@ export const StagesContextProvider = (props: {
     const [stageMemberPrototypes, setStageMemberPrototypes] = useState<Server.StageMember[]>([]);
     const [customGroupVolumes, setCustomGroupVolumes] = useState<Server.CustomGroupVolume[]>([]);
     const [customStageMemberVolumes, setCustomStageMemberVolumes] = useState<Server.CustomStageMemberVolume[]>([]);
-    const {audioConsumers, videoConsumers, ovConsumers} = useMediasoup();
+    const {localConsumers, remoteProducers} = useMediasoup();
 
     // Resolved Objects
     const [stage, setStage] = useState<Client.Stage>();
     const [stages, setStages] = useState<Client.Stage[]>([]);
+
 
     // Resolve stage objects
     useEffect(() => {
@@ -91,9 +92,9 @@ export const StagesContextProvider = (props: {
                             const member: Client.GroupMember = {
                                 ...groupMemberPrototype,
                                 customVolume: customVolume ? customVolume.volume : undefined,
-                                audioProducers: audioConsumers.filter(producer => producer.userId === groupMemberPrototype.userId),
-                                videoProducers: videoConsumers.filter(producer => producer.userId === groupMemberPrototype.userId),
-                                ovProducers: ovConsumers.filter(producer => producer.userId === groupMemberPrototype.userId)
+                                audioConsumers: localConsumers.filter(consumer => consumer.remoteProducer.kind === "audio" && consumer.remoteProducer.userId === groupMemberPrototype.userId),
+                                videoConsumers: localConsumers.filter(consumer => consumer.remoteProducer.kind === "video" && consumer.remoteProducer.userId === groupMemberPrototype.userId),
+                                ovProducers: remoteProducers.filter(producer => producer.kind === "ov" && producer.userId === groupMemberPrototype.userId)
                             }
                             return member;
                         })
@@ -104,7 +105,7 @@ export const StagesContextProvider = (props: {
             return stage;
         })
         setStages(stages);
-    }, [user, stagePrototypes, groupPrototypes, stageMemberPrototypes, customGroupVolumes, customStageMemberVolumes, ovConsumers, audioConsumers, videoConsumers]);
+    }, [user, stagePrototypes, groupPrototypes, stageMemberPrototypes, customGroupVolumes, customStageMemberVolumes, remoteProducers, localConsumers]);
 
     // Assign active stage
     useEffect(() => {
@@ -229,18 +230,18 @@ export const StagesContextProvider = (props: {
     useEffect(() => {
         if (socket) {
             registerDeviceEvents(socket);
-        } else {
-            console.log("RESET ALL");
-            setStageId(undefined);
-            setStages([]);
-            setStagePrototypes([]);
-            setGroupPrototypes([]);
-            setStageMemberPrototypes([]);
-            setCustomGroupVolumes([]);
-            setCustomStageMemberVolumes([]);
+            return () => {
+                console.log("[useStages] Cleaning up");
+                setStageId(undefined);
+                setStages([]);
+                setStagePrototypes([]);
+                setGroupPrototypes([]);
+                setStageMemberPrototypes([]);
+                setCustomGroupVolumes([]);
+                setCustomStageMemberVolumes([]);
+            }
         }
     }, [socket]);
-
 
     const createStage = useCallback((name: string, password: string, width?: number, length?: number, height?: number, reflection?: number, absorption?: number) => {
         if (socket) {
@@ -364,16 +365,6 @@ export const StagesContextProvider = (props: {
             });
         }
     }, [socket]);
-
-    // DEBUG
-    useEffect(() => {
-        console.log("stageId changed:");
-        console.log(stageId);
-    }, [stageId])
-
-    useEffect(() => {
-        console.log("stage changed");
-    }, [stage])
 
     return (
         <StagesContext.Provider value={{

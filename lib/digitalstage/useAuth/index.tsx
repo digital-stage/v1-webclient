@@ -46,6 +46,10 @@ export const AuthContextProvider = (props: {
     const [user, setUser] = useState<AuthUser>();
     const [loading, setLoading] = useState<boolean>(true);
 
+    useEffect(() => {
+        console.log("[useAuth] Initialized");
+    }, [])
+
     const createUserWithEmailAndPassword = useCallback((email: string, password: string, additional?: {
         name: string;
         avatarUrl?: string;
@@ -191,6 +195,11 @@ export const AuthContextProvider = (props: {
         } else {
             setUser(undefined);
             setLoading(false);
+        }
+        return () => {
+            console.log("[useAuth] Cleaning up");
+            setToken(undefined);
+            setUser(undefined);
         }
     }, []);
 

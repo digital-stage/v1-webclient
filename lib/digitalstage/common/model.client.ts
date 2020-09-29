@@ -1,5 +1,6 @@
 import {Producer} from "./model.common";
 import Server from "./model.server";
+import mediasoupClient from "mediasoup-client";
 
 namespace Client {
     export interface Stage extends Server.Stage {
@@ -12,10 +13,21 @@ namespace Client {
         members: GroupMember[];
     }
 
+    export interface LocalProducer extends Producer {
+        msProducer: mediasoupClient.types.Producer
+    }
+
+    export type RemoteProducer = Producer;
+
+    export interface LocalConsumer {
+        remoteProducer: RemoteProducer;
+        msConsumer: mediasoupClient.types.Consumer;
+    }
+
     export interface GroupMember extends Server.StageMember {
         customVolume?: number;
-        videoProducers: Producer[];
-        audioProducers: Producer[];
+        videoConsumers: LocalConsumer[];
+        audioConsumers: LocalConsumer[];
         ovProducers: Producer[];
     }
 }

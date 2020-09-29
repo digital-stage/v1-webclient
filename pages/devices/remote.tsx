@@ -3,7 +3,7 @@ import Container from "../../components/theme/Container";
 import DeviceView from "../../components/devices/DeviceView";
 import {useDevices} from "../../lib/digitalstage/useDevices";
 
-const Index = () => {
+const Remote = () => {
     const {remoteDevices} = useDevices();
 
     return (
@@ -17,4 +17,4 @@ const Index = () => {
         </Container>
     );
 }
-export default Index;
+export default Remote;

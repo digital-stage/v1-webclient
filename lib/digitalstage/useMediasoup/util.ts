@@ -1,7 +1,8 @@
 import {Router} from "../common/model.common";
 import mediasoupClient from 'mediasoup-client';
 import {Device as MediasoupDevice} from 'mediasoup-client/lib/Device'
-import {MediasoupConsumer, RemoteProducer} from "./index";
+import {ROUTERS_URL} from "../../../env";
+import Client from "../common/model.client";
 
 export const RouterGetUrls = {
     GetRTPCapabilities: '/rtp-capabilities',
@@ -31,12 +32,18 @@ export const RouterPostUrls = {
     CloseConsumer: '/consumer/close'
 }
 
+const prefix = process.env.NODE_ENV === "production" ? "https://" : "http://";
+
 export const fetchGet = <T>(url: string): Promise<T> => {
     return fetch(url, {
         method: 'GET',
         headers: {'Content-Type': 'application/json'}
     })
-        .then(result => result.json());
+        .then(result => {
+            if (result.ok)
+                return result.json();
+            throw new Error(result.statusText);
+        })
 };
 export const fetchPost = <T>(url: string, body?: any): Promise<T> => {
     return fetch(url, {
@@ -44,21 +51,26 @@ export const fetchPost = <T>(url: string, body?: any): Promise<T> => {
         headers: {'Content-Type': 'application/json'},
         body: body ? JSON.stringify(body) : undefined
     })
-        .then(result => result.json());
+        .then(result => {
+            if (result.ok)
+                return result.json();
+            throw new Error(result.statusText);
+        })
 };
 
+
 export const getUrl = (router: Router, path?: string): string => {
-    return "https://" + router.url + ":" + router.port + (path ? path : "");
+    return prefix + router.url + ":" + router.port + (path ? path : "");
 }
 
 export const getFastestRouter = (): Promise<Router> => {
-    return Promise.resolve({
-        _id: "123",
-        url: "fra.routers.digital-stage.org",
-        ipv4: "46.101.149.130",
-        ipv6: "2a03:b0c0:3:d0::21:3001",
-        port: 3020
-    });
+    return fetchGet<Router[]>(ROUTERS_URL + "/routers")
+        .then(routers => {
+            if (routers && routers.length > 0) {
+                return routers[0];
+            } else
+                throw new Error("No routers available");
+        });
 };
 
 export const createWebRTCTransport = (
@@ -150,9 +162,8 @@ export const stopProducer = (router: Router, producer: mediasoupClient.types.Pro
             return producer;
         });
 
-export const createConsumer = (router: Router, device: mediasoupClient.types.Device, transport: mediasoupClient.types.Transport, remoteProducer: RemoteProducer) => {
+export const createConsumer = (router: Router, device: mediasoupClient.types.Device, transport: mediasoupClient.types.Transport, remoteProducer: Client.RemoteProducer): Promise<mediasoupClient.types.Consumer> => {
     console.log("createConsumer");
-    console.log(remoteProducer);
     return fetchPost(getUrl(router, RouterPostUrls.CreateConsumer), {
         globalProducerId: remoteProducer._id,
         transportId: transport.id,
@@ -167,47 +178,48 @@ export const createConsumer = (router: Router, device: mediasoupClient.types.Dev
                 paused: boolean
                 type: 'simple' | 'simulcast' | 'svc' | 'pipe'
             }) => {
-                const consumer = await transport.consume(data)
-                if (data.paused) consumer.pause()
+                const consumer = await transport.consume(data);
+                if (data.paused) consumer.pause();
                 return consumer
             }
         )
-        .then((consumer: mediasoupClient.types.Consumer): MediasoupConsumer => {
-            return {
-                remoteProducer: remoteProducer,
-                msConsumer: consumer
-            };
-        });
+        .catch(error => {
+            console.error(error);
+            throw error;
+        })
 }
 
-export const resumeConsumer = (router: Router, consumer: MediasoupConsumer) => {
-    if (consumer.msConsumer.paused) {
+export const resumeConsumer = (router: Router, consumer: mediasoupClient.types.Consumer): Promise<mediasoupClient.types.Consumer> => {
+    if (consumer.paused) {
         return fetchPost(getUrl(router, RouterPostUrls.ResumeConsumer), {
-            id: consumer.msConsumer.id
+            id: consumer.id
         })
             .then(() => {
-                consumer.msConsumer.resume()
+                consumer.resume();
+                return consumer;
             })
     }
 }
 
-export const pauseConsumer = (router: Router, consumer: MediasoupConsumer) => {
-    if (!consumer.msConsumer.paused) {
+export const pauseConsumer = (router: Router, consumer: mediasoupClient.types.Consumer): Promise<mediasoupClient.types.Consumer> => {
+    if (!consumer.paused) {
         return fetchPost(getUrl(router, RouterPostUrls.PauseConsumer), {
-            id: consumer.msConsumer.id
+            id: consumer.id
         })
             .then(() => {
-                consumer.msConsumer.pause()
+                consumer.pause();
+                return consumer;
             })
     }
 }
 
-export const closeConsumer = (router: Router, consumer: MediasoupConsumer) => {
+export const closeConsumer = (router: Router, consumer: mediasoupClient.types.Consumer): Promise<mediasoupClient.types.Consumer> => {
     console.log("closeConsumer");
     return fetchPost(getUrl(router, RouterPostUrls.CloseConsumer), {
-        id: consumer.msConsumer.id
+        id: consumer.id
     })
         .then(() => {
-            consumer.msConsumer.close()
+            consumer.close();
+            return consumer;
         });
 }

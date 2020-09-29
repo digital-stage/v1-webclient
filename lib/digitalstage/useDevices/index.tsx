@@ -16,10 +16,8 @@ import {API_URL} from "../../../env";
 export interface DeviceProps {
     socket: SocketIOClient.Socket;
     ready: boolean;
-    localDevice: Device;
-    devices: Device[];
+    localDevice?: Device;
     remoteDevices: Device[];
-    logs: string[];
     user: User;
 
     updateDevice(id: DeviceId, device: Partial<Device>);
@@ -37,27 +35,24 @@ export const DeviceContextProvider = (props: {
     const {token} = useAuth();
     const [ready, setReady] = useState<boolean>(false);
     const [user, setUser] = useState<User>();
-    const [logs, setLogs] = useState<string[]>([]);
     const [socket, setSocket] = useState<SocketIOClient.Socket>(null);
-    const [localDeviceId, setLocalDeviceId] = useState<string>();
-    const [localDevice, setLocalDevice] = useState<Device>();
-    const [devices, setDevices] = useState<Device[]>([]);
+    const [localDevice, setLocalDevice] = useState<Device>(undefined);
     const [remoteDevices, setRemoteDevices] = useState<Device[]>([]);
+
+    const [localDeviceId, setLocalDeviceId] = useState<string>(undefined);
+    const [devices, setDevices] = useState<Device[]>([]);
 
     useEffect(() => {
         if (token) {
             if (!socket) {
+                console.log("[useDevices] Connecting...");
                 const bowser = Bowser.getParser(window.navigator.userAgent);
                 const os = bowser.getOSName();
                 const browser = bowser.getBrowserName();
 
                 enumerateDevices()
                     .then(devices => {
-                        log("Initializing socket");
-                        devices.inputAudioDevices.forEach(device => log("Found video input device " + device.id + ": " + device.label));
-                        devices.inputVideoDevices.forEach(device => log("Found audio input device " + device.id + ": " + device.label));
-                        devices.outputAudioDevices.forEach(device => log("Found audio output device " + device.id + ": " + device.label));
-                        const socketIO: SocketIOClient.Socket = io(API_URL, {
+                        const socket = io(API_URL, {
                             secure: process.env.NODE_ENV !== "development",
                             query: {
                                 token: token,
@@ -74,65 +69,48 @@ export const DeviceContextProvider = (props: {
                                 })
                             }
                         });
-                        socketIO.on("reconnect", () => {
-                            log("Socket reconnected");
+                        socket.on("reconnect", () => {
+                            console.log("[useDevices] Reconnected!");
                         });
-                        socketIO.on("disconnect", () => {
-                            log("Disconnected from server, try to reconnect but reset state");
-                            setDevices([]);
+                        socket.on("disconnect", () => {
+                            console.log("[useDevices] Disconnected from server, try to reconnect");
                             setRemoteDevices([]);
-                            setLocalDeviceId(undefined);
                             setLocalDevice(undefined);
                         });
-                        setSocket(socketIO);
+                        setSocket(socket);
                     });
-            }
-        } else {
-            if (socket) {
-                log("Token invalid, reset socket connection");
-                socket.disconnect();
-                setSocket(undefined);
-                setLocalDeviceId(undefined);
-                setLocalDevice(undefined);
-                setRemoteDevices([]);
-                setDevices([]);
-                setReady(false);
+                return () => {
+                    setSocket(undefined);
+                }
             }
         }
     }, [token]);
 
     useEffect(() => {
-        // Update local and remote devices
         if (localDeviceId) {
-            const localDevice = devices.find(device => device._id === localDeviceId);
-            setLocalDevice(prevState => ({
-                ...prevState,
-                ...localDevice
-            }));
-            setRemoteDevices(devices.filter(device => device._id !== localDeviceId));
+            setLocalDevice(devices.find(d => d._id === localDeviceId));
+            setRemoteDevices(devices.filter(d => d._id !== localDeviceId));
         } else {
-            setLocalDevice(undefined);
             setRemoteDevices(devices);
         }
-    }, [devices, localDeviceId]);
+    }, [localDeviceId, devices]);
 
-    const log = useCallback((message: string) => {
-        setLogs(prevState => [...prevState, message + "\n"]);
-    }, []);
 
     const registerDeviceEvents = (socket) => {
-        log("Register device changes");
         socket.on(ServerGlobalEvents.READY, () => setReady(true));
         socket.on(ServerUserEvents.USER_READY, (user) => setUser(user));
         socket.on(ServerDeviceEvents.DEVICE_ADDED, (device: Device) => setDevices(prevState => [...prevState, device]));
-        socket.on(ServerDeviceEvents.DEVICE_CHANGED, (device: Device) => setDevices(prevState => prevState.map(d => d._id === device._id ? {...d, ...device} : d)));
-        socket.on(ServerDeviceEvents.DEVICE_REMOVED, (device: Device) => setDevices(prevState => prevState.filter(d => d._id !== device._id)));
-        socket.on(ServerDeviceEvents.LOCAL_DEVICE_READY, (device: Device) => {
-            setLocalDeviceId(device._id);
-            setDevices(prevState => [...prevState, device]);
+        socket.on(ServerDeviceEvents.DEVICE_CHANGED, (device: Device) => setDevices(prevState => prevState.map(d => d._id === device._id ? {
+            ...d,
+            ...device
+        } : d)));
+        socket.on(ServerDeviceEvents.DEVICE_REMOVED, (device: Device) => setDevices(prevState => prevState.filter(remoteDevice => remoteDevice._id !== device._id)));
+        socket.on(ServerDeviceEvents.LOCAL_DEVICE_READY, (localDevice: Device) => {
+            setLocalDeviceId(localDevice._id);
+            setDevices(prevState => [...prevState, localDevice]);
             navigator.mediaDevices.ondevicechange = () => enumerateDevices()
                 .then(devices => {
-                    updateDevice(device._id, {
+                    updateDevice(localDevice._id, {
                         canAudio: devices.inputAudioDevices.length > 0,
                         canVideo: devices.inputVideoDevices.length > 0,
                         inputAudioDevices: devices.inputAudioDevices,
@@ -142,24 +120,26 @@ export const DeviceContextProvider = (props: {
                 });
         });
         socket.on("disconnect", () => {
-            setLocalDeviceId(undefined);
-            setLocalDevice(undefined);
             setRemoteDevices([]);
-            setDevices([]);
+            setLocalDevice(undefined);
             setReady(false);
         })
     }
 
     useEffect(() => {
         if (socket) {
-            log("Socket available");
             registerDeviceEvents(socket);
+
+            return () => {
+                console.log("[useDevices] Disconnecting from server");
+                socket.disconnect();
+            }
         } else {
-            log("Socket not available - reset devices");
-            setLocalDeviceId(undefined);
-            setLocalDevice(undefined);
+            console.log("[useDevices] Reacting to no socket");
             setRemoteDevices([]);
+            setLocalDevice(undefined);
             setDevices([]);
+            setLocalDeviceId(undefined);
             setReady(false);
             setUser(undefined);
         }
@@ -172,7 +152,7 @@ export const DeviceContextProvider = (props: {
                 _id: deviceId
             });
         } else {
-            console.error("SOCKET NOT READY");
+            throw new Error("Socket connection wasn't ready");
         }
     }, [socket]);
 
@@ -183,7 +163,7 @@ export const DeviceContextProvider = (props: {
                 avatarUrl: avatarUrl
             });
         } else {
-            console.error("SOCKET NOT READY");
+            throw new Error("Socket connection wasn't ready");
         }
     }, [socket]);
 
@@ -193,11 +173,9 @@ export const DeviceContextProvider = (props: {
             ready: ready,
             user: user,
             localDevice: localDevice,
-            devices: devices,
             remoteDevices: remoteDevices,
             updateDevice: updateDevice,
-            updateUser: updateUser,
-            logs: logs
+            updateUser: updateUser
         }}>
             {props.children}
         </DeviceContext.Provider>

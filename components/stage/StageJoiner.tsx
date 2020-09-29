@@ -21,6 +21,7 @@ const StageJoiner = () => {
         joinStage(stageId, groupId, password)
             .catch(error => {
                 console.log("Could not join stage");
+                console.log(error);
                 if (error === Errors.INVALID_PASSWORD) {
                     setWrongPassword(true);
                 } else {

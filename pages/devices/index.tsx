@@ -13,7 +13,7 @@ const Index = () => {
             {remoteDevices && (
                 <>
                     <h2>Meine anderen Geräte</h2>
-                    {remoteDevices.map(remoteDevices => <DeviceView device={remoteDevices}/>)}
+                    {remoteDevices.map(remoteDevice => <DeviceView device={remoteDevice}/>)}
                 </>
             )}
         </Container>

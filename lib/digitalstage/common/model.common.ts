@@ -58,6 +58,7 @@ export interface Producer {
     deviceId: DeviceId;
     kind: "audio" | "video" | "ov";
     routerId?: RouterId;
+    routerProducerId?: string;
 }
 
 export interface Router {

@@ -51,13 +51,19 @@ export const SHOW_LOCAL_AND_REMOTE_DEVICES: MainNavItem = {
     nav: [
         {
             icon: Icon,
-            item: {label: 'Dieses Gerät'},
+            item: {
+                label: 'Dieses Gerät',
+                path: '/devices/local'
+            },
             mapItemToNode: renderItem,
             mapItemToString: renderItem,
         },
         {
             icon: Icon,
-            item: {label: 'Andere Geräte'},
+            item: {
+                label: 'Andere Geräte',
+                path: '/devices/remote'
+            },
             mapItemToNode: renderItem,
             mapItemToString: renderItem,
         }
