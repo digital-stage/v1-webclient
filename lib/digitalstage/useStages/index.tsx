@@ -10,7 +10,7 @@ import {
 } from "../common/model.common";
 import {useDevices} from "../useDevices";
 import {ClientStageEvents, ServerStageEvents} from "../common/events";
-import useMediasoup from "../useMediasoup2";
+import useMediasoup from "../useMediasoup";
 import {useRequest} from "../../useRequest";
 import Client from "../common/model.client";
 

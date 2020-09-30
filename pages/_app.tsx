@@ -11,7 +11,7 @@ import Head from 'next/head'
 import AppNavigation from "../components/AppNavigation";
 import StageJoiner from "../components/stage/StageJoiner";
 import {Block} from 'baseui/block';
-import {MediasoupProvider} from "../lib/digitalstage/useMediasoup2";
+import {MediasoupProvider} from "../lib/digitalstage/useMediasoup";
 import LocalDeviceControl from '../components/devices/LocalDeviceControl';
 
 class MyApp extends App {

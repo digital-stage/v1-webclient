@@ -1,7 +1,8 @@
 import React, {useCallback, useEffect, useReducer, useState} from "react";
 import {Producer, ProducerId, Router} from "../common/model.common";
 import {useDevices} from "../useDevices";
-import {ClientDeviceEvents, ServerDeviceEvents, ServerStageEvents} from "../common/events";
+import io from "socket.io-client";
+import {ClientDeviceEvents, ServerStageEvents} from "../common/events";
 import mediasoupClient from 'mediasoup-client';
 import {Device as MediasoupDevice} from 'mediasoup-client/lib/Device'
 import {
@@ -10,8 +11,8 @@ import {
     createProducer,
     createWebRTCTransport,
     getFastestRouter,
-    getUrl, resumeConsumer,
-    RouterGetUrls,
+    resumeConsumer,
+    RouterRequests,
     stopProducer
 } from "./util";
 import Client from "../common/model.client";
@@ -32,13 +33,17 @@ export const MediasoupProvider = (props: {
     children: React.ReactNode
 }) => {
     const {socket, localDevice} = useDevices();
+
+    const [router, setRouter] = useState<Router>();
+    const [connection, setConnection] = useState<SocketIOClient.Socket>();
+
     const [sendVideo, setSendVideo] = useState<boolean>(localDevice && localDevice.sendVideo);
     const [sendAudio, setSendAudio] = useState<boolean>(localDevice && localDevice.sendAudio);
     const [receiveAudio, setReceiveAudio] = useState<boolean>(localDevice && localDevice.receiveAudio);
     const [receiveVideo, setReceiveVideo] = useState<boolean>(localDevice && localDevice.receiveVideo);
-    const [router, setRouter] = useState<Router>();
 
     const [working, setWorking] = useState<boolean>(false);
+
 
     // For mediasoup
     const [device, setDevice] = useState<mediasoupClient.types.Device>();
@@ -59,10 +64,10 @@ export const MediasoupProvider = (props: {
                     if ((producer.kind === "audio" && localDevice.receiveAudio) ||
                         producer.kind === "video" && localDevice.receiveVideo) {
                         setWorking(true);
-                        createConsumer(router, device, receiveTransport, producer)
+                        createConsumer(connection, device, receiveTransport, producer)
                             .then(consumer => {
                                 if (consumer.paused)
-                                    return resumeConsumer(router, consumer);
+                                    return resumeConsumer(connection, consumer);
                                 return consumer;
                             })
                             .then(consumer => {
@@ -84,10 +89,10 @@ export const MediasoupProvider = (props: {
                     Promise.all(producers.map(producer => {
                         if ((producer.kind === "audio" && localDevice.receiveAudio) ||
                             producer.kind === "video" && localDevice.receiveVideo) {
-                            return createConsumer(router, device, receiveTransport, producer)
+                            return createConsumer(connection, device, receiveTransport, producer)
                                 .then(consumer => {
                                     if (consumer.paused)
-                                        return resumeConsumer(router, consumer);
+                                        return resumeConsumer(connection, consumer);
                                     return consumer;
                                 })
                                 .then(consumer => {
@@ -119,7 +124,7 @@ export const MediasoupProvider = (props: {
                 const consumer = localConsumers.find(consumer => consumer.remoteProducer._id === id);
                 if (consumer) {
                     setWorking(true);
-                    closeConsumer(router, consumer.msConsumer)
+                    closeConsumer(connection, consumer.msConsumer)
                         .catch(error => console.error(error))
                         .finally(() => {
                             setLocalConsumers(prevState => prevState.filter(c => c.remoteProducer._id !== id));
@@ -131,10 +136,10 @@ export const MediasoupProvider = (props: {
                 setWorking(true);
                 if (action.payload) {
                     Promise.all(state.filter(remoteProducers => remoteProducers.kind === "audio").map(remoteProducer => {
-                        return createConsumer(router, device, receiveTransport, remoteProducer)
+                        return createConsumer(connection, device, receiveTransport, remoteProducer)
                             .then(consumer => {
                                 if (consumer.paused)
-                                    return resumeConsumer(router, consumer);
+                                    return resumeConsumer(connection, consumer);
                                 return consumer;
                             })
                             .then(consumer => {
@@ -148,7 +153,7 @@ export const MediasoupProvider = (props: {
                 } else {
                     // Remote all video consumers
                     Promise.all(localConsumers.filter(consumer => consumer.remoteProducer.kind === "audio").map(consumer => {
-                        return closeConsumer(router, consumer.msConsumer)
+                        return closeConsumer(connection, consumer.msConsumer)
                             .finally(() => setLocalConsumers(prevState => prevState.filter(c => c.remoteProducer._id !== consumer.remoteProducer._id)))
                     }))
                         .finally(() => setWorking(false));
@@ -158,10 +163,10 @@ export const MediasoupProvider = (props: {
                 setWorking(true);
                 if (action.payload) {
                     Promise.all(state.filter(remoteProducers => remoteProducers.kind === "video").map(remoteProducer => {
-                        return createConsumer(router, device, receiveTransport, remoteProducer)
+                        return createConsumer(connection, device, receiveTransport, remoteProducer)
                             .then(consumer => {
                                 if (consumer.paused)
-                                    return resumeConsumer(router, consumer);
+                                    return resumeConsumer(connection, consumer);
                                 return consumer;
                             })
                             .then(consumer => {
@@ -177,7 +182,7 @@ export const MediasoupProvider = (props: {
                 } else {
                     // Remote all video consumers
                     Promise.all(localConsumers.filter(consumer => consumer.remoteProducer.kind === "video").map(consumer => {
-                        return closeConsumer(router, consumer.msConsumer)
+                        return closeConsumer(connection, consumer.msConsumer)
                             .finally(() => setLocalConsumers(prevState => prevState.filter(c => c.remoteProducer._id !== consumer.remoteProducer._id)))
                     }))
                         .catch(error => console.error(error))
@@ -188,7 +193,7 @@ export const MediasoupProvider = (props: {
                 console.log("dispatch: reset");
                 setWorking(true);
                 Promise.all(
-                    localConsumers.map(consumer => closeConsumer(router, consumer.msConsumer))
+                    localConsumers.map(consumer => closeConsumer(connection, consumer.msConsumer))
                 )
                     .catch(error => console.error(error))
                     .finally(() => {
@@ -200,16 +205,59 @@ export const MediasoupProvider = (props: {
         return state;
     }, []);
 
-    useEffect(() => {
-        connect()
-            .catch((error) => {
-                console.error(error);
-            });
 
+    useEffect(() => {
+        getFastestRouter()
+            .then(router => setRouter(router));
         return () => {
-            console.log("[useMediasoup] Disconnecting");
+            setRouter(undefined);
         }
     }, []);
+
+    useEffect(() => {
+        if (router) {
+            console.log("connecting to " + router.url + ":" + router.port);
+            const connection = io(router.url + ":" + router.port, {
+                secure: process.env.NODE_ENV !== "development",
+            });
+
+            connection.on("connect_error", (error) => {
+                console.log(error);
+            });
+
+            connection.on("connect_timeout", (error) => {
+                console.log(error);
+            });
+
+            setConnection(connection);
+            return () => {
+                connection.close();
+            }
+        }
+    }, [router]);
+
+    useEffect(() => {
+        if (connection) {
+            connection.emit(RouterRequests.GetRTPCapabilities, {}, (error: string, rtpCapabilities: mediasoupClient.types.RtpCapabilities) => {
+                if (error) {
+                    return console.error(error);
+                }
+                // Create device
+                const device = new MediasoupDevice();
+                device.load({routerRtpCapabilities: rtpCapabilities})
+                    .then(() =>
+                        // Create transports
+                        Promise.all([
+                            createWebRTCTransport(connection, device, "send")
+                                .then(transport => setSendTransport(transport)),
+                            createWebRTCTransport(connection, device, "receive")
+                                .then(transport => setReceiveTransport(transport))
+                        ])
+                    )
+                    .then(() => setDevice(device));
+            });
+        }
+    }, [connection]);
 
     useEffect(() => {
         if (receiveTransport)
@@ -227,30 +275,6 @@ export const MediasoupProvider = (props: {
             }
         }
     }, [sendTransport]);
-
-    const connect = useCallback(() => {
-        return getFastestRouter()
-            .then(router => {
-                setRouter(router);
-                fetch(getUrl(router, RouterGetUrls.GetRTPCapabilities))
-                    .then(result => result.json())
-                    .then((rtpCapabilities: mediasoupClient.types.RtpCapabilities) => {
-                        const handleDisconnect = () => {
-                            console.error("Connected disconnected by server");
-                        };
-                        const device = new MediasoupDevice();
-                        device.load({routerRtpCapabilities: rtpCapabilities})
-                            .then(() => {
-                                createWebRTCTransport(router, device, 'send', handleDisconnect)
-                                    .then(transport => setSendTransport(transport));
-                                createWebRTCTransport(router, device, 'receive', handleDisconnect)
-                                    .then(transport => setReceiveTransport(transport));
-                            })
-                            .then(() => setDevice(device));
-                    });
-            });
-    }, [])
-
 
     const startSending = useCallback((kind: "audio" | "video") => {
         console.log("startSending " + kind);
@@ -308,7 +332,7 @@ export const MediasoupProvider = (props: {
         console.log("stopSending " + kind);
         setWorking(true);
         return Promise.all(localProducers.filter(msProducer => msProducer.kind === kind)
-            .map(producer => stopProducer(router, producer.msProducer)
+            .map(producer => stopProducer(connection, producer.msProducer)
                 .then(() => new Promise(resolve => {
                     console.log("Removing remote producer " + producer._id);
                     socket.emit(ClientDeviceEvents.REMOVE_PRODUCER, producer._id, () => {
@@ -318,7 +342,7 @@ export const MediasoupProvider = (props: {
                 }))
             ))
             .finally(() => setWorking(false));
-    }, [localDevice, sendTransport, localProducers]);
+    }, [connection, localDevice, sendTransport, localProducers]);
 
     useEffect(() => {
         if (router && device && receiveTransport && sendTransport && localDevice) {
@@ -385,8 +409,6 @@ export const MediasoupProvider = (props: {
 
             return () => {
                 console.log("[useMediasoup] Cleaning up");
-                stopSending("audio");
-                stopSending("video");
                 dispatch({type: 'reset'});
                 setSendAudio(false);
                 setSendVideo(false);

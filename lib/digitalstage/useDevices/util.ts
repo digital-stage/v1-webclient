@@ -1,5 +1,6 @@
 import {MediaDevice} from "../common/model.common";
 
+
 export const enumerateDevices = (): Promise<{
     inputAudioDevices: MediaDevice[],
     inputVideoDevices: MediaDevice[],
