@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import Server from "../common/model.server";
 import {
     CustomGroupVolumeId,
@@ -13,6 +13,7 @@ import {ClientStageEvents, ServerStageEvents} from "../common/events";
 import useMediasoup from "../useMediasoup";
 import {useRequest} from "../../useRequest";
 import Client from "../common/model.client";
+import debounce from "lodash.debounce";
 
 export interface StagesProps {
     stages: Client.Stage[];
@@ -146,6 +147,7 @@ export const StagesContextProvider = (props: {
         });
         socket.on(ServerStageEvents.GROUP_MEMBER_CHANGED, (payload: Partial<Server.StageMember>) => {
             console.log(ServerStageEvents.GROUP_MEMBER_CHANGED);
+            console.log("HEY");
             setStageMemberPrototypes(prevState => prevState.map(s => s._id === payload._id ? {...s, ...payload} : s));
         });
         socket.on(ServerStageEvents.GROUP_MEMBER_REMOVED, (stageMemberId: string) => {
@@ -315,14 +317,23 @@ export const StagesContextProvider = (props: {
         }
     }, [socket]);
 
-    const updateGroup = useCallback((id: GroupId, group: Partial<Server.Group>) => {
+
+    const updateGroupInternal = useCallback((id: GroupId, update: Partial<Server.Group>) => {
         if (socket) {
             socket.emit(ClientStageEvents.CHANGE_GROUP, {
                 id: id,
-                group: group
+                group: update
             });
         }
     }, [socket]);
+    const updateGroupDebounced = useCallback(debounce((id: GroupId, update: Partial<Server.Group>) => updateGroupInternal(id, update), 500), [updateGroupInternal]);
+    const updateGroup = useCallback((id: GroupId, update: Partial<Server.Group>) => {
+        setGroupPrototypes(prevState => prevState.map(group => group._id === id ? {
+            ...group,
+            ...update
+        } : group));
+        updateGroupDebounced(id, update);
+    }, [updateGroupDebounced]);
 
     const removeGroup = useCallback((id: GroupId) => {
         if (socket) {
@@ -330,14 +341,28 @@ export const StagesContextProvider = (props: {
         }
     }, [socket]);
 
-    const updateStageMember = useCallback((id: StageMemberId, stageMember: Partial<Server.StageMember>) => {
+
+    const updateStageMemberInternal = useCallback((id: StageMemberId, update: Partial<Server.StageMember>) => {
         if (socket) {
             socket.emit(ClientStageEvents.CHANGE_GROUP_MEMBER, {
                 id: id,
-                stageMember: stageMember
+                stageMember: update
             });
         }
     }, [socket]);
+
+
+
+    const updateStageMemberDebounced = useCallback(debounce((id: StageMemberId, update: Partial<Server.StageMember>) => updateStageMemberInternal(id, update), 500), [updateStageMemberInternal]);
+    const updateStageMember = useCallback((id: StageMemberId, update: Partial<Server.StageMember>) => {
+        // Change localy
+        setStageMemberPrototypes(prevState => prevState.map(stageMember => stageMember._id === id ? {
+            ...stageMember,
+            ...update
+        } : stageMember))
+        // And send change to server debounced
+        updateStageMemberDebounced(id, update);
+    }, [updateStageMemberDebounced]);
 
     const setGroupVolume = useCallback((id: GroupId, volume: number) => updateGroup(id, {
         volume: volume

@@ -4,7 +4,7 @@ import {useAuth} from "../lib/digitalstage/useAuth";
 import {useStages} from "../lib/digitalstage/useStages";
 import Loading from "../components/theme/Loading";
 import {useRouter} from "next/router";
-import MemberGrid from "../components/stage/MemberGrid";
+import GroupGrid from "../components/stage/GroupGrid";
 
 const Index = () => {
     const {stage} = useStages();
@@ -22,7 +22,7 @@ const Index = () => {
                 return stage.groups.map(group => (
                     <>
                         <DisplayMedium>{group.name}</DisplayMedium>
-                        <MemberGrid members={group.members}/>
+                        <GroupGrid group={group}/>
                     </>
                 ))
             }

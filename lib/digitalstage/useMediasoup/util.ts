@@ -1,8 +1,6 @@
-import {ProducerId, Router} from "../common/model.common";
+import {Router} from "../common/model.common";
 import mediasoupClient from 'mediasoup-client';
-import {Device as MediasoupDevice} from 'mediasoup-client/lib/Device'
 import {ROUTERS_URL} from "../../../env";
-import io from "socket.io-client";
 import Client from "../common/model.client";
 
 export enum RouterEvents {
@@ -60,8 +58,6 @@ export const RouterPostUrls = {
     CloseConsumer: '/consumer/close'
 }
 
-const prefix = process.env.NODE_ENV === "production" ? "https://" : "http://";
-
 export const fetchGet = <T>(url: string): Promise<T> => {
     return fetch(url, {
         method: 'GET',
@@ -88,7 +84,7 @@ export const fetchPost = <T>(url: string, body?: any): Promise<T> => {
 
 
 export const getUrl = (router: Router, path?: string): string => {
-    return prefix + router.url + ":" + router.port + (path ? path : "");
+    return "https://" + router.url + ":" + router.port + (path ? path : "");
 }
 
 export const getFastestRouter = (): Promise<Router> => {

@@ -13,6 +13,7 @@ import StageJoiner from "../components/stage/StageJoiner";
 import {Block} from 'baseui/block';
 import {MediasoupProvider} from "../lib/digitalstage/useMediasoup";
 import LocalDeviceControl from '../components/devices/LocalDeviceControl';
+import {AudioContextProvider} from "../lib/useAudioContext";
 
 class MyApp extends App {
     render() {
@@ -28,11 +29,15 @@ class MyApp extends App {
                         <AuthContextProvider>
                             <DeviceContextProvider>
                                 <MediasoupProvider>
-                                    <StagesContextProvider>
-                                        <StagesContextConsumer>
-                                            {({stageId}) => (
-                                                <BaseProvider theme={stageId ? DarkTheme : LightTheme}>
-                                                    <style jsx global>{`
+                                    <AudioContextProvider>
+                                        <StagesContextProvider>
+                                            <StagesContextConsumer>
+                                                {({stageId}) => (
+                                                    <BaseProvider theme={stageId ? DarkTheme : LightTheme}>
+                                                        <style jsx global>{`
+                                            * {
+                                                box-sizing: border-box;
+                                            }
                                             html, body {
                                                 margin: 0;
                                                 padding: 0;
@@ -52,17 +57,18 @@ class MyApp extends App {
                                                 100% { transform: translateY(0); }
                                             }
                                         `}
-                                                    </style>
-                                                    <AppNavigation/>
-                                                    <StageJoiner/>
-                                                    <Block marginTop={['52px', '52px', '72px']}>
-                                                        <Component {...pageProps} />
-                                                    </Block>
-                                                    <LocalDeviceControl/>
-                                                </BaseProvider>
-                                            )}
-                                        </StagesContextConsumer>
-                                    </StagesContextProvider>
+                                                        </style>
+                                                        <AppNavigation/>
+                                                        <StageJoiner/>
+                                                        <Block marginTop={['52px', '52px', '72px']}>
+                                                            <Component {...pageProps} />
+                                                        </Block>
+                                                        <LocalDeviceControl/>
+                                                    </BaseProvider>
+                                                )}
+                                            </StagesContextConsumer>
+                                        </StagesContextProvider>
+                                    </AudioContextProvider>
                                 </MediasoupProvider>
                             </DeviceContextProvider>
                         </AuthContextProvider>

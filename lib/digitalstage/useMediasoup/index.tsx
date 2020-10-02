@@ -42,6 +42,10 @@ export const MediasoupProvider = (props: {
     const [receiveAudio, setReceiveAudio] = useState<boolean>(localDevice && localDevice.receiveAudio);
     const [receiveVideo, setReceiveVideo] = useState<boolean>(localDevice && localDevice.receiveVideo);
 
+    const [inputAudioDevice, setInputAudioDevice] = useState<string>(localDevice && localDevice.inputAudioDevice);
+    const [outputAudioDevice, setOutputAudioDevice] = useState<string>(localDevice && localDevice.outputAudioDevice);
+    const [inputVideoDevice, setInputVideoDevice] = useState<string>(localDevice && localDevice.inputVideoDevice);
+
     const [working, setWorking] = useState<boolean>(false);
 
 
@@ -217,7 +221,7 @@ export const MediasoupProvider = (props: {
     useEffect(() => {
         if (router) {
             console.log("connecting to " + router.url + ":" + router.port);
-            const connection = io(router.url + ":" + router.port, {
+            const connection = io("wss://" + router.url + ":" + router.port, {
                 secure: process.env.NODE_ENV !== "development",
             });
 
@@ -373,8 +377,25 @@ export const MediasoupProvider = (props: {
                     setReceiveVideo(localDevice.receiveVideo);
                     dispatch({type: "receive-video", payload: localDevice.receiveVideo});
                 }
-            } else {
-                console.log("still working");
+
+                if (localDevice.inputAudioDevice !== inputAudioDevice) {
+                    setInputAudioDevice(localDevice.inputAudioDevice);
+                    if (sendAudio)
+                        stopSending("audio")
+                            .then(() => startSending("audio"));
+                }
+
+                if (localDevice.inputVideoDevice !== inputVideoDevice) {
+                    setInputVideoDevice(localDevice.inputVideoDevice);
+                    if (sendVideo)
+                        stopSending("video")
+                            .then(() => startSending("video"));
+                }
+
+                if (localDevice.outputAudioDevice !== outputAudioDevice) {
+                    setOutputAudioDevice(localDevice.outputAudioDevice);
+                    //TODO: Discuss, what to do here
+                }
             }
         }
 
