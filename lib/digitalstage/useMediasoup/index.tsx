@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useReducer, useState} from "react";
-import {Producer, ProducerId, Router} from "../common/model.common";
+import {Producer, Router} from "../common/model.common";
 import {useDevices} from "../useDevices";
 import io from "socket.io-client";
 import {ClientDeviceEvents, ServerStageEvents} from "../common/events";
@@ -16,13 +16,15 @@ import {
     stopProducer
 } from "./util";
 import Client from "../common/model.client";
+import {StageMemberAudioProducerId, StageMemberVideoProducerId} from "../common/model.server";
 
 
 export interface MediasoupContextProps {
     working: boolean;
     localProducers: Client.LocalProducer[];
-    remoteProducers: Producer[];
-    localConsumers: Client.LocalConsumer[];
+    localVideoConsumers: Client.LocalVideoConsumer[];
+    localAudioConsumers: Client.LocalAudioConsumer[];
+    remoteOvTracks: Client.RemoteOvTrack[];
 }
 
 const MediasoupContext = React.createContext<MediasoupContextProps>(undefined);
@@ -48,7 +50,6 @@ export const MediasoupProvider = (props: {
 
     const [working, setWorking] = useState<boolean>(false);
 
-
     // For mediasoup
     const [device, setDevice] = useState<mediasoupClient.types.Device>();
     const [sendTransport, setSendTransport] = useState<mediasoupClient.types.Transport>();
@@ -58,25 +59,28 @@ export const MediasoupProvider = (props: {
     const [localProducers, setLocalProducers] = useState<Client.LocalProducer[]>([]);
 
     // Remote offers
-    const [localConsumers, setLocalConsumers] = useState<Client.LocalConsumer[]>([]);
+    const [remoteOvTracks, setRemoteOvTracks] = useState<Client.RemoteOvTrack[]>([]);
+    const [localAudioConsumers, setLocalAudioConsumers] = useState<Client.LocalAudioConsumer[]>([]);
+    const [localVideoConsumers, setLocalVideoConsumers] = useState<Client.LocalVideoConsumer[]>([]);
     const [remoteProducers, dispatch] = useReducer((state, action) => {
         switch (action.type) {
-            case "add":
-                const producer: Producer = action.payload;
-                console.log("dispatch: add " + producer._id);
+            case "add_video":
+                console.log("ADD_VIDEO_PRODUCER");
+                console.log(action.payload);
+                const videoProducer: Client.RemoteVideoProducer = action.payload;
+                console.log("dispatch: add video " + videoProducer._id);
                 if (router && device && receiveTransport && localDevice) {
-                    if ((producer.kind === "audio" && localDevice.receiveAudio) ||
-                        producer.kind === "video" && localDevice.receiveVideo) {
+                    if (localDevice.receiveVideo) {
                         setWorking(true);
-                        createConsumer(connection, device, receiveTransport, producer)
+                        createConsumer(connection, device, receiveTransport, videoProducer)
                             .then(consumer => {
                                 if (consumer.paused)
                                     return resumeConsumer(connection, consumer);
                                 return consumer;
                             })
                             .then(consumer => {
-                                setLocalConsumers(prevState => [...prevState, {
-                                    remoteProducer: producer,
+                                setLocalVideoConsumers(prevState => [...prevState, {
+                                    remoteProducer: videoProducer,
                                     msConsumer: consumer
                                 }]);
                             })
@@ -84,15 +88,45 @@ export const MediasoupProvider = (props: {
                             .finally(() => setWorking(false));
                     }
                 }
-                return [...state, producer];
-            case "add_many":
-                console.log("dispatch: add_many ");
-                const producers: Producer[] = action.payload;
+                return {
+                    ...state,
+                    video: [...state.video, videoProducer]
+                }
+            case "add_audio":
+                console.log("ADD_AUDIO_PRODUCER");
+                console.log(action.payload);
+                const audioProducer: Client.RemoteAudioProducer = action.payload;
+                console.log("dispatch: add " + audioProducer._id);
+                if (router && device && receiveTransport && localDevice) {
+                    if (localDevice.receiveAudio) {
+                        setWorking(true);
+                        createConsumer(connection, device, receiveTransport, audioProducer)
+                            .then(consumer => {
+                                if (consumer.paused)
+                                    return resumeConsumer(connection, consumer);
+                                return consumer;
+                            })
+                            .then(consumer => {
+                                setLocalAudioConsumers(prevState => [...prevState, {
+                                    remoteProducer: audioProducer,
+                                    msConsumer: consumer
+                                }]);
+                            })
+                            .catch(error => console.log(error))
+                            .finally(() => setWorking(false));
+                    }
+                }
+                return {
+                    ...state,
+                    audio: [...state.audio, audioProducer]
+                }
+            case "add_many_audio":
+                console.log("dispatch: add_many_audio ");
+                const audioProducers: Client.RemoteAudioProducer[] = action.payload;
                 if (localDevice) {
                     setWorking(true);
-                    Promise.all(producers.map(producer => {
-                        if ((producer.kind === "audio" && localDevice.receiveAudio) ||
-                            producer.kind === "video" && localDevice.receiveVideo) {
+                    Promise.all(audioProducers.map(producer => {
+                        if (localDevice.receiveAudio) {
                             return createConsumer(connection, device, receiveTransport, producer)
                                 .then(consumer => {
                                     if (consumer.paused)
@@ -100,7 +134,7 @@ export const MediasoupProvider = (props: {
                                     return consumer;
                                 })
                                 .then(consumer => {
-                                    setLocalConsumers(prevState => [...prevState, {
+                                    setLocalAudioConsumers(prevState => [...prevState, {
                                         remoteProducer: producer,
                                         msConsumer: consumer
                                     }]);
@@ -110,36 +144,106 @@ export const MediasoupProvider = (props: {
                     }))
                         .finally(() => setWorking(false));
                 }
-                return [...state, ...producers];
-            case "update":
-                const update: Producer = action.payload;
-                console.log("dispatch: update " + update._id);
-                setLocalConsumers(prevState => prevState.map(consumer => consumer.remoteProducer._id === update._id ? {
+                return {
+                    ...state,
+                    audio: [...state.audio, ...audioProducers]
+                }
+            case "add_many_video":
+                console.log("dispatch: add_many ");
+                const videoProducers: Client.RemoteVideoProducer[] = action.payload;
+                if (localDevice) {
+                    setWorking(true);
+                    Promise.all(videoProducers.map(producer => {
+
+                        if (localDevice.receiveVideo) {
+                            return createConsumer(connection, device, receiveTransport, producer)
+                                .then(consumer => {
+                                    if (consumer.paused)
+                                        return resumeConsumer(connection, consumer);
+                                    return consumer;
+                                })
+                                .then(consumer => {
+                                    setLocalVideoConsumers(prevState => [...prevState, {
+                                        remoteProducer: producer,
+                                        msConsumer: consumer
+                                    }]);
+                                })
+                                .catch(error => console.log(error))
+                        }
+                    }))
+                        .finally(() => setWorking(false));
+                }
+                return {
+                    ...state,
+                    video: [...state.video, ...videoProducers]
+                }
+            case "update_audio":
+                const updateAudio: Partial<Client.RemoteAudioProducer> = action.payload;
+                console.log("dispatch: update " + updateAudio._id);
+                setLocalAudioConsumers(prevState => prevState.map(consumer => consumer.remoteProducer._id === updateAudio._id ? {
                     ...consumer,
                     remoteProducer: {
                         ...consumer.remoteProducer,
-                        ...update
+                        ...updateAudio
                     }
                 } : consumer));
-                return state.map(p => p._id === update._id ? {...p, ...update} : p);
-            case "remove":
+                return {
+                    ...state,
+                    audio: state.audio.map(p => p._id === updateAudio._id ? {...p, ...updateAudio} : p)
+                };
+            case "update_video":
+                const updateVideo: Partial<Client.RemoteAudioProducer> = action.payload;
+                console.log("dispatch: update " + updateVideo._id);
+                setLocalVideoConsumers(prevState => prevState.map(consumer => consumer.remoteProducer._id === updateVideo._id ? {
+                    ...consumer,
+                    remoteProducer: {
+                        ...consumer.remoteProducer,
+                        ...updateVideo
+                    }
+                } : consumer));
+                return {
+                    ...state,
+                    video: state.video.map(p => p._id === updateVideo._id ? {...p, ...updateVideo} : p)
+                };
+            case "remove_audio":
                 console.log("dispatch: remove " + action.payload);
-                const id: ProducerId = action.payload;
-                const consumer = localConsumers.find(consumer => consumer.remoteProducer._id === id);
-                if (consumer) {
+                const audioId: StageMemberAudioProducerId = action.payload;
+                const audioConsumer = localAudioConsumers.find(consumer => consumer.remoteProducer._id === audioId);
+                if (audioConsumer) {
                     setWorking(true);
-                    closeConsumer(connection, consumer.msConsumer)
+                    closeConsumer(connection, audioConsumer.msConsumer)
                         .catch(error => console.error(error))
                         .finally(() => {
-                            setLocalConsumers(prevState => prevState.filter(c => c.remoteProducer._id !== id));
+                            setLocalAudioConsumers(prevState => prevState.filter(c => c.remoteProducer._id !== audioId));
                             setWorking(false);
                         });
                 }
-                return state.filter(i => i._id !== id);
+                return {
+                    ...state,
+                    audio: state.audio.filter(i => i._id !== audioId)
+                }
+            case "remove_video":
+                console.log("dispatch: remove " + action.payload);
+                const videoId: StageMemberVideoProducerId = action.payload;
+                const videoConsumer = localVideoConsumers.find(consumer => consumer.remoteProducer._id === videoId);
+                if (videoConsumer) {
+                    setWorking(true);
+                    closeConsumer(connection, videoConsumer.msConsumer)
+                        .catch(error => console.error(error))
+                        .finally(() => {
+                            setLocalVideoConsumers(prevState => prevState.filter(c => c.remoteProducer._id !== videoId));
+                            setWorking(false);
+                        });
+                }
+                return {
+                    ...state,
+                    video: state.video.filter(i => i._id !== videoId)
+                }
             case "receive-audio":
                 setWorking(true);
                 if (action.payload) {
-                    Promise.all(state.filter(remoteProducers => remoteProducers.kind === "audio").map(remoteProducer => {
+                    Promise.all(state.video.map(remoteProducer => {
+                        console.log("Creating consumer for audio");
                         return createConsumer(connection, device, receiveTransport, remoteProducer)
                             .then(consumer => {
                                 if (consumer.paused)
@@ -147,7 +251,7 @@ export const MediasoupProvider = (props: {
                                 return consumer;
                             })
                             .then(consumer => {
-                                setLocalConsumers(prevState => [...prevState, {
+                                setLocalAudioConsumers(prevState => [...prevState, {
                                     remoteProducer: remoteProducer,
                                     msConsumer: consumer
                                 }]);
@@ -155,10 +259,10 @@ export const MediasoupProvider = (props: {
                     }))
                         .finally(() => setWorking(false));
                 } else {
-                    // Remote all video consumers
-                    Promise.all(localConsumers.filter(consumer => consumer.remoteProducer.kind === "audio").map(consumer => {
+                    // Remove all video consumers
+                    Promise.all(localAudioConsumers.map(consumer => {
                         return closeConsumer(connection, consumer.msConsumer)
-                            .finally(() => setLocalConsumers(prevState => prevState.filter(c => c.remoteProducer._id !== consumer.remoteProducer._id)))
+                            .finally(() => setLocalAudioConsumers(prevState => prevState.filter(c => c.remoteProducer._id !== consumer.remoteProducer._id)))
                     }))
                         .finally(() => setWorking(false));
                 }
@@ -166,7 +270,8 @@ export const MediasoupProvider = (props: {
             case "receive-video":
                 setWorking(true);
                 if (action.payload) {
-                    Promise.all(state.filter(remoteProducers => remoteProducers.kind === "video").map(remoteProducer => {
+                    Promise.all(state.video.map(remoteProducer => {
+                        console.log("Creating consumer for video");
                         return createConsumer(connection, device, receiveTransport, remoteProducer)
                             .then(consumer => {
                                 if (consumer.paused)
@@ -175,7 +280,7 @@ export const MediasoupProvider = (props: {
                             })
                             .then(consumer => {
                                 console.log("Adding local consumer");
-                                setLocalConsumers(prevState => [...prevState, {
+                                setLocalVideoConsumers(prevState => [...prevState, {
                                     remoteProducer: remoteProducer,
                                     msConsumer: consumer
                                 }]);
@@ -185,9 +290,9 @@ export const MediasoupProvider = (props: {
                         .finally(() => setWorking(false));
                 } else {
                     // Remote all video consumers
-                    Promise.all(localConsumers.filter(consumer => consumer.remoteProducer.kind === "video").map(consumer => {
+                    Promise.all(localVideoConsumers.map(consumer => {
                         return closeConsumer(connection, consumer.msConsumer)
-                            .finally(() => setLocalConsumers(prevState => prevState.filter(c => c.remoteProducer._id !== consumer.remoteProducer._id)))
+                            .finally(() => setLocalVideoConsumers(prevState => prevState.filter(c => c.remoteProducer._id !== consumer.remoteProducer._id)))
                     }))
                         .catch(error => console.error(error))
                         .finally(() => setWorking(false));
@@ -196,23 +301,31 @@ export const MediasoupProvider = (props: {
             case "reset":
                 console.log("dispatch: reset");
                 setWorking(true);
-                Promise.all(
-                    localConsumers.map(consumer => closeConsumer(connection, consumer.msConsumer))
-                )
+                Promise.all([
+                    localVideoConsumers.map(consumer => closeConsumer(connection, consumer.msConsumer)),
+                    localAudioConsumers.map(consumer => closeConsumer(connection, consumer.msConsumer))
+                ])
                     .catch(error => console.error(error))
                     .finally(() => {
-                        setLocalConsumers([]);
+                        setLocalAudioConsumers([]);
+                        setLocalVideoConsumers([]);
                         setWorking(false);
                     });
                 return [];
         }
         return state;
-    }, []);
+    }, {
+        audio: [],
+        video: []
+    });
 
 
     useEffect(() => {
         getFastestRouter()
-            .then(router => setRouter(router));
+            .then(router => {
+                setRouter(router);
+                console.log("[useMediasoup] Using router " + router.url);
+            })
         return () => {
             setRouter(undefined);
         }
@@ -222,7 +335,7 @@ export const MediasoupProvider = (props: {
         if (router) {
             console.log("connecting to " + router.url + ":" + router.port);
             const connection = io("wss://" + router.url + ":" + router.port, {
-                secure: process.env.NODE_ENV !== "development",
+                secure: true
             });
 
             connection.on("connect_error", (error) => {
@@ -312,7 +425,7 @@ export const MediasoupProvider = (props: {
                         return createProducer(sendTransport, track)
                             .then(msProducer => {
                                 return new Promise(resolve => {
-                                    socket.emit(ClientDeviceEvents.ADD_PRODUCER, {
+                                    socket.emit(kind === "audio" ? ClientDeviceEvents.ADD_AUDIO_PRODUCER : ClientDeviceEvents.ADD_VIDEO_PRODUCER, {
                                         kind: kind,
                                         routerId: router._id,
                                         routerProducerId: msProducer.id
@@ -339,7 +452,7 @@ export const MediasoupProvider = (props: {
             .map(producer => stopProducer(connection, producer.msProducer)
                 .then(() => new Promise(resolve => {
                     console.log("Removing remote producer " + producer._id);
-                    socket.emit(ClientDeviceEvents.REMOVE_PRODUCER, producer._id, () => {
+                    socket.emit(producer.kind === "audio" ? ClientDeviceEvents.ADD_AUDIO_PRODUCER : ClientDeviceEvents.REMOVE_VIDEO_PRODUCER, producer._id, () => {
                         setLocalProducers(prevState => prevState.filter(p => p._id !== producer._id));
                         resolve();
                     });
@@ -403,19 +516,41 @@ export const MediasoupProvider = (props: {
 
     useEffect(() => {
         if (socket) {
-            socket.on(ServerStageEvents.STAGE_PRODUCER_ADDED, producer => dispatch({type: 'add', payload: producer}));
-            socket.on(ServerStageEvents.STAGE_PRODUCER_CHANGED, producer => dispatch({
-                type: 'update',
+            socket.on(ServerStageEvents.STAGE_MEMBER_VIDEO_ADDED, producer => dispatch({
+                type: 'add_video',
                 payload: producer
             }));
-            socket.on(ServerStageEvents.STAGE_PRODUCER_REMOVED, producerId => dispatch({
-                type: 'remove',
+            socket.on(ServerStageEvents.STAGE_MEMBER_VIDEO_CHANGED, producer => dispatch({
+                type: 'update_video',
+                payload: producer
+            }));
+            socket.on(ServerStageEvents.STAGE_MEMBER_VIDEO_REMOVED, producerId => dispatch({
+                type: 'remove_video',
                 payload: producerId
             }));
+            socket.on(ServerStageEvents.STAGE_MEMBER_AUDIO_ADDED, producer => dispatch({
+                type: 'add_audio',
+                payload: producer
+            }));
+            socket.on(ServerStageEvents.STAGE_MEMBER_AUDIO_CHANGED, producer => dispatch({
+                type: 'update_audio',
+                payload: producer
+            }));
+            socket.on(ServerStageEvents.STAGE_MEMBER_AUDIO_REMOVED, producerId => dispatch({
+                type: 'remove_audio',
+                payload: producerId
+            }));
+            socket.on(ServerStageEvents.STAGE_MEMBER_OV_ADDED, track => setRemoteOvTracks(prevState => [...prevState, track]));
+            socket.on(ServerStageEvents.STAGE_MEMBER_OV_CHANGED, track => setRemoteOvTracks(prevState => prevState.map(t => t._id === track._id ? {...t, ...track} : t)));
+            socket.on(ServerStageEvents.STAGE_MEMBER_OV_REMOVED, track => setRemoteOvTracks(prevState => prevState.filter(t => t._id !== track._id)));
             socket.on(ServerStageEvents.STAGE_JOINED, (payload: {
-                producers: Producer[];
+                audioProducers: Client.RemoteAudioProducer[];
+                videoProducers: Client.RemoteVideoProducer[];
+                ovTracks: Client.RemoteOvTrack[];
             }) => {
-                dispatch({type: 'add_many', payload: payload.producers});
+                dispatch({type: 'add_many_audio', payload: payload.audioProducers});
+                dispatch({type: 'add_many_video', payload: payload.videoProducers});
+                setRemoteOvTracks(payload.ovTracks);
             });
             socket.on(ServerStageEvents.STAGE_LEFT, (payload: {
                 producers: Producer[];
@@ -425,7 +560,8 @@ export const MediasoupProvider = (props: {
             socket.on("disconnect", () => {
                 dispatch({type: 'reset'});
                 setLocalProducers([]);
-                setLocalConsumers([]);
+                setLocalAudioConsumers([]);
+                setLocalVideoConsumers([]);
             })
 
             return () => {
@@ -446,8 +582,9 @@ export const MediasoupProvider = (props: {
         <MediasoupContext.Provider value={{
             working: working,
             localProducers: localProducers,
-            remoteProducers: remoteProducers,
-            localConsumers: localConsumers
+            localAudioConsumers: localAudioConsumers,
+            localVideoConsumers: localVideoConsumers,
+            remoteOvTracks: remoteOvTracks
         }}>
             {props.children}
         </MediasoupContext.Provider>

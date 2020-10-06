@@ -81,7 +81,7 @@ const GroupGrid = (props: {
                     <Card>
                         <CardConstraint/>
                         <CardContent>
-                            {member.ovProducers.length > 0 && (
+                            {member.ovTracks.length > 0 && (
                                 <>
                                     <SoundjackLogo src={"soundjack.png"}/>
                                     <PoweredBySoundjack>

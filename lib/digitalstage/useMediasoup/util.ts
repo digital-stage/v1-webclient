@@ -69,19 +69,6 @@ export const fetchGet = <T>(url: string): Promise<T> => {
             throw new Error(result.statusText);
         })
 };
-export const fetchPost = <T>(url: string, body?: any): Promise<T> => {
-    return fetch(url, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: body ? JSON.stringify(body) : undefined
-    })
-        .then(result => {
-            if (result.ok)
-                return result.json();
-            throw new Error(result.statusText);
-        })
-};
-
 
 export const getUrl = (router: Router, path?: string): string => {
     return "https://" + router.url + ":" + router.port + (path ? path : "");
@@ -183,10 +170,10 @@ export const stopProducer = (socket: SocketIOClient.Socket, producer: mediasoupC
         })
     );
 
-export const createConsumer = (socket: SocketIOClient.Socket, device: mediasoupClient.Device, transport: mediasoupClient.types.Transport, remoteProducer: Client.RemoteProducer): Promise<mediasoupClient.types.Consumer> =>
+export const createConsumer = (socket: SocketIOClient.Socket, device: mediasoupClient.Device, transport: mediasoupClient.types.Transport, remoteProducer: Client.RemoteAudioProducer | Client.RemoteVideoProducer): Promise<mediasoupClient.types.Consumer> =>
     new Promise<mediasoupClient.types.Consumer>((resolve, reject) => {
         socket.emit(RouterRequests.CreateConsumer, {
-            globalProducerId: remoteProducer._id,
+            globalProducerId: remoteProducer.globalProducerId,
             transportId: transport.id,
             rtpCapabilities: device.rtpCapabilities // TODO: Necessary?
         }, (error: string | null, data?: {
