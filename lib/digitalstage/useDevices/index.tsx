@@ -78,8 +78,11 @@ export const DeviceContextProvider = (props: {
                             setLocalDevice(undefined);
                         });
                         setSocket(socket);
+                        console.log("[useDevices] Connected!");
                     });
                 return () => {
+                    if (socket)
+                        socket.removeAllListeners();
                     setSocket(undefined);
                 }
             }

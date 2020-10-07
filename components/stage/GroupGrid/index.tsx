@@ -4,7 +4,7 @@ import {LabelMedium} from "baseui/typography";
 import {FlexGrid, FlexGridItem} from "baseui/flex-grid";
 import {useStyletron} from "baseui";
 import CanvasPlayer from "../../video/CanvasPlayer";
-import Client from "../../../lib/digitalstage/common/model.client";
+import ClientModel, {Client} from "../../../lib/digitalstage/common/model.client";
 import {AudioPlayer} from "../../audio/AudioPlayer";
 import VolumeSlider from "../../audio/VolumeSlider";
 import {useStages} from "../../../lib/digitalstage/useStages";
@@ -46,7 +46,7 @@ const PoweredBySoundjack = styled("div", {
 })
 
 const GroupGrid = (props: {
-    group?: Client.Group;
+    group?: ClientModel.Group;
 }) => {
     const {setStageMemberVolume} = useStages();
     const [numDesktopCols, setNumDesktopCols] = useState<number>(1);
@@ -142,7 +142,7 @@ const GroupGrid = (props: {
                             </div>
                             {member.audioConsumers.map(audioConsumer => (
                                 <AudioPlayer
-                                    key={audioConsumer.remoteProducer._id}
+                                    key={audioConsumer._id}
                                     track={audioConsumer.msConsumer.track}
                                     groupVolume={props.group.volume}
                                     customGroupVolume={props.group.customVolume}

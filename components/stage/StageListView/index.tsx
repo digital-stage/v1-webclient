@@ -1,5 +1,5 @@
 import {styled} from "baseui";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Button} from "baseui/button/index";
 import {Accordion, Panel} from "baseui/accordion/index";
 import {useStages} from "../../../lib/digitalstage/useStages";
@@ -11,7 +11,7 @@ import ModifyStageModal from "./ModifyStageModal";
 import {Tag} from "baseui/tag";
 import InviteModal from "./InviteModal";
 import {useRequest} from "../../../lib/useRequest";
-import Client from "../../../lib/digitalstage/common/model.client";
+import {Client} from "../../../lib/digitalstage/common/model.client";
 
 const Label = styled("div", {})
 const GlobalActions = styled("div", {
@@ -71,7 +71,7 @@ const GroupAdminActions = styled("div", {
 })
 
 const StageListView = () => {
-    const {stageId, stages, removeStage, removeGroup, leaveStage, leaveStageForGood} = useStages();
+    const {stageId, availableStages, groups, removeStage, removeGroup, leaveStage, leaveStageForGood} = useStages();
     const {setRequest} = useRequest();
     const [currentStage, setCurrentStage] = useState<Client.Stage>();
     const [currentGroup, setCurrentGroup] = useState<Client.Group>();
@@ -81,25 +81,6 @@ const StageListView = () => {
     const [isModifyStageOpen, setModifyStageIsOpen] = useState<boolean>(false);
     const [isCopyLinkOpen, setCopyLinkOpen] = useState<boolean>();
 
-    const [numMembers, setNumMembers] = useState<number>(0);
-    const [numOnlineMembers, setNumOnlineMembers] = useState<number>(0);
-
-    useEffect(() => {
-        let numMembers = 0;
-        let numOnlineMembers = 0;
-        for (const stage of stages) {
-            for (const group of stage.groups) {
-                numMembers += group.members.length;
-                group.members.forEach(m => {
-                    if (m.online) {
-                        numOnlineMembers++;
-                    }
-                })
-            }
-        }
-        setNumMembers(numMembers);
-        setNumOnlineMembers(numOnlineMembers);
-    }, [stages])
 
     return (
         <>
@@ -110,7 +91,7 @@ const StageListView = () => {
                 </Button>
             </GlobalActions>
             <Accordion>
-                {stages.map(stage => (
+                {Object.values(availableStages).map(stage => (
                     <Panel
                         key={stage._id}
                         title={(
@@ -150,7 +131,7 @@ const StageListView = () => {
                                 </Tag>
                             )}
                         </StageTopActions>
-                        {stage.groups.map(group => (
+                        {Object.values(groups).filter(group => group.stageId === stage._id).map(group => (
                             <GroupRow key={group._id}>
                                 <GroupTitle>
                                     <Label>{group.name}</Label>
@@ -223,9 +204,6 @@ const StageListView = () => {
                     </Panel>
                 ))}
             </Accordion>
-            <div>
-                {numMembers} Members ({numOnlineMembers} online)
-            </div>
             <CreateStageModal isOpen={isCreateStageOpen}
                               onClose={() => setCreateStageIsOpen(false)}/>
             <CreateGroupModal stage={currentStage} isOpen={isCreateGroupOpen}

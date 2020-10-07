@@ -2,7 +2,7 @@ import App from 'next/app'
 import {Provider as StyletronProvider} from 'styletron-react'
 import {debug, styletron} from '../styletron'
 import {AuthContextProvider} from "../lib/digitalstage/useAuth";
-import {BaseProvider, DarkTheme, LightTheme, styled, useStyletron} from "baseui";
+import {BaseProvider, DarkTheme, LightTheme} from "baseui";
 import React from "react";
 import {DeviceContextProvider} from "../lib/digitalstage/useDevices";
 import {StagesContextConsumer, StagesContextProvider} from "../lib/digitalstage/useStages";
@@ -11,7 +11,6 @@ import Head from 'next/head'
 import AppNavigation from "../components/AppNavigation";
 import StageJoiner from "../components/stage/StageJoiner";
 import {Block} from 'baseui/block';
-import {MediasoupProvider} from "../lib/digitalstage/useMediasoup";
 import LocalDeviceControl from '../components/devices/LocalDeviceControl';
 import {AudioContextProvider} from "../lib/useAudioContext";
 
@@ -28,13 +27,12 @@ class MyApp extends App {
                     <RequestContextProvider>
                         <AuthContextProvider>
                             <DeviceContextProvider>
-                                <MediasoupProvider>
+                                <StagesContextProvider>
                                     <AudioContextProvider>
-                                        <StagesContextProvider>
-                                            <StagesContextConsumer>
-                                                {({stageId}) => (
-                                                    <BaseProvider theme={stageId ? DarkTheme : LightTheme}>
-                                                        <style jsx global>{`
+                                        <StagesContextConsumer>
+                                            {({stageId}) => (
+                                                <BaseProvider theme={stageId ? DarkTheme : LightTheme}>
+                                                    <style jsx global>{`
                                             * {
                                                 box-sizing: border-box;
                                             }
@@ -57,19 +55,18 @@ class MyApp extends App {
                                                 100% { transform: translateY(0); }
                                             }
                                         `}
-                                                        </style>
-                                                        <AppNavigation/>
-                                                        <StageJoiner/>
-                                                        <Block marginTop={['52px', '52px', '72px']}>
-                                                            <Component {...pageProps} />
-                                                        </Block>
-                                                        <LocalDeviceControl/>
-                                                    </BaseProvider>
-                                                )}
-                                            </StagesContextConsumer>
-                                        </StagesContextProvider>
+                                                    </style>
+                                                    <AppNavigation/>
+                                                    <StageJoiner/>
+                                                    <Block marginTop={['52px', '52px', '72px']}>
+                                                        <Component {...pageProps} />
+                                                    </Block>
+                                                    <LocalDeviceControl/>
+                                                </BaseProvider>
+                                            )}
+                                        </StagesContextConsumer>
                                     </AudioContextProvider>
-                                </MediasoupProvider>
+                                </StagesContextProvider>
                             </DeviceContextProvider>
                         </AuthContextProvider>
                     </RequestContextProvider>

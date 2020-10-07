@@ -1,13 +1,13 @@
 import {DisplayMedium} from "baseui/typography";
 import React from "react";
 import {useAuth} from "../lib/digitalstage/useAuth";
-import {useStages} from "../lib/digitalstage/useStages";
 import Loading from "../components/theme/Loading";
 import {useRouter} from "next/router";
 import GroupGrid from "../components/stage/GroupGrid";
+import useStageModel from "../lib/digitalstage/useStageModel";
 
 const Index = () => {
-    const {stage} = useStages();
+    const {stage} = useStageModel();
     const router = useRouter();
 
     const {loading, user} = useAuth();

@@ -7,7 +7,7 @@ import {Input} from "baseui/input/index";
 import {FormControl} from "baseui/form-control/index";
 import {KIND} from "baseui/button/index";
 import {Accordion, Panel} from "baseui/accordion/index";
-import Client from "../../../lib/digitalstage/common/model.client";
+import {Client} from "../../../lib/digitalstage/common/model.client";
 
 const Schema = Yup.object().shape({
     name: Yup.string()
@@ -40,21 +40,26 @@ const ModifyStageModal = (props: {
             length: props.stage.length,
             height: props.stage.height,
             absorption: props.stage.absorption,
-            reflection: props.stage.reflection
+            damping: props.stage.damping
         } : {
             name: '',
             password: '',
             width: 25,
             length: 13,
             height: 7.5,
-            reflection: 0.7,
+            damping: 0.7,
             absorption: 0.6
         },
         validationSchema: Schema,
         onSubmit: (values) => {
             updateStage(props.stage._id, {
                 name: values.name,
-                password: values.password
+                password: values.password,
+                width: values.width,
+                length: values.length,
+                height: values.height,
+                absorption: values.absorption,
+                damping: values.damping
             });
             // Close modal
             props.onClose();
@@ -70,7 +75,7 @@ const ModifyStageModal = (props: {
                 length: props.stage.length,
                 height: props.stage.height,
                 absorption: props.stage.absorption,
-                reflection: props.stage.reflection
+                damping: props.stage.damping
             })
     }, [props.stage])
 
@@ -158,15 +163,15 @@ const ModifyStageModal = (props: {
                                 />
                             </FormControl>
                             <FormControl
-                                label={() => "Absorption"}
+                                label={() => "Dämpfung"}
                                 caption={() => "Dämpfungsfaktor der Bühnenwände"}
-                                error={formik.errors.reflection}
+                                error={formik.errors.damping}
                             >
                                 <Input
                                     type="number"
                                     name="reflection"
                                     required={false}
-                                    value={formik.values.reflection}
+                                    value={formik.values.damping}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                 />

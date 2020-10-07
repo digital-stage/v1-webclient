@@ -3,7 +3,7 @@ import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from "baseui/mo
 import CopyToClipboard from 'react-copy-to-clipboard';
 import {Input} from "baseui/input";
 import {Checkbox} from "baseui/checkbox";
-import Client from "../../../lib/digitalstage/common/model.client";
+import {Client} from "../../../lib/digitalstage/common/model.client";
 
 const InviteModal = (props: {
     stage: Client.Stage;

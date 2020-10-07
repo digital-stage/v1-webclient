@@ -1,8 +1,7 @@
-import {Producer} from "./model.common";
 import * as Server from "./model.server";
 import mediasoupClient from "mediasoup-client";
 
-export namespace Client2 {
+export namespace Client {
     /**
      * Create different components:
      *
@@ -17,55 +16,47 @@ export namespace Client2 {
 
     export type Group = Server.Group;
 
-    export type StageMembers = Server.StageMember;
-
     export interface StageMemberAudio extends Server.StageMemberAudioProducer {
-        consumer?: mediasoupClient.types.Consumer;
+        msConsumer?: mediasoupClient.types.Consumer;
     }
 
     export interface StageMemberVideo extends Server.StageMemberVideoProducer {
-        consumer?: mediasoupClient.types.Consumer;
+        msConsumer?: mediasoupClient.types.Consumer;
     }
 
     export type StageMemberOvTrack = Server.StageMemberOvTrack;
+
+    export interface StageMember extends Server.StageMember {
+        customVolume?: number;
+        videoConsumers: StageMemberVideo[];
+        audioConsumers: StageMemberAudio[];
+        ovTracks: StageMemberOvTrack[];
+    }
+
+    export interface LocalAudioProducer extends Server.GlobalAudioProducer {
+        msProducer: mediasoupClient.types.Producer;
+    }
+
+    export interface LocalVideoProducer extends Server.GlobalAudioProducer {
+        msProducer: mediasoupClient.types.Producer;
+    }
 }
 
-namespace Client {
-    export interface Stage extends Server.Stage {
-        isAdmin: boolean;
+namespace ClientModel {
+    export interface Stage extends Client.Stage {
         groups: Group[];
     }
 
-    export interface Group extends Server.Group {
+    export interface Group extends Client.Group {
         customVolume?: number;
-        members: GroupMember[];
+        members: StageMember[];
     }
 
-    export interface LocalProducer extends Producer {
-        msProducer: mediasoupClient.types.Producer
-    }
-
-    export type RemoteAudioProducer = Server.StageMemberAudioProducer;
-    export type RemoteVideoProducer = Server.StageMemberVideoProducer;
-    export type RemoteOvTrack = Server.StageMemberOvTrack;
-
-    export interface LocalVideoConsumer {
-        remoteProducer: RemoteVideoProducer;
-        msConsumer: mediasoupClient.types.Consumer;
-    }
-
-    export interface LocalAudioConsumer {
-        remoteProducer: RemoteAudioProducer;
-        msConsumer: mediasoupClient.types.Consumer;
-    }
-
-
-    export interface GroupMember extends Server.StageMember {
+    export interface StageMember extends Client.StageMember {
+        name: string;
+        avatarUrl?: string;
         customVolume?: number;
-        videoConsumers: LocalVideoConsumer[];
-        audioConsumers: LocalAudioConsumer[];
-        ovTracks: RemoteOvTrack[];
     }
 }
 
-export default Client;
+export default ClientModel;

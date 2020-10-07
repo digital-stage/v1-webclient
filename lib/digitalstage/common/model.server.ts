@@ -1,3 +1,5 @@
+import {ThreeDimensionAudioProperties} from "./model.utils";
+
 export type StageId = string;
 export type GroupId = string;
 export type UserId = string;
@@ -11,7 +13,6 @@ export type CustomStageMemberId = string;
 export type VideoDeviceId = string;
 export type GlobalAudioProducerId = string;
 export type GlobalVideoProducerId = string;
-export type RouterProducerId = string;
 export type SoundCardId = string;
 export type StageMemberProducerId = string;
 export type SoundCardChannelId = string;
@@ -21,6 +22,7 @@ export type StageMemberAudioProducerId = string;
 export type CustomStageMemberAudioProducerId = string;
 export type StageMemberOvTrackId = string;
 export type CustomStageMemberOvTrackId = string;
+
 
 export interface Router {
     _id: RouterId;
@@ -146,7 +148,7 @@ interface GlobalProducer {
     deviceId: DeviceId; // <-- RELATION
 
     routerId: RouterId;
-    routerProducerId: RouterProducerId;
+    routerProducerId: string;
 
     // Optimizations for performance
     userId: UserId;
@@ -206,7 +208,7 @@ export interface CustomGroup {
  * A stage member is the associated between a user and a stage.
  * Settings can be only modified by admins.
  */
-export interface StageMember {
+export interface StageMember extends ThreeDimensionAudioProperties {
     _id: StageMemberId;
     groupId: GroupId;   // <--- RELATION
     userId: UserId;     // <--- RELATION
@@ -215,15 +217,6 @@ export interface StageMember {
 
     // SETTINGS (modifiable only by admins)
     isDirector: boolean;
-    volume: number;
-    // Position relative to stage
-    x: number;  //TODO: Circular assignment inside room
-    y: number;
-    z: number;
-    // Rotation relative to stage
-    rX: number;
-    rY: number;
-    rZ: number;
 
     // Optimizations for performance
     stageId: StageId;
@@ -235,21 +228,10 @@ export interface StageMember {
 /**
  * Each user can overwrite the global stage member settings with personal preferences
  */
-export interface CustomStageMember {
+export interface CustomStageMember extends ThreeDimensionAudioProperties {
     _id: CustomStageMemberId;
     userId: UserId;                 // <--- RELATION
     stageMemberId: StageMemberId;   // <--- RELATION
-
-    // SETTINGS
-    volume: number;
-    // Position relative to stage
-    x: number;  //TODO: Circular assignment inside room
-    y: number;
-    z: number;
-    // Rotation relative to stage
-    rX: number;
-    rY: number;
-    rZ: number;
 
     // Optimizations for performance
     stageId: StageId;
@@ -268,44 +250,22 @@ export interface StageMemberVideoProducer {
 }
 
 
-export interface StageMemberAudioProducer {
+export interface StageMemberAudioProducer extends ThreeDimensionAudioProperties {
     _id: StageMemberVideoProducerId;
     stageMemberId: StageMemberId;           // <-- RELATION
     globalProducerId: GlobalAudioProducerId; // <-- RELATION
 
-    volume: number;
-
     online: boolean;
-
-    // Position relative to stage member
-    x: number;
-    y: number;
-    z: number;
-    // Rotation relative to stage
-    rX: number;
-    rY: number;
-    rZ: number;
 
     // Optimizations for performance
     userId: UserId;
     stageId: StageId;
 }
 
-export interface CustomStageMemberAudioProducer {
+export interface CustomStageMemberAudioProducer extends ThreeDimensionAudioProperties {
     _id: CustomStageMemberAudioProducerId;
     userId: UserId;                                         // <-- RELATION
     stageMemberAudioProducerId: StageMemberAudioProducerId; // <-- RELATION
-
-    volume: number;
-
-    // Position relative to stage member
-    x: number;  //TODO: Circular assignment inside room
-    y: number;
-    z: number;
-    // Rotation relative to stage
-    rX: number;
-    rY: number;
-    rZ: number;
 
     // Optimizations for performance
     stageId: StageId;
@@ -320,7 +280,7 @@ export interface CustomStageMemberAudioProducer {
  * However, spatial audio settings are stored for both, maybe for integrating webrtc and ov later and use
  * the web audio api panner for 3D audio interpolation later.
  */
-export interface StageMemberOvTrack extends Track {
+export interface StageMemberOvTrack extends Track, ThreeDimensionAudioProperties {
     _id: StageMemberOvTrackId;
     trackId: TrackId;                // <-- RELATION
     stageMemberId: StageMemberId;    // <-- RELATION
@@ -328,18 +288,8 @@ export interface StageMemberOvTrack extends Track {
     online: boolean;
 
     gain: number;       // Overrides track gain (for stage)
-    volume: number;     // Overrides track volume (for stage)
 
     directivity: "omni" | "cardioid"; // Overrides track directivity (for stage)
-
-    // Position relative to stage member
-    x: number;  //TODO: Circular assignment inside room
-    y: number;
-    z: number;
-    // Rotation relative to stage
-    rX: number;
-    rY: number;
-    rZ: number;
 
     // Optimizations for performance
     userId: UserId;
@@ -349,25 +299,15 @@ export interface StageMemberOvTrack extends Track {
 /**
  * Each user can overwrite the global stage member track settings with personal preferences.
  */
-export interface CustomStageMemberOvTrack {
+export interface CustomStageMemberOvTrack extends ThreeDimensionAudioProperties {
     _id: CustomStageMemberOvTrackId;
 
     userId: UserId;                             // <-- RELATION
     stageMemberOvTrackId: StageMemberOvTrackId; // <-- RELATION
 
     gain: number;       // Overrides track gain (for user)
-    volume: number;     // Overrides track volume (for user)
 
     directivity: "omni" | "cardioid"; // Overrides track directivity (for user)
-
-    // Position relative to stage member
-    x: number;  //TODO: Circular assignment inside room
-    y: number;
-    z: number;
-    // Rotation relative to stage
-    rX: number;
-    rY: number;
-    rZ: number;
 
     // Optimizations for performance
     stageId: StageId;
@@ -387,6 +327,7 @@ export interface StagePackage {
     ovTracks: StageMemberOvTrack[];
     customOvTracks: CustomStageMemberOvTrack[];
 }
+
 export interface InitialStagePackage extends StagePackage {
     stageId: StageId;
     groupId: GroupId;

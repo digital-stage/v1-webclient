@@ -1,6 +1,7 @@
+import {Router} from "../../lib/digitalstage/common/model.common";
 import mediasoupClient from 'mediasoup-client';
-import {ROUTERS_URL} from "../../../env";
-import {Router, StageMemberAudioProducer, StageMemberVideoProducer} from "../common/model.server";
+import {ROUTERS_URL} from "../../env";
+import ClientModel from "../../lib/digitalstage/common/model.client";
 
 export enum RouterEvents {
     TransportCloses = "transport-closed",
@@ -169,7 +170,7 @@ export const stopProducer = (socket: SocketIOClient.Socket, producer: mediasoupC
         })
     );
 
-export const createConsumer = (socket: SocketIOClient.Socket, device: mediasoupClient.Device, transport: mediasoupClient.types.Transport, remoteProducer: StageMemberAudioProducer | StageMemberVideoProducer): Promise<mediasoupClient.types.Consumer> =>
+export const createConsumer = (socket: SocketIOClient.Socket, device: mediasoupClient.Device, transport: mediasoupClient.types.Transport, remoteProducer: ClientModel.RemoteAudioProducer | ClientModel.RemoteVideoProducer): Promise<mediasoupClient.types.Consumer> =>
     new Promise<mediasoupClient.types.Consumer>((resolve, reject) => {
         socket.emit(RouterRequests.CreateConsumer, {
             globalProducerId: remoteProducer.globalProducerId,

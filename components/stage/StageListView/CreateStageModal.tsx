@@ -36,12 +36,12 @@ const CreateStageModal = (props: {
             width: 25,
             length: 13,
             height: 7.5,
-            reflection: 0.7,
+            damping: 0.7,
             absorption: 0.6
         },
         validationSchema: Schema,
         onSubmit: (values) => {
-            createStage(values.name, values.password, values.width, values.length, values.height, values.reflection, values.absorption);
+            createStage(values.name, values.password, values.width, values.length, values.height, values.damping, values.absorption);
             // Close modal
             props.onClose();
         },
@@ -133,13 +133,13 @@ const CreateStageModal = (props: {
                             <FormControl
                                 label={() => "Absorption"}
                                 caption={() => "Dämpfungsfaktor der Bühnenwände"}
-                                error={formik.errors.reflection}
+                                error={formik.errors.damping}
                             >
                                 <Input
                                     type="number"
                                     name="reflection"
                                     required={false}
-                                    value={formik.values.reflection}
+                                    value={formik.values.damping}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                 />

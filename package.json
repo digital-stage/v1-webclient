@@ -12,6 +12,7 @@
     "formik": "^2.1.5",
     "js-cookie": "^2.2.1",
     "lodash.debounce": "^4.0.8",
+    "lodash.omit": "^4.5.0",
     "lodash.throttle": "^4.1.1",
     "mediasoup-client": "^3.6.15",
     "next": "9.5.3",

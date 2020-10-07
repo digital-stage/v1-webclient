@@ -1,30 +1,29 @@
-import React, {useCallback, useEffect, useReducer, useState} from "react";
-import {Producer, Router} from "../common/model.common";
+import React, {useCallback, useEffect, useState} from "react";
+import {Client} from "../common/model.client";
+import {useStages} from "../useStages";
 import {useDevices} from "../useDevices";
-import io from "socket.io-client";
-import {ClientDeviceEvents, ServerStageEvents} from "../common/events";
+import {GlobalAudioProducer, GlobalVideoProducer, Router} from "../common/model.server";
 import mediasoupClient from 'mediasoup-client';
-import {Device as MediasoupDevice} from 'mediasoup-client/lib/Device'
+import {Device as MediasoupDevice} from "mediasoup-client/lib/Device";
 import {
     closeConsumer,
     createConsumer,
     createProducer,
-    createWebRTCTransport,
-    getFastestRouter,
+    createWebRTCTransport, getFastestRouter,
     resumeConsumer,
     RouterRequests,
     stopProducer
 } from "./util";
-import Client from "../common/model.client";
-import {StageMemberAudioProducerId, StageMemberVideoProducerId} from "../common/model.server";
+import {ClientDeviceEvents} from "../common/events";
+import io from "socket.io-client";
 
 
 export interface MediasoupContextProps {
     working: boolean;
-    localProducers: Client.LocalProducer[];
-    localVideoConsumers: Client.LocalVideoConsumer[];
-    localAudioConsumers: Client.LocalAudioConsumer[];
-    remoteOvTracks: Client.RemoteOvTrack[];
+    localAudioProducers: Client.LocalAudioProducer[];
+    localVideoProducers: Client.LocalVideoProducer[];
+    audioConsumers: Client.StageMemberAudio[];
+    videoConsumers: Client.StageMemberVideo[];
 }
 
 const MediasoupContext = React.createContext<MediasoupContextProps>(undefined);
@@ -34,302 +33,310 @@ export const useMediasoup = (): MediasoupContextProps => React.useContext<Medias
 export const MediasoupProvider = (props: {
     children: React.ReactNode
 }) => {
-    const {socket, localDevice} = useDevices();
+    // Dependencies
+    const {localDevice, socket} = useDevices();
+    const {audioProducers, videoProducers} = useStages();
 
+    // Connection states
     const [router, setRouter] = useState<Router>();
     const [connection, setConnection] = useState<SocketIOClient.Socket>();
 
+    // Public states
+    const [localAudioProducers, setLocalAudioProducers] = useState<Client.LocalAudioProducer[]>([]);
+    const [localVideoProducers, setLocalVideoProducers] = useState<Client.LocalVideoProducer[]>([]);
+    const [audioConsumers, setAudioConsumers] = useState<{
+        [producerId: string]: Client.StageMemberAudio
+    }>({});
+    const [videoConsumers, setVideoConsumers] = useState<{
+        [producerId: string]: Client.StageMemberVideo
+    }>({});
+    const [working, setWorking] = useState<boolean>(false);
+
+    // Internal state for comparising with server data
     const [sendVideo, setSendVideo] = useState<boolean>(localDevice && localDevice.sendVideo);
     const [sendAudio, setSendAudio] = useState<boolean>(localDevice && localDevice.sendAudio);
     const [receiveAudio, setReceiveAudio] = useState<boolean>(localDevice && localDevice.receiveAudio);
     const [receiveVideo, setReceiveVideo] = useState<boolean>(localDevice && localDevice.receiveVideo);
-
     const [inputAudioDevice, setInputAudioDevice] = useState<string>(localDevice && localDevice.inputAudioDevice);
     const [outputAudioDevice, setOutputAudioDevice] = useState<string>(localDevice && localDevice.outputAudioDevice);
     const [inputVideoDevice, setInputVideoDevice] = useState<string>(localDevice && localDevice.inputVideoDevice);
 
-    const [working, setWorking] = useState<boolean>(false);
-
-    // For mediasoup
+    // Mediasoup specific
     const [device, setDevice] = useState<mediasoupClient.types.Device>();
     const [sendTransport, setSendTransport] = useState<mediasoupClient.types.Transport>();
     const [receiveTransport, setReceiveTransport] = useState<mediasoupClient.types.Transport>();
 
-    // Local producers
-    const [localProducers, setLocalProducers] = useState<Client.LocalProducer[]>([]);
+    const consumeVideo = useCallback(() => {
+        // Create consumer for all unconsumed audio producers
+        setWorking(true);
+        Promise.all(Object.values(videoProducers).map(videoProducer => {
+            if (!videoConsumers[videoProducer._id]) {
+                return createConsumer(connection, device, receiveTransport, videoProducer)
+                    .then(consumer => {
+                        if (consumer.paused)
+                            return resumeConsumer(connection, consumer);
+                        return consumer;
+                    })
+                    .then(consumer => {
+                        setVideoConsumers(prevState => ({
+                            ...prevState,
+                            [videoProducer._id]: {
+                                ...videoProducer,
+                                msConsumer: consumer
+                            }
+                        }));
+                    })
+                    .catch(error => console.log(error))
+            }
+        }))
+            .finally(() => setWorking(false));
+    }, [connection, device, videoProducers, videoConsumers, receiveTransport]);
 
-    // Remote offers
-    const [remoteOvTracks, setRemoteOvTracks] = useState<Client.RemoteOvTrack[]>([]);
-    const [localAudioConsumers, setLocalAudioConsumers] = useState<Client.LocalAudioConsumer[]>([]);
-    const [localVideoConsumers, setLocalVideoConsumers] = useState<Client.LocalVideoConsumer[]>([]);
-    const [remoteProducers, dispatch] = useReducer((state, action) => {
-        switch (action.type) {
-            case "add_video":
-                console.log("ADD_VIDEO_PRODUCER");
-                console.log(action.payload);
-                const videoProducer: Client.RemoteVideoProducer = action.payload;
-                console.log("dispatch: add video " + videoProducer._id);
-                if (router && device && receiveTransport && localDevice) {
-                    if (localDevice.receiveVideo) {
-                        setWorking(true);
-                        createConsumer(connection, device, receiveTransport, videoProducer)
-                            .then(consumer => {
-                                if (consumer.paused)
-                                    return resumeConsumer(connection, consumer);
-                                return consumer;
-                            })
-                            .then(consumer => {
-                                setLocalVideoConsumers(prevState => [...prevState, {
-                                    remoteProducer: videoProducer,
-                                    msConsumer: consumer
-                                }]);
-                            })
-                            .catch(error => console.log(error))
-                            .finally(() => setWorking(false));
-                    }
-                }
-                return {
-                    ...state,
-                    video: [...state.video, videoProducer]
-                }
-            case "add_audio":
-                console.log("ADD_AUDIO_PRODUCER");
-                console.log(action.payload);
-                const audioProducer: Client.RemoteAudioProducer = action.payload;
-                console.log("dispatch: add " + audioProducer._id);
-                if (router && device && receiveTransport && localDevice) {
-                    if (localDevice.receiveAudio) {
-                        setWorking(true);
-                        createConsumer(connection, device, receiveTransport, audioProducer)
-                            .then(consumer => {
-                                if (consumer.paused)
-                                    return resumeConsumer(connection, consumer);
-                                return consumer;
-                            })
-                            .then(consumer => {
-                                setLocalAudioConsumers(prevState => [...prevState, {
-                                    remoteProducer: audioProducer,
-                                    msConsumer: consumer
-                                }]);
-                            })
-                            .catch(error => console.log(error))
-                            .finally(() => setWorking(false));
-                    }
-                }
-                return {
-                    ...state,
-                    audio: [...state.audio, audioProducer]
-                }
-            case "add_many_audio":
-                console.log("dispatch: add_many_audio ");
-                const audioProducers: Client.RemoteAudioProducer[] = action.payload;
-                if (localDevice) {
-                    setWorking(true);
-                    Promise.all(audioProducers.map(producer => {
-                        if (localDevice.receiveAudio) {
-                            return createConsumer(connection, device, receiveTransport, producer)
-                                .then(consumer => {
-                                    if (consumer.paused)
-                                        return resumeConsumer(connection, consumer);
-                                    return consumer;
-                                })
-                                .then(consumer => {
-                                    setLocalAudioConsumers(prevState => [...prevState, {
-                                        remoteProducer: producer,
-                                        msConsumer: consumer
-                                    }]);
-                                })
-                                .catch(error => console.log(error))
-                        }
-                    }))
-                        .finally(() => setWorking(false));
-                }
-                return {
-                    ...state,
-                    audio: [...state.audio, ...audioProducers]
-                }
-            case "add_many_video":
-                console.log("dispatch: add_many ");
-                const videoProducers: Client.RemoteVideoProducer[] = action.payload;
-                if (localDevice) {
-                    setWorking(true);
-                    Promise.all(videoProducers.map(producer => {
+    const stopConsumingVideo = useCallback(() => {
+        // Stop consuming all audio producers
+        setWorking(true);
+        Promise.all(Object.keys(videoConsumers).map(key => {
+            const videoConsumer = videoConsumers[key];
+            return closeConsumer(connection, videoConsumer.msConsumer)
+        }))
+            .finally(() => setWorking(false));
+    }, [connection, videoConsumers]);
 
-                        if (localDevice.receiveVideo) {
-                            return createConsumer(connection, device, receiveTransport, producer)
-                                .then(consumer => {
-                                    if (consumer.paused)
-                                        return resumeConsumer(connection, consumer);
-                                    return consumer;
-                                })
-                                .then(consumer => {
-                                    setLocalVideoConsumers(prevState => [...prevState, {
-                                        remoteProducer: producer,
-                                        msConsumer: consumer
-                                    }]);
-                                })
-                                .catch(error => console.log(error))
-                        }
-                    }))
-                        .finally(() => setWorking(false));
-                }
-                return {
-                    ...state,
-                    video: [...state.video, ...videoProducers]
-                }
-            case "update_audio":
-                const updateAudio: Partial<Client.RemoteAudioProducer> = action.payload;
-                console.log("dispatch: update " + updateAudio._id);
-                setLocalAudioConsumers(prevState => prevState.map(consumer => consumer.remoteProducer._id === updateAudio._id ? {
-                    ...consumer,
-                    remoteProducer: {
-                        ...consumer.remoteProducer,
-                        ...updateAudio
-                    }
-                } : consumer));
-                return {
-                    ...state,
-                    audio: state.audio.map(p => p._id === updateAudio._id ? {...p, ...updateAudio} : p)
-                };
-            case "update_video":
-                const updateVideo: Partial<Client.RemoteAudioProducer> = action.payload;
-                console.log("dispatch: update " + updateVideo._id);
-                setLocalVideoConsumers(prevState => prevState.map(consumer => consumer.remoteProducer._id === updateVideo._id ? {
-                    ...consumer,
-                    remoteProducer: {
-                        ...consumer.remoteProducer,
-                        ...updateVideo
-                    }
-                } : consumer));
-                return {
-                    ...state,
-                    video: state.video.map(p => p._id === updateVideo._id ? {...p, ...updateVideo} : p)
-                };
-            case "remove_audio":
-                console.log("dispatch: remove " + action.payload);
-                const audioId: StageMemberAudioProducerId = action.payload;
-                const audioConsumer = localAudioConsumers.find(consumer => consumer.remoteProducer._id === audioId);
-                if (audioConsumer) {
-                    setWorking(true);
-                    closeConsumer(connection, audioConsumer.msConsumer)
-                        .catch(error => console.error(error))
-                        .finally(() => {
-                            setLocalAudioConsumers(prevState => prevState.filter(c => c.remoteProducer._id !== audioId));
-                            setWorking(false);
-                        });
-                }
-                return {
-                    ...state,
-                    audio: state.audio.filter(i => i._id !== audioId)
-                }
-            case "remove_video":
-                console.log("dispatch: remove " + action.payload);
-                const videoId: StageMemberVideoProducerId = action.payload;
-                const videoConsumer = localVideoConsumers.find(consumer => consumer.remoteProducer._id === videoId);
-                if (videoConsumer) {
-                    setWorking(true);
-                    closeConsumer(connection, videoConsumer.msConsumer)
-                        .catch(error => console.error(error))
-                        .finally(() => {
-                            setLocalVideoConsumers(prevState => prevState.filter(c => c.remoteProducer._id !== videoId));
-                            setWorking(false);
-                        });
-                }
-                return {
-                    ...state,
-                    video: state.video.filter(i => i._id !== videoId)
-                }
-            case "receive-audio":
-                setWorking(true);
-                if (action.payload) {
-                    Promise.all(state.video.map(remoteProducer => {
-                        console.log("Creating consumer for audio");
-                        return createConsumer(connection, device, receiveTransport, remoteProducer)
-                            .then(consumer => {
-                                if (consumer.paused)
-                                    return resumeConsumer(connection, consumer);
-                                return consumer;
-                            })
-                            .then(consumer => {
-                                setLocalAudioConsumers(prevState => [...prevState, {
-                                    remoteProducer: remoteProducer,
-                                    msConsumer: consumer
-                                }]);
-                            })
-                    }))
-                        .finally(() => setWorking(false));
-                } else {
-                    // Remove all video consumers
-                    Promise.all(localAudioConsumers.map(consumer => {
-                        return closeConsumer(connection, consumer.msConsumer)
-                            .finally(() => setLocalAudioConsumers(prevState => prevState.filter(c => c.remoteProducer._id !== consumer.remoteProducer._id)))
-                    }))
-                        .finally(() => setWorking(false));
-                }
-                return state;
-            case "receive-video":
-                setWorking(true);
-                if (action.payload) {
-                    Promise.all(state.video.map(remoteProducer => {
-                        console.log("Creating consumer for video");
-                        return createConsumer(connection, device, receiveTransport, remoteProducer)
-                            .then(consumer => {
-                                if (consumer.paused)
-                                    return resumeConsumer(connection, consumer);
-                                return consumer;
-                            })
-                            .then(consumer => {
-                                console.log("Adding local consumer");
-                                setLocalVideoConsumers(prevState => [...prevState, {
-                                    remoteProducer: remoteProducer,
-                                    msConsumer: consumer
-                                }]);
-                            })
-                    }))
-                        .catch(error => console.error(error))
-                        .finally(() => setWorking(false));
-                } else {
-                    // Remote all video consumers
-                    Promise.all(localVideoConsumers.map(consumer => {
-                        return closeConsumer(connection, consumer.msConsumer)
-                            .finally(() => setLocalVideoConsumers(prevState => prevState.filter(c => c.remoteProducer._id !== consumer.remoteProducer._id)))
-                    }))
-                        .catch(error => console.error(error))
-                        .finally(() => setWorking(false));
-                }
-                return state;
-            case "reset":
-                console.log("dispatch: reset");
-                setWorking(true);
-                Promise.all([
-                    localVideoConsumers.map(consumer => closeConsumer(connection, consumer.msConsumer)),
-                    localAudioConsumers.map(consumer => closeConsumer(connection, consumer.msConsumer))
-                ])
-                    .catch(error => console.error(error))
-                    .finally(() => {
-                        setLocalAudioConsumers([]);
-                        setLocalVideoConsumers([]);
-                        setWorking(false);
-                    });
-                return [];
-        }
-        return state;
-    }, {
-        audio: [],
-        video: []
-    });
+    const consumeAudio = useCallback(() => {
+        // Create consumer for all unconsumed audio producers
+        setWorking(true);
+        Promise.all(Object.values(audioProducers).map(audioProducer => {
+            if (!audioConsumers[audioProducer._id]) {
+                return createConsumer(connection, device, receiveTransport, audioProducer)
+                    .then(consumer => {
+                        if (consumer.paused)
+                            return resumeConsumer(connection, consumer);
+                        return consumer;
+                    })
+                    .then(consumer => {
+                        setAudioConsumers(prevState => ({
+                            ...prevState,
+                            [audioProducer._id]: {
+                                ...audioProducer,
+                                msConsumer: consumer
+                            }
+                        }));
+                    })
+                    .catch(error => console.log(error))
+            }
+        }))
+            .finally(() => setWorking(false));
+    }, [connection, device, audioProducers, audioConsumers, receiveTransport]);
 
+    const stopConsumingAudio = useCallback(() => {
+        // Stop consuming all audio producers
+        setWorking(true);
+        Promise.all(Object.keys(audioConsumers).map(key => {
+            const audioConsumer = audioConsumers[key];
+            return closeConsumer(connection, audioConsumer.msConsumer)
+        }))
+            .finally(() => setWorking(false));
+    }, [connection, audioConsumers]);
+
+    const startSendingAudio = useCallback(() => {
+        console.log("startSendingAudio");
+        setWorking(true);
+        return navigator.mediaDevices.getUserMedia({
+            video: false,
+            audio: {
+                deviceId: localDevice.inputAudioDevice,
+                autoGainControl: false,
+                echoCancellation: false,
+                noiseSuppression: false
+            },
+        })
+            .then(stream => stream.getAudioTracks())
+            .then(tracks =>
+                Promise.all(tracks.map(track => {
+                        return createProducer(sendTransport, track)
+                            .then(msProducer => {
+                                return new Promise(resolve => {
+                                    socket.emit(ClientDeviceEvents.ADD_AUDIO_PRODUCER, {
+                                        kind: "audio",
+                                        routerId: router._id,
+                                        routerProducerId: msProducer.id
+                                    }, (producer: GlobalAudioProducer) => {
+                                        console.log("Created remote producer " + producer._id);
+                                        setLocalAudioProducers(prevState => [...prevState, {
+                                            ...producer,
+                                            msProducer: msProducer
+                                        }]);
+                                        resolve();
+                                    });
+                                });
+                            })
+                    }
+                )))
+            .finally(() => setWorking(false));
+    }, [socket, localDevice, sendTransport, localAudioProducers]);
+
+    const stopSendingAudio = useCallback(() => {
+        console.log("stopSendingAudio");
+        setWorking(true);
+        return Promise.all(localAudioProducers.map(producer => stopProducer(connection, producer.msProducer)
+            .then(() => new Promise(resolve => {
+                console.log("Removing remote producer " + producer._id);
+                socket.emit(ClientDeviceEvents.REMOVE_AUDIO_PRODUCER, producer._id, () => {
+                    setLocalAudioProducers(prevState => prevState.filter(p => p._id !== producer._id));
+                    resolve();
+                });
+            }))
+        ))
+            .finally(() => setWorking(false));
+    }, [connection, socket, localDevice, sendTransport, localAudioProducers]);
+
+
+    const startSendingVideo = useCallback(() => {
+        console.log("startSendingVideo");
+        setWorking(true);
+        return navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false
+        })
+            .then(stream => stream.getVideoTracks())
+            .then(tracks =>
+                Promise.all(tracks.map(track => {
+                        return createProducer(sendTransport, track)
+                            .then(msProducer => {
+                                return new Promise(resolve => {
+                                    socket.emit(ClientDeviceEvents.ADD_VIDEO_PRODUCER, {
+                                        kind: "video",
+                                        routerId: router._id,
+                                        routerProducerId: msProducer.id
+                                    }, (producer: GlobalVideoProducer) => {
+                                        console.log("Created remote video producer " + producer._id);
+                                        setLocalVideoProducers(prevState => [...prevState, {
+                                            ...producer,
+                                            msProducer: msProducer
+                                        }]);
+                                        resolve();
+                                    });
+                                });
+                            })
+                    }
+                )))
+            .finally(() => setWorking(false));
+    }, [socket, localDevice, sendTransport, localVideoProducers]);
+
+    const stopSendingVideo = useCallback(() => {
+        console.log("stopSendingVideo");
+        setWorking(true);
+        return Promise.all(localVideoProducers.map(producer => stopProducer(connection, producer.msProducer)
+            .then(() => new Promise(resolve => {
+                console.log("Removing remote video producer " + producer._id);
+                socket.emit(ClientDeviceEvents.REMOVE_VIDEO_PRODUCER, producer._id, () => {
+                    setLocalVideoProducers(prevState => prevState.filter(p => p._id !== producer._id));
+                    resolve();
+                });
+            }))
+        ))
+            .finally(() => setWorking(false));
+    }, [connection, socket, localDevice, sendTransport, localVideoProducers]);
 
     useEffect(() => {
-        getFastestRouter()
-            .then(router => {
-                setRouter(router);
-                console.log("[useMediasoup] Using router " + router.url);
-            })
-        return () => {
-            setRouter(undefined);
+        if (socket && connection && !working) {
+            if (receiveAudio) {
+                consumeAudio();
+            } else {
+                stopConsumingAudio();
+            }
+            if (receiveVideo) {
+                consumeVideo();
+            } else {
+                stopConsumingVideo();
+            }
         }
-    }, []);
+    }, [socket, connection, working,
+        audioProducers, videoProducers, receiveAudio, receiveVideo]);
+
+
+    const updateInternalStates = useCallback(() => {
+        // Update internal state and perform actions
+        if (localDevice.sendAudio && !sendAudio) {
+            setSendAudio(localDevice.sendAudio);
+            if (localDevice.sendAudio) {
+                startSendingAudio();
+            } else {
+                stopSendingAudio();
+            }
+        }
+        if (localDevice.sendVideo && !sendVideo) {
+            setSendVideo(localDevice.sendVideo);
+            if (localDevice.sendAudio) {
+                startSendingVideo();
+            } else {
+                stopSendingVideo();
+            }
+        }
+        if (localDevice.receiveAudio && !receiveAudio) {
+            setReceiveAudio(localDevice.receiveAudio);
+            /*if( localDevice.receiveVideo ) {
+                consumeAudio();
+            } else {
+                stopConsumingAudio();
+            }*/
+        }
+        if (localDevice.receiveVideo && !receiveVideo) {
+            setReceiveVideo(localDevice.receiveVideo);
+            /*if( localDevice.receiveVideo ) {
+                consumeVideo();
+            } else {
+                stopConsumingVideo();
+            }*/
+        }
+    }, [localDevice, sendAudio, sendVideo, receiveAudio, receiveVideo, startSendingVideo, startSendingAudio, stopSendingVideo, stopSendingAudio])
+
+    useEffect(() => {
+        if (socket && connection && sendTransport && receiveTransport && localDevice && !working) {
+            updateInternalStates();
+        }
+    }, [socket, connection, sendTransport, receiveTransport, localDevice, working]);
+
+    useEffect(() => {
+        if (connection) {
+            connection.emit(RouterRequests.GetRTPCapabilities, {}, (error: string, rtpCapabilities: mediasoupClient.types.RtpCapabilities) => {
+                if (error) {
+                    return console.error(error);
+                }
+                // Create device
+                const device = new MediasoupDevice();
+                device.load({routerRtpCapabilities: rtpCapabilities})
+                    .then(() =>
+                        // Create transports
+                        Promise.all([
+                            createWebRTCTransport(connection, device, "send")
+                                .then(transport => setSendTransport(transport)),
+                            createWebRTCTransport(connection, device, "receive")
+                                .then(transport => setReceiveTransport(transport))
+                        ])
+                    )
+                    .then(() => setDevice(device));
+            });
+            return () => connection.removeAllListeners()
+        }
+    }, [connection]);
+
+    useEffect(() => {
+        if (receiveTransport)
+            return () => {
+                console.log("[useMediasoup] Disconnecting receive transport");
+                receiveTransport.close();
+            }
+    }, [receiveTransport]);
+
+    useEffect(() => {
+        if (sendTransport) {
+            return () => {
+                console.log("[useMediasoup] Disconnecting send transport");
+                sendTransport.close();
+            }
+        }
+    }, [sendTransport]);
 
     useEffect(() => {
         if (router) {
@@ -354,237 +361,23 @@ export const MediasoupProvider = (props: {
     }, [router]);
 
     useEffect(() => {
-        if (connection) {
-            connection.emit(RouterRequests.GetRTPCapabilities, {}, (error: string, rtpCapabilities: mediasoupClient.types.RtpCapabilities) => {
-                if (error) {
-                    return console.error(error);
-                }
-                // Create device
-                const device = new MediasoupDevice();
-                device.load({routerRtpCapabilities: rtpCapabilities})
-                    .then(() =>
-                        // Create transports
-                        Promise.all([
-                            createWebRTCTransport(connection, device, "send")
-                                .then(transport => setSendTransport(transport)),
-                            createWebRTCTransport(connection, device, "receive")
-                                .then(transport => setReceiveTransport(transport))
-                        ])
-                    )
-                    .then(() => setDevice(device));
-            });
-        }
-    }, [connection]);
-
-    useEffect(() => {
-        if (receiveTransport)
-            return () => {
-                console.log("[useMediasoup] Disconnecting receive transport");
-                receiveTransport.close();
-            }
-    }, [receiveTransport]);
-
-    useEffect(() => {
-        if (sendTransport) {
-            return () => {
-                console.log("[useMediasoup] Disconnecting send transport");
-                sendTransport.close();
-            }
-        }
-    }, [sendTransport]);
-
-    const startSending = useCallback((kind: "audio" | "video") => {
-        console.log("startSending " + kind);
-        setWorking(true);
-        return navigator.mediaDevices.getUserMedia({
-            video: kind === "video" ? {
-                deviceId: localDevice.inputVideoDevice
-            } : undefined,
-            audio: kind === "audio" ? {
-                deviceId: localDevice.inputAudioDevice,
-                autoGainControl: false,
-                echoCancellation: false,
-                noiseSuppression: false
-            } : undefined,
-        })
-            .then(stream => {
-                console.log(stream);
-                return stream;
+        getFastestRouter()
+            .then(router => {
+                setRouter(router);
+                console.log("[useMediasoup] Using router " + router.url);
             })
-            .then(stream => {
-                if (kind === "video") {
-                    const videoTracks = stream.getVideoTracks();
-                    if (videoTracks.length > 0)
-                        return [videoTracks[0]];
-                    return [];
-                }
-                return stream.getAudioTracks();
-            })
-            .then(tracks =>
-                Promise.all(tracks.map(track => {
-                        return createProducer(sendTransport, track)
-                            .then(msProducer => {
-                                return new Promise(resolve => {
-                                    socket.emit(kind === "audio" ? ClientDeviceEvents.ADD_AUDIO_PRODUCER : ClientDeviceEvents.ADD_VIDEO_PRODUCER, {
-                                        kind: kind,
-                                        routerId: router._id,
-                                        routerProducerId: msProducer.id
-                                    }, (producer: Producer) => {
-                                        console.log("Created remote producer " + producer._id);
-                                        setLocalProducers(prevState => [...prevState, {
-                                            ...producer,
-                                            msProducer: msProducer
-                                        }]);
-                                        resolve();
-                                    });
-                                });
-                            })
-                    }
-                ))
-            )
-            .finally(() => setWorking(false));
-    }, [localDevice, sendTransport, localProducers]);
-
-    const stopSending = useCallback((kind: "audio" | "video") => {
-        console.log("stopSending " + kind);
-        setWorking(true);
-        return Promise.all(localProducers.filter(msProducer => msProducer.kind === kind)
-            .map(producer => stopProducer(connection, producer.msProducer)
-                .then(() => new Promise(resolve => {
-                    console.log("Removing remote producer " + producer._id);
-                    socket.emit(producer.kind === "audio" ? ClientDeviceEvents.ADD_AUDIO_PRODUCER : ClientDeviceEvents.REMOVE_VIDEO_PRODUCER, producer._id, () => {
-                        setLocalProducers(prevState => prevState.filter(p => p._id !== producer._id));
-                        resolve();
-                    });
-                }))
-            ))
-            .finally(() => setWorking(false));
-    }, [connection, localDevice, sendTransport, localProducers]);
-
-    useEffect(() => {
-        if (router && device && receiveTransport && sendTransport && localDevice) {
-            // Requirements matched
-            if (!working) {
-                console.log("ready again");
-                if (localDevice.sendVideo !== sendVideo) {
-                    setSendVideo(localDevice.sendVideo);
-                    if (localDevice.sendVideo) {
-                        startSending("video");
-                    } else {
-                        stopSending("video");
-                    }
-                }
-                if (localDevice.sendAudio !== sendAudio) {
-                    setSendAudio(localDevice.sendAudio);
-                    if (localDevice.sendAudio) {
-                        startSending("audio");
-                    } else {
-                        stopSending("audio");
-                    }
-                }
-                if (localDevice.receiveAudio !== receiveAudio) {
-                    setReceiveAudio(localDevice.receiveAudio);
-                    dispatch({type: "receive-audio", payload: localDevice.receiveAudio});
-                }
-                if (localDevice.receiveVideo !== receiveVideo) {
-                    setReceiveVideo(localDevice.receiveVideo);
-                    dispatch({type: "receive-video", payload: localDevice.receiveVideo});
-                }
-
-                if (localDevice.inputAudioDevice !== inputAudioDevice) {
-                    setInputAudioDevice(localDevice.inputAudioDevice);
-                    if (sendAudio)
-                        stopSending("audio")
-                            .then(() => startSending("audio"));
-                }
-
-                if (localDevice.inputVideoDevice !== inputVideoDevice) {
-                    setInputVideoDevice(localDevice.inputVideoDevice);
-                    if (sendVideo)
-                        stopSending("video")
-                            .then(() => startSending("video"));
-                }
-
-                if (localDevice.outputAudioDevice !== outputAudioDevice) {
-                    setOutputAudioDevice(localDevice.outputAudioDevice);
-                    //TODO: Discuss, what to do here
-                }
-            }
+        return () => {
+            setRouter(undefined);
         }
-
-    }, [router, device, receiveTransport, sendTransport, localDevice, working]);
-
-    useEffect(() => {
-        if (socket) {
-            socket.on(ServerStageEvents.STAGE_MEMBER_VIDEO_ADDED, producer => dispatch({
-                type: 'add_video',
-                payload: producer
-            }));
-            socket.on(ServerStageEvents.STAGE_MEMBER_VIDEO_CHANGED, producer => dispatch({
-                type: 'update_video',
-                payload: producer
-            }));
-            socket.on(ServerStageEvents.STAGE_MEMBER_VIDEO_REMOVED, producerId => dispatch({
-                type: 'remove_video',
-                payload: producerId
-            }));
-            socket.on(ServerStageEvents.STAGE_MEMBER_AUDIO_ADDED, producer => dispatch({
-                type: 'add_audio',
-                payload: producer
-            }));
-            socket.on(ServerStageEvents.STAGE_MEMBER_AUDIO_CHANGED, producer => dispatch({
-                type: 'update_audio',
-                payload: producer
-            }));
-            socket.on(ServerStageEvents.STAGE_MEMBER_AUDIO_REMOVED, producerId => dispatch({
-                type: 'remove_audio',
-                payload: producerId
-            }));
-            socket.on(ServerStageEvents.STAGE_MEMBER_OV_ADDED, track => setRemoteOvTracks(prevState => [...prevState, track]));
-            socket.on(ServerStageEvents.STAGE_MEMBER_OV_CHANGED, track => setRemoteOvTracks(prevState => prevState.map(t => t._id === track._id ? {...t, ...track} : t)));
-            socket.on(ServerStageEvents.STAGE_MEMBER_OV_REMOVED, track => setRemoteOvTracks(prevState => prevState.filter(t => t._id !== track._id)));
-            socket.on(ServerStageEvents.STAGE_JOINED, (payload: {
-                audioProducers: Client.RemoteAudioProducer[];
-                videoProducers: Client.RemoteVideoProducer[];
-                ovTracks: Client.RemoteOvTrack[];
-            }) => {
-                dispatch({type: 'add_many_audio', payload: payload.audioProducers});
-                dispatch({type: 'add_many_video', payload: payload.videoProducers});
-                setRemoteOvTracks(payload.ovTracks);
-            });
-            socket.on(ServerStageEvents.STAGE_LEFT, (payload: {
-                producers: Producer[];
-            }) => {
-                dispatch({type: 'reset'});
-            });
-            socket.on("disconnect", () => {
-                dispatch({type: 'reset'});
-                setLocalProducers([]);
-                setLocalAudioConsumers([]);
-                setLocalVideoConsumers([]);
-            })
-
-            return () => {
-                console.log("[useMediasoup] Cleaning up");
-                dispatch({type: 'reset'});
-                setSendAudio(false);
-                setSendVideo(false);
-                setReceiveAudio(false);
-                setReceiveVideo(false);
-                setReceiveTransport(undefined);
-                setSendTransport(undefined);
-                setDevice(undefined);
-            }
-        }
-    }, [socket]);
+    }, []);
 
     return (
         <MediasoupContext.Provider value={{
             working: working,
-            localProducers: localProducers,
-            localAudioConsumers: localAudioConsumers,
-            localVideoConsumers: localVideoConsumers,
-            remoteOvTracks: remoteOvTracks
+            localAudioProducers: localAudioProducers,
+            localVideoProducers: localVideoProducers,
+            audioConsumers: Object.values(audioConsumers),
+            videoConsumers: Object.values(videoConsumers),
         }}>
             {props.children}
         </MediasoupContext.Provider>

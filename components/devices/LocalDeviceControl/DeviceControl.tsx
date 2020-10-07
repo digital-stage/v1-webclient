@@ -37,7 +37,7 @@ const DeviceControl = (props: {
                     {darkMode ? (
                         <img src={props.device.sendVideo ? "videocam-black-18dp.svg" : "videocam_off-black-18dp.svg"}/>
                     ) : (
-                        <img src={props.device.sendVideo ? "videocam-white-18dp.svg" : "videocam_off-white-18dp.svg"}/>
+                        <img src={props.device.sendVideo ?  "videocam-white-18dp.svg" : "videocam_off-white-18dp.svg"}/>
                     )}
                 </Button>
             )}
