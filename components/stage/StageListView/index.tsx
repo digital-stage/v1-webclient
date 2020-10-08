@@ -91,7 +91,7 @@ const StageListView = () => {
                 </Button>
             </GlobalActions>
             <Accordion>
-                {Object.values(availableStages).map(stage => (
+                {availableStages.map(stage => (
                     <Panel
                         key={stage._id}
                         title={(
@@ -131,7 +131,7 @@ const StageListView = () => {
                                 </Tag>
                             )}
                         </StageTopActions>
-                        {Object.values(groups).filter(group => group.stageId === stage._id).map(group => (
+                        {groups.filter(group => group.stageId === stage._id).map(group => (
                             <GroupRow key={group._id}>
                                 <GroupTitle>
                                     <Label>{group.name}</Label>
