@@ -71,7 +71,7 @@ const GroupAdminActions = styled("div", {
 })
 
 const StageListView = () => {
-    const {stageId, availableStages, groups, removeStage, removeGroup, leaveStage, leaveStageForGood} = useStages();
+    const {state, stageId, availableStages, groups, removeStage, removeGroup, leaveStage, leaveStageForGood} = useStages();
     const {setRequest} = useRequest();
     const [currentStage, setCurrentStage] = useState<Client.Stage>();
     const [currentGroup, setCurrentGroup] = useState<Client.Group>();
@@ -204,6 +204,9 @@ const StageListView = () => {
                     </Panel>
                 ))}
             </Accordion>
+            <div>
+                <pre>{JSON.stringify(state, null, 2)}</pre>
+            </div>
             <CreateStageModal isOpen={isCreateStageOpen}
                               onClose={() => setCreateStageIsOpen(false)}/>
             <CreateGroupModal stage={currentStage} isOpen={isCreateGroupOpen}

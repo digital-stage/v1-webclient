@@ -14,7 +14,9 @@ export namespace Client {
         isAdmin: boolean;
     }
 
-    export type Group = Server.Group;
+    export interface Group extends Server.Group {
+        customVolume?: number;
+    }
 
     export interface StageMemberAudio extends Server.StageMemberAudioProducer {
         msConsumer?: mediasoupClient.types.Consumer;
@@ -48,7 +50,6 @@ namespace ClientModel {
     }
 
     export interface Group extends Client.Group {
-        customVolume?: number;
         members: StageMember[];
     }
 
@@ -56,6 +57,16 @@ namespace ClientModel {
         name: string;
         avatarUrl?: string;
         customVolume?: number;
+    }
+
+    export interface StageMemberAudio extends Client.StageMemberAudio {
+        customVolume?: number;
+        actualVolume: number;
+    }
+
+    export interface StageMemberOvTrack extends Client.StageMemberOvTrack {
+        customVolume?: number;
+        actualVolume: number;
     }
 }
 

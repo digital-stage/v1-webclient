@@ -10,7 +10,6 @@ const useStageModel = (): {
 } => {
     const {user} = useAuth();
     const {stageId, availableStages, groups, customGroups, stageMembers, users, customStageMembers, ovTracks} = useStages();
-    //const {audioConsumers, videoConsumers} = useMediasoup();
     const [stages, setStages] = useState<ClientModel.Stage[]>([]);
     const [stage, setStage] = useState<ClientModel.Stage>();
 

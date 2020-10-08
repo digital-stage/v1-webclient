@@ -107,7 +107,7 @@ export const DeviceContextProvider = (props: {
             ...d,
             ...device
         } : d)));
-        socket.on(ServerDeviceEvents.DEVICE_REMOVED, (device: Device) => setDevices(prevState => prevState.filter(remoteDevice => remoteDevice._id !== device._id)));
+        socket.on(ServerDeviceEvents.DEVICE_REMOVED, (id: DeviceId) => setDevices(prevState => prevState.filter(device => id !== device._id)));
         socket.on(ServerDeviceEvents.LOCAL_DEVICE_READY, (localDevice: Device) => {
             setLocalDeviceId(localDevice._id);
             setDevices(prevState => [...prevState, localDevice]);
