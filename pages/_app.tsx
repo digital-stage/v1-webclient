@@ -4,7 +4,7 @@ import {debug, styletron} from '../styletron'
 import {AuthContextProvider} from "../lib/digitalstage/useAuth";
 import {BaseProvider, DarkTheme, LightTheme} from "baseui";
 import React from "react";
-import {StagesContextConsumer, StagesContextProvider} from "../lib/digitalstage/useStages";
+import {StagesContextConsumer, StagesContextProvider} from "../lib/digitalstage/useStageContext";
 import {RequestContextProvider} from "../lib/useRequest";
 import Head from 'next/head'
 import AppNavigation from "../components/AppNavigation";

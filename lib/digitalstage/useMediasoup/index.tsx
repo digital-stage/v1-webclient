@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {Client} from "../common/model.client";
-import {useStages, useStageSelector} from "../useStages";
+import {useStages, useStageSelector} from "../useStageContext";
 import {useDevices} from "../useDevices";
 import {GlobalAudioProducer, GlobalVideoProducer, Router} from "../common/model.server";
 import mediasoupClient from 'mediasoup-client';

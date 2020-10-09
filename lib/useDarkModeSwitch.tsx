@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useStages, useStageSelector} from "./digitalstage/useStages";
+import {useStages, useStageSelector} from "./digitalstage/useStageContext";
 
 export interface DarkModeProps {
     darkMode: boolean,

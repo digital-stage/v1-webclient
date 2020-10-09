@@ -25,7 +25,7 @@ import {
 import {ClientDeviceEvents, ClientStageEvents, ClientUserEvents} from "./common/events";
 import {useRequest} from "../useRequest";
 import useStageSelector from "./useStageSelector";
-import {useStageContext} from "./useStages";
+import {useStageContext} from "./useStageContext";
 
 export interface StageActionsProps {
     updateDevice(id: DeviceId, device: Partial<Device>);

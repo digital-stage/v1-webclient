@@ -1,5 +1,5 @@
-import {NormalizedState} from "./useStages/schema";
-import {useStageContext} from "./useStages";
+import {NormalizedState} from "./useStageContext/schema";
+import {useStageContext} from "./useStageContext";
 
 const useStageSelector = (callback: (state: NormalizedState) => any) => {
     const {state} = useStageContext();

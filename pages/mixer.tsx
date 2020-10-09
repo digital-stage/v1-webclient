@@ -4,7 +4,7 @@ import { useAuth } from "../lib/digitalstage/useAuth";
 import Loading from "../components/theme/Loading";
 import { DisplayMedium } from "baseui/typography";
 import Login from "./account/login";
-import { useStages } from "../lib/digitalstage/useStages";
+import { useStages } from "../lib/digitalstage/useStageContext";
 import { useRouter } from "next/router";
 import VerticalSlider from "../components/digital-stage-ui/VerticalSlider";
 import PanControler from "../components/digital-stage-ui/PanControl";

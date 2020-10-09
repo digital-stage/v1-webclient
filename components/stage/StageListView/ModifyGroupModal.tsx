@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import {useFormik} from "formik";
-import {useStages} from "../../../lib/digitalstage/useStages";
+import {useStages} from "../../../lib/digitalstage/useStageContext";
 import React, {useEffect} from "react";
 import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from "baseui/modal/index";
 import {Input} from "baseui/input/index";
