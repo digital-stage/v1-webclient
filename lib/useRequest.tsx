@@ -1,5 +1,5 @@
-import {GroupId, StageId} from "./digitalstage/common/model.common";
 import React, {useState} from "react";
+import {GroupId, StageId} from "./digitalstage/common/model.server";
 
 export interface Request {
     stageId: StageId;

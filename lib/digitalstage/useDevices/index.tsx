@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Device, DeviceId, User} from "../common/model.common";
 import io from "socket.io-client";
 import {enumerateDevices} from "./util";
 import * as Bowser from "bowser";
@@ -12,6 +11,7 @@ import {
 } from "../common/events";
 import {useAuth} from "../useAuth";
 import {API_URL} from "../../../env";
+import {Device, DeviceId, User} from "../common/model.server";
 
 export interface DeviceProps {
     socket: SocketIOClient.Socket;
@@ -107,7 +107,7 @@ export const DeviceContextProvider = (props: {
             ...d,
             ...device
         } : d)));
-        socket.on(ServerDeviceEvents.DEVICE_REMOVED, (device: Device) => setDevices(prevState => prevState.filter(remoteDevice => remoteDevice._id !== device._id)));
+        socket.on(ServerDeviceEvents.DEVICE_REMOVED, (id: DeviceId) => setDevices(prevState => prevState.filter(device => id !== device._id)));
         socket.on(ServerDeviceEvents.LOCAL_DEVICE_READY, (localDevice: Device) => {
             setLocalDeviceId(localDevice._id);
             setDevices(prevState => [...prevState, localDevice]);

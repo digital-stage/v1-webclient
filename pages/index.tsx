@@ -4,10 +4,15 @@ import {useAuth} from "../lib/digitalstage/useAuth";
 import Loading from "../components/theme/Loading";
 import {useRouter} from "next/router";
 import GroupGrid from "../components/stage/GroupGrid";
-import useStageModel from "../lib/digitalstage/useStageModel";
+import {useStageSelector} from "../lib/digitalstage/useStages";
 
 const Index = () => {
-    const {stage} = useStageModel();
+    const {stage, groups} = useStageSelector(state => {
+        return {
+            stage: state.current ? state.stages.byId[state.current.stageId] : undefined,
+            groups: state.groups
+        }
+    })
     const router = useRouter();
 
     const {loading, user} = useAuth();
@@ -19,14 +24,16 @@ const Index = () => {
             if (!stage) {
                 router.push("/stages");
             } else {
-                return stage.groups.map(group => (
-                    <>
-                        <DisplayMedium>{group.name}</DisplayMedium>
-                        <GroupGrid group={group}/>
-                    </>
-                ))
+                return stage.groups.map(groupId => {
+                    const group = groups.byId[groupId];
+                    return (
+                        <>
+                            <DisplayMedium>{group.name}</DisplayMedium>
+                            <GroupGrid group={group}/>
+                        </>
+                    )
+                })
             }
-            ;
         }
     }
 

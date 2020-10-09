@@ -14,7 +14,7 @@ import {
     Unstable_AppNavBar as AppNavBar
 } from 'baseui/app-nav-bar';
 import {useRouter} from "next/router";
-import {useStages} from "../../lib/digitalstage/useStages";
+import {useStages, useStageSelector} from "../../lib/digitalstage/useStages";
 import {useDevices} from "../../lib/digitalstage/useDevices";
 import TextLink from "../theme/TextLink";
 
@@ -33,7 +33,12 @@ const AppNavigation = () => {
     const [activeNavItem, setActiveNavItem] = useState<MainNavItem>();
 
     const router = useRouter();
-    const {stage} = useStages();
+    const {current, stage} = useStageSelector((state) => {
+        return {
+            current: state.current,
+            stage: state.current ? state.stages.byId[state.current.stageId] : undefined
+        };
+    });
     const {user, remoteDevices} = useDevices();
 
     useEffect(() => {
@@ -43,7 +48,7 @@ const AppNavigation = () => {
     useEffect(() => {
         if (user) {
             const nav: MainNavItem[] = [];
-            if (stage) {
+            if (current) {
                 nav.push({
                     icon: () => <img src="crop_landscape-24px.svg"/>,
                     item: {
@@ -66,7 +71,7 @@ const AppNavigation = () => {
             setUserNav([]);
             setMainNav(NO_USER_NAV);
         }
-    }, [user, stage, remoteDevices])
+    }, [user, current, stage, remoteDevices])
 
     return (
         <Layer>

@@ -61,13 +61,13 @@ export interface Device {
     receiveAudio: boolean;
 
     // WebRTC video device
-    inputVideoDeviceIds: WebRTCDeviceId[];
+    inputVideoDevices: WebRTCDevice[];
     inputVideoDeviceId?: WebRTCDeviceId;
 
     // WebRTC audio device
-    inputAudioDeviceIds: WebRTCDeviceId[];
+    inputAudioDevices: WebRTCDevice[];
     inputAudioDeviceId?: WebRTCDeviceId;
-    outputAudioDeviceIds: WebRTCDeviceId[];
+    outputAudioDevices: WebRTCDevice[];
     outputAudioDeviceId?: WebRTCDeviceId;
 
     // OV SoundCards

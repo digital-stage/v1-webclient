@@ -4,7 +4,7 @@ import {LabelMedium} from "baseui/typography";
 import {FlexGrid, FlexGridItem} from "baseui/flex-grid";
 import {useStyletron} from "baseui";
 import CanvasPlayer from "../../video/CanvasPlayer";
-import ClientModel, {Client} from "../../../lib/digitalstage/common/model.client";
+import ClientModel from "../../../lib/digitalstage/common/model.client";
 import {AudioPlayer} from "../../audio/AudioPlayer";
 import VolumeSlider from "../../audio/VolumeSlider";
 import {useStages} from "../../../lib/digitalstage/useStages";
@@ -48,35 +48,35 @@ const PoweredBySoundjack = styled("div", {
 const GroupGrid = (props: {
     group?: ClientModel.Group;
 }) => {
-    const {setStageMemberVolume} = useStages();
+    const {updateStageMember} = useStages();
     const [numDesktopCols, setNumDesktopCols] = useState<number>(1);
     const [css] = useStyletron();
 
     useEffect(() => {
-        if (props.group.members && props.group.members.length <= 1) {
+        if (props.group.stageMembers && props.group.stageMembers.length <= 1) {
             setNumDesktopCols(1);
         } else {
-            if (props.group.members.length > 4) {
+            if (props.group.stageMembers.length > 4) {
                 setNumDesktopCols(4)
             } else {
                 setNumDesktopCols(2)
             }
         }
-    }, [props.group.members]);
+    }, [props.group.stageMembers]);
 
     return (
         <FlexGrid
             width="100%"
             flexGridColumnCount={[
                 1,
-                props.group.members.length > 1 ? 2 : 1,
-                props.group.members.length > 1 ? 2 : 1,
+                props.group.stageMembers.length > 1 ? 2 : 1,
+                props.group.stageMembers.length > 1 ? 2 : 1,
                 numDesktopCols
             ]}
             flexGridColumnGap="scale800"
             flexGridRowGap="scale800"
         >
-            {props.group.members && props.group.members.map(member => (
+            {props.group.stageMembers && props.group.stageMembers.map(member => (
                 <FlexGridItem key={member._id}>
                     <Card>
                         <CardConstraint/>
@@ -137,7 +137,7 @@ const GroupGrid = (props: {
                                     step={0.1}
                                     color="green"
                                     value={member.volume}
-                                    onChange={(volume) => setStageMemberVolume(member._id, volume)}
+                                    onChange={(volume) => updateStageMember(member._id, {volume: volume})}
                                 />
                             </div>
                             {member.audioConsumers.map(audioConsumer => (
