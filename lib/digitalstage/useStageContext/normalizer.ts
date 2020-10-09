@@ -191,6 +191,7 @@ const removeItem = (state: NormalizedState, group: string, id: string): Normaliz
     return {
         ...state,
         [group]: {
+            ...state[group],
             byId: _.omit(state[group].byId, id),
             allIds: state[group].allIds.filter(el => el !== id)
         }
@@ -292,7 +293,13 @@ export const reducer: Reducer<NormalizedState, ReducerAction> = (state: Normaliz
         case ServerDeviceEvents.DEVICE_CHANGED:
             return updateItem(state, "devices", action.payload._id, action.payload);
         case ServerDeviceEvents.DEVICE_REMOVED:
-            return removeItem(state, "devices", action.payload);
+            return {
+                ...removeItem(state, "devices", action.payload),
+                devices: {
+                    ...state.devices,
+                    remote: state.devices.remote.filter(id => id !== action.payload)
+                }
+            }
 
         case ServerStageEvents.USER_ADDED:
             return normalize(state, {
