@@ -50,7 +50,7 @@ namespace ClientModel {
     }
 
     export interface Group extends Client.Group {
-        members: StageMember[];
+        stageMembers: StageMember[];
     }
 
     export interface StageMember extends Client.StageMember {
