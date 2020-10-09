@@ -8,6 +8,7 @@ import * as Bowser from "bowser";
 import io from "socket.io-client";
 import {API_URL} from "../../../env";
 import {enumerateDevices} from "./utils";
+import {Device} from "../common/model.server";
 
 export interface StagesProps {
     socket: SocketIOClient.Socket;
@@ -36,11 +37,8 @@ export const StagesContextProvider = (props: {
             dispatch({type: ServerGlobalEvents.READY})
         );
 
-        socket.on(ServerStageEvents.STAGE_LEFT, () => {
-            dispatch({type: ServerStageEvents.STAGE_LEFT});
-        });
-        socket.on(ServerStageEvents.STAGE_JOINED, (payload: Server.InitialStagePackage) => {
-            dispatch({type: ServerStageEvents.STAGE_JOINED, payload: payload});
+        socket.on(ServerDeviceEvents.LOCAL_DEVICE_READY, (payload: Server.Device) => {
+            dispatch({type: ServerDeviceEvents.LOCAL_DEVICE_READY, payload: payload});
         });
 
         socket.on(ServerUserEvents.USER_READY, (payload: Server.User) => dispatch({
@@ -52,10 +50,10 @@ export const StagesContextProvider = (props: {
             dispatch({type: ServerDeviceEvents.DEVICE_ADDED, payload: payload});
         });
         socket.on(ServerDeviceEvents.DEVICE_CHANGED, (payload: Server.Device) => {
-            dispatch({type: ServerStageEvents.USER_CHANGED, payload: payload});
+            dispatch({type: ServerDeviceEvents.DEVICE_CHANGED, payload: payload});
         });
         socket.on(ServerDeviceEvents.DEVICE_REMOVED, (payload: Server.DeviceId) => {
-            dispatch({type: ServerStageEvents.USER_REMOVED, payload: payload});
+            dispatch({type: ServerDeviceEvents.DEVICE_REMOVED, payload: payload});
         });
 
         socket.on(ServerStageEvents.USER_ADDED, (payload: Server.User) => {
@@ -70,6 +68,12 @@ export const StagesContextProvider = (props: {
 
         socket.on(ServerStageEvents.STAGE_ADDED, (payload: Server.Stage) => {
             dispatch({type: ServerStageEvents.STAGE_ADDED, payload: payload});
+        });
+        socket.on(ServerStageEvents.STAGE_JOINED, (payload: Server.InitialStagePackage) => {
+            dispatch({type: ServerStageEvents.STAGE_JOINED, payload: payload});
+        });
+        socket.on(ServerStageEvents.STAGE_LEFT, () => {
+            dispatch({type: ServerStageEvents.STAGE_LEFT});
         });
         socket.on(ServerStageEvents.STAGE_CHANGED, (payload: Server.Stage) => {
             dispatch({type: ServerStageEvents.STAGE_CHANGED, payload: payload});
@@ -190,10 +194,10 @@ export const StagesContextProvider = (props: {
                                     inputAudioDevices: devices.inputAudioDevices,
                                     inputVideoDevices: devices.inputVideoDevices,
                                     outputAudioDevices: devices.outputAudioDevices,
-                                    inputAudioDevice: devices.inputAudioDevices.find(d => d.id === "label") ? "default" : devices.inputAudioDevices.length > 0 ? devices.inputAudioDevices[0].id : undefined,
-                                    inputVideoDevice: devices.inputVideoDevices.length === 1 ? devices.inputVideoDevices[0].id : "default",
-                                    outputAudioDevice: devices.outputAudioDevices.find(d => d.id === "label") ? "default" : devices.outputAudioDevices.length > 0 ? devices.outputAudioDevices[0].id : undefined
-                                })
+                                    inputAudioDeviceId: devices.inputAudioDevices.find(d => d.id === "label") ? "default" : devices.inputAudioDevices.length > 0 ? devices.inputAudioDevices[0].id : undefined,
+                                    inputVideoDeviceId: devices.inputVideoDevices.length === 1 ? devices.inputVideoDevices[0].id : "default",
+                                    outputAudioDeviceId: devices.outputAudioDevices.find(d => d.id === "label") ? "default" : devices.outputAudioDevices.length > 0 ? devices.outputAudioDevices[0].id : undefined
+                                } as Device)
                             }
                         });
 

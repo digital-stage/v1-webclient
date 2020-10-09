@@ -1,7 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {Client} from "../common/model.client";
-import {useStages, useStageSelector} from "../useStageContext";
-import {useDevices} from "../useDevices";
 import {GlobalAudioProducer, GlobalVideoProducer, Router} from "../common/model.server";
 import mediasoupClient from 'mediasoup-client';
 import {Device as MediasoupDevice} from "mediasoup-client/lib/Device";
@@ -16,6 +14,8 @@ import {
 } from "./util";
 import {ClientDeviceEvents} from "../common/events";
 import io from "socket.io-client";
+import useStageSelector from "../useStageSelector";
+import {useStageContext} from "../useStageContext";
 
 
 export interface MediasoupContextProps {
@@ -34,11 +34,12 @@ export const MediasoupProvider = (props: {
     children: React.ReactNode
 }) => {
     // Dependencies
-    const {localDevice, socket} = useDevices();
-    const {audioProducers, videoProducers} = useStageSelector(state => {
+    const {socket} = useStageContext();
+    const {localDevice, audioProducers, videoProducers} = useStageSelector(state => {
         return {
             audioProducers: state.audioProducers,
-            videoProducers: state.videoProducers
+            videoProducers: state.videoProducers,
+            localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined
         }
     });
 

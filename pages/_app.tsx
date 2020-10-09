@@ -12,6 +12,8 @@ import StageJoiner from "../components/stage/StageJoiner";
 import {Block} from 'baseui/block';
 import LocalDeviceControl from '../components/devices/LocalDeviceControl';
 import {AudioContextProvider} from "../lib/useAudioContext";
+import {CssBaseline, ThemeProvider} from '@material-ui/core';
+import theme from "../styles/theme";
 
 class MyApp extends App {
     render() {
@@ -22,9 +24,11 @@ class MyApp extends App {
                 <Head>
                     <meta name="viewport" content="width=device-width, initial-scale=1"/>
                 </Head>
-                <StyletronProvider value={styletron} debug={debug} debugAfterHydration>
-                    <RequestContextProvider>
-                        <AuthContextProvider>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline/>
+                    <StyletronProvider value={styletron} debug={debug} debugAfterHydration>
+                        <RequestContextProvider>
+                            <AuthContextProvider>
                                 <StagesContextProvider>
                                     <AudioContextProvider>
                                         <StagesContextConsumer>
@@ -70,9 +74,10 @@ class MyApp extends App {
                                         </StagesContextConsumer>
                                     </AudioContextProvider>
                                 </StagesContextProvider>
-                        </AuthContextProvider>
-                    </RequestContextProvider>
-                </StyletronProvider>
+                            </AuthContextProvider>
+                        </RequestContextProvider>
+                    </StyletronProvider>
+                </ThemeProvider>
             </>
         )
     }

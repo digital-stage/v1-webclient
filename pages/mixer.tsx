@@ -4,18 +4,20 @@ import { useAuth } from "../lib/digitalstage/useAuth";
 import Loading from "../components/theme/Loading";
 import { DisplayMedium } from "baseui/typography";
 import Login from "./account/login";
-import { useStages } from "../lib/digitalstage/useStageContext";
 import { useRouter } from "next/router";
 import VerticalSlider from "../components/digital-stage-ui/VerticalSlider";
 import PanControler from "../components/digital-stage-ui/PanControl";
 import SwitchButton from "../components/digital-stage-ui/SwitchButton";
+import useStageSelector from "../lib/digitalstage/useStageSelector";
 
 const mixers = ["Guitar", "Strings", "Bass", "Cello"]
 
 const Mixer = () => {
     const router = useRouter();
     const { loading, user } = useAuth();
-    const { stageId } = useStages();
+    const { current } = useStageSelector(state => ({
+        current: state.current
+    }));
     const [initialized, setInitialized] = useState<boolean>();
 
     const [value, setValue] = React.useState<number>(5)
@@ -26,11 +28,11 @@ const Mixer = () => {
 
     useEffect(() => {
         if (initialized) {
-            if (stageId) {
+            if (current) {
                 router.push("/");
             }
         }
-    }, [stageId]);
+    }, [current]);
 
     useEffect(() => {
         if (router.pathname === "/mixer") {

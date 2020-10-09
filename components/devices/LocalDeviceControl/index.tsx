@@ -5,7 +5,7 @@ import useStageSelector from "../../../lib/digitalstage/useStageSelector";
 
 const LocalDeviceControl = () => {
     const [css] = useStyletron();
-    const {localDevice} = useStageSelector(state => ({localDevice: state.localDevice ? state.devices.byId[state.localDevice] : undefined}));
+    const {localDevice} = useStageSelector(state => ({localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined}));
 
     if (!localDevice)
         return null;
