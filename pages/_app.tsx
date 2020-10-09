@@ -1,38 +1,43 @@
 import App from 'next/app'
-import {Provider as StyletronProvider} from 'styletron-react'
-import {debug, styletron} from '../styletron'
-import {AuthContextProvider} from "../lib/digitalstage/useAuth";
-import {BaseProvider, DarkTheme, LightTheme} from "baseui";
+import { Provider as StyletronProvider } from 'styletron-react'
+import { debug, styletron } from '../styletron'
+import { AuthContextProvider } from "../lib/digitalstage/useAuth";
+import { BaseProvider, DarkTheme, LightTheme } from "baseui";
 import React from "react";
-import {DeviceContextProvider} from "../lib/digitalstage/useDevices";
-import {StagesContextConsumer, StagesContextProvider} from "../lib/digitalstage/useStages";
-import {RequestContextProvider} from "../lib/useRequest";
+import { DeviceContextProvider } from "../lib/digitalstage/useDevices";
+import { StagesContextConsumer, StagesContextProvider } from "../lib/digitalstage/useStages";
+import { RequestContextProvider } from "../lib/useRequest";
 import Head from 'next/head'
 import AppNavigation from "../components/AppNavigation";
 import StageJoiner from "../components/stage/StageJoiner";
-import {Block} from 'baseui/block';
+import { Block } from 'baseui/block';
 import LocalDeviceControl from '../components/devices/LocalDeviceControl';
-import {AudioContextProvider} from "../lib/useAudioContext";
+import { AudioContextProvider } from "../lib/useAudioContext";
+import { ThemeProvider } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import theme from '../styles/theme';
 
 class MyApp extends App {
     render() {
-        const {Component, pageProps} = this.props;
+        const { Component, pageProps } = this.props;
 
         return (
             <>
-                <Head>
-                    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-                </Head>
-                <StyletronProvider value={styletron} debug={debug} debugAfterHydration>
-                    <RequestContextProvider>
-                        <AuthContextProvider>
-                            <DeviceContextProvider>
-                                <StagesContextProvider>
-                                    <AudioContextProvider>
-                                        <StagesContextConsumer>
-                                            {({stageId}) => (
-                                                <BaseProvider theme={stageId ? DarkTheme : LightTheme}>
-                                                    <style jsx global>{`
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <Head>
+                        <meta name="viewport" content="width=device-width, initial-scale=1" />
+                    </Head>
+                    <StyletronProvider value={styletron} debug={debug} debugAfterHydration>
+                        <RequestContextProvider>
+                            <AuthContextProvider>
+                                <DeviceContextProvider>
+                                    <StagesContextProvider>
+                                        <AudioContextProvider>
+                                            <StagesContextConsumer>
+                                                {({ stageId }) => (
+                                                    <BaseProvider theme={stageId ? DarkTheme : LightTheme}>
+                                                        <style jsx global>{`
                                             * {
                                                 box-sizing: border-box;
                                             }
@@ -55,22 +60,23 @@ class MyApp extends App {
                                                 100% { transform: translateY(0); }
                                             }
                                         `}
-                                                    </style>
-                                                    <AppNavigation/>
-                                                    <StageJoiner/>
-                                                    <Block marginTop={['52px', '52px', '72px']}>
-                                                        <Component {...pageProps} />
-                                                    </Block>
-                                                    <LocalDeviceControl/>
-                                                </BaseProvider>
-                                            )}
-                                        </StagesContextConsumer>
-                                    </AudioContextProvider>
-                                </StagesContextProvider>
-                            </DeviceContextProvider>
-                        </AuthContextProvider>
-                    </RequestContextProvider>
-                </StyletronProvider>
+                                                        </style>
+                                                        <AppNavigation />
+                                                        <StageJoiner />
+                                                        <Block marginTop={['52px', '52px', '72px']}>
+                                                            <Component {...pageProps} />
+                                                        </Block>
+                                                        <LocalDeviceControl />
+                                                    </BaseProvider>
+                                                )}
+                                            </StagesContextConsumer>
+                                        </AudioContextProvider>
+                                    </StagesContextProvider>
+                                </DeviceContextProvider>
+                            </AuthContextProvider>
+                        </RequestContextProvider>
+                    </StyletronProvider>
+                </ThemeProvider>
             </>
         )
     }
