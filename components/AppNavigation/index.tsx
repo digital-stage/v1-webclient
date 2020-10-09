@@ -32,8 +32,8 @@ const AppNavigation = () => {
     const [activeNavItem, setActiveNavItem] = useState<MainNavItem>();
 
     const router = useRouter();
-    const {current, stage, user, remoteDevices} = useStageSelector((state) => ({
-        current: state.current,
+    const {stage, user, remoteDevices} = useStageSelector((state) => ({
+
         stage: state.current ? state.stages.byId[state.current.stageId] : undefined,
         user: state.user,
         remoteDevices: state.devices
@@ -46,7 +46,7 @@ const AppNavigation = () => {
     useEffect(() => {
         if (user) {
             const nav: MainNavItem[] = [];
-            if (current) {
+            if (stage) {
                 nav.push({
                     icon: () => <img src="crop_landscape-24px.svg"/>,
                     item: {
@@ -69,7 +69,7 @@ const AppNavigation = () => {
             setUserNav([]);
             setMainNav(NO_USER_NAV);
         }
-    }, [user, current, stage, remoteDevices])
+    }, [user, stage, remoteDevices])
 
     return (
         <Layer>
