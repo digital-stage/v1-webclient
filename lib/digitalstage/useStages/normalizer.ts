@@ -46,6 +46,8 @@ export function normalize(prevState: NormalizedState, data: Partial<{
         };
     }
     if (data.users) {
+        console.log("HAVE USERS");
+        console.log(data.users);
         data.users.forEach(user => {
             state.users.byId[user._id] = {
                 stageMembers: state.stageMembers.allIds.filter(id => state.stageMembers.byId[id].userId === user._id),
