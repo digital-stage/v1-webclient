@@ -2,21 +2,26 @@ import * as Server from "../common/model.server";
 import mediasoupClient from 'mediasoup-client';
 
 export interface NormalizedState {
+    user?: Server.User;
+    current?: {
+        stageId: string;
+        groupId: string;
+    },
     users: {
         byId: {
-            [id: string]: Server.Stage & { stageMembers: string[] }
+            [id: string]: Server.User & { stageMembers: string[] }
         },
         allIds: string[]
     },
     stages: {
         byId: {
-            [id: string]: Server.Stage & { groups: string[] }
+            [id: string]: Server.Stage & { isAdmin: boolean, groups: string[] }
         },
         allIds: string[]
     },
     groups: {
         byId: {
-            [id: string]: Server.Group & { customGroup?: string }
+            [id: string]: Server.Group & { customGroup?: string, stageMembers: string[] }
         },
         allIds: string[]
     },
@@ -92,6 +97,7 @@ export interface NormalizedState {
 }
 
 export const OutsideStageNormalizedState: Partial<NormalizedState> = {
+    current: undefined,
     customGroups: {
         byId: {},
         allIds: []
@@ -135,6 +141,7 @@ export const OutsideStageNormalizedState: Partial<NormalizedState> = {
 }
 
 export const InitialNormalizedState: NormalizedState = {
+    current: undefined,
     users: {
         byId: {},
         allIds: []

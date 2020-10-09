@@ -5,23 +5,25 @@ import Loading from "../components/theme/Loading";
 import {DisplayMedium, HeadingLarge} from "baseui/typography";
 import Login from "./account/login";
 import StageListView from "../components/stage/StageListView";
-import {useStages} from "../lib/digitalstage/useStages";
+import {useStageSelector} from "../lib/digitalstage/useStages";
 import {useRouter} from "next/router";
 
 
 const Stages = () => {
     const router = useRouter();
     const {loading, user} = useAuth();
-    const {stageId} = useStages();
+    const {current} = useStageSelector(state => {
+        return {current: state.current}
+    });
     const [initialized, setInitialized] = useState<boolean>();
 
     useEffect(() => {
         if (initialized) {
-            if (stageId) {
+            if (current) {
                 router.push("/");
             }
         }
-    }, [stageId]);
+    }, [current]);
 
     useEffect(() => {
         if (router.pathname === "/stages") {

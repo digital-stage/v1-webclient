@@ -9,32 +9,33 @@ const useStageModel = (): {
     stage?: ClientModel.Stage
 } => {
     const {user} = useAuth();
-    const {stageId, availableStages, groups, customGroups, stageMembers, users, customStageMembers, ovTracks} = useStages();
+    const {state} = useStages();
     const [stages, setStages] = useState<ClientModel.Stage[]>([]);
     const [stage, setStage] = useState<ClientModel.Stage>();
 
     // Resolve stage objects
     useEffect(() => {
-        const stages: ClientModel.Stage[] = availableStages.map(stagePrototype => {
+        const stages: ClientModel.Stage[] = state.stages.allIds.map(stageId => {
             const stage: ClientModel.Stage = {
-                ...stagePrototype,
-                groups: groups.filter(groupPrototype => groupPrototype.stageId === stagePrototype._id).map(groupPrototype => {
-                    const customVolume = customGroups[groupPrototype._id];
+                ...state.stages.byId[stageId],
+                groups: state.stages.byId[stageId].groups.map(groupId => {
+                    const customVolume = state.groups.byId[groupId].customGroup ? state.customGroups.byId[state.groups.byId[groupId].customGroup] : undefined;
                     const group: ClientModel.Group = {
-                        ...groupPrototype,
+                        ...state.groups.byId[groupId],
                         customVolume: customVolume ? customVolume.volume : undefined,
-                        members: stageMembers.filter(groupMemberPrototype => groupMemberPrototype.groupId === groupPrototype._id).map(groupMemberPrototype => {
-                            const customVolume = customStageMembers[groupMemberPrototype._id];
+                        members: state.groups.byId[groupId].stageMembers.map(stageMemberId => {
+                            const customVolume = state.stageMembers.byId[stageMemberId].customStageMember ? state.customStageMembers.byId[state.stageMembers.byId[stageMemberId].customStageMember].volume : undefined;
+                            const user = state.stageMembers.byId[stageMemberId].userId ? state.users.byId[state.stageMembers.byId[stageMemberId].userId] : undefined;
                             const member: ClientModel.StageMember = {
-                                ...groupMemberPrototype,
-                                name: users[groupMemberPrototype.userId] && users[groupMemberPrototype.userId].name,
-                                avatarUrl: users[groupMemberPrototype.userId] && users[groupMemberPrototype.userId].avatarUrl,
-                                customVolume: customVolume ? customVolume.volume : undefined,
+                                ...state.stageMembers.byId[stageMemberId],
+                                name: user && user.name,
+                                avatarUrl: user && user.avatarUrl,
+                                customVolume: customVolume,
                                 //audioConsumers: audioConsumers.filter(consumer => consumer.userId === groupMemberPrototype.userId),
                                 //videoConsumers: videoConsumers.filter(consumer => consumer.userId === groupMemberPrototype.userId),
                                 audioConsumers: [],
                                 videoConsumers: [],
-                                ovTracks: ovTracks.filter(track => track.userId === groupMemberPrototype.userId)
+                                ovTracks: state.stageMembers.byId[stageMemberId].ovTracks.map(trackId => state.ovTracks.byId[trackId])
                             }
                             return member;
                         })
@@ -45,7 +46,7 @@ const useStageModel = (): {
             return stage;
         })
         setStages(stages);
-    }, [user, availableStages, groups, stageMembers, customGroups, customStageMembers, ovTracks]);
+    }, [user, state]);
 
     /*
     useEffect(() => {

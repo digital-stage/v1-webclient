@@ -48,7 +48,7 @@ const PoweredBySoundjack = styled("div", {
 const GroupGrid = (props: {
     group?: ClientModel.Group;
 }) => {
-    const {setStageMemberVolume} = useStages();
+    const {updateStageMember} = useStages();
     const [numDesktopCols, setNumDesktopCols] = useState<number>(1);
     const [css] = useStyletron();
 
@@ -137,7 +137,7 @@ const GroupGrid = (props: {
                                     step={0.1}
                                     color="green"
                                     value={member.volume}
-                                    onChange={(volume) => setStageMemberVolume(member._id, volume)}
+                                    onChange={(volume) => updateStageMember(member._id, {volume: volume})}
                                 />
                             </div>
                             {member.audioConsumers.map(audioConsumer => (

@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {Client} from "../common/model.client";
-import {useStages} from "../useStages";
+import {useStages, useStageSelector} from "../useStages";
 import {useDevices} from "../useDevices";
 import {GlobalAudioProducer, GlobalVideoProducer, Router} from "../common/model.server";
 import mediasoupClient from 'mediasoup-client';
@@ -35,7 +35,12 @@ export const MediasoupProvider = (props: {
 }) => {
     // Dependencies
     const {localDevice, socket} = useDevices();
-    const {audioProducers, videoProducers} = useStages();
+    const {audioProducers, videoProducers} = useStageSelector(state => {
+        return {
+            audioProducers: state.audioProducers,
+            videoProducers: state.videoProducers
+        }
+    });
 
     // Connection states
     const [router, setRouter] = useState<Router>();
@@ -57,9 +62,9 @@ export const MediasoupProvider = (props: {
     const [sendAudio, setSendAudio] = useState<boolean>(localDevice && localDevice.sendAudio);
     const [receiveAudio, setReceiveAudio] = useState<boolean>(localDevice && localDevice.receiveAudio);
     const [receiveVideo, setReceiveVideo] = useState<boolean>(localDevice && localDevice.receiveVideo);
-    const [inputAudioDevice, setInputAudioDevice] = useState<string>(localDevice && localDevice.inputAudioDevice);
-    const [outputAudioDevice, setOutputAudioDevice] = useState<string>(localDevice && localDevice.outputAudioDevice);
-    const [inputVideoDevice, setInputVideoDevice] = useState<string>(localDevice && localDevice.inputVideoDevice);
+    const [inputAudioDevice, setInputAudioDevice] = useState<string>(localDevice && localDevice.inputAudioDeviceId);
+    const [outputAudioDevice, setOutputAudioDevice] = useState<string>(localDevice && localDevice.outputAudioDeviceId);
+    const [inputVideoDevice, setInputVideoDevice] = useState<string>(localDevice && localDevice.inputVideoDeviceId);
 
     // Mediasoup specific
     const [device, setDevice] = useState<mediasoupClient.types.Device>();
@@ -69,9 +74,9 @@ export const MediasoupProvider = (props: {
     const consumeVideo = useCallback(() => {
         // Create consumer for all unconsumed audio producers
         setWorking(true);
-        Promise.all(Object.values(videoProducers).map(videoProducer => {
-            if (!videoConsumers[videoProducer._id]) {
-                return createConsumer(connection, device, receiveTransport, videoProducer)
+        Promise.all(videoProducers.allIds.map(videoProducerId => {
+            if (!videoConsumers[videoProducerId]) {
+                return createConsumer(connection, device, receiveTransport, videoProducers.byId[videoProducerId])
                     .then(consumer => {
                         if (consumer.paused)
                             return resumeConsumer(connection, consumer);
@@ -80,8 +85,8 @@ export const MediasoupProvider = (props: {
                     .then(consumer => {
                         setVideoConsumers(prevState => ({
                             ...prevState,
-                            [videoProducer._id]: {
-                                ...videoProducer,
+                            [videoProducerId]: {
+                                ...videoProducers.byId[videoProducerId],
                                 msConsumer: consumer
                             }
                         }));
@@ -105,9 +110,9 @@ export const MediasoupProvider = (props: {
     const consumeAudio = useCallback(() => {
         // Create consumer for all unconsumed audio producers
         setWorking(true);
-        Promise.all(Object.values(audioProducers).map(audioProducer => {
-            if (!audioConsumers[audioProducer._id]) {
-                return createConsumer(connection, device, receiveTransport, audioProducer)
+        Promise.all(audioProducers.allIds.map(audioProducerId => {
+            if (!audioConsumers[audioProducerId]) {
+                return createConsumer(connection, device, receiveTransport, audioProducers.byId[audioProducerId])
                     .then(consumer => {
                         if (consumer.paused)
                             return resumeConsumer(connection, consumer);
@@ -116,8 +121,8 @@ export const MediasoupProvider = (props: {
                     .then(consumer => {
                         setAudioConsumers(prevState => ({
                             ...prevState,
-                            [audioProducer._id]: {
-                                ...audioProducer,
+                            [audioProducerId]: {
+                                ...audioProducers.byId[audioProducerId],
                                 msConsumer: consumer
                             }
                         }));
@@ -144,7 +149,7 @@ export const MediasoupProvider = (props: {
         return navigator.mediaDevices.getUserMedia({
             video: false,
             audio: {
-                deviceId: localDevice.inputAudioDevice,
+                deviceId: localDevice.inputAudioDeviceId,
                 autoGainControl: false,
                 echoCancellation: false,
                 noiseSuppression: false

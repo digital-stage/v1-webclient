@@ -1,10 +1,8 @@
-import React, {Reducer, useCallback, useEffect, useReducer, useState} from "react";
+import React, {Reducer, useCallback, useContext, useEffect, useReducer} from "react";
 import * as Server from "./../common/model.server";
 import {useDevices} from "../useDevices";
-import {ClientStageEvents, ServerStageEvents} from "../common/events";
+import {ClientStageEvents, ServerStageEvents, ServerUserEvents} from "../common/events";
 import {useRequest} from "../../useRequest";
-import {Client} from "../common/model.client";
-import {GroupId, StageId, StageMemberId} from "../common/model.common";
 import {
     AddGroupPayload,
     AddStagePayload,
@@ -19,39 +17,14 @@ import {
     SetCustomStageMemberOvTrackPayload,
     SetCustomStageMemberPayload
 } from "../common/payloads";
-import omit from "lodash.omit";
 import {ThreeDimensionAudioProperties} from "../common/model.utils";
-import {StageMemberAudioProducerId, StageMemberOvTrackId} from "./../common/model.server";
+import {GroupId, StageId, StageMemberAudioProducerId, StageMemberId, StageMemberOvTrackId} from "./../common/model.server";
 import {InitialNormalizedState, NormalizedState} from "./schema";
-import {AdditionalReducerTypes, normalize, reducer, ReducerAction} from "./normalizer";
+import {AdditionalReducerTypes, reducer, ReducerAction} from "./normalizer";
 
-export type Users = { [id: string]: Server.User };
-export type Groups = { [id: string]: Server.Group };
-export type CustomGroups = { [groupId: string]: Server.CustomGroup };
-export type CustomStageMembers = { [stageMemberId: string]: Server.CustomStageMember };
-export type CustomStageMemberAudioProducers = { [stageMemberAudioProducerId: string]: Server.CustomStageMemberAudioProducer };
-export type CustomStageMemberOvTracks = { [stageMemberOvTrackId: string]: Server.CustomStageMemberOvTrack };
 
 export interface StagesProps {
     state: NormalizedState;
-
-    // States
-    stageId?: {
-        stageId: Server.StageId;
-        groupId: Server.GroupId;
-    }
-    stage?: Client.Stage;
-    availableStages: Client.Stage[];
-    groups: Server.Group[];
-    customGroups: CustomGroups;
-    users: Users;
-    stageMembers: Server.StageMember[];
-    customStageMembers: CustomStageMembers;
-    videoProducers: Server.StageMemberVideoProducer[];
-    audioProducers: Server.StageMemberAudioProducer[];
-    customAudioProducers: CustomStageMemberAudioProducers;
-    ovTracks: Server.StageMemberOvTrack[];
-    customOvTracks: CustomStageMemberOvTracks;
 
     // Methods
     createStage(name: string, password: string | null, width?: number, length?: number, height?: number, reflection?: number, absorption?: number);
@@ -95,347 +68,156 @@ export const useStages = (): StagesProps => React.useContext<StagesProps>(Stages
 
 export const StagesContextConsumer = StagesContext.Consumer;
 
+export const useStageSelector = (callback: (state: NormalizedState) => any) => {
+    const {state} = useContext(StagesContext);
+
+    const getValue = (callback) => {
+        return callback(state);
+    }
+    return getValue(callback);
+}
+
 export const StagesContextProvider = (props: {
     children: React.ReactNode
 }) => {
     const {socket, user} = useDevices();
     const {setRequest} = useRequest();
 
-    // Data
-    const [users, setUsers] = useState<Users>({});
-    const [availableStages, setAvailableStages] = useState<Client.Stage[]>([]);
-
     // NORMALIZED STATE (brand *NEW*)
     const [state, dispatch] = useReducer<Reducer<NormalizedState, ReducerAction>>(reducer, InitialNormalizedState);
 
-    // Single stage data
-    const [stage, setStage] = useState<Client.Stage>();
-    const [stageId, setStageId] = useState<{ stageId: Server.StageId, groupId: Server.GroupId }>();
-    const [groups, setGroups] = useState<Client.Group[]>([]);
-    const [stageMembers, setStageMembers] = useState<Server.StageMember[]>([]);
-    const [audioProducers, setAudioProducers] = useState<Client.StageMemberAudio[]>([]);
-    const [videoProducers, setVideoProducers] = useState<Client.StageMemberVideo[]>([]);
-    const [ovTracks, setOvTracks] = useState<Client.StageMemberOvTrack[]>([]);
-
-    const [customGroups, setCustomGroups] = useState<CustomGroups>({});
-    const [customStageMembers, setCustomStageMembers] = useState<CustomStageMembers>({});
-    const [customAudioProducers, setCustomAudioProducers] = useState<CustomStageMemberAudioProducers>({});
-    const [customOvTracks, setCustomOvTracks] = useState<CustomStageMemberOvTracks>({});
-
     useEffect(() => {
-        // Apply custom group info
-        setAudioProducers(prevState => prevState.map(group => {
-            const customGroup = customGroups[group._id];
-            return {
-                ...group,
-                customVolume: customGroup ? customGroup.volume : undefined
-            }
-        }))
-    }, [customAudioProducers]);
-
-    useEffect(() => {
-        // Apply custom group info
-        setGroups(prevState => prevState.map(group => {
-            const customGroup = customGroups[group._id];
-            return {
-                ...group,
-                customVolume: customGroup ? customGroup.volume : undefined
-            }
-        }))
-    }, [customGroups]);
+        if (user) {
+            dispatch({type: ServerUserEvents.USER_READY, payload: user});
+        }
+    }, [user]);
 
     const registerSocketHandlers = useCallback(() => {
         console.log("[useStages] Registering socket handlers");
+        socket.on(ServerStageEvents.STAGE_LEFT, () => {
+            dispatch({type: ServerStageEvents.STAGE_LEFT});
+        });
         socket.on(ServerStageEvents.STAGE_JOINED, (payload: Server.InitialStagePackage) => {
             dispatch({type: ServerStageEvents.STAGE_JOINED, payload: payload});
-
-            if (payload.stage) {
-                setAvailableStages(prevState => [...prevState, {
-                    ...payload.stage,
-                    isAdmin: payload.stage.admins.find(admin => user._id === admin) !== undefined
-                }]);
-            }
-            if (payload.groups) {
-                setGroups(prevState => [...prevState, ...payload.groups]);
-            }
-            setUsers(payload.users.reduce<Users>((prev, cur) => {
-                prev[cur._id] = cur;
-                return prev
-            }, {}));
-            setCustomGroups(payload.customGroups.reduce<CustomGroups>((prev, cur) => {
-                prev[cur._id] = cur;
-                return prev
-            }, {}));
-            setCustomStageMembers(payload.customStageMembers.reduce<CustomStageMembers>((prev, cur) => {
-                prev[cur._id] = cur;
-                return prev
-            }, {}));
-            setCustomAudioProducers(payload.customAudioProducers.reduce<CustomStageMemberAudioProducers>((prev, cur) => {
-                prev[cur._id] = cur;
-                return prev
-            }, {}));
-            setCustomOvTracks(payload.customOvTracks.reduce<CustomStageMemberOvTracks>((prev, cur) => {
-                prev[cur._id] = cur;
-                return prev
-            }, {}));
-            setStageMembers(payload.stageMembers);
-            setVideoProducers(payload.videoProducers);
-            setAudioProducers(payload.audioProducers);
-            setOvTracks(payload.ovTracks);
-            setStageId({
-                stageId: payload.stageId,
-                groupId: payload.groupId
-            });
         });
 
         socket.on(ServerStageEvents.USER_ADDED, (payload: Server.User) => {
             dispatch({type: ServerStageEvents.USER_ADDED, payload: payload});
-
-            setUsers(prevState => ({...prevState, [payload._id]: payload}))
         });
         socket.on(ServerStageEvents.USER_CHANGED, (payload: Server.User) => {
             dispatch({type: ServerStageEvents.USER_CHANGED, payload: payload});
-
-            setUsers(prevState => ({...prevState, [payload._id]: payload}));
         });
         socket.on(ServerStageEvents.USER_REMOVED, (payload: Server.UserId) => {
             dispatch({type: ServerStageEvents.USER_REMOVED, payload: payload});
-
-            setUsers(prevState => omit(prevState, payload));
         });
 
         socket.on(ServerStageEvents.STAGE_ADDED, (payload: Server.Stage) => {
             dispatch({type: ServerStageEvents.STAGE_ADDED, payload: payload});
-
-            setAvailableStages(prevState => [...prevState, {
-                ...payload,
-                isAdmin: payload.admins.find(admin => user._id === admin) !== undefined
-            }]);
         });
         socket.on(ServerStageEvents.STAGE_CHANGED, (payload: Server.Stage) => {
             dispatch({type: ServerStageEvents.STAGE_CHANGED, payload: payload});
-
-            setAvailableStages(prevState => prevState.map(el => el._id === payload._id ? {
-                ...el,
-                ...payload,
-                isAdmin: payload.admins ? payload.admins.find(admin => user._id === admin) !== undefined : el.isAdmin
-            } : el));
         });
         socket.on(ServerStageEvents.STAGE_REMOVED, (payload: Server.UserId) => {
             dispatch({type: ServerStageEvents.STAGE_REMOVED, payload: payload});
-
-            setAvailableStages(prevState => prevState.filter(stage => stage._id !== payload));
         });
 
         socket.on(ServerStageEvents.GROUP_ADDED, (payload: Server.Group) => {
             dispatch({type: ServerStageEvents.GROUP_ADDED, payload: payload});
-
-            setGroups(prevState => [...prevState, payload])
         });
         socket.on(ServerStageEvents.GROUP_CHANGED, (payload: Server.Group) => {
             dispatch({type: ServerStageEvents.GROUP_CHANGED, payload: payload});
-
-            setGroups(prevState => prevState.map(el => el._id === payload._id ? {
-                ...el,
-                ...payload
-            } : el));
         });
         socket.on(ServerStageEvents.GROUP_REMOVED, (payload: Server.GroupId) => {
             dispatch({type: ServerStageEvents.GROUP_REMOVED, payload: payload});
-
-            setGroups(prevState => prevState.filter(el => el._id !== payload));
         });
 
         socket.on(ServerStageEvents.CUSTOM_GROUP_ADDED, (payload: Server.CustomGroup) => {
             dispatch({type: ServerStageEvents.CUSTOM_GROUP_ADDED, payload: payload});
-
-            setCustomGroups(prevState => ({...prevState, [payload.groupId]: payload}))
         });
         socket.on(ServerStageEvents.CUSTOM_GROUP_CHANGED, (payload: Server.CustomGroup) => {
             dispatch({type: ServerStageEvents.CUSTOM_GROUP_CHANGED, payload: payload});
-
-            setCustomGroups(prevState => ({
-                ...prevState,
-                [payload.groupId]: {...prevState[payload.groupId], ...payload}
-            }));
         });
         socket.on(ServerStageEvents.CUSTOM_GROUP_REMOVED, (payload: Server.CustomGroupId) => {
             dispatch({type: ServerStageEvents.CUSTOM_GROUP_REMOVED, payload: payload});
-
-            setCustomGroups(prevState => {
-                const o = Object.values(prevState).find(s => s._id === payload);
-                return omit(prevState, o.groupId);
-            });
         });
 
         socket.on(ServerStageEvents.STAGE_MEMBER_ADDED, (payload: Server.StageMember) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_ADDED, payload: payload});
-
-            setStageMembers(prevState => [...prevState, payload])
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_CHANGED, (payload: Server.StageMember) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_CHANGED, payload: payload});
-
-            setStageMembers(prevState => prevState.map(el => el._id === payload._id ? {
-                ...el,
-                ...payload
-            } : el));
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_REMOVED, (payload: Server.StageMemberId) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_REMOVED, payload: payload});
-
-            setStageMembers(prevState => prevState.filter(el => el._id !== payload));
         });
 
 
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_ADDED, (payload: Server.CustomStageMember) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_ADDED, payload: payload});
-
-            setCustomStageMembers(prevState => ({...prevState, [payload.stageMemberId]: payload}))
         });
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_CHANGED, (payload: Server.CustomStageMember) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_CHANGED, payload: payload});
-
-            setCustomStageMembers(prevState => ({
-                ...prevState,
-                [payload._id]: {...prevState[payload.stageMemberId], ...payload}
-            }));
         });
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_REMOVED, (payload: Server.CustomStageMemberId) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_REMOVED, payload: payload});
-
-            setCustomStageMembers(prevState => {
-                const o = Object.values(prevState).find(s => s._id === payload);
-                return omit(prevState, o.stageMemberId);
-            });
         });
 
         socket.on(ServerStageEvents.STAGE_MEMBER_VIDEO_ADDED, (payload: Server.StageMemberVideoProducer) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_VIDEO_ADDED, payload: payload});
-
-            setVideoProducers(prevState => [...prevState, payload])
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_VIDEO_CHANGED, (payload: Server.StageMemberVideoProducer) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_VIDEO_CHANGED, payload: payload});
-
-            setVideoProducers(prevState => prevState.map(el => el._id === payload._id ? {
-                ...el,
-                ...payload
-            } : el));
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_VIDEO_REMOVED, (payload: Server.StageMemberVideoProducerId) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_VIDEO_REMOVED, payload: payload});
-
-            setVideoProducers(prevState => prevState.filter(el => el._id !== payload));
         });
 
         socket.on(ServerStageEvents.STAGE_MEMBER_AUDIO_ADDED, (payload: Server.StageMemberAudioProducer) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_AUDIO_ADDED, payload: payload});
-
-            setAudioProducers(prevState => [...prevState, payload])
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_AUDIO_CHANGED, (payload: Server.StageMemberAudioProducer) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_AUDIO_CHANGED, payload: payload});
-
-            setAudioProducers(prevState => prevState.map(el => el._id === payload._id ? {
-                ...el,
-                ...payload
-            } : el));
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_AUDIO_REMOVED, (payload: Server.StageMemberAudioProducerId) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_AUDIO_REMOVED, payload: payload});
-
-            setAudioProducers(prevState => prevState.filter(el => el._id !== payload));
         });
 
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_ADDED, (payload: Server.CustomStageMemberAudioProducer) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_ADDED, payload: payload});
-
-            setCustomAudioProducers(prevState => ({...prevState, [payload.stageMemberAudioProducerId]: payload}))
         });
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_CHANGED, (payload: Server.CustomStageMemberAudioProducer) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_CHANGED, payload: payload});
-
-            setCustomAudioProducers(prevState => ({
-                ...prevState,
-                [payload.stageMemberAudioProducerId]: {...prevState[payload.stageMemberAudioProducerId], ...payload}
-            }));
         });
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_REMOVED, (payload: Server.CustomStageMemberAudioProducerId) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_REMOVED, payload: payload});
-
-            setCustomAudioProducers(prevState => {
-                const o = Object.values(prevState).find(s => s._id === payload);
-                return omit(prevState, o.stageMemberAudioProducerId);
-            });
         });
 
         socket.on(ServerStageEvents.STAGE_MEMBER_OV_ADDED, (payload: Server.StageMemberOvTrack) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_OV_ADDED, payload: payload});
-
-            setOvTracks(prevState => [...prevState, payload])
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_OV_CHANGED, (payload: Server.StageMemberOvTrack) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_OV_CHANGED, payload: payload});
-
-            setOvTracks(prevState => prevState.map(el => el._id === payload._id ? {
-                ...el,
-                ...payload
-            } : el));
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_OV_REMOVED, (payload: Server.StageMemberOvTrackId) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_OV_REMOVED, payload: payload});
-
-            setOvTracks(prevState => prevState.filter(el => el._id !== payload));
         });
 
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_ADDED, (payload: Server.CustomStageMemberOvTrack) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_ADDED, payload: payload});
-
-            setCustomOvTracks(prevState => ({...prevState, [payload.stageMemberOvTrackId]: payload}))
         });
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_CHANGED, (payload: Server.CustomStageMemberOvTrack) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_CHANGED, payload: payload});
-
-            setCustomOvTracks(prevState => ({
-                ...prevState,
-                [payload.stageMemberOvTrackId]: {...prevState[payload.stageMemberOvTrackId], ...payload}
-            }));
         });
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_REMOVED, (payload: Server.CustomStageMemberOvTrackId) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_REMOVED, payload: payload});
-
-            setCustomOvTracks(prevState => {
-                const o = Object.values(prevState).find(s => s._id === payload);
-                return omit(prevState, o.stageMemberOvTrackId);
-            });
         });
     }, [socket, user]);
-
-    useEffect(() => {
-        if (stageId) {
-            setStage(availableStages.find(stage => stage._id === stageId.stageId));
-        } else {
-            setStage(undefined);
-        }
-    }, [stageId, availableStages]);
 
     useEffect(() => {
         if (socket && user) {
             registerSocketHandlers();
             return () => {
                 console.log("[useStages] Cleaning up")
-                setUsers({});
-                setAvailableStages([]);
-                setGroups([]);
-                setCustomGroups({});
-                setStageMembers([]);
-                setCustomStageMembers({});
-                setAudioProducers([]);
-                setVideoProducers([]);
-                setOvTracks([]);
-                setOvTracks([]);
-
                 dispatch({type: AdditionalReducerTypes.RESET})
             }
         }
@@ -495,7 +277,7 @@ export const StagesContextProvider = (props: {
         if (socket) {
             socket.emit(ClientStageEvents.LEAVE_STAGE_FOR_GOOD, id);
         }
-        if (stageId && stageId.stageId === id) {
+        if (state.current.stageId && state.current.stageId === id) {
             setRequest(undefined, undefined, null);
         }
     }, [socket]);
@@ -608,21 +390,6 @@ export const StagesContextProvider = (props: {
     return (
         <StagesContext.Provider value={{
             state: state,
-
-            // States
-            stageId: stageId,
-            stage: stage,
-            availableStages: availableStages,
-            groups: groups,
-            customGroups: customGroups,
-            users: users,
-            stageMembers: stageMembers,
-            customStageMembers: customStageMembers,
-            audioProducers: audioProducers,
-            customAudioProducers: customAudioProducers,
-            videoProducers: videoProducers,
-            ovTracks: ovTracks,
-            customOvTracks: customOvTracks,
 
             // Methods
             createStage,

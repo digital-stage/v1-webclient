@@ -1,21 +1,21 @@
 import React, {useEffect, useState} from "react";
 import SingleSelect from "../theme/SingleSelect";
-import {MediaDevice, MediaDeviceId} from "../../lib/digitalstage/common/model.common";
+import {WebRTCDevice, WebRTCDeviceId} from "../../lib/digitalstage/common/model.server";
 
 const LocalDeviceSettings = () => {
-    const [videoDevices, setVideoDevices] = useState<MediaDevice[]>([]);
-    const [inputDevices, setInputDevices] = useState<MediaDevice[]>([]);
-    const [outputDevices, setOutputDevices] = useState<MediaDevice[]>([]);
-    const [videoDevice, setVideoDevice] = useState<MediaDeviceId>();
-    const [inputDevice, setInputDevice] = useState<MediaDeviceId>();
-    const [outputDevice, setOutputDevice] = useState<MediaDeviceId>();
+    const [videoDevices, setVideoDevices] = useState<WebRTCDevice[]>([]);
+    const [inputDevices, setInputDevices] = useState<WebRTCDevice[]>([]);
+    const [outputDevices, setOutputDevices] = useState<WebRTCDevice[]>([]);
+    const [videoDevice, setVideoDevice] = useState<WebRTCDeviceId>();
+    const [inputDevice, setInputDevice] = useState<WebRTCDeviceId>();
+    const [outputDevice, setOutputDevice] = useState<WebRTCDeviceId>();
 
     const enumerateDevices = () => {
         navigator.mediaDevices.enumerateDevices()
             .then(devices => {
-                const videoDevices: MediaDevice[] = [];
-                const inputDevices: MediaDevice[] = [];
-                const outputDevices: MediaDevice[] = [];
+                const videoDevices: WebRTCDevice[] = [];
+                const inputDevices: WebRTCDevice[] = [];
+                const outputDevices: WebRTCDevice[] = [];
                 devices.forEach(device => {
                     switch (device.kind) {
                         case "audioinput":

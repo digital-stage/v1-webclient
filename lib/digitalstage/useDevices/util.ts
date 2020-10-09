@@ -1,15 +1,15 @@
-import {MediaDevice} from "../common/model.common";
+import {WebRTCDevice} from "../common/model.server";
 
 
 export const enumerateDevices = (): Promise<{
-    inputAudioDevices: MediaDevice[],
-    inputVideoDevices: MediaDevice[],
-    outputAudioDevices: MediaDevice[],
+    inputAudioDevices: WebRTCDevice[],
+    inputVideoDevices: WebRTCDevice[],
+    outputAudioDevices: WebRTCDevice[],
 }> => {
     return new Promise<{
-        inputAudioDevices: MediaDevice[],
-        inputVideoDevices: MediaDevice[],
-        outputAudioDevices: MediaDevice[]
+        inputAudioDevices: WebRTCDevice[],
+        inputVideoDevices: WebRTCDevice[],
+        outputAudioDevices: WebRTCDevice[]
     }>(resolve => {
         if (!navigator)
             return resolve({
@@ -19,9 +19,9 @@ export const enumerateDevices = (): Promise<{
             });
         return navigator.mediaDevices.enumerateDevices()
             .then(devices => {
-                const inputVideoDevices: MediaDevice[] = [];
-                const inputAudioDevices: MediaDevice[] = [];
-                const outputAudioDevices: MediaDevice[] = [];
+                const inputVideoDevices: WebRTCDevice[] = [];
+                const inputAudioDevices: WebRTCDevice[] = [];
+                const outputAudioDevices: WebRTCDevice[] = [];
                 devices.forEach((device, index) => {
                     switch (device.kind) {
                         case "videoinput":

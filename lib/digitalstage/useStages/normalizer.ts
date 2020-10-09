@@ -1,14 +1,18 @@
 import {
     CustomGroup,
-    CustomStageMember, CustomStageMemberAudioProducer, CustomStageMemberOvTrack,
+    CustomStageMember,
+    CustomStageMemberAudioProducer,
+    CustomStageMemberOvTrack,
     Group,
     Stage,
-    StageMember, StageMemberAudioProducer, StageMemberOvTrack,
+    StageMember,
+    StageMemberAudioProducer,
+    StageMemberOvTrack,
     StageMemberVideoProducer,
     User
 } from "../common/model.server";
 import {InitialNormalizedState, NormalizedState, OutsideStageNormalizedState} from "./schema";
-import {ServerStageEvents} from "../common/events";
+import {ServerDeviceEvents, ServerStageEvents, ServerUserEvents} from "../common/events";
 import _ from "lodash";
 import {Reducer} from "react";
 
@@ -20,6 +24,8 @@ export const upsert = function <T>(arr: T[], value: T) {
 
 // See: https://redux.js.org/recipes/structuring-reducers/normalizing-state-shape
 export function normalize(prevState: NormalizedState, data: Partial<{
+    stageId?: string;
+    groupId?: string;
     users: User[];
     stages: Stage[];
     groups: Group[];
@@ -33,6 +39,12 @@ export function normalize(prevState: NormalizedState, data: Partial<{
     customOvTracks: CustomStageMemberOvTrack[];
 }>): NormalizedState {
     const state: NormalizedState = {...prevState};
+    if (data.stageId && data.groupId) {
+        state.current = {
+            stageId: data.stageId,
+            groupId: data.groupId
+        };
+    }
     if (data.users) {
         data.users.forEach(user => {
             state.users.byId[user._id] = {
@@ -47,6 +59,7 @@ export function normalize(prevState: NormalizedState, data: Partial<{
         data.stages.forEach(stage => {
             state.stages.byId[stage._id] = {
                 groups: state.groups.allIds.filter(id => state.groups.byId[id].stageId === stage._id),
+                isAdmin: stage.admins.indexOf(state.user._id) !== -1,
                 ...stage
             };
             upsert(state.stages.allIds, stage._id);
@@ -55,6 +68,7 @@ export function normalize(prevState: NormalizedState, data: Partial<{
     if (data.groups) {
         data.groups.forEach(group => {
             state.groups.byId[group._id] = {
+                stageMembers: state.stageMembers.allIds.filter(id => state.stageMembers.byId[id].groupId === group._id),
                 ...state.groups.byId[group._id],
                 ...group
             };
@@ -153,7 +167,7 @@ export enum AdditionalReducerTypes {
 }
 
 export interface ReducerAction {
-    type: ServerStageEvents | AdditionalReducerTypes,
+    type: ServerUserEvents | ServerDeviceEvents | ServerStageEvents | AdditionalReducerTypes,
     payload?: any;
 }
 
@@ -234,6 +248,12 @@ export const reducer: Reducer<NormalizedState, ReducerAction> = (state: Normaliz
         case AdditionalReducerTypes.RESET:
             return InitialNormalizedState;
 
+        case ServerUserEvents.USER_READY:
+            return {
+                ...state,
+                user: action.payload
+            };
+
         case ServerStageEvents.USER_ADDED:
             return normalize(state, {
                 users: [action.payload]
@@ -253,10 +273,10 @@ export const reducer: Reducer<NormalizedState, ReducerAction> = (state: Normaliz
                 stages: action.payload.stage ? [action.payload.stage] : []
             })
         case ServerStageEvents.STAGE_LEFT:
-            return normalize(state, {
-                ...action.payload,
+            return {
+                ...state,
                 ...OutsideStageNormalizedState
-            })
+            };
         case ServerStageEvents.STAGE_ADDED:
             return normalize(state, {
                 stages: [action.payload]

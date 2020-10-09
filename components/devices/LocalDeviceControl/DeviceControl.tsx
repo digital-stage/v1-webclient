@@ -1,8 +1,8 @@
 import {Button, KIND, SHAPE, SIZE} from "baseui/button";
 import React from "react";
-import {useStages} from "../../../lib/digitalstage/useStages";
+import {useStages, useStageSelector} from "../../../lib/digitalstage/useStages";
 import {useDevices} from "../../../lib/digitalstage/useDevices";
-import {Device} from "../../../lib/digitalstage/common/model.common";
+import { Device } from "../../../lib/digitalstage/common/model.server";
 
 const DeviceControl = (props: {
     device?: Device;
@@ -12,7 +12,11 @@ const DeviceControl = (props: {
     spacing?: number;
 }) => {
     const {updateDevice} = useDevices();
-    const {stageId: darkMode} = useStages();
+    const {darkMode} = useStageSelector(state => {
+        return {
+            darkMode: state.current !== undefined
+        }
+    })
 
     if (!props.device) {
         return null;

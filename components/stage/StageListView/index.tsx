@@ -2,7 +2,7 @@ import {styled} from "baseui";
 import React, {useState} from "react";
 import {Button} from "baseui/button/index";
 import {Accordion, Panel} from "baseui/accordion/index";
-import {useStages} from "../../../lib/digitalstage/useStages";
+import {useStages, useStageSelector} from "../../../lib/digitalstage/useStages";
 import {Plus} from "baseui/icon/index";
 import CreateGroupModal from "./CreateGroupModal";
 import CreateStageModal from "./CreateStageModal";
@@ -71,7 +71,14 @@ const GroupAdminActions = styled("div", {
 })
 
 const StageListView = () => {
-    const {state, stageId, availableStages, groups, removeStage, removeGroup, leaveStage, leaveStageForGood} = useStages();
+    const {stages, groups, current} = useStageSelector((state) => {
+        return {
+            stages: state.stages,
+            groups: state.groups,
+            current: state.current
+        };
+    });
+    const {removeStage, removeGroup, leaveStage, leaveStageForGood} = useStages();
     const {setRequest} = useRequest();
     const [currentStage, setCurrentStage] = useState<Client.Stage>();
     const [currentGroup, setCurrentGroup] = useState<Client.Group>();
@@ -91,122 +98,125 @@ const StageListView = () => {
                 </Button>
             </GlobalActions>
             <Accordion>
-                {availableStages.map(stage => (
-                    <Panel
-                        key={stage._id}
-                        title={(
-                            <StageTitle>
-                                {stage.name}
-                            </StageTitle>
-                        )}
-                    >
-                        <StageTopActions>
-                            {stage.isAdmin ? (
-                                <>
-                                    <Tag
-                                        closeable={false}
-                                        kind="accent"
-                                        onClick={() => {
-                                            setCurrentStage(stage);
-                                            setModifyStageIsOpen(true)
-                                        }}
-                                    >
-                                        Bühne ändern
-                                    </Tag>
+                {stages.allIds.map(stageId => {
+                    const stage = stages.byId[stageId];
+                    return (
+                        <Panel
+                            key={stage._id}
+                            title={(
+                                <StageTitle>
+                                    {stage.name}
+                                </StageTitle>
+                            )}
+                        >
+                            <StageTopActions>
+                                {stage.isAdmin ? (
+                                    <>
+                                        <Tag
+                                            closeable={false}
+                                            kind="accent"
+                                            onClick={() => {
+                                                setCurrentStage(stage);
+                                                setModifyStageIsOpen(true)
+                                            }}
+                                        >
+                                            Bühne ändern
+                                        </Tag>
+                                        <Tag
+                                            closeable={false}
+                                            kind="negative"
+                                            onClick={() => removeStage(stage._id)}
+                                        >
+                                            Bühne entfernen
+                                        </Tag>
+                                    </>
+                                ) : (
                                     <Tag
                                         closeable={false}
                                         kind="negative"
-                                        onClick={() => removeStage(stage._id)}
+                                        onClick={() => leaveStageForGood(stage._id)}
                                     >
-                                        Bühne entfernen
+                                        Bühne entgültig verlassen
                                     </Tag>
-                                </>
-                            ) : (
-                                <Tag
-                                    closeable={false}
-                                    kind="negative"
-                                    onClick={() => leaveStageForGood(stage._id)}
-                                >
-                                    Bühne entgültig verlassen
-                                </Tag>
-                            )}
-                        </StageTopActions>
-                        {groups.filter(group => group.stageId === stage._id).map(group => (
-                            <GroupRow key={group._id}>
-                                <GroupTitle>
-                                    <Label>{group.name}</Label>
+                                )}
+                            </StageTopActions>
+                            {stage.groups.map(groupId => {
+                                const group = groups.byId[groupId];
+                                return (
+                                    <GroupRow key={group._id}>
+                                        <GroupTitle>
+                                            <Label>{group.name}</Label>
 
-                                    {stage.isAdmin && (
-                                        <GroupAdminActions>
+                                            {stage.isAdmin && (
+                                                <GroupAdminActions>
+                                                    <Tag
+                                                        closeable={false}
+                                                        kind="accent"
+                                                        onClick={() => {
+                                                            setCurrentGroup(group);
+                                                            setModifyGroupIsOpen(true);
+                                                        }}
+                                                    >
+                                                        Gruppe ändern
+                                                    </Tag>
+                                                    <Tag
+                                                        closeable={false}
+                                                        kind="negative"
+                                                        onClick={() => removeGroup(group._id)}
+                                                    >
+                                                        Gruppe entfernen
+                                                    </Tag>
+                                                </GroupAdminActions>
+                                            )}
+                                        </GroupTitle>
+                                        <GroupActions>
                                             <Tag
+                                                size="large"
                                                 closeable={false}
-                                                kind="accent"
+                                                kind={current && stage._id === current.stageId && group._id === current.groupId ? "orange" : "positive"}
                                                 onClick={() => {
-                                                    setCurrentGroup(group);
-                                                    setModifyGroupIsOpen(true);
+                                                    if (current && stage._id === current.stageId && group._id === current.groupId) {
+                                                        leaveStage();
+                                                    } else {
+                                                        console.log("Request");
+                                                        setRequest(stage._id, group._id, stage.password);
+                                                    }
                                                 }}
                                             >
-                                                Gruppe ändern
+                                                {current && stage._id === current.stageId && group._id === current.groupId ? "Verlassen" : "Beitreten"}
                                             </Tag>
                                             <Tag
+                                                size="large"
                                                 closeable={false}
-                                                kind="negative"
-                                                onClick={() => removeGroup(group._id)}
+                                                onClick={() => {
+                                                    setCurrentStage(stage);
+                                                    setCurrentGroup(group);
+                                                    setCopyLinkOpen(prevState => !prevState);
+                                                }}
                                             >
-                                                Gruppe entfernen
+                                                Einladen
                                             </Tag>
-                                        </GroupAdminActions>
-                                    )}
-                                </GroupTitle>
-                                <GroupActions>
-                                    <Tag
-                                        size="large"
-                                        closeable={false}
-                                        kind={stageId && stage._id === stageId.stageId && group._id === stageId.groupId ? "orange" : "positive"}
-                                        onClick={() => {
-                                            if (stageId && stage._id === stageId.stageId && group._id === stageId.groupId) {
-                                                leaveStage();
-                                            } else {
-                                                console.log("Request");
-                                                setRequest(stage._id, group._id, stage.password);
-                                            }
-                                        }}
-                                    >
-                                        {stageId && stage._id === stageId.stageId && group._id === stageId.groupId ? "Verlassen" : "Beitreten"}
-                                    </Tag>
-                                    <Tag
-                                        size="large"
-                                        closeable={false}
+                                        </GroupActions>
+                                    </GroupRow>
+                                )
+                            })}
+                            {stage.isAdmin && (
+                                <StageBottomActions>
+                                    <Button
+                                        size="mini" shape="pill"
+                                        startEnhancer={<Plus/>}
                                         onClick={() => {
                                             setCurrentStage(stage);
-                                            setCurrentGroup(group);
-                                            setCopyLinkOpen(prevState => !prevState);
-                                        }}
-                                    >
-                                        Einladen
-                                    </Tag>
-                                </GroupActions>
-                            </GroupRow>
-                        ))}
-                        {stage.isAdmin && (
-                            <StageBottomActions>
-                                <Button
-                                    size="mini" shape="pill"
-                                    startEnhancer={<Plus/>}
-                                    onClick={() => {
-                                        setCurrentStage(stage);
-                                        setCreateGroupIsOpen(true)
-                                    }}>
-                                    Neue Gruppe hinzufügen
-                                </Button>
-                            </StageBottomActions>
-                        )}
-                    </Panel>
-                ))}
+                                            setCreateGroupIsOpen(true)
+                                        }}>
+                                        Neue Gruppe hinzufügen
+                                    </Button>
+                                </StageBottomActions>
+                            )}
+                        </Panel>
+                    )
+                })}
             </Accordion>
-            <div>
-                <pre>{JSON.stringify(state, null, 2)}</pre>
-            </div>
             <CreateStageModal isOpen={isCreateStageOpen}
                               onClose={() => setCreateStageIsOpen(false)}/>
             <CreateGroupModal stage={currentStage} isOpen={isCreateGroupOpen}

@@ -5,9 +5,9 @@ import {Card, StyledAction, StyledBody} from "baseui/card/index";
 import {Checkbox} from "baseui/checkbox/index";
 import {Check, Delete} from "baseui/icon/index";
 import {Button, KIND, SIZE} from "baseui/button/index";
-import {Device} from "../../lib/digitalstage/common/model.common";
 import SingleSelect from "../theme/SingleSelect";
 import {useDevices} from "../../lib/digitalstage/useDevices";
+import {Device} from "../../lib/digitalstage/common/model.server";
 
 
 const CardTitle = styled("div", {
@@ -105,9 +105,9 @@ const DeviceView = (props: {
                             flexGrow: 1
                         })}
                         options={props.device.inputAudioDevices || []}
-                        id={props.device.inputAudioDevice}
+                        id={props.device.inputAudioDeviceId}
                         onSelect={(id) => updateDevice(props.device._id, {
-                            inputAudioDevice: id
+                            inputAudioDeviceId: id
                         })}
                     />
                     <SingleSelect
@@ -117,9 +117,9 @@ const DeviceView = (props: {
                             flexGrow: 1
                         })}
                         options={props.device.outputAudioDevices || []}
-                        id={props.device.outputAudioDevice}
+                        id={props.device.outputAudioDeviceId}
                         onSelect={(id) => updateDevice(props.device._id, {
-                            outputAudioDevice: id
+                            outputAudioDeviceId: id
                         })}
                     />
                     <SingleSelect
@@ -129,9 +129,9 @@ const DeviceView = (props: {
                             flexGrow: 1
                         })}
                         options={props.device.inputVideoDevices || []}
-                        id={props.device.inputVideoDevice}
+                        id={props.device.inputVideoDeviceId}
                         onSelect={(id) => updateDevice(props.device._id, {
-                            inputVideoDevice: id
+                            inputVideoDeviceId: id
                         })}
                     />
                 </div>

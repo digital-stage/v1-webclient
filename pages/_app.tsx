@@ -30,8 +30,8 @@ class MyApp extends App {
                                 <StagesContextProvider>
                                     <AudioContextProvider>
                                         <StagesContextConsumer>
-                                            {({stageId}) => (
-                                                <BaseProvider theme={stageId ? DarkTheme : LightTheme}>
+                                            {({state}) => (
+                                                <BaseProvider theme={state.current ? DarkTheme : LightTheme}>
                                                     <style jsx global>{`
                                             * {
                                                 box-sizing: border-box;
@@ -43,8 +43,8 @@ class MyApp extends App {
                                             }
                                             body {
                                                 font-family: var(--font-sans);
-                                                color: ${stageId ? "#ffffff" : "#000000"};
-                                                background-color: ${stageId ? "#000000" : "#ffffff"};
+                                                color: ${state.current ? "#ffffff" : "#000000"};
+                                                background-color: ${state.current ? "#000000" : "#ffffff"};
                                                 transition-timing-function: cubic-bezier(0, 0, 1, 1);
                                                 transition: color 200ms, background-color 200ms;
                                                 overflow-x: hidden;
@@ -62,6 +62,11 @@ class MyApp extends App {
                                                         <Component {...pageProps} />
                                                     </Block>
                                                     <LocalDeviceControl/>
+                                                    <div>
+                                                        <pre>
+                                                            {JSON.stringify(state, null, 2)}
+                                                        </pre>
+                                                    </div>
                                                 </BaseProvider>
                                             )}
                                         </StagesContextConsumer>
