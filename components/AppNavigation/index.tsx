@@ -14,9 +14,8 @@ import {
     Unstable_AppNavBar as AppNavBar
 } from 'baseui/app-nav-bar';
 import {useRouter} from "next/router";
-import {useStages, useStageSelector} from "../../lib/digitalstage/useStages";
-import {useDevices} from "../../lib/digitalstage/useDevices";
 import TextLink from "../theme/TextLink";
+import useStageSelector from "../../lib/digitalstage/useStageSelector";
 
 
 const AppNavigation = () => {
@@ -33,13 +32,12 @@ const AppNavigation = () => {
     const [activeNavItem, setActiveNavItem] = useState<MainNavItem>();
 
     const router = useRouter();
-    const {current, stage} = useStageSelector((state) => {
-        return {
-            current: state.current,
-            stage: state.current ? state.stages.byId[state.current.stageId] : undefined
-        };
-    });
-    const {user, remoteDevices} = useDevices();
+    const {current, stage, user, remoteDevices} = useStageSelector((state) => ({
+        current: state.current,
+        stage: state.current ? state.stages.byId[state.current.stageId] : undefined,
+        user: state.user,
+        remoteDevices: state.devices
+    }));
 
     useEffect(() => {
         setActiveNavItem(mainNav.find(nav => nav.item.path === router.pathname));

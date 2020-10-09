@@ -1,10 +1,12 @@
 import React from "react";
 import Container from "../../components/theme/Container";
 import DeviceView from "../../components/devices/DeviceView";
-import {useDevices} from "../../lib/digitalstage/useDevices";
+import useStageSelector from "../../lib/digitalstage/useStageSelector";
 
 const Local = () => {
-    const {localDevice} = useDevices();
+    const {localDevice} = useStageSelector(state => ({
+        localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined
+    }));
 
     return (
         <Container>

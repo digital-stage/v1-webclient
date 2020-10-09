@@ -1,12 +1,14 @@
 import {HeadingLarge} from "baseui/typography";
 import React from "react";
 import Container from "../../components/theme/Container";
-import {useDevices} from "../../lib/digitalstage/useDevices";
 import {useAuth} from "../../lib/digitalstage/useAuth";
+import useStageSelector from "../../lib/digitalstage/useStageSelector";
 
 const Profile = () => {
     const {user: authUser} = useAuth();
-    const {user} = useDevices();
+    const {user} = useStageSelector(state => ({
+        user: state.user
+    }));
 
     return (
         <Container>

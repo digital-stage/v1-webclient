@@ -1,10 +1,12 @@
 import React from "react";
 import Container from "../../components/theme/Container";
 import DeviceView from "../../components/devices/DeviceView";
-import {useDevices} from "../../lib/digitalstage/useDevices";
+import useStageSelector from "../../lib/digitalstage/useStageSelector";
 
 const Remote = () => {
-    const {remoteDevices} = useDevices();
+    const {remoteDevices} = useStageSelector(state => ({
+        remoteDevices: state.devices.remote.map(id => state.devices.byId[id])
+    }));
 
     return (
         <Container>

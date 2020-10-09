@@ -4,7 +4,7 @@ import {useAuth} from "../lib/digitalstage/useAuth";
 import Loading from "../components/theme/Loading";
 import {useRouter} from "next/router";
 import GroupGrid from "../components/stage/GroupGrid";
-import {useStageSelector} from "../lib/digitalstage/useStages";
+import useStageSelector from "../lib/digitalstage/useStageSelector";
 
 const Index = () => {
     const {stage, groups} = useStageSelector(state => {

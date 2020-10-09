@@ -2,7 +2,6 @@ import {styled} from "baseui";
 import React, {useState} from "react";
 import {Button} from "baseui/button/index";
 import {Accordion, Panel} from "baseui/accordion/index";
-import {useStages, useStageSelector} from "../../../lib/digitalstage/useStages";
 import {Plus} from "baseui/icon/index";
 import CreateGroupModal from "./CreateGroupModal";
 import CreateStageModal from "./CreateStageModal";
@@ -12,6 +11,8 @@ import {Tag} from "baseui/tag";
 import InviteModal from "./InviteModal";
 import {useRequest} from "../../../lib/useRequest";
 import {Client} from "../../../lib/digitalstage/common/model.client";
+import useStageActions from "../../../lib/digitalstage/useStageActions";
+import useStageSelector from "../../../lib/digitalstage/useStageSelector";
 
 const Label = styled("div", {})
 const GlobalActions = styled("div", {
@@ -78,7 +79,7 @@ const StageListView = () => {
             current: state.current
         };
     });
-    const {removeStage, removeGroup, leaveStage, leaveStageForGood} = useStages();
+    const {removeStage, removeGroup, leaveStage, leaveStageForGood} = useStageActions();
     const {setRequest} = useRequest();
     const [currentStage, setCurrentStage] = useState<Client.Stage>();
     const [currentGroup, setCurrentGroup] = useState<Client.Group>();

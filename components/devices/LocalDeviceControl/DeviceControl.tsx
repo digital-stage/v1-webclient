@@ -1,8 +1,8 @@
 import {Button, KIND, SHAPE, SIZE} from "baseui/button";
 import React from "react";
-import {useStages, useStageSelector} from "../../../lib/digitalstage/useStages";
-import {useDevices} from "../../../lib/digitalstage/useDevices";
-import { Device } from "../../../lib/digitalstage/common/model.server";
+import {Device} from "../../../lib/digitalstage/common/model.server";
+import useStageSelector from "../../../lib/digitalstage/useStageSelector";
+import useStageActions from "../../../lib/digitalstage/useStageActions";
 
 const DeviceControl = (props: {
     device?: Device;
@@ -11,7 +11,7 @@ const DeviceControl = (props: {
     kind?: KIND[keyof KIND];
     spacing?: number;
 }) => {
-    const {updateDevice} = useDevices();
+    const {updateDevice} = useStageActions();
     const {darkMode} = useStageSelector(state => {
         return {
             darkMode: state.current !== undefined
@@ -41,7 +41,7 @@ const DeviceControl = (props: {
                     {darkMode ? (
                         <img src={props.device.sendVideo ? "videocam-black-18dp.svg" : "videocam_off-black-18dp.svg"}/>
                     ) : (
-                        <img src={props.device.sendVideo ?  "videocam-white-18dp.svg" : "videocam_off-white-18dp.svg"}/>
+                        <img src={props.device.sendVideo ? "videocam-white-18dp.svg" : "videocam_off-white-18dp.svg"}/>
                     )}
                 </Button>
             )}

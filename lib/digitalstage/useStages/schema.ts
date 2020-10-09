@@ -2,7 +2,16 @@ import * as Server from "../common/model.server";
 import mediasoupClient from 'mediasoup-client';
 
 export interface NormalizedState {
+    ready: boolean;
     user?: Server.User;
+    devices: {
+        byId: {
+            [id: string]: Server.Device
+        },
+        local?: string;
+        remote: string[];
+        allIds: string[]
+    }
     current?: {
         stageId: string;
         groupId: string;
@@ -141,7 +150,13 @@ export const OutsideStageNormalizedState: Partial<NormalizedState> = {
 }
 
 export const InitialNormalizedState: NormalizedState = {
+    ready: false,
     current: undefined,
+    devices: {
+        byId: {},
+        remote: [],
+        allIds: []
+    },
     users: {
         byId: {},
         allIds: []

@@ -5,8 +5,8 @@ import React from "react";
 import {KIND} from "baseui/button";
 import * as Yup from "yup";
 import {useFormik} from "formik";
-import {useStages} from "../../../lib/digitalstage/useStages";
 import {Accordion, Panel} from "baseui/accordion";
+import useStageActions from "../../../lib/digitalstage/useStageActions";
 
 const Schema = Yup.object().shape({
     name: Yup.string()
@@ -27,7 +27,7 @@ const CreateStageModal = (props: {
     isOpen?: boolean;
     onClose?: () => any;
 }) => {
-    const {createStage} = useStages();
+    const {createStage} = useStageActions();
     const formik = useFormik({
         validateOnMount: true,
         initialValues: {

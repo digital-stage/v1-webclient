@@ -4,7 +4,6 @@ import {debug, styletron} from '../styletron'
 import {AuthContextProvider} from "../lib/digitalstage/useAuth";
 import {BaseProvider, DarkTheme, LightTheme} from "baseui";
 import React from "react";
-import {DeviceContextProvider} from "../lib/digitalstage/useDevices";
 import {StagesContextConsumer, StagesContextProvider} from "../lib/digitalstage/useStages";
 import {RequestContextProvider} from "../lib/useRequest";
 import Head from 'next/head'
@@ -26,13 +25,12 @@ class MyApp extends App {
                 <StyletronProvider value={styletron} debug={debug} debugAfterHydration>
                     <RequestContextProvider>
                         <AuthContextProvider>
-                            <DeviceContextProvider>
-                                <StagesContextProvider>
-                                    <AudioContextProvider>
-                                        <StagesContextConsumer>
-                                            {({state}) => (
-                                                <BaseProvider theme={state.current ? DarkTheme : LightTheme}>
-                                                    <style jsx global>{`
+                            <StagesContextProvider>
+                                <AudioContextProvider>
+                                    <StagesContextConsumer>
+                                        {({state}) => (
+                                            <BaseProvider theme={state.current ? DarkTheme : LightTheme}>
+                                                <style jsx global>{`
                                             * {
                                                 box-sizing: border-box;
                                             }
@@ -55,24 +53,23 @@ class MyApp extends App {
                                                 100% { transform: translateY(0); }
                                             }
                                         `}
-                                                    </style>
-                                                    <AppNavigation/>
-                                                    <StageJoiner/>
-                                                    <Block marginTop={['52px', '52px', '72px']}>
-                                                        <Component {...pageProps} />
-                                                    </Block>
-                                                    <LocalDeviceControl/>
-                                                    <div>
+                                                </style>
+                                                <AppNavigation/>
+                                                <StageJoiner/>
+                                                <Block marginTop={['52px', '52px', '72px']}>
+                                                    <Component {...pageProps} />
+                                                </Block>
+                                                <LocalDeviceControl/>
+                                                <div>
                                                         <pre>
                                                             {JSON.stringify(state, null, 2)}
                                                         </pre>
-                                                    </div>
-                                                </BaseProvider>
-                                            )}
-                                        </StagesContextConsumer>
-                                    </AudioContextProvider>
-                                </StagesContextProvider>
-                            </DeviceContextProvider>
+                                                </div>
+                                            </BaseProvider>
+                                        )}
+                                    </StagesContextConsumer>
+                                </AudioContextProvider>
+                            </StagesContextProvider>
                         </AuthContextProvider>
                     </RequestContextProvider>
                 </StyletronProvider>

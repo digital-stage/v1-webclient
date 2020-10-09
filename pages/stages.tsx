@@ -5,7 +5,7 @@ import Loading from "../components/theme/Loading";
 import {DisplayMedium, HeadingLarge} from "baseui/typography";
 import Login from "./account/login";
 import StageListView from "../components/stage/StageListView";
-import {useStageSelector} from "../lib/digitalstage/useStages";
+import useStageSelector from "../lib/digitalstage/useStageSelector";
 import {useRouter} from "next/router";
 
 

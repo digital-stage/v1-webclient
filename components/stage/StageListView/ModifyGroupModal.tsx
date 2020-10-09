@@ -7,6 +7,7 @@ import {Input} from "baseui/input/index";
 import {FormControl} from "baseui/form-control/index";
 import {KIND} from "baseui/button/index";
 import {Client} from "../../../lib/digitalstage/common/model.client";
+import useStageActions from "../../../lib/digitalstage/useStageActions";
 
 const Schema = Yup.object().shape({
     name: Yup.string()
@@ -21,7 +22,7 @@ const ModifyGroupModal = (props: {
     onClose?: () => any;
 
 }) => {
-    const {updateGroup} = useStages();
+    const {updateGroup} = useStageActions();
     const formik = useFormik({
         validateOnMount: true,
         initialValues: {

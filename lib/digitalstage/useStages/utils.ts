@@ -1,6 +1,5 @@
 import {WebRTCDevice} from "../common/model.server";
 
-
 export const enumerateDevices = (): Promise<{
     inputAudioDevices: WebRTCDevice[],
     inputVideoDevices: WebRTCDevice[],

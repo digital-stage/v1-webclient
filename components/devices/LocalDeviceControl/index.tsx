@@ -1,11 +1,11 @@
 import React from "react";
 import {useStyletron} from "baseui";
 import DeviceControl from "./DeviceControl";
-import {useDevices} from "../../../lib/digitalstage/useDevices";
+import useStageSelector from "../../../lib/digitalstage/useStageSelector";
 
 const LocalDeviceControl = () => {
     const [css] = useStyletron();
-    const {localDevice} = useDevices();
+    const {localDevice} = useStageSelector(state => ({localDevice: state.localDevice ? state.devices.byId[state.localDevice] : undefined}));
 
     if (!localDevice)
         return null;

@@ -6,8 +6,8 @@ import {Checkbox} from "baseui/checkbox/index";
 import {Check, Delete} from "baseui/icon/index";
 import {Button, KIND, SIZE} from "baseui/button/index";
 import SingleSelect from "../theme/SingleSelect";
-import {useDevices} from "../../lib/digitalstage/useDevices";
 import {Device} from "../../lib/digitalstage/common/model.server";
+import useStageActions from "../../lib/digitalstage/useStageActions";
 
 
 const CardTitle = styled("div", {
@@ -19,7 +19,7 @@ const CardTitle = styled("div", {
 const DeviceView = (props: {
     device: Device
 }) => {
-    const {updateDevice} = useDevices();
+    const {updateDevice} = useStageActions();
     const [css] = useStyletron();
 
     return (

@@ -1,15 +1,17 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
-import {useStages} from "../../lib/digitalstage/useStages";
 import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from "baseui/modal";
 import {useRequest} from "../../lib/useRequest";
-import {useDevices} from "../../lib/digitalstage/useDevices";
 import {Input} from "baseui/input";
 import {Errors} from "../../lib/digitalstage/common/errors";
+import useStageActions from "../../lib/digitalstage/useStageActions";
+import useStageSelector from "../../lib/digitalstage/useStageSelector";
 
 const StageJoiner = () => {
-    const {ready} = useDevices();
+    const {ready} = useStageSelector(state => ({
+        ready: state.ready
+    }));
     const {stageId, groupId, password, setRequest} = useRequest();
-    const {joinStage} = useStages();
+    const {joinStage} = useStageActions();
     const [retries, setRetries] = useState<number>(0);
     const [wrongPassword, setWrongPassword] = useState<boolean>();
     const [notFound, setNotFound] = useState<boolean>();

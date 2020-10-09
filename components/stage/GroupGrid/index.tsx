@@ -7,7 +7,7 @@ import CanvasPlayer from "../../video/CanvasPlayer";
 import ClientModel from "../../../lib/digitalstage/common/model.client";
 import {AudioPlayer} from "../../audio/AudioPlayer";
 import VolumeSlider from "../../audio/VolumeSlider";
-import {useStages} from "../../../lib/digitalstage/useStages";
+import useStageActions from "../../../lib/digitalstage/useStageActions";
 
 const Card = styled("div", {
     position: "relative",
@@ -48,7 +48,7 @@ const PoweredBySoundjack = styled("div", {
 const GroupGrid = (props: {
     group?: ClientModel.Group;
 }) => {
-    const {updateStageMember} = useStages();
+    const {updateStageMember} = useStageActions();
     const [numDesktopCols, setNumDesktopCols] = useState<number>(1);
     const [css] = useStyletron();
 

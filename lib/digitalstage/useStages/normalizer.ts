@@ -12,14 +12,15 @@ import {
     User
 } from "../common/model.server";
 import {InitialNormalizedState, NormalizedState, OutsideStageNormalizedState} from "./schema";
-import {ServerDeviceEvents, ServerStageEvents, ServerUserEvents} from "../common/events";
+import {ServerDeviceEvents, ServerGlobalEvents, ServerStageEvents, ServerUserEvents} from "../common/events";
 import _ from "lodash";
 import {Reducer} from "react";
 
-export const upsert = function <T>(arr: T[], value: T) {
+export const upsert = function <T>(arr: T[], value: T): T[] {
     if (_.indexOf(arr, value) === -1) {
         arr.push(value);
     }
+    return arr;
 }
 
 // See: https://redux.js.org/recipes/structuring-reducers/normalizing-state-shape
@@ -46,8 +47,6 @@ export function normalize(prevState: NormalizedState, data: Partial<{
         };
     }
     if (data.users) {
-        console.log("HAVE USERS");
-        console.log(data.users);
         data.users.forEach(user => {
             state.users.byId[user._id] = {
                 stageMembers: state.stageMembers.allIds.filter(id => state.stageMembers.byId[id].userId === user._id),
@@ -169,7 +168,7 @@ export enum AdditionalReducerTypes {
 }
 
 export interface ReducerAction {
-    type: ServerUserEvents | ServerDeviceEvents | ServerStageEvents | AdditionalReducerTypes,
+    type: ServerGlobalEvents | ServerUserEvents | ServerDeviceEvents | ServerStageEvents | AdditionalReducerTypes,
     payload?: any;
 }
 
@@ -250,11 +249,50 @@ export const reducer: Reducer<NormalizedState, ReducerAction> = (state: Normaliz
         case AdditionalReducerTypes.RESET:
             return InitialNormalizedState;
 
+        case ServerGlobalEvents.READY:
+            return {
+                ...state,
+                ready: true
+            };
+
         case ServerUserEvents.USER_READY:
             return {
                 ...state,
                 user: action.payload
             };
+
+        case ServerDeviceEvents.LOCAL_DEVICE_READY:
+            return {
+                ...state,
+                devices: {
+                    ...state.devices,
+                    byId: {
+                        ...state.devices.byId,
+                        [action.payload._id]: action.payload
+                    },
+                    local: action.payload._id,
+                    allIds: upsert(state.devices.allIds, action.payload._id)
+                }
+            }
+
+        case ServerDeviceEvents.DEVICE_ADDED:
+            return {
+                ...state,
+
+                devices: {
+                    ...state.devices,
+                    byId: {
+                        ...state.devices.byId,
+                        [action.payload._id]: action.payload
+                    },
+                    remote: upsert(state.devices.remote, action.payload._id),
+                    allIds: upsert(state.devices.allIds, action.payload._id)
+                }
+            }
+        case ServerDeviceEvents.DEVICE_CHANGED:
+            return updateItem(state, "devices", action.payload._id, action.payload);
+        case ServerDeviceEvents.DEVICE_REMOVED:
+            return removeItem(state, "devices", action.payload);
 
         case ServerStageEvents.USER_ADDED:
             return normalize(state, {
@@ -268,6 +306,7 @@ export const reducer: Reducer<NormalizedState, ReducerAction> = (state: Normaliz
                 state.stageMembers.byId[id].userId = undefined;
             });
             return removeItem(state, "users", action.payload);
+
 
         case ServerStageEvents.STAGE_JOINED:
             return normalize(state, {
