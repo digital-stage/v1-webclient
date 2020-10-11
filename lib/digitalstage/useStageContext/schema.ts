@@ -1,5 +1,6 @@
 import * as Server from "../common/model.server";
 import mediasoupClient from 'mediasoup-client';
+import {GlobalAudioProducer, GlobalVideoProducer} from "../common/model.server";
 
 export interface NormalizedState {
     ready: boolean;
@@ -11,7 +12,7 @@ export interface NormalizedState {
         local?: string;
         remote: string[];
         allIds: string[]
-    }
+    };
     current?: {
         stageId: string;
         groupId: string;
@@ -57,13 +58,13 @@ export interface NormalizedState {
     },
     videoProducers: {
         byId: {
-            [id: string]: Server.StageMemberVideoProducer
+            [id: string]: Server.StageMemberVideoProducer & { consumer?: string }
         },
         allIds: string[]
     },
     audioProducers: {
         byId: {
-            [id: string]: Server.StageMemberAudioProducer & { customAudioProducer?: string }
+            [id: string]: Server.StageMemberAudioProducer & { customAudioProducer?: string, consumer?: string }
         },
         allIds: string[]
     },
@@ -88,7 +89,7 @@ export interface NormalizedState {
     audioConsumers: {
         byId: {
             [id: string]: {
-                videoProducer: string
+                audioProducer: string
                 msConsumer: mediasoupClient.types.Consumer
             }
         },
@@ -97,9 +98,21 @@ export interface NormalizedState {
     videoConsumers: {
         byId: {
             [id: string]: {
-                audioProducer: string
+                videoProducer: string
                 msConsumer: mediasoupClient.types.Consumer
             }
+        },
+        allIds: string[]
+    },
+    localAudioProducers: {
+        byId: {
+            [id: string]: GlobalAudioProducer & {msProducer: mediasoupClient.types.Producer}
+        },
+        allIds: string[]
+    },
+    localVideoProducers: {
+        byId: {
+            [id: string]: GlobalVideoProducer & {msProducer: mediasoupClient.types.Producer}
         },
         allIds: string[]
     }
@@ -136,14 +149,6 @@ export const OutsideStageNormalizedState: Partial<NormalizedState> = {
         allIds: []
     },
     customOvTracks: {
-        byId: {},
-        allIds: []
-    },
-    videoConsumers: {
-        byId: {},
-        allIds: []
-    },
-    audioConsumers: {
         byId: {},
         allIds: []
     }
@@ -206,6 +211,14 @@ export const InitialNormalizedState: NormalizedState = {
         allIds: []
     },
     audioConsumers: {
+        byId: {},
+        allIds: []
+    },
+    localAudioProducers: {
+        byId: {},
+        allIds: []
+    },
+    localVideoProducers: {
         byId: {},
         allIds: []
     }

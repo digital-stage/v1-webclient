@@ -1,307 +1,49 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Client} from "../common/model.client";
-import {GlobalAudioProducer, GlobalVideoProducer, Router} from "../common/model.server";
-import mediasoupClient from 'mediasoup-client';
-import {Device as MediasoupDevice} from "mediasoup-client/lib/Device";
+import {
+    Router
+} from "../common/model.server";
+import mediasoupClient from "mediasoup-client";
+import io from "socket.io-client";
 import {
     closeConsumer,
     createConsumer,
     createProducer,
-    createWebRTCTransport, getFastestRouter,
-    resumeConsumer,
-    RouterRequests,
-    stopProducer
+    createWebRTCTransport,
+    getFastestRouter,
+    RouterRequests, stopProducer
 } from "./util";
-import {ClientDeviceEvents} from "../common/events";
-import io from "socket.io-client";
-import useStageSelector from "../useStageSelector";
+import {Device as MediasoupDevice} from "mediasoup-client/lib/Device";
+import {AdditionalReducerTypes} from "../useStageContext/normalizer";
 import {useStageContext} from "../useStageContext";
+import useStageSelector from "../useStageSelector";
+import {ClientDeviceEvents, ServerDeviceEvents} from "../common/events";
+import {AddAudioProducerPayload, RemoveAudioProducerPayload} from "../common/payloads";
+import {GlobalAudioProducer} from "../../../../server/src/model.server";
 
 
-export interface MediasoupContextProps {
-    working: boolean;
-    localAudioProducers: Client.LocalAudioProducer[];
-    localVideoProducers: Client.LocalVideoProducer[];
-    audioConsumers: Client.StageMemberAudio[];
-    videoConsumers: Client.StageMemberVideo[];
-}
-
-const MediasoupContext = React.createContext<MediasoupContextProps>(undefined);
-
-export const useMediasoup = (): MediasoupContextProps => React.useContext<MediasoupContextProps>(MediasoupContext);
+const MediasoupContext = React.createContext(undefined);
 
 export const MediasoupProvider = (props: {
     children: React.ReactNode
 }) => {
-    // Dependencies
-    const {socket} = useStageContext();
-    const {localDevice, audioProducers, videoProducers} = useStageSelector(state => {
+    const {dispatch, socket} = useStageContext();
+    const {localDevice, audioConsumers, videoConsumers, audioProducers, videoProducers, localAudioProducers, localVideoProducers} = useStageSelector(state => {
         return {
-            audioProducers: state.audioProducers,
+            localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
+            audioConsumers: state.audioConsumers,
             videoProducers: state.videoProducers,
-            localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined
-        }
+            videoConsumers: state.videoConsumers,
+            audioProducers: state.audioProducers,
+            localAudioProducers: state.localAudioProducers,
+            localVideoProducers: state.localVideoProducers
+        };
     });
-
-    // Connection states
+    const [working, setWorking] = useState<boolean>(false);
     const [router, setRouter] = useState<Router>();
     const [connection, setConnection] = useState<SocketIOClient.Socket>();
-
-    // Public states
-    const [localAudioProducers, setLocalAudioProducers] = useState<Client.LocalAudioProducer[]>([]);
-    const [localVideoProducers, setLocalVideoProducers] = useState<Client.LocalVideoProducer[]>([]);
-    const [audioConsumers, setAudioConsumers] = useState<{
-        [producerId: string]: Client.StageMemberAudio
-    }>({});
-    const [videoConsumers, setVideoConsumers] = useState<{
-        [producerId: string]: Client.StageMemberVideo
-    }>({});
-    const [working, setWorking] = useState<boolean>(false);
-
-    // Internal state for comparising with server data
-    const [sendVideo, setSendVideo] = useState<boolean>(localDevice && localDevice.sendVideo);
-    const [sendAudio, setSendAudio] = useState<boolean>(localDevice && localDevice.sendAudio);
-    const [receiveAudio, setReceiveAudio] = useState<boolean>(localDevice && localDevice.receiveAudio);
-    const [receiveVideo, setReceiveVideo] = useState<boolean>(localDevice && localDevice.receiveVideo);
-    const [inputAudioDevice, setInputAudioDevice] = useState<string>(localDevice && localDevice.inputAudioDeviceId);
-    const [outputAudioDevice, setOutputAudioDevice] = useState<string>(localDevice && localDevice.outputAudioDeviceId);
-    const [inputVideoDevice, setInputVideoDevice] = useState<string>(localDevice && localDevice.inputVideoDeviceId);
-
-    // Mediasoup specific
     const [device, setDevice] = useState<mediasoupClient.types.Device>();
     const [sendTransport, setSendTransport] = useState<mediasoupClient.types.Transport>();
     const [receiveTransport, setReceiveTransport] = useState<mediasoupClient.types.Transport>();
-
-    const consumeVideo = useCallback(() => {
-        // Create consumer for all unconsumed audio producers
-        setWorking(true);
-        Promise.all(videoProducers.allIds.map(videoProducerId => {
-            if (!videoConsumers[videoProducerId]) {
-                return createConsumer(connection, device, receiveTransport, videoProducers.byId[videoProducerId])
-                    .then(consumer => {
-                        if (consumer.paused)
-                            return resumeConsumer(connection, consumer);
-                        return consumer;
-                    })
-                    .then(consumer => {
-                        setVideoConsumers(prevState => ({
-                            ...prevState,
-                            [videoProducerId]: {
-                                ...videoProducers.byId[videoProducerId],
-                                msConsumer: consumer
-                            }
-                        }));
-                    })
-                    .catch(error => console.log(error))
-            }
-        }))
-            .finally(() => setWorking(false));
-    }, [connection, device, videoProducers, videoConsumers, receiveTransport]);
-
-    const stopConsumingVideo = useCallback(() => {
-        // Stop consuming all audio producers
-        setWorking(true);
-        Promise.all(Object.keys(videoConsumers).map(key => {
-            const videoConsumer = videoConsumers[key];
-            return closeConsumer(connection, videoConsumer.msConsumer)
-        }))
-            .finally(() => setWorking(false));
-    }, [connection, videoConsumers]);
-
-    const consumeAudio = useCallback(() => {
-        // Create consumer for all unconsumed audio producers
-        setWorking(true);
-        Promise.all(audioProducers.allIds.map(audioProducerId => {
-            if (!audioConsumers[audioProducerId]) {
-                return createConsumer(connection, device, receiveTransport, audioProducers.byId[audioProducerId])
-                    .then(consumer => {
-                        if (consumer.paused)
-                            return resumeConsumer(connection, consumer);
-                        return consumer;
-                    })
-                    .then(consumer => {
-                        setAudioConsumers(prevState => ({
-                            ...prevState,
-                            [audioProducerId]: {
-                                ...audioProducers.byId[audioProducerId],
-                                msConsumer: consumer
-                            }
-                        }));
-                    })
-                    .catch(error => console.log(error))
-            }
-        }))
-            .finally(() => setWorking(false));
-    }, [connection, device, audioProducers, audioConsumers, receiveTransport]);
-
-    const stopConsumingAudio = useCallback(() => {
-        // Stop consuming all audio producers
-        setWorking(true);
-        Promise.all(Object.keys(audioConsumers).map(key => {
-            const audioConsumer = audioConsumers[key];
-            return closeConsumer(connection, audioConsumer.msConsumer)
-        }))
-            .finally(() => setWorking(false));
-    }, [connection, audioConsumers]);
-
-    const startSendingAudio = useCallback(() => {
-        console.log("startSendingAudio");
-        setWorking(true);
-        return navigator.mediaDevices.getUserMedia({
-            video: false,
-            audio: {
-                deviceId: localDevice.inputAudioDeviceId,
-                autoGainControl: false,
-                echoCancellation: false,
-                noiseSuppression: false
-            },
-        })
-            .then(stream => stream.getAudioTracks())
-            .then(tracks =>
-                Promise.all(tracks.map(track => {
-                        return createProducer(sendTransport, track)
-                            .then(msProducer => {
-                                return new Promise(resolve => {
-                                    socket.emit(ClientDeviceEvents.ADD_AUDIO_PRODUCER, {
-                                        kind: "audio",
-                                        routerId: router._id,
-                                        routerProducerId: msProducer.id
-                                    }, (producer: GlobalAudioProducer) => {
-                                        console.log("Created remote producer " + producer._id);
-                                        setLocalAudioProducers(prevState => [...prevState, {
-                                            ...producer,
-                                            msProducer: msProducer
-                                        }]);
-                                        resolve();
-                                    });
-                                });
-                            })
-                    }
-                )))
-            .finally(() => setWorking(false));
-    }, [socket, localDevice, sendTransport, localAudioProducers]);
-
-    const stopSendingAudio = useCallback(() => {
-        console.log("stopSendingAudio");
-        setWorking(true);
-        return Promise.all(localAudioProducers.map(producer => stopProducer(connection, producer.msProducer)
-            .then(() => new Promise(resolve => {
-                console.log("Removing remote producer " + producer._id);
-                socket.emit(ClientDeviceEvents.REMOVE_AUDIO_PRODUCER, producer._id, () => {
-                    setLocalAudioProducers(prevState => prevState.filter(p => p._id !== producer._id));
-                    resolve();
-                });
-            }))
-        ))
-            .finally(() => setWorking(false));
-    }, [connection, socket, localDevice, sendTransport, localAudioProducers]);
-
-
-    const startSendingVideo = useCallback(() => {
-        console.log("startSendingVideo");
-        setWorking(true);
-        return navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: false
-        })
-            .then(stream => stream.getVideoTracks())
-            .then(tracks =>
-                Promise.all(tracks.map(track => {
-                        return createProducer(sendTransport, track)
-                            .then(msProducer => {
-                                return new Promise(resolve => {
-                                    socket.emit(ClientDeviceEvents.ADD_VIDEO_PRODUCER, {
-                                        kind: "video",
-                                        routerId: router._id,
-                                        routerProducerId: msProducer.id
-                                    }, (producer: GlobalVideoProducer) => {
-                                        console.log("Created remote video producer " + producer._id);
-                                        setLocalVideoProducers(prevState => [...prevState, {
-                                            ...producer,
-                                            msProducer: msProducer
-                                        }]);
-                                        resolve();
-                                    });
-                                });
-                            })
-                    }
-                )))
-            .finally(() => setWorking(false));
-    }, [socket, localDevice, sendTransport, localVideoProducers]);
-
-    const stopSendingVideo = useCallback(() => {
-        console.log("stopSendingVideo");
-        setWorking(true);
-        return Promise.all(localVideoProducers.map(producer => stopProducer(connection, producer.msProducer)
-            .then(() => new Promise(resolve => {
-                console.log("Removing remote video producer " + producer._id);
-                socket.emit(ClientDeviceEvents.REMOVE_VIDEO_PRODUCER, producer._id, () => {
-                    setLocalVideoProducers(prevState => prevState.filter(p => p._id !== producer._id));
-                    resolve();
-                });
-            }))
-        ))
-            .finally(() => setWorking(false));
-    }, [connection, socket, localDevice, sendTransport, localVideoProducers]);
-
-    useEffect(() => {
-        if (socket && connection && !working) {
-            if (receiveAudio) {
-                consumeAudio();
-            } else {
-                stopConsumingAudio();
-            }
-            if (receiveVideo) {
-                consumeVideo();
-            } else {
-                stopConsumingVideo();
-            }
-        }
-    }, [socket, connection, working,
-        audioProducers, videoProducers, receiveAudio, receiveVideo]);
-
-
-    const updateInternalStates = useCallback(() => {
-        // Update internal state and perform actions
-        if (localDevice.sendAudio && !sendAudio) {
-            setSendAudio(localDevice.sendAudio);
-            if (localDevice.sendAudio) {
-                startSendingAudio();
-            } else {
-                stopSendingAudio();
-            }
-        }
-        if (localDevice.sendVideo && !sendVideo) {
-            setSendVideo(localDevice.sendVideo);
-            if (localDevice.sendAudio) {
-                startSendingVideo();
-            } else {
-                stopSendingVideo();
-            }
-        }
-        if (localDevice.receiveAudio && !receiveAudio) {
-            setReceiveAudio(localDevice.receiveAudio);
-            /*if( localDevice.receiveVideo ) {
-                consumeAudio();
-            } else {
-                stopConsumingAudio();
-            }*/
-        }
-        if (localDevice.receiveVideo && !receiveVideo) {
-            setReceiveVideo(localDevice.receiveVideo);
-            /*if( localDevice.receiveVideo ) {
-                consumeVideo();
-            } else {
-                stopConsumingVideo();
-            }*/
-        }
-    }, [localDevice, sendAudio, sendVideo, receiveAudio, receiveVideo, startSendingVideo, startSendingAudio, stopSendingVideo, stopSendingAudio])
-
-    useEffect(() => {
-        if (socket && connection && sendTransport && receiveTransport && localDevice && !working) {
-            updateInternalStates();
-        }
-    }, [socket, connection, sendTransport, receiveTransport, localDevice, working]);
 
     useEffect(() => {
         if (connection) {
@@ -377,17 +119,137 @@ export const MediasoupProvider = (props: {
         }
     }, []);
 
+    const [sendVideo, setSendVideo] = useState<boolean>(false);
+    const [sendAudio, setSendAudio] = useState<boolean>(false);
+    const [receiveVideo, setReceiveVideo] = useState<boolean>(false);
+    const [receiveAudio, setReceiveAudio] = useState<boolean>(false);
+
+    const streamAudio = useCallback(() => {
+        setWorking(true);
+        return navigator.mediaDevices.getUserMedia({
+            video: false,
+            audio: {
+                deviceId: localDevice ? localDevice.inputAudioDeviceId : undefined,
+                autoGainControl: false,
+                echoCancellation: false,
+                noiseSuppression: false
+            },
+        })
+            .then(stream => stream.getAudioTracks())
+            .then(tracks =>
+                Promise.all(tracks.map(track => {
+                        return createProducer(sendTransport, track)
+                            .then(producer => {
+                                return new Promise(resolve => {
+                                    socket.emit(ClientDeviceEvents.ADD_AUDIO_PRODUCER, {
+                                        routerId: router._id,
+                                        routerProducerId: producer.id
+                                    } as AddAudioProducerPayload, (error: string | undefined, globalProducer: GlobalAudioProducer) => {
+                                        if (error) {
+                                            console.error(error);
+                                            return stopProducer(socket, producer);
+                                        }
+                                        dispatch({
+                                            type: AdditionalReducerTypes.ADD_LOCAL_AUDIO_PRODUCER,
+                                            payload: {
+                                                ...globalProducer,
+                                                msProducer: producer
+                                            }
+                                        });
+                                        resolve();
+                                    });
+                                });
+                            })
+                    }
+                )))
+            .finally(() => setWorking(false));
+    }, [sendTransport, localDevice])
+
+    const stopStreamingAudio = useCallback(() => {
+        setWorking(true);
+        // Assure, that we stop streaming all local audio producers
+        return Promise.all(localAudioProducers.allIds.map(id => {
+            if (localAudioProducers.byId[id]) {
+                return stopProducer(connection, localAudioProducers.byId[id].msProducer)
+                    .then(() => {
+                        return new Promise(resolve => {
+                            socket.emit(ClientDeviceEvents.REMOVE_AUDIO_PRODUCER, id, (error?: string) => {
+                                if (error) {
+                                    console.error(error);
+                                }
+                                dispatch({
+                                    type: AdditionalReducerTypes.REMOVE_LOCAL_AUDIO_PRODUCER, payload: id
+                                });
+                                resolve();
+                            });
+                        })
+                    });
+            }
+        }))
+            .finally(() => setWorking(false));
+    }, [localAudioProducers]);
+
+    useEffect(() => {
+        if (receiveAudio) {
+            setWorking(true);
+            // Assure, that we are consuming all audio producers
+            Promise.all(audioProducers.allIds.map(id => {
+                if (!audioProducers.byId[id].consumer) {
+                    return createConsumer(connection, device, receiveTransport, audioProducers.byId[id])
+                        .then(consumer => dispatch({
+                            type: AdditionalReducerTypes.ADD_AUDIO_CONSUMER,
+                            payload: {producerId: id, msConsumer: consumer}
+                        }));
+                }
+            }))
+                .finally(() => setWorking(false));
+        } else {
+            setWorking(true);
+            // Assure, that we stop consuming all audio producers
+            Promise.all(audioConsumers.allIds.map(id => {
+                if (audioConsumers.byId[id]) {
+                    return closeConsumer(connection, audioConsumers.byId[id].msConsumer)
+                        .then(() => dispatch({
+                            type: AdditionalReducerTypes.REMOVE_AUDIO_CONSUMER, payload: id
+                        }));
+                }
+            }))
+                .finally(() => setWorking(false));
+        }
+    }, [receiveAudio, audioProducers.allIds]);
+
+    useEffect(() => {
+        if (!working && localDevice) {
+            if (sendVideo !== localDevice.sendVideo) {
+                console.log("Devices changed: sendAudio");
+                setSendVideo(localDevice.sendVideo);
+            }
+            if (sendAudio !== localDevice.sendAudio) {
+                console.log("Devices changed: sendAudio");
+                if (localDevice.sendAudio) {
+                    streamAudio();
+                } else {
+                    stopStreamingAudio();
+                }
+                setSendAudio(localDevice.sendAudio);
+            }
+            if (receiveVideo !== localDevice.receiveVideo) {
+                console.log("Devices changed: sendAudio");
+                setReceiveVideo(localDevice.receiveVideo);
+            }
+            if (receiveAudio !== localDevice.receiveAudio) {
+                console.log("Devices changed: sendAudio");
+                setReceiveAudio(localDevice.receiveAudio);
+            }
+        }
+
+    }, [working, localDevice]);
+
     return (
-        <MediasoupContext.Provider value={{
-            working: working,
-            localAudioProducers: localAudioProducers,
-            localVideoProducers: localVideoProducers,
-            audioConsumers: Object.values(audioConsumers),
-            videoConsumers: Object.values(videoConsumers),
-        }}>
+        <MediasoupContext.Provider value={undefined}>
             {props.children}
         </MediasoupContext.Provider>
     )
-}
+};
 
-export default useMediasoup;
+export default MediasoupProvider;

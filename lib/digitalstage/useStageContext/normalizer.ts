@@ -2,7 +2,7 @@ import {
     CustomGroup,
     CustomStageMember,
     CustomStageMemberAudioProducer,
-    CustomStageMemberOvTrack,
+    CustomStageMemberOvTrack, GlobalAudioProducer,
     Group,
     Stage,
     StageMember,
@@ -15,6 +15,7 @@ import {InitialNormalizedState, NormalizedState, OutsideStageNormalizedState} fr
 import {ServerDeviceEvents, ServerGlobalEvents, ServerStageEvents, ServerUserEvents} from "../common/events";
 import _ from "lodash";
 import {Reducer} from "react";
+import mediasoupClient from "mediasoup-client";
 
 export const upsert = function <T>(arr: T[], value: T): T[] {
     if (_.indexOf(arr, value) === -1) {
@@ -164,7 +165,19 @@ export function normalize(prevState: NormalizedState, data: Partial<{
 }
 
 export enum AdditionalReducerTypes {
-    RESET = "reset"
+    RESET = "reset",
+
+    ADD_LOCAL_AUDIO_PRODUCER = 'add-local-audio-producer',
+    REMOVE_LOCAL_AUDIO_PRODUCER = 'remove-local-audio-producer',
+
+    ADD_LOCAL_VIDEO_PRODUCER = 'add-local-video-producer',
+    REMOVE_LOCAL_VIDEO_PRODUCER = 'remove-local-video-producer',
+
+    ADD_AUDIO_CONSUMER = 'add-audio-consumer',
+    REMOVE_AUDIO_CONSUMER = 'remove-audio-consumer',
+
+    ADD_VIDEO_CONSUMER = 'add-video-consumer',
+    REMOVE_VIDEO_CONSUMER = 'remove-video-consumer',
 }
 
 export interface ReducerAction {
@@ -210,7 +223,7 @@ const removeItemWithArrayReference = (state: NormalizedState, group: string, id:
                 ...state[reference.group].byId,
                 [reference.id]: {
                     ...state[reference.group].byId[reference.id],
-                    [reference.key]: state[reference.group].byId[reference.id].groups.filter(refId => refId !== id)
+                    [reference.key]: state[reference.group].byId[reference.id][reference.key].filter(refId => refId !== id)
                 }
             }
         },
@@ -412,5 +425,71 @@ export const reducer: Reducer<NormalizedState, ReducerAction> = (state: Normaliz
                 id: state.videoProducers.byId[action.payload].stageMemberId,
                 key: "videoProducers"
             });
+
+
+        case AdditionalReducerTypes.ADD_AUDIO_CONSUMER:
+            return {
+                ...state,
+                audioConsumers: {
+                    ...state.audioConsumers,
+                    byId: {
+                        ...state.audioConsumers.byId,
+                        [action.payload.msConsumer.id]: {
+                            audioProducer: action.payload.producerId,
+                            msConsumer: action.payload.msConsumer
+                        }
+                    },
+                    allIds: upsert(state.audioConsumers.allIds, action.payload.msConsumer.id)
+                },
+                audioProducers: {
+                    ...state.audioProducers,
+                    byId: {
+                        ...state.audioProducers.byId,
+                        [action.payload.producerId]: {
+                            ...state.audioProducers.byId[action.payload.producerId],
+                            consumer: action.payload.msConsumer.id
+                        }
+                    }
+                }
+            };
+
+        case AdditionalReducerTypes.REMOVE_AUDIO_CONSUMER:
+            return removeItemWithReference(state, "audioConsumers", action.payload, {
+                group: "audioProducers",
+                id: state.audioConsumers.byId[action.payload].audioProducer,
+                key: "consumer"
+            })
+
+        case AdditionalReducerTypes.ADD_LOCAL_AUDIO_PRODUCER:
+            return {
+                ...state,
+                localAudioProducers: {
+                    ...state.localAudioProducers,
+                    byId: {
+                        ...state.localAudioProducers.byId,
+                        [action.payload._id]: action.payload
+                    },
+                    allIds: upsert(state.localAudioProducers.allIds, action.payload._id)
+                }
+            }
+        case AdditionalReducerTypes.REMOVE_LOCAL_AUDIO_PRODUCER:
+            return removeItem(state, "localAudioProducers", action.payload);
+
+
+        case AdditionalReducerTypes.ADD_LOCAL_VIDEO_PRODUCER:
+            return {
+                ...state,
+                localAudioProducers: {
+                    ...state.localAudioProducers,
+                    byId: {
+                        ...state.localAudioProducers.byId,
+                        [action.payload.id]: action.payload
+                    },
+                    allIds: upsert(state.localAudioProducers.allIds, action.payload.id)
+                }
+            }
+        case AdditionalReducerTypes.REMOVE_LOCAL_VIDEO_PRODUCER:
+            return removeItem(state, "localAudioProducers", action.payload);
     }
+    return state;
 }

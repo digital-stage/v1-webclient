@@ -14,6 +14,7 @@ import LocalDeviceControl from '../components/devices/LocalDeviceControl';
 import {AudioContextProvider} from "../lib/useAudioContext";
 import {CssBaseline, ThemeProvider} from '@material-ui/core';
 import theme from "../styles/theme";
+import MediasoupProvider from "../lib/digitalstage/useMediasoup";
 
 class MyApp extends App {
     render() {
@@ -30,11 +31,12 @@ class MyApp extends App {
                         <RequestContextProvider>
                             <AuthContextProvider>
                                 <StagesContextProvider>
-                                    <AudioContextProvider>
-                                        <StagesContextConsumer>
-                                            {({state}) => (
-                                                <BaseProvider theme={state.current ? DarkTheme : LightTheme}>
-                                                    <style jsx global>{`
+                                    <MediasoupProvider>
+                                        <AudioContextProvider>
+                                            <StagesContextConsumer>
+                                                {({state}) => (
+                                                    <BaseProvider theme={state.current ? DarkTheme : LightTheme}>
+                                                        <style jsx global>{`
                                             * {
                                                 box-sizing: border-box;
                                             }
@@ -57,22 +59,23 @@ class MyApp extends App {
                                                 100% { transform: translateY(0); }
                                             }
                                         `}
-                                                    </style>
-                                                    <AppNavigation/>
-                                                    <StageJoiner/>
-                                                    <Block marginTop={['52px', '52px', '72px']}>
-                                                        <Component {...pageProps} />
-                                                    </Block>
-                                                    <LocalDeviceControl/>
-                                                    <div>
+                                                        </style>
+                                                        <AppNavigation/>
+                                                        <StageJoiner/>
+                                                        <Block marginTop={['52px', '52px', '72px']}>
+                                                            <Component {...pageProps} />
+                                                        </Block>
+                                                        <LocalDeviceControl/>
+                                                        <div>
                                                         <pre>
                                                             {JSON.stringify(state, null, 2)}
                                                         </pre>
-                                                    </div>
-                                                </BaseProvider>
-                                            )}
-                                        </StagesContextConsumer>
-                                    </AudioContextProvider>
+                                                        </div>
+                                                    </BaseProvider>
+                                                )}
+                                            </StagesContextConsumer>
+                                        </AudioContextProvider>
+                                    </MediasoupProvider>
                                 </StagesContextProvider>
                             </AuthContextProvider>
                         </RequestContextProvider>
