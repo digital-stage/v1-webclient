@@ -16,6 +16,7 @@ import {
 import {useRouter} from "next/router";
 import TextLink from "../theme/TextLink";
 import useStageSelector from "../../lib/digitalstage/useStageSelector";
+import {Delete} from "baseui/icon";
 
 
 const AppNavigation = () => {
@@ -52,6 +53,15 @@ const AppNavigation = () => {
                     item: {
                         label: stage.name,
                         path: '/'
+                    },
+                    mapItemToNode: renderItem,
+                    mapItemToString: renderItem,
+                });
+                nav.push({
+                    icon: () => <Delete/>,
+                    item: {
+                        label: stage.name + " verlassen",
+                        path: '/leave'
                     },
                     mapItemToNode: renderItem,
                     mapItemToString: renderItem,

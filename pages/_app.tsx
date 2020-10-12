@@ -4,7 +4,7 @@ import {debug, styletron} from '../styletron'
 import {AuthContextProvider} from "../lib/digitalstage/useAuth";
 import {BaseProvider, DarkTheme, LightTheme} from "baseui";
 import React from "react";
-import {StagesContextConsumer, StagesContextProvider} from "../lib/digitalstage/useStageContext";
+import {StagesContextProvider, StageStateConsumer} from "../lib/digitalstage/useStageContext";
 import {RequestContextProvider} from "../lib/useRequest";
 import Head from 'next/head'
 import AppNavigation from "../components/AppNavigation";
@@ -33,8 +33,8 @@ class MyApp extends App {
                                 <StagesContextProvider>
                                     <MediasoupProvider>
                                         <AudioContextProvider>
-                                            <StagesContextConsumer>
-                                                {({state}) => (
+                                            <StageStateConsumer>
+                                                {(state) => (
                                                     <BaseProvider theme={state.current ? DarkTheme : LightTheme}>
                                                         <style jsx global>{`
                                             * {
@@ -66,14 +66,9 @@ class MyApp extends App {
                                                             <Component {...pageProps} />
                                                         </Block>
                                                         <LocalDeviceControl/>
-                                                        <div>
-                                                        <pre>
-                                                            {JSON.stringify(state, null, 2)}
-                                                        </pre>
-                                                        </div>
                                                     </BaseProvider>
                                                 )}
-                                            </StagesContextConsumer>
+                                            </StageStateConsumer>
                                         </AudioContextProvider>
                                     </MediasoupProvider>
                                 </StagesContextProvider>

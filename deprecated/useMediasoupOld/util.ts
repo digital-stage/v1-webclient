@@ -1,6 +1,6 @@
 import mediasoupClient from 'mediasoup-client';
-import {ROUTERS_URL} from "../../../env";
-import {Router, StageMemberAudioProducer, StageMemberVideoProducer} from "../common/model.server";
+import {ROUTERS_URL} from "../../env";
+import {Router, StageMemberAudioProducer, StageMemberVideoProducer} from "../../lib/digitalstage/common/model.server";
 
 export enum RouterEvents {
     TransportCloses = "transport-closed",

@@ -25,7 +25,7 @@ import {
 import {ClientDeviceEvents, ClientStageEvents, ClientUserEvents} from "./common/events";
 import {useRequest} from "../useRequest";
 import useStageSelector from "./useStageSelector";
-import {useStageContext} from "./useStageContext";
+import {useStageSocket} from "./useStageContext";
 
 export interface StageActionsProps {
     updateDevice(id: DeviceId, device: Partial<Device>);
@@ -69,7 +69,7 @@ export interface StageActionsProps {
 }
 
 const useStageActions = (): StageActionsProps => {
-    const {socket} = useStageContext();
+    const socket = useStageSocket();
     const {current} = useStageSelector(state => ({
         current: state.current
     }));

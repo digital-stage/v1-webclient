@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
-import {Client} from "../common/model.client";
-import {GlobalAudioProducer, GlobalVideoProducer, Router} from "../common/model.server";
+import {Client} from "../../lib/digitalstage/common/model.client";
+import {GlobalAudioProducer, GlobalVideoProducer, Router} from "../../lib/digitalstage/common/model.server";
 import mediasoupClient from 'mediasoup-client';
 import {Device as MediasoupDevice} from "mediasoup-client/lib/Device";
 import {
@@ -12,10 +12,10 @@ import {
     RouterRequests,
     stopProducer
 } from "./util";
-import {ClientDeviceEvents} from "../common/events";
+import {ClientDeviceEvents} from "../../lib/digitalstage/common/events";
 import io from "socket.io-client";
-import useStageSelector from "../useStageSelector";
-import {useStageContext} from "../useStageContext";
+import useStageSelector from "../../lib/digitalstage/useStageSelector";
+import {useStageContext} from "../../lib/digitalstage/useStageContext";
 
 
 export interface MediasoupContextProps {

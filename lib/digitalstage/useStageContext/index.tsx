@@ -1,4 +1,4 @@
-import React, {Reducer, useCallback, useEffect, useMemo, useReducer, useState} from "react";
+import React, {Dispatch, Reducer, useCallback, useEffect, useMemo, useReducer, useState} from "react";
 import {InitialNormalizedState, NormalizedState} from "./schema";
 import {AdditionalReducerTypes, reducer, ReducerAction} from "./normalizer";
 import {useAuth} from "../useAuth";
@@ -15,23 +15,26 @@ import {API_URL} from "../../../env";
 import {enumerateDevices} from "./utils";
 import {Device} from "../common/model.server";
 
-export interface StagesProps {
+export type StageStateProps = NormalizedState;
+export type StageDispatchProps = Dispatch<ReducerAction>;
+
+export interface StagesContextProps {
     socket?: SocketIOClient.Socket;
     state: NormalizedState;
     dispatch?: React.Dispatch<ReducerAction>
 }
 
-const StagesContext = React.createContext<StagesProps>({
-    state: InitialNormalizedState,
-    dispatch: undefined,
-    socket: undefined
-});
+const StageSocketContext = React.createContext<SocketIOClient.Socket>(undefined);
+const StageDispatchContext = React.createContext<StageDispatchProps>(undefined);
+const StageStateContext = React.createContext<StageStateProps>(undefined);
 
-//TODO: Separate socket, state and dispatch using encapsulated contextes !!!!
-export const useStageContext = (): StagesProps => React.useContext<StagesProps>(StagesContext);
+export const useStageSocket = (): SocketIOClient.Socket => React.useContext<SocketIOClient.Socket>(StageSocketContext);
+export const useStageDispatch = (): StageDispatchProps => React.useContext<StageDispatchProps>(StageDispatchContext);
+export const useStageState = (): StageStateProps => React.useContext<StageStateProps>(StageStateContext);
 
-export const StagesContextConsumer = StagesContext.Consumer;
-
+export const StageDispatchConsumer = StageDispatchContext.Consumer;
+export const StageStateConsumer = StageStateContext.Consumer;
+export const StageSocketConsumer = StageSocketContext.Consumer;
 
 export const StagesContextProvider = (props: {
     children: React.ReactNode
@@ -235,13 +238,13 @@ export const StagesContextProvider = (props: {
         }
     }, [token]);
 
-    const contextValue = useMemo(() => {
-        return { state, dispatch, socket };
-    }, [state, dispatch, socket]);
-
     return (
-        <StagesContext.Provider value={contextValue}>
-            {props.children}
-        </StagesContext.Provider>
+        <StageSocketContext.Provider value={socket}>
+            <StageDispatchContext.Provider value={dispatch}>
+                <StageStateContext.Provider value={state}>
+                    {props.children}
+                </StageStateContext.Provider>
+            </StageDispatchContext.Provider>
+        </StageSocketContext.Provider>
     );
 }

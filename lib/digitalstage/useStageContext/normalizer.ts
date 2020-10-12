@@ -117,7 +117,8 @@ export function normalize(prevState: NormalizedState, data: Partial<{
                 ...state.videoProducers.byId[videoProducer._id],
                 ...videoProducer
             };
-            state.stageMembers.byId[videoProducer.stageMemberId].videoProducers.push(videoProducer._id);
+            if (state.stageMembers.byId[videoProducer.stageMemberId])
+                state.stageMembers.byId[videoProducer.stageMemberId].videoProducers.push(videoProducer._id);
             upsert(state.videoProducers.allIds, videoProducer._id);
         });
     }
@@ -127,7 +128,8 @@ export function normalize(prevState: NormalizedState, data: Partial<{
                 ...state.audioProducers.byId[audioProducer._id],
                 ...audioProducer
             };
-            state.stageMembers.byId[audioProducer.stageMemberId].audioProducers.push(audioProducer._id);
+            if (state.stageMembers.byId[audioProducer.stageMemberId])
+                state.stageMembers.byId[audioProducer.stageMemberId].audioProducers.push(audioProducer._id);
             upsert(state.audioProducers.allIds, audioProducer._id);
         });
     }
@@ -137,7 +139,8 @@ export function normalize(prevState: NormalizedState, data: Partial<{
                 ...state.customOvTracks.byId[customAudioProducer._id],
                 ...customAudioProducer
             };
-            state.audioProducers.byId[customAudioProducer.stageMemberAudioProducerId].customAudioProducer = customAudioProducer._id;
+            if (state.audioProducers.byId[customAudioProducer.stageMemberAudioProducerId])
+                state.audioProducers.byId[customAudioProducer.stageMemberAudioProducerId].customAudioProducer = customAudioProducer._id;
             upsert(state.customAudioProducers.allIds, customAudioProducer._id);
         });
     }

@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {
+    GlobalAudioProducer,
     Router
 } from "../common/model.server";
 import mediasoupClient from "mediasoup-client";
@@ -14,11 +15,10 @@ import {
 } from "./util";
 import {Device as MediasoupDevice} from "mediasoup-client/lib/Device";
 import {AdditionalReducerTypes} from "../useStageContext/normalizer";
-import {useStageContext} from "../useStageContext";
 import useStageSelector from "../useStageSelector";
-import {ClientDeviceEvents, ServerDeviceEvents} from "../common/events";
-import {AddAudioProducerPayload, RemoveAudioProducerPayload} from "../common/payloads";
-import {GlobalAudioProducer} from "../../../../server/src/model.server";
+import {ClientDeviceEvents} from "../common/events";
+import {AddAudioProducerPayload} from "../common/payloads";
+import {useStageDispatch, useStageSocket} from "../useStageContext";
 
 
 const MediasoupContext = React.createContext(undefined);
@@ -26,7 +26,8 @@ const MediasoupContext = React.createContext(undefined);
 export const MediasoupProvider = (props: {
     children: React.ReactNode
 }) => {
-    const {dispatch, socket} = useStageContext();
+    const socket = useStageSocket();
+    const dispatch = useStageDispatch();
     const {localDevice, audioConsumers, videoConsumers, audioProducers, videoProducers, localAudioProducers, localVideoProducers} = useStageSelector(state => {
         return {
             localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
