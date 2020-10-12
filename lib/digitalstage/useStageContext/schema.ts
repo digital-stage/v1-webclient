@@ -103,18 +103,6 @@ export interface NormalizedState {
             }
         },
         allIds: string[]
-    },
-    localAudioProducers: {
-        byId: {
-            [id: string]: GlobalAudioProducer & {msProducer: mediasoupClient.types.Producer}
-        },
-        allIds: string[]
-    },
-    localVideoProducers: {
-        byId: {
-            [id: string]: GlobalVideoProducer & {msProducer: mediasoupClient.types.Producer}
-        },
-        allIds: string[]
     }
 }
 
@@ -211,14 +199,6 @@ export const InitialNormalizedState: NormalizedState = {
         allIds: []
     },
     audioConsumers: {
-        byId: {},
-        allIds: []
-    },
-    localAudioProducers: {
-        byId: {},
-        allIds: []
-    },
-    localVideoProducers: {
         byId: {},
         allIds: []
     }

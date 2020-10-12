@@ -1,6 +1,5 @@
-import React, {Dispatch, Reducer, useCallback, useEffect, useMemo, useReducer, useState} from "react";
+import React, {Dispatch, Reducer, useCallback, useEffect, useReducer, useState} from "react";
 import {InitialNormalizedState, NormalizedState} from "./schema";
-import {AdditionalReducerTypes, reducer, ReducerAction} from "./normalizer";
 import {useAuth} from "../useAuth";
 import {
     ServerDeviceEvents,
@@ -14,6 +13,7 @@ import io from "socket.io-client";
 import {API_URL} from "../../../env";
 import {enumerateDevices} from "./utils";
 import {Device} from "../common/model.server";
+import {AdditionalReducerTypes, reducer, ReducerAction} from "./reducer";
 
 export type StageStateProps = NormalizedState;
 export type StageDispatchProps = Dispatch<ReducerAction>;

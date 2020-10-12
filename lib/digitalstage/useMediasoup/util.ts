@@ -162,9 +162,9 @@ export const resumeProducer = (socket: SocketIOClient.Socket, producer: mediasou
 export const stopProducer = (socket: SocketIOClient.Socket, producer: mediasoupClient.types.Producer): Promise<mediasoupClient.types.Producer> =>
     new Promise<mediasoupClient.types.Producer>((resolve, reject) =>
         socket.emit(RouterRequests.CloseProducer, producer.id, (error?: string) => {
+            producer.close();
             if (error)
                 return reject(error);
-            producer.close();
             return resolve(producer);
         })
     );
