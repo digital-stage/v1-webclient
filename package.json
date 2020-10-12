@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "NODE_ENV=development AUTH_URL=https://auth.api.digital-stage.org ROUTERS_URL=http://imac.fritz.box:4000 API_URL=ws://imac.fritz.box:4000 next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "deploy": "vercel --prod"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",

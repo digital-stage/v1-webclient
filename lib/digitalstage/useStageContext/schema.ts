@@ -1,13 +1,23 @@
-import * as Server from "../common/model.server";
-import mediasoupClient from 'mediasoup-client';
-import {GlobalAudioProducer, GlobalVideoProducer} from "../common/model.server";
+import {
+    AudioConsumer,
+    AudioProducer, CustomAudioProducer,
+    CustomGroup, CustomOvTrack,
+    CustomStageMember,
+    Device,
+    Group,
+    LocalUser, OvTrack,
+    Stage,
+    StageMember,
+    User, VideoConsumer,
+    VideoProducer
+} from './model';
 
 export interface NormalizedState {
     ready: boolean;
-    user?: Server.User;
+    user?: LocalUser;
     devices: {
         byId: {
-            [id: string]: Server.Device
+            [id: string]: Device
         },
         local?: string;
         remote: string[];
@@ -19,88 +29,82 @@ export interface NormalizedState {
     },
     users: {
         byId: {
-            [id: string]: Server.User & { stageMembers: string[] }
+            [id: string]: User
         },
         allIds: string[]
     },
     stages: {
         byId: {
-            [id: string]: Server.Stage & { isAdmin: boolean, groups: string[] }
+            [id: string]: Stage
         },
         allIds: string[]
     },
     groups: {
         byId: {
-            [id: string]: Server.Group & { customGroup?: string, stageMembers: string[] }
+            [id: string]: Group
         },
         allIds: string[]
     },
     customGroups: {
         byId: {
             // Already have a relation to groupId inside
-            [id: string]: Server.CustomGroup
+            [id: string]: CustomGroup
         },
         allIds: string[]
     },
     stageMembers: {
         byId: {
             // Already have a relation to userId inside
-            [id: string]: Server.StageMember & { customStageMember?: string, audioProducers: string[], videoProducers: string[], ovTracks: string[] }
+            [id: string]: StageMember
         },
         allIds: string[]
     },
     customStageMembers: {
         byId: {
             // Already have a relation to userId inside
-            [id: string]: Server.CustomStageMember
+            [id: string]: CustomStageMember
         },
         allIds: string[]
     },
     videoProducers: {
         byId: {
-            [id: string]: Server.StageMemberVideoProducer & { consumer?: string }
+            [id: string]: VideoProducer
         },
         allIds: string[]
     },
     audioProducers: {
         byId: {
-            [id: string]: Server.StageMemberAudioProducer & { customAudioProducer?: string, consumer?: string }
+            [id: string]: AudioProducer
         },
         allIds: string[]
     },
     customAudioProducers: {
         byId: {
-            [id: string]: Server.CustomStageMemberAudioProducer
+            [id: string]: CustomAudioProducer
         },
         allIds: string[]
     },
     ovTracks: {
         byId: {
-            [id: string]: Server.StageMemberOvTrack & { customOvTrack?: string }
+            [id: string]: OvTrack
         },
         allIds: string[]
     },
     customOvTracks: {
         byId: {
-            [id: string]: Server.CustomStageMemberOvTrack
+            [id: string]: CustomOvTrack
         },
         allIds: string[]
     },
     audioConsumers: {
         byId: {
-            [id: string]: {
-                audioProducer: string
-                msConsumer: mediasoupClient.types.Consumer
-            }
+            [id: string]: AudioConsumer
         },
         allIds: string[]
     },
     videoConsumers: {
         byId: {
-            [id: string]: {
-                videoProducer: string
-                msConsumer: mediasoupClient.types.Consumer
-            }
+            [id: string]: VideoConsumer
         },
         allIds: string[]
     }

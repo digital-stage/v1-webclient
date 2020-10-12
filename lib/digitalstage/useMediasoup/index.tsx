@@ -180,7 +180,8 @@ export const MediasoupProvider = (props: {
         console.log("[useMediasoup] start consuming video");
         setWorking(true);
         return Promise.all(videoProducers.allIds.map(videoProducerId => {
-            if (!videoConsumers[videoProducerId]) {
+            if (!videoProducers.byId[videoProducerId].consumer) {
+                console.log("Creating video producer");
                 return createConsumer(connection, device, receiveTransport, videoProducers.byId[videoProducerId])
                     .then(consumer => {
                         if (consumer.paused)
@@ -191,7 +192,7 @@ export const MediasoupProvider = (props: {
                         dispatch({
                             type: AdditionalReducerTypes.ADD_VIDEO_CONSUMER,
                             payload: {
-                                audioProducer: videoProducerId,
+                                videoProducer: videoProducerId,
                                 msConsumer: consumer
                             }
                         });

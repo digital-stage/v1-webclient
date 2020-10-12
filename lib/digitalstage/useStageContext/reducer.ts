@@ -127,6 +127,15 @@ export const reducer: Reducer<NormalizedState, ReducerAction> = (state: Normaliz
                 stageMembers: [action.payload]
             });
         case ServerStageEvents.STAGE_MEMBER_CHANGED:
+            console.log(action.payload);
+            // Refresh also references
+            if (state.stageMembers.byId[action.payload._id]) {
+                if (action.payload.groupId && state.stageMembers.byId[action.payload._id].groupId !== action.payload.groupId) {
+                    // Remove old group assignment
+                    state.groups.byId[state.stageMembers.byId[action.payload._id].groupId].stageMembers = state.groups.byId[state.stageMembers.byId[action.payload._id].groupId].stageMembers.filter(id => id === action.payload._id);
+                    upsert(state.groups.byId[action.payload.groupId].stageMembers, action.payload._id);
+                }
+            }
             return updateItem(state, "stageMembers", action.payload._id, action.payload);
         case ServerStageEvents.STAGE_MEMBER_REMOVED:
             return removeItemWithArrayReference(state, "stageMembers", action.payload, {
@@ -219,6 +228,40 @@ export const reducer: Reducer<NormalizedState, ReducerAction> = (state: Normaliz
             return removeItemWithReference(state, "audioConsumers", action.payload, {
                 group: "audioProducers",
                 id: state.audioConsumers.byId[action.payload].audioProducer,
+                key: "consumer"
+            })
+
+
+        case AdditionalReducerTypes.ADD_VIDEO_CONSUMER:
+            return {
+                ...state,
+                videoConsumers: {
+                    ...state.videoConsumers,
+                    byId: {
+                        ...state.videoConsumers.byId,
+                        [action.payload.msConsumer.id]: {
+                            videoProducer: action.payload.producerId,
+                            msConsumer: action.payload.msConsumer
+                        }
+                    },
+                    allIds: upsert(state.videoConsumers.allIds, action.payload.msConsumer.id)
+                },
+                videoProducers: {
+                    ...state.videoProducers,
+                    byId: {
+                        ...state.videoProducers.byId,
+                        [action.payload.producerId]: {
+                            ...state.videoProducers.byId[action.payload.producerId],
+                            consumer: action.payload.msConsumer.id
+                        }
+                    }
+                }
+            };
+
+        case AdditionalReducerTypes.REMOVE_VIDEO_CONSUMER:
+            return removeItemWithReference(state, "videoConsumers", action.payload, {
+                group: "videoProducers",
+                id: state.videoConsumers.byId[action.payload].videoProducer,
                 key: "consumer"
             })
     }

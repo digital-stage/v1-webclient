@@ -88,6 +88,7 @@ export function normalize(prevState: NormalizedState, data: Partial<{
                 ...state.stageMembers.byId[stageMember._id],
                 ...stageMember
             };
+            upsert(state.groups.byId[stageMember.groupId].stageMembers, stageMember._id);
             upsert(state.stageMembers.allIds, stageMember._id);
         });
     }
