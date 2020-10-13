@@ -15,11 +15,11 @@ import {
     RouterRequests, stopProducer
 } from "./util";
 import {Device as MediasoupDevice} from "mediasoup-client/lib/Device";
-import useStageSelector from "../useStageSelector";
 import {ClientDeviceEvents} from "../common/events";
 import {AddAudioProducerPayload, AddVideoProducerPayload} from "../common/payloads";
-import {useStageDispatch, useStageSocket} from "../useStageContext";
+import {useStageDispatch, useStageSocket, useStageState} from "../useStageContext";
 import {AdditionalReducerTypes} from "../useStageContext/reducer";
+import {AudioConsumer, VideoConsumer} from "../useStageContext/model";
 
 
 const MediasoupContext = React.createContext(undefined);
@@ -29,15 +29,17 @@ export const MediasoupProvider = (props: {
 }) => {
     const socket = useStageSocket();
     const dispatch = useStageDispatch();
-    const {localDevice, audioConsumers, videoConsumers, audioProducers, videoProducers} = useStageSelector(state => {
-        return {
-            localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
-            audioConsumers: state.audioConsumers,
-            videoProducers: state.videoProducers,
-            videoConsumers: state.videoConsumers,
-            audioProducers: state.audioProducers
-        };
-    });
+    const {devices, audioConsumers, videoConsumers, audioProducers, videoProducers} = useStageState();
+    /*
+        const {localDevice, audioConsumers, videoConsumers, audioProducers, videoProducers} = useStageSelector(state => {
+            return {
+                localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
+                audioConsumers: state.audioConsumers,
+                videoProducers: state.videoProducers,
+                videoConsumers: state.videoConsumers,
+                audioProducers: state.audioProducers
+            };
+        });*/
     const [working, setWorking] = useState<boolean>(false);
     const [router, setRouter] = useState<Router>();
     const [connection, setConnection] = useState<SocketIOClient.Socket>();
@@ -137,7 +139,7 @@ export const MediasoupProvider = (props: {
         console.log("[useMediasoup] start consuming audio");
         setWorking(true);
         return Promise.all(audioProducers.allIds.map(audioProducerId => {
-            if (!audioConsumers[audioProducerId]) {
+            if (!audioConsumers.byProducer[audioProducerId]) {
                 return createConsumer(connection, device, receiveTransport, audioProducers.byId[audioProducerId])
                     .then(consumer => {
                         if (consumer.paused)
@@ -148,9 +150,11 @@ export const MediasoupProvider = (props: {
                         dispatch({
                             type: AdditionalReducerTypes.ADD_AUDIO_CONSUMER,
                             payload: {
+                                _id: consumer.id,
+                                stageMember: audioProducers.byId[audioProducerId].stageMemberId,
                                 audioProducer: audioProducerId,
                                 msConsumer: consumer
-                            }
+                            } as AudioConsumer
                         });
                     })
                     .catch(error => console.log(error))
@@ -180,7 +184,7 @@ export const MediasoupProvider = (props: {
         console.log("[useMediasoup] start consuming video");
         setWorking(true);
         return Promise.all(videoProducers.allIds.map(videoProducerId => {
-            if (!videoProducers.byId[videoProducerId].consumer) {
+            if (!videoConsumers.byProducer[videoProducerId]) {
                 console.log("Creating video producer");
                 return createConsumer(connection, device, receiveTransport, videoProducers.byId[videoProducerId])
                     .then(consumer => {
@@ -192,9 +196,11 @@ export const MediasoupProvider = (props: {
                         dispatch({
                             type: AdditionalReducerTypes.ADD_VIDEO_CONSUMER,
                             payload: {
+                                _id: consumer.id,
+                                stageMember: videoProducers.byId[videoProducerId].stageMemberId,
                                 videoProducer: videoProducerId,
                                 msConsumer: consumer
-                            }
+                            } as VideoConsumer
                         });
                     })
                     .catch(error => console.log(error))
@@ -226,7 +232,7 @@ export const MediasoupProvider = (props: {
         return navigator.mediaDevices.getUserMedia({
             video: false,
             audio: {
-                deviceId: localDevice ? localDevice.inputAudioDeviceId : undefined,
+                deviceId: devices.local ? devices.byId[devices.local].inputAudioDeviceId : undefined,
                 autoGainControl: false,
                 echoCancellation: false,
                 noiseSuppression: false
@@ -258,7 +264,7 @@ export const MediasoupProvider = (props: {
                     }
                 )))
             .finally(() => setWorking(false));
-    }, [sendTransport, localDevice])
+    }, [sendTransport, devices.local, devices.byId])
 
     const stopStreamingAudio = useCallback(() => {
         console.log("[useMediasoup] stop streaming audio");
@@ -288,8 +294,8 @@ export const MediasoupProvider = (props: {
         setWorking(true);
         return navigator.mediaDevices.getUserMedia({
             audio: false,
-            video: localDevice && localDevice.inputVideoDeviceId ? {
-                deviceId: localDevice.inputVideoDeviceId
+            video: devices.local && devices.byId[devices.local].inputVideoDeviceId ? {
+                deviceId: devices.byId[devices.local].inputVideoDeviceId
             } : true
         })
             .then(stream => stream.getVideoTracks())
@@ -318,7 +324,7 @@ export const MediasoupProvider = (props: {
                     }
                 )))
             .finally(() => setWorking(false));
-    }, [sendTransport, localDevice])
+    }, [sendTransport, devices.local, devices.byId])
 
     const stopStreamingVideo = useCallback(() => {
         console.log("[useMediasoup] stop streaming video");
@@ -353,46 +359,46 @@ export const MediasoupProvider = (props: {
     }, [localAudioProducers]);
 
     useEffect(() => {
-        if (!working && localDevice) {
-            if (sendVideo !== localDevice.sendVideo) {
+        if (!working && devices.local) {
+            if (sendVideo !== devices.byId[devices.local].sendVideo) {
                 console.log("Devices changed: sendVideo");
-                if (localDevice.sendVideo) {
+                if (devices.byId[devices.local].sendVideo) {
                     startStreamVideo();
                 } else {
                     stopStreamingVideo();
                 }
-                setSendVideo(localDevice.sendVideo);
+                setSendVideo(devices.byId[devices.local].sendVideo);
             }
-            if (sendAudio !== localDevice.sendAudio) {
+            if (sendAudio !== devices.byId[devices.local].sendAudio) {
                 console.log("Devices changed: sendAudio");
-                if (localDevice.sendAudio) {
+                if (devices.byId[devices.local].sendAudio) {
                     startStreamAudio();
                 } else {
                     stopStreamingAudio();
                 }
-                setSendAudio(localDevice.sendAudio);
+                setSendAudio(devices.byId[devices.local].sendAudio);
             }
-            if (receiveVideo !== localDevice.receiveVideo) {
+            if (receiveVideo !== devices.byId[devices.local].receiveVideo) {
                 console.log("Devices changed: receiveVideo");
-                if (localDevice.receiveVideo) {
+                if (devices.byId[devices.local].receiveVideo) {
                     startConsumingVideo();
                 } else {
                     stopConsumingVideo();
                 }
-                setReceiveVideo(localDevice.receiveVideo);
+                setReceiveVideo(devices.byId[devices.local].receiveVideo);
             }
-            if (receiveAudio !== localDevice.receiveAudio) {
+            if (receiveAudio !== devices.byId[devices.local].receiveAudio) {
                 console.log("[useMediasoup] Devices changed: receiveAudio");
-                if (localDevice.receiveAudio) {
+                if (devices.byId[devices.local].receiveAudio) {
                     startConsumingAudio();
                 } else {
                     stopConsumingAudio();
                 }
-                setReceiveAudio(localDevice.receiveAudio);
+                setReceiveAudio(devices.byId[devices.local].receiveAudio);
             }
         }
 
-    }, [working, localDevice]);
+    }, [working, devices.local, devices.byId]);
 
     useEffect(() => {
         console.log("[useMediasoup] Handling: audioProducers.allIds");

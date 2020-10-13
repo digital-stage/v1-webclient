@@ -1,29 +1,27 @@
-import Container from "../components/theme/Container";
+import Container from "../components/theme/layout/Container";
 import React, {useEffect, useState} from "react";
 import {useAuth} from "../lib/digitalstage/useAuth";
 import Loading from "../components/theme/Loading";
 import {DisplayMedium, HeadingLarge} from "baseui/typography";
 import Login from "./account/login";
 import StageListView from "../components/stage/StageListView";
-import useStageSelector from "../lib/digitalstage/useStageSelector";
 import {useRouter} from "next/router";
+import {useStageState} from "../lib/digitalstage/useStageContext";
 
 
 const Stages = () => {
     const router = useRouter();
     const {loading, user} = useAuth();
-    const {current} = useStageSelector(state => {
-        return {current: state.current}
-    });
+    const {stageId} = useStageState();
     const [initialized, setInitialized] = useState<boolean>();
 
     useEffect(() => {
         if (initialized) {
-            if (current) {
+            if (stageId) {
                 router.push("/");
             }
         }
-    }, [current]);
+    }, [stageId]);
 
     useEffect(() => {
         if (router.pathname === "/stages") {

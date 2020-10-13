@@ -4,7 +4,7 @@ import React from "react";
 import ResetForm from "../../components/account/ResetForm";
 import Loading from "../../components/theme/Loading";
 import {HeadingLarge} from "baseui/typography";
-import Container from "../../components/theme/Container";
+import Container from "../../components/theme/layout/Container";
 
 const Reset = () => {
     const router = useRouter();

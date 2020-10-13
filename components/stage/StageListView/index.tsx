@@ -12,7 +12,7 @@ import InviteModal from "./InviteModal";
 import {useRequest} from "../../../lib/useRequest";
 import {Client} from "../../../lib/digitalstage/common/model.client";
 import useStageActions from "../../../lib/digitalstage/useStageActions";
-import useStageSelector from "../../../lib/digitalstage/useStageSelector";
+import {useStageState} from "../../../lib/digitalstage/useStageContext";
 
 const Label = styled("div", {})
 const GlobalActions = styled("div", {
@@ -72,13 +72,7 @@ const GroupAdminActions = styled("div", {
 })
 
 const StageListView = () => {
-    const {stages, groups, current} = useStageSelector((state) => {
-        return {
-            stages: state.stages,
-            groups: state.groups,
-            current: state.current
-        };
-    });
+    const {stages, groups, stageId, groupId} = useStageState();
     const {removeStage, removeGroup, leaveStage, leaveStageForGood} = useStageActions();
     const {setRequest} = useRequest();
     const [currentStage, setCurrentStage] = useState<Client.Stage>();
@@ -88,7 +82,6 @@ const StageListView = () => {
     const [isCreateStageOpen, setCreateStageIsOpen] = useState<boolean>(false);
     const [isModifyStageOpen, setModifyStageIsOpen] = useState<boolean>(false);
     const [isCopyLinkOpen, setCopyLinkOpen] = useState<boolean>();
-
 
     return (
         <>
@@ -141,8 +134,8 @@ const StageListView = () => {
                                     </Tag>
                                 )}
                             </StageTopActions>
-                            {stage.groups.map(groupId => {
-                                const group = groups.byId[groupId];
+                            {groups.byStage[stageId] && groups.byStage[stageId].map(id => {
+                                const group = groups.byId[id];
                                 return (
                                     <GroupRow key={group._id}>
                                         <GroupTitle>
@@ -174,9 +167,9 @@ const StageListView = () => {
                                             <Tag
                                                 size="large"
                                                 closeable={false}
-                                                kind={current && stage._id === current.stageId && group._id === current.groupId ? "orange" : "positive"}
+                                                kind={stageId && stage._id === stageId && group._id === groupId ? "orange" : "positive"}
                                                 onClick={() => {
-                                                    if (current && stage._id === current.stageId && group._id === current.groupId) {
+                                                    if (stageId && stage._id === stageId && group._id === groupId) {
                                                         leaveStage();
                                                     } else {
                                                         console.log("Request");
@@ -184,7 +177,7 @@ const StageListView = () => {
                                                     }
                                                 }}
                                             >
-                                                {current && stage._id === current.stageId && group._id === current.groupId ? "Verlassen" : "Beitreten"}
+                                                {stageId && stage._id === stageId && group._id === groupId ? "Verlassen" : "Beitreten"}
                                             </Tag>
                                             <Tag
                                                 size="large"

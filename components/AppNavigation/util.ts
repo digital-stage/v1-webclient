@@ -1,7 +1,9 @@
+import {MainNavItem, UserNavItem} from "./navs";
+
 export function isActive(
-    arr: Array<any>,
-    item: any,
-    activeItem: any,
+    arr: Array<MainNavItem>,
+    item: MainNavItem,
+    activeItem: MainNavItem,
 ): boolean {
     let active = false;
     for (let i = 0; i < arr.length; i++) {

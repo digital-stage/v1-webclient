@@ -25,7 +25,7 @@ import {
 import {ClientDeviceEvents, ClientStageEvents, ClientUserEvents} from "./common/events";
 import {useRequest} from "../useRequest";
 import useStageSelector from "./useStageSelector";
-import {useStageSocket} from "./useStageContext";
+import {useStageSocket, useStageState} from "./useStageContext";
 
 export interface StageActionsProps {
     updateDevice(id: DeviceId, device: Partial<Device>);
@@ -70,9 +70,7 @@ export interface StageActionsProps {
 
 const useStageActions = (): StageActionsProps => {
     const socket = useStageSocket();
-    const {current} = useStageSelector(state => ({
-        current: state.current
-    }));
+    const {stageId} = useStageState();
     const {setRequest} = useRequest();
 
     const updateDevice = useCallback((deviceId: string, device: Partial<Omit<Device, "_id">>) => {
@@ -151,7 +149,7 @@ const useStageActions = (): StageActionsProps => {
         if (socket) {
             socket.emit(ClientStageEvents.LEAVE_STAGE_FOR_GOOD, id);
         }
-        if (current.stageId && current.stageId === id) {
+        if (stageId && stageId === id) {
             setRequest(undefined, undefined, null);
         }
     }, [socket]);

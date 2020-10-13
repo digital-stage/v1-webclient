@@ -1,6 +1,6 @@
 import React from "react";
 import {styled} from "baseui";
-import {Client} from "../../lib/digitalstage/common/model.client";
+import {VideoConsumer} from "../../lib/digitalstage/useStageContext/model";
 
 interface CanvasElement extends HTMLCanvasElement {
     captureStream(): MediaStream;
@@ -25,7 +25,7 @@ interface AnimationFrame {
 }
 
 interface Props {
-    consumers: Client.StageMemberVideo[];
+    consumers: VideoConsumer[];
     className?: string;
 }
 

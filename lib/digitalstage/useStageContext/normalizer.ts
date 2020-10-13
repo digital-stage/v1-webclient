@@ -32,41 +32,35 @@ export function normalize(prevState: NormalizedState, data: Partial<{
 }>): NormalizedState {
     const state: NormalizedState = {...prevState};
     if (data.stageId && data.groupId) {
-        state.current = {
-            stageId: data.stageId,
-            groupId: data.groupId
-        };
+        state.stageId = data.stageId;
+        state.groupId = data.groupId;
     }
     if (data.users) {
         data.users.forEach(user => {
             state.users.byId[user._id] = {
-                stageMembers: state.stageMembers.allIds.filter(id => state.stageMembers.byId[id].userId === user._id),
                 ...state.users.byId[user._id],
                 ...user
             };
-            state.users.allIds.push(user._id);
+            state.users.allIds = upsert(state.users.allIds, user._id);
         });
     }
     if (data.stages) {
         data.stages.forEach(stage => {
             state.stages.byId[stage._id] = {
-                groups: state.groups.allIds.filter(id => state.groups.byId[id].stageId === stage._id),
                 isAdmin: stage.admins.indexOf(state.user._id) !== -1,
                 ...stage
             };
-            upsert(state.stages.allIds, stage._id);
+            state.stages.allIds = upsert(state.stages.allIds, stage._id);
         });
     }
     if (data.groups) {
         data.groups.forEach(group => {
             state.groups.byId[group._id] = {
-                stageMembers: state.stageMembers.allIds.filter(id => state.stageMembers.byId[id].groupId === group._id),
                 ...state.groups.byId[group._id],
                 ...group
             };
-            if (state.stages.byId[group.stageId])
-                upsert(state.stages.byId[group.stageId].groups, group._id);
-            upsert(state.groups.allIds, group._id);
+            state.groups.byStage[group.stageId] = upsert(state.groups.byStage[group.stageId], group._id);
+            state.groups.allIds = upsert(state.groups.allIds, group._id);
         });
     }
     if (data.customGroups) {
@@ -75,21 +69,19 @@ export function normalize(prevState: NormalizedState, data: Partial<{
                 ...state.customGroups.byId[customGroup._id],
                 ...customGroup
             };
-            state.groups.byId[customGroup.groupId].customGroup = customGroup._id;
-            upsert(state.customGroups.allIds, customGroup._id);
+            state.customGroups.byGroup[customGroup.groupId] = upsert(state.customGroups.byGroup[customGroup.groupId], customGroup._id);
+            state.customGroups.allIds = upsert(state.customGroups.allIds, customGroup._id);
         });
     }
     if (data.stageMembers) {
         data.stageMembers.forEach(stageMember => {
             state.stageMembers.byId[stageMember._id] = {
-                audioProducers: state.audioProducers.allIds.filter(id => state.audioProducers.byId[id].stageMemberId === stageMember._id),
-                videoProducers: state.videoProducers.allIds.filter(id => state.videoProducers.byId[id].stageMemberId === stageMember._id),
-                ovTracks: state.ovTracks.allIds.filter(id => state.ovTracks.byId[id].stageMemberId === stageMember._id),
                 ...state.stageMembers.byId[stageMember._id],
                 ...stageMember
             };
-            upsert(state.groups.byId[stageMember.groupId].stageMembers, stageMember._id);
-            upsert(state.stageMembers.allIds, stageMember._id);
+            state.stageMembers.byGroup[stageMember.groupId] = upsert(state.stageMembers.byGroup[stageMember.groupId], stageMember._id);
+            state.stageMembers.byStage[stageMember.stageId] = upsert(state.stageMembers.byStage[stageMember.stageId], stageMember._id);
+            state.stageMembers.allIds = upsert(state.stageMembers.allIds, stageMember._id);
         });
     }
     if (data.customStageMembers) {
@@ -98,8 +90,8 @@ export function normalize(prevState: NormalizedState, data: Partial<{
                 ...state.customStageMembers.byId[customStageMember._id],
                 ...customStageMember
             };
-            state.stageMembers.byId[customStageMember.stageMemberId].customStageMember = customStageMember._id;
-            upsert(state.customStageMembers.allIds, customStageMember._id);
+            state.customStageMembers.byStageMember[customStageMember.stageMemberId] = upsert(state.customStageMembers.byStageMember[customStageMember.stageMemberId], customStageMember._id);
+            state.customStageMembers.allIds = upsert(state.customStageMembers.allIds, customStageMember._id);
         });
     }
     if (data.videoProducers) {
@@ -108,9 +100,8 @@ export function normalize(prevState: NormalizedState, data: Partial<{
                 ...state.videoProducers.byId[videoProducer._id],
                 ...videoProducer
             };
-            if (state.stageMembers.byId[videoProducer.stageMemberId])
-                state.stageMembers.byId[videoProducer.stageMemberId].videoProducers.push(videoProducer._id);
-            upsert(state.videoProducers.allIds, videoProducer._id);
+            state.videoProducers.byStageMember[videoProducer.stageMemberId] = upsert(state.videoProducers.byStageMember[videoProducer.stageMemberId], videoProducer._id);
+            state.videoProducers.allIds = upsert(state.videoProducers.allIds, videoProducer._id);
         });
     }
     if (data.audioProducers) {
@@ -119,9 +110,8 @@ export function normalize(prevState: NormalizedState, data: Partial<{
                 ...state.audioProducers.byId[audioProducer._id],
                 ...audioProducer
             };
-            if (state.stageMembers.byId[audioProducer.stageMemberId])
-                state.stageMembers.byId[audioProducer.stageMemberId].audioProducers.push(audioProducer._id);
-            upsert(state.audioProducers.allIds, audioProducer._id);
+            state.audioProducers.byStageMember[audioProducer.stageMemberId] = upsert(state.audioProducers.byStageMember[audioProducer.stageMemberId], audioProducer._id);
+            state.audioProducers.allIds = upsert(state.audioProducers.allIds, audioProducer._id);
         });
     }
     if (data.customAudioProducers) {
@@ -130,9 +120,8 @@ export function normalize(prevState: NormalizedState, data: Partial<{
                 ...state.customOvTracks.byId[customAudioProducer._id],
                 ...customAudioProducer
             };
-            if (state.audioProducers.byId[customAudioProducer.stageMemberAudioProducerId])
-                state.audioProducers.byId[customAudioProducer.stageMemberAudioProducerId].customAudioProducer = customAudioProducer._id;
-            upsert(state.customAudioProducers.allIds, customAudioProducer._id);
+            state.customAudioProducers.byAudioProducer[customAudioProducer.stageMemberAudioProducerId] = upsert(state.customAudioProducers.byAudioProducer[customAudioProducer.stageMemberAudioProducerId], customAudioProducer._id);
+            state.customAudioProducers.allIds = upsert(state.customAudioProducers.allIds, customAudioProducer._id);
         });
     }
     if (data.ovTracks) {
@@ -141,8 +130,8 @@ export function normalize(prevState: NormalizedState, data: Partial<{
                 ...state.ovTracks.byId[ovTrack._id],
                 ...ovTrack
             };
-            state.stageMembers.byId[ovTrack.stageMemberId].ovTracks.push(ovTrack._id);
-            upsert(state.ovTracks.allIds, ovTrack._id);
+            state.ovTracks.byStageMember[ovTrack.stageMemberId] = upsert(state.ovTracks.byStageMember[ovTrack.stageMemberId], ovTrack._id);
+            state.ovTracks.allIds = upsert(state.ovTracks.allIds, ovTrack._id);
         });
     }
     if (data.customOvTracks) {
@@ -151,8 +140,8 @@ export function normalize(prevState: NormalizedState, data: Partial<{
                 ...state.customOvTracks.byId[customOvTrack._id],
                 ...customOvTrack
             };
-            state.ovTracks.byId[customOvTrack.stageMemberOvTrackId].customOvTrack = customOvTrack._id;
-            upsert(state.customOvTracks.allIds, customOvTrack._id);
+            state.customOvTracks.byOvTrack[customOvTrack.stageMemberOvTrackId] = upsert(state.customOvTracks.byOvTrack[customOvTrack.stageMemberOvTrackId], customOvTrack._id);
+            state.customOvTracks.allIds = upsert(state.customOvTracks.allIds, customOvTrack._id);
         });
     }
     return state;

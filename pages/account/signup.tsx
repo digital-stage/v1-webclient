@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import SignUpForm from "../../components/account/SignUpForm";
-import Container from "../../components/theme/Container";
+import Container from "../../components/theme/layout/Container";
 import {HeadingLarge, ParagraphMedium} from "baseui/typography";
 import TextLink from "../../components/theme/TextLink";
 import {useRouter} from "next/router";

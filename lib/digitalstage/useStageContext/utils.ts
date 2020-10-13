@@ -55,6 +55,10 @@ export const enumerateDevices = (): Promise<{
 }
 
 export const upsert = function <T>(arr: T[], value: T): T[] {
+    if (!arr) {
+        arr = [value];
+        return arr;
+    }
     if (_.indexOf(arr, value) === -1) {
         arr.push(value);
     }

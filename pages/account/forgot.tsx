@@ -3,7 +3,7 @@ import {useAuth} from "../../lib/digitalstage/useAuth";
 import React, {useState} from "react";
 import Loading from "../../components/theme/Loading";
 import {HeadingLarge} from "baseui/typography";
-import Container from "../../components/theme/Container";
+import Container from "../../components/theme/layout/Container";
 import {Input} from "baseui/input";
 import {FormControl} from "baseui/form-control";
 import {Button} from "baseui/button";

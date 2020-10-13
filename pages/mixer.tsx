@@ -1,4 +1,4 @@
-import FlexContainer from "../components/theme/FlexContainer";
+import FlexContainer from "../components/theme/layout/FlexContainer";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../lib/digitalstage/useAuth";
 import Loading from "../components/theme/Loading";
@@ -8,16 +8,14 @@ import { useRouter } from "next/router";
 import VerticalSlider from "../components/digital-stage-ui/VerticalSlider";
 import PanControler from "../components/digital-stage-ui/PanControl";
 import SwitchButton from "../components/digital-stage-ui/SwitchButton";
-import useStageSelector from "../lib/digitalstage/useStageSelector";
+import { useStageState } from "../lib/digitalstage/useStageContext";
 
 const mixers = ["Guitar", "Strings", "Bass", "Cello"]
 
 const Mixer = () => {
     const router = useRouter();
     const { loading, user } = useAuth();
-    const { current } = useStageSelector(state => ({
-        current: state.current
-    }));
+    const { stageId } = useStageState();
     const [initialized, setInitialized] = useState<boolean>();
 
     const [value, setValue] = React.useState<number>(5)
@@ -28,11 +26,11 @@ const Mixer = () => {
 
     useEffect(() => {
         if (initialized) {
-            if (current) {
+            if (stageId) {
                 router.push("/");
             }
         }
-    }, [current]);
+    }, [stageId]);
 
     useEffect(() => {
         if (router.pathname === "/mixer") {

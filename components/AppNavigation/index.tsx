@@ -15,8 +15,9 @@ import {
 } from 'baseui/app-nav-bar';
 import {useRouter} from "next/router";
 import TextLink from "../theme/TextLink";
-import useStageSelector from "../../lib/digitalstage/useStageSelector";
 import {Delete} from "baseui/icon";
+import {useStageState} from "../../lib/digitalstage/useStageContext";
+import {useAuth} from "../../lib/digitalstage/useAuth";
 
 
 const AppNavigation = () => {
@@ -28,17 +29,13 @@ const AppNavigation = () => {
         top: '0',
         left: '0',
     });
+    const {user: authUser} = useAuth();
     const [mainNav, setMainNav] = useState<MainNavItem[]>([]);
     const [userNav, setUserNav] = useState<UserNavItem[]>([]);
     const [activeNavItem, setActiveNavItem] = useState<MainNavItem>();
 
     const router = useRouter();
-    const {stage, user, remoteDevices} = useStageSelector((state) => ({
-
-        stage: state.current ? state.stages.byId[state.current.stageId] : undefined,
-        user: state.user,
-        remoteDevices: state.devices
-    }));
+    const {stageId, stages, user, devices} = useStageState();
 
     useEffect(() => {
         setActiveNavItem(mainNav.find(nav => nav.item.path === router.pathname));
@@ -47,11 +44,11 @@ const AppNavigation = () => {
     useEffect(() => {
         if (user) {
             const nav: MainNavItem[] = [];
-            if (stage) {
+            if (stageId) {
                 nav.push({
                     icon: () => <img src="crop_landscape-24px.svg"/>,
                     item: {
-                        label: stage.name,
+                        label: stages.byId[stageId].name,
                         path: '/'
                     },
                     mapItemToNode: renderItem,
@@ -60,7 +57,7 @@ const AppNavigation = () => {
                 nav.push({
                     icon: () => <Delete/>,
                     item: {
-                        label: stage.name + " verlassen",
+                        label: stages.byId[stageId].name + " verlassen",
                         path: '/leave'
                     },
                     mapItemToNode: renderItem,
@@ -68,7 +65,7 @@ const AppNavigation = () => {
                 });
             }
             nav.push(SHOW_ALL_STAGES);
-            if (remoteDevices.length > 0) {
+            if (devices.remote.length > 0) {
                 nav.push(SHOW_LOCAL_AND_REMOTE_DEVICES);
             } else {
                 nav.push(SHOW_LOCAL_DEVICE_ONLY);
@@ -79,7 +76,7 @@ const AppNavigation = () => {
             setUserNav([]);
             setMainNav(NO_USER_NAV);
         }
-    }, [user, stage, remoteDevices])
+    }, [user, stageId, stages.byId, devices.remote])
 
     return (
         <Layer>
@@ -99,7 +96,7 @@ const AppNavigation = () => {
                     }}
                     userNav={userNav}
                     username={user && user.name}
-                    usernameSubtitle={user && user.name}
+                    usernameSubtitle={authUser && authUser.email}
                     userImgUrl={user && user.avatarUrl}
                 />
             </div>

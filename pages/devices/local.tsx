@@ -1,5 +1,5 @@
 import React from "react";
-import Container from "../../components/theme/Container";
+import Container from "../../components/theme/layout/Container";
 import DeviceView from "../../components/devices/DeviceView";
 import useStageSelector from "../../lib/digitalstage/useStageSelector";
 import Link from "next/link";

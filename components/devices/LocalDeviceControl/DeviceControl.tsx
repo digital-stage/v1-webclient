@@ -14,7 +14,7 @@ const DeviceControl = (props: {
     const {updateDevice} = useStageActions();
     const {darkMode} = useStageSelector(state => {
         return {
-            darkMode: state.current !== undefined
+            darkMode: state.stageId !== undefined
         }
     })
 

@@ -7,18 +7,18 @@ import {useStageState} from "../lib/digitalstage/useStageContext";
 
 const Leave = () => {
     const router = useRouter();
-    const {ready, current} = useStageState();
+    const {ready, stageId} = useStageState();
     const {leaveStage} = useStageActions();
 
     useEffect(() => {
         if (ready) {
-            if (current)
+            if (stageId)
                 leaveStage();
             else
                 router.push("/stages")
         }
 
-    }, [ready, current]);
+    }, [ready, stageId]);
 
     return (
         <Loading>

@@ -3,15 +3,11 @@ import React from "react";
 import {useAuth} from "../lib/digitalstage/useAuth";
 import Loading from "../components/theme/Loading";
 import {useRouter} from "next/router";
-import useStageSelector from "../lib/digitalstage/useStageSelector";
 import StageView from "../components/stage/StageView";
+import {useStageState} from "../lib/digitalstage/useStageContext";
 
 const Index = () => {
-    const {stage} = useStageSelector(state => {
-        return {
-            stage: state.current ? state.stages.byId[state.current.stageId] : undefined
-        }
-    })
+    const {stageId, stages} = useStageState();
     const router = useRouter();
 
     const {loading, user} = useAuth();
@@ -20,10 +16,10 @@ const Index = () => {
         if (!user) {
             router.push("/account/login");
         } else {
-            if (!stage) {
+            if (!stageId) {
                 router.push("/stages");
             } else {
-                return <StageView stage={stage}/>;
+                return <StageView stage={stages.byId[stageId]}/>;
             }
         }
     }

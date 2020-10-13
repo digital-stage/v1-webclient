@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import SingleSelect from "../theme/SingleSelect";
+import SingleSelect from "../theme/form/SingleSelect";
 import {WebRTCDevice, WebRTCDeviceId} from "../../lib/digitalstage/common/model.server";
 
 const LocalDeviceSettings = () => {
