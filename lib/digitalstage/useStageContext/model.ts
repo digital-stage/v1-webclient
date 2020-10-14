@@ -6,7 +6,8 @@ export type LocalUser = Server.User;
 export type User = Server.User;
 export type Device = Server.Device;
 
-export type Stage = Server.Stage;
+//TODO: isadmin
+export type Stage = Server.Stage & { isAdmin: false };
 export type Group = Server.Group;
 export type CustomGroup = Server.CustomGroup;
 export type StageMember = Server.StageMember;
