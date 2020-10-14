@@ -17,10 +17,21 @@ import {
 import {Device as MediasoupDevice} from "mediasoup-client/lib/Device";
 import {ClientDeviceEvents} from "../common/events";
 import {AddAudioProducerPayload, AddVideoProducerPayload} from "../common/payloads";
-import {useStageDispatch, useStageSocket, useStageState} from "../useStageContext";
+import {useStageDispatch, useStageSocket} from "../useStageContext";
 import {AdditionalReducerTypes} from "../useStageContext/reducer";
-import {AudioConsumer, VideoConsumer} from "../useStageContext/model";
+import {AudioConsumer, Device, VideoConsumer} from "../useStageContext/model";
+import {useDispatch, useSelector} from "../useStageContext/redux";
+import allActions from "../useStageContext/redux/actions";
+import {
+    AudioConsumers,
+    AudioProducers,
+    Devices,
+    NormalizedState,
+    VideoConsumers,
+    VideoProducers
+} from "../useStageContext/schema";
 
+const TIMEOUT_MS: number = 4000;
 
 const MediasoupContext = React.createContext(undefined);
 
@@ -29,17 +40,17 @@ export const MediasoupProvider = (props: {
 }) => {
     const socket = useStageSocket();
     const dispatch = useStageDispatch();
-    const {devices, audioConsumers, videoConsumers, audioProducers, videoProducers} = useStageState();
-    /*
-        const {localDevice, audioConsumers, videoConsumers, audioProducers, videoProducers} = useStageSelector(state => {
-            return {
-                localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
-                audioConsumers: state.audioConsumers,
-                videoProducers: state.videoProducers,
-                videoConsumers: state.videoConsumers,
-                audioProducers: state.audioProducers
-            };
-        });*/
+
+    const localDevice = useSelector<NormalizedState, Device>(state => {
+        if (state.devices.local)
+            return state.devices.byId[state.devices.local];
+        return undefined;
+    });
+    const audioConsumers = useSelector<NormalizedState, AudioConsumers>(state => state.audioConsumers);
+    const videoConsumers = useSelector<NormalizedState, VideoConsumers>(state => state.videoConsumers);
+    const videoProducers = useSelector<NormalizedState, VideoProducers>(state => state.videoProducers);
+    const audioProducers = useSelector<NormalizedState, AudioProducers>(state => state.audioProducers);
+
     const [working, setWorking] = useState<boolean>(false);
     const [router, setRouter] = useState<Router>();
     const [connection, setConnection] = useState<SocketIOClient.Socket>();
@@ -50,6 +61,7 @@ export const MediasoupProvider = (props: {
     const [sendAudio, setSendAudio] = useState<boolean>(false);
     const [receiveVideo, setReceiveVideo] = useState<boolean>(false);
     const [receiveAudio, setReceiveAudio] = useState<boolean>(false);
+    const reduxDispatch = useDispatch();
 
     const [localAudioProducers, setLocalAudioProducers] = useState<{
         audioProducerId: string;
@@ -156,6 +168,13 @@ export const MediasoupProvider = (props: {
                                 msConsumer: consumer
                             } as AudioConsumer
                         });
+                        reduxDispatch(allActions.stageActions.client.addAudioConsumer({
+                            _id: consumer.id,
+                            stage: audioProducers.byId[audioProducerId].stageId,
+                            stageMember: audioProducers.byId[audioProducerId].stageMemberId,
+                            audioProducer: audioProducerId,
+                            msConsumer: consumer
+                        }));
                     })
                     .catch(error => console.log(error))
             }
@@ -174,6 +193,7 @@ export const MediasoupProvider = (props: {
                     .then(() => dispatch({
                         type: AdditionalReducerTypes.REMOVE_AUDIO_CONSUMER, payload: id
                     }))
+                    .then(() => reduxDispatch(allActions.stageActions.client.removeAudioConsumer(id)))
                     .catch(error => console.log(error))
             }
         }))
@@ -202,11 +222,21 @@ export const MediasoupProvider = (props: {
                                 msConsumer: consumer
                             } as VideoConsumer
                         });
+                        reduxDispatch(allActions.stageActions.client.addVideoConsumer({
+                            _id: consumer.id,
+                            stage: videoProducers.byId[videoProducerId].stageId,
+                            stageMember: videoProducers.byId[videoProducerId].stageMemberId,
+                            videoProducer: videoProducerId,
+                            msConsumer: consumer
+                        }));
                     })
                     .catch(error => console.log(error))
             }
         }))
-            .finally(() => setWorking(false));
+            .finally(() => {
+                console.log("[useMediasoup] Set working = false");
+                setWorking(false)
+            });
     }, [connection, device, receiveTransport, videoProducers, videoConsumers]);
 
     const stopConsumingVideo = useCallback(() => {
@@ -220,10 +250,14 @@ export const MediasoupProvider = (props: {
                     .then(() => dispatch({
                         type: AdditionalReducerTypes.REMOVE_VIDEO_CONSUMER, payload: id
                     }))
+                    .then(() => reduxDispatch(allActions.stageActions.client.removeVideoConsumer(id)))
                     .catch(error => console.log(error))
             }
         }))
-            .finally(() => setWorking(false));
+            .finally(() => {
+                console.log("[useMediasoup] Set working = false");
+                setWorking(false)
+            });
     }, [connection, videoConsumers]);
 
     const startStreamAudio = useCallback(() => {
@@ -232,7 +266,7 @@ export const MediasoupProvider = (props: {
         return navigator.mediaDevices.getUserMedia({
             video: false,
             audio: {
-                deviceId: devices.local ? devices.byId[devices.local].inputAudioDeviceId : undefined,
+                deviceId: localDevice ? localDevice.inputAudioDeviceId : undefined,
                 autoGainControl: false,
                 echoCancellation: false,
                 noiseSuppression: false
@@ -251,7 +285,7 @@ export const MediasoupProvider = (props: {
                                         if (error) {
                                             console.error(error);
                                             return stopProducer(socket, producer)
-                                                .then(() => reject(error));
+                                                .then(() => reject(new Error(error)));
                                         }
                                         setLocalAudioProducers(prevState => [...prevState, {
                                             audioProducerId: globalProducer._id,
@@ -259,12 +293,15 @@ export const MediasoupProvider = (props: {
                                         }]);
                                         resolve();
                                     });
+                                    setTimeout(function () {
+                                        reject(new Error("Timed out: " + ClientDeviceEvents.ADD_AUDIO_PRODUCER));
+                                    }, TIMEOUT_MS)
                                 });
                             })
                     }
                 )))
             .finally(() => setWorking(false));
-    }, [sendTransport, devices.local, devices.byId])
+    }, [sendTransport, localDevice])
 
     const stopStreamingAudio = useCallback(() => {
         console.log("[useMediasoup] stop streaming audio");
@@ -275,12 +312,16 @@ export const MediasoupProvider = (props: {
                 .then(() => {
                     return new Promise((resolve, reject) => {
                         socket.emit(ClientDeviceEvents.REMOVE_AUDIO_PRODUCER, localAudioProducer.audioProducerId, (error?: string) => {
+                            console.log("Got response");
                             if (error) {
                                 console.error(error)
-                                reject(error);
+                                reject(new Error(error));
                             }
                             resolve();
                         });
+                        setTimeout(function () {
+                            reject(new Error("Timed out: " + ClientDeviceEvents.REMOVE_AUDIO_PRODUCER));
+                        }, TIMEOUT_MS)
                     })
                 })
                 .finally(() => setLocalAudioProducers(prevState => prevState.filter(p => p.audioProducerId !== localAudioProducer.audioProducerId)))
@@ -294,8 +335,8 @@ export const MediasoupProvider = (props: {
         setWorking(true);
         return navigator.mediaDevices.getUserMedia({
             audio: false,
-            video: devices.local && devices.byId[devices.local].inputVideoDeviceId ? {
-                deviceId: devices.byId[devices.local].inputVideoDeviceId
+            video: localDevice && localDevice.inputVideoDeviceId ? {
+                deviceId: localDevice.inputVideoDeviceId
             } : true
         })
             .then(stream => stream.getVideoTracks())
@@ -311,7 +352,7 @@ export const MediasoupProvider = (props: {
                                         if (error) {
                                             console.error(error);
                                             return stopProducer(socket, producer)
-                                                .then(() => reject(error));
+                                                .then(() => reject(new Error(error)));
                                         }
                                         setLocalVideoProducers(prevState => [...prevState, {
                                             videoProducerId: globalProducer._id,
@@ -319,12 +360,18 @@ export const MediasoupProvider = (props: {
                                         }]);
                                         resolve();
                                     });
+                                    setTimeout(function () {
+                                        reject(new Error("Timed out: " + ClientDeviceEvents.ADD_VIDEO_PRODUCER));
+                                    }, TIMEOUT_MS)
                                 });
                             })
                     }
                 )))
-            .finally(() => setWorking(false));
-    }, [sendTransport, devices.local, devices.byId])
+            .finally(() => {
+                console.log("[useMediasoup] Set working = false");
+                setWorking(false)
+            });
+    }, [sendTransport, localDevice])
 
     const stopStreamingVideo = useCallback(() => {
         console.log("[useMediasoup] stop streaming video");
@@ -337,87 +384,74 @@ export const MediasoupProvider = (props: {
                         socket.emit(ClientDeviceEvents.REMOVE_VIDEO_PRODUCER, localVideoProducer.videoProducerId, (error?: string) => {
                             if (error) {
                                 console.error(error)
-                                reject(error);
+                                reject(new Error(error));
                             }
                             resolve();
                         });
+                        setTimeout(function () {
+                            reject(new Error("Timed out: " + ClientDeviceEvents.REMOVE_VIDEO_PRODUCER));
+                        }, TIMEOUT_MS);
                     })
                         .finally(() => setLocalVideoProducers(prevState => prevState.filter(p => p.videoProducerId !== localVideoProducer.videoProducerId)))
                 })
         }))
-            .finally(() => setWorking(false));
+            .finally(() => {
+                console.log("[useMediasoup] Set working = false");
+                setWorking(false)
+            });
     }, [localVideoProducers]);
 
     useEffect(() => {
-        console.log("[useMediasoup DEBUG] LocalVideoProducers:");
-        console.log(localVideoProducers);
-    }, [localVideoProducers]);
-
-    useEffect(() => {
-        console.log("[useMediasoup DEBUG] LocalAudioProducers:");
-        console.log(localAudioProducers);
-    }, [localAudioProducers]);
-
-    useEffect(() => {
-        if (!working && devices.local) {
-            if (sendVideo !== devices.byId[devices.local].sendVideo) {
+        if (!working && localDevice) {
+            if (sendVideo !== localDevice.sendVideo) {
                 console.log("Devices changed: sendVideo");
-                if (devices.byId[devices.local].sendVideo) {
+                if (localDevice.sendVideo) {
                     startStreamVideo();
                 } else {
                     stopStreamingVideo();
                 }
-                setSendVideo(devices.byId[devices.local].sendVideo);
+                setSendVideo(localDevice.sendVideo);
             }
-            if (sendAudio !== devices.byId[devices.local].sendAudio) {
+            if (sendAudio !== localDevice.sendAudio) {
                 console.log("Devices changed: sendAudio");
-                if (devices.byId[devices.local].sendAudio) {
+                if (localDevice.sendAudio) {
                     startStreamAudio();
                 } else {
                     stopStreamingAudio();
                 }
-                setSendAudio(devices.byId[devices.local].sendAudio);
+                setSendAudio(localDevice.sendAudio);
             }
-            if (receiveVideo !== devices.byId[devices.local].receiveVideo) {
+            if (receiveVideo !== localDevice.receiveVideo) {
                 console.log("Devices changed: receiveVideo");
-                if (devices.byId[devices.local].receiveVideo) {
+                if (localDevice.receiveVideo) {
                     startConsumingVideo();
                 } else {
                     stopConsumingVideo();
                 }
-                setReceiveVideo(devices.byId[devices.local].receiveVideo);
+                setReceiveVideo(localDevice.receiveVideo);
             }
-            if (receiveAudio !== devices.byId[devices.local].receiveAudio) {
+            if (receiveAudio !== localDevice.receiveAudio) {
                 console.log("[useMediasoup] Devices changed: receiveAudio");
-                if (devices.byId[devices.local].receiveAudio) {
+                if (localDevice.receiveAudio) {
                     startConsumingAudio();
                 } else {
                     stopConsumingAudio();
                 }
-                setReceiveAudio(devices.byId[devices.local].receiveAudio);
+                setReceiveAudio(localDevice.receiveAudio);
             }
         }
 
-    }, [working, devices.local, devices.byId]);
+    }, [working, localDevice]);
+
 
     useEffect(() => {
-        console.log("[useMediasoup] Handling: audioProducers.allIds");
-        if (receiveAudio) {
-            startConsumingAudio();
-        } else {
-            stopConsumingAudio();
-        }
+        console.log("[useMediasoup] VIDEO PRODUCER CHANGED");
+    }, [videoProducers]);
+
+    useEffect(() => {
+        console.log("[useMediasoup] AUDIO PRODUCER CHANGED");
     }, [audioProducers.allIds]);
 
-
-    useEffect(() => {
-        console.log("[useMediasoup] Handling: videoProducers.allIds");
-        if (receiveVideo) {
-            startConsumingVideo();
-        } else {
-            stopConsumingVideo();
-        }
-    }, [videoProducers.allIds]);
 
     return (
         <MediasoupContext.Provider value={undefined}>

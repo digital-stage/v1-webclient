@@ -47,7 +47,6 @@ export function normalize(prevState: NormalizedState, data: Partial<{
     if (data.stages) {
         data.stages.forEach(stage => {
             state.stages.byId[stage._id] = {
-                isAdmin: stage.admins.indexOf(state.user._id) !== -1,
                 ...stage
             };
             state.stages.allIds = upsert(state.stages.allIds, stage._id);

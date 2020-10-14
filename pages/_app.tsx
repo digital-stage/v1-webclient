@@ -1,9 +1,9 @@
-import App from 'next/app'
+import App, {AppProps} from 'next/app'
 import {Provider as StyletronProvider} from 'styletron-react'
 import {debug, styletron} from '../styletron'
 import {AuthContextProvider} from "../lib/digitalstage/useAuth";
 import {BaseProvider, DarkTheme, LightTheme, styled} from "baseui";
-import React from "react";
+import React, {FC} from "react";
 import {StagesContextProvider, StageStateConsumer} from "../lib/digitalstage/useStageContext";
 import {RequestContextProvider} from "../lib/useRequest";
 import Head from 'next/head'
@@ -16,6 +16,8 @@ import theme from "../styles/theme";
 import MediasoupProvider from "../lib/digitalstage/useMediasoup";
 import Link from "next/link";
 import AppNavigation from "../components/AppNavigation";
+import {wrapper} from "../lib/digitalstage/useStageContext/redux";
+
 
 const DevCorner = styled("div", {
     position: "fixed",
@@ -35,27 +37,23 @@ const DevButton = styled("a", {
     }
 });
 
-class MyApp extends App {
-    render() {
-        const {Component, pageProps} = this.props;
-
-        return (
-            <>
-                <Head>
-                    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-                </Head>
-                <ThemeProvider theme={theme}>
-                    <CssBaseline/>
-                    <StyletronProvider value={styletron} debug={debug} debugAfterHydration>
-                        <RequestContextProvider>
-                            <AuthContextProvider>
-                                <StagesContextProvider>
-                                    <MediasoupProvider>
-                                        <AudioContextProvider>
-                                            <StageStateConsumer>
-                                                {(state) => (
-                                                    <BaseProvider theme={state.stageId ? DarkTheme : LightTheme}>
-                                                        <style jsx global>{`
+const MyApp: FC<AppProps> = ({Component, pageProps}) => (
+    <>
+        <Head>
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        </Head>
+        <ThemeProvider theme={theme}>
+            <CssBaseline/>
+            <StyletronProvider value={styletron} debug={debug} debugAfterHydration>
+                <RequestContextProvider>
+                    <AuthContextProvider>
+                        <StagesContextProvider>
+                            <MediasoupProvider>
+                                <AudioContextProvider>
+                                    <StageStateConsumer>
+                                        {(state) => (
+                                            <BaseProvider theme={state.stageId ? DarkTheme : LightTheme}>
+                                                <style jsx global>{`
                                             * {
                                                 box-sizing: border-box;
                                             }
@@ -78,35 +76,32 @@ class MyApp extends App {
                                                 100% { transform: translateY(0); }
                                             }
                                         `}
-                                                        </style>
-                                                        <AppNavigation/>
-                                                        <StageJoiner/>
-                                                        <Block marginTop={['52px', '52px', '72px']}>
-                                                            <Component {...pageProps} />
-                                                        </Block>
-                                                        <LocalDeviceControl/>
-                                                        {process.env.NODE_ENV === "development" && (
-                                                            <DevCorner>
-                                                                <Link href="/debug">
-                                                                    <DevButton>
-                                                                        DEV
-                                                                    </DevButton>
-                                                                </Link>
-                                                            </DevCorner>
-                                                        )}
-                                                    </BaseProvider>
+                                                </style>
+                                                <AppNavigation/>
+                                                <StageJoiner/>
+                                                <Block marginTop={['52px', '52px', '72px']}>
+                                                    <Component {...pageProps} />
+                                                </Block>
+                                                <LocalDeviceControl/>
+                                                {process.env.NODE_ENV === "development" && (
+                                                    <DevCorner>
+                                                        <Link href="/debug">
+                                                            <DevButton>
+                                                                DEV
+                                                            </DevButton>
+                                                        </Link>
+                                                    </DevCorner>
                                                 )}
-                                            </StageStateConsumer>
-                                        </AudioContextProvider>
-                                    </MediasoupProvider>
-                                </StagesContextProvider>
-                            </AuthContextProvider>
-                        </RequestContextProvider>
-                    </StyletronProvider>
-                </ThemeProvider>
-            </>
-        )
-    }
-}
-
-export default MyApp;
+                                            </BaseProvider>
+                                        )}
+                                    </StageStateConsumer>
+                                </AudioContextProvider>
+                            </MediasoupProvider>
+                        </StagesContextProvider>
+                    </AuthContextProvider>
+                </RequestContextProvider>
+            </StyletronProvider>
+        </ThemeProvider>
+    </>
+)
+export default wrapper.withRedux(MyApp);

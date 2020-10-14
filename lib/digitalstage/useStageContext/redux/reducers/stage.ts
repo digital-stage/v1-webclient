@@ -1,8 +1,8 @@
-import {Reducer} from "react";
-import {InitialNormalizedState, NormalizedState, OutsideStageNormalizedState} from "./schema";
-import {ServerDeviceEvents, ServerGlobalEvents, ServerStageEvents, ServerUserEvents} from "../common/events";
-import {normalize} from "./normalizer";
-import {removeItem, updateItem, upsert} from "./utils";
+import {InitialNormalizedState, NormalizedState, OutsideStageNormalizedState} from "../../schema";
+import {ServerDeviceEvents, ServerGlobalEvents, ServerStageEvents, ServerUserEvents} from "../../../common/events";
+import {removeItem, updateItem, upsert} from "../../utils";
+import {normalize} from "../../normalizer";
+import {AnyAction, Reducer} from "redux";
 import _ from "lodash";
 
 export enum AdditionalReducerTypes {
@@ -15,12 +15,13 @@ export enum AdditionalReducerTypes {
     REMOVE_VIDEO_CONSUMER = 'remove-video-consumer',
 }
 
-export interface ReducerAction {
+export interface ReducerAction extends AnyAction {
     type: ServerGlobalEvents | ServerUserEvents | ServerDeviceEvents | ServerStageEvents | AdditionalReducerTypes,
     payload?: any;
 }
 
-export const reducer: Reducer<NormalizedState, ReducerAction> = (state: NormalizedState = InitialNormalizedState, action: ReducerAction): NormalizedState => {
+
+export const stage: Reducer<NormalizedState, ReducerAction> = (state: NormalizedState = InitialNormalizedState, action: ReducerAction): NormalizedState => {
     console.log(action.type);
     switch (action.type) {
         case AdditionalReducerTypes.RESET:
@@ -313,6 +314,10 @@ export const reducer: Reducer<NormalizedState, ReducerAction> = (state: Normaliz
                         ...state.videoConsumers.byProducer,
                         [action.payload.videoProducer]: action.payload._id
                     },
+                    byStage: {
+                        ...state.videoConsumers.byStage,
+                        [action.payload.stage]: action.payload._id
+                    },
                     byStageMember: {
                         ...state.videoConsumers.byStageMember,
                         [action.payload.stageMember]: upsert(state.videoConsumers.byStageMember[action.payload.stageMemberId], action.payload._id),
@@ -330,6 +335,10 @@ export const reducer: Reducer<NormalizedState, ReducerAction> = (state: Normaliz
                     byStageMember: {
                         ...state.videoConsumers.byStageMember,
                         [state.videoConsumers.byId[action.payload].stageMember]: _.filter(state.videoConsumers.byStageMember[state.videoConsumers.byId[action.payload].stageMember], action.payload),
+                    },
+                    byStage: {
+                        ...state.videoConsumers.byStage,
+                        [state.videoConsumers.byId[action.payload].stage]: _.filter(state.videoConsumers.byStage[state.videoConsumers.byId[action.payload].stage], action.payload),
                     },
                     byProducer: _.omit(state.videoConsumers.byProducer, state.videoConsumers.byId[action.payload].videoProducer),
                     allIds: _.filter(state.videoConsumers.allIds, action.payload)

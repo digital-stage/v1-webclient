@@ -6,7 +6,7 @@ export type LocalUser = Server.User;
 export type User = Server.User;
 export type Device = Server.Device;
 
-export type Stage = Server.Stage & { isAdmin: boolean };
+export type Stage = Server.Stage;
 export type Group = Server.Group;
 export type CustomGroup = Server.CustomGroup;
 export type StageMember = Server.StageMember;
@@ -25,6 +25,7 @@ export type AudioConsumer = {
 };
 export type VideoConsumer = {
     _id: string;
+    stage: string;
     stageMember: string;
     videoProducer: string;
     msConsumer: mediasoupClient.types.Consumer

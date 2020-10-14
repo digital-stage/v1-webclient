@@ -12,145 +12,176 @@ import {
     VideoProducer
 } from './model';
 
+export interface Devices {
+    byId: {
+        [id: string]: Device
+    },
+    local?: string;
+    remote: string[];
+    allIds: string[]
+}
+
+export interface Users {
+    byId: {
+        [id: string]: User
+    },
+    allIds: string[]
+}
+
+export interface Stages {
+    byId: {
+        [id: string]: Stage
+    },
+    allIds: string[]
+}
+
+export interface Groups {
+    byId: {
+        [id: string]: Group
+    },
+    byStage: {
+        [stageId: string]: string[]
+    },
+    allIds: string[]
+}
+
+export interface CustomGroups {
+    byId: {
+        // Already have a relation to groupId inside
+        [id: string]: CustomGroup
+    },
+    byGroup: {
+        [groupId: string]: string[]
+    }
+    allIds: string[]
+}
+
+export interface StageMembers {
+    byId: {
+        // Already have a relation to userId inside
+        [id: string]: StageMember
+    },
+    byStage: {
+        [stageId: string]: string[]
+    },
+    byGroup: {
+        [groupId: string]: string[]
+    },
+    allIds: string[]
+}
+
+export interface CustomStageMembers {
+    byId: {
+        // Already have a relation to userId inside
+        [id: string]: CustomStageMember
+    },
+    byStageMember: {
+        [stageMemberId: string]: string[]
+    },
+    allIds: string[]
+}
+
+export interface VideoProducers {
+    byId: {
+        [id: string]: VideoProducer
+    },
+    byStageMember: {
+        [stageMemberId: string]: string[]
+    },
+    allIds: string[]
+}
+
+export interface AudioProducers {
+    byId: {
+        [id: string]: AudioProducer
+    },
+    byStageMember: {
+        [stageMemberId: string]: string[]
+    },
+    allIds: string[]
+}
+
+export interface CustomAudioProducers {
+    byId: {
+        [id: string]: CustomAudioProducer
+    },
+    byAudioProducer: {
+        [audioProducerId: string]: string[]
+    },
+    allIds: string[]
+}
+
+export interface OvTracks {
+    byId: {
+        [id: string]: OvTrack
+    },
+    byStageMember: {
+        [stageMemberId: string]: string[]
+    },
+    allIds: string[]
+}
+
+export interface CustomOvTracks {
+    byId: {
+        [id: string]: CustomOvTrack
+    },
+    byOvTrack: {
+        [ovTrack: string]: string[]
+    },
+    allIds: string[]
+}
+
+export interface AudioConsumers {
+    byId: {
+        [id: string]: AudioConsumer
+    },
+    byProducer: {
+        [audioProducerId: string]: string
+    },
+    byStage: {
+        [stageId: string]: string[]
+    },
+    byStageMember: {
+        [stageMemberId: string]: string[]
+    },
+    allIds: string[]
+}
+
+export interface VideoConsumers {
+    byId: {
+        [id: string]: VideoConsumer
+    },
+    byProducer: {
+        [videoProducerId: string]: string[]
+    },
+    byStage: {
+        [stageId: string]: string[]
+    },
+    byStageMember: {
+        [stageMemberId: string]: string[]
+    },
+    allIds: string[]
+}
+
 export interface NormalizedState {
     ready: boolean;
     user?: LocalUser;
-    devices: {
-        byId: {
-            [id: string]: Device
-        },
-        local?: string;
-        remote: string[];
-        allIds: string[]
-    };
     stageId?: string;
     groupId?: string;
-    users: {
-        byId: {
-            [id: string]: User
-        },
-        allIds: string[]
-    },
-    stages: {
-        byId: {
-            [id: string]: Stage
-        },
-        allIds: string[]
-    },
-    groups: {
-        byId: {
-            [id: string]: Group
-        },
-        byStage: {
-            [stageId: string]: string[]
-        },
-        allIds: string[]
-    },
-    customGroups: {
-        byId: {
-            // Already have a relation to groupId inside
-            [id: string]: CustomGroup
-        },
-        byGroup: {
-            [groupId: string]: string[]
-        }
-        allIds: string[]
-    },
-    stageMembers: {
-        byId: {
-            // Already have a relation to userId inside
-            [id: string]: StageMember
-        },
-        byStage: {
-            [stageId: string]: string[]
-        },
-        byGroup: {
-            [groupId: string]: string[]
-        },
-        allIds: string[]
-    },
-    customStageMembers: {
-        byId: {
-            // Already have a relation to userId inside
-            [id: string]: CustomStageMember
-        },
-        byStageMember: {
-            [stageMemberId: string]: string[]
-        },
-        allIds: string[]
-    },
-    videoProducers: {
-        byId: {
-            [id: string]: VideoProducer
-        },
-        byStageMember: {
-            [stageMemberId: string]: string[]
-        },
-        allIds: string[]
-    },
-    audioProducers: {
-        byId: {
-            [id: string]: AudioProducer
-        },
-        byStageMember: {
-            [stageMemberId: string]: string[]
-        },
-        allIds: string[]
-    },
-    customAudioProducers: {
-        byId: {
-            [id: string]: CustomAudioProducer
-        },
-        byAudioProducer: {
-            [audioProducerId: string]: string[]
-        },
-        allIds: string[]
-    },
-    ovTracks: {
-        byId: {
-            [id: string]: OvTrack
-        },
-        byStageMember: {
-            [stageMemberId: string]: string[]
-        },
-        allIds: string[]
-    },
-    customOvTracks: {
-        byId: {
-            [id: string]: CustomOvTrack
-        },
-        byOvTrack: {
-            [ovTrack: string]: string[]
-        },
-        allIds: string[]
-    },
-    audioConsumers: {
-        byId: {
-            [id: string]: AudioConsumer
-        },
-        byProducer: {
-            [audioProducerId: string]: string
-        },
-        byStage: {
-            [stageId: string]: string[]
-        },
-        byStageMember: {
-            [stageMemberId: string]: string[]
-        },
-        allIds: string[]
-    },
-    videoConsumers: {
-        byId: {
-            [id: string]: VideoConsumer
-        },
-        byProducer: {
-            [videoProducerId: string]: string[]
-        },
-        byStageMember: {
-            [stageMemberId: string]: string[]
-        },
-        allIds: string[]
-    }
+    devices: Devices;
+    users: Users,
+    stages: Stages,
+    groups: Groups,
+    customGroups: CustomGroups,
+    stageMembers: StageMembers,
+    customStageMembers: CustomStageMembers,
+    videoProducers: VideoProducers,
+    audioProducers: AudioProducers,
+    customAudioProducers: CustomAudioProducers,
+    ovTracks: OvTracks,
+    customOvTracks: CustomOvTracks,
+    audioConsumers: AudioConsumers,
+    videoConsumers: VideoConsumers
 }
 
 export const OutsideStageNormalizedState: Partial<NormalizedState> = {
@@ -264,6 +295,7 @@ export const InitialNormalizedState: NormalizedState = {
     },
     videoConsumers: {
         byId: {},
+        byStage: {},
         byProducer: {},
         byStageMember: {},
         allIds: []

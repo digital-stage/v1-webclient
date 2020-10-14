@@ -14,6 +14,8 @@ import {API_URL} from "../../../env";
 import {enumerateDevices} from "./utils";
 import {Device} from "../common/model.server";
 import {AdditionalReducerTypes, reducer, ReducerAction} from "./reducer";
+import allActions from "./redux/actions";
+import {useDispatch} from "./redux";
 
 export type StageStateProps = NormalizedState;
 export type StageDispatchProps = Dispatch<ReducerAction>;
@@ -32,9 +34,7 @@ export const useStageSocket = (): SocketIOClient.Socket => React.useContext<Sock
 export const useStageDispatch = (): StageDispatchProps => React.useContext<StageDispatchProps>(StageDispatchContext);
 export const useStageState = (): StageStateProps => React.useContext<StageStateProps>(StageStateContext);
 
-export const StageDispatchConsumer = StageDispatchContext.Consumer;
 export const StageStateConsumer = StageStateContext.Consumer;
-export const StageSocketConsumer = StageSocketContext.Consumer;
 
 export const StagesContextProvider = (props: {
     children: React.ReactNode
@@ -42,148 +42,192 @@ export const StagesContextProvider = (props: {
     const {token} = useAuth();
     const [socket, setSocket] = useState<SocketIOClient.Socket>(null);
     const [state, dispatch] = useReducer<Reducer<NormalizedState, ReducerAction>>(reducer, InitialNormalizedState);
+    const reduxDispatch = useDispatch();
 
 
     const registerSocketHandlers = useCallback((socket) => {
         console.log("[useStages] Registering socket handlers");
 
-        socket.on(ServerGlobalEvents.READY, () =>
-            dispatch({type: ServerGlobalEvents.READY})
-        );
+        socket.on(ServerGlobalEvents.READY, () => {
+            dispatch({type: ServerGlobalEvents.READY});
+            reduxDispatch(allActions.server.setReady());
+        });
 
         socket.on(ServerDeviceEvents.LOCAL_DEVICE_READY, (payload: Server.Device) => {
             dispatch({type: ServerDeviceEvents.LOCAL_DEVICE_READY, payload: payload});
+            reduxDispatch(allActions.deviceActions.server.handleLocalDeviceReady(payload));
         });
 
-        socket.on(ServerUserEvents.USER_READY, (payload: Server.User) => dispatch({
-            type: ServerUserEvents.USER_READY,
-            payload
-        }));
+        socket.on(ServerUserEvents.USER_READY, (payload: Server.User) => {
+            dispatch({
+                type: ServerUserEvents.USER_READY,
+                payload
+            })
+            reduxDispatch(allActions.server.handleUserReady(payload));
+        });
 
         socket.on(ServerDeviceEvents.DEVICE_ADDED, (payload: Server.Device) => {
             dispatch({type: ServerDeviceEvents.DEVICE_ADDED, payload: payload});
+            reduxDispatch(allActions.deviceActions.server.addDevice(payload));
         });
         socket.on(ServerDeviceEvents.DEVICE_CHANGED, (payload: Server.Device) => {
             dispatch({type: ServerDeviceEvents.DEVICE_CHANGED, payload: payload});
+            reduxDispatch(allActions.deviceActions.server.changeDevice(payload));
         });
         socket.on(ServerDeviceEvents.DEVICE_REMOVED, (payload: Server.DeviceId) => {
             dispatch({type: ServerDeviceEvents.DEVICE_REMOVED, payload: payload});
+            reduxDispatch(allActions.deviceActions.server.removeDevice(payload));
         });
 
         socket.on(ServerStageEvents.USER_ADDED, (payload: Server.User) => {
             dispatch({type: ServerStageEvents.USER_ADDED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.addUser(payload));
         });
         socket.on(ServerStageEvents.USER_CHANGED, (payload: Server.User) => {
             dispatch({type: ServerStageEvents.USER_CHANGED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.changeUser(payload));
         });
         socket.on(ServerStageEvents.USER_REMOVED, (payload: Server.UserId) => {
             dispatch({type: ServerStageEvents.USER_REMOVED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.removeUser(payload));
         });
 
         socket.on(ServerStageEvents.STAGE_ADDED, (payload: Server.Stage) => {
             dispatch({type: ServerStageEvents.STAGE_ADDED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.addStage(payload));
         });
         socket.on(ServerStageEvents.STAGE_JOINED, (payload: Server.InitialStagePackage) => {
             dispatch({type: ServerStageEvents.STAGE_JOINED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.handleStageJoined(payload));
         });
         socket.on(ServerStageEvents.STAGE_LEFT, () => {
             dispatch({type: ServerStageEvents.STAGE_LEFT});
+            reduxDispatch(allActions.stageActions.server.handleStageLeft());
         });
         socket.on(ServerStageEvents.STAGE_CHANGED, (payload: Server.Stage) => {
             dispatch({type: ServerStageEvents.STAGE_CHANGED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.changeStage(payload));
         });
         socket.on(ServerStageEvents.STAGE_REMOVED, (payload: Server.UserId) => {
             dispatch({type: ServerStageEvents.STAGE_REMOVED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.removeStage(payload));
         });
 
         socket.on(ServerStageEvents.GROUP_ADDED, (payload: Server.Group) => {
             dispatch({type: ServerStageEvents.GROUP_ADDED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.addGroup(payload));
         });
         socket.on(ServerStageEvents.GROUP_CHANGED, (payload: Server.Group) => {
             dispatch({type: ServerStageEvents.GROUP_CHANGED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.changeGroup(payload));
         });
         socket.on(ServerStageEvents.GROUP_REMOVED, (payload: Server.GroupId) => {
             dispatch({type: ServerStageEvents.GROUP_REMOVED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.removeGroup(payload));
         });
 
         socket.on(ServerStageEvents.CUSTOM_GROUP_ADDED, (payload: Server.CustomGroup) => {
             dispatch({type: ServerStageEvents.CUSTOM_GROUP_ADDED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.addCustomGroup(payload));
         });
         socket.on(ServerStageEvents.CUSTOM_GROUP_CHANGED, (payload: Server.CustomGroup) => {
             dispatch({type: ServerStageEvents.CUSTOM_GROUP_CHANGED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.changeCustomGroup(payload));
         });
         socket.on(ServerStageEvents.CUSTOM_GROUP_REMOVED, (payload: Server.CustomGroupId) => {
             dispatch({type: ServerStageEvents.CUSTOM_GROUP_REMOVED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.removeCustomGroup(payload));
         });
 
         socket.on(ServerStageEvents.STAGE_MEMBER_ADDED, (payload: Server.StageMember) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_ADDED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.addStageMember(payload));
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_CHANGED, (payload: Server.StageMember) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_CHANGED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.changeStageMember(payload));
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_REMOVED, (payload: Server.StageMemberId) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_REMOVED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.removeStageMember(payload));
         });
 
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_ADDED, (payload: Server.CustomStageMember) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_ADDED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.addCustomStageMember(payload));
         });
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_CHANGED, (payload: Server.CustomStageMember) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_CHANGED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.changeCustomStageMember(payload));
         });
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_REMOVED, (payload: Server.CustomStageMemberId) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_REMOVED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.removeCustomStageMember(payload));
         });
 
         socket.on(ServerStageEvents.STAGE_MEMBER_VIDEO_ADDED, (payload: Server.StageMemberVideoProducer) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_VIDEO_ADDED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.addVideoProducer(payload));
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_VIDEO_CHANGED, (payload: Server.StageMemberVideoProducer) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_VIDEO_CHANGED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.changeVideoProducer(payload));
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_VIDEO_REMOVED, (payload: Server.StageMemberVideoProducerId) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_VIDEO_REMOVED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.removeVideoProducer(payload));
         });
 
         socket.on(ServerStageEvents.STAGE_MEMBER_AUDIO_ADDED, (payload: Server.StageMemberAudioProducer) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_AUDIO_ADDED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.addAudioProducer(payload));
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_AUDIO_CHANGED, (payload: Server.StageMemberAudioProducer) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_AUDIO_CHANGED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.changeAudioProducer(payload));
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_AUDIO_REMOVED, (payload: Server.StageMemberAudioProducerId) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_AUDIO_REMOVED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.removeAudioProducer(payload));
         });
 
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_ADDED, (payload: Server.CustomStageMemberAudioProducer) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_ADDED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.addCustomAudioProducer(payload));
         });
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_CHANGED, (payload: Server.CustomStageMemberAudioProducer) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_CHANGED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.changeCustomAudioProducer(payload));
         });
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_REMOVED, (payload: Server.CustomStageMemberAudioProducerId) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_REMOVED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.removeCustomAudioProducer(payload));
         });
 
         socket.on(ServerStageEvents.STAGE_MEMBER_OV_ADDED, (payload: Server.StageMemberOvTrack) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_OV_ADDED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.addOvTrack(payload));
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_OV_CHANGED, (payload: Server.StageMemberOvTrack) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_OV_CHANGED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.changeOvTrack(payload));
         });
         socket.on(ServerStageEvents.STAGE_MEMBER_OV_REMOVED, (payload: Server.StageMemberOvTrackId) => {
             dispatch({type: ServerStageEvents.STAGE_MEMBER_OV_REMOVED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.removeOvTrack(payload));
         });
 
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_ADDED, (payload: Server.CustomStageMemberOvTrack) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_ADDED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.addCustomOvTrack(payload));
         });
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_CHANGED, (payload: Server.CustomStageMemberOvTrack) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_CHANGED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.changeCustomOvTrack(payload));
         });
         socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_REMOVED, (payload: Server.CustomStageMemberOvTrackId) => {
             dispatch({type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_REMOVED, payload: payload});
+            reduxDispatch(allActions.stageActions.server.removeCustomOvTrack(payload));
         });
     }, [dispatch]);
 
@@ -232,6 +276,7 @@ export const StagesContextProvider = (props: {
                         socket.removeAllListeners();
                     }
                     dispatch({type: AdditionalReducerTypes.RESET});
+                    reduxDispatch(allActions.client.reset());
                     setSocket(undefined);
                 }
             }
