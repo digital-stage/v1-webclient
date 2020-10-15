@@ -8,14 +8,14 @@ import { useRouter } from "next/router";
 import VerticalSlider from "../components/digital-stage-ui/VerticalSlider";
 import PanControler from "../components/digital-stage-ui/PanControl";
 import SwitchButton from "../components/digital-stage-ui/SwitchButton";
-import { useStageState } from "../lib/digitalstage/useStageContext";
+import useStageSelector from "../lib/digitalstage/useStageSelector";
 
 const mixers = ["Guitar", "Strings", "Bass", "Cello"]
 
 const Mixer = () => {
     const router = useRouter();
     const { loading, user } = useAuth();
-    const { stageId } = useStageState();
+    const stageId = useStageSelector<string | undefined>(state => state.stageId);
     const [initialized, setInitialized] = useState<boolean>();
 
     const [value, setValue] = React.useState<number>(5)

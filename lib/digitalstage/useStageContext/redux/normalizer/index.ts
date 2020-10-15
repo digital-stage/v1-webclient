@@ -10,12 +10,12 @@ import {
     StageMemberOvTrack,
     StageMemberVideoProducer,
     User
-} from "../common/model.server";
-import {NormalizedState} from "./schema";
-import {upsert} from "./utils";
+} from "../../../common/model.server";
+import {NormalizedState} from "../../schema";
+import {upsert} from "../../utils";
 
 // See: https://redux.js.org/recipes/structuring-reducers/normalizing-state-shape
-export function normalize(prevState: NormalizedState, data: Partial<{
+function normalize(prevState: NormalizedState, data: Partial<{
     stageId?: string;
     groupId?: string;
     users: User[];
@@ -146,3 +146,5 @@ export function normalize(prevState: NormalizedState, data: Partial<{
     }
     return state;
 }
+
+export default normalize;

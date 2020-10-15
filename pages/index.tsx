@@ -4,10 +4,12 @@ import {useAuth} from "../lib/digitalstage/useAuth";
 import Loading from "../components/theme/Loading";
 import {useRouter} from "next/router";
 import StageView from "../components/stage/StageView";
-import {useStageState} from "../lib/digitalstage/useStageContext";
+import useStageSelector from "../lib/digitalstage/useStageSelector";
+import {Stages} from "../lib/digitalstage/useStageContext/schema";
 
 const Index = () => {
-    const {stageId, stages} = useStageState();
+    const stageId = useStageSelector<string | undefined>(state => state.stageId);
+    const stages = useStageSelector<Stages>(state => state.stages);
     const router = useRouter();
 
     const {loading, user} = useAuth();

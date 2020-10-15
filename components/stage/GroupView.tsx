@@ -1,17 +1,18 @@
 import {Group} from "../../lib/digitalstage/useStageContext/model";
-import {useStageState} from "../../lib/digitalstage/useStageContext";
 import React from "react";
 import StageMemberView from "./StageMemberView";
 import {useStyletron} from "baseui";
 import {Cell, Grid} from "baseui/layout-grid";
 import {H1} from "../theme/typography/Headline";
+import {NormalizedState, StageMembers} from "../../lib/digitalstage/useStageContext/schema";
+import {useSelector} from "../../lib/digitalstage/useStageContext/redux";
 
 
 const GroupView = (props: {
     group: Group
 }) => {
     const [css] = useStyletron();
-    const {stageMembers} = useStageState();
+    const stageMembers = useSelector<NormalizedState, StageMembers>(state => state.stageMembers);
 
     if (stageMembers.byGroup[props.group._id] && stageMembers.byGroup[props.group._id].length > 0) {
         return (

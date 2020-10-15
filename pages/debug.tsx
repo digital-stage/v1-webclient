@@ -1,10 +1,11 @@
 import {useStyletron} from "baseui";
 import React from "react";
-import {useStageState} from "../lib/digitalstage/useStageContext";
+import {useSelector} from "../lib/digitalstage/useStageContext/redux";
+import {NormalizedState} from "../lib/digitalstage/useStageContext/schema";
 
 const Debug = () => {
     const [css] = useStyletron();
-    const state = useStageState();
+    const state = useSelector<NormalizedState>(state => state);
 
     return (
         <div className={css({

@@ -1,9 +1,11 @@
 import React from "react";
-import {useStageState} from "../../lib/digitalstage/useStageContext";
+import {useSelector} from "../../lib/digitalstage/useStageContext/redux";
+import {AudioConsumers, NormalizedState} from "../../lib/digitalstage/useStageContext/schema";
 
 
 export const AllAudioPlayer = () => {
-    const {stageId, audioConsumers} = useStageState();
+    const stageId = useSelector<NormalizedState, string | undefined>(state => state.stageId);
+    const audioConsumers = useSelector<NormalizedState, AudioConsumers>(state => state.audioConsumers);
 
 
     return (

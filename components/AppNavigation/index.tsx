@@ -16,8 +16,10 @@ import {
 import {useRouter} from "next/router";
 import TextLink from "../theme/TextLink";
 import {Delete} from "baseui/icon";
-import {useStageState} from "../../lib/digitalstage/useStageContext";
 import {useAuth} from "../../lib/digitalstage/useAuth";
+import {Devices, NormalizedState, Stages} from "../../lib/digitalstage/useStageContext/schema";
+import {useSelector} from "../../lib/digitalstage/useStageContext/redux";
+import {LocalUser} from "../../lib/digitalstage/useStageContext/model";
 
 
 const AppNavigation = () => {
@@ -35,7 +37,10 @@ const AppNavigation = () => {
     const [activeNavItem, setActiveNavItem] = useState<MainNavItem>();
 
     const router = useRouter();
-    const {stageId, stages, user, devices} = useStageState();
+    const stageId = useSelector<NormalizedState, string | undefined>(state => state.stageId);
+    const stages = useSelector<NormalizedState, Stages>(state => state.stages);
+    const user = useSelector<NormalizedState, LocalUser | undefined>(state => state.user);
+    const devices = useSelector<NormalizedState, Devices>(state => state.devices);
 
     useEffect(() => {
         setActiveNavItem(mainNav.find(nav => nav.item.path === router.pathname));

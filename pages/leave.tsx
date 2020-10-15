@@ -3,11 +3,12 @@ import React, {useEffect} from "react";
 import Loading from "../components/theme/Loading";
 import useStageActions from "../lib/digitalstage/useStageActions";
 import {useRouter} from "next/router";
-import {useStageState} from "../lib/digitalstage/useStageContext";
+import useStageSelector from "../lib/digitalstage/useStageSelector";
 
 const Leave = () => {
     const router = useRouter();
-    const {ready, stageId} = useStageState();
+    const ready = useStageSelector<boolean>(state => state.ready);
+    const stageId = useStageSelector<string | undefined>(state => state.stageId);
     const {leaveStage} = useStageActions();
 
     useEffect(() => {

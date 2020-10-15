@@ -24,8 +24,9 @@ import {
 } from "./common/payloads";
 import {ClientDeviceEvents, ClientStageEvents, ClientUserEvents} from "./common/events";
 import {useRequest} from "../useRequest";
-import useStageSelector from "./useStageSelector";
-import {useStageSocket, useStageState} from "./useStageContext";
+import {useSocket} from "./useStageContext";
+import {NormalizedState} from "./useStageContext/schema";
+import {useSelector} from "./useStageContext/redux";
 
 export interface StageActionsProps {
     updateDevice(id: DeviceId, device: Partial<Device>);
@@ -69,8 +70,8 @@ export interface StageActionsProps {
 }
 
 const useStageActions = (): StageActionsProps => {
-    const socket = useStageSocket();
-    const {stageId} = useStageState();
+    const socket = useSocket();
+    const stageId = useSelector<NormalizedState, string | undefined>(state => state.stageId);
     const {setRequest} = useRequest();
 
     const updateDevice = useCallback((deviceId: string, device: Partial<Omit<Device, "_id">>) => {

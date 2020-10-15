@@ -6,13 +6,13 @@ import {DisplayMedium, HeadingLarge} from "baseui/typography";
 import Login from "./account/login";
 import StageListView from "../components/stage/StageListView";
 import {useRouter} from "next/router";
-import {useStageState} from "../lib/digitalstage/useStageContext";
+import useStageSelector from "../lib/digitalstage/useStageSelector";
 
 
 const Stages = () => {
     const router = useRouter();
     const {loading, user} = useAuth();
-    const {stageId} = useStageState();
+    const stageId = useStageSelector<string | undefined>(state => state.stageId);
     const [initialized, setInitialized] = useState<boolean>();
 
     useEffect(() => {

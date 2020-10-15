@@ -1,32 +1,25 @@
 import React, {useEffect, useState} from "react";
-import useStageSelector from "./digitalstage/useStageSelector";
-import {useStageState} from "./digitalstage/useStageContext";
+import {useSelector} from "./digitalstage/useStageContext/redux";
+import {NormalizedState} from "./digitalstage/useStageContext/schema";
 
-export interface DarkModeProps {
-    darkMode: boolean,
-
-    setDarkMode: (enabled: boolean) => void
-}
-
-export const DarkModeContext = React.createContext<DarkModeProps>(undefined);
+const DarkModeContext = React.createContext<boolean>(false);
 
 export const useDarkModeSwitch = () => React.useContext(DarkModeContext);
 
-export const DarkModeStageProvider = (props: {
+export const DarkModeConsumer = DarkModeContext.Consumer;
+
+export const DarkModeProvider = (props: {
     children: React.ReactNode
 }) => {
     const [darkMode, setDarkMode] = useState<boolean>(false);
-    const {stageId} = useStageState();
+    const stageId = useSelector<NormalizedState, string | undefined>(state => state.stageId);
 
     useEffect(() => {
         setDarkMode(stageId !== undefined);
     }, [stageId]);
 
     return (
-        <DarkModeContext.Provider value={{
-            darkMode,
-            setDarkMode
-        }}>
+        <DarkModeContext.Provider value={darkMode}>
             {props.children}
         </DarkModeContext.Provider>
     )
@@ -34,9 +27,9 @@ export const DarkModeStageProvider = (props: {
 
 export const withDarkMode = (Component) => {
     const WithDarkMode = (props) => {
-        const {darkMode, setDarkMode} = useDarkModeSwitch();
+        const darkMode = useDarkModeSwitch();
         return (
-            <Component darkMode={darkMode} setDarkMode={setDarkMode} {...props} />
+            <Component darkMode={darkMode} {...props} />
         )
     };
     return WithDarkMode;

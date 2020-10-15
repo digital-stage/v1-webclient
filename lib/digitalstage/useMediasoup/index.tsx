@@ -17,8 +17,7 @@ import {
 import {Device as MediasoupDevice} from "mediasoup-client/lib/Device";
 import {ClientDeviceEvents} from "../common/events";
 import {AddAudioProducerPayload, AddVideoProducerPayload} from "../common/payloads";
-import {useStageDispatch, useStageSocket} from "../useStageContext";
-import {AdditionalReducerTypes} from "../useStageContext/reducer";
+import {useSocket} from "../useStageContext";
 import {AudioConsumer, Device, VideoConsumer} from "../useStageContext/model";
 import {useDispatch, useSelector} from "../useStageContext/redux";
 import allActions from "../useStageContext/redux/actions";
@@ -30,6 +29,7 @@ import {
     VideoConsumers,
     VideoProducers
 } from "../useStageContext/schema";
+import {AdditionalReducerTypes} from "../useStageContext/redux/reducers";
 
 const TIMEOUT_MS: number = 4000;
 
@@ -38,8 +38,8 @@ const MediasoupContext = React.createContext(undefined);
 export const MediasoupProvider = (props: {
     children: React.ReactNode
 }) => {
-    const socket = useStageSocket();
-    const dispatch = useStageDispatch();
+    const socket = useSocket();
+    const dispatch = useDispatch();
 
     const localDevice = useSelector<NormalizedState, Device>(state => {
         if (state.devices.local)

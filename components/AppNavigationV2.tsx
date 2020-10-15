@@ -3,8 +3,10 @@ import TextLink from "./theme/TextLink";
 import React, {useEffect, useState} from "react";
 import {ChevronDown, Delete, Overflow as UserIcon, Upload as Icon} from "baseui/icon";
 import {useRouter} from "next/router";
-import {useStageState} from "../lib/digitalstage/useStageContext";
 import {useAuth} from "../lib/digitalstage/useAuth";
+import {useSelector} from "../lib/digitalstage/useStageContext/redux";
+import {Devices, NormalizedState, Stages} from "../lib/digitalstage/useStageContext/schema";
+import {LocalUser} from "../lib/digitalstage/useStageContext/model";
 
 export const SHOW_ALL_STAGES: NavItem = {
     icon: () => <img src="filter_none-24px.svg"/>,
@@ -92,7 +94,10 @@ const setItemActiveByLabel = (items: NavItem[], label: string) => {
 const AppNavigationV2 = () => {
     const router = useRouter();
     const {user: authUser} = useAuth();
-    const {stageId, stages, user, devices} = useStageState();
+    const stageId = useSelector<NormalizedState, string | undefined>(state => state.stageId);
+    const stages = useSelector<NormalizedState, Stages>(state => state.stages);
+    const user = useSelector<NormalizedState, LocalUser | undefined>(state => state.user);
+    const devices = useSelector<NormalizedState, Devices>(state => state.devices);
     const [mainItems, setMainItems] = useState<NavItem[]>(NO_USER_NAV);
     const [userItems, setUserItems] = useState<NavItem[]>(undefined);
 

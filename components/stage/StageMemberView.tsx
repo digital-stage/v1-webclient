@@ -1,17 +1,20 @@
 import {StageMember} from "../../lib/digitalstage/useStageContext/model";
-import {useStageState} from "../../lib/digitalstage/useStageContext";
 import {useStyletron} from "baseui";
 import React from "react";
 import {Avatar} from "baseui/avatar";
 import OnlineStatus from "../theme/OnlineStatus";
 import CanvasPlayer from "../video/CanvasPlayer";
 import {H2} from "../theme/typography/Headline";
+import {NormalizedState, Users, VideoConsumers} from "../../lib/digitalstage/useStageContext/schema";
+import {useSelector} from "../../lib/digitalstage/useStageContext/redux";
+import {shallowEqual} from "react-redux";
 
 const StageMemberView = (props: {
     stageMember: StageMember
 }) => {
     const [css] = useStyletron();
-    const {users, videoConsumers} = useStageState();
+    const users = useSelector<NormalizedState, Users>(state => state.users, shallowEqual);
+    const videoConsumers = useSelector<NormalizedState, VideoConsumers>(state => state.videoConsumers, shallowEqual);
 
     const user = users.byId[props.stageMember.userId];
 

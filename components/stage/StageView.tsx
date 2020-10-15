@@ -1,12 +1,14 @@
-import {useStageState} from "../../lib/digitalstage/useStageContext";
 import React from "react";
 import GroupView from "./GroupView";
 import {Stage} from "../../lib/digitalstage/useStageContext/model";
+import {useSelector} from "../../lib/digitalstage/useStageContext/redux";
+import {Groups, NormalizedState, VideoConsumers} from "../../lib/digitalstage/useStageContext/schema";
+import {shallowEqual} from "react-redux";
 
 const StageView = (props: {
     stage: Stage
 }) => {
-    const {groups} = useStageState();
+    const groups = useSelector<NormalizedState, Groups>(state => state.groups, shallowEqual);
 
     return (
         <div>

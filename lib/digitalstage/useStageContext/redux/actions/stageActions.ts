@@ -1,6 +1,5 @@
 import {ServerStageEvents} from "../../../common/events";
 import {Group, InitialStagePackage, Stage, StageMember, User} from "../../../common/model.server";
-import {AdditionalReducerTypes} from "../../reducer";
 import {
     AudioConsumer,
     AudioProducer,
@@ -11,6 +10,7 @@ import {
     VideoConsumer,
     VideoProducer
 } from "../../model";
+import {AdditionalReducerTypes} from "../reducers";
 
 const addUser = (user: User) => {
     return {
