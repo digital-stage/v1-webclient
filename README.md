@@ -1,5 +1,13 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Digital Stage Web Client Service
+
+This service implementation provides the React web frontend for the Digital Stage platform once running.
+
+
+## Tech stack
+This service is based on next.js and generates part static and part server-side rendered pages.
+We are using an event-driven socket.io API for the client server communication and Redux for the storage of a normalized state.
+Currently we are heavily depending on baseweb components, but are replacing them step for step with own designed components.
+
 
 ## Getting Started
 
@@ -13,23 +21,22 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### Current dockerization
+Currently a dockerization of all services is planned and on it's way.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+### Good resources or tutorials
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js documentation](https://nextjs.org/docs) -  learn about Next.js
+- [Next.js and Redux](https://github.com/vercel/next.js/tree/canary/examples/with-redux) - reference implementation using redux inside the Next.js environment
+- [Styletron documentation](https://www.styletron.org/react) - learn about styletron, one of the most performing CSS-in-JS technology we are using
+- [Mediasoup client documentation](https://mediasoup.org/documentation/v3/mediasoup-client/api/) - learn about the webrtc technologie we are using
+- 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+#### For later
+- [Capture a MediaStream From a Canvas, Video or Audio Element](https://developers.google.com/web/updates/2016/10/capture-stream) - Capture MediaStream from canvas (for implementing streaming to video platforms later) - we used this tutorial to implement the video inside canvas component (CanvasPlayer.tsx)
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Visit [http://www.digital-stage.org](http://www.digital-stage.org)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-=======
-# react-hooks
-React Hooks for interacting with the Stage Server and Router
->>>>>>> a2eb3234c229d87a8c172764194c88dac050f166
