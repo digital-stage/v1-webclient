@@ -1,17 +1,10 @@
 import { createMuiTheme } from "@material-ui/core/styles";
-declare module "@material-ui/core/styles/createPalette" {
-  interface Palette {
-    neutral: Palette['primary'];
-  }
-  interface PaletteOptions {
-    neutral: PaletteOptions['primary'];
-  }
-}
+
 const theme = createMuiTheme({
   palette: {
     primary: {
       main: "#F20544",
-      light: "#A7A7A7",
+      light: "#A7A7A7"
     },
     secondary: {
       main: "#2452CE",
@@ -20,10 +13,6 @@ const theme = createMuiTheme({
     info:{
       main:"#fff",
       light:"#000"
-    },
-    neutral: {
-      main: '#000',
-      light:"#fff"
     },
     error: {
       main: "#FA000099",
@@ -120,6 +109,7 @@ const theme = createMuiTheme({
       fontSize:"0.8125rem",
       fontFamily: "Poppins",
       fontWeight: 600,
+      lineHeight: "initial"
     }
   },
   shape:{

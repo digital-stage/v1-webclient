@@ -13,6 +13,8 @@ import Chip from "../components/digital-stage-ui/Chip";
 import TextField from "../components/digital-stage-ui/TextField";
 import { Typography } from "@material-ui/core";
 import Icon from "../components/digital-stage-ui/Icon";
+import Welcome from "../components/digital-stage-sign-in/Welcome";
+import LoginIndex from '../components/digital-stage-sign-in'
 
 
 
@@ -30,8 +32,10 @@ const Components = () => {
             return <Login />
         } else {
             return (
-                <div style={{ marginBottom: "100vh", height: "220vh", background: "transparent linear-gradient(202deg, #343434 0%, #141414 100%) 0% 0% no-repeat padding-box" }}>
-                    <FlexContainer>
+                <div>
+                    {/* <Welcome/> */}
+                    <LoginIndex/>
+                    {/* <FlexContainer>
                         <Button color="primary" text="Primary" withIcon iconName="settings" iconColor="white" />
                         <Button color="secondary" text="Seconday" />
                         <Button color="light" text="Light" />
@@ -85,7 +89,7 @@ const Components = () => {
                     </FlexContainer>
                     <FlexContainer>
                         <Icon name="settings" />
-                    </FlexContainer>
+                    </FlexContainer> */}
                 </div>
             );
         }

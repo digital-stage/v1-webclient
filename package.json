@@ -10,6 +10,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "baseui": "^9.99.0",
+    "fg-loadcss": "^3.1.0",
     "formik": "^2.1.5",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.20",
@@ -26,6 +27,7 @@
     "standardized-audio-context": "^25.1.0",
     "styletron-engine-atomic": "^1.4.6",
     "styletron-react": "^5.2.7",
+    "validator": "^13.1.17",
     "webrtc-adapter": "^7.7.0",
     "yup": "^0.29.3"
   },

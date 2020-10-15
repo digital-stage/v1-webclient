@@ -10,14 +10,15 @@ export interface Props {
     withIcon: boolean,
     iconName?: string,
     iconColor?: string,
+    type?:"submit"
 }
 const useStyles = makeStyles<Theme, Props>((theme: Theme) =>
     createStyles({
         root: {
-            color: ({ color }) => color === "dark" && theme.palette.neutral.light || color === "light" && theme.palette.neutral.main,
-            backgroundColor: ({ color }) => color === "dark" && theme.palette.neutral.main || color === "light" && theme.palette.neutral.light,
+            color: ({ color }) => color === "dark" && theme.palette.common.white || color === "light" && theme.palette.common.black,
+            backgroundColor: ({ color }) => color === "dark" && theme.palette.common.black || color === "light" && theme.palette.common.white,
             '&:hover': {
-                backgroundColor: ({ color }) => color === "dark" && theme.palette.neutral.main || color === "light" && theme.palette.neutral.light
+                backgroundColor: ({ color }) => color === "dark" && theme.palette.common.black || color === "light" && theme.palette.common.white
             },
             margin: theme.spacing(1),
             borderRadius: "21px",
@@ -31,6 +32,7 @@ export default function Button(props: Props) {
     const {
         color,
         text,
+        type,
         withIcon,
         iconName,
         iconColor
@@ -43,6 +45,7 @@ export default function Button(props: Props) {
                 variant="contained"
                 color={color}
                 className={classes.root}
+                type={type}
                 startIcon={withIcon && <Icon name={iconName} iconColor={iconColor} />}
             >
                 <Typography variant="button">{text}</Typography>
