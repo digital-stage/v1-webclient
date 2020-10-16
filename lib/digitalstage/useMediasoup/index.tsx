@@ -158,7 +158,7 @@ export const MediasoupProvider = (props: {
                     }
                 }),
                 audioProducers.allIds.map(audioProducerId => {
-                    if (!audioConsumers.byProducer[audioProducerId]) {
+                    if (!audioConsumers.byProducer[audioProducerId] && audioProducers.byId[audioProducerId]) {
                         return createConsumer(connection, device, receiveTransport, audioProducers.byId[audioProducerId])
                             .then(consumer => {
                                 if (consumer.paused)
@@ -175,6 +175,9 @@ export const MediasoupProvider = (props: {
                                 }));
                             })
                             .catch(error => console.log(error))
+                    }
+                    if( !audioProducers.byId[audioProducerId] ) {
+                        console.error("FIXME: error inside reducer: producer is inside allIds but not byId");
                     }
                 })
             ])
@@ -206,9 +209,7 @@ export const MediasoupProvider = (props: {
                     }
                 }),
                 videoProducers.allIds.map(videoProducerId => {
-                    if (!videoConsumers.byProducer[videoProducerId]) {
-                        console.log("Hey");
-                        console.log("Creating video producer with global id: " + videoProducers.byId[videoProducerId].globalProducerId);
+                    if (!videoConsumers.byProducer[videoProducerId] && videoProducers.byId[videoProducerId]) {
                         return createConsumer(connection, device, receiveTransport, videoProducers.byId[videoProducerId])
                             .then(consumer => {
                                 if (consumer.paused)
@@ -225,6 +226,9 @@ export const MediasoupProvider = (props: {
                                 }))
                             )
                             .catch(error => console.log(error))
+                    }
+                    if( !videoProducers.byId[videoProducerId] ) {
+                        console.error("FIXME: error inside reducer: producer is inside allIds but not byId");
                     }
                 })
             ])
