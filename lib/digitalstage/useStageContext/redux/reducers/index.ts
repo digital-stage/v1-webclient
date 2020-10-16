@@ -1,6 +1,6 @@
 import {InitialNormalizedState, NormalizedState, OutsideStageNormalizedState} from "../../schema";
 import {ServerDeviceEvents, ServerGlobalEvents, ServerStageEvents, ServerUserEvents} from "../../../common/events";
-import {addItemToCollection, filter, removeItem, updateItem, upsert} from "../../utils";
+import {addItemToCollection, filter, removeItem, updateItem, upsert} from "../utils";
 import {AnyAction, Reducer} from "redux";
 import _ from "lodash";
 import normalize from "../normalizer";

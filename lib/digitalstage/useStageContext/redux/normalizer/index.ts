@@ -12,7 +12,7 @@ import {
     User
 } from "../../../common/model.server";
 import {NormalizedState} from "../../schema";
-import {upsert} from "../../utils";
+import {upsert} from "../utils";
 
 // See: https://redux.js.org/recipes/structuring-reducers/normalizing-state-shape
 function normalize(prevState: NormalizedState, data: Partial<{
