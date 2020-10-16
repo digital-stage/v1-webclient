@@ -1,9 +1,20 @@
 import {InitialNormalizedState, NormalizedState, OutsideStageNormalizedState} from "../../schema";
 import {ServerDeviceEvents, ServerGlobalEvents, ServerStageEvents, ServerUserEvents} from "../../../common/events";
-import {removeItem, updateItem, upsert} from "../../utils";
+import {addItemToCollection, filter, removeItem, updateItem, upsert} from "../../utils";
 import {AnyAction, Reducer} from "redux";
 import _ from "lodash";
 import normalize from "../normalizer";
+import {Stage} from "../../../common/model.server";
+import {
+    AudioConsumer,
+    AudioProducer,
+    CustomAudioProducer,
+    CustomStageMember,
+    Device,
+    Group,
+    StageMember,
+    User, VideoConsumer, VideoProducer
+} from "../../model";
 
 export enum AdditionalReducerTypes {
     RESET = "reset",
@@ -43,27 +54,18 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
                 ...state,
                 devices: {
                     ...state.devices,
-                    byId: {
-                        ...state.devices.byId,
-                        [action.payload._id]: action.payload
-                    },
+                    ...addItemToCollection<Device>(state.devices, action.payload._id, action.payload),
                     local: action.payload._id,
-                    allIds: upsert(state.devices.allIds, action.payload._id)
                 }
             }
 
         case ServerDeviceEvents.DEVICE_ADDED:
             return {
                 ...state,
-
                 devices: {
                     ...state.devices,
-                    byId: {
-                        ...state.devices.byId,
-                        [action.payload._id]: action.payload
-                    },
-                    remote: upsert(state.devices.remote, action.payload._id),
-                    allIds: upsert(state.devices.allIds, action.payload._id)
+                    ...addItemToCollection<Device>(state.devices, action.payload._id, action.payload),
+                    remote: upsert(state.devices.remote, action.payload._id)
                 }
             }
         case ServerDeviceEvents.DEVICE_CHANGED:
@@ -78,9 +80,10 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
             }
 
         case ServerStageEvents.USER_ADDED:
-            return normalize(state, {
-                users: [action.payload]
-            });
+            return {
+                ...state,
+                users: addItemToCollection<User>(state.users, action.payload._id, action.payload)
+            }
         case ServerStageEvents.USER_CHANGED:
             return updateItem(state, "users", action.payload._id, action.payload);
         case ServerStageEvents.USER_REMOVED:
@@ -94,6 +97,7 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
             };
 
         case ServerStageEvents.STAGE_JOINED:
+            console.log("JOINED STAGE!");
             console.log(action.payload);
             return normalize(state, {
                 ...action.payload,
@@ -101,29 +105,111 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
             })
         case ServerStageEvents.STAGE_LEFT:
             return {
-                ...state,
-                ...OutsideStageNormalizedState
+                // Keep existing
+                ready: state.ready,
+                devices: state.devices,
+                stages: state.stages,
+                groups: state.groups,
+                user: state.user,
+                users: state.users,
+                audioConsumers: state.audioConsumers,
+                videoConsumers: state.videoConsumers,
+                // Reset states:
+                stageId: undefined,
+                groupId: undefined,
+                customGroups: {
+                    byId: {},
+                    byGroup: {},
+                    allIds: []
+                },
+                stageMembers: {
+                    byId: {},
+                    byGroup: {},
+                    byStage: {},
+                    allIds: []
+                },
+                customStageMembers: {
+                    byId: {},
+                    byStageMember: {},
+                    allIds: []
+                },
+                videoProducers: {
+                    byId: {},
+                    byStageMember: {},
+                    allIds: []
+                },
+                audioProducers: {
+                    byId: {},
+                    byStageMember: {},
+                    allIds: []
+                },
+                customAudioProducers: {
+                    byId: {},
+                    byAudioProducer: {},
+                    allIds: []
+                },
+                ovTracks: {
+                    byId: {},
+                    byStageMember: {},
+                    allIds: []
+                },
+                customOvTracks: {
+                    byId: {},
+                    byOvTrack: {},
+                    allIds: []
+                }
             };
         case ServerStageEvents.STAGE_ADDED:
-            return normalize(state, {
-                stages: [action.payload]
-            });
+            return {
+                ...state,
+                stages: {
+                    ...state.stages,
+                    byId: {
+                        ...state.stages.byId,
+                        [action.payload._id]: {
+                            ...action.payload,
+                            isAdmin: state.user && (action.payload as Stage).admins.find(adminId => adminId === state.user._id)
+                        },
+                    },
+                    allIds: [...state.stages.allIds, action.payload._id]
+                }
+            }
         case ServerStageEvents.STAGE_CHANGED:
-            return updateItem(state, "stages", action.payload._id, action.payload);
+            return {
+                ...state,
+                stages: {
+                    ...state.stages,
+                    byId: {
+                        ...state.stages.byId,
+                        [action.payload._id]: {
+                            ...state.stages.byId[action.payload._id],
+                            ...action.payload,
+                            isAdmin: state.user && state.stages.byId[action.payload._id].admins.find(adminId => adminId === state.user._id)
+                        }
+                    }
+                }
+            };
         case ServerStageEvents.STAGE_REMOVED:
             return {
                 ...state,
                 stages: {
                     ...state.stages,
                     byId: _.omit(state.stages.byId, action.payload),
-                    allIds: _.filter(state.stages.allIds, action.payload)
+                    allIds: filter(state.stages.allIds, action.payload)
                 }
             };
 
         case ServerStageEvents.GROUP_ADDED:
-            return normalize(state, {
-                groups: [action.payload]
-            });
+            return {
+                ...state,
+                groups: {
+                    ...addItemToCollection<Group>(state.groups, action.payload._id, action.payload),
+                    byStage: {
+                        ...state.groups.byStage,
+                        [action.payload.stageId]: upsert(state.groups.byStage[action.payload.stageId], action.payload._id)
+                    }
+                }
+            }
         case ServerStageEvents.GROUP_CHANGED:
             return updateItem(state, "groups", action.payload._id, action.payload);
         case ServerStageEvents.GROUP_REMOVED:
@@ -134,22 +220,33 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
                     byId: _.omit(state.groups.byId, action.payload),
                     byStage: {
                         ...state.groups.byStage,
-                        [state.groups.byId[action.payload].stageId]: _.filter(state.groups.byStage[state.groups.byId[action.payload].stageId], action.payload),
+                        [state.groups.byId[action.payload].stageId]: filter(state.groups.byStage[state.groups.byId[action.payload].stageId], action.payload),
                     },
-                    allIds: _.filter(state.groups.allIds, action.payload)
+                    allIds: filter(state.groups.allIds, action.payload)
                 }
             };
 
         case ServerStageEvents.STAGE_MEMBER_ADDED:
-            return normalize(state, {
-                stageMembers: [action.payload]
-            });
+            return {
+                ...state,
+                stageMembers: {
+                    ...addItemToCollection<StageMember>(state.stageMembers, action.payload._id, action.payload),
+                    byStage: {
+                        ...state.stageMembers.byStage,
+                        [action.payload.stageId]: upsert(state.stageMembers.byStage[action.payload.stageId], action.payload._id)
+                    },
+                    byGroup: {
+                        ...state.stageMembers.byGroup,
+                        [action.payload.groupId]: upsert(state.stageMembers.byStage[action.payload.groupId], action.payload._id)
+                    }
+                }
+            }
         case ServerStageEvents.STAGE_MEMBER_CHANGED:
             if (state.stageMembers.byId[action.payload._id]) {
                 const oldGroupId = state.stageMembers.byId[action.payload._id].groupId;
                 if (action.payload.groupId && oldGroupId !== action.payload.groupId) {
                     // Remove old byGroup entry
-                    state.stageMembers.byGroup[oldGroupId] = _.remove(state.stageMembers.byGroup[oldGroupId], action.payload._id);
+                    state.stageMembers.byGroup[oldGroupId] = filter(state.stageMembers.byGroup[oldGroupId], action.payload._id);
                     // Add new byGroup
                     state.stageMembers.byGroup[action.payload.groupId] = upsert(state.stageMembers.byGroup[action.payload.groupId], action.payload._id);
                 }
@@ -163,20 +260,27 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
                     byId: _.omit(state.stageMembers.byId, action.payload),
                     byStage: {
                         ...state.stageMembers.byStage,
-                        [state.stageMembers.byId[action.payload].stageId]: _.filter(state.stageMembers.byStage[state.stageMembers.byId[action.payload].stageId], action.payload),
+                        [state.stageMembers.byId[action.payload].stageId]: filter(state.stageMembers.byStage[state.stageMembers.byId[action.payload].stageId], action.payload),
                     },
                     byGroup: {
                         ...state.stageMembers.byGroup,
-                        [state.stageMembers.byId[action.payload].groupId]: _.filter(state.stageMembers.byGroup[state.stageMembers.byId[action.payload].groupId], action.payload),
+                        [state.stageMembers.byId[action.payload].groupId]: filter(state.stageMembers.byGroup[state.stageMembers.byId[action.payload].groupId], action.payload),
                     },
-                    allIds: _.filter(state.stageMembers.allIds, action.payload)
+                    allIds: filter(state.stageMembers.allIds, action.payload)
                 }
             };
 
         case ServerStageEvents.CUSTOM_STAGE_MEMBER_ADDED:
-            return normalize(state, {
-                customStageMembers: [action.payload]
-            });
+            return {
+                ...state,
+                customStageMembers: {
+                    ...addItemToCollection<CustomStageMember>(state.customStageMembers, action.payload._id, action.payload),
+                    byStageMember: {
+                        ...state.customStageMembers.byStageMember,
+                        [action.payload.stageMemberId]: upsert(state.customStageMembers.byStageMember[action.payload.stageMemberId], action.payload._id)
+                    },
+                }
+            };
         case ServerStageEvents.CUSTOM_STAGE_MEMBER_CHANGED:
             return updateItem(state, "customStageMembers", action.payload._id, action.payload);
         case ServerStageEvents.CUSTOM_STAGE_MEMBER_REMOVED:
@@ -187,20 +291,28 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
                     byId: _.omit(state.customStageMembers.byId, action.payload),
                     byStageMember: {
                         ...state.customStageMembers.byStageMember,
-                        [state.customStageMembers.byId[action.payload].stageMemberId]: _.filter(state.customStageMembers.byStageMember[state.customStageMembers.byId[action.payload].stageMemberId], action.payload),
+                        [state.customStageMembers.byId[action.payload].stageMemberId]: filter(state.customStageMembers.byStageMember[state.customStageMembers.byId[action.payload].stageMemberId], action.payload),
                     },
-                    allIds: _.filter(state.stageMembers.allIds, action.payload)
+                    allIds: filter(state.stageMembers.allIds, action.payload)
                 }
             };
 
-
         case ServerStageEvents.STAGE_MEMBER_AUDIO_ADDED:
-            return normalize(state, {
-                audioProducers: [action.payload]
-            });
+            return {
+                ...state,
+                audioProducers: {
+                    ...addItemToCollection<AudioProducer>(state.audioProducers, action.payload._id, action.payload),
+                    byStageMember: {
+                        ...state.audioProducers.byStageMember,
+                        [action.payload.stageMemberId]: action.payload._id,
+                    },
+                }
+            };
         case ServerStageEvents.STAGE_MEMBER_AUDIO_CHANGED:
             return updateItem(state, "audioProducers", action.payload._id, action.payload);
         case ServerStageEvents.STAGE_MEMBER_AUDIO_REMOVED:
+            console.log("STAGE_MEMBER_AUDIO_REMOVED");
+            console.log(state.audioProducers.byId[action.payload])
             return {
                 ...state,
                 audioProducers: {
@@ -208,16 +320,24 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
                     byId: _.omit(state.audioProducers.byId, action.payload),
                     byStageMember: {
                         ...state.audioProducers.byStageMember,
-                        [state.audioProducers.byId[action.payload].stageMemberId]: _.filter(state.audioProducers.byStageMember[state.audioProducers.byId[action.payload].stageMemberId], action.payload),
+                        [state.audioProducers.byId[action.payload].stageMemberId]: filter(state.audioProducers.byStageMember[state.audioProducers.byId[action.payload].stageMemberId], action.payload),
                     },
-                    allIds: _.filter(state.stageMembers.allIds, action.payload)
+                    allIds: filter(state.stageMembers.allIds, action.payload)
                 }
             };
 
         case ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_ADDED:
-            return normalize(state, {
-                customAudioProducers: [action.payload]
-            });
+            return {
+                ...state,
+                customAudioProducers: {
+                    ...state.customAudioProducers,
+                    ...addItemToCollection<CustomAudioProducer>(state.customAudioProducers, action.payload._id, action.payload),
+                    byAudioProducer: {
+                        ...state.customAudioProducers.byAudioProducer,
+                        [action.payload.stageMemberAudioProducerId]: upsert(state.customAudioProducers.byAudioProducer[action.payload.stageMemberAudioProducerId], action.payload._id)
+                    }
+                }
+            }
         case ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_CHANGED:
             return updateItem(state, "customAudioProducers", action.payload._id, action.payload);
         case ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_REMOVED:
@@ -228,19 +348,28 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
                     byId: _.omit(state.customAudioProducers.byId, action.payload),
                     byAudioProducer: {
                         ...state.customAudioProducers.byAudioProducer,
-                        [state.customAudioProducers.byId[action.payload].stageMemberAudioProducerId]: _.filter(state.customAudioProducers.byAudioProducer[state.customAudioProducers.byId[action.payload].stageMemberAudioProducerId], action.payload),
+                        [state.customAudioProducers.byId[action.payload].stageMemberAudioProducerId]: filter(state.customAudioProducers.byAudioProducer[state.customAudioProducers.byId[action.payload].stageMemberAudioProducerId], action.payload),
                     },
-                    allIds: _.filter(state.stageMembers.allIds, action.payload)
+                    allIds: filter(state.stageMembers.allIds, action.payload)
                 }
             };
 
         case ServerStageEvents.STAGE_MEMBER_VIDEO_ADDED:
-            return normalize(state, {
-                videoProducers: [action.payload]
-            });
+            return {
+                ...state,
+                videoProducers: {
+                    ...addItemToCollection<VideoProducer>(state.videoProducers, action.payload._id, action.payload),
+                    byStageMember: {
+                        ...state.videoProducers.byStageMember,
+                        [action.payload.stageMemberId]: action.payload._id,
+                    },
+                }
+            }
         case ServerStageEvents.STAGE_MEMBER_VIDEO_CHANGED:
             return updateItem(state, "videoProducers", action.payload._id, action.payload);
         case ServerStageEvents.STAGE_MEMBER_VIDEO_REMOVED:
+            console.log("STAGE_MEMBER_VIDEO_REMOVED");
+            console.log(state.videoProducers.byId[action.payload]);
             return {
                 ...state,
                 videoProducers: {
@@ -248,9 +377,9 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
                     byId: _.omit(state.videoProducers.byId, action.payload),
                     byStageMember: {
                         ...state.videoProducers.byStageMember,
-                        [state.videoProducers.byId[action.payload].stageMemberId]: _.filter(state.videoProducers.byStageMember[state.videoProducers.byId[action.payload].stageMemberId], action.payload),
+                        [state.videoProducers.byId[action.payload].stageMemberId]: filter(state.videoProducers.byStageMember[state.videoProducers.byId[action.payload].stageMemberId], action.payload),
                     },
-                    allIds: _.filter(state.stageMembers.allIds, action.payload)
+                    allIds: filter(state.stageMembers.allIds, action.payload)
                 }
             };
 
@@ -259,11 +388,7 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
             return {
                 ...state,
                 audioConsumers: {
-                    ...state.audioConsumers,
-                    byId: {
-                        ...state.audioConsumers.byId,
-                        [action.payload._id]: action.payload
-                    },
+                    ...addItemToCollection<AudioConsumer>(state.audioConsumers, action.payload._id, action.payload),
                     byProducer: {
                         ...state.audioConsumers.byProducer,
                         [action.payload.audioProducer]: action.payload._id
@@ -275,8 +400,7 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
                     byStageMember: {
                         ...state.audioConsumers.byStageMember,
                         [action.payload.stageMember]: upsert(state.audioConsumers.byStageMember[action.payload.stageMemberId], action.payload._id),
-                    },
-                    allIds: upsert(state.audioConsumers.allIds, action.payload._id)
+                    }
                 }
             };
 
@@ -288,14 +412,14 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
                     byId: _.omit(state.audioConsumers.byId, action.payload),
                     byStageMember: {
                         ...state.audioConsumers.byStageMember,
-                        [state.audioConsumers.byId[action.payload].stageMember]: _.filter(state.audioConsumers.byStageMember[state.audioConsumers.byId[action.payload].stageMember], action.payload),
+                        [state.audioConsumers.byId[action.payload].stageMember]: filter(state.audioConsumers.byStageMember[state.audioConsumers.byId[action.payload].stageMember], action.payload),
                     },
                     byStage: {
                         ...state.audioConsumers.byStage,
-                        [state.audioConsumers.byId[action.payload].stage]: _.filter(state.audioConsumers.byStage[state.audioConsumers.byId[action.payload].stage], action.payload),
+                        [state.audioConsumers.byId[action.payload].stage]: filter(state.audioConsumers.byStage[state.audioConsumers.byId[action.payload].stage], action.payload),
                     },
                     byProducer: _.omit(state.audioConsumers.byProducer, state.audioConsumers.byId[action.payload].audioProducer),
-                    allIds: _.filter(state.audioConsumers.allIds, action.payload)
+                    allIds: filter(state.audioConsumers.allIds, action.payload)
                 }
             };
 
@@ -304,11 +428,7 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
             return {
                 ...state,
                 videoConsumers: {
-                    ...state.videoConsumers,
-                    byId: {
-                        ...state.videoConsumers.byId,
-                        [action.payload._id]: action.payload
-                    },
+                    ...addItemToCollection<VideoConsumer>(state.videoConsumers, action.payload._id, action.payload),
                     byProducer: {
                         ...state.videoConsumers.byProducer,
                         [action.payload.videoProducer]: action.payload._id
@@ -320,8 +440,7 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
                     byStageMember: {
                         ...state.videoConsumers.byStageMember,
                         [action.payload.stageMember]: upsert(state.videoConsumers.byStageMember[action.payload.stageMemberId], action.payload._id),
-                    },
-                    allIds: upsert(state.videoConsumers.allIds, action.payload._id)
+                    }
                 }
             };
 
@@ -333,14 +452,14 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Normalized
                     byId: _.omit(state.videoConsumers.byId, action.payload),
                     byStageMember: {
                         ...state.videoConsumers.byStageMember,
-                        [state.videoConsumers.byId[action.payload].stageMember]: _.filter(state.videoConsumers.byStageMember[state.videoConsumers.byId[action.payload].stageMember], action.payload),
+                        [state.videoConsumers.byId[action.payload].stageMember]: filter(state.videoConsumers.byStageMember[state.videoConsumers.byId[action.payload].stageMember], action.payload),
                     },
                     byStage: {
                         ...state.videoConsumers.byStage,
-                        [state.videoConsumers.byId[action.payload].stage]: _.filter(state.videoConsumers.byStage[state.videoConsumers.byId[action.payload].stage], action.payload),
+                        [state.videoConsumers.byId[action.payload].stage]: filter(state.videoConsumers.byStage[state.videoConsumers.byId[action.payload].stage], action.payload),
                     },
                     byProducer: _.omit(state.videoConsumers.byProducer, state.videoConsumers.byId[action.payload].videoProducer),
-                    allIds: _.filter(state.videoConsumers.allIds, action.payload)
+                    allIds: filter(state.videoConsumers.allIds, action.payload)
                 }
             };
     }

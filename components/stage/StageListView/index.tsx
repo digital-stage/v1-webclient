@@ -14,6 +14,7 @@ import {Client} from "../../../lib/digitalstage/common/model.client";
 import useStageActions from "../../../lib/digitalstage/useStageActions";
 import {useSelector} from "../../../lib/digitalstage/useStageContext/redux";
 import {Groups, NormalizedState, Stages} from "../../../lib/digitalstage/useStageContext/schema";
+import {shallowEqual} from "react-redux";
 
 const Label = styled("div", {})
 const GlobalActions = styled("div", {
@@ -73,7 +74,7 @@ const GroupAdminActions = styled("div", {
 })
 
 const StageListView = () => {
-    const stages = useSelector<NormalizedState, Stages>(state => state.stages);
+    const stages = useSelector<NormalizedState, Stages>(state => state.stages, shallowEqual);
     const groups = useSelector<NormalizedState, Groups>(state => state.groups);
     const currentStageId = useSelector<NormalizedState, string | undefined>(state => state.stageId);
     const currentGroupId = useSelector<NormalizedState, string | undefined>(state => state.groupId);

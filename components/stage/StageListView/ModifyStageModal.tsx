@@ -32,7 +32,6 @@ const ModifyStageModal = (props: {
 }) => {
     const {updateStage} = useStageActions();
     const formik = useFormik({
-        validateOnMount: true,
         initialValues: props.stage ? {
             name: props.stage.name,
             password: props.stage.password,
@@ -194,11 +193,11 @@ const ModifyStageModal = (props: {
                     </Accordion>
                 </ModalBody>
                 <ModalFooter>
-                    <ModalButton kind={KIND.tertiary} onClick={props.onClose}>Abbrechen</ModalButton>
+                    <ModalButton type="button" kind={KIND.tertiary} onClick={props.onClose}>Abbrechen</ModalButton>
                     <ModalButton
                         disabled={!formik.isValid}
                         type="submit"
-                    >Gruppe ändern</ModalButton>
+                    >Bühne ändern</ModalButton>
                 </ModalFooter>
             </form>
         </Modal>

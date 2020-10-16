@@ -103,6 +103,8 @@ function normalize(prevState: NormalizedState, data: Partial<{
             state.videoProducers.byStageMember[videoProducer.stageMemberId] = upsert(state.videoProducers.byStageMember[videoProducer.stageMemberId], videoProducer._id);
             state.videoProducers.allIds = upsert(state.videoProducers.allIds, videoProducer._id);
         });
+        console.log("New video producers:");
+        console.log(state.videoProducers);
     }
     if (data.audioProducers) {
         data.audioProducers.forEach(audioProducer => {

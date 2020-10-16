@@ -23,7 +23,6 @@ const ModifyGroupModal = (props: {
 }) => {
     const {updateGroup} = useStageActions();
     const formik = useFormik({
-        validateOnMount: true,
         initialValues: {
             name: props.group ? props.group.name : ''
         },
@@ -68,7 +67,7 @@ const ModifyGroupModal = (props: {
                     </FormControl>
                 </ModalBody>
                 <ModalFooter>
-                    <ModalButton kind={KIND.tertiary} onClick={props.onClose}>Abbrechen</ModalButton>
+                    <ModalButton type="button" kind={KIND.tertiary} onClick={props.onClose}>Abbrechen</ModalButton>
                     <ModalButton
                         disabled={!formik.isValid}
                         type="submit"

@@ -18,18 +18,17 @@ import {Device as MediasoupDevice} from "mediasoup-client/lib/Device";
 import {ClientDeviceEvents} from "../common/events";
 import {AddAudioProducerPayload, AddVideoProducerPayload} from "../common/payloads";
 import {useSocket} from "../useStageContext";
-import {AudioConsumer, Device, VideoConsumer} from "../useStageContext/model";
+import {Device} from "../useStageContext/model";
 import {useDispatch, useSelector} from "../useStageContext/redux";
 import allActions from "../useStageContext/redux/actions";
 import {
     AudioConsumers,
     AudioProducers,
-    Devices,
     NormalizedState,
     VideoConsumers,
     VideoProducers
 } from "../useStageContext/schema";
-import {AdditionalReducerTypes} from "../useStageContext/redux/reducers";
+import useStageSelector from "../useStageSelector";
 
 const TIMEOUT_MS: number = 4000;
 
@@ -46,10 +45,10 @@ export const MediasoupProvider = (props: {
             return state.devices.byId[state.devices.local];
         return undefined;
     });
-    const audioConsumers = useSelector<NormalizedState, AudioConsumers>(state => state.audioConsumers);
-    const videoConsumers = useSelector<NormalizedState, VideoConsumers>(state => state.videoConsumers);
-    const videoProducers = useSelector<NormalizedState, VideoProducers>(state => state.videoProducers);
-    const audioProducers = useSelector<NormalizedState, AudioProducers>(state => state.audioProducers);
+    const audioConsumers = useStageSelector<AudioConsumers>(state => state.audioConsumers);
+    const videoConsumers = useStageSelector<VideoConsumers>(state => state.videoConsumers);
+    const videoProducers = useStageSelector<VideoProducers>(state => state.videoProducers);
+    const audioProducers = useStageSelector<AudioProducers>(state => state.audioProducers);
 
     const [working, setWorking] = useState<boolean>(false);
     const [router, setRouter] = useState<Router>();
@@ -61,7 +60,6 @@ export const MediasoupProvider = (props: {
     const [sendAudio, setSendAudio] = useState<boolean>(false);
     const [receiveVideo, setReceiveVideo] = useState<boolean>(false);
     const [receiveAudio, setReceiveAudio] = useState<boolean>(false);
-    const reduxDispatch = useDispatch();
 
     const [localAudioProducers, setLocalAudioProducers] = useState<{
         audioProducerId: string;
@@ -146,119 +144,105 @@ export const MediasoupProvider = (props: {
         }
     }, []);
 
-
-    const startConsumingAudio = useCallback(() => {
-        console.log("[useMediasoup] start consuming audio");
+    const handleConsumingAudio = useCallback(() => {
+        console.log("[useMediasoup] handle consuming audio");
         setWorking(true);
-        return Promise.all(audioProducers.allIds.map(audioProducerId => {
-            if (!audioConsumers.byProducer[audioProducerId]) {
-                return createConsumer(connection, device, receiveTransport, audioProducers.byId[audioProducerId])
-                    .then(consumer => {
-                        if (consumer.paused)
-                            return resumeConsumer(connection, consumer);
-                        return consumer;
-                    })
-                    .then(consumer => {
-                        dispatch({
-                            type: AdditionalReducerTypes.ADD_AUDIO_CONSUMER,
-                            payload: {
-                                _id: consumer.id,
-                                stageMember: audioProducers.byId[audioProducerId].stageMemberId,
-                                audioProducer: audioProducerId,
-                                msConsumer: consumer
-                            } as AudioConsumer
-                        });
-                        reduxDispatch(allActions.stageActions.client.addAudioConsumer({
-                            _id: consumer.id,
-                            stage: audioProducers.byId[audioProducerId].stageId,
-                            stageMember: audioProducers.byId[audioProducerId].stageMemberId,
-                            audioProducer: audioProducerId,
-                            msConsumer: consumer
-                        }));
-                    })
-                    .catch(error => console.log(error))
-            }
-        }))
-            .finally(() => setWorking(false));
-    }, [connection, device, receiveTransport, audioProducers, audioConsumers]);
+        if (receiveAudio) {
+            // Start receiving all, cleanup old
+            return Promise.all([
+                audioConsumers.allIds.map(audioConsumerId => {
+                    if (audioProducers.allIds.indexOf(audioConsumerId) === -1) {
+                        return closeConsumer(connection, audioConsumers.byId[audioConsumerId].msConsumer)
+                            .then(() => dispatch(allActions.stageActions.client.removeAudioConsumer(audioConsumerId)))
+                            .catch(error => console.log(error))
+                    }
+                }),
+                audioProducers.allIds.map(audioProducerId => {
+                    if (!audioConsumers.byProducer[audioProducerId]) {
+                        return createConsumer(connection, device, receiveTransport, audioProducers.byId[audioProducerId])
+                            .then(consumer => {
+                                if (consumer.paused)
+                                    return resumeConsumer(connection, consumer);
+                                return consumer;
+                            })
+                            .then(consumer => {
+                                dispatch(allActions.stageActions.client.addAudioConsumer({
+                                    _id: consumer.id,
+                                    stage: audioProducers.byId[audioProducerId].stageId,
+                                    stageMember: audioProducers.byId[audioProducerId].stageMemberId,
+                                    audioProducer: audioProducerId,
+                                    msConsumer: consumer
+                                }));
+                            })
+                            .catch(error => console.log(error))
+                    }
+                })
+            ])
+                .finally(() => setWorking(false));
+        } else {
+            // Stop receiving all
+            return Promise.all(audioConsumers.allIds.map(id => {
+                if (audioConsumers.byId[id]) {
+                    return closeConsumer(connection, audioConsumers.byId[id].msConsumer)
+                        .then(() => dispatch(allActions.stageActions.client.removeAudioConsumer(id)))
+                        .catch(error => console.log(error))
+                }
+            }))
+                .finally(() => setWorking(false));
+        }
+    }, [connection, device, receiveAudio, receiveTransport, audioProducers, audioConsumers]);
 
-    const stopConsumingAudio = useCallback(() => {
-        // Stop consuming all audio producers
-        console.log("[useMediasoup] stop consuming audio");
+    const handleConsumingVideo = useCallback(() => {
+        console.log("[useMediasoup] handle consuming video");
         setWorking(true);
-        // Assure, that we stop consuming all audio producers
-        return Promise.all(audioConsumers.allIds.map(id => {
-            if (audioConsumers.byId[id]) {
-                return closeConsumer(connection, audioConsumers.byId[id].msConsumer)
-                    .then(() => dispatch({
-                        type: AdditionalReducerTypes.REMOVE_AUDIO_CONSUMER, payload: id
-                    }))
-                    .then(() => reduxDispatch(allActions.stageActions.client.removeAudioConsumer(id)))
-                    .catch(error => console.log(error))
-            }
-        }))
-            .finally(() => setWorking(false));
-    }, [connection, audioConsumers]);
+        if (receiveVideo) {
+            // Start receiving all, cleanup old
+            return Promise.all([
+                videoConsumers.allIds.map(videoConsumerId => {
+                    if (videoConsumers.byId[videoConsumerId] && videoProducers.allIds.indexOf(videoConsumerId) === -1) {
+                        return closeConsumer(connection, videoConsumers.byId[videoConsumerId].msConsumer)
+                            .then(() => dispatch(allActions.stageActions.client.removeVideoConsumer(videoConsumerId)))
+                            .catch(error => console.log(error))
+                    }
+                }),
+                videoProducers.allIds.map(videoProducerId => {
+                    if (!videoConsumers.byProducer[videoProducerId]) {
+                        console.log("Hey");
+                        console.log("Creating video producer with global id: " + videoProducers.byId[videoProducerId].globalProducerId);
+                        return createConsumer(connection, device, receiveTransport, videoProducers.byId[videoProducerId])
+                            .then(consumer => {
+                                if (consumer.paused)
+                                    return resumeConsumer(connection, consumer);
+                                return consumer;
+                            })
+                            .then(consumer =>
+                                dispatch(allActions.stageActions.client.addVideoConsumer({
+                                    _id: consumer.id,
+                                    stage: videoProducers.byId[videoProducerId].stageId,
+                                    stageMember: videoProducers.byId[videoProducerId].stageMemberId,
+                                    videoProducer: videoProducerId,
+                                    msConsumer: consumer
+                                }))
+                            )
+                            .catch(error => console.log(error))
+                    }
+                })
+            ])
+                .finally(() => setWorking(false));
+        } else {
+            // Stop receiving all
+            return Promise.all(videoConsumers.allIds.map(videoConsumerId => {
+                if (videoConsumers.byId[videoConsumerId]) {
+                    console.log("Handling consumer")
+                    return closeConsumer(connection, videoConsumers.byId[videoConsumerId].msConsumer)
+                        .then(() => dispatch(allActions.stageActions.client.removeVideoConsumer(videoConsumerId)))
+                        .catch(error => console.log(error))
+                }
+            }))
+                .finally(() => setWorking(false));
+        }
+    }, [connection, device, receiveVideo, receiveTransport, videoProducers, videoConsumers]);
 
-    const startConsumingVideo = useCallback(() => {
-        console.log("[useMediasoup] start consuming video");
-        setWorking(true);
-        return Promise.all(videoProducers.allIds.map(videoProducerId => {
-            if (!videoConsumers.byProducer[videoProducerId]) {
-                console.log("Creating video producer");
-                return createConsumer(connection, device, receiveTransport, videoProducers.byId[videoProducerId])
-                    .then(consumer => {
-                        if (consumer.paused)
-                            return resumeConsumer(connection, consumer);
-                        return consumer;
-                    })
-                    .then(consumer => {
-                        dispatch({
-                            type: AdditionalReducerTypes.ADD_VIDEO_CONSUMER,
-                            payload: {
-                                _id: consumer.id,
-                                stageMember: videoProducers.byId[videoProducerId].stageMemberId,
-                                videoProducer: videoProducerId,
-                                msConsumer: consumer
-                            } as VideoConsumer
-                        });
-                        reduxDispatch(allActions.stageActions.client.addVideoConsumer({
-                            _id: consumer.id,
-                            stage: videoProducers.byId[videoProducerId].stageId,
-                            stageMember: videoProducers.byId[videoProducerId].stageMemberId,
-                            videoProducer: videoProducerId,
-                            msConsumer: consumer
-                        }));
-                    })
-                    .catch(error => console.log(error))
-            }
-        }))
-            .finally(() => {
-                console.log("[useMediasoup] Set working = false");
-                setWorking(false)
-            });
-    }, [connection, device, receiveTransport, videoProducers, videoConsumers]);
-
-    const stopConsumingVideo = useCallback(() => {
-        // Stop consuming all video producers
-        console.log("[useMediasoup] stop consuming video");
-        setWorking(true);
-        // Assure, that we stop consuming all audio producers
-        return Promise.all(videoConsumers.allIds.map(id => {
-            if (videoConsumers.byId[id]) {
-                return closeConsumer(connection, videoConsumers.byId[id].msConsumer)
-                    .then(() => dispatch({
-                        type: AdditionalReducerTypes.REMOVE_VIDEO_CONSUMER, payload: id
-                    }))
-                    .then(() => reduxDispatch(allActions.stageActions.client.removeVideoConsumer(id)))
-                    .catch(error => console.log(error))
-            }
-        }))
-            .finally(() => {
-                console.log("[useMediasoup] Set working = false");
-                setWorking(false)
-            });
-    }, [connection, videoConsumers]);
 
     const startStreamAudio = useCallback(() => {
         console.log("[useMediasoup] start streaming audio");
@@ -422,21 +406,9 @@ export const MediasoupProvider = (props: {
                 setSendAudio(localDevice.sendAudio);
             }
             if (receiveVideo !== localDevice.receiveVideo) {
-                console.log("Devices changed: receiveVideo");
-                if (localDevice.receiveVideo) {
-                    startConsumingVideo();
-                } else {
-                    stopConsumingVideo();
-                }
                 setReceiveVideo(localDevice.receiveVideo);
             }
             if (receiveAudio !== localDevice.receiveAudio) {
-                console.log("[useMediasoup] Devices changed: receiveAudio");
-                if (localDevice.receiveAudio) {
-                    startConsumingAudio();
-                } else {
-                    stopConsumingAudio();
-                }
                 setReceiveAudio(localDevice.receiveAudio);
             }
         }
@@ -446,11 +418,13 @@ export const MediasoupProvider = (props: {
 
     useEffect(() => {
         console.log("[useMediasoup] VIDEO PRODUCER CHANGED");
-    }, [videoProducers]);
+        handleConsumingVideo();
+    }, [receiveVideo, videoProducers]);
 
     useEffect(() => {
         console.log("[useMediasoup] AUDIO PRODUCER CHANGED");
-    }, [audioProducers.allIds]);
+        handleConsumingAudio();
+    }, [receiveAudio, audioProducers]);
 
 
     return (

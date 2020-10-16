@@ -1,6 +1,7 @@
 import {WebRTCDevice} from "../common/model.server";
 import {NormalizedState} from "./schema";
 import _ from "lodash";
+import {ExtendedCollection} from "./model";
 
 export const enumerateDevices = (): Promise<{
     inputAudioDevices: WebRTCDevice[],
@@ -65,6 +66,21 @@ export const upsert = function <T>(arr: T[], value: T): T[] {
     return arr;
 }
 
+export const filter = function <T>(arr: T[], value: T): T[] {
+    return _.without(arr, value);
+}
+
+export function addItemToCollection<T>(state: ExtendedCollection<T>, id: string, payload: T): ExtendedCollection<T> {
+    return {
+        ...state,
+        byId: {
+            ...state.byId,
+            [id]: payload,
+        },
+        allIds: upsert(state.allIds, id)
+    }
+}
+
 
 export const updateItem = (state: NormalizedState, group: string, id: string, payload: any): NormalizedState => {
     return {
@@ -87,7 +103,7 @@ export const removeItem = (state: NormalizedState, group: string, id: string): N
         [group]: {
             ...state[group],
             byId: _.omit(state[group].byId, id),
-            allIds: state[group].allIds.filter(el => el !== id)
+            allIds: filter(state[group].allIds, id)
         }
     }
 }
@@ -111,7 +127,7 @@ export const removeItemWithArrayReference = (state: NormalizedState, group: stri
         },
         [group]: {
             byId: _.omit(state[group].byId, id),
-            allIds: state[group].allIds.filter(el => el !== id)
+            allIds: filter(state[group].allIds, id)
         }
     };
 }
@@ -135,7 +151,7 @@ export const removeItemWithReference = (state: NormalizedState, group: string, i
         },
         [group]: {
             byId: _.omit(state[group].byId, id),
-            allIds: state[group].allIds.filter(el => el !== id)
+            allIds: filter(state[group].allIds, id)
         }
     };
 }

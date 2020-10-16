@@ -6,8 +6,7 @@ export type LocalUser = Server.User;
 export type User = Server.User;
 export type Device = Server.Device;
 
-//TODO: isadmin
-export type Stage = Server.Stage & { isAdmin: false };
+export type Stage = Server.Stage & { isAdmin: boolean };
 export type Group = Server.Group;
 export type CustomGroup = Server.CustomGroup;
 export type StageMember = Server.StageMember;
@@ -31,3 +30,15 @@ export type VideoConsumer = {
     videoProducer: string;
     msConsumer: mediasoupClient.types.Consumer
 };
+
+
+export interface Collection<T> {
+    byId: {
+        [id: string]: T
+    },
+    allIds: string[]
+}
+
+export interface ExtendedCollection<T> extends Collection<T> {
+    [keys: string]: any
+}
