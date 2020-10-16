@@ -15,6 +15,7 @@ import { Typography } from "@material-ui/core";
 import Icon from "../components/digital-stage-ui/Icon";
 import Welcome from "../components/digital-stage-sign-in/Welcome";
 import LoginIndex from '../components/digital-stage-sign-in'
+import Home from "../components/digital-stage-home";
 
 
 
@@ -34,7 +35,8 @@ const Components = () => {
             return (
                 <div>
                     {/* <Welcome/> */}
-                    <LoginIndex/>
+                    {/* <LoginIndex/> */}
+                    <Home/>
                     {/* <FlexContainer>
                         <Button color="primary" text="Primary" withIcon iconName="settings" iconColor="white" />
                         <Button color="secondary" text="Seconday" />

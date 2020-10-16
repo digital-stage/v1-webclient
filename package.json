@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "baseui": "^9.99.0",
     "fg-loadcss": "^3.1.0",
     "formik": "^2.1.5",

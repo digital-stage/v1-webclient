@@ -5,9 +5,9 @@ import theme from '../../styles/theme';
 const defaultStyles = { display: "inline-block", verticalAlign: "middle" };
 
 
-type width = 24
-type height = 24
-type viewbox = "0 0 32 32"
+// type width = 24
+// type height = 24
+// type viewbox = "0 0 32 32"
 
 
 type Props = {
@@ -15,11 +15,11 @@ type Props = {
     name: string,
     iconColor?: string,
     circleColor?: string,
-    viewBox?: viewbox,
+    viewBox?: string,
     className?: string,
     style?: Object,
-    width?: width,
-    height?: height,
+    width?: number,
+    height?: number,
     circled?: boolean,
     outlineColor?: string,
     title?: string
@@ -70,7 +70,7 @@ Icon.defaultProps = {
     circled: false,
     iconColor: theme.palette.grey[300],
     circleColor: "#E84040",
-    viewBox: "0 0 32 32"
+    viewBox: "0 0 24 24"
 };
 
 export default Icon
