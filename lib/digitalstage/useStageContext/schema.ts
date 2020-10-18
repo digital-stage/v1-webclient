@@ -85,6 +85,9 @@ export interface VideoProducers {
     byId: {
         [id: string]: VideoProducer
     },
+    byStage: {
+        [stageId: string]: string[]
+    },
     byStageMember: {
         [stageMemberId: string]: string[]
     },
@@ -94,6 +97,9 @@ export interface VideoProducers {
 export interface AudioProducers {
     byId: {
         [id: string]: AudioProducer
+    },
+    byStage: {
+        [stageId: string]: string[]
     },
     byStageMember: {
         [stageMemberId: string]: string[]
@@ -206,11 +212,13 @@ export const OutsideStageNormalizedState: Partial<NormalizedState> = {
     videoProducers: {
         byId: {},
         byStageMember: {},
+        byStage: {},
         allIds: []
     },
     audioProducers: {
         byId: {},
         byStageMember: {},
+        byStage: {},
         allIds: []
     },
     customAudioProducers: {
@@ -271,11 +279,13 @@ export const InitialNormalizedState: NormalizedState = {
     videoProducers: {
         byId: {},
         byStageMember: {},
+        byStage: {},
         allIds: []
     },
     audioProducers: {
         byId: {},
         byStageMember: {},
+        byStage: {},
         allIds: []
     },
     customAudioProducers: {
