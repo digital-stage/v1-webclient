@@ -15,7 +15,7 @@ import {
 } from 'baseui/app-nav-bar';
 import {useRouter} from "next/router";
 import TextLink from "../theme/TextLink";
-import {Delete} from "baseui/icon";
+import {Delete, Filter} from "baseui/icon";
 import {useAuth} from "../../lib/digitalstage/useAuth";
 import {Devices, NormalizedState, Stages} from "../../lib/digitalstage/useStageContext/schema";
 import {useSelector} from "../../lib/digitalstage/useStageContext/redux";
@@ -55,6 +55,15 @@ const AppNavigation = () => {
                     item: {
                         label: stages.byId[stageId].name,
                         path: '/'
+                    },
+                    mapItemToNode: renderItem,
+                    mapItemToString: renderItem,
+                });
+                nav.push({
+                    icon: () => <Filter/>,
+                    item: {
+                        label: "Mischpult",
+                        path: '/mixer'
                     },
                     mapItemToNode: renderItem,
                     mapItemToString: renderItem,

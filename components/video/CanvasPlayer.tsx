@@ -72,7 +72,6 @@ export default class CanvasPlayer extends React.Component<Props, States> {
     componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<States>, snapshot?: any): void {
         if (prevProps.consumers !== this.props.consumers
             || prevState.size !== this.state.size) {
-            console.log("Have now " + this.props.consumers.length + " consumers");
             // Video producers or size of wrapper has changed
             if (this.state.size) {
                 const videoTracks: MediaStreamTrack[] = this.props.consumers.filter(vp => vp.msConsumer && vp.msConsumer.track).map(vp => vp.msConsumer.track);

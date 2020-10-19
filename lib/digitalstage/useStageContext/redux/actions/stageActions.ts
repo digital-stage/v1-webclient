@@ -86,6 +86,12 @@ const addCustomGroup = (group: CustomGroup) => {
         payload: group
     }
 }
+const setCustomGroup = (group: CustomGroup) => {
+    return {
+        type: ServerStageEvents.CUSTOM_GROUP_SET,
+        payload: group
+    }
+}
 const changeCustomGroup = (group: Partial<CustomGroup>) => {
     return {
         type: ServerStageEvents.CUSTOM_GROUP_CHANGED,
@@ -269,6 +275,7 @@ const server = {
     changeGroup,
     removeGroup,
     addCustomGroup,
+    setCustomGroup,
     changeCustomGroup,
     removeCustomGroup,
     addStageMember,

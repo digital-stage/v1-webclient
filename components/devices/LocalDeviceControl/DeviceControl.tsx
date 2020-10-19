@@ -3,6 +3,7 @@ import React from "react";
 import {Device} from "../../../lib/digitalstage/common/model.server";
 import useStageSelector from "../../../lib/digitalstage/useStageSelector";
 import useStageActions from "../../../lib/digitalstage/useStageActions";
+import {useAudioContext} from "../../../lib/useAudioContext";
 
 const DeviceControl = (props: {
     device?: Device;
@@ -11,6 +12,7 @@ const DeviceControl = (props: {
     kind?: KIND[keyof KIND];
     spacing?: number;
 }) => {
+    const {audioContext} = useAudioContext();
     const {updateDevice} = useStageActions();
     const {darkMode} = useStageSelector(state => {
         return {
@@ -93,7 +95,12 @@ const DeviceControl = (props: {
                     shape={props.shape}
                     kind={props.kind}
                     size={props.size}
-                    onClick={() => updateDevice(props.device._id, {receiveAudio: !props.device.receiveAudio})}
+                    onClick={() => {
+                        updateDevice(props.device._id, {receiveAudio: !props.device.receiveAudio})
+                        if( audioContext.state === "suspended" ) {
+                            return audioContext.resume();
+                        }
+                    }}
                 >
                     {darkMode ? (
                         <img

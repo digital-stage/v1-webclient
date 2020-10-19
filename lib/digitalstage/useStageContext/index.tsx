@@ -94,6 +94,9 @@ export const SocketContextProvider = (props: {
         socket.on(ServerStageEvents.CUSTOM_GROUP_ADDED, (payload: Server.CustomGroup) => {
             dispatch(allActions.stageActions.server.addCustomGroup(payload));
         });
+        socket.on(ServerStageEvents.CUSTOM_GROUP_SET, (payload: Server.CustomGroup) => {
+            dispatch(allActions.stageActions.server.setCustomGroup(payload));
+        });
         socket.on(ServerStageEvents.CUSTOM_GROUP_CHANGED, (payload: Server.CustomGroup) => {
             dispatch(allActions.stageActions.server.changeCustomGroup(payload));
         });
@@ -182,7 +185,7 @@ export const SocketContextProvider = (props: {
         enumerateDevices()
             .then(devices => {
                 const socket = io(API_URL, {
-                    secure: process.env.NODE_ENV !== "development",
+                   // secure: process.env.NODE_ENV !== "development",
                     query: {
                         token: token,
                         device: JSON.stringify({

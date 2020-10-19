@@ -192,6 +192,51 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
                 }
             };
 
+        case ServerStageEvents.CUSTOM_GROUP_ADDED:
+            return {
+                ...state,
+                customGroups: {
+                    ...state.customGroups,
+                    byId: {
+                        ...state.customGroups.byId,
+                        [action.payload._id]: action.payload
+                    },
+                    byGroup: {
+                        ...state.customGroups.byGroup,
+                        [action.payload.groupId]: action.payload._id
+                    },
+                    allIds: upsert(state.customGroups.allIds, action.payload._id)
+                }
+            };
+        case ServerStageEvents.CUSTOM_GROUP_SET:
+            return {
+                ...state,
+                customGroups: {
+                    ...state.customGroups,
+                    byId: {
+                        ...state.customGroups.byId,
+                        [action.payload._id]: action.payload
+                    },
+                    byGroup: {
+                        ...state.customGroups.byGroup,
+                        [action.payload.groupId]: action.payload._id
+                    },
+                    allIds: upsert(state.customGroups.allIds, action.payload._id)
+                }
+            };
+        case ServerStageEvents.CUSTOM_GROUP_CHANGED:
+            return updateItem(state, "customGroups", action.payload._id, action.payload);
+        case ServerStageEvents.CUSTOM_GROUP_REMOVED:
+            return {
+                ...state,
+                customGroups: {
+                    ...state.customGroups,
+                    byId: _.omit(state.customGroups.byId, action.payload),
+                    byGroup: _.omit(state.customGroups.byGroup, state.customGroups.byId[action.payload].groupId),
+                    allIds: _.filter(state.customGroups.allIds, id => id !== action.payload)
+                }
+            };
+
         case ServerStageEvents.STAGE_MEMBER_ADDED:
             return {
                 ...state,
@@ -249,7 +294,7 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
                     allIds: [...state.customStageMembers.allIds, action.payload._id],
                     byStageMember: {
                         ...state.customStageMembers.byStageMember,
-                        [action.payload.stageMemberId]: upsert<string>(state.customStageMembers.byStageMember[action.payload.stageMemberId], action.payload._id)
+                        [action.payload.stageMemberId]: action.payload._id
                     },
                 }
             };
@@ -261,10 +306,7 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
                 customStageMembers: {
                     ...state.customStageMembers,
                     byId: _.omit(state.customStageMembers.byId, action.payload),
-                    byStageMember: {
-                        ...state.customStageMembers.byStageMember,
-                        [state.customStageMembers.byId[action.payload].stageMemberId]: _.filter(state.customStageMembers.byStageMember[state.customStageMembers.byId[action.payload].stageMemberId], id => id !== action.payload),
-                    },
+                    byStageMember: _.omit(state.customStageMembers.byStageMember, state.customStageMembers.byId[action.payload].stageMemberId),
                     allIds: _.filter(state.stageMembers.allIds, id => id !== action.payload)
                 }
             };

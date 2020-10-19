@@ -51,7 +51,7 @@ export interface CustomGroups {
         [id: string]: CustomGroup
     },
     byGroup: {
-        [groupId: string]: string[]
+        [groupId: string]: string
     }
     allIds: string[]
 }
@@ -76,7 +76,7 @@ export interface CustomStageMembers {
         [id: string]: CustomStageMember
     },
     byStageMember: {
-        [stageMemberId: string]: string[]
+        [stageMemberId: string]: string
     },
     allIds: string[]
 }

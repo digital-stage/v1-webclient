@@ -41,9 +41,6 @@ const LocalDeviceSettings = () => {
                             break;
                     }
                 });
-                console.log("DEVICES");
-                console.log(inputDevices);
-                console.log(outputDevices);
                 setInputDevices(inputDevices);
                 setVideoDevices(videoDevices);
                 setOutputDevices(outputDevices);

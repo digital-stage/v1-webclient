@@ -18,7 +18,8 @@ import Link from "next/link";
 import AppNavigation from "../components/AppNavigation";
 import {wrapper} from "../lib/digitalstage/useStageContext/redux";
 import {DarkModeConsumer, DarkModeProvider} from "../lib/useDarkModeSwitch";
-import {useStore} from "../lib/digitalstage/useStageContext/redux/store";
+import AudioContextController from "../components/audio/AudioContextController";
+import AllAudioPlayer from "../components/audio/AllAudioPlayer";
 
 
 const DevCorner = styled("div", {
@@ -87,6 +88,8 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                                                         <StageJoiner/>
                                                         <Block marginTop={['52px', '52px', '72px']}>
                                                             <Component {...pageProps} />
+                                                            <AllAudioPlayer/>
+                                                            <AudioContextController/>
                                                         </Block>
                                                         <LocalDeviceControl/>
                                                         {process.env.NODE_ENV === "development" && (

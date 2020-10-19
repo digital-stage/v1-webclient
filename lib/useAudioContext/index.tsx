@@ -20,23 +20,23 @@ export const AudioContextProvider = (props: {
             return context;
         }
         const audioContext: IAudioContext = new RealAudioContext();
-
         console.log("Base latency with sample rate " + audioContext.sampleRate + ": " + Math.round(1000 * audioContext.baseLatency) + "ms");
+
         return webAudioTouchUnlock(audioContext)
             .then((unlocked: boolean) => {
-                if (unlocked) {
-                    // AudioContext was unlocked from an explicit user action, sound should start playing now
-                } else {
-                    // There was no need for unlocking, devices other than iOS
-                }
-                setContext(audioContext);
                 return audioContext;
             });
     }, []);
 
     useEffect(() => {
         createAudioContext()
-            .then(() => console.log("Audio engine initialized"))
+            .then((audioContext) => {
+                console.log("Audio engine initialized");
+                setContext(audioContext);
+            })
+            .catch(() => {
+                console.error("eerror")
+            })
     }, []);
 
     return (
