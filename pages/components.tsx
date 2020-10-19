@@ -34,8 +34,8 @@ const Components = () => {
         } else {
             return (
                 <div>
-                    {/* <Welcome/> */}
-                    {/* <LoginIndex/> */}
+                    <Welcome/>
+                    <LoginIndex/>
                     <Home/>
                     {/* <FlexContainer>
                         <Button color="primary" text="Primary" withIcon iconName="settings" iconColor="white" />

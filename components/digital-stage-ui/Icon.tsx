@@ -46,7 +46,7 @@ const Icon = (props: Props) => {
         <svg
             className={className}
             style={styles}
-            viewBox={viewBox}
+            viewBox={`0 0 ${width} ${height}`}
             width={`${width}px`}
             height={`${height}px`}
             xmlns="http://www.w3.org/2000/svg"

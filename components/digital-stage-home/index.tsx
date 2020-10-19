@@ -1,19 +1,15 @@
 
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Drawer, Grid } from '@material-ui/core';
+import { Drawer, Typography } from '@material-ui/core';
 import clsx from 'clsx';
-import { createStyles, Theme } from '@material-ui/core/styles'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Icon from '../digital-stage-ui/Icon';
 import StagesList from './StagesList';
-import NotificationsList from './NotificationsList';
 import StageDetails from './StageDetails';
-import NotificationsDetails from './NotificationsDetails';
 
 const drawerWidth = 380;
-
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -93,25 +89,16 @@ const useStyles = makeStyles((theme) => ({
         maxHeight: "100vh",
         background: "#343434 0% 0% no-repeat padding-box",
         boxShadow: "20px 0px 60px #0000004A",
+    },
+    leftSide: {
+        display: 'flex',
+        flexDirection: "row",
+        minHeight: "100vh"
+    },
+    drawerContent: {
+        width: "100%"
     }
 }));
-
-const stages = [
-    { title: 'Bulshemier Theatre', mineStage: true, image: "/images/stage-icon.png", online: true, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }] },
-    { title: 'National Theatre', mineStage: false, image: "/images/stage-icon.png", online: true, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }] },
-    { title: 'Theatre National Royal', mineStage: true, image: "/images/stage-icon.png", online: false, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }] },
-    { title: 'The Old Theatre', mineStage: false, image: "/images/stage-icon.png", online: false, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }] },
-    { title: 'Lyceum Theatre', mineStage: true, image: "/images/stage-icon.png", online: true, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }] },
-];
-
-const notifications = [
-    { title: "You have been invited to Bulshemier Theatre", time: "2500", image: "/images/stage-icon.png", stageId: 0, type: "invitations" },
-    { title: "National Theatre updated it's name", time: "500", image: "/images/stage-icon.png", stageId: 1, type: "updates" },
-    { title: "Theatre National Royal updated it's timetable", time: "2000", image: "/images/stage-icon.png", stageId: 2, type: "updates" },
-    { title: "You have been invited to The Old Theatre", time: "200", image: "/images/stage-icon.png", stageId: 3, type: "invitations" },
-    { title: "Lyceum Theatre update it's name", time: "60", image: "/images/stage-icon.png", stageId: 4, type: "updates" },
-    { title: "You have been invited to Bulshemier Theatre", time: "2500", image: "/images/stage-icon.png", stageId: 0, type: "invitations" },
-]
 
 enum SelectedItem {
     MENU = "MENU",
@@ -119,13 +106,32 @@ enum SelectedItem {
     SETTINGS = "SETTINGS",
     NOTIFICATION = "NOTIFICATION"
 }
+interface User {
+    userPhoto: string,
+    username: string
+}
+interface Stage {
+    title: string,
+    mineStage: boolean,
+    image: string,
+    online: boolean,
+    description:string,
+    users: User[]
+}
+
+const stages: Stage[] = [
+    { title: 'Bulshemier Theatre', mineStage: true, image: "/images/stage-icon.png", online: true, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }], description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis." },
+    { title: 'National Theatre', mineStage: false, image: "/images/stage-icon.png", online: true, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }], description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis." },
+    { title: 'Theatre National Royal', mineStage: true, image: "/images/stage-icon.png", online: false, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }], description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis." },
+    { title: 'The Old Theatre', mineStage: false, image: "/images/stage-icon.png", online: false, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }], description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis." },
+    { title: 'Lyceum Theatre', mineStage: true, image: "/images/stage-icon.png", online: true, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }], description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis." },
+];
 
 export default function Home() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const [stageId, setStageId] = React.useState(0);
     const [selectedItem, setSelectedItem] = React.useState<string>(SelectedItem.STAGE);
-    const [notificationId, setNotificationId] = React.useState(0);
     const [openCreateStageModal, setOpenCreateStageModal] = React.useState(false);
 
     const handleDrawer = (icon: string) => {
@@ -144,7 +150,7 @@ export default function Home() {
     };
 
     const setDrawerIconColor = (selected: string) => {
-        let color = "#999";
+        let color = "#828282";
         if (selected === SelectedItem.MENU) {
             color = "#fff"
         }
@@ -169,34 +175,35 @@ export default function Home() {
                     }),
                 }}
             >
-                <div style={{ display: 'flex', flexDirection: "row", minHeight: "100vh" }} className="left-side">
+                <div className={classes.leftSide}>
                     <span className={classes.sideDrawer}>
                         <List>
                             {['menu', 'stage', 'notification'].map((text) => (
                                 <ListItem button key={text} onClick={() => { handleDrawer(text); setDrawerSelection(text.toUpperCase()) }}>
-                                    <Icon name={text} />
+                                    <Icon name={text} iconColor={setDrawerIconColor(text.toUpperCase())} />
                                 </ListItem>
                             ))}
                         </List>
                         <List>
                             {['feedback', 'settings'].map((text) => (
                                 <ListItem button key={text}>
-                                    <Icon name={text} />
+                                    <Icon name={text} iconColor={setDrawerIconColor(text.toUpperCase())} />
                                 </ListItem>
                             ))}
                         </List>
                     </span>
-                    <span>
+                    <span className={classes.drawerContent}>
                         {
                             selectedItem === SelectedItem.STAGE &&
                             <><StagesList
                                 onClick={(id) => { setStageId(id) }}
                                 handleOpen={() => setOpenCreateStageModal(true)}
+                                stages={stages}
                             /></>
                         }
                         {
                             selectedItem === SelectedItem.NOTIFICATION &&
-                            <NotificationsList onClick={(id) => { setNotificationId(id) }} notifications={notifications} />
+                            <Typography variant="h6">Notifications</Typography>
                         }
                     </span>
                 </div>
@@ -204,7 +211,7 @@ export default function Home() {
             </Drawer>
             <main className={classes.content}>
                 {selectedItem === SelectedItem.STAGE && <StageDetails stage={stages[stageId]} />}
-                {selectedItem === SelectedItem.NOTIFICATION && <NotificationsDetails stage={stages[notifications[notificationId].stageId]} />}
+                {selectedItem === SelectedItem.NOTIFICATION && <Typography variant="h6">Notifications</Typography>}
                 {selectedItem === SelectedItem.SETTINGS && <h4>Settings</h4>}
             </main>
         </div >

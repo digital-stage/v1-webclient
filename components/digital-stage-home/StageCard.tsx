@@ -1,4 +1,31 @@
+import { createStyles, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
 import React from "react";
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            width: "100%",
+            display: "flex",
+            margin: theme.spacing(1, 0),
+            paddingRight: theme.spacing(2),
+            justifyContent: "space-between"
+        },
+        stageImage: {
+            width: "80px",
+            height: "80px"
+        },
+        online: {
+            width: "8px",
+            height: "8px",
+            backgroundColor: "#00FF08",
+            borderRadius: "25px",
+            marginTop: theme.spacing(0)
+        },
+        users: {
+            textAlign: "right"
+        }
+    }),
+);
 
 const StageCard = (props: {
     stage: {
@@ -9,19 +36,26 @@ const StageCard = (props: {
         description: string
     }
 }) => {
+    const {
+        title,
+        image,
+        online,
+        users,
+        description
+    } = props.stage;
+    const classes = useStyles()
+
     return (
-        <div className="stage-card">
-            <div className="stage-card-image">
-                <img src={props.stage.image} alt="stage" width="80px" height="80px" className="mr-3" />
-            </div>
-            <div className="stage-card-details my-auto">
-                <div>
-                    <h5 style={{ color: "white" }}>{props.stage.title}</h5>
-                    {props.stage.online && <span className="online"></span>}
-                </div>
-                <p>{props.stage.description}</p>
-                <div className="float-right">
-                    <p className="mb-0">{props.stage.users.length} users</p>
+        <div className={classes.root}>
+            <img src={image} alt="stage" className={classes.stageImage} />
+            <div>
+                <Grid container justify="space-between">
+                    <Typography variant="h5">{title}</Typography>
+                    {online && <div className={classes.online}></div>}
+                </Grid>
+                <Typography variant="subtitle1">{description}</Typography>
+                <div className={classes.users}>
+                    <Typography variant="subtitle1">{users.length} users</Typography>
                 </div>
             </div>
         </div>

@@ -61,17 +61,19 @@ class MyApp extends App {
                                             }
                                         `}
                                                         </style>
-                                                        <AppNavigation />
+                                                        {/* <AppNavigation /> */}
                                                         <StageJoiner />
-                                                        <Block marginTop={['52px', '52px', '72px']}>
+                                                        <Block 
+                                                        // marginTop={['52px', '52px', '72px']}
+                                                        >
                                                             <Component {...pageProps} />
                                                         </Block>
                                                         <LocalDeviceControl />
-                                                        <div>
+                                                        {/* <div>
                                                             <pre>
                                                                 {JSON.stringify(state, null, 2)}
                                                             </pre>
-                                                        </div>
+                                                        </div> */}
                                                     </BaseProvider>
                                                 )}
                                             </StagesContextConsumer>
