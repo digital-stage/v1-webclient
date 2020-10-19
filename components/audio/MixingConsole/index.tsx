@@ -5,6 +5,7 @@ import {H2} from "../../theme/typography/Headline";
 import React, {useEffect} from "react";
 import useStageActions from "../../../lib/digitalstage/useStageActions";
 import Slider from '@material-ui/core/Slider';
+import {Checkbox} from "baseui/checkbox";
 
 const Console = styled("div", {
     position: "relative",
@@ -20,7 +21,7 @@ const TrackRow = styled("div", ({$theme}) => ({
 const TrackTitle = styled("div", {});
 
 const MixingConsole = () => {
-    const {updateGroup, updateCustomGroup} = useStageActions();
+    const {updateGroup, addCustomGroup, updateCustomGroup, removeCustomGroup} = useStageActions();
     const stageId = useStageSelector<string>(state => state.stageId);
     const groups = useStageSelector<Groups>(state => state.groups);
     const customGroups = useStageSelector<CustomGroups>(state => state.customGroups);
@@ -59,49 +60,56 @@ const MixingConsole = () => {
                         )
                     }
 
-                    if (customGroups.byGroup[groupId]) {
-                        const customGroup = customGroups.byId[customGroups.byGroup[groupId]];
-                        return (
-                            <TrackRow>
-                                <TrackTitle>
-                                    <H2>{group.name} (custom)</H2>
-                                </TrackTitle>
+                    return (
+                        <TrackRow>
+                            <TrackTitle>
+                                <H2>{group.name} (custom)</H2>
+                            </TrackTitle>
+                            <p>
+                                <Checkbox
+                                    checked={customGroups.byGroup[groupId] !== undefined}
+                                    onChange={() => {
+                                        if (customGroups.byGroup[groupId])
+                                            removeCustomGroup(customGroups.byGroup[groupId])
+                                        else
+                                            addCustomGroup(groupId, 1)
+                                    }}
+                                >
+                                    Custom
+                                </Checkbox>
+                            </p>
+                            {customGroups.byGroup[groupId] && (
                                 <Slider
                                     orientation="vertical"
-                                    value={customGroup.volume}
+                                    value={customGroups.byId[customGroups.byGroup[groupId]].volume}
                                     step={0.05}
                                     min={0}
                                     max={1}
                                     onChange={(e, v) => {
                                         if (!Array.isArray(v)) {
                                             console.log("Set custom group volume to " + v)
-                                            updateCustomGroup(customGroup._id, v);
+                                            updateCustomGroup(customGroups.byId[customGroups.byGroup[groupId]]._id, v);
                                         }
                                     }}
                                 />
-                            </TrackRow>
-                        )
-                    }
-
-
-                    return (
-                        <TrackRow>
-                            <TrackTitle>
-                                <H2>{group.name} (custom)</H2>
-                            </TrackTitle>
-                            <Slider
-                                orientation="vertical"
-                                value={customGroups.byGroup[groupId] ? customGroups.byId[customGroups.byGroup[groupId]].volume : 0}
-                                step={0.05}
-                                min={0}
-                                max={1}
-                                onChange={(e, v) => {
-                                    if (!Array.isArray(v)) {
-                                        console.log("Set volume to " + v)
-                                        //updateCustomGroup(group._id, v);
-                                    }
-                                }}
-                            />
+                            )}
+                            {isAdmin && (
+                                <div>
+                                    <Slider
+                                        orientation="vertical"
+                                        value={group.volume}
+                                        min={0}
+                                        max={1}
+                                        onChange={(e, v) => {
+                                            if (!Array.isArray(v)) {
+                                                updateGroup(group._id, {
+                                                    volume: v
+                                                });
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            )}
                         </TrackRow>
                     )
                 })}

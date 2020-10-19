@@ -18,7 +18,7 @@ import {Device as MediasoupDevice} from "mediasoup-client/lib/Device";
 import {ClientDeviceEvents} from "../common/events";
 import {AddAudioProducerPayload, AddVideoProducerPayload} from "../common/payloads";
 import {useSocket} from "../useStageContext";
-import {AudioProducer, Device, VideoProducer} from "../useStageContext/model";
+import {Device} from "../useStageContext/model";
 import {useDispatch, useSelector} from "../useStageContext/redux";
 import allActions from "../useStageContext/redux/actions";
 import {

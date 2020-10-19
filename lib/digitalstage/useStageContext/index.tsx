@@ -9,7 +9,6 @@ import {
 import * as Server from "../common/model.server";
 import * as Bowser from "bowser";
 import io from "socket.io-client";
-import {API_URL} from "../../../env";
 import {enumerateDevices} from "./utils";
 import {Device} from "../common/model.server";
 import allActions from "./redux/actions";
@@ -184,8 +183,8 @@ export const SocketContextProvider = (props: {
 
         enumerateDevices()
             .then(devices => {
-                const socket = io(API_URL, {
-                   // secure: process.env.NODE_ENV !== "development",
+                const socket = io(process.env.NEXT_PUBLIC_API_URL, {
+                    //secure: process.env.NODE_ENV !== "development",
                     query: {
                         token: token,
                         device: JSON.stringify({

@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useState} from "react";
 import cookie from 'js-cookie';
-import {AUTH_URL} from "../../../env";
 
 export interface AuthUser {
     _id: string;
@@ -32,7 +31,7 @@ const AuthContext = React.createContext<AuthProps>(undefined);
 
 export const useAuth = (): AuthProps => React.useContext<AuthProps>(AuthContext);
 
-const getUserByToken = (token: string): Promise<AuthUser> => fetch(AUTH_URL + "/profile", {
+const getUserByToken = (token: string): Promise<AuthUser> => fetch(process.env.NEXT_PUBLIC_AUTH_URL + "/profile", {
     headers: {
         'Content-Type': 'application/json',
         Authorization: "Bearer " + token
@@ -51,7 +50,7 @@ export const AuthContextProvider = (props: {
         avatarUrl?: string;
     }) => {
         setLoading(true);
-        return fetch(AUTH_URL + "/signup", {
+        return fetch(process.env.NEXT_PUBLIC_AUTH_URL + "/signup", {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -81,7 +80,7 @@ export const AuthContextProvider = (props: {
 
     const signInWithEmailAndPassword = useCallback((email: string, password: string) => {
         setLoading(true);
-        return fetch(AUTH_URL + "/login", {
+        return fetch(process.env.NEXT_PUBLIC_AUTH_URL + "/login", {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -108,7 +107,7 @@ export const AuthContextProvider = (props: {
     }, []);
 
     const requestPasswordReset = useCallback((email: string) => {
-        return fetch(AUTH_URL + "/forgot",
+        return fetch(process.env.NEXT_PUBLIC_AUTH_URL + "/forgot",
             {
                 headers: {
                     'Content-Type': 'application/json'
@@ -127,7 +126,7 @@ export const AuthContextProvider = (props: {
     }, []);
 
     const resetPassword = useCallback((resetToken: string, password: string) => {
-        return fetch(AUTH_URL + "/reset",
+        return fetch(process.env.NEXT_PUBLIC_AUTH_URL + "/reset",
             {
                 headers: {
                     'Content-Type': 'application/json'
@@ -148,7 +147,7 @@ export const AuthContextProvider = (props: {
 
     const logout = useCallback(() => {
         setLoading(true);
-        return fetch(AUTH_URL + "/logout",
+        return fetch(process.env.NEXT_PUBLIC_AUTH_URL + "/logout",
             {
                 headers: {
                     'Content-Type': 'application/json',
