@@ -158,7 +158,7 @@ export interface VideoConsumers {
         [id: string]: VideoConsumer
     },
     byProducer: {
-        [videoProducerId: string]: string[]
+        [videoProducerId: string]: string
     },
     byStage: {
         [stageId: string]: string[]

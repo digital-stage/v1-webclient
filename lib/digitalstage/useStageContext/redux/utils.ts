@@ -3,12 +3,16 @@ import _ from "lodash";
 import {ExtendedCollection} from "../model";
 
 export const upsert = function <T>(arr: Readonly<T[]>, value: T): T[] {
+    console.log("upsert")
     if (!arr) {
+        console.log("array was null")
         return [value];
     }
     if (_.indexOf<T>(arr, value) === -1) {
+        console.log("value was not found")
         return [...arr, value];
     }
+    console.log("value found")
     return [...arr];
 }
 

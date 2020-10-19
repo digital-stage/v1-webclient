@@ -360,6 +360,10 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
         case ServerStageEvents.STAGE_MEMBER_VIDEO_CHANGED:
             return updateItem(state, "videoProducers", action.payload._id, action.payload);
         case ServerStageEvents.STAGE_MEMBER_VIDEO_REMOVED:
+            if (!state.videoProducers.byId[action.payload]) {
+                console.error("Could not remove requested producer with id=" + action.payload);
+                return state;
+            }
             return {
                 ...state,
                 videoProducers: {
@@ -386,19 +390,19 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
                         ...state.audioConsumers.byId,
                         [action.payload._id]: action.payload
                     },
-                    allIds: [...state.audioConsumers.allIds, action.payload._id],
                     byProducer: {
                         ...state.audioConsumers.byProducer,
                         [action.payload.audioProducer]: action.payload._id
                     },
                     byStage: {
                         ...state.audioConsumers.byStage,
-                        [action.payload.stage]: action.payload._id
+                        [action.payload.stage]: upsert<string>(state.audioConsumers.byStage[action.payload.stage], action.payload._id),
                     },
                     byStageMember: {
                         ...state.audioConsumers.byStageMember,
-                        [action.payload.stageMember]: upsert<string>(state.audioConsumers.byStageMember[action.payload.stageMemberId], action.payload._id),
-                    }
+                        [action.payload.stageMember]: upsert<string>(state.audioConsumers.byStageMember[action.payload.stageMember], action.payload._id),
+                    },
+                    allIds: [...state.audioConsumers.allIds, action.payload._id]
                 }
             };
 
@@ -437,11 +441,11 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
                     },
                     byStage: {
                         ...state.videoConsumers.byStage,
-                        [action.payload.stage]: action.payload._id
+                        [action.payload.stage]: upsert<string>(state.videoConsumers.byStage[action.payload.stage], action.payload._id),
                     },
                     byStageMember: {
                         ...state.videoConsumers.byStageMember,
-                        [action.payload.stageMember]: upsert<string>(state.videoConsumers.byStageMember[action.payload.stageMemberId], action.payload._id),
+                        [action.payload.stageMember]: upsert<string>(state.videoConsumers.byStageMember[action.payload.stageMember], action.payload._id),
                     },
                     allIds: [...state.videoConsumers.allIds, action.payload._id],
                 }

@@ -172,54 +172,66 @@ export const SocketContextProvider = (props: {
         });
     }, [dispatch]);
 
+
+    const createSocket = useCallback(() => {
+        console.log("[useStageContext] Creating socket connection...");
+        const bowser = Bowser.getParser(window.navigator.userAgent);
+        const os = bowser.getOSName();
+        const browser = bowser.getBrowserName();
+
+        enumerateDevices()
+            .then(devices => {
+                const socket = io(API_URL, {
+                    secure: process.env.NODE_ENV !== "development",
+                    query: {
+                        token: token,
+                        device: JSON.stringify({
+                            name: browser + " (" + os + ")",
+                            canAudio: devices.inputAudioDevices.length > 0,
+                            canVideo: devices.inputVideoDevices.length > 0,
+                            inputAudioDevices: devices.inputAudioDevices,
+                            inputVideoDevices: devices.inputVideoDevices,
+                            outputAudioDevices: devices.outputAudioDevices,
+                            inputAudioDeviceId: devices.inputAudioDevices.find(d => d.id === "label") ? "default" : devices.inputAudioDevices.length > 0 ? devices.inputAudioDevices[0].id : undefined,
+                            inputVideoDeviceId: devices.inputVideoDevices.length === 1 ? devices.inputVideoDevices[0].id : "default",
+                            outputAudioDeviceId: devices.outputAudioDevices.find(d => d.id === "label") ? "default" : devices.outputAudioDevices.length > 0 ? devices.outputAudioDevices[0].id : undefined
+                        } as Device)
+                    }
+                });
+
+                registerSocketHandlers(socket);
+
+                socket.on("reconnect", () => {
+                    console.log("[useStageContext] Reconnected!");
+                });
+                socket.on("disconnect", () => {
+                    console.log("[useStageContext] Disconnected from server, try to reconnect");
+                });
+
+                setSocket(socket);
+                console.log("[useStageContext] Created socket connection!");
+            });
+    }, [token]);
+
+    useEffect(() => {
+        if( socket ) {
+            return () => {
+                console.log("[useStageContext] Closing socket connection...");
+                socket.removeAllListeners();
+                socket.close();
+                setSocket(undefined);
+                dispatch(allActions.client.reset());
+                console.log("[useStageContext] Closed socket connection!");
+            }
+        }
+    }, [socket]);
+
     useEffect(() => {
         if (token) {
-            if (!socket) {
-                console.log("[useStageContext] Connecting...");
-                const bowser = Bowser.getParser(window.navigator.userAgent);
-                const os = bowser.getOSName();
-                const browser = bowser.getBrowserName();
-
-                enumerateDevices()
-                    .then(devices => {
-                        const socket = io(API_URL, {
-                            secure: process.env.NODE_ENV !== "development",
-                            query: {
-                                token: token,
-                                device: JSON.stringify({
-                                    name: browser + " (" + os + ")",
-                                    canAudio: devices.inputAudioDevices.length > 0,
-                                    canVideo: devices.inputVideoDevices.length > 0,
-                                    inputAudioDevices: devices.inputAudioDevices,
-                                    inputVideoDevices: devices.inputVideoDevices,
-                                    outputAudioDevices: devices.outputAudioDevices,
-                                    inputAudioDeviceId: devices.inputAudioDevices.find(d => d.id === "label") ? "default" : devices.inputAudioDevices.length > 0 ? devices.inputAudioDevices[0].id : undefined,
-                                    inputVideoDeviceId: devices.inputVideoDevices.length === 1 ? devices.inputVideoDevices[0].id : "default",
-                                    outputAudioDeviceId: devices.outputAudioDevices.find(d => d.id === "label") ? "default" : devices.outputAudioDevices.length > 0 ? devices.outputAudioDevices[0].id : undefined
-                                } as Device)
-                            }
-                        });
-
-                        registerSocketHandlers(socket);
-
-                        socket.on("reconnect", () => {
-                            console.log("[useStageContext] Reconnected!");
-                        });
-                        socket.on("disconnect", () => {
-                            console.log("[useStageContext] Disconnected from server, try to reconnect");
-                        });
-
-                        setSocket(socket);
-                        console.log("[useStageContext] Connected!");
-                    });
-                return () => {
-                    if (socket) {
-                        socket.removeAllListeners();
-                    }
-                    dispatch(allActions.client.reset());
-                    setSocket(undefined);
-                }
-            }
+            createSocket();
+        } else {
+            console.log("[useStageContext] token is null -> clearing socket");
+            setSocket(undefined);
         }
     }, [token]);
 
