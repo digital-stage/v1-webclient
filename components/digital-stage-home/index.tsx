@@ -110,7 +110,7 @@ interface User {
     userPhoto: string,
     username: string
 }
-interface Stage {
+export interface Stage {
     title: string,
     mineStage: boolean,
     image: string,
@@ -132,7 +132,6 @@ export default function Home() {
     const [open, setOpen] = React.useState(true);
     const [stageId, setStageId] = React.useState(0);
     const [selectedItem, setSelectedItem] = React.useState<string>(SelectedItem.STAGE);
-    const [openCreateStageModal, setOpenCreateStageModal] = React.useState(false);
 
     const handleDrawer = (icon: string) => {
         if (icon === "menu") {
@@ -197,7 +196,6 @@ export default function Home() {
                             selectedItem === SelectedItem.STAGE &&
                             <><StagesList
                                 onClick={(id) => { setStageId(id) }}
-                                handleOpen={() => setOpenCreateStageModal(true)}
                                 stages={stages}
                             /></>
                         }

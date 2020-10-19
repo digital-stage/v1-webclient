@@ -6,6 +6,8 @@ import Button from "../digital-stage-ui/Button";
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
+import CreateStageModal from "../digital-stage-create-stage/CreateStageModal";
+import { Stage } from "../../lib/digitalstage/common/model.server";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -47,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const StagesList = (props: { onClick(i: number): void, handleOpen(open: boolean): void, stages: any }) => {
+const StagesList = (props: { onClick(i: number): void, stages: any }) => {
     const { stages } = props
     const classes = useStyles()
     const [list, setList] = React.useState(stages);
@@ -55,8 +57,7 @@ const StagesList = (props: { onClick(i: number): void, handleOpen(open: boolean)
     const [checkedMyStage, setCheckedMyStage] = React.useState(true);
     const [checkedJoindedStages, setCheckedJoinedStages] = React.useState(true);
     const [clickedId, setclickedId] = React.useState(0);
-
-
+    const [openCreateStageModal, setOpenCreateStageModal] = React.useState(false);
 
     const handleMySatgeClick = () => {
         setCheckedMyStage((prev) => !prev);
@@ -88,6 +89,10 @@ const StagesList = (props: { onClick(i: number): void, handleOpen(open: boolean)
 
     return (
         <div className={classes.root}>
+            <CreateStageModal
+                open={openCreateStageModal}
+                handleClose={() => setOpenCreateStageModal(false)}
+            />
             <Typography variant="h5" className={classes.paddingLeft}>Stages</Typography>
             <Input
                 onChange={onChangeHandler}
@@ -146,6 +151,7 @@ const StagesList = (props: { onClick(i: number): void, handleOpen(open: boolean)
                 color="primary"
                 text="Create stage"
                 type="submit"
+                onClick={() => setOpenCreateStageModal(true)}
             />
         </div>);
 };

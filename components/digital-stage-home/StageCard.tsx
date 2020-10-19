@@ -11,8 +11,8 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: "space-between"
         },
         stageImage: {
-            width: "80px",
-            height: "80px"
+            width: "48px",
+            height: "48px"
         },
         online: {
             width: "8px",

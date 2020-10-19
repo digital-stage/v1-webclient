@@ -10,7 +10,8 @@ export interface Props {
     withIcon: boolean,
     iconName?: string,
     iconColor?: string,
-    type?:"submit"
+    type?:"submit",
+    onClick?: () => void
 }
 const useStyles = makeStyles<Theme, Props>((theme: Theme) =>
     createStyles({
@@ -35,7 +36,8 @@ export default function Button(props: Props) {
         type,
         withIcon,
         iconName,
-        iconColor
+        iconColor,
+        onClick
     } = props
     const classes = useStyles(props);
 
@@ -47,6 +49,7 @@ export default function Button(props: Props) {
                 className={classes.root}
                 type={type}
                 startIcon={withIcon && <Icon name={iconName} iconColor={iconColor} />}
+                onClick={onClick}
             >
                 <Typography variant="button">{text}</Typography>
             </MaterialButton>
