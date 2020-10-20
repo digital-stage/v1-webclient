@@ -191,6 +191,8 @@ export const SocketContextProvider = (props: {
                             name: browser + " (" + os + ")",
                             canAudio: devices.inputAudioDevices.length > 0,
                             canVideo: devices.inputVideoDevices.length > 0,
+                            receiveVideo: true,
+                            receiveAudio: true,
                             inputAudioDevices: devices.inputAudioDevices,
                             inputVideoDevices: devices.inputVideoDevices,
                             outputAudioDevices: devices.outputAudioDevices,

@@ -177,6 +177,10 @@ export interface SetCustomStageMemberPayload {
     stageMemberId: string;
     update: Partial<ThreeDimensionAudioProperties>
 }
+export interface UpdateCustomStageMemberPayload {
+    customStageMemberId: string;
+    update: Partial<ThreeDimensionAudioProperties>
+}
 
 
 // STAGE MEMBER AUDIO PRODUCER

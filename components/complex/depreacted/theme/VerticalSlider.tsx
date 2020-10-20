@@ -33,9 +33,11 @@ const VerticalSlider = (
     props: {
         value: number;
         onEnd: (value: number) => any;
+        disabled?: boolean;
         min?: number;
         max?: number;
         step?: number;
+        color?: "primary" | "secondary";
     }
 ) => {
     const [value, setValue] = useState<number>(props.value);
@@ -50,6 +52,8 @@ const VerticalSlider = (
                 if (props.onEnd && !Array.isArray(v))
                     props.onEnd(v)
             }}
+            color={props.color}
+            disabled={props.disabled}
             orientation="vertical"
             value={value}
             min={props.min}

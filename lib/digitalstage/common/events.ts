@@ -134,6 +134,7 @@ export enum ClientStageEvents {
     REMOVE_CUSTOM_GROUP = "remove-custom-group",
 
     SET_CUSTOM_STAGE_MEMBER = "set-custom-stage-member",            // upsert
+    UPDATE_CUSTOM_STAGE_MEMBER = "update-custom-stage-member",            // upsert
     SET_CUSTOM_STAGE_MEMBER_AUDIO = "set-custom-stage-member-audio",// upsert
     SET_CUSTOM_STAGE_MEMBER_OV = "set-custom-stage-member-ov",      // upsert
 

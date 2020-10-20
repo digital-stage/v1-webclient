@@ -1,17 +1,20 @@
 import {styled} from "styletron-react";
 import useStageSelector from "../../../../../lib/digitalstage/useStageSelector";
-import React, {useState} from "react";
-import VerticalSlider from "../../theme/VerticalSlider";
+import React from "react";
 import {Select, Value} from "baseui/select";
-import GroupMixer from "./GroupMixer";
+import GroupChannel from "./channels/GroupChannel";
 
 const Wrapper = styled("div", {
     width: "100%",
     height: "100%",
-});
-const Panel = styled("div", {
-    width: "100%",
-    height: "100%",
+    maxHeight: "600px",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    overflowX: "auto",
+    overflowY: "hidden",
+    whiteSpace: "nowrap",
+    padding: ".2rem"
 });
 
 const adminOptions = [
@@ -42,26 +45,11 @@ const AdminSwitcher = (
 };
 
 const MixingPanel = () => {
-    const [global, setGlobal] = useState<boolean>(true);
-
-    const isAdmin: boolean = useStageSelector(state => state.stageId ? state.stages.byId[state.stageId].isAdmin : false);
-    const groupIds: string[] = useStageSelector<string[]>(state => state.stageId ? state.groups.byStage[state.stageId] : []);
+    const groupIds = useStageSelector<string[]>(state => state.stageId ? state.groups.byStage[state.stageId] : []);
 
     return (
         <Wrapper>
-            {isAdmin ? (
-                <>
-                    <AdminSwitcher onSelected={value => setGlobal(value === "global")}/>
-                    {groupIds && groupIds.map(id => <GroupMixer key={id} global={global} groupId={id}/>)}
-                </>
-            ) : (
-                <Panel>
-                    <VerticalSlider value={0.5} min={0} max={1} step={0.05} onEnd={(value) => console.log(value)}/>
-                </Panel>
-
-            )}
-
-
+            {groupIds.map(id => <GroupChannel key={id} groupId={id}/>)}
         </Wrapper>
     )
 };

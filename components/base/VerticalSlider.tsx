@@ -70,6 +70,7 @@ export default function VerticalSlider(props:{
                     max={props.max}
                     valueLabelDisplay="auto"
                     getAriaValueText={valuetext}
+
                     onChange={props.handleChange}
                 />
             </div>
