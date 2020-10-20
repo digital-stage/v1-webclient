@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {
     FormControlLabel,
     Link,
@@ -9,8 +9,6 @@ import {
     Icon,
     makeStyles
 } from "@material-ui/core";
-// @ts-ignore
-import { loadCSS } from "fg-loadcss";
 
 import validator from 'validator';
 import Input from "../base/Input";
@@ -70,24 +68,11 @@ export default function SignInForm(props: {
 
     const classes = useStyles();
 
-    /*
-    React.useEffect(() => {
-        const node = loadCSS(
-            "https://use.fontawesome.com/releases/v5.12.0/css/all.css",
-            document.querySelector("#font-awesome-css")
-        );
-        return () => {
-            node.parentNode.removeChild(node);
-        };
-    }, []);*/
-
-
     const validate = () => {
         const errorsList: IError = {}
         if (validator.isEmpty(email)) {
             errorsList.email = "Email is required"
-        }
-        else if (!validator.isEmail(email)) {
+        } else if (!validator.isEmail(email)) {
             errorsList.email = "Enter a valid email"
         }
         if (validator.isEmpty(password)) {
@@ -109,7 +94,7 @@ export default function SignInForm(props: {
         if (Object.keys(validationErrors).length === 0) {
             return signInWithEmailAndPassword(email, password)
                 .then(() => {
-                    if( props.onCompleted )
+                    if (props.onCompleted)
                         props.onCompleted();
                 })
                 .catch(err => setErrors({

@@ -1,4 +1,4 @@
-import FlexContainer from "../components/complex/depreacted/theme/FlexContainer";
+//import FlexContainer from "../components/complex/depreacted/theme/FlexContainer";
 import React from "react";
 import { useAuth } from "../lib/digitalstage/useAuth";
 import Loading from "../components/complex/depreacted/theme/Loading";
@@ -35,7 +35,7 @@ const Components = () => {
             return (
                 <div>
                     <Welcome/>
-                    <LoginIndex/>
+                    <LoginIndex mode="login"/>
                     <Home/>
                     {/* <FlexContainer>
                         <Button color="primary" text="Primary" withIcon iconName="settings" iconColor="white" />

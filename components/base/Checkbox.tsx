@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Checkbox(props: {
     value: string,
     label?: string,
-    checked:boolean,
+    checked: boolean,
     handleChange(event: React.ChangeEvent<HTMLInputElement>):void
 }) {
     const { value, label, checked, handleChange } = props;

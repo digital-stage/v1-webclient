@@ -30,17 +30,17 @@ const AudioContextController = () => {
                 </Button>
             </StartAudioOverlay>
         )
-    } else if (audioContext.state === "suspended") {
+    } /*else if (audioContext.state === "suspended") {
         return (
             <StartAudioOverlay>
                 <Button
                     onClick={() => audioContext.resume()}
                 >
-                    Enable Audio Playback
+                    Resume Audio Playback
                 </Button>
             </StartAudioOverlay>
         )
-    }
+    }*/
 
     return null;
 }

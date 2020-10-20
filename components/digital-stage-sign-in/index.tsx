@@ -3,7 +3,6 @@ import {Box, createStyles, Grid, Icon, IconButton, Link, makeStyles, Theme, Typo
 
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
-import {loadCSS} from "fg-loadcss";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -58,18 +57,6 @@ const Login = (props: {
     const classes = useStyles();
     const [LoginOpen, setLoginOpen] = useState(props.mode === "login");
     const [SignupOpen, setSignupOpen] = useState(props.mode === "signup");
-
-    /*
-    React.useEffect(() => {
-        /*const node = loadCSS(
-            "https://use.fontawesome.com/releases/v5.12.0/css/all.css",
-            document.querySelector("#font-awesome-css")
-        );
-
-        return () => {
-            node.parentNode.removeChild(node);
-        };
-    }, []);*/
 
     const showLoginBox = () => {
         setLoginOpen(true);

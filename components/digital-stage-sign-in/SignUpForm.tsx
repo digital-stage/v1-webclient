@@ -8,8 +8,6 @@ import {
   makeStyles,
   Typography
 } from "@material-ui/core";
-// @ts-ignore
-import { loadCSS } from "fg-loadcss";
 
 import validator from 'validator';
 import Input from "../base/Input";
@@ -78,18 +76,6 @@ export default function SignUpForm(props: {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [errors, setErrors] = useState<IError>({});
   const [showAlert, setShowAlert] = useState(false);
-
-  /*
-  React.useEffect(() => {
-    const node = loadCSS(
-      "https://use.fontawesome.com/releases/v5.12.0/css/all.css",
-      document.querySelector("#font-awesome-css")
-    );
-
-    return () => {
-      node.parentNode.removeChild(node);
-    };
-  }, []);*/
 
   const validate = () => {
     const errorsList: IError = {}

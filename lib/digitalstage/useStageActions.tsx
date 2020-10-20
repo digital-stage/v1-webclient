@@ -58,9 +58,9 @@ export interface StageActionsProps {
     /*
     // Customized stage member
     addCustomStageMember(stageMemberId: StageMemberId, initial: Partial<ThreeDimensionAudioProperties>);
-
+    */
     updateCustomStageMember(customStageMemberId: CustomStageMemberId, update: Partial<ThreeDimensionAudioProperties>);
-
+/*
     removeCustomStageMember(customStageMemberId: CustomStageMemberId);
 
 
@@ -327,6 +327,7 @@ const useStageActions = (): StageActionsProps => {
         addCustomGroup: addCustomGroup,
         updateCustomGroup: updateCustomGroup,
         removeCustomGroup: removeCustomGroup,
+        updateCustomStageMember: setCustomStageMember,
         //setCustomStageMember: setCustomStageMember,
         //updateStageMemberAudio: updateStageMemberAudio,
         //setCustomStageMemberAudio: setCustomStageMemberAudio,

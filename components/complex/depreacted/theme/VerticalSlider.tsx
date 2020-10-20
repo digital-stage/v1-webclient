@@ -1,18 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Slider, Typography, withStyles} from "@material-ui/core";
 
-const PrettoSlider = withStyles({
-    root: {},
-    valueLabel: {
-        left: 'calc(-50% - 4px)',
-    },
-    mark: {
-        color: "white",
-        '& *': {
-            background: 'transparent',
-        },
-    }
-})(Slider);
 
 const marks = [
     {
@@ -57,7 +45,7 @@ const VerticalSlider = (
     }, [props.value]);
 
     return <>
-        <PrettoSlider
+        <Slider
             onChangeCommitted={(e, v) => {
                 if (props.onEnd && !Array.isArray(v))
                     props.onEnd(v)

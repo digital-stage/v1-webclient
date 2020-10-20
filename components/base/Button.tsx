@@ -1,19 +1,19 @@
 import React from 'react';
 import MaterialButton from '@material-ui/core/Button';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import {PropTypes, Typography} from '@material-ui/core';
 import Icon from './Icon';
 
 export interface Props {
-    color?: "light" | "dark" | 'primary' | 'secondary',
+    color?: PropTypes.Color | "light" | "dark",
     text: string,
-    withIcon: boolean,
+    withIcon?: boolean,
     iconName?: string,
     iconColor?: string,
     type?:"submit",
     onClick?: () => void
 }
-const useStyles = makeStyles<Theme, Props>((theme: Theme) =>
+const useStyles = makeStyles<Theme, Props>((theme: Theme & Props) =>
     createStyles({
         root: {
             color: ({ color }) => color === "dark" && theme.palette.common.white || color === "light" && theme.palette.common.black,
@@ -25,6 +25,9 @@ const useStyles = makeStyles<Theme, Props>((theme: Theme) =>
             borderRadius: "21px",
             lineHeight: "initial",
             alignItems: "initial"
+        },
+        wrapper: {
+            color: theme.color,
         }
     }),
 );
@@ -41,11 +44,13 @@ export default function Button(props: Props) {
     } = props
     const classes = useStyles(props);
 
+    const buttonColor: PropTypes.Color = props.color === "dark" || props.color === "light" ? "inherit" : props.color;
+
     return (
-        <div>
+        <div className={classes.wrapper}>
             <MaterialButton
                 variant="contained"
-                color={color}
+                color={buttonColor}
                 className={classes.root}
                 type={type}
                 startIcon={withIcon && <Icon name={iconName} iconColor={iconColor} />}
@@ -56,7 +61,3 @@ export default function Button(props: Props) {
         </div>
     );
 }
-
-Button.defaultProps = {
-    withIcon: false
-};

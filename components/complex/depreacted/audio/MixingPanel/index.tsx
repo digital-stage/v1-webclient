@@ -2,7 +2,8 @@ import {styled} from "styletron-react";
 import useStageSelector from "../../../../../lib/digitalstage/useStageSelector";
 import React, {useState} from "react";
 import VerticalSlider from "../../theme/VerticalSlider";
-import {Select} from "baseui/select";
+import {Select, Value} from "baseui/select";
+import GroupMixer from "./GroupMixer";
 
 const Wrapper = styled("div", {
     width: "100%",
@@ -13,22 +14,29 @@ const Panel = styled("div", {
     height: "100%",
 });
 
-const adminOptions = [{label: "Global"}, {label: "Benutzerdefiniert"}]
+const adminOptions = [
+    {label: "Global", id: "global"},
+    {label: "Monitor", id: "monitor"}
+];
 const AdminSwitcher = (
     props: {
         onSelected: (mode: "global" | "monitor") => any
     }
 ) => {
-    const [value, setValue] = React.useState([]);
+    const [value, setValue] = React.useState<Value>([
+        adminOptions[0]
+    ]);
 
     return (
         <Select
-            options={[
-                {label: "AliceBlue", id: "global"},
-                {label: "AntiqueWhite", id: "monitor"},
-            ]}
-            value={[{label: "Monitor"}]}
-            //onChange={(params) => setValue(params.option)}
+            clearable={false}
+            options={adminOptions}
+            value={value}
+            onChange={params => {
+                setValue(params.value);
+                if (props.onSelected)
+                    params.option.id === "global" ? props.onSelected("global") : props.onSelected("monitor")
+            }}
         />
     )
 };
@@ -36,19 +44,16 @@ const AdminSwitcher = (
 const MixingPanel = () => {
     const [global, setGlobal] = useState<boolean>(true);
 
-    const stageId = useStageSelector<string>(state => state.stageId);
     const isAdmin: boolean = useStageSelector(state => state.stageId ? state.stages.byId[state.stageId].isAdmin : false);
+    const groupIds: string[] = useStageSelector<string[]>(state => state.stageId ? state.groups.byStage[state.stageId] : []);
 
     return (
         <Wrapper>
             {isAdmin ? (
-                <div>
-                    <AdminSwitcher onSelected={useGlobal => {}}/>
-
-
-                    <VerticalSlider value={0.5} min={0} max={1} step={0.05} onEnd={(value) => console.log(value)}/>
-
-                </div>
+                <>
+                    <AdminSwitcher onSelected={value => setGlobal(value === "global")}/>
+                    {groupIds && groupIds.map(id => <GroupMixer key={id} global={global} groupId={id}/>)}
+                </>
             ) : (
                 <Panel>
                     <VerticalSlider value={0.5} min={0} max={1} step={0.05} onEnd={(value) => console.log(value)}/>
