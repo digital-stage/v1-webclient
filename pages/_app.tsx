@@ -76,6 +76,7 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                                                 transition-timing-function: cubic-bezier(0, 0, 1, 1);
                                                 transition: color 200ms, background-color 200ms;
                                                 overflow-x: hidden;
+                                                overflow-y: scroll;
                                             }
                                             @keyframes bounce {
                                                 0%   { transform: translateY(0); }
