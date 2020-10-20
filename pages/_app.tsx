@@ -87,7 +87,8 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                                                         </style>
                                                         <AppNavigation/>
                                                         <StageJoiner/>
-                                                        <Block marginTop={['52px', '52px', '72px']}>
+                                                        <Block //marginTop={['52px', '52px', '72px']}
+                                                            >
                                                             <Component {...pageProps} />
                                                             <AllAudioPlayer/>
                                                             <AudioContextController/>
@@ -102,6 +103,7 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                                                                 </Link>
                                                             </DevCorner>
                                                         )}
+                                                        <LocalDeviceControl />
                                                     </BaseProvider>
                                                 )}
                                             </DarkModeConsumer>

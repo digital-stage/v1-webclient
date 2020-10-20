@@ -1,6 +1,5 @@
 import React from 'react';
-import {createStyles, Switch, SwitchClassKey, SwitchProps, Theme, withStyles} from '@material-ui/core';
-import theme from '../../styles/theme'
+import { createStyles, FormControlLabel, Switch, SwitchClassKey, SwitchProps, Theme, Typography, withStyles } from '@material-ui/core';
 
 interface Styles extends Partial<Record<SwitchClassKey, string>> {
   focusVisible?: string;
@@ -10,13 +9,13 @@ interface Props extends SwitchProps {
   classes: Styles;
 }
 
-const IOSSwitch = withStyles((theme: Theme) =>
+const CustomSwitch = withStyles((theme: Theme) =>
   createStyles({
     root: {
       width: 50,
       height: 24,
       padding: 0,
-      margin: theme.spacing(1),
+      margin: theme.spacing(3),
     },
     switchBase: {
       padding: 2,
@@ -24,7 +23,6 @@ const IOSSwitch = withStyles((theme: Theme) =>
         transform: 'translateX(25px)',
         color: theme.palette.common.white,
         '& + $track': {
-          backgroundColor: theme.palette.secondary.main,
           opacity: 1,
           border: 'none',
         },
@@ -40,7 +38,6 @@ const IOSSwitch = withStyles((theme: Theme) =>
     },
     track: {
       borderRadius: 18,
-      border: `1px solid ${theme.palette.grey[400]}`,
       backgroundColor: "#A7A7A7",
       opacity: 1,
       transition: theme.transitions.create(['background-color', 'border']),
@@ -65,7 +62,12 @@ const IOSSwitch = withStyles((theme: Theme) =>
   );
 });
 
-export default function SwitchButton() {
+
+export default function SwitchButton(props: {
+  color: "primary" | "secondary",
+  text?: string
+}) {
+  const { color, text } = props
   const [state, setState] = React.useState({
     checked: true,
   });
@@ -76,7 +78,11 @@ export default function SwitchButton() {
 
   return (
     <div>
-      <IOSSwitch checked={state.checked} onChange={handleChange} name="checked" />
+      <FormControlLabel
+        control={<CustomSwitch checked={state.checked} onChange={handleChange} name="checked" color={color}/>}
+        label={<Typography variant="h6" color="textPrimary">{text ? text : ""}</Typography>}
+        labelPlacement="start"
+      />
     </div>
   );
 }

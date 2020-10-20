@@ -3,10 +3,11 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import MaterialSlider from '@material-ui/core/Slider';
 import theme from '../../styles/theme';
+import { Grid } from '@material-ui/core';
 
 const CustomSlider = withStyles({
   root: {
-    color: '#828282',
+    color: '#FFFFFF',
     height: 2,
     width: 144
   },
@@ -21,9 +22,6 @@ const CustomSlider = withStyles({
     },
   },
   active: {},
-  valueLabel: {
-    left: 'calc(-50% + 4px)',
-  },
   track: {
     height: 2,
     borderRadius: 4,
@@ -34,31 +32,49 @@ const CustomSlider = withStyles({
   },
 })(MaterialSlider);
 
-export default function Slider(props:{
-    text?:string,
-    defaultValue:number,
-    handleChange(event: any, newValue: number | number[]):void,
-    max:number,
-    min:number,
-    step:number
+export default function Slider(props: {
+  text?: string,
+  defaultValue: number,
+  handleChange(event: any, newValue: number | number[]): void,
+  max: number,
+  min: number,
+  step: number
 }) {
+  const {
+    text,
+    defaultValue,
+    handleChange,
+    max,
+    min,
+    step
+  } = props
 
-    return (
-        <React.Fragment>
-            <Typography id="slider" gutterBottom align="center">
-                {props.text}
-            </Typography>
-            <div>
-                <CustomSlider
-                    color="secondary"
-                    aria-labelledby="discrete-slider-custom"
-                    defaultValue={props.defaultValue}
-                    step={props.step}
-                    min={props.min}
-                    max={props.max}
-                    onChange={props.handleChange}
-                />
-            </div>
-        </React.Fragment>
-    );
+  return (
+    <React.Fragment>
+      <Grid container spacing={4}>
+        <Grid item>
+          <Typography variant="h6" color="textPrimary">
+            {text}
+          </Typography>
+        </Grid>
+        <Grid item>
+          <CustomSlider
+            color="secondary"
+            aria-labelledby="discrete-slider-custom"
+            defaultValue={defaultValue}
+            step={step}
+            min={min}
+            max={max}
+            onChange={handleChange}
+          />
+        </Grid>
+      </Grid>
+    </React.Fragment>
+  );
 }
+
+Slider.defaultProps = {
+  max: 10,
+  min: 0,
+  step: 1
+};

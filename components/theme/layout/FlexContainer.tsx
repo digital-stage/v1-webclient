@@ -6,6 +6,7 @@ export default styled("div", {
     paddingRight: '15px',
     marginLeft: 'auto',
     marginRight: 'auto',
+    marginTop:"15px",
     flexDirection: 'row',
     justifyContent: 'space-around'
 });
