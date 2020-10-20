@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import {Typography} from "@material-ui/core";
 import {Button} from "baseui/button";
-import VerticalSlider from "../../../theme/VerticalSlider";
+import VerticalSlider from "../../depreacted/theme/VerticalSlider";
 import {styled} from "baseui";
-import VolumeSlider from "../../../../../experimental/VolumeSlider";
+import VolumeSlider from "../../../experimental/VolumeSlider";
 
 const Wrapper = styled("div", {
     position: "relative",
@@ -69,8 +69,6 @@ const ChannelPanel = (props: {
     children?: React.ReactNode;
 }) => {
     const [expanded, setExpanded] = useState<boolean>(false);
-
-    console.log(props);
 
     return (
         <Wrapper>

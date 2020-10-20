@@ -1,8 +1,8 @@
 import React from "react";
-import useStageSelector from "../../../../../../lib/digitalstage/useStageSelector";
-import {CustomStageMember, StageMember, User} from "../../../../../../lib/digitalstage/common/model.server";
+import useStageSelector from "../../../../lib/digitalstage/useStageSelector";
+import {CustomStageMember, StageMember, User} from "../../../../lib/digitalstage/common/model.server";
 import ChannelPanel from "./ChannelPanel";
-import useStageActions from "../../../../../../lib/digitalstage/useStageActions";
+import useStageActions from "../../../../lib/digitalstage/useStageActions";
 
 const StageMemberChannel = (props: {
     stageMemberId: string

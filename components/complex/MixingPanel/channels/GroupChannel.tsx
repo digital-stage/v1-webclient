@@ -1,8 +1,8 @@
-import {GroupId} from "../../../../../../lib/digitalstage/common/model.server";
+import {GroupId} from "../../../../lib/digitalstage/common/model.server";
 import React from "react";
-import useStageSelector from "../../../../../../lib/digitalstage/useStageSelector";
-import {CustomGroup, Group} from "../../../../../../lib/digitalstage/useStageContext/model";
-import useStageActions from "../../../../../../lib/digitalstage/useStageActions";
+import useStageSelector from "../../../../lib/digitalstage/useStageSelector";
+import {CustomGroup, Group} from "../../../../lib/digitalstage/useStageContext/model";
+import useStageActions from "../../../../lib/digitalstage/useStageActions";
 import ChannelPanel from "./ChannelPanel";
 import StageMemberChannel from "./StageMemberChannel";
 

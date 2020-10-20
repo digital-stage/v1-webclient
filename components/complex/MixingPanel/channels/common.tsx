@@ -2,7 +2,7 @@ import {styled} from "baseui";
 import React, {useState} from "react";
 import {Typography} from "@material-ui/core";
 import {Button} from "baseui/button";
-import VerticalSlider from "../../../theme/VerticalSlider";
+import VerticalSlider from "../../depreacted/theme/VerticalSlider";
 
 export const SinglePanel = styled("div", {
     display: "flex",

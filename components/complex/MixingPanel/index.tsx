@@ -1,5 +1,5 @@
 import {styled} from "styletron-react";
-import useStageSelector from "../../../../../lib/digitalstage/useStageSelector";
+import useStageSelector from "../../../lib/digitalstage/useStageSelector";
 import React from "react";
 import {Select, Value} from "baseui/select";
 import GroupChannel from "./channels/GroupChannel";

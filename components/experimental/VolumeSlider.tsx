@@ -41,6 +41,7 @@ function getColor(value) {
     const hue = ((1 - value) * 120).toString(10);
     return ["hsl(", hue, ",100%,50%)"].join("");
 }
+
 function getColorInverted(value) {
     return getColor(1 - value);
 }
@@ -65,12 +66,27 @@ const VolumeSlider = (props: {
     colorize?: boolean,
 }) => {
     const [value, setValue] = useState<number>(props.value);
+    const [color, setColor] = useState<string>(props.color);
 
-    console.log(props);
+    useEffect(() => {
+        setValue(props.value);
+    }, [props.value]);
 
-    const color = props.colorize ? getColorInverted(value) : (props.color ? props.color : "yellow");
-    
-    console.log(color);
+    useEffect(() => {
+        if (!props.colorize) {
+            if (props.color) {
+                setColor(props.color);
+            } else {
+                setColor("yellow");
+            }
+        }
+    }, [props.color, props.colorize]);
+
+    useEffect(() => {
+        if (props.colorize) {
+            setColor(getColorInverted(value));
+        }
+    }, [value, props.colorize])
 
     if (props.vertical) {
         return (

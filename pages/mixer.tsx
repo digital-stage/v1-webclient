@@ -1,6 +1,6 @@
 import React from "react";
 import {styled} from "styletron-react";
-import MixingPanel from "../components/complex/depreacted/audio/MixingPanel";
+import MixingPanel from "../components/complex/MixingPanel";
 
 const Wrapper = styled("div", {
     position: "absolute",
