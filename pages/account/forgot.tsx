@@ -1,9 +1,9 @@
 import {useRouter} from "next/router";
 import {useAuth} from "../../lib/digitalstage/useAuth";
 import React, {useState} from "react";
-import Loading from "../../components/theme/Loading";
+import Loading from "../../components/complex/depreacted/theme/Loading";
 import {HeadingLarge} from "baseui/typography";
-import Container from "../../components/theme/layout/Container";
+import Container from "../../components/complex/depreacted/theme/layout/Container";
 import {Input} from "baseui/input";
 import {FormControl} from "baseui/form-control";
 import {Button} from "baseui/button";

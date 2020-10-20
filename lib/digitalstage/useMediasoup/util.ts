@@ -1,5 +1,4 @@
 import mediasoupClient from 'mediasoup-client';
-import {ROUTERS_URL} from "../../../env";
 import {Router, StageMemberAudioProducer, StageMemberVideoProducer} from "../common/model.server";
 
 export enum RouterEvents {
@@ -74,7 +73,7 @@ export const getUrl = (router: Router, path?: string): string => {
 }
 
 export const getFastestRouter = (): Promise<Router> => {
-    return fetchGet<Router[]>(ROUTERS_URL + "/routers")
+    return fetchGet<Router[]>(process.env.NEXT_PUBLIC_ROUTERS_URL + "/routers")
         .then(routers => {
             if (routers && routers.length > 0) {
                 return routers[0];

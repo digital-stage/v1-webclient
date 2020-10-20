@@ -34,6 +34,18 @@ const TIMEOUT_MS: number = 4000;
 
 const MediasoupContext = React.createContext(undefined);
 
+enum TaskAction {
+    CONSUME_VIDEO = "consume-video",
+    CONSUME_AUDIO = "consume-audio",
+    STOP_CONSUMING_VIDEO = "stop-consuming-video",
+    STOP_CONSUMING_AUDIO = "stop-consuming-audio",
+}
+
+interface Task {
+    action: TaskAction,
+    payload: string
+}
+
 export const MediasoupProvider = (props: {
     children: React.ReactNode
 }) => {
@@ -144,109 +156,73 @@ export const MediasoupProvider = (props: {
         }
     }, []);
 
-    const handleConsumingAudio = useCallback(() => {
-        console.log("[useMediasoup] handle consuming audio");
-        setWorking(true);
-        if (receiveAudio) {
-            // Start receiving all, cleanup old
-            return Promise.all([
-                audioConsumers.allIds.map(audioConsumerId => {
-                    if (audioProducers.allIds.indexOf(audioConsumerId) === -1) {
-                        return closeConsumer(connection, audioConsumers.byId[audioConsumerId].msConsumer)
-                            .then(() => dispatch(allActions.stageActions.client.removeAudioConsumer(audioConsumerId)))
-                            .catch(error => console.log(error))
-                    }
-                }),
-                audioProducers.allIds.map(audioProducerId => {
-                    if (!audioConsumers.byProducer[audioProducerId] && audioProducers.byId[audioProducerId]) {
-                        return createConsumer(connection, device, receiveTransport, audioProducers.byId[audioProducerId])
-                            .then(consumer => {
-                                if (consumer.paused)
-                                    return resumeConsumer(connection, consumer);
-                                return consumer;
-                            })
-                            .then(consumer => {
-                                dispatch(allActions.stageActions.client.addAudioConsumer({
-                                    _id: consumer.id,
-                                    stage: audioProducers.byId[audioProducerId].stageId,
-                                    stageMember: audioProducers.byId[audioProducerId].stageMemberId,
-                                    audioProducer: audioProducerId,
-                                    msConsumer: consumer
-                                }));
-                            })
-                            .catch(error => console.log(error))
-                    }
-                    if( !audioProducers.byId[audioProducerId] ) {
-                        console.error("FIXME: error inside reducer: producer is inside allIds but not byId");
-                    }
+    const consumeVideoProducer = useCallback((producerId: string) => {
+        const producer = videoProducers.byId[producerId];
+        if (producer) {
+            return createConsumer(connection, device, receiveTransport, producer)
+                .then(consumer => {
+                    if (consumer.paused)
+                        return resumeConsumer(connection, consumer);
+                    return consumer;
                 })
-            ])
-                .finally(() => setWorking(false));
+                .then(consumer => {
+                        return dispatch(allActions.stageActions.client.addVideoConsumer({
+                            _id: consumer.id,
+                            stage: producer.stageId,
+                            stageMember: producer.stageMemberId,
+                            videoProducer: producer._id,
+                            msConsumer: consumer
+                        }))
+                    }
+                );
         } else {
-            // Stop receiving all
-            return Promise.all(audioConsumers.allIds.map(id => {
-                if (audioConsumers.byId[id]) {
-                    return closeConsumer(connection, audioConsumers.byId[id].msConsumer)
-                        .then(() => dispatch(allActions.stageActions.client.removeAudioConsumer(id)))
-                        .catch(error => console.log(error))
-                }
-            }))
-                .finally(() => setWorking(false));
+            throw new Error("Could not find producer=" + producerId);
         }
-    }, [connection, device, receiveAudio, receiveTransport, audioProducers, audioConsumers]);
+    }, [connection, device, receiveTransport, videoProducers, videoConsumers]);
 
-    const handleConsumingVideo = useCallback(() => {
-        console.log("[useMediasoup] handle consuming video");
-        setWorking(true);
-        if (receiveVideo) {
-            // Start receiving all, cleanup old
-            return Promise.all([
-                videoConsumers.allIds.map(videoConsumerId => {
-                    if (videoConsumers.byId[videoConsumerId] && videoProducers.allIds.indexOf(videoConsumerId) === -1) {
-                        return closeConsumer(connection, videoConsumers.byId[videoConsumerId].msConsumer)
-                            .then(() => dispatch(allActions.stageActions.client.removeVideoConsumer(videoConsumerId)))
-                            .catch(error => console.log(error))
-                    }
-                }),
-                videoProducers.allIds.map(videoProducerId => {
-                    if (!videoConsumers.byProducer[videoProducerId] && videoProducers.byId[videoProducerId]) {
-                        return createConsumer(connection, device, receiveTransport, videoProducers.byId[videoProducerId])
-                            .then(consumer => {
-                                if (consumer.paused)
-                                    return resumeConsumer(connection, consumer);
-                                return consumer;
-                            })
-                            .then(consumer =>
-                                dispatch(allActions.stageActions.client.addVideoConsumer({
-                                    _id: consumer.id,
-                                    stage: videoProducers.byId[videoProducerId].stageId,
-                                    stageMember: videoProducers.byId[videoProducerId].stageMemberId,
-                                    videoProducer: videoProducerId,
-                                    msConsumer: consumer
-                                }))
-                            )
-                            .catch(error => console.log(error))
-                    }
-                    if( !videoProducers.byId[videoProducerId] ) {
-                        console.error("FIXME: error inside reducer: producer is inside allIds but not byId");
-                    }
+    const stopConsumingVideoProducer = useCallback((producerId: string) => {
+        const consumerId = videoConsumers.byProducer[producerId];
+        if (consumerId && videoConsumers.byId[consumerId]) {
+            return closeConsumer(connection, videoConsumers.byId[consumerId].msConsumer)
+                .then(() => dispatch(allActions.stageActions.client.removeVideoConsumer(consumerId)))
+        } else {
+            //throw new Error("Could not find consumer for producer " + producerId);
+        }
+    }, [connection, videoConsumers]);
+
+    const consumeAudioProducer = useCallback((producerId: string) => {
+        const producer = audioProducers.byId[producerId];
+        if (producer) {
+            return createConsumer(connection, device, receiveTransport, producer)
+                .then(consumer => {
+                    if (consumer.paused)
+                        return resumeConsumer(connection, consumer);
+                    return consumer;
                 })
-            ])
-                .finally(() => setWorking(false));
+                .then(consumer => {
+                        return dispatch(allActions.stageActions.client.addAudioConsumer({
+                            _id: consumer.id,
+                            stage: producer.stageId,
+                            stageMember: producer.stageMemberId,
+                            audioProducer: producer._id,
+                            msConsumer: consumer
+                        }))
+                    }
+                );
         } else {
-            // Stop receiving all
-            return Promise.all(videoConsumers.allIds.map(videoConsumerId => {
-                if (videoConsumers.byId[videoConsumerId]) {
-                    console.log("Handling consumer")
-                    return closeConsumer(connection, videoConsumers.byId[videoConsumerId].msConsumer)
-                        .then(() => dispatch(allActions.stageActions.client.removeVideoConsumer(videoConsumerId)))
-                        .catch(error => console.log(error))
-                }
-            }))
-                .finally(() => setWorking(false));
+            throw new Error("Could not find producer=" + producerId);
         }
-    }, [connection, device, receiveVideo, receiveTransport, videoProducers, videoConsumers]);
+    }, [connection, device, receiveTransport, audioProducers, audioConsumers]);
 
+    const stopConsumingAudioProducer = useCallback((producerId: string) => {
+        const consumerId = audioConsumers.byProducer[producerId];
+        if (consumerId && audioConsumers.byId[consumerId]) {
+            return closeConsumer(connection, audioConsumers.byId[consumerId].msConsumer)
+                .then(() => dispatch(allActions.stageActions.client.removeAudioConsumer(consumerId)))
+        } else {
+            throw new Error("Could not find consumer for producer " + producerId);
+        }
+    }, [connection, audioConsumers]);
 
     const startStreamAudio = useCallback(() => {
         console.log("[useMediasoup] start streaming audio");
@@ -419,15 +395,63 @@ export const MediasoupProvider = (props: {
 
     }, [working, localDevice]);
 
+    const [handledVideoProducerIds, setHandledVideoProducerIds] = useState<string[]>([]);
+    const [consumingVideoProducerIds, setConsumingVideoProducerIds] = useState<string[]>([]);
+    const [handledAudioProducerIds, setHandledAudioProducerIds] = useState<string[]>([]);
+    const [consumingAudioProducerIds, setConsumingAudioProducerIds] = useState<string[]>([]);
+
+    const syncVideoProducers = useCallback(() => {
+        setConsumingVideoProducerIds(prev => {
+            const addedVideoProducerIds = handledVideoProducerIds.filter(id => prev.indexOf(id) === -1);
+            const existingVideoProducerIds = handledVideoProducerIds.filter(id => prev.indexOf(id) !== -1);
+            const removedVideoProducerIds = prev.filter(id => handledVideoProducerIds.indexOf(id) === -1);
+
+            addedVideoProducerIds.map(producerId => consumeVideoProducer(producerId));
+            removedVideoProducerIds.map(producerId => stopConsumingVideoProducer(producerId));
+
+            return [...existingVideoProducerIds, ...addedVideoProducerIds];
+        })
+    }, [handledVideoProducerIds, consumingVideoProducerIds]);
+
+    const syncAudioProducers = useCallback(() => {
+        setConsumingAudioProducerIds(prev => {
+            const addedAudioProducerIds = handledAudioProducerIds.filter(id => prev.indexOf(id) === -1);
+            const existingAudioProducerIds = handledAudioProducerIds.filter(id => prev.indexOf(id) !== -1);
+            const removedAudioProducerIds = prev.filter(id => handledAudioProducerIds.indexOf(id) === -1);
+
+            addedAudioProducerIds.map(producerId => consumeAudioProducer(producerId));
+            removedAudioProducerIds.map(producerId => stopConsumingAudioProducer(producerId));
+
+            return [...existingAudioProducerIds, ...addedAudioProducerIds];
+        })
+    }, [handledAudioProducerIds, consumingAudioProducerIds]);
 
     useEffect(() => {
-        console.log("[useMediasoup] VIDEO PRODUCER CHANGED");
-        handleConsumingVideo();
+        syncVideoProducers();
+    }, [handledVideoProducerIds])
+
+    useEffect(() => {
+        syncAudioProducers();
+    }, [handledAudioProducerIds])
+
+    useEffect(() => {
+        if (receiveVideo) {
+            console.log("[useMediasoup] START CONSUMING VIDEO");
+            setHandledVideoProducerIds(videoProducers.allIds);
+        } else {
+            console.log("[useMediasoup] STOP CONSUMING VIDEO");
+            setHandledVideoProducerIds([]);
+        }
     }, [receiveVideo, videoProducers]);
 
     useEffect(() => {
-        console.log("[useMediasoup] AUDIO PRODUCER CHANGED");
-        handleConsumingAudio();
+        if (receiveAudio) {
+            console.log("[useMediasoup] START CONSUMING AUDIO");
+            setHandledAudioProducerIds(audioProducers.allIds);
+        } else {
+            console.log("[useMediasoup] STOP CONSUMING AUDIO");
+            setHandledAudioProducerIds([]);
+        }
     }, [receiveAudio, audioProducers]);
 
 

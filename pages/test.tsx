@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from "react";
-import Container from "../components/theme/layout/Container";
+import Container from "../components/complex/depreacted/theme/layout/Container";
 import {ListItem, ListItemLabel} from "baseui/list";
 import {Button} from "baseui/button";
 import useStageSelector from "../lib/digitalstage/useStageSelector";

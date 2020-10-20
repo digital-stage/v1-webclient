@@ -85,9 +85,12 @@ export enum ServerStageEvents {
     GROUP_CHANGED = "group-changed",
     GROUP_REMOVED = "group-removed",
 
+
     CUSTOM_GROUP_ADDED = "custom-group-added",
+    CUSTOM_GROUP_SET = "custom-group-set",
     CUSTOM_GROUP_CHANGED = "custom-group-changed",
     CUSTOM_GROUP_REMOVED = "custom-group-removed",
+
 
     STAGE_MEMBER_ADDED = "stage-member-added",
     STAGE_MEMBER_CHANGED = "stage-member-changed",
@@ -125,7 +128,11 @@ export enum ClientStageEvents {
     LEAVE_STAGE = "leave-stage",
     LEAVE_STAGE_FOR_GOOD = "leave-stage-for-good",
 
+    ADD_CUSTOM_GROUP = "add-custom-group",                          // upsert
+    UPDATE_CUSTOM_GROUP = "update-custom-group",                          // upsert
     SET_CUSTOM_GROUP = "set-custom-group",                          // upsert
+    REMOVE_CUSTOM_GROUP = "remove-custom-group",
+
     SET_CUSTOM_STAGE_MEMBER = "set-custom-stage-member",            // upsert
     SET_CUSTOM_STAGE_MEMBER_AUDIO = "set-custom-stage-member-audio",// upsert
     SET_CUSTOM_STAGE_MEMBER_OV = "set-custom-stage-member-ov",      // upsert

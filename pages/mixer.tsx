@@ -1,80 +1,25 @@
-import FlexContainer from "../components/theme/layout/FlexContainer";
-import React, { useEffect, useState } from "react";
-import { useAuth } from "../lib/digitalstage/useAuth";
-import Loading from "../components/theme/Loading";
-import { DisplayMedium } from "baseui/typography";
-import Login from "./account/login";
-import { useRouter } from "next/router";
-import VerticalSlider from "../components/digital-stage-ui/VerticalSlider";
-import PanControler from "../components/digital-stage-ui/PanControl";
-import SwitchButton from "../components/digital-stage-ui/SwitchButton";
-import useStageSelector from "../lib/digitalstage/useStageSelector";
+import React from "react";
+import VerticalSlider from "../components/complex/depreacted/theme/VerticalSlider";
+import {styled} from "styletron-react";
+import MixingPanel from "../components/complex/depreacted/audio/MixingPanel";
 
-const mixers = ["Guitar", "Strings", "Bass", "Cello"]
+const Wrapper = styled("div", {
+    position: "absolute",
+    width: "100vw",
+    height: "calc(100vh - 72px)",
+    border: "1px solid red",
+    top: "72px",
+    left: "0",
+    overflowX: "hidden",
+    overflowY: "scroll",
+    padding: "2rem"
+});
 
 const Mixer = () => {
-    const router = useRouter();
-    const { loading, user } = useAuth();
-    const stageId = useStageSelector<string | undefined>(state => state.stageId);
-    const [initialized, setInitialized] = useState<boolean>();
-
-    const [value, setValue] = React.useState<number>(5)
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, newValue: number | number[]) => {
-        setValue(value as number)
-    }
-
-    useEffect(() => {
-        if (initialized) {
-            if (stageId) {
-                router.push("/");
-            }
-        }
-    }, [stageId]);
-
-    useEffect(() => {
-        if (router.pathname === "/mixer") {
-            setInitialized(true);
-        }
-    }, [router.pathname]);
-
-    if (!loading) {
-        if (!user) {
-            return <Login />
-        } else {
-            return (
-                <>
-                    <FlexContainer>
-                        <PanControler />
-                        <PanControler />
-                        <PanControler />
-                        <PanControler />
-                    </FlexContainer>
-                    <FlexContainer>
-                        <SwitchButton />
-                        <SwitchButton />
-                        <SwitchButton />
-                        <SwitchButton />
-                    </FlexContainer>
-                    <FlexContainer> {mixers.map(mixer => {
-                        return <div>
-                            <VerticalSlider
-                                text={mixer}
-                                defaultValue={value}
-                                max={10}
-                                min={0}
-                                step={1}
-                                handleChange={handleChange}
-                            /></div>
-                    })}
-                    </FlexContainer>
-                </>
-            );
-        }
-    }
-
-    return <Loading>
-        <DisplayMedium>Lade ...</DisplayMedium>
-    </Loading>;
+    return (
+        <Wrapper>
+            <MixingPanel/>
+        </Wrapper>
+    )
 }
 export default Mixer;

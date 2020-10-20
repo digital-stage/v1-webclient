@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
-import Container from "../../components/theme/layout/Container";
+import Container from "../../components/complex/depreacted/theme/layout/Container";
 import {useAuth} from "../../lib/digitalstage/useAuth";
 import {DisplayMedium, HeadingLarge} from "baseui/typography";
-import Loading from "../../components/theme/Loading";
+import Loading from "../../components/complex/depreacted/theme/Loading";
 import {useRouter} from "next/router";
 
 const Logout = () => {

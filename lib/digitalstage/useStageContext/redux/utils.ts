@@ -1,36 +1,38 @@
-import {WebRTCDevice} from "../../common/model.server";
 import {NormalizedState} from "../schema";
 import _ from "lodash";
 import {ExtendedCollection} from "../model";
 
-export const upsert = function <T>(arr: T[], value: T): T[] {
+export const upsert = function <T>(arr: Readonly<T[]>, value: T): T[] {
+    console.log("upsert")
     if (!arr) {
-        arr = [value];
-        return arr;
+        console.log("array was null")
+        return [value];
     }
-    if (_.indexOf(arr, value) === -1) {
-        arr.push(value);
+    if (_.indexOf<T>(arr, value) === -1) {
+        console.log("value was not found")
+        return [...arr, value];
     }
-    return arr;
+    console.log("value found")
+    return [...arr];
 }
 
-export const filter = function <T>(arr: T[], value: T): T[] {
-    return _.without(arr, value);
+export const filter = function <T>(arr: Readonly<T[]>, value: T): T[] {
+    return _.without<T>(arr, value);
 }
 
-export function addItemToCollection<T>(state: ExtendedCollection<T>, id: string, payload: T): ExtendedCollection<T> {
+export function addItemToCollection<T>(state: Readonly<ExtendedCollection<T>>, id: string, payload: T): ExtendedCollection<T> {
     return {
         ...state,
         byId: {
             ...state.byId,
             [id]: payload,
         },
-        allIds: upsert(state.allIds, id)
+        allIds: upsert<string>(state.allIds, id)
     }
 }
 
 
-export const updateItem = (state: NormalizedState, group: string, id: string, payload: any): NormalizedState => {
+export const updateItem = (state: Readonly<NormalizedState>, group: string, id: string, payload: any): NormalizedState => {
     return {
         ...state,
         [group]: {
@@ -45,7 +47,7 @@ export const updateItem = (state: NormalizedState, group: string, id: string, pa
         }
     };
 }
-export const removeItem = (state: NormalizedState, group: string, id: string): NormalizedState => {
+export const removeItem = (state: Readonly<NormalizedState>, group: string, id: string): NormalizedState => {
     return {
         ...state,
         [group]: {
@@ -56,7 +58,7 @@ export const removeItem = (state: NormalizedState, group: string, id: string): N
     }
 }
 
-export const removeItemWithArrayReference = (state: NormalizedState, group: string, id: string, reference: {
+export const removeItemWithArrayReference = (state: Readonly<NormalizedState>, group: string, id: string, reference: {
     group: string;
     id: string;
     key: string;
@@ -80,7 +82,7 @@ export const removeItemWithArrayReference = (state: NormalizedState, group: stri
     };
 }
 
-export const removeItemWithReference = (state: NormalizedState, group: string, id: string, reference: {
+export const removeItemWithReference = (state: Readonly<NormalizedState>, group: string, id: string, reference: {
     group: string;
     id: string;
     key: string;

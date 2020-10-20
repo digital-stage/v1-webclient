@@ -51,7 +51,7 @@ export interface CustomGroups {
         [id: string]: CustomGroup
     },
     byGroup: {
-        [groupId: string]: string[]
+        [groupId: string]: string
     }
     allIds: string[]
 }
@@ -76,7 +76,7 @@ export interface CustomStageMembers {
         [id: string]: CustomStageMember
     },
     byStageMember: {
-        [stageMemberId: string]: string[]
+        [stageMemberId: string]: string
     },
     allIds: string[]
 }
@@ -84,6 +84,9 @@ export interface CustomStageMembers {
 export interface VideoProducers {
     byId: {
         [id: string]: VideoProducer
+    },
+    byStage: {
+        [stageId: string]: string[]
     },
     byStageMember: {
         [stageMemberId: string]: string[]
@@ -94,6 +97,9 @@ export interface VideoProducers {
 export interface AudioProducers {
     byId: {
         [id: string]: AudioProducer
+    },
+    byStage: {
+        [stageId: string]: string[]
     },
     byStageMember: {
         [stageMemberId: string]: string[]
@@ -152,7 +158,7 @@ export interface VideoConsumers {
         [id: string]: VideoConsumer
     },
     byProducer: {
-        [videoProducerId: string]: string[]
+        [videoProducerId: string]: string
     },
     byStage: {
         [stageId: string]: string[]
@@ -206,11 +212,13 @@ export const OutsideStageNormalizedState: Partial<NormalizedState> = {
     videoProducers: {
         byId: {},
         byStageMember: {},
+        byStage: {},
         allIds: []
     },
     audioProducers: {
         byId: {},
         byStageMember: {},
+        byStage: {},
         allIds: []
     },
     customAudioProducers: {
@@ -271,11 +279,13 @@ export const InitialNormalizedState: NormalizedState = {
     videoProducers: {
         byId: {},
         byStageMember: {},
+        byStage: {},
         allIds: []
     },
     audioProducers: {
         byId: {},
         byStageMember: {},
+        byStage: {},
         allIds: []
     },
     customAudioProducers: {
