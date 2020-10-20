@@ -13,9 +13,10 @@ import {
 import { loadCSS } from "fg-loadcss";
 
 import validator from 'validator';
-import Input from "../digital-stage-ui/Input";
-import Button from "../digital-stage-ui/Button";
-import Checkbox from "../digital-stage-ui/Checkbox";
+import Input from "../base/Input";
+import Button from "../base/Button";
+import Checkbox from "../base/Checkbox";
+import {useAuth} from "../../lib/digitalstage/useAuth";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -51,19 +52,25 @@ type Props = {
 export interface IError {
     email?: string;
     password?: string;
+    response?: string;
 }
 
-export default function SignInForm() {
+export default function SignInForm(props: {
+    onCompleted?: () => void
+}) {
+    const {signInWithEmailAndPassword} = useAuth();
+
     // Get auth state and re-render anytime it changes
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    // const [showAlert, setShowAlert] = useState<boolean>(false);
+    //const [showAlert, setShowAlert] = useState<boolean>(false);
     const [checked, setChecked] = useState<boolean>(false);
 
     const [errors, setErrors] = useState<IError>({});
 
     const classes = useStyles();
 
+    /*
     React.useEffect(() => {
         const node = loadCSS(
             "https://use.fontawesome.com/releases/v5.12.0/css/all.css",
@@ -72,7 +79,7 @@ export default function SignInForm() {
         return () => {
             node.parentNode.removeChild(node);
         };
-    }, []);
+    }, []);*/
 
 
     const validate = () => {
@@ -100,7 +107,14 @@ export default function SignInForm() {
         e.preventDefault();
         const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
-            console.log("loged in")
+            return signInWithEmailAndPassword(email, password)
+                .then(() => {
+                    if( props.onCompleted )
+                        props.onCompleted();
+                })
+                .catch(err => setErrors({
+                    response: err.message
+                }));
         }
     };
 
@@ -116,7 +130,7 @@ export default function SignInForm() {
                         name="email"
                         type="text"
                         error={errors && errors.email}
-                        onInputChange={handleEmailChange}
+                        onChange={handleEmailChange}
                     />
                     <Input
                         required={true}
@@ -125,7 +139,7 @@ export default function SignInForm() {
                         type="password"
                         id="password"
                         error={errors && errors.password}
-                        onInputChange={handlePasswordChange}
+                        onChange={handlePasswordChange}
                     />
                     <Checkbox
                         value="remember"
@@ -138,6 +152,11 @@ export default function SignInForm() {
                         text="Sign in"
                         type="submit"
                     />
+                    {errors && errors.response && (
+                        <div>
+
+                        </div>
+                    )}
                     <Typography variant="h6">Forgot password? </Typography>
                     <Typography variant="h6">Or Via</Typography>
                 </form>

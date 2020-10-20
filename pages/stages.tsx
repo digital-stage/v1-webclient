@@ -1,10 +1,10 @@
-import Container from "../components/theme/layout/Container";
+import Container from "../components/complex/depreacted/theme/layout/Container";
 import React, {useEffect, useState} from "react";
 import {useAuth} from "../lib/digitalstage/useAuth";
-import Loading from "../components/theme/Loading";
+import Loading from "../components/complex/depreacted/theme/Loading";
 import {DisplayMedium, HeadingLarge} from "baseui/typography";
 import Login from "./account/login";
-import StageListView from "../components/stage/StageListView";
+import StageListView from "../components/complex/depreacted/stage/StageListView";
 import {useRouter} from "next/router";
 import useStageSelector from "../lib/digitalstage/useStageSelector";
 

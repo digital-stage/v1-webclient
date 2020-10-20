@@ -1,21 +1,34 @@
 import Document, {DocumentProps, Head, Html, Main, NextScript} from 'next/document'
 import {Provider as StyletronProvider} from 'styletron-react'
 import {styletron} from '../styletron'
+import {ServerStyleSheets} from "@material-ui/styles";
+import React from "react";
 
 interface DocProps extends DocumentProps {
     stylesheets: any
 }
 
 class MyDocument extends Document<DocProps> {
-    static getInitialProps(props) {
-        const page = props.renderPage((App) => (props) => (
-            <StyletronProvider value={styletron}>
-                <App {...props} />
-            </StyletronProvider>
-        ))
+    static async getInitialProps(props) {
+        const sheets = new ServerStyleSheets();
+
+        const page = props.renderPage((App) => (props) => {
+            return (
+                <StyletronProvider value={styletron}>
+                    {sheets.collect(<App {...props} />)}
+                </StyletronProvider>
+            )
+        });
+
+        const initialProps = await Document.getInitialProps(props);
+
         // @ts-ignore
         const stylesheets = styletron.getStylesheets() || []
-        return {...page, stylesheets}
+        return {
+            ...page,
+            stylesheets,
+            styles: [...React.Children.toArray(initialProps.styles), sheets.getStyleElement()],
+        }
     }
 
     render() {

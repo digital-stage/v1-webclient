@@ -12,8 +12,9 @@ import {
 import { loadCSS } from "fg-loadcss";
 
 import validator from 'validator';
-import Input from "../digital-stage-ui/Input";
-import Button from "../digital-stage-ui/Button";
+import Input from "../base/Input";
+import Button from "../base/Button";
+import {useAuth} from "../../lib/digitalstage/useAuth";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -62,9 +63,14 @@ export interface IError {
   username?: string;
   password?: string;
   repeatPassword?: string;
+  response?: string;
 }
 
-export default function SignUpForm() {
+export default function SignUpForm(props: {
+  onCompleted?: () => void
+}) {
+  const {createUserWithEmailAndPassword} = useAuth();
+
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -73,6 +79,7 @@ export default function SignUpForm() {
   const [errors, setErrors] = useState<IError>({});
   const [showAlert, setShowAlert] = useState(false);
 
+  /*
   React.useEffect(() => {
     const node = loadCSS(
       "https://use.fontawesome.com/releases/v5.12.0/css/all.css",
@@ -82,7 +89,7 @@ export default function SignUpForm() {
     return () => {
       node.parentNode.removeChild(node);
     };
-  }, []);
+  }, []);*/
 
   const validate = () => {
     const errorsList: IError = {}
@@ -122,7 +129,17 @@ export default function SignUpForm() {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
-      console.log("registered");
+      return createUserWithEmailAndPassword(email, password, {
+        name: username
+      })
+          .then(() => {
+            console.log("Allreight")
+            if( props.onCompleted )
+              props.onCompleted();
+          })
+          .catch(err => setErrors({
+            response: err.message
+          }));
     }
   };
 
@@ -138,7 +155,7 @@ export default function SignUpForm() {
             placeholder="Email"
             name="email"
             error={errors && errors.email}
-            onInputChange={handleEmailChange}
+            onChange={handleEmailChange}
           />
           <Input
             required={true}
@@ -147,7 +164,7 @@ export default function SignUpForm() {
             name="Username"
             type="text"
             error={errors && errors.username}
-            onInputChange={handleUsernameChange}
+            onChange={handleUsernameChange}
           />
           <Input
             required={true}
@@ -156,7 +173,7 @@ export default function SignUpForm() {
             name="password"
             type="password"
             error={errors && errors.password}
-            onInputChange={handlePasswordChange}
+            onChange={handlePasswordChange}
           />
           <Input
             required={true}
@@ -165,13 +182,18 @@ export default function SignUpForm() {
             type="password"
             name="password"
             error={errors && errors.repeatPassword}
-            onInputChange={handleReapeatPasswordChange}
+            onChange={handleReapeatPasswordChange}
           />
           <Button
             color="primary"
             text="Sign up"
             type="submit"
           />
+          {errors && errors.response && (
+              <div>
+                {errors.response}!!!!!!
+              </div>
+          )}
           <Typography variant="h6">Or Via</Typography>
         </form>
       </div>

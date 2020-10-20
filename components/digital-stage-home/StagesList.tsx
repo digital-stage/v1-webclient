@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import StageCard from "./StageCard";
 import { Collapse, createStyles, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
-import Input from "../digital-stage-ui/Input";
-import Button from "../digital-stage-ui/Button";
+import Input from "../base/Input";
+import Button from "../base/Button";
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';

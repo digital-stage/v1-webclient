@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dialog, DialogContent, useMediaQuery, makeStyles, useTheme, Theme, createStyles } from '@material-ui/core';
 import CreateStageStepper from './CreateStageStepper';
-import Icon from '../digital-stage-ui/Icon';
+import Icon from '../base/Icon';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {

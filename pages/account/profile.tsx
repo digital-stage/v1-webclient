@@ -1,6 +1,6 @@
 import {HeadingLarge} from "baseui/typography";
 import React from "react";
-import Container from "../../components/theme/layout/Container";
+import Container from "../../components/complex/depreacted/theme/layout/Container";
 import {useAuth} from "../../lib/digitalstage/useAuth";
 import useStageSelector from "../../lib/digitalstage/useStageSelector";
 

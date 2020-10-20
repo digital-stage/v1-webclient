@@ -5,7 +5,7 @@ import { Drawer, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import Icon from '../digital-stage-ui/Icon';
+import Icon from '../base/Icon';
 import StagesList from './StagesList';
 import StageDetails from './StageDetails';
 

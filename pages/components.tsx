@@ -1,18 +1,18 @@
-import FlexContainer from "../components/theme/FlexContainer";
+import FlexContainer from "../components/complex/depreacted/theme/FlexContainer";
 import React from "react";
 import { useAuth } from "../lib/digitalstage/useAuth";
-import Loading from "../components/theme/Loading";
+import Loading from "../components/complex/depreacted/theme/Loading";
 import { DisplayMedium } from "baseui/typography";
 import Login from "./account/login";
-import Button from "../components/digital-stage-ui/Button";
-import SwitchButton from "../components/digital-stage-ui/SwitchButton";
-import RadioButton from "../components/digital-stage-ui/RadioButton";
-import Checkbox from "../components/digital-stage-ui/Checkbox";
-import Slider from "../components/digital-stage-ui/Slider";
-import Chip from "../components/digital-stage-ui/Chip";
-import TextField from "../components/digital-stage-ui/TextField";
+import Button from "../components/base/Button";
+import SwitchButton from "../components/base/SwitchButton";
+import RadioButton from "../components/base/RadioButton";
+import Checkbox from "../components/base/Checkbox";
+import Slider from "../components/base/Slider";
+import Chip from "../components/base/Chip";
+import TextField from "../components/base/TextField";
 import { Typography } from "@material-ui/core";
-import Icon from "../components/digital-stage-ui/Icon";
+import Icon from "../components/base/Icon";
 import Welcome from "../components/digital-stage-sign-in/Welcome";
 import LoginIndex from '../components/digital-stage-sign-in'
 import Home from "../components/digital-stage-home";

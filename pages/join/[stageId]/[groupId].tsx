@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import {useRouter} from "next/router";
 import {useRequest} from "../../../lib/useRequest";
-import Loading from "../../../components/theme/Loading";
+import Loading from "../../../components/complex/depreacted/theme/Loading";
 import {DisplayMedium} from "baseui/typography";
 
 const Join = () => {

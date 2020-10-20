@@ -7,19 +7,19 @@ import React, {FC} from "react";
 import {SocketContextProvider} from "../lib/digitalstage/useStageContext";
 import {RequestContextProvider} from "../lib/useRequest";
 import Head from 'next/head'
-import StageJoiner from "../components/stage/StageJoiner";
+import StageJoiner from "../components/complex/depreacted/stage/StageJoiner";
 import {Block} from 'baseui/block';
-import LocalDeviceControl from '../components/devices/LocalDeviceControl';
+import LocalDeviceControl from '../components/complex/depreacted/devices/LocalDeviceControl';
 import {AudioContextProvider} from "../lib/useAudioContext";
 import {CssBaseline, ThemeProvider} from '@material-ui/core';
 import theme from "../styles/theme";
 import MediasoupProvider from "../lib/digitalstage/useMediasoup";
 import Link from "next/link";
-import AppNavigation from "../components/AppNavigation";
+import AppNavigation from "../components/complex/depreacted/AppNavigation";
 import {wrapper} from "../lib/digitalstage/useStageContext/redux";
 import {DarkModeConsumer, DarkModeProvider} from "../lib/useDarkModeSwitch";
-import AudioContextController from "../components/audio/AudioContextController";
-import AllAudioPlayer from "../components/audio/AllAudioPlayer";
+import AudioContextController from "../components/complex/depreacted/audio/AudioContextController";
+import AllAudioPlayer from "../components/complex/depreacted/audio/AllAudioPlayer";
 
 
 const DevCorner = styled("div", {
@@ -43,10 +43,18 @@ const DevButton = styled("a", {
 const MyApp: FC<AppProps> = ({Component, pageProps}) => {
     //const store = useStore(pageProps.initialReduxState)
 
+    React.useEffect(() => {
+        // Remove the server-side injected CSS.
+        const jssStyles = document.querySelector('#jss-server-side');
+        if (jssStyles) {
+            jssStyles.parentElement.removeChild(jssStyles);
+        }
+    }, []);
+
     return (
         <>
             <Head>
-                <meta name="viewport" content="width=device-width, initial-scale=1"/>
+                <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
             </Head>
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
@@ -61,6 +69,7 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                                                 {(darkMode) => (
                                                     <BaseProvider theme={darkMode ? DarkTheme : LightTheme}>
                                                         <style jsx global>{`
+                                            @import("https://use.fontawesome.com/releases/v5.12.0/css/all.css");
                                             * {
                                                 box-sizing: border-box;
                                             }

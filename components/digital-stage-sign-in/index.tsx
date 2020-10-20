@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { Box, createStyles, Grid, Icon, IconButton, Link, makeStyles, Theme, Typography } from "@material-ui/core";
+import React, {useState} from "react";
+import {Box, createStyles, Grid, Icon, IconButton, Link, makeStyles, Theme, Typography} from "@material-ui/core";
 
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
-import { loadCSS } from "fg-loadcss";
+import {loadCSS} from "fg-loadcss";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -52,13 +52,16 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const Login = () => {
+const Login = (props: {
+    mode: "signup" | "login"
+}) => {
     const classes = useStyles();
-    const [LoginOpen, setLoginOpen] = useState(true);
-    const [SignupOpen, setSignupOpen] = useState(false);
+    const [LoginOpen, setLoginOpen] = useState(props.mode === "login");
+    const [SignupOpen, setSignupOpen] = useState(props.mode === "signup");
 
+    /*
     React.useEffect(() => {
-        const node = loadCSS(
+        /*const node = loadCSS(
             "https://use.fontawesome.com/releases/v5.12.0/css/all.css",
             document.querySelector("#font-awesome-css")
         );
@@ -66,7 +69,7 @@ const Login = () => {
         return () => {
             node.parentNode.removeChild(node);
         };
-    }, []);
+    }, []);*/
 
     const showLoginBox = () => {
         setLoginOpen(true);
@@ -119,8 +122,8 @@ const Login = () => {
                         Sign up
                     </Typography>
                 </Grid>
-                {LoginOpen && <SignInForm />}
-                {SignupOpen && <SignUpForm />}
+                {LoginOpen && <SignInForm/>}
+                {SignupOpen && <SignUpForm/>}
                 <Grid className={classes.center}>
                     <Link>
                         <IconButton disabled={true}>

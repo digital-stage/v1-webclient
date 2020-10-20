@@ -1,13 +1,13 @@
-import FlexContainer from "../components/theme/layout/FlexContainer";
+import FlexContainer from "../components/complex/depreacted/theme/layout/FlexContainer";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../lib/digitalstage/useAuth";
-import Loading from "../components/theme/Loading";
+import Loading from "../components/complex/depreacted/theme/Loading";
 import { DisplayMedium } from "baseui/typography";
 import Login from "./account/login";
 import { useRouter } from "next/router";
-import VerticalSlider from "../components/digital-stage-ui/VerticalSlider";
-import PanControler from "../components/digital-stage-ui/PanControl";
-import SwitchButton from "../components/digital-stage-ui/SwitchButton";
+import VerticalSlider from "../components/base/VerticalSlider";
+import PanControler from "../components/base/PanControl";
+import SwitchButton from "../components/base/SwitchButton";
 import useStageSelector from "../lib/digitalstage/useStageSelector";
 
 const mixers = ["Guitar", "Strings", "Bass", "Cello"]

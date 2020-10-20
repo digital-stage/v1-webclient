@@ -1,8 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
 import { Stepper, Step, StepLabel, StepConnector, StepIconProps, makeStyles, Theme, createStyles, withStyles, Grid } from '@material-ui/core';
-import Button from '../digital-stage-ui/Button';
-import Icon from '../digital-stage-ui/Icon';
+import Button from '../base/Button';
+import Icon from '../base/Icon';
 // import ButtonStyled from '../../Components/Form/Button';
 // import Icons from '../../Components/Icons/Icons';
 // import { CreateStageSuccessStep } from './CreateStageFinalStep';

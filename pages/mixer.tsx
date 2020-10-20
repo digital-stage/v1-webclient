@@ -1,7 +1,7 @@
 import React from "react";
-import VerticalSlider from "../components/theme/VerticalSlider";
+import VerticalSlider from "../components/complex/depreacted/theme/VerticalSlider";
 import {styled} from "styletron-react";
-import MixingPanel from "../components/audio/MixingPanel";
+import MixingPanel from "../components/complex/depreacted/audio/MixingPanel";
 
 const Wrapper = styled("div", {
     position: "absolute",

@@ -1,8 +1,8 @@
 import React from "react";
 import { createStyles, Grid, makeStyles, Typography } from "@material-ui/core";
-import Icon from "../digital-stage-ui/Icon";
-import Button from "../digital-stage-ui/Button";
-import Chip from "../digital-stage-ui/Chip";
+import Icon from "../base/Icon";
+import Button from "../base/Button";
+import Chip from "../base/Chip";
 
 const useStyles = makeStyles(() =>
     createStyles({

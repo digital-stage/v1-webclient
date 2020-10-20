@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, createStyles, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
-import Button from "../digital-stage-ui/Button";
+import Button from "../base/Button";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

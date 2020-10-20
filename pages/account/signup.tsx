@@ -1,11 +1,8 @@
 import React, {useEffect} from "react";
-import SignUpForm from "../../components/account/SignUpForm";
-import Container from "../../components/theme/layout/Container";
-import {HeadingLarge, ParagraphMedium} from "baseui/typography";
-import TextLink from "../../components/theme/TextLink";
 import {useRouter} from "next/router";
 import {useAuth} from "../../lib/digitalstage/useAuth";
-import Loading from "../../components/theme/Loading";
+import Login from "../../components/digital-stage-sign-in";
+import Loading from "../../components/complex/depreacted/theme/Loading";
 
 const SignUp = () => {
     const router = useRouter();
@@ -15,22 +12,16 @@ const SignUp = () => {
         router.prefetch("/account/login");
     }, []);
 
-    if( !loading ) {
-        if( user ) {
+    if (!loading) {
+        if (user) {
             router.push("/");
-        } else {
-            return (
-                <Container>
-                    <HeadingLarge>Registrierung</HeadingLarge>
-                    <SignUpForm targetUrl="/"/>
-                    <ParagraphMedium>
-                        oder <TextLink animateUnderline href="/account/login">melde Dich an</TextLink>
-                    </ParagraphMedium>
-                </Container>
-            )
         }
+    } else {
+        return <Loading>Sign up</Loading>
     }
 
-    return <Loading><HeadingLarge>Melde an...</HeadingLarge></Loading>;
+    return (
+        <Login mode="signup"/>
+    )
 };
 export default SignUp;
