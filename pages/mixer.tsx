@@ -1,6 +1,6 @@
 import React from "react";
 import {styled} from "styletron-react";
-import MixingPanel from "../components/complex/MixingPanel";
+import MixingPanelView from "../components/layouts/MixingPanelView";
 
 const Wrapper = styled("div", {
     position: "absolute",
@@ -16,7 +16,7 @@ const Wrapper = styled("div", {
 const Mixer = () => {
     return (
         <Wrapper>
-            <MixingPanel/>
+            <MixingPanelView/>
         </Wrapper>
     )
 }

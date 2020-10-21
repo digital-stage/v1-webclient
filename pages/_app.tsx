@@ -7,7 +7,7 @@ import React, {FC} from "react";
 import {SocketContextProvider} from "../lib/digitalstage/useStageContext";
 import {RequestContextProvider} from "../lib/useRequest";
 import Head from 'next/head'
-import StageJoiner from "../components/complex/depreacted/stage/StageJoiner";
+import StageJoiner from "../components/layouts/StageJoiner";
 import {Block} from 'baseui/block';
 import LocalDeviceControl from '../components/complex/depreacted/devices/LocalDeviceControl';
 import {AudioContextProvider} from "../lib/useAudioContext";
@@ -19,7 +19,7 @@ import AppNavigation from "../components/complex/depreacted/AppNavigation";
 import {wrapper} from "../lib/digitalstage/useStageContext/redux";
 import {DarkModeConsumer, DarkModeProvider} from "../lib/useDarkModeSwitch";
 import AudioContextController from "../components/complex/depreacted/audio/AudioContextController";
-import AllAudioPlayer from "../components/complex/depreacted/audio/AllAudioPlayer";
+import StageWebAudioProvider from "../lib/useStageWebAudio";
 
 
 const DevCorner = styled("div", {
@@ -54,7 +54,7 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
     return (
         <>
             <Head>
-                <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+                <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
             </Head>
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
@@ -97,9 +97,10 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                                                         <AppNavigation/>
                                                         <StageJoiner/>
                                                         <Block marginTop={['52px', '52px', '72px']}
-                                                            >
-                                                            <Component {...pageProps} />
-                                                            <AllAudioPlayer/>
+                                                        >
+                                                            <StageWebAudioProvider>
+                                                                <Component {...pageProps} />
+                                                            </StageWebAudioProvider>
                                                             <AudioContextController/>
                                                         </Block>
                                                         <LocalDeviceControl/>
@@ -112,7 +113,7 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                                                                 </Link>
                                                             </DevCorner>
                                                         )}
-                                                        <LocalDeviceControl />
+                                                        <LocalDeviceControl/>
                                                     </BaseProvider>
                                                 )}
                                             </DarkModeConsumer>

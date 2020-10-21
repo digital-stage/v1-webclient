@@ -1,10 +1,10 @@
-import {Group} from "../../../../lib/digitalstage/useStageContext/model";
+import {Group} from "../../../lib/digitalstage/useStageContext/model";
 import React from "react";
 import StageMemberView from "./StageMemberView";
 import {useStyletron} from "baseui";
 import {Cell, Grid} from "baseui/layout-grid";
-import {NormalizedState, StageMembers} from "../../../../lib/digitalstage/useStageContext/schema";
-import {useSelector} from "../../../../lib/digitalstage/useStageContext/redux";
+import {NormalizedState, StageMembers} from "../../../lib/digitalstage/useStageContext/schema";
+import {useSelector} from "../../../lib/digitalstage/useStageContext/redux";
 import {Typography} from "@material-ui/core";
 
 
