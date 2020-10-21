@@ -13,7 +13,12 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+<<<<<<< HEAD
     "baseui": "9.102.0",
+=======
+    "@material-ui/lab": "^4.0.0-alpha.56",
+    "baseui": "9.100.0",
+>>>>>>> f17e58b0bfed2b630e076668033b7ad7919a7564
     "formik": "^2.2.0",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.20",

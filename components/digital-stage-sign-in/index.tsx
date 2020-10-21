@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {Box, createStyles, Grid, Icon, IconButton, Link, makeStyles, Theme, Typography} from "@material-ui/core";
+import React, { useState } from "react";
+import { Box, createStyles, Grid, Icon, IconButton, Link, makeStyles, Theme, Typography } from "@material-ui/core";
 
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
@@ -79,7 +79,7 @@ const Login = (props: {
         >
             <Grid container={true} direction='column' alignContent="center" alignItems="center">
                 <img
-                    src="images/welcome_icon.png"
+                    src="/images/welcome_icon.png"
                     width="120"
                     height="auto"
                     alt="logo"
@@ -109,39 +109,8 @@ const Login = (props: {
                         Sign up
                     </Typography>
                 </Grid>
-                {LoginOpen && <SignInForm/>}
-                {SignupOpen && <SignUpForm/>}
-                <Grid className={classes.center}>
-                    <Link>
-                        <IconButton disabled={true}>
-                            <span className={classes.iconButton}
-                            >
-                                <Icon
-                                    className={`fab fa-facebook-f ${classes.icon}`}
-                                />
-                            </span>
-                        </IconButton>
-                    </Link>
-                    <Link>
-                        <IconButton>
-                            <span className={classes.iconButton}>
-                                <Icon
-                                    className={`fab fa-google ${classes.icon}`}
-                                />
-                            </span>
-                        </IconButton>
-                    </Link>
-                    <Link>
-                        <IconButton>
-                            <span className={classes.iconButton}>
-                                <Icon
-                                    className={`fab fa-microsoft ${classes.icon}`}
-                                />
-                            </span>
-                        </IconButton>
-                    </Link>
-                </Grid>
-
+                {LoginOpen && <SignInForm />}
+                {SignupOpen && <SignUpForm />}
             </Box>
             <Box>
                 <Typography variant="h6" className={classes.text}>Enter stage ID to join as Guest</Typography>

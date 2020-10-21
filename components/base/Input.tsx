@@ -17,7 +17,7 @@ theme.overrides = {
 
 
 type Props = {
-  onChange?:  (e: any) => void,
+  onChange?: (e: any) => void,
   placeholder: string,
   required?: boolean,
   type: string,
@@ -34,7 +34,7 @@ const Input = (props: Props) => {
   const useStyles = makeStyles(() => ({
     root: {
       width: "100%",
-      padding: props.context === "search" && theme.spacing(3, 0, 3, 2),
+      padding: props.context === "search" && theme.spacing(3, 0, 3, 2)
     },
     input: {
       background: `${props.error ? "rgb(240, 212, 209)" : "white"}`,
@@ -57,7 +57,8 @@ const Input = (props: Props) => {
       fontWeight: 600,
       paddingLeft: "20px",
       marginTop: "5px",
-      marginBottom: "0 !important"
+      marginBottom: "0 !important",
+      textAlign:"left"
     }
   }));
 
@@ -89,6 +90,7 @@ const Input = (props: Props) => {
         id={props.id}
         name={props.name}
         value={props.value}
+        inputProps={{ style: { padding: "10px 14px" } }}
       />
       {props.error && <p className={classes.p}>{props.error}</p>}
     </MuiThemeProvider>

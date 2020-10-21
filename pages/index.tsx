@@ -16,7 +16,7 @@ const Index = () => {
 
     if (!loading) {
         if (!user) {
-            router.push("/account/login");
+            router.push("/account/welcome");
         } else {
             if (!stageId) {
                 router.push("/stages");
