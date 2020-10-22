@@ -92,6 +92,7 @@ const AppNavigation = () => {
         }
     }, [user, stageId, stages.byId, devices.remote])
 
+    if(authUser)
     return (
         <Layer>
             <div className={containerStyles}>
@@ -116,5 +117,6 @@ const AppNavigation = () => {
             </div>
         </Layer>
     );
+    return null;
 };
 export default AppNavigation;
