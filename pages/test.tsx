@@ -31,6 +31,7 @@ const Test = () => {
                 }
                 stream.getAudioTracks().forEach(track => track.stop());
             })
+            .catch(error => setError(error.message));
     }, [localDevice]);
 
     const testVideo = useCallback(() => {
@@ -48,6 +49,7 @@ const Test = () => {
                 }
                 stream.getVideoTracks().forEach(track => track.stop());
             })
+            .catch(error => setError(error.message));
     }, [localDevice]);
 
     return (
@@ -55,7 +57,7 @@ const Test = () => {
             <DisplayMedium>Test</DisplayMedium>
             <>
                 {error && <Notification kind={KIND.negative}>
-                    {error}
+                    {error === "Permission denied" ? "Bitte aktiviere der Gerät" : error}
                 </Notification>}
                 <ListItem endEnhancer={
                     () =>

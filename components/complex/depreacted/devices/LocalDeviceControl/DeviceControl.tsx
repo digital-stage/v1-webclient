@@ -18,7 +18,7 @@ const DeviceControl = (props: {
         return {
             darkMode: state.stageId !== undefined
         }
-    })
+    });
 
     if (!props.device) {
         return null;
@@ -97,7 +97,7 @@ const DeviceControl = (props: {
                     size={props.size}
                     onClick={() => {
                         updateDevice(props.device._id, {receiveAudio: !props.device.receiveAudio})
-                        if( audioContext.state === "suspended" ) {
+                        if (audioContext.state === "suspended") {
                             return audioContext.resume();
                         }
                     }}

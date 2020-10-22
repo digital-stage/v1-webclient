@@ -28,10 +28,7 @@ const LevelMeter = (
         analyser: IAnalyserNode<IAudioContext>
     }
 ) => {
-    const [v, setV] = useState<number>();
     const canvasRef = useRef<HTMLCanvasElement>();
-
-    const [css] = useStyletron();
 
     useAnimationFrame(() => {
         if (props.analyser && canvasRef.current) {
@@ -53,23 +50,11 @@ const LevelMeter = (
             context.fillStyle = gradient;
 
             context.fillRect(0, height - average, width, height);
-
-            if (v !== average)
-                setV(average);
         }
     });
 
     return (
-        <>
-            <Canvas ref={canvasRef}/>
-            <div className={css({
-                position: "absolute",
-                top: "50%",
-                left: "10%"
-            })}>
-                {v}
-            </div>
-        </>
+        <Canvas ref={canvasRef}/>
     )
 }
 export default LevelMeter;

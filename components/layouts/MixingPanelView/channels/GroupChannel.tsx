@@ -3,7 +3,7 @@ import React from "react";
 import useStageSelector from "../../../../lib/digitalstage/useStageSelector";
 import {CustomGroup, Group} from "../../../../lib/digitalstage/useStageContext/model";
 import useStageActions from "../../../../lib/digitalstage/useStageActions";
-import ChannelPanel from "./ChannelPanel";
+import ChannelPanel from "../../../experimental/ChannelPanel";
 import StageMemberChannel from "./StageMemberChannel";
 import {useStageWebAudio} from "../../../../lib/useStageWebAudio";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import useStageSelector from "../../../../lib/digitalstage/useStageSelector";
 import {CustomStageMember, StageMember, User} from "../../../../lib/digitalstage/common/model.server";
-import ChannelPanel from "./ChannelPanel";
+import ChannelPanel from "../../../experimental/ChannelPanel";
 import useStageActions from "../../../../lib/digitalstage/useStageActions";
 import AudioProducerChannel from "./AudioProducerChannel";
 import {useStageWebAudio} from "../../../../lib/useStageWebAudio";

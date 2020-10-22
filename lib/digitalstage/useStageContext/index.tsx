@@ -218,7 +218,7 @@ export const SocketContextProvider = (props: {
     }, [token]);
 
     useEffect(() => {
-        if( socket ) {
+        if (socket) {
             return () => {
                 console.log("[useStageContext] Closing socket connection...");
                 socket.removeAllListeners();
@@ -238,6 +238,33 @@ export const SocketContextProvider = (props: {
             setSocket(undefined);
         }
     }, [token]);
+
+    /*
+    const localDevice = useStageSelector<Device>(state => state.devices.local ? state.devices.byId[state.devices.local] : undefined);
+    const {updateDevice} = useStageActions();
+    useEffect(() => {
+        if (localDevice) {
+            console.error("called");
+
+            navigator.mediaDevices.ondevicechange = () => {
+                console.error("UPDATE DEVICES")
+                enumerateDevices()
+                    .then(devices => {
+                        updateDevice(localDevice._id, {
+                            canAudio: devices.inputAudioDevices.length > 0,
+                            canVideo: devices.inputVideoDevices.length > 0,
+                            inputAudioDevices: devices.inputAudioDevices,
+                            inputVideoDevices: devices.inputVideoDevices,
+                            outputAudioDevices: devices.outputAudioDevices,
+                            inputAudioDeviceId: devices.inputAudioDevices.find(d => d.id === "label") ? "default" : devices.inputAudioDevices.length > 0 ? devices.inputAudioDevices[0].id : undefined,
+                            inputVideoDeviceId: devices.inputVideoDevices.length === 1 ? devices.inputVideoDevices[0].id : "default",
+                            outputAudioDeviceId: devices.outputAudioDevices.find(d => d.id === "label") ? "default" : devices.outputAudioDevices.length > 0 ? devices.outputAudioDevices[0].id : undefined
+
+                        })
+                    })
+            }
+        }
+    }, [localDevice])*/
 
     return (
         <SocketContext.Provider value={socket}>

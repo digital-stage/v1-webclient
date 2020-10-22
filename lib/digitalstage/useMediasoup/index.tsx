@@ -72,6 +72,9 @@ export const MediasoupProvider = (props: {
     const [sendAudio, setSendAudio] = useState<boolean>(false);
     const [receiveVideo, setReceiveVideo] = useState<boolean>(false);
     const [receiveAudio, setReceiveAudio] = useState<boolean>(false);
+    const [inputAudioDeviceId, setInputAudioDeviceId] = useState<string>();
+    const [inputVideoDeviceId, setInputVideoDeviceId] = useState<string>();
+    const [outputAudioDeviceId, setOutputAudioDeviceId] = useState<string>();
 
     const [localAudioProducers, setLocalAudioProducers] = useState<{
         audioProducerId: string;
@@ -365,6 +368,7 @@ export const MediasoupProvider = (props: {
             });
     }, [localVideoProducers]);
 
+
     useEffect(() => {
         if (!working && localDevice) {
             if (sendVideo !== localDevice.sendVideo) {
@@ -391,9 +395,26 @@ export const MediasoupProvider = (props: {
             if (receiveAudio !== localDevice.receiveAudio) {
                 setReceiveAudio(localDevice.receiveAudio);
             }
+
+            if (inputAudioDeviceId !== localDevice.inputAudioDeviceId) {
+                setInputAudioDeviceId(localDevice.inputAudioDeviceId);
+                if (localDevice.sendAudio) {
+                    stopStreamingAudio().then(() => startStreamAudio());
+                }
+            }
+            if (inputVideoDeviceId !== localDevice.inputVideoDeviceId) {
+                setInputVideoDeviceId(localDevice.inputVideoDeviceId);
+                if (localDevice.sendVideo) {
+                    stopStreamingVideo().then(() => startStreamVideo());
+                }
+            }
+            if (outputAudioDeviceId !== localDevice.outputAudioDeviceId) {
+                setOutputAudioDeviceId(localDevice.outputAudioDeviceId);
+            }
         }
 
     }, [working, localDevice]);
+
 
     const [handledVideoProducerIds, setHandledVideoProducerIds] = useState<string[]>([]);
     const [consumingVideoProducerIds, setConsumingVideoProducerIds] = useState<string[]>([]);

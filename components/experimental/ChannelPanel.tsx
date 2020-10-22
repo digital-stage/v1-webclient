@@ -3,21 +3,22 @@ import {Typography} from "@material-ui/core";
 import {Button} from "baseui/button";
 import {styled} from "baseui";
 import {IAnalyserNode, IAudioContext} from "standardized-audio-context";
-import VolumeFader from "../../../experimental/VolumeFader";
+import VolumeFader from "./VolumeFader";
 
 const Wrapper = styled("div", {
     position: "relative",
+    flexShrink: 0,
     width: 'auto',
     height: "100%",
     display: "flex",
     flexDirection: "row",
-    flexWrap: "nowrap",
     overflowX: "auto"
 });
 
 const SinglePanel = styled("div", (props: { $backgroundColor }) => ({
     display: "flex",
     flexDirection: "column",
+    flexShrink: 0,
     width: "260px",
     height: "100%",
     padding: "1rem",
@@ -78,7 +79,7 @@ const ChannelPanel = (props: {
                 $backgroundColor={props.backgroundColor}
             >
                 <SinglePanelTitle>
-                    <Typography variant="h4">{props.name}</Typography>
+                    <Typography variant="h5">{props.name}</Typography>
                     {props.children && React.Children.count(props.children) > 0 && (
                         <Button size="mini" onClick={() => setExpanded(prev => !prev)}>
                             {expanded ? "<<" : ">>"}

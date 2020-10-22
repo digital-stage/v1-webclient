@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {styled} from "baseui";
 import {Direction, Range, getTrackBackground} from 'react-range';
+import {calculateDbMeasurement} from "./util";
 
 function getColor(value) {
     //value from 0 to 1
@@ -25,17 +26,12 @@ const VolumeSlider = (props: {
     max: number;
     step: number;
     value: number;
-    onChange?: (value: number) => void
+    onChange: (value: number) => void
     onEnd?: (value: number) => void,
     color?: string,
     colorize?: boolean,
 }) => {
-    const [value, setValue] = useState<number>(props.value);
     const [color, setColor] = useState<string>(props.color);
-
-    useEffect(() => {
-        setValue(props.value);
-    }, [props.value]);
 
     useEffect(() => {
         if (!props.colorize) {
@@ -49,9 +45,9 @@ const VolumeSlider = (props: {
 
     useEffect(() => {
         if (props.colorize) {
-            setColor(getColorInverted(value));
+            setColor(getColorInverted(props.value));
         }
-    }, [value, props.colorize])
+    }, [props.value, props.colorize]);
 
     return (
         <Wrapper>
@@ -60,12 +56,8 @@ const VolumeSlider = (props: {
                 step={props.step}
                 min={props.min}
                 max={props.max}
-                values={[value]}
-                onChange={(values) => {
-                    setValue(values[0]);
-                    if (props.onChange)
-                        props.onChange(values[0]);
-                }}
+                values={[props.value]}
+                onChange={(values) => props.onChange(values[0])}
                 onFinalChange={(values) => {
                     if (props.onEnd)
                         props.onEnd(values[0]);
@@ -77,7 +69,7 @@ const VolumeSlider = (props: {
                             ...markProps.style,
                             height: index % 2 ? '1px' : '4px',
                             width: index % 2 ? '10px' : '20px',
-                            backgroundColor: index * props.step > props.max - value ? color : '#ccc'
+                            backgroundColor: index * props.step > props.max - props.value ? color : '#ccc'
                         }}
                     />
                 )}
@@ -99,7 +91,7 @@ const VolumeSlider = (props: {
                                 height: '100%',
                                 borderRadius: '4px',
                                 background: getTrackBackground({
-                                    values: [value],
+                                    values: [props.value],
                                     colors: [color, '#ccc'],
                                     min: props.min,
                                     max: props.max,
@@ -143,7 +135,7 @@ const VolumeSlider = (props: {
                                     backgroundColor: color,
                                 }}
                             >
-                                {Math.round((value / props.max) * 100)}%
+                                {calculateDbMeasurement(props.value)} dB
                             </div>
                             <div
                                 style={{

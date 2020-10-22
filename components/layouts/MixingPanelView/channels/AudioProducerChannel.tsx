@@ -2,7 +2,7 @@ import React from "react";
 import useStageSelector from "../../../../lib/digitalstage/useStageSelector";
 import {AudioProducer} from "../../../../lib/digitalstage/useStageContext/model";
 import {useStageWebAudio} from "../../../../lib/useStageWebAudio";
-import ChannelPanel from "./ChannelPanel";
+import ChannelPanel from "../../../experimental/ChannelPanel";
 
 const AudioProducerChannel = (props: {
     audioProducerId: string
