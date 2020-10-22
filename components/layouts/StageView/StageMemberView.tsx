@@ -1,11 +1,11 @@
-import {StageMember} from "../../../../lib/digitalstage/useStageContext/model";
+import {StageMember} from "../../../lib/digitalstage/useStageContext/model";
 import {useStyletron} from "baseui";
 import React from "react";
 import {Avatar} from "baseui/avatar";
-import OnlineStatus from "../theme/OnlineStatus";
-import CanvasPlayer from "../video/CanvasPlayer";
-import {NormalizedState, Users, VideoConsumers} from "../../../../lib/digitalstage/useStageContext/schema";
-import {useSelector} from "../../../../lib/digitalstage/useStageContext/redux";
+import OnlineStatus from "../../complex/depreacted/theme/OnlineStatus";
+import CanvasPlayer from "../../experimental/CanvasPlayer";
+import {NormalizedState, Users, VideoConsumers} from "../../../lib/digitalstage/useStageContext/schema";
+import {useSelector} from "../../../lib/digitalstage/useStageContext/redux";
 import {shallowEqual} from "react-redux";
 import {Typography} from "@material-ui/core";
 

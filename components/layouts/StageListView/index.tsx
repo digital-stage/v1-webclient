@@ -9,11 +9,11 @@ import ModifyGroupModal from "./ModifyGroupModal";
 import ModifyStageModal from "./ModifyStageModal";
 import {Tag} from "baseui/tag";
 import InviteModal from "./InviteModal";
-import {useRequest} from "../../../../../lib/useRequest";
-import {Client} from "../../../../../lib/digitalstage/common/model.client";
-import useStageActions from "../../../../../lib/digitalstage/useStageActions";
-import {useSelector} from "../../../../../lib/digitalstage/useStageContext/redux";
-import {Groups, NormalizedState, Stages} from "../../../../../lib/digitalstage/useStageContext/schema";
+import {useRequest} from "../../../lib/useRequest";
+import {Client} from "../../../lib/digitalstage/common/model.client";
+import useStageActions from "../../../lib/digitalstage/useStageActions";
+import {useSelector} from "../../../lib/digitalstage/useStageContext/redux";
+import {Groups, NormalizedState, Stages} from "../../../lib/digitalstage/useStageContext/schema";
 import {shallowEqual} from "react-redux";
 
 const Label = styled("div", {})

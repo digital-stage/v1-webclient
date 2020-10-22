@@ -6,7 +6,7 @@ import {KIND} from "baseui/button";
 import * as Yup from "yup";
 import {useFormik} from "formik";
 import {Accordion, Panel} from "baseui/accordion";
-import useStageActions from "../../../../../lib/digitalstage/useStageActions";
+import useStageActions from "../../../lib/digitalstage/useStageActions";
 
 const Schema = Yup.object().shape({
     name: Yup.string()

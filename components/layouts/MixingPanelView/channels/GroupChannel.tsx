@@ -5,6 +5,7 @@ import {CustomGroup, Group} from "../../../../lib/digitalstage/useStageContext/m
 import useStageActions from "../../../../lib/digitalstage/useStageActions";
 import ChannelPanel from "./ChannelPanel";
 import StageMemberChannel from "./StageMemberChannel";
+import {useStageWebAudio} from "../../../../lib/useStageWebAudio";
 
 const GroupChannel = (props: {
     groupId: GroupId
@@ -16,24 +17,23 @@ const GroupChannel = (props: {
     const {updateGroup, removeCustomGroup, setCustomGroup} = useStageActions();
     const stageMemberIds = useStageSelector<string[]>(state => state.stageMembers.byGroup[props.groupId] ? state.stageMembers.byGroup[props.groupId] : []);
 
-    console.log(group);
-    //TODO: If admin: show both global and custom (yellow)
-    //TODO: If not admin: show global but with checkbox to overwrite (yellow)
+    const {byGroup} = useStageWebAudio();
 
     return (
-        <ChannelPanel
-            name={group.name}
-            volume={group.volume}
-            customVolume={customGroup ? customGroup.volume : undefined}
-            onVolumeChanged={volume => updateGroup(group._id, {
-                volume: volume
-            })}
-            onCustomVolumeChanged={volume => setCustomGroup(group._id, volume)}
-            onCustomVolumeReset={() => removeCustomGroup(customGroup._id)}
-            isAdmin={isAdmin}
-        >
-            {stageMemberIds.map(id => <StageMemberChannel key={id} stageMemberId={id}/>)}
-        </ChannelPanel>
+            <ChannelPanel
+                analyser={byGroup[props.groupId] ? byGroup[props.groupId].analyserNode : undefined}
+                name={group.name}
+                volume={group.volume}
+                customVolume={customGroup ? customGroup.volume : undefined}
+                onVolumeChanged={volume => updateGroup(group._id, {
+                    volume: volume
+                })}
+                onCustomVolumeChanged={volume => setCustomGroup(group._id, volume)}
+                onCustomVolumeReset={() => removeCustomGroup(customGroup._id)}
+                isAdmin={isAdmin}
+            >
+                {stageMemberIds.map(id => <StageMemberChannel key={id} stageMemberId={id}/>)}
+            </ChannelPanel>
     )
 }
 export default GroupChannel;

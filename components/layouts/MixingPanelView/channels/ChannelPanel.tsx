@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import {Typography} from "@material-ui/core";
 import {Button} from "baseui/button";
-import VerticalSlider from "../../depreacted/theme/VerticalSlider";
 import {styled} from "baseui";
-import VolumeSlider from "../../../experimental/VolumeSlider";
+import {IAnalyserNode, IAudioContext} from "standardized-audio-context";
+import VolumeFader from "../../../experimental/VolumeFader";
 
 const Wrapper = styled("div", {
     position: "relative",
@@ -56,6 +56,8 @@ const SinglePanelAction = styled("div", {
 })
 
 const ChannelPanel = (props: {
+    analyser?: IAnalyserNode<IAudioContext>;
+
     name: string;
     volume: number;
     customVolume?: number;
@@ -89,47 +91,41 @@ const ChannelPanel = (props: {
                     {props.isAdmin ? (
                         <>
                             <SinglePanelSlider>
-                                <VolumeSlider
-                                    value={props.volume}
-                                    min={0}
-                                    max={1}
-                                    step={0.05}
-                                    vertical={true}
-                                    color="white"
-                                    onEnd={(value) => {
+                                <VolumeFader
+                                    volume={props.volume}
+                                    analyser={props.analyser}
+                                    sliderColor="white"
+                                    onVolumeChanged={(value) => {
                                         if (props.onVolumeChanged)
                                             props.onVolumeChanged(value);
-                                    }}/>
+                                    }}
+                                />
                             </SinglePanelSlider>
 
                             {props.customVolume !== undefined && (
                                 <SinglePanelSlider>
-                                    <VolumeSlider
-                                        value={props.volume}
-                                        min={0}
-                                        max={1}
-                                        step={0.05}
-                                        color="#FFF999"
-                                        vertical={true}
-                                        onEnd={(value) => {
+                                    <VolumeFader
+                                        volume={props.volume}
+                                        analyser={props.analyser}
+                                        sliderColor="#FFF999"
+                                        onVolumeChanged={(value) => {
                                             if (props.onCustomVolumeChanged)
                                                 props.onCustomVolumeChanged(value);
-                                        }}/>
+                                        }}
+                                    />
                                 </SinglePanelSlider>
                             )}
                         </>
                     ) : (
-                        <VolumeSlider
-                            value={props.customVolume || props.volume}
-                            min={0}
-                            max={1}
-                            color={props.customVolume ? "#FFF99" : "white"}
-                            step={0.05}
-                            vertical={true}
-                            onEnd={(value) => {
+                        <VolumeFader
+                            volume={props.customVolume || props.volume}
+                            analyser={props.analyser}
+                            sliderColor={props.customVolume ? "#FFF99" : "white"}
+                            onVolumeChanged={(value) => {
                                 if (props.onCustomVolumeChanged)
                                     props.onCustomVolumeChanged(value);
-                            }}/>
+                            }}
+                        />
                     )}
                 </SinglePanelSliderRow>
                 <SinglePanelAction>

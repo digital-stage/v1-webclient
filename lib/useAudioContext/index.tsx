@@ -13,6 +13,7 @@ const AudioContext: Context<AudioContextProps> = createContext<AudioContextProps
 export const AudioContextProvider = (props: {
     children: React.ReactNode
 }) => {
+    const [running, setRunning] = useState<boolean>(false);
     const [context, setContext] = useState<IAudioContext>(undefined);
 
     const createAudioContext = useCallback(async () => {
@@ -21,6 +22,12 @@ export const AudioContextProvider = (props: {
         }
         const audioContext: IAudioContext = new RealAudioContext();
         console.log("Base latency with sample rate " + audioContext.sampleRate + ": " + Math.round(1000 * audioContext.baseLatency) + "ms");
+
+        if( audioContext.state !== "running" ) {
+            setRunning(false)
+        } else {
+            setRunning(true)
+        }
 
         return webAudioTouchUnlock(audioContext)
             .then((unlocked: boolean) => {

@@ -5,8 +5,8 @@ import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from "baseui/mo
 import {Input} from "baseui/input";
 import {FormControl} from "baseui/form-control";
 import {KIND} from "baseui/button";
-import {Client} from "../../../../../lib/digitalstage/common/model.client";
-import useStageActions from "../../../../../lib/digitalstage/useStageActions";
+import {Client} from "../../../lib/digitalstage/common/model.client";
+import useStageActions from "../../../lib/digitalstage/useStageActions";
 
 const Schema = Yup.object().shape({
     name: Yup.string()

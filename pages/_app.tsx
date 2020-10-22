@@ -7,7 +7,7 @@ import React, { FC } from "react";
 import { SocketContextProvider } from "../lib/digitalstage/useStageContext";
 import { RequestContextProvider } from "../lib/useRequest";
 import Head from 'next/head'
-import StageJoiner from "../components/complex/depreacted/stage/StageJoiner";
+import StageJoiner from "../components/layouts/StageJoiner";
 import { Block } from 'baseui/block';
 import LocalDeviceControl from '../components/complex/depreacted/devices/LocalDeviceControl';
 import { AudioContextProvider } from "../lib/useAudioContext";
@@ -19,7 +19,7 @@ import AppNavigation from "../components/complex/depreacted/AppNavigation";
 import { wrapper } from "../lib/digitalstage/useStageContext/redux";
 import { DarkModeConsumer, DarkModeProvider } from "../lib/useDarkModeSwitch";
 import AudioContextController from "../components/complex/depreacted/audio/AudioContextController";
-import AllAudioPlayer from "../components/complex/depreacted/audio/AllAudioPlayer";
+import StageWebAudioProvider from "../lib/useStageWebAudio";
 import Drawer from '../components/navigation';
 
 
@@ -187,22 +187,20 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
                                             }
                                         `}
                                                         </style>
-
-                                                        <AppNavigation />
+                                                        {/* <AppNavigation /> */}
                                                         <StageJoiner />
                                                         <div className={classes.root}>
                                                             <Drawer />
                                                             <main className={classes.content}>
-                                                                <Block
-                                                                marginTop={['52px', '52px', '72px']}
+                                                                <Block marginTop={['52px', '52px', '72px']}
                                                                 >
-                                                                    <Component {...pageProps} />
-                                                                    <AllAudioPlayer />
+                                                                    <StageWebAudioProvider>
+                                                                        <Component {...pageProps} />
+                                                                    </StageWebAudioProvider>
                                                                     <AudioContextController />
                                                                 </Block>
                                                             </main>
                                                         </div>
-                                                        {/* </Drawer> */}
                                                         <LocalDeviceControl />
                                                         {process.env.NODE_ENV === "development" && (
                                                             <DevCorner>

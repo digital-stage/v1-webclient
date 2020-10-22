@@ -1,11 +1,17 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import {Modal, ModalBody, ModalButton, ModalFooter, ModalHeader} from "baseui/modal";
-import {useRequest} from "../../../../lib/useRequest";
+import {useRequest} from "../../lib/useRequest";
 import {Input} from "baseui/input";
-import {Errors} from "../../../../lib/digitalstage/common/errors";
-import useStageActions from "../../../../lib/digitalstage/useStageActions";
-import useStageSelector from "../../../../lib/digitalstage/useStageSelector";
+import {Errors} from "../../lib/digitalstage/common/errors";
+import useStageActions from "../../lib/digitalstage/useStageActions";
+import useStageSelector from "../../lib/digitalstage/useStageSelector";
 
+/**
+ * The StageJoiner is a usually hidden component, that reacts to requested stage joins and displays errors if occuring
+ *
+ * //TODO: Replace modal with own digital stage components
+ * @constructor
+ */
 const StageJoiner = () => {
     const {ready} = useStageSelector(state => ({
         ready: state.ready
