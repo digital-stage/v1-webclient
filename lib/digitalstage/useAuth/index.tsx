@@ -38,6 +38,8 @@ const getUserByToken = (token: string): Promise<AuthUser> => fetch(process.env.N
     }
 }).then(result => result.json()).then(json => json as AuthUser);
 
+export const AuthContextConsumer = AuthContext.Consumer;
+
 export const AuthContextProvider = (props: {
     children: React.ReactNode
 }) => {
@@ -177,6 +179,7 @@ export const AuthContextProvider = (props: {
                 .then(user => {
                     setUser(user);
                     setToken(token);
+                    console.log("[useAuth] Have token and user");
                 })
                 .catch(error => {
                     console.error(error);
@@ -185,10 +188,13 @@ export const AuthContextProvider = (props: {
                     cookie.remove('token');
                 })
                 .finally(() => {
+                    console.log("[useAuth] Set loading to false");
                     setLoading(false);
                 })
         } else {
+            console.log("[useAuth] Token is not available (anymore / yet)");
             setUser(undefined);
+            console.log("[useAuth] Set loading to false");
             setLoading(false);
         }
         return () => {

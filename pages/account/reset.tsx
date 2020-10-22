@@ -5,6 +5,7 @@ import ResetForm from "../../components/complex/depreacted/account/ResetForm";
 import Loading from "../../components/complex/depreacted/theme/Loading";
 import {HeadingLarge} from "baseui/typography";
 import Container from "../../components/complex/depreacted/theme/layout/Container";
+import {Typography} from "@material-ui/core";
 
 const Reset = () => {
     const router = useRouter();
@@ -26,7 +27,7 @@ const Reset = () => {
         }
     }
 
-    return <Loading><HeadingLarge>Lade...</HeadingLarge></Loading>;
+    return <Loading><Typography variant="h1">Lade...</Typography></Loading>;
 };
 
 export default Reset;

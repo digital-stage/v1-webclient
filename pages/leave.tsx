@@ -1,9 +1,9 @@
-import {DisplaySmall} from "baseui/typography";
 import React, {useEffect} from "react";
 import Loading from "../components/complex/depreacted/theme/Loading";
 import useStageActions from "../lib/digitalstage/useStageActions";
 import {useRouter} from "next/router";
 import useStageSelector from "../lib/digitalstage/useStageSelector";
+import {Typography} from "@material-ui/core";
 
 const Leave = () => {
     const router = useRouter();
@@ -23,8 +23,8 @@ const Leave = () => {
 
     return (
         <Loading>
-            <DisplaySmall>Verlasse Bühne...</DisplaySmall>
+            <Typography variant="h1">Verlasse Bühne...</Typography>
         </Loading>
-    )
+    );
 }
 export default Leave;

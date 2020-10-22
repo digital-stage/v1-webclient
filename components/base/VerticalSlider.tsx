@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import MaterialSlider from '@material-ui/core/Slider';
-import theme from '../../styles/theme';
 
 const useStyles = makeStyles({
     root: {
@@ -11,7 +10,7 @@ const useStyles = makeStyles({
     },
 });
 
-const CustomSlider = withStyles({
+const CustomSlider = withStyles((theme) => ({
     root: {
       color: '#828282',
       width: 8,
@@ -37,7 +36,7 @@ const CustomSlider = withStyles({
       width: 8,
       borderRadius: 4,
     },
-  })(MaterialSlider);
+  }))(MaterialSlider);
 
 function valuetext(value: number) {
     return `${value}`;

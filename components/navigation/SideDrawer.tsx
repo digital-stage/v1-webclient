@@ -1,7 +1,6 @@
-
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Drawer, Typography } from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
+import {Drawer} from '@material-ui/core';
 import clsx from 'clsx';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -107,10 +106,12 @@ enum SelectedItem {
     SETTINGS = "SETTINGS",
     NOTIFICATION = "NOTIFICATION"
 }
+
 interface User {
     userPhoto: string,
     username: string
 }
+
 export interface Stage {
     title: string,
     mineStage: boolean,
@@ -121,14 +122,78 @@ export interface Stage {
 }
 
 const stages: Stage[] = [
-    { title: 'Bulshemier Theatre', mineStage: true, image: "/images/stage-icon.png", online: true, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }], description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis." },
-    { title: 'National Theatre', mineStage: false, image: "/images/stage-icon.png", online: true, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }], description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis." },
-    { title: 'Theatre National Royal', mineStage: true, image: "/images/stage-icon.png", online: false, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }], description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis." },
-    { title: 'The Old Theatre', mineStage: false, image: "/images/stage-icon.png", online: false, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }], description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis." },
-    { title: 'Lyceum Theatre', mineStage: true, image: "/images/stage-icon.png", online: true, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }], description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis." },
+    {
+        title: 'Bulshemier Theatre',
+        mineStage: true,
+        image: "/images/stage-icon.png",
+        online: true,
+        users: [{userPhoto: "/images/stage-icon.png", username: "username"}],
+        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis."
+    },
+    {
+        title: 'National Theatre',
+        mineStage: false,
+        image: "/images/stage-icon.png",
+        online: true,
+        users: [{userPhoto: "/images/stage-icon.png", username: "username"}, {
+            userPhoto: "/images/stage-icon.png",
+            username: "username"
+        }, {userPhoto: "/images/stage-icon.png", username: "username"}],
+        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis."
+    },
+    {
+        title: 'Theatre National Royal',
+        mineStage: true,
+        image: "/images/stage-icon.png",
+        online: false,
+        users: [{userPhoto: "/images/stage-icon.png", username: "username"}, {
+            userPhoto: "/images/stage-icon.png",
+            username: "username"
+        }, {userPhoto: "/images/stage-icon.png", username: "username"}, {
+            userPhoto: "/images/stage-icon.png",
+            username: "username"
+        }, {userPhoto: "/images/stage-icon.png", username: "username"}, {
+            userPhoto: "/images/stage-icon.png",
+            username: "username"
+        }],
+        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis."
+    },
+    {
+        title: 'The Old Theatre',
+        mineStage: false,
+        image: "/images/stage-icon.png",
+        online: false,
+        users: [{userPhoto: "/images/stage-icon.png", username: "username"}, {
+            userPhoto: "/images/stage-icon.png",
+            username: "username"
+        }, {userPhoto: "/images/stage-icon.png", username: "username"}],
+        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis."
+    },
+    {
+        title: 'Lyceum Theatre',
+        mineStage: true,
+        image: "/images/stage-icon.png",
+        online: true,
+        users: [{userPhoto: "/images/stage-icon.png", username: "username"}, {
+            userPhoto: "/images/stage-icon.png",
+            username: "username"
+        }, {userPhoto: "/images/stage-icon.png", username: "username"}, {
+            userPhoto: "/images/stage-icon.png",
+            username: "username"
+        }, {userPhoto: "/images/stage-icon.png", username: "username"}, {
+            userPhoto: "/images/stage-icon.png",
+            username: "username"
+        }, {userPhoto: "/images/stage-icon.png", username: "username"}, {
+            userPhoto: "/images/stage-icon.png",
+            username: "username"
+        }, {userPhoto: "/images/stage-icon.png", username: "username"}],
+        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis."
+    },
 ];
 
-export default function SideDrawer() {
+export default function SideDrawer(props: {
+    className?: string;
+}) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const [stageId, setStageId] = React.useState(0);
@@ -143,8 +208,7 @@ export default function SideDrawer() {
     const setDrawerSelection = (selection: string) => {
         if (selection === SelectedItem.MENU) {
             setSelectedItem(selectedItem);
-        }
-        else {
+        } else {
             setSelectedItem(selection);
         }
     };
@@ -161,8 +225,8 @@ export default function SideDrawer() {
     }
 
     const menuItems = [
-        { icon: "stage", link: "/stages" },
-        { icon: "notification", link: "/devices" },
+        {icon: "stage", link: "/stages"},
+        {icon: "notification", link: "/devices"},
     ]
 
     return (
@@ -171,7 +235,7 @@ export default function SideDrawer() {
             className={clsx(classes.drawer, {
                 [classes.drawerOpen]: open,
                 [classes.drawerClose]: !open,
-            })}
+            }, props.className)}
             classes={{
                 paper: clsx({
                     [classes.drawerOpen]: open,
@@ -183,20 +247,24 @@ export default function SideDrawer() {
                 <span className={classes.sideDrawer}>
                     <List>
                         {['menu'].map((text) => (
-                            <ListItem button key={text} onClick={() => { handleDrawer(text) }}>
-                                <Icon name={text} />
+                            <ListItem button key={text} onClick={() => {
+                                handleDrawer(text)
+                            }}>
+                                <Icon name={text}/>
                             </ListItem>
                         ))}
                         {menuItems.map((item) => (
-                            <ListItem button key={item.icon} onClick={() => { handleDrawer(item.icon) }}>
-                                <Link href={item.link}><Icon name={item.icon} /></Link>
+                            <ListItem button key={item.icon} onClick={() => {
+                                handleDrawer(item.icon)
+                            }}>
+                                <Link href={item.link}><Icon name={item.icon}/></Link>
                             </ListItem>
                         ))}
                     </List>
                     <List>
                         {['feedback', 'settings'].map((text) => (
                             <ListItem button key={text}>
-                                <Icon name={text} iconColor={setDrawerIconColor(text.toUpperCase())} />
+                                <Icon name={text} iconColor={setDrawerIconColor(text.toUpperCase())}/>
                             </ListItem>
                         ))}
                     </List>

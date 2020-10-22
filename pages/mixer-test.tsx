@@ -1,20 +1,20 @@
 import FlexContainer from "../components/complex/depreacted/theme/layout/FlexContainer";
-import React, { useEffect, useState } from "react";
-import { useAuth } from "../lib/digitalstage/useAuth";
+import React, {useEffect, useState} from "react";
+import {useAuth} from "../lib/digitalstage/useAuth";
 import Loading from "../components/complex/depreacted/theme/Loading";
-import { DisplayMedium } from "baseui/typography";
 import Login from "./account/login";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 import VerticalSlider from "../components/base/VerticalSlider";
 import PanControler from "../components/base/PanControl";
 import SwitchButton from "../components/base/SwitchButton";
 import useStageSelector from "../lib/digitalstage/useStageSelector";
+import {Typography} from "@material-ui/core";
 
 const mixers = ["Guitar", "Strings", "Bass", "Cello"]
 
 const MixerTest = () => {
     const router = useRouter();
-    const { loading, user } = useAuth();
+    const {loading, user} = useAuth();
     const stageId = useStageSelector<string | undefined>(state => state.stageId);
     const [initialized, setInitialized] = useState<boolean>();
 
@@ -40,21 +40,21 @@ const MixerTest = () => {
 
     if (!loading) {
         if (!user) {
-            return <Login />
+            return <Login/>
         } else {
             return (
                 <>
                     <FlexContainer>
-                        <PanControler />
-                        <PanControler />
-                        <PanControler />
-                        <PanControler />
+                        <PanControler/>
+                        <PanControler/>
+                        <PanControler/>
+                        <PanControler/>
                     </FlexContainer>
                     <FlexContainer>
-                        <SwitchButton />
-                        <SwitchButton />
-                        <SwitchButton />
-                        <SwitchButton />
+                        <SwitchButton color="primary"/>
+                        <SwitchButton color="primary"/>
+                        <SwitchButton color="primary"/>
+                        <SwitchButton color="primary"/>
                     </FlexContainer>
                     <FlexContainer> {mixers.map(mixer => {
                         return <div>
@@ -73,8 +73,10 @@ const MixerTest = () => {
         }
     }
 
-    return <Loading>
-        <DisplayMedium>Lade ...</DisplayMedium>
-    </Loading>;
+    return (
+        <Loading>
+            <Typography variant="h1">Lade...</Typography>
+        </Loading>
+    );
 }
 export default MixerTest;

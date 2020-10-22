@@ -2,11 +2,11 @@ import Container from "../components/complex/depreacted/theme/layout/Container";
 import React, {useEffect, useState} from "react";
 import {useAuth} from "../lib/digitalstage/useAuth";
 import Loading from "../components/complex/depreacted/theme/Loading";
-import {DisplayMedium, HeadingLarge} from "baseui/typography";
 import Login from "./account/login";
 import StageListView from "../components/layouts/StageListView";
 import {useRouter} from "next/router";
 import useStageSelector from "../lib/digitalstage/useStageSelector";
+import {Typography} from "@material-ui/core";
 
 
 const Stages = () => {
@@ -35,7 +35,7 @@ const Stages = () => {
         } else {
             return (
                 <Container>
-                    <HeadingLarge>Meine Bühnen</HeadingLarge>
+                    <Typography variant="h1">Meine Bühnen</Typography>
                     <StageListView/>
                 </Container>
             );
@@ -43,7 +43,7 @@ const Stages = () => {
     }
 
     return <Loading>
-        <DisplayMedium>Lade ...</DisplayMedium>
+        <Typography variant="h1">Lade ...</Typography>
     </Loading>;
 }
 export default Stages;
