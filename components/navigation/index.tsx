@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
         }
     },
     showMobile: {
+        width: "100%",
         display: "flex",
         [theme.breakpoints.up('md')]: {
             display: "none",

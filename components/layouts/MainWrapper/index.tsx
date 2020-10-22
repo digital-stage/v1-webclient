@@ -3,17 +3,13 @@ import {useAuth} from "../../../lib/digitalstage/useAuth";
 import Drawer from "../../navigation";
 import React from "react";
 import {Block} from "baseui/block";
+import SideDrawer from "../../navigation/SideDrawer";
+import MobileMenu from "../../navigation/MobileMenu";
 
 
 const drawerWidth = 380;
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-    },
     appBar: {
         zIndex: theme.zIndex.drawer + 1,
         transition: theme.transitions.create(['width', 'margin'], {
@@ -68,16 +64,6 @@ const useStyles = makeStyles((theme) => ({
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
     },
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-        background: "transparent linear-gradient(180deg, #575757 0%, #303030 30%, #282828 100%) 0% 0% no-repeat padding-box",
-        display: "inline-block",
-        width: "380px",
-        maxHeight: "100vh",
-        overflowY: "auto",
-        textAlign: "center",
-    },
     sideDrawer: {
         display: "flex",
         justifyContent: "space-between",
@@ -93,7 +79,49 @@ const useStyles = makeStyles((theme) => ({
     },
     drawerContent: {
         width: "100%"
-    }
+    },
+    showDesktop: {
+        display: "none",
+        [theme.breakpoints.up('md')]: {
+            display: "flex"
+        }
+    },
+    showMobile: {
+        width: "100%",
+        display: "flex",
+        [theme.breakpoints.up('md')]: {
+            display: "none",
+        }
+    },
+
+    root: {
+        flexGrow: 1,
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        [theme.breakpoints.up('md')]: {
+            display: "flex",
+            flexDirection: "row",
+        }
+    },
+    content: {
+        position: "relative",
+        display: "flex",
+        flexGrow: 1,
+        width: "100%",
+        textAlign: "center",
+        overflowY: "auto",
+
+        padding: theme.spacing(3),
+
+        background: "transparent linear-gradient(180deg, #575757 0%, #303030 30%, #282828 100%) 0% 0% no-repeat padding-box",
+
+        [theme.breakpoints.up('md')]: {
+            width: "auto",
+            display: "inline-block",
+        }
+    },
 }));
 
 const MainWrapper = (props: {
@@ -106,7 +134,10 @@ const MainWrapper = (props: {
     return (
         <div>
             <div className={classes.root}>
-                {user ? <Drawer/> : null}
+                {user ? <>
+                    <SideDrawer className={classes.showDesktop}/>
+                    <MobileMenu className={classes.showMobile}/>
+                </> : null}
                 <main className={classes.content}>
                     {props.children}
                 </main>
