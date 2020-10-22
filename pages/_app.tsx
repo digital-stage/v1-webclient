@@ -189,18 +189,21 @@ const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
                                                         </style>
                                                         {/* <AppNavigation /> */}
                                                         <StageJoiner />
-                                                        <div className={classes.root}>
-                                                            <Drawer />
-                                                            <main className={classes.content}>
-                                                                <Block marginTop={['52px', '52px', '72px']}
-                                                                >
-                                                                    <StageWebAudioProvider>
+
+                                                        <Block
+                                                        // marginTop={['52px', '52px', '72px']}
+                                                        >
+                                                            <StageWebAudioProvider>
+                                                                <div className={classes.root}>
+                                                                    <Drawer />
+                                                                    <main className={classes.content}>
                                                                         <Component {...pageProps} />
-                                                                    </StageWebAudioProvider>
-                                                                    <AudioContextController />
-                                                                </Block>
-                                                            </main>
-                                                        </div>
+                                                                    </main>
+                                                                </div>
+                                                            </StageWebAudioProvider>
+                                                            <AudioContextController />
+                                                        </Block>
+
                                                         <LocalDeviceControl />
                                                         {process.env.NODE_ENV === "development" && (
                                                             <DevCorner>
