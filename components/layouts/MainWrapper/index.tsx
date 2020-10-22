@@ -1,8 +1,6 @@
 import {makeStyles} from "@material-ui/core/styles";
 import {useAuth} from "../../../lib/digitalstage/useAuth";
-import Drawer from "../../navigation";
 import React from "react";
-import {Block} from "baseui/block";
 import SideDrawer from "../../navigation/SideDrawer";
 import MobileMenu from "../../navigation/MobileMenu";
 
@@ -112,8 +110,6 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         textAlign: "center",
         overflowY: "auto",
-
-        padding: theme.spacing(3),
 
         background: "transparent linear-gradient(180deg, #575757 0%, #303030 30%, #282828 100%) 0% 0% no-repeat padding-box",
 
