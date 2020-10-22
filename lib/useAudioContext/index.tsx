@@ -14,7 +14,6 @@ export const AudioContextProvider = (props: {
     children: React.ReactNode
 }) => {
     const [context, setContext] = useState<IAudioContext>(undefined);
-
     const createAudioContext = useCallback(async () => {
         if (context) {
             return context;
