@@ -3,6 +3,8 @@ import useStageSelector from "../../../lib/digitalstage/useStageSelector";
 import {Stage} from "../../../lib/digitalstage/common/model.server";
 import React, {useCallback, useEffect, useState} from "react";
 import {DefaultSettingsMenu, DefaultStageMenu, DefaultUserSignedInMenu, DefaultUserSignedOutMenu} from "./defaultMenus";
+import {Delete, Overflow} from "baseui/icon";
+import Icon2 from "../../base/Icon2";
 
 export interface NavItem {
     // LABEL HAS TO BE UNIQUE (!)
@@ -42,7 +44,18 @@ const useMenus = (): {
 
     useEffect(() => {
         if (stage) {
-            setStageNav(DefaultStageMenu)
+            setStageNav([
+                {
+                    label: stage.name,
+                    icon: <Icon2 name="band-vocals"/>,
+                    path: "/"
+                },
+                {
+                    label: "Leave stage",
+                    icon: <Delete size="24px"/>,
+                    path: "/leave"
+                },
+                ...DefaultStageMenu])
         } else {
             setStageNav([]);
         }
