@@ -9,6 +9,7 @@ import Input from "../base/Input";
 import Button from "../base/Button";
 import { useAuth } from "../../lib/digitalstage/useAuth";
 import Alert from "../base/Alert";
+import ResetLinkModal from "./ResetLinkModal";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,6 +49,15 @@ export default function SignUpForm(props: {
   const [username, setUsername] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [errors, setErrors] = useState<IError>({});
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+      setOpen(true);
+  };
+
+  const handleClose = () => {
+      setOpen(false);
+  };
 
   const validate = () => {
     const errorsList: IError = {}
@@ -93,6 +103,7 @@ export default function SignUpForm(props: {
         .then(() => {
           if (props.onCompleted)
             props.onCompleted();
+            handleClickOpen();
         })
         .catch(err => setErrors({
           response: err.message
@@ -102,6 +113,7 @@ export default function SignUpForm(props: {
 
   return (
     <Container maxWidth="sm" className={classes.back}>
+      <ResetLinkModal open={open} handleClose={handleClose} />
       <div className={classes.paper}>
         {errors && errors.response && <Alert text={errors.response} severity="error" />}
         <form className={classes.form} noValidate={true} onSubmit={handleSubmit}>

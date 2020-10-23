@@ -3,6 +3,7 @@ import { Box, createStyles, Grid, Icon, IconButton, Link, makeStyles, Theme, Typ
 
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
+import ForgetPasswordForm from "./ForgetPasswordForm";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,37 +35,35 @@ const useStyles = makeStyles((theme: Theme) =>
             paddingTop: theme.spacing(2),
             paddingBottom: theme.spacing(2),
         },
-        center: {
-            textAlign: "center"
-        },
-        iconButton: {
-            backgroundColor: "#897FE4",
-            width: "36px",
-            height: "36px",
-            borderRadius: "20px",
-        },
-        icon: {
-            color: "#fff",
-            fontSize: "20px",
-            marginTop: "8px"
+        forgetPassword: {
+            textAlign: "center",
+            cursor: "pointer"
         }
     }),
 );
 
 const Login = (props: {
-    mode: "signup" | "login"
+    mode: "signup" | "login" | "forget"
 }) => {
     const classes = useStyles();
     const [LoginOpen, setLoginOpen] = useState(props.mode === "login");
     const [SignupOpen, setSignupOpen] = useState(props.mode === "signup");
+    const [ForgetOpen, setForgetOpen] = useState(props.mode === "forget");
 
     const showLoginBox = () => {
         setLoginOpen(true);
+        setForgetOpen(false);
         setSignupOpen(false);
     };
 
     const showRegisterBox = () => {
         setSignupOpen(true);
+        setForgetOpen(false);
+        setLoginOpen(false);
+    };
+
+    const showForgetBox = () => {
+        setForgetOpen(true);
         setLoginOpen(false);
     };
 
@@ -97,7 +96,7 @@ const Login = (props: {
                     <Typography
                         variant="h5"
                         onClick={showLoginBox}
-                        className={`${classes.controller} ${LoginOpen && classes.selectedController}`}
+                        className={`${classes.controller} ${(LoginOpen || ForgetOpen) && classes.selectedController}`}
                     >
                         Sign in
                     </Typography>
@@ -111,6 +110,15 @@ const Login = (props: {
                 </Grid>
                 {LoginOpen && <SignInForm />}
                 {SignupOpen && <SignUpForm />}
+                {ForgetOpen && <ForgetPasswordForm onClick={showLoginBox}/>}
+                {LoginOpen && <Typography
+                    variant="h6"
+                    onClick={showForgetBox}
+                    className={classes.forgetPassword}
+                >
+                    Forgot password?
+                    </Typography>
+                }
             </Box>
             <Box>
                 <Typography variant="h6" className={classes.text}>Enter stage ID to join as Guest</Typography>

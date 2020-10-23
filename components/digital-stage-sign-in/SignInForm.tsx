@@ -85,7 +85,7 @@ export default function SignInForm(props: {
                     <Input
                         required={true}
                         id="email"
-                        placeholder="Username"
+                        placeholder="Email"
                         name="email"
                         type="text"
                         error={errors && errors.email}
@@ -111,7 +111,6 @@ export default function SignInForm(props: {
                         text="Sign in"
                         type="submit"
                     />
-                    <Typography variant="h6">Forgot password? </Typography>
                 </form>
             </div>
         </Container>
