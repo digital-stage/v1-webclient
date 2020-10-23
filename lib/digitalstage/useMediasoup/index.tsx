@@ -228,46 +228,50 @@ export const MediasoupProvider = (props: {
     }, [connection, audioConsumers]);
 
     const startStreamAudio = useCallback(() => {
-        console.log("[useMediasoup] start streaming audio");
-        setWorking(true);
-        return navigator.mediaDevices.getUserMedia({
-            video: false,
-            audio: {
-                deviceId: localDevice ? localDevice.inputAudioDeviceId : undefined,
-                autoGainControl: false,
-                echoCancellation: false,
-                noiseSuppression: false
-            },
-        })
-            .then(stream => stream.getAudioTracks())
-            .then(tracks =>
-                Promise.all(tracks.map(track => {
-                        return createProducer(sendTransport, track)
-                            .then(producer => {
-                                return new Promise((resolve, reject) => {
-                                    socket.emit(ClientDeviceEvents.ADD_AUDIO_PRODUCER, {
-                                        routerId: router._id,
-                                        routerProducerId: producer.id
-                                    } as AddAudioProducerPayload, (error: string | null, globalProducer: GlobalAudioProducer) => {
-                                        if (error) {
-                                            console.error(error);
-                                            return stopProducer(socket, producer)
-                                                .then(() => reject(new Error(error)));
-                                        }
-                                        setLocalAudioProducers(prevState => [...prevState, {
-                                            audioProducerId: globalProducer._id,
-                                            msProducer: producer
-                                        }]);
-                                        resolve();
+        if (sendTransport) {
+            console.log("[useMediasoup] start streaming audio");
+            setWorking(true);
+            return navigator.mediaDevices.getUserMedia({
+                video: false,
+                audio: {
+                    deviceId: localDevice ? localDevice.inputAudioDeviceId : undefined,
+                    autoGainControl: false,
+                    echoCancellation: false,
+                    noiseSuppression: false
+                },
+            })
+                .then(stream => stream.getAudioTracks())
+                .then(tracks =>
+                    Promise.all(tracks.map(track => {
+                            return createProducer(sendTransport, track)
+                                .then(producer => {
+                                    return new Promise((resolve, reject) => {
+                                        socket.emit(ClientDeviceEvents.ADD_AUDIO_PRODUCER, {
+                                            routerId: router._id,
+                                            routerProducerId: producer.id
+                                        } as AddAudioProducerPayload, (error: string | null, globalProducer: GlobalAudioProducer) => {
+                                            if (error) {
+                                                console.error(error);
+                                                return stopProducer(socket, producer)
+                                                    .then(() => reject(new Error(error)));
+                                            }
+                                            setLocalAudioProducers(prevState => [...prevState, {
+                                                audioProducerId: globalProducer._id,
+                                                msProducer: producer
+                                            }]);
+                                            resolve();
+                                        });
+                                        setTimeout(function () {
+                                            reject(new Error("Timed out: " + ClientDeviceEvents.ADD_AUDIO_PRODUCER));
+                                        }, TIMEOUT_MS)
                                     });
-                                    setTimeout(function () {
-                                        reject(new Error("Timed out: " + ClientDeviceEvents.ADD_AUDIO_PRODUCER));
-                                    }, TIMEOUT_MS)
-                                });
-                            })
-                    }
-                )))
-            .finally(() => setWorking(false));
+                                })
+                        }
+                    )))
+                .finally(() => setWorking(false));
+        } else {
+            console.error("FIXME: Send transport is still undefined ...")
+        }
     }, [sendTransport, localDevice])
 
     const stopStreamingAudio = useCallback(() => {
@@ -298,46 +302,50 @@ export const MediasoupProvider = (props: {
 
 
     const startStreamVideo = useCallback(() => {
-        console.log("[useMediasoup] start streaming video");
-        setWorking(true);
-        return navigator.mediaDevices.getUserMedia({
-            audio: false,
-            video: localDevice && localDevice.inputVideoDeviceId ? {
-                deviceId: localDevice.inputVideoDeviceId
-            } : true
-        })
-            .then(stream => stream.getVideoTracks())
-            .then(tracks =>
-                Promise.all(tracks.map(track => {
-                        return createProducer(sendTransport, track)
-                            .then(producer => {
-                                return new Promise((resolve, reject) => {
-                                    socket.emit(ClientDeviceEvents.ADD_VIDEO_PRODUCER, {
-                                        routerId: router._id,
-                                        routerProducerId: producer.id
-                                    } as AddVideoProducerPayload, (error: string | null, globalProducer: GlobalVideoProducer) => {
-                                        if (error) {
-                                            console.error(error);
-                                            return stopProducer(socket, producer)
-                                                .then(() => reject(new Error(error)));
-                                        }
-                                        setLocalVideoProducers(prevState => [...prevState, {
-                                            videoProducerId: globalProducer._id,
-                                            msProducer: producer
-                                        }]);
-                                        resolve();
+        if (sendTransport) {
+            console.log("[useMediasoup] start streaming video");
+            setWorking(true);
+            return navigator.mediaDevices.getUserMedia({
+                audio: false,
+                video: localDevice && localDevice.inputVideoDeviceId ? {
+                    deviceId: localDevice.inputVideoDeviceId
+                } : true
+            })
+                .then(stream => stream.getVideoTracks())
+                .then(tracks =>
+                    Promise.all(tracks.map(track => {
+                            return createProducer(sendTransport, track)
+                                .then(producer => {
+                                    return new Promise((resolve, reject) => {
+                                        socket.emit(ClientDeviceEvents.ADD_VIDEO_PRODUCER, {
+                                            routerId: router._id,
+                                            routerProducerId: producer.id
+                                        } as AddVideoProducerPayload, (error: string | null, globalProducer: GlobalVideoProducer) => {
+                                            if (error) {
+                                                console.error(error);
+                                                return stopProducer(socket, producer)
+                                                    .then(() => reject(new Error(error)));
+                                            }
+                                            setLocalVideoProducers(prevState => [...prevState, {
+                                                videoProducerId: globalProducer._id,
+                                                msProducer: producer
+                                            }]);
+                                            resolve();
+                                        });
+                                        setTimeout(function () {
+                                            reject(new Error("Timed out: " + ClientDeviceEvents.ADD_VIDEO_PRODUCER));
+                                        }, TIMEOUT_MS)
                                     });
-                                    setTimeout(function () {
-                                        reject(new Error("Timed out: " + ClientDeviceEvents.ADD_VIDEO_PRODUCER));
-                                    }, TIMEOUT_MS)
-                                });
-                            })
-                    }
-                )))
-            .finally(() => {
-                console.log("[useMediasoup] Set working = false");
-                setWorking(false)
-            });
+                                })
+                        }
+                    )))
+                .finally(() => {
+                    console.log("[useMediasoup] Set working = false");
+                    setWorking(false)
+                });
+        } else {
+            console.error("FIXME: Send transport is still undefined ...")
+        }
     }, [sendTransport, localDevice])
 
     const stopStreamingVideo = useCallback(() => {

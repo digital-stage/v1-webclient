@@ -16,7 +16,7 @@ import {wrapper} from "../lib/digitalstage/useStageContext/redux";
 import {DarkModeConsumer, DarkModeProvider} from "../lib/useDarkModeSwitch";
 import AudioContextController from "../components/complex/depreacted/audio/AudioContextController";
 import StageWebAudioProvider from "../lib/useStageWebAudio";
-import MainWrapper from "../components/layouts/MainWrapper";
+import MainWrapper from "../components/layouts/PageWrapper";
 import {DSDarkTheme, DSLightTheme} from "../components/DSTheme";
 
 const MyApp: FC<AppProps> = ({Component, pageProps}) => {
