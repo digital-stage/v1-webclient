@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const MobileMenu = (props: {
-    className: string
+    className?: string
 }) => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState(null);
