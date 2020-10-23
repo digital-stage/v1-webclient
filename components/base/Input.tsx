@@ -1,5 +1,5 @@
 import React from "react";
-import { MuiThemeProvider, createMuiTheme, makeStyles, TextField, InputAdornment } from "@material-ui/core";
+import { MuiThemeProvider, createMuiTheme, makeStyles, TextField, InputAdornment, Typography } from "@material-ui/core";
 import Icon from "./Icon";
 
 const theme = createMuiTheme({});
@@ -33,28 +33,27 @@ type Props = {
 const Input = (props: Props) => {
   const useStyles = makeStyles(() => ({
     root: {
-      width: "100%",
       padding: props.context === "search" && theme.spacing(3, 0, 3, 2)
     },
     input: {
       background: `${props.error ? "rgb(240, 212, 209)" : "white"}`,
       borderRadius: "24px",
       color: "black",
-      height: "36px",
-      width: `${props.context === "search" ? "100%" : props.context === "group" ? "auto" : "199px"}`,
+      height: "34px",
+      width: `${props.context === "search" ? "100%" : props.context === "group" ? "auto" : "189px"}`,
       fontFamily: "Poppins",
-      fontSize: "14px",
+      fontSize: "12px",
       // boxShadow: "0px 5px 30px #0B2140",
       marginTop: `${props.context === "search" ? "0px" : "20px"}`,
-      fontWeight: 600,
+      fontWeight: 500,
       borderBottom: `${props.error && "1px solid #F20544"}`
     },
     p: {
-      color: "white",
+      color: "#D1D1D1",
       marginLeft: "0 !important",
       fontFamily: "Poppins",
       fontSize: "12px",
-      fontWeight: 600,
+      fontWeight: 500,
       paddingLeft: "20px",
       marginTop: "5px",
       marginBottom: "0 !important",

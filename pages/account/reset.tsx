@@ -6,6 +6,7 @@ import Loading from "../../components/complex/depreacted/theme/Loading";
 import {HeadingLarge} from "baseui/typography";
 import Container from "../../components/complex/depreacted/theme/layout/Container";
 import {Typography} from "@material-ui/core";
+import ResetPassword from "../../components/digital-stage-sign-in/ResetPassword";
 
 const Reset = () => {
     const router = useRouter();
@@ -17,12 +18,13 @@ const Reset = () => {
             router.push("/");
         } else {
             return (
-                <Container>
-                    <HeadingLarge>Passwort zurücksetzen</HeadingLarge>
-                    {token && !Array.isArray(token) && (
-                        <ResetForm resetToken={token}/>
-                    )}
-                </Container>
+                // <Container>
+                //     <HeadingLarge>Passwort zurücksetzen</HeadingLarge>
+                    <>{token && !Array.isArray(token) && (
+                        // <ResetForm resetToken={token}/>
+                        <ResetPassword resetToken={token} targetUrl="/account/login"/>
+                    )}</>
+                // </Container>
             )
         }
     }

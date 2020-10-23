@@ -24,9 +24,6 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(0),
         marginTop: theme.spacing(0),
     },
-    form: {
-        width: "70%"
-    },
     text: {
         textAlign: "left",
         padding: theme.spacing(2, 2, 0, 2)

@@ -22,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0),
     marginTop: theme.spacing(0),
   },
-  form: {
-    width: "70%"
-  },
   marginTopBottom: {
     margin: theme.spacing(2, 0),
   }
@@ -116,7 +113,7 @@ export default function SignUpForm(props: {
       <ResetLinkModal open={open} handleClose={handleClose} />
       <div className={classes.paper}>
         {errors && errors.response && <Alert text={errors.response} severity="error" />}
-        <form className={classes.form} noValidate={true} onSubmit={handleSubmit}>
+        <form noValidate={true} onSubmit={handleSubmit}>
           <Input
             required={true}
             id="email"

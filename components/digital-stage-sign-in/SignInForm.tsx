@@ -17,15 +17,12 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        textAlign: "center"
+        textAlign: "center",
     },
     back: {
         padding: theme.spacing(0),
         marginTop: theme.spacing(0),
-    },
-    form: {
-        width: "70%"
-    },
+    }
 }));
 export interface IError {
     email?: string;
@@ -81,7 +78,7 @@ export default function SignInForm(props: {
         <Container maxWidth="sm" className={classes.back}>
             <div className={classes.paper}>
                 {errors && errors.response && <Alert text={errors.response} severity="error" />}
-                <form className={classes.form} noValidate={true} onSubmit={handleSubmit}>
+                <form noValidate={true} onSubmit={handleSubmit}>
                     <Input
                         required={true}
                         id="email"

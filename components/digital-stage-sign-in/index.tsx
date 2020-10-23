@@ -1,34 +1,28 @@
 import React, { useState } from "react";
-import { Box, createStyles, Grid, Icon, IconButton, Link, makeStyles, Theme, Typography } from "@material-ui/core";
+import { createStyles, Grid, Slide, makeStyles, Theme, Typography } from "@material-ui/core";
 
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
 import ForgetPasswordForm from "./ForgetPasswordForm";
+import FormContainerView from "./FormContainerView";
 
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            background: "transparent linear-gradient(180deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%) 0% 0% no-repeat padding-box",
+            background: "transparent linear-gradient(221deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%) 0% 0% no-repeat padding-box;",
             minHeight: "100vh",
             color: theme.palette.common.white,
             paddingTop: theme.spacing(4),
-            paddingBottom: theme.spacing(4),
-        },
-        container: {
-            background: "#000000bf",
-            width: "300px",
-            borderRadius: "5px",
-            boxShadow: "0px 3px 50px rgba(11, 33, 64, 0.75) ",
-            padding: "15px 10px"
+            paddingBottom: theme.spacing(4)
         },
         controller: {
-            padding: "10px 30px",
+            padding: "10px 20px",
             cursor: "pointer",
             borderBottom: "2px solid transparent"
         },
         selectedController: {
-            transition: "border 0.5s ease-out",
+            transition: "border 1s ease-out",
             borderBottom: `2px solid ${theme.palette.primary.main}`
         },
         text: {
@@ -68,30 +62,23 @@ const Login = (props: {
     };
 
     return (
-        <Grid
-            container={true}
-            direction="column"
-            alignItems="center"
-            alignContent="center"
-            justify='space-between'
-            className={classes.root}
-        >
+        <div className={classes.root}>
             <Grid container={true} direction='column' alignContent="center" alignItems="center">
                 <img
                     src="/images/welcome_icon.png"
-                    width="120"
+                    width="180"
                     height="auto"
                     alt="logo"
                 />
-                <Typography variant="h3" className={classes.text}>Welcome</Typography>
             </Grid>
-            <Box className={classes.container}>
+            <FormContainerView>
                 <Grid
                     container={true}
                     direction="row"
                     alignContent="center"
                     alignItems="center"
                     justify='space-evenly'
+                    className={classes.text}
                 >
                     <Typography
                         variant="h5"
@@ -110,7 +97,7 @@ const Login = (props: {
                 </Grid>
                 {LoginOpen && <SignInForm />}
                 {SignupOpen && <SignUpForm />}
-                {ForgetOpen && <ForgetPasswordForm onClick={showLoginBox}/>}
+                {ForgetOpen && <ForgetPasswordForm onClick={showLoginBox} />}
                 {LoginOpen && <Typography
                     variant="h6"
                     onClick={showForgetBox}
@@ -119,11 +106,8 @@ const Login = (props: {
                     Forgot password?
                     </Typography>
                 }
-            </Box>
-            <Box>
-                <Typography variant="h6" className={classes.text}>Enter stage ID to join as Guest</Typography>
-            </Box>
-        </Grid>
+            </FormContainerView>
+        </div>
     );
 };
 
