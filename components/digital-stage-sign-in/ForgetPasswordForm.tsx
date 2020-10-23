@@ -125,7 +125,7 @@ export default function ForgetPasswordForm(props: {
             <ResetLinkModal open={open} handleClose={handleClose} onClick={handleResend} resend={resend} />
             <div className={classes.paper}>
                 {errors && errors.response && <Alert text={errors.response} severity="error" />}
-                <form className={classes.form} noValidate={true} onSubmit={handleSubmit}>
+                <form noValidate={true} onSubmit={handleSubmit}>
                     <div className={classes.text}>
                         <Typography variant="h5">Reset your password</Typography>
                         <Typography variant="subtitle2">Enter your email address to restore your password</Typography>
