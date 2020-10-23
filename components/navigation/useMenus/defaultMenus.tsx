@@ -1,6 +1,6 @@
 import {Delete, Overflow} from "baseui/icon";
-import Icon from "../../base/Icon";
 import {NavItem} from "./index";
+import Icon2 from "../../base/Icon2";
 
 export const DefaultUserSignedOutMenu: NavItem[] = [
     {
@@ -30,23 +30,23 @@ export const DefaultUserSignedInMenu: NavItem[] = [
 export const DefaultStageMenu: NavItem[] = [
     {
         label: "Meine Bühnen",
-        icon: <Icon name="stage"/>,
+        icon: <Icon2 name="stage"/>,
         path: "/stages"
     },
     {
         label: "Ereignisse",
-        icon: <Icon name="notification"/>
+        icon: <Icon2 name="notification"/>
     },
 ];
 
 export const DefaultSettingsMenu: NavItem[] = [
     {
         label: "Problem melden",
-        icon: <Icon name="feedback"/>,
+        icon: <Icon2 name="feedback"/>,
     },
     {
         label: "Meine Geräte",
-        icon: <Icon name="settings"/>,
+        icon: <Icon2 name="settings"/>,
         path: "/devices"
     },
 ];

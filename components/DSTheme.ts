@@ -1,6 +1,6 @@
 import {createMuiTheme} from "@material-ui/core/styles";
 
-export const DSDarkTheme = createMuiTheme({
+const BaseTheme = createMuiTheme({
     palette: {
         primary: {
             main: "#F20544",
@@ -118,23 +118,28 @@ export const DSDarkTheme = createMuiTheme({
     },
     shape: {
         borderRadius: 14
-    },
-    overrides: {
-        MuiSelect: {
-
-        },
-        MuiListItem: {
-            root: {
-            },
-            selected: {
-                color: "#fff",
-                backgroundColor: "green",
-                ":hover": {
-                    backgroundColor: "green",
-                }
-            }
-        },
     }
 });
+
+export const DSDarkTheme = {
+    ...BaseTheme,
+    overrides: {
+        MuiListItem: {
+            root: {
+                color: BaseTheme.palette.grey[300],
+                "&$selected": {
+                    color: BaseTheme.palette.common.white,
+                    "&:hover": {
+                        color: BaseTheme.palette.common.white,
+                    }
+                },
+                "&:hover": {
+                    color: BaseTheme.palette.grey[100],
+                }
+            },
+        },
+    }
+}
+
 
 export const DSLightTheme = DSDarkTheme;

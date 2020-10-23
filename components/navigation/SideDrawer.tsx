@@ -8,6 +8,7 @@ import Icon from '../base/Icon';
 import Link from 'next/link';
 import useMenus, {NavItem} from "./useMenus";
 import {useRouter} from "next/router";
+import Icon2 from "../base/Icon2";
 
 const drawerWidth = 380;
 
@@ -162,7 +163,7 @@ export default function SideDrawer(props: {
                 <span className={classes.sideDrawer}>
                     <List>
                         <ListItem button onClick={() => setOpen(prev => !prev)}>
-                            <Icon name="menu"/>
+                            <Icon2 name="menu"/>
                         </ListItem>
 
                         {menus.stageNav.map(navItem => renderItem(navItem))}
