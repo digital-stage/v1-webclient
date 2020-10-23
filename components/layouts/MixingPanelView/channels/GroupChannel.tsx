@@ -14,26 +14,29 @@ const GroupChannel = (props: {
     const group = useStageSelector<Group>(state => state.groups.byId[props.groupId]);
     const customGroup = useStageSelector<CustomGroup>(state => state.customGroups.byGroup[props.groupId] ? state.customGroups.byId[state.customGroups.byGroup[props.groupId]] : undefined);
 
-    const {updateGroup, removeCustomGroup, setCustomGroup} = useStageActions();
+    const {updateGroup, setCustomGroup, removeCustomGroup} = useStageActions();
     const stageMemberIds = useStageSelector<string[]>(state => state.stageMembers.byGroup[props.groupId] ? state.stageMembers.byGroup[props.groupId] : []);
 
     const {byGroup} = useStageWebAudio();
 
     return (
-            <ChannelPanel
-                analyser={byGroup[props.groupId] ? byGroup[props.groupId].analyserNode : undefined}
-                name={group.name}
-                volume={group.volume}
-                customVolume={customGroup ? customGroup.volume : undefined}
-                onVolumeChanged={volume => updateGroup(group._id, {
-                    volume: volume
-                })}
-                onCustomVolumeChanged={volume => setCustomGroup(group._id, volume)}
-                onCustomVolumeReset={() => removeCustomGroup(customGroup._id)}
-                isAdmin={isAdmin}
-            >
-                {stageMemberIds.map(id => <StageMemberChannel key={id} stageMemberId={id}/>)}
-            </ChannelPanel>
+        <ChannelPanel
+            analyser={byGroup[props.groupId] ? byGroup[props.groupId].analyserNode : undefined}
+            name={group.name}
+            volume={group.volume}
+            customVolume={customGroup ? customGroup.volume : undefined}
+            onVolumeChanged={volume => updateGroup(group._id, {
+                volume: volume
+            })}
+            onCustomVolumeChanged={volume => setCustomGroup(group._id, volume)}
+            onCustomVolumeReset={() => {
+                if (removeCustomGroup)
+                    return removeCustomGroup(customGroup._id)
+            }}
+            isAdmin={isAdmin}
+        >
+            {stageMemberIds.map(id => <StageMemberChannel key={id} stageMemberId={id}/>)}
+        </ChannelPanel>
     )
 }
 export default GroupChannel;

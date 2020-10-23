@@ -9,7 +9,6 @@ import {useStageWebAudio} from "../../../../lib/useStageWebAudio";
 const StageMemberChannel = (props: {
     stageMemberId: string
 }) => {
-    const {updateStageMember, setCustomStageMember} = useStageActions();
     const isAdmin: boolean = useStageSelector(state => state.stageId ? state.stages.byId[state.stageId].isAdmin : false);
     const stageMember = useStageSelector<StageMember>(state => state.stageMembers.byId[props.stageMemberId]);
     const customStageMember = useStageSelector<CustomStageMember>(state => state.customStageMembers.byStageMember[props.stageMemberId] ? state.customStageMembers.byId[state.customStageMembers.byStageMember[props.stageMemberId]] : undefined);
@@ -17,6 +16,8 @@ const StageMemberChannel = (props: {
     const audioProducers = useStageSelector<string[]>(state => state.audioProducers.byStageMember[props.stageMemberId]);
 
     const {byStageMember} = useStageWebAudio();
+
+    const {updateStageMember, setCustomStageMember, removeCustomStageMember} = useStageActions();
 
     return (
         <ChannelPanel
@@ -31,6 +32,10 @@ const StageMemberChannel = (props: {
             onCustomVolumeChanged={volume => setCustomStageMember(stageMember._id, {
                 volume: volume
             })}
+            onCustomVolumeReset={() => {
+                if (customStageMember)
+                    return removeCustomStageMember(customStageMember._id)
+            }}
             isAdmin={isAdmin}
         >
             {audioProducers && audioProducers.map(id => <AudioProducerChannel key={id} audioProducerId={id}/>)}

@@ -158,6 +158,10 @@ export const DSLightTheme = createMuiTheme({
             primary: "#D1D1D1",
             secondary: "#707070",
             hint: "#777777"
+        },
+        background: {
+            default: "#343434",
+            paper: "#000000"
         }
     },
     typography: {

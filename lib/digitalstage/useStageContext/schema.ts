@@ -112,7 +112,7 @@ export interface CustomAudioProducers {
         [id: string]: CustomAudioProducer
     },
     byAudioProducer: {
-        [audioProducerId: string]: string[]
+        [audioProducerId: string]: string
     },
     allIds: string[]
 }
