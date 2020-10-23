@@ -128,6 +128,7 @@ export const createWebRTCTransport = (socket: SocketIOClient.Socket, device: med
 };
 
 export const createProducer = (transport: mediasoupClient.types.Transport, track: MediaStreamTrack): Promise<mediasoupClient.types.Producer> => {
+    //TODO: Fix this, TypeError: Cannot read property 'produce' of undefined
     return transport
         .produce({
             track: track,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {Drawer} from '@material-ui/core';
 import clsx from 'clsx';
@@ -6,8 +6,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Icon from '../base/Icon';
 import Link from 'next/link';
-// import StagesList from './StagesList';
-// import StageDetails from './StageDetails';
+import useMenus, {NavItem} from "./useMenus";
+import {useRouter} from "next/router";
 
 const drawerWidth = 380;
 
@@ -100,134 +100,49 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-enum SelectedItem {
-    MENU = "MENU",
-    STAGE = "STAGE",
-    SETTINGS = "SETTINGS",
-    NOTIFICATION = "NOTIFICATION"
-}
-
-interface User {
-    userPhoto: string,
-    username: string
-}
-
-export interface Stage {
-    title: string,
-    mineStage: boolean,
-    image: string,
-    online: boolean,
-    description: string,
-    users: User[]
-}
-
-const stages: Stage[] = [
-    {
-        title: 'Bulshemier Theatre',
-        mineStage: true,
-        image: "/images/stage-icon.png",
-        online: true,
-        users: [{userPhoto: "/images/stage-icon.png", username: "username"}],
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis."
-    },
-    {
-        title: 'National Theatre',
-        mineStage: false,
-        image: "/images/stage-icon.png",
-        online: true,
-        users: [{userPhoto: "/images/stage-icon.png", username: "username"}, {
-            userPhoto: "/images/stage-icon.png",
-            username: "username"
-        }, {userPhoto: "/images/stage-icon.png", username: "username"}],
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis."
-    },
-    {
-        title: 'Theatre National Royal',
-        mineStage: true,
-        image: "/images/stage-icon.png",
-        online: false,
-        users: [{userPhoto: "/images/stage-icon.png", username: "username"}, {
-            userPhoto: "/images/stage-icon.png",
-            username: "username"
-        }, {userPhoto: "/images/stage-icon.png", username: "username"}, {
-            userPhoto: "/images/stage-icon.png",
-            username: "username"
-        }, {userPhoto: "/images/stage-icon.png", username: "username"}, {
-            userPhoto: "/images/stage-icon.png",
-            username: "username"
-        }],
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis."
-    },
-    {
-        title: 'The Old Theatre',
-        mineStage: false,
-        image: "/images/stage-icon.png",
-        online: false,
-        users: [{userPhoto: "/images/stage-icon.png", username: "username"}, {
-            userPhoto: "/images/stage-icon.png",
-            username: "username"
-        }, {userPhoto: "/images/stage-icon.png", username: "username"}],
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis."
-    },
-    {
-        title: 'Lyceum Theatre',
-        mineStage: true,
-        image: "/images/stage-icon.png",
-        online: true,
-        users: [{userPhoto: "/images/stage-icon.png", username: "username"}, {
-            userPhoto: "/images/stage-icon.png",
-            username: "username"
-        }, {userPhoto: "/images/stage-icon.png", username: "username"}, {
-            userPhoto: "/images/stage-icon.png",
-            username: "username"
-        }, {userPhoto: "/images/stage-icon.png", username: "username"}, {
-            userPhoto: "/images/stage-icon.png",
-            username: "username"
-        }, {userPhoto: "/images/stage-icon.png", username: "username"}, {
-            userPhoto: "/images/stage-icon.png",
-            username: "username"
-        }, {userPhoto: "/images/stage-icon.png", username: "username"}],
-        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis."
-    },
-];
-
 export default function SideDrawer(props: {
     className?: string;
 }) {
+    const router = useRouter();
     const classes = useStyles();
-    const [open, setOpen] = React.useState(true);
-    const [stageId, setStageId] = React.useState(0);
-    const [selectedItem, setSelectedItem] = React.useState<string>(SelectedItem.STAGE);
+    const [open, setOpen] = React.useState(false);
+    const menus = useMenus();
 
     const handleDrawer = (icon: string) => {
         if (icon === "menu") {
             setOpen(!open);
         }
     };
+    const [selectedItem, setSelectedItem] = React.useState<NavItem>(undefined);
 
-    const setDrawerSelection = (selection: string) => {
-        if (selection === SelectedItem.MENU) {
-            setSelectedItem(selectedItem);
-        } else {
-            setSelectedItem(selection);
+    useEffect(() => {
+        if (menus.ready) {
+            // Find item by path
+            const item = menus.findItemByPath(router.pathname);
+            if (item)
+                setSelectedItem(item);
         }
-    };
+    }, [router.pathname, menus.ready])
 
-    const setDrawerIconColor = (selected: string) => {
-        let color = "#828282";
-        if (selected === SelectedItem.MENU) {
-            color = "#fff"
-        }
-        if (selected === selectedItem) {
-            color = "#fff"
-        }
-        return color
-    }
+    const renderItem = useCallback((item: NavItem): React.ReactElement => {
+        const isSelected: boolean = selectedItem && item.label && item.label === selectedItem.label;
+        const color: string = isSelected ? "#fff" : "#828282";
 
-    const menuItems = [
-        {icon: "stage", link: "/stages"},
-        {icon: "notification", link: "/devices"},
-    ]
+        const icon = item.path ? (
+            <Link href={item.path}>
+                {item.icon}
+            </Link>
+        ) : item.icon;
+
+        return (
+            <ListItem
+                button
+                selected={isSelected}
+                onClick={() => setSelectedItem(item)}>
+                {icon}
+            </ListItem>
+        );
+    }, [selectedItem])
 
     return (
         <Drawer
@@ -246,27 +161,14 @@ export default function SideDrawer(props: {
             <div className={classes.leftSide}>
                 <span className={classes.sideDrawer}>
                     <List>
-                        {['menu'].map((text) => (
-                            <ListItem button key={text} onClick={() => {
-                                handleDrawer(text)
-                            }}>
-                                <Icon name={text}/>
-                            </ListItem>
-                        ))}
-                        {menuItems.map((item) => (
-                            <ListItem button key={item.icon} onClick={() => {
-                                handleDrawer(item.icon)
-                            }}>
-                                <Link href={item.link}><Icon name={item.icon}/></Link>
-                            </ListItem>
-                        ))}
+                        <ListItem button onClick={() => setOpen(prev => !prev)}>
+                            <Icon name="menu"/>
+                        </ListItem>
+
+                        {menus.stageNav.map(navItem => renderItem(navItem))}
                     </List>
                     <List>
-                        {['feedback', 'settings'].map((text) => (
-                            <ListItem button key={text}>
-                                <Icon name={text} iconColor={setDrawerIconColor(text.toUpperCase())}/>
-                            </ListItem>
-                        ))}
+                        {menus.settingsNav.map(navItem => renderItem(navItem))}
                     </List>
                 </span>
             </div>
