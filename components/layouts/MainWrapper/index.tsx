@@ -13,7 +13,6 @@ const MainWrapper = (props: {
     const {breakpoints} = useTheme<Theme>();
     const [css] = useStyletron();
 
-    //TODO: Stage behavior -> without wrapped div, the classes.root is not rendered ...
     return (
         <div className={css({
             width: "100%",
@@ -24,10 +23,7 @@ const MainWrapper = (props: {
             }
         })}>
             {user && (
-                <div className={css({
-                    display: "flex",
-                    flexGrow: 0
-                })}>
+                <>
                     <div className={css({
                         display: "none",
                         [breakpoints.up('md')]: {
@@ -45,7 +41,7 @@ const MainWrapper = (props: {
                     })}>
                         <MobileMenu/>
                     </div>
-                </div>
+                </>
             )}
             <main className={css({
                 flexGrow: 1,
