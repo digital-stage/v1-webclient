@@ -79,7 +79,10 @@ export const getFastestRouter = (): Promise<Router> => {
                 return routers[0];
             } else
                 throw new Error("No routers available");
-        });
+        })
+        .catch(() => {
+            throw new Error("Routingservice not available")
+        })
 };
 
 

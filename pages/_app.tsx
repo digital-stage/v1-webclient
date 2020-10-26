@@ -8,7 +8,7 @@ import {SocketContextProvider} from "../lib/digitalstage/useStageContext";
 import {RequestContextProvider} from "../lib/useRequest";
 import Head from 'next/head'
 import StageJoiner from "../components/layouts/StageJoiner";
-import LocalDeviceControl from '../components/complex/depreacted/devices/LocalDeviceControl';
+import LocalDeviceControl from '../components/layouts/LocalDeviceControl';
 import {AudioContextProvider} from "../lib/useAudioContext";
 import {CssBaseline, ThemeProvider} from '@material-ui/core';
 import MediasoupProvider from "../lib/digitalstage/useMediasoup";
@@ -16,8 +16,10 @@ import {wrapper} from "../lib/digitalstage/useStageContext/redux";
 import {DarkModeConsumer, DarkModeProvider} from "../lib/useDarkModeSwitch";
 import AudioContextController from "../components/complex/depreacted/audio/AudioContextController";
 import StageWebAudioProvider from "../lib/useStageWebAudio";
-import MainWrapper from "../components/layouts/PageWrapper";
+import PageWrapper from "../components/layouts/PageWrapper";
 import {DSDarkTheme, DSLightTheme} from "../components/DSTheme";
+import i18n from '../i18n'
+import {ErrorsProvider} from "../lib/useErrors";
 
 const MyApp: FC<AppProps> = ({Component, pageProps}) => {
     React.useEffect(() => {
@@ -34,18 +36,19 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                 <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
             </Head>
             <StyletronProvider value={styletron} debug={debug} debugAfterHydration>
-                <RequestContextProvider>
-                    <AuthContextProvider>
-                        <SocketContextProvider>
-                            <MediasoupProvider>
-                                <AudioContextProvider>
-                                    <DarkModeProvider>
-                                        <DarkModeConsumer>
-                                            {(darkMode) => (
-                                                <ThemeProvider theme={darkMode ? DSDarkTheme : DSLightTheme}>
-                                                    <CssBaseline/>
-                                                    <BaseProvider theme={darkMode ? DarkTheme : LightTheme}>
-                                                        <style jsx global>{`
+                <ErrorsProvider>
+                    <RequestContextProvider>
+                        <AuthContextProvider>
+                            <SocketContextProvider>
+                                <MediasoupProvider>
+                                    <AudioContextProvider>
+                                        <DarkModeProvider>
+                                            <DarkModeConsumer>
+                                                {(darkMode) => (
+                                                    <ThemeProvider theme={darkMode ? DSDarkTheme : DSLightTheme}>
+                                                        <CssBaseline/>
+                                                        <BaseProvider theme={darkMode ? DarkTheme : LightTheme}>
+                                                            <style jsx global>{`
                                             @import("https://use.fontawesome.com/releases/v5.12.0/css/all.css");
                                             * {
                                                 box-sizing: border-box;
@@ -54,11 +57,14 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                                                 margin: 0;
                                                 padding: 0;
                                                 width: 100%;
+                                                height: 100%;
                                             }
                                             body {
                                                 font-family: var(--font-sans);
                                                 color: ${darkMode ? "#ffffff" : "#000000"};
-                                                background-color: ${darkMode ? "#000000" : "#ffffff"};
+                                                background-color: ${darkMode ? "#343434" : "#ffffff"};
+                                                background: linear-gradient(218deg, rgba(52,52,52,1) 0%, rgba(20,20,20,1) 100%);
+                                                background-size: cover;
                                                 transition-timing-function: cubic-bezier(0, 0, 1, 1);
                                                 transition: color 200ms, background-color 200ms;
                                                 overflow-x: hidden;
@@ -70,30 +76,30 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                                                 100% { transform: translateY(0); }
                                             }
                                         `}
-                                                        </style>
+                                                            </style>
+                                                            <StageWebAudioProvider>
+                                                                <PageWrapper>
+                                                                    <Component {...pageProps} />
+                                                                </PageWrapper>
+                                                            </StageWebAudioProvider>
 
-                                                        <StageWebAudioProvider>
-                                                            <MainWrapper>
-                                                                <Component {...pageProps} />
-                                                            </MainWrapper>
-                                                        </StageWebAudioProvider>
-                                                        <AudioContextController/>
+                                                            <AudioContextController/>
 
-                                                        <StageJoiner/>
+                                                            <StageJoiner/>
 
-                                                        <LocalDeviceControl/>
-                                                    </BaseProvider>
-                                                </ThemeProvider>
-                                            )}
-                                        </DarkModeConsumer>
-                                    </DarkModeProvider>
-                                </AudioContextProvider>
-                            </MediasoupProvider>
-                        </SocketContextProvider>
-                    </AuthContextProvider>
-                </RequestContextProvider>
+                                                        </BaseProvider>
+                                                    </ThemeProvider>
+                                                )}
+                                            </DarkModeConsumer>
+                                        </DarkModeProvider>
+                                    </AudioContextProvider>
+                                </MediasoupProvider>
+                            </SocketContextProvider>
+                        </AuthContextProvider>
+                    </RequestContextProvider>
+                </ErrorsProvider>
             </StyletronProvider>
         </>
     )
 }
-export default wrapper.withRedux(MyApp);
+export default i18n.appWithTranslation(wrapper.withRedux(MyApp));

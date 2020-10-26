@@ -19,13 +19,13 @@ const GroupView = (props: {
             <div className={css({})}>
                 <Grid>
                     <Cell span={12}>
-                        <Typography variant="h1">{props.group.name}</Typography>
+                        <Typography variant="h3">{props.group.name}</Typography>
                     </Cell>
                 </Grid>
                 <div className={css({
                     display: 'flex',
                     flexWrap: 'wrap',
-                    justifyContent: 'center'
+                    justifyContent: 'flex-start'
                 })}>
                     {stageMembers.byGroup[props.group._id].map(id => (
                         <StageMemberView key={id} stageMember={stageMembers.byId[id]}/>

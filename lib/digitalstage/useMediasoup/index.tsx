@@ -29,6 +29,7 @@ import {
     VideoProducers
 } from "../useStageContext/schema";
 import useStageSelector from "../useStageSelector";
+import {useErrors} from "../../useErrors";
 
 const TIMEOUT_MS: number = 4000;
 
@@ -51,6 +52,7 @@ export const MediasoupProvider = (props: {
 }) => {
     const socket = useSocket();
     const dispatch = useDispatch();
+    const {reportError} = useErrors();
 
     const localDevice = useSelector<NormalizedState, Device>(state => {
         if (state.devices.local)
@@ -154,6 +156,9 @@ export const MediasoupProvider = (props: {
                 setRouter(router);
                 console.log("[useMediasoup] Using router " + router.url);
             })
+            .catch(error => {
+                reportError(error.message)
+            })
         return () => {
             setRouter(undefined);
         }
@@ -179,7 +184,7 @@ export const MediasoupProvider = (props: {
                     }
                 );
         } else {
-            throw new Error("Could not find producer=" + producerId);
+            reportError("Could not find producer=" + producerId);
         }
     }, [connection, device, receiveTransport, videoProducers, videoConsumers]);
 
@@ -213,7 +218,7 @@ export const MediasoupProvider = (props: {
                     }
                 );
         } else {
-            throw new Error("Could not find producer=" + producerId);
+            reportError("Could not find producer=" + producerId);
         }
     }, [connection, device, receiveTransport, audioProducers, audioConsumers]);
 
@@ -223,7 +228,7 @@ export const MediasoupProvider = (props: {
             return closeConsumer(connection, audioConsumers.byId[consumerId].msConsumer)
                 .then(() => dispatch(allActions.stageActions.client.removeAudioConsumer(consumerId)))
         } else {
-            throw new Error("Could not find consumer for producer " + producerId);
+            reportError("Could not find consumer for producer " + producerId);
         }
     }, [connection, audioConsumers]);
 
@@ -270,7 +275,7 @@ export const MediasoupProvider = (props: {
                     )))
                 .finally(() => setWorking(false));
         } else {
-            console.error("FIXME: Send transport is still undefined ...")
+            reportError("FIXME: Send transport is still undefined ...");
         }
     }, [sendTransport, localDevice])
 
@@ -297,6 +302,7 @@ export const MediasoupProvider = (props: {
                 })
                 .finally(() => setLocalAudioProducers(prevState => prevState.filter(p => p.audioProducerId !== localAudioProducer.audioProducerId)))
         }))
+            .catch((error) => reportError(error.message))
             .finally(() => setWorking(false));
     }, [localAudioProducers]);
 
@@ -339,12 +345,12 @@ export const MediasoupProvider = (props: {
                                 })
                         }
                     )))
+                .catch((error) => reportError(error.message))
                 .finally(() => {
-                    console.log("[useMediasoup] Set working = false");
                     setWorking(false)
                 });
         } else {
-            console.error("FIXME: Send transport is still undefined ...")
+            reportError("FIXME: Send transport is still undefined ...")
         }
     }, [sendTransport, localDevice])
 
@@ -370,8 +376,8 @@ export const MediasoupProvider = (props: {
                         .finally(() => setLocalVideoProducers(prevState => prevState.filter(p => p.videoProducerId !== localVideoProducer.videoProducerId)))
                 })
         }))
+            .catch((error) => reportError(error.message))
             .finally(() => {
-                console.log("[useMediasoup] Set working = false");
                 setWorking(false)
             });
     }, [localVideoProducers]);

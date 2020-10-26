@@ -57,7 +57,7 @@ const useMenus = (): {
                 },
                 ...DefaultStageMenu])
         } else {
-            setStageNav([]);
+            setStageNav(DefaultStageMenu);
         }
     }, [stage]);
 

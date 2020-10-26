@@ -4,8 +4,6 @@ import {Drawer} from '@material-ui/core';
 import clsx from 'clsx';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import Icon from '../base/Icon';
-import Link from 'next/link';
 import useMenus, {NavItem} from "./useMenus";
 import {useRouter} from "next/router";
 import Icon2 from "../base/Icon2";
@@ -88,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "space-between",
         flexDirection: "column",
         maxHeight: "100vh",
-        background: "#343434 0% 0% no-repeat padding-box",
+        background: theme.palette.background.paper,
         boxShadow: "20px 0px 60px #0000004A",
     },
     leftSide: {
@@ -108,13 +106,8 @@ export default function SideDrawer(props: {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const menus = useMenus();
-
-    const handleDrawer = (icon: string) => {
-        if (icon === "menu") {
-            setOpen(!open);
-        }
-    };
     const [selectedItem, setSelectedItem] = React.useState<NavItem>(undefined);
+
 
     useEffect(() => {
         if (menus.ready) {
@@ -123,24 +116,25 @@ export default function SideDrawer(props: {
             if (item)
                 setSelectedItem(item);
         }
-    }, [router.pathname, menus.ready])
+    }, [router.pathname, menus.ready]);
+
+    const handleItemSelection = useCallback((item: NavItem) => {
+        if (item.path && router.pathname !== item.path) {
+            return router.push(item.path)
+                .then(() => setSelectedItem(item))
+        }
+        setSelectedItem(item);
+    }, [router.pathname]);
 
     const renderItem = useCallback((item: NavItem): React.ReactElement => {
         const isSelected: boolean = selectedItem && item.label && item.label === selectedItem.label;
-        const color: string = isSelected ? "#fff" : "#828282";
-
-        const icon = item.path ? (
-            <Link href={item.path}>
-                {item.icon}
-            </Link>
-        ) : item.icon;
 
         return (
             <ListItem
                 button
                 selected={isSelected}
-                onClick={() => setSelectedItem(item)}>
-                {icon}
+                onClick={() => handleItemSelection(item)}>
+                {item.icon}
             </ListItem>
         );
     }, [selectedItem])
@@ -165,7 +159,8 @@ export default function SideDrawer(props: {
                         <ListItem button onClick={() => setOpen(prev => !prev)}>
                             <Icon2 name="menu"/>
                         </ListItem>
-
+                    </List>
+                    <List>
                         {menus.stageNav.map(navItem => renderItem(navItem))}
                     </List>
                     <List>

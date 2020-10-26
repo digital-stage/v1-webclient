@@ -8,6 +8,7 @@ const Svg = styled('svg', {
 
 const Icon2 = (props: {
     name: string,
+    label?: string;
     size?: number,
     onClick?: MouseEventHandler<HTMLOrSVGElement>,
     circled?: boolean
@@ -25,7 +26,7 @@ const Icon2 = (props: {
             xmlnsXlink="http://www.w3.org/1999/xlink"
             onClick={props.onClick}
         >
-            <title id={props.name}>{props.name}</title>
+            <title id={props.name}>{props.label ? props.label : props.name}</title>
             <g className={css({
                 fill: "currentColor"
             })}>

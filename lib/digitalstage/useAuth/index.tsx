@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import cookie from 'js-cookie';
+import {useErrors} from "../../useErrors";
 
 export interface AuthUser {
     _id: string;
@@ -46,6 +47,7 @@ export const AuthContextProvider = (props: {
     const [token, setToken] = useState<string>();
     const [user, setUser] = useState<AuthUser>();
     const [loading, setLoading] = useState<boolean>(true);
+    const {reportError} = useErrors();
 
     const createUserWithEmailAndPassword = useCallback((email: string, password: string, additional?: {
         name: string;
@@ -75,6 +77,7 @@ export const AuthContextProvider = (props: {
                     setToken(token);
                     cookie.set('token', token, {expires: 7});
                 }))
+            .catch(error => reportError(error.message))
             .finally(() => {
                 setLoading(false);
             });
@@ -103,6 +106,7 @@ export const AuthContextProvider = (props: {
                     setToken(token);
                     cookie.set('token', token, {expires: 7});
                 }))
+            .catch(error => reportError(error.message))
             .finally(() => {
                 setLoading(false);
             });
@@ -124,7 +128,8 @@ export const AuthContextProvider = (props: {
                 if (!result.ok) {
                     throw new Error("Unbekannte E-Mail Adresse")
                 }
-            });
+            })
+            .catch(error => reportError(error.message))
     }, []);
 
     const resetPassword = useCallback((resetToken: string, password: string) => {
@@ -144,7 +149,8 @@ export const AuthContextProvider = (props: {
                 if (!result.ok) {
                     throw new Error("Abgelaufener Link")
                 }
-            });
+            })
+            .catch(error => reportError(error.message))
     }, []);
 
     const logout = useCallback(() => {
@@ -165,6 +171,7 @@ export const AuthContextProvider = (props: {
                     setUser(undefined);
                 }
             })
+            .catch(error => reportError(error.message))
             .finally(() => {
                 setLoading(false);
             })
