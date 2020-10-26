@@ -40,7 +40,7 @@ const BaseTheme = createMuiTheme({
         },
         background: {
             default: "#343434",
-            paper: "#000000"
+            paper: "#101010"
         }
     },
     typography: {

@@ -1,35 +1,15 @@
 import {useAudioContext} from "../../../../lib/useAudioContext";
 import {styled} from "baseui";
 import React, {useCallback, useEffect, useState} from "react";
-import {Button} from "baseui/button";
-
+import Icon2 from "../../../base/Icon2";
+import {IconButton, withStyles} from "@material-ui/core";
 
 const StartAudioOverlay = styled("div", {
     position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100vw",
-    height: "100vh",
-    backgroundColor: "rgba(0,0,0,0.6)",
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+    bottom: "1rem",
+    left: "1rem"
 });
-
-const StartAudioOverlayBox = styled("div", {
-    position: "fixed",
-    top: "20vh",
-    left: "20vw",
-    width: "60vw",
-    height: "40vh",
-    minHeight: "400px",
-    marginLeft: "auto",
-    backgroundColor: "rgba(255,0,0,0.4)",
-    border: "1px solid white",
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-});
+const StartAudioButton = withStyles({})(IconButton);
 
 const AudioContextController = () => {
     const {audioContext, createAudioContext} = useAudioContext();
@@ -61,14 +41,9 @@ const AudioContextController = () => {
     if (!valid) {
         return (
             <StartAudioOverlay>
-                <StartAudioOverlayBox>
-                    <Button
-                        size="large"
-                        onClick={start}
-                    >
-                        Enable Audio Playback
-                    </Button>
-                </StartAudioOverlayBox>
+                <StartAudioButton onClick={() => start()}>
+                    <Icon2 name="speaker-off"/>
+                </StartAudioButton>
             </StartAudioOverlay>
         );
     }

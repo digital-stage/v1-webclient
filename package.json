@@ -20,6 +20,7 @@
     "lodash": "^4.17.20",
     "mediasoup-client": "^3.6.20",
     "next": "9.5.5",
+    "next-i18next": "^6.0.3",
     "next-redux-wrapper": "^6.0.2",
     "normalizr": "^3.6.1",
     "react": "17.0.0",

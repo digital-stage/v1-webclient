@@ -4,17 +4,16 @@ import React from "react";
 import {Avatar} from "baseui/avatar";
 import OnlineStatus from "../../complex/depreacted/theme/OnlineStatus";
 import CanvasPlayer from "../../experimental/CanvasPlayer";
-import {NormalizedState, Users, VideoConsumers} from "../../../lib/digitalstage/useStageContext/schema";
-import {useSelector} from "../../../lib/digitalstage/useStageContext/redux";
-import {shallowEqual} from "react-redux";
+import {Users, VideoConsumers} from "../../../lib/digitalstage/useStageContext/schema";
 import {Typography} from "@material-ui/core";
+import useStageSelector from "../../../lib/digitalstage/useStageSelector";
 
 const StageMemberView = (props: {
     stageMember: StageMember
 }) => {
     const [css] = useStyletron();
-    const users = useSelector<NormalizedState, Users>(state => state.users, shallowEqual);
-    const videoConsumers = useSelector<NormalizedState, VideoConsumers>(state => state.videoConsumers, shallowEqual);
+    const users = useStageSelector<Users>(state => state.users);
+    const videoConsumers = useStageSelector<VideoConsumers>(state => state.videoConsumers);
 
     const user = users.byId[props.stageMember.userId];
 
@@ -23,7 +22,10 @@ const StageMemberView = (props: {
             position: "relative",
             display: 'flex',
             width: '50vw',
-            background: 'radial-gradient(ellipse at center, rgba(125,126,125,0.2) 0%,rgba(0,0,0,1) 60%)',
+            backgroundImage: 'url("/images/white_logo.png")',
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "20%",
             "@media screen and (min-width: 800px)": {
                 width: '25vw',
             },
@@ -58,7 +60,7 @@ const StageMemberView = (props: {
                     })}>
                         <Avatar name={user.name}/>
                     </div>
-                    <Typography variant="h2">{user.name}</Typography>
+                    <Typography variant="h5">{user.name}</Typography>
                 </div>
                 <OnlineStatus overrides={{
                     position: "absolute",
