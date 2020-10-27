@@ -8,7 +8,6 @@ import {SocketContextProvider} from "../lib/digitalstage/useStageContext";
 import {RequestContextProvider} from "../lib/useRequest";
 import Head from 'next/head'
 import StageJoiner from "../components/layouts/StageJoiner";
-import LocalDeviceControl from '../components/layouts/LocalDeviceControl';
 import {AudioContextProvider} from "../lib/useAudioContext";
 import {CssBaseline, ThemeProvider} from '@material-ui/core';
 import MediasoupProvider from "../lib/digitalstage/useMediasoup";
@@ -49,17 +48,22 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                                                         <CssBaseline/>
                                                         <BaseProvider theme={darkMode ? DarkTheme : LightTheme}>
                                                             <style jsx global>{`
+                                                            @import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins:wght@600&display=swap');
+                                            @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
                                             @import("https://use.fontawesome.com/releases/v5.12.0/css/all.css");
                                             * {
                                                 box-sizing: border-box;
+                                            }
+                                            html {
+                                                height: 100%;
                                             }
                                             html, body {
                                                 margin: 0;
                                                 padding: 0;
                                                 width: 100%;
-                                                height: 100%;
                                             }
                                             body {
+                                                min-height: 100%;
                                                 font-family: var(--font-sans);
                                                 color: ${darkMode ? "#ffffff" : "#000000"};
                                                 background-color: ${darkMode ? "#343434" : "#ffffff"};

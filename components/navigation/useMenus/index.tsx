@@ -3,8 +3,9 @@ import useStageSelector from "../../../lib/digitalstage/useStageSelector";
 import {Stage} from "../../../lib/digitalstage/common/model.server";
 import React, {useCallback, useEffect, useState} from "react";
 import {DefaultSettingsMenu, DefaultStageMenu, DefaultUserSignedInMenu, DefaultUserSignedOutMenu} from "./defaultMenus";
-import {Delete, Overflow} from "baseui/icon";
-import Icon2 from "../../base/Icon2";
+import {Delete} from "baseui/icon";
+import GraphicEqIcon from '@material-ui/icons/GraphicEq';
+import ViewQuiltIcon from '@material-ui/icons/ViewQuilt';
 
 export interface NavItem {
     // LABEL HAS TO BE UNIQUE (!)
@@ -47,8 +48,13 @@ const useMenus = (): {
             setStageNav([
                 {
                     label: stage.name,
-                    icon: <Icon2 name="band-vocals"/>,
+                    icon: <ViewQuiltIcon />,
                     path: "/"
+                },
+                {
+                    label: "Mixer",
+                    icon: <GraphicEqIcon/>,
+                    path: "/mixer"
                 },
                 {
                     label: "Leave stage",

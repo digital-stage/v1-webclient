@@ -1,19 +1,20 @@
 import React from "react";
 import GroupView from "./GroupView";
-import {Groups} from "../../../lib/digitalstage/useStageContext/schema";
-import useStageSelector from "../../../lib/digitalstage/useStageSelector";
-import {Stage} from "../../../lib/digitalstage/common/model.server";
+import { useGroupsByStage} from "../../../lib/digitalstage/useStageSelector";
+import {Stage} from "../../../lib/digitalstage/useStageContext/model";
+import ConductorsView from "./ConductorsView";
 
 const StageView = (props: {
     stage: Stage
 }) => {
-    const groups = useStageSelector<Groups>(state => state.groups);
+    const groups = useGroupsByStage(props.stage._id);
 
     return (
         <div>
-            {groups.byStage[props.stage._id] && groups.byStage[props.stage._id].map(id => (
-                <GroupView key={id} group={groups.byId[id]}/>
+            {groups.map(group => (
+                <GroupView key={group._id} group={group}/>
             ))}
+            <ConductorsView />
         </div>
     )
 };

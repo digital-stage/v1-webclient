@@ -19,7 +19,7 @@ export interface AuthProps {
         avatarUrl?: string;
     }): Promise<any>;
 
-    signInWithEmailAndPassword(email: string, password: string): Promise<any>;
+    signInWithEmailAndPassword(email: string, password: string, staySignedIn?: boolean): Promise<any>;
 
     requestPasswordReset(email: string): Promise<any>;
 
@@ -83,7 +83,7 @@ export const AuthContextProvider = (props: {
             });
     }, []);
 
-    const signInWithEmailAndPassword = useCallback((email: string, password: string) => {
+    const signInWithEmailAndPassword = useCallback((email: string, password: string, staySignedIn?: boolean) => {
         setLoading(true);
         return fetch(process.env.NEXT_PUBLIC_AUTH_URL + "/login", {
             headers: {
@@ -104,7 +104,7 @@ export const AuthContextProvider = (props: {
                 .then(user => {
                     setUser(user);
                     setToken(token);
-                    cookie.set('token', token, {expires: 7});
+                    cookie.set('token', token, {expires: staySignedIn ? 7 : 1});
                 }))
             .catch(error => reportError(error.message))
             .finally(() => {

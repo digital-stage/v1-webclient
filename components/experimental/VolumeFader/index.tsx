@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
-import LevelMeter from "./LevelMeter";
+import LevelMeter from "../LevelMeter";
 import {styled} from "baseui";
 import {IAnalyserNode, IAudioContext} from "standardized-audio-context";
 import VolumeSlider from "./VolumeSlider";
 import {Input} from "@material-ui/core";
-import {calculateDbMeasurement, Infinity} from "./util";
+import {calculateDbMeasurement, DbMeasurement, Infinity} from "./util";
 
 const Wrapper = styled("div", {
     position: "relative",
@@ -55,7 +55,7 @@ const VolumeFader = (
     }
 ) => {
     const [value, setValue] = useState<number>(props.volume);
-    const [dbMeasurement, setDbMeasurement] = useState<number | Infinity>();
+    const [dbMeasurement, setDbMeasurement] = useState<DbMeasurement>();
 
     useEffect(() => {
         setValue(props.volume);
@@ -71,7 +71,7 @@ const VolumeFader = (
                 <SliderContainer>
                     <VolumeSlider
                         min={0}
-                        max={1}
+                        max={2}
                         step={0.05}
                         color={props.sliderColor}
                         colorize={props.colorize}
