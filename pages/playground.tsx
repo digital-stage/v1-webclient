@@ -1,7 +1,6 @@
 import React, {useState} from "react";
-import {calculateDbMeasurement, formatDbMeasurement} from "../components/experimental/VolumeFader/util";
 import {styled, useStyletron} from "styletron-react";
-import LogSlider from "../components/experimental/LogSlider";
+import LogSlider from "../components/experimental/audio/LogSlider";
 
 const Wrapper = styled("div", {
     height: "200px"
@@ -23,10 +22,7 @@ const Playground = () => {
                 max={4}
                 onChange={volume => setVolume(volume)}
                 width={20}
-            />
-            <p>
-                {formatDbMeasurement(calculateDbMeasurement(volume))} dB
-            </p>
+            />x
             <Wrapper>
                 <LogSlider
                     vertical={true}

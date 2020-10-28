@@ -1,13 +1,17 @@
-import {getTrackBackground, Range} from "react-range";
+import {Direction, getTrackBackground, Range} from "react-range";
 import React from "react";
 import {styled, useStyletron} from "styletron-react";
 import {RGBColor} from "./index";
 
 const Wrapper = styled("div", {
-    width: "100%"
+    display: 'flex',
+    alignItems: 'center',
+    height: '100%',
+    flexDirection: 'column',
+    boxSizing: "border-box"
 });
 
-const HorizontalSlider = (props: {
+const VerticalSlider = (props: {
     min: number;
     max: number;
     step: number;
@@ -17,6 +21,7 @@ const HorizontalSlider = (props: {
     color: RGBColor;
     width: number;
     text?: string;
+    showMarks?: boolean;
 }) => {
     const [css] = useStyletron();
 
@@ -24,6 +29,7 @@ const HorizontalSlider = (props: {
     return (
         <Wrapper>
             <Range
+                direction={Direction.Up}
                 step={props.step}
                 min={props.min}
                 max={props.max}
@@ -33,22 +39,33 @@ const HorizontalSlider = (props: {
                     if (props.onFinalChange)
                         props.onFinalChange(values[0]);
                 }}
+                renderMark={({props: markProps, index}) => (
+                    <div
+                        {...markProps}
+                        className={css({
+                            ...markProps.style,
+                            height: index % 2 ? '1px' : '2px',
+                            width: index % 2 ? (props.width / 2) + "px" : props.width + "px",
+                            backgroundColor: index * props.step > props.max - props.value ? solidColor : 'rgba(255,255,255,0.2)'
+                        })}
+                    />
+                )}
                 renderTrack={({props: trackProps, children}) => (
                     <div
                         onMouseDown={trackProps.onMouseDown}
                         onTouchStart={trackProps.onTouchStart}
                         className={css({
                             ...trackProps.style,
-                            height: props.width + "px",
+                            flexGrow: 1,
                             display: 'flex',
-                            width: '100%'
+                            height: '100%'
                         })}
                     >
                         <div
                             ref={trackProps.ref}
                             className={css({
-                                height: props.width + "px",
-                                width: '100%',
+                                width: props.width + "px",
+                                height: '100%',
                                 borderWidth: "1px",
                                 borderStyle: "solid",
                                 borderColor: solidColor,
@@ -56,14 +73,16 @@ const HorizontalSlider = (props: {
                                     values: [props.value],
                                     colors: ["rgba(255,255,255,0.2)", "transparent"],
                                     min: props.min,
-                                    max: props.max
+                                    max: props.max,
+                                    direction: Direction.Up
                                 }),
                                 ":hover": {
                                     background: getTrackBackground({
                                         values: [props.value],
                                         colors: [`rgba(${props.color[0]},${props.color[1]},${props.color[2]},0.6)`, "transparent"],
                                         min: props.min,
-                                        max: props.max
+                                        max: props.max,
+                                        direction: Direction.Up
                                     })
                                 },
                                 alignSelf: 'center'
@@ -122,4 +141,4 @@ const HorizontalSlider = (props: {
         </Wrapper>
     );
 }
-export default HorizontalSlider;
+export default VerticalSlider;

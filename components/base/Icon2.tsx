@@ -17,11 +17,9 @@ const Icon2 = (props: {
 
     return (
         <Svg
-            className={css({
-                width: `${props.size || 24}px`,
-                height: `${props.size || 24}px`,
-            })}
-            viewBox={`0 0 ${props.size || 24} ${props.size || 24}`}
+            width={props.size || 24}
+            height={props.size || 24}
+            viewBox={`0 0 24 24`}
             xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
             onClick={props.onClick}

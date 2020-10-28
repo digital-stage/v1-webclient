@@ -6,9 +6,7 @@
     "dev": "NODE_ENV=development next dev",
     "build": "NODE_ENV=production next build",
     "start": "next start",
-    "deploy": "vercel --prod",
-    "lint": "eslint ./components/** ./pages/** -c .eslintrc.json --ext js,jsx,ts,tsx",
-    "lint-fix": "eslint ./components/** ./pages/** -c .eslintrc.json --fix --ext js,jsx,ts,tsx"
+    "deploy": "vercel --prod"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",

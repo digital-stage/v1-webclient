@@ -1,8 +1,7 @@
-import Input from "@material-ui/core/Input";
 import React, {useCallback, useEffect, useState} from "react";
-import {calculateDbMeasurement, dbMeasurementToRange, formatDbMeasurement} from "../VolumeFader/util";
 import HorizontalSlider from "./HorizontalSlider";
 import VerticalSlider from "./VerticalSlider";
+import {convertRangeToDbMeasure, formatDbMeasure} from "./utils";
 
 export type RGBColor = [number, number, number];
 
@@ -33,7 +32,7 @@ const LogSlider = (props: {
     middle: number;
     max: number;
     color: RGBColor;
-    onChange: (volume: number) => any;
+    onChange?: (volume: number) => any;
     onEnd?: (volume: number) => any;
     width: number;
     vertical?: boolean;
@@ -61,13 +60,22 @@ const LogSlider = (props: {
 
     useEffect(() => {
         setValue(convertLogToLinear(props.volume));
-        setDbValue(calculateDbMeasurement(props.volume));
+        setDbValue(convertRangeToDbMeasure(props.volume));
     }, [props.volume])
 
     const handleSliderChange = useCallback((value: number) => {
-        props.onChange(convertLinearToLog(value));
-    }, [])
+        if (props.onChange) {
+            const volume = convertLinearToLog(value);
+            props.onChange(volume);
+        }
+    }, [props.onChange])
 
+    const handleFinalSliderChange = useCallback((value: number) => {
+        if (props.onEnd) {
+            const volume = convertLinearToLog(value);
+            props.onEnd(volume);
+        }
+    }, [props.onEnd])
 
     if (props.vertical) {
         return (
@@ -77,41 +85,28 @@ const LogSlider = (props: {
                 step={STEP}
                 value={value}
                 onChange={handleSliderChange}
+                onFinalChange={handleFinalSliderChange}
                 color={props.color}
                 width={props.width}
-                text={formatDbMeasurement(dbValue)}
+                text={formatDbMeasure(dbValue)}
+                showMarks={true}
             />
         )
     }
 
     return (
-        <>
-            <HorizontalSlider
-                min={MIN}
-                max={MAX}
-                step={STEP}
-                value={value}
-                onChange={handleSliderChange}
-                color={props.color}
-                width={props.width}
-                text={formatDbMeasurement(dbValue)}
-            />
-            <Input
-                type="number"
-                value={dbValue.toPrecision(2)}
-                onChange={event => {
+        <HorizontalSlider
+            min={MIN}
+            max={MAX}
+            step={STEP}
+            value={value}
+            onChange={handleSliderChange}
+            onFinalChange={handleFinalSliderChange}
+            color={props.color}
+            width={props.width}
+            text={formatDbMeasure(dbValue)}
 
-                    const value = parseInt(event.currentTarget.defaultValue);
-                    if (value !== Number.NaN) {
-                        console.log(props.volume);
-                        const y = dbMeasurementToRange(value);
-                        console.log(y);
-
-                    }
-                }}
-            />
-            <p>Internal: {value}</p>
-        </>
+        />
     )
 };
 

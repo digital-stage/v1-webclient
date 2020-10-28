@@ -20,7 +20,7 @@ const LocalDeviceControl = () => {
             <div className={css({
                 display: "flex",
                 width: "50vw",
-                maxWidth: "500px",
+                maxWidth: "160px",
                 justifyContent: "space-between",
                 alignItems: "space-between",
                 color: "white",

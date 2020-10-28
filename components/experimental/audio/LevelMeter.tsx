@@ -1,6 +1,6 @@
 import React, {useRef} from "react";
 import {IAnalyserNode, IAudioContext} from "standardized-audio-context";
-import useAnimationFrame from "../../lib/useAnimationFrame";
+import useAnimationFrame from "../../../lib/useAnimationFrame";
 import {styled} from "baseui";
 
 const Canvas = styled("canvas", {
