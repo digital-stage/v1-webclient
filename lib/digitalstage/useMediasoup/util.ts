@@ -1,6 +1,5 @@
 import mediasoupClient from 'mediasoup-client';
 import {Router, StageMemberAudioProducer, StageMemberVideoProducer} from "../common/model.server";
-import * as https from "https";
 
 export enum RouterEvents {
     TransportCloses = "transport-closed",
@@ -70,18 +69,20 @@ export const fetchGet = <T>(url: string): Promise<T> => {
 };
 
 export const getUrl = (router: Router, path?: string): string => {
-    const protocol = process.env.NEXT_PUBLIC_USE_SSL === "true" ? "https" : "http";
-    return `${protocol + router.url}:${router.port}${path || ""}`;
+    return "https://" + router.url + ":" + router.port + (path ? path : "");
 }
 
 export const getFastestRouter = (): Promise<Router> => {
-    return fetchGet<Router[]>(`${process.env.NEXT_PUBLIC_ROUTERS_URL}/routers`)
+    return fetchGet<Router[]>(process.env.NEXT_PUBLIC_ROUTERS_URL + "/routers")
         .then(routers => {
             if (routers && routers.length > 0) {
                 return routers[0];
-            }
-            throw new Error("No routers available");
-        });
+            } else
+                throw new Error("No routers available");
+        })
+        .catch(() => {
+            throw new Error("Routingservice not available")
+        })
 };
 
 
@@ -130,6 +131,7 @@ export const createWebRTCTransport = (socket: SocketIOClient.Socket, device: med
 };
 
 export const createProducer = (transport: mediasoupClient.types.Transport, track: MediaStreamTrack): Promise<mediasoupClient.types.Producer> => {
+    //TODO: Fix this, TypeError: Cannot read property 'produce' of undefined
     return transport
         .produce({
             track: track,

@@ -2,24 +2,21 @@ import {useStyletron} from "baseui";
 import React, {useEffect, useState} from "react";
 import {Layer} from "baseui/layer";
 import {
-    MainNavItem,
     NO_USER_NAV,
     SHOW_ALL_STAGES,
     SHOW_LOCAL_AND_REMOTE_DEVICES, SHOW_LOCAL_DEVICE_ONLY,
     USER_NAV,
-    UserNavItem
 } from "./navs";
-import {isActive, renderItem} from "./util";
 import {
-    Unstable_AppNavBar as AppNavBar
+    AppNavBar, NavItemT
 } from 'baseui/app-nav-bar';
 import {useRouter} from "next/router";
 import TextLink from "../theme/TextLink";
 import {Delete, Filter} from "baseui/icon";
 import {useAuth} from "../../../../lib/digitalstage/useAuth";
-import {Devices, NormalizedState, Stages} from "../../../../lib/digitalstage/useStageContext/schema";
-import {useSelector} from "../../../../lib/digitalstage/useStageContext/redux";
+import {Devices, Stages} from "../../../../lib/digitalstage/useStageContext/schema";
 import {LocalUser} from "../../../../lib/digitalstage/useStageContext/model";
+import useStageSelector from "../../../../lib/digitalstage/useStageSelector";
 
 
 const AppNavigation = () => {
@@ -32,50 +29,47 @@ const AppNavigation = () => {
         left: '0',
     });
     const {user: authUser} = useAuth();
-    const [mainNav, setMainNav] = useState<MainNavItem[]>([]);
-    const [userNav, setUserNav] = useState<UserNavItem[]>([]);
-    const [activeNavItem, setActiveNavItem] = useState<MainNavItem>();
+    const [mainNav, setMainNav] = useState<NavItemT[]>([]);
+    const [userNav, setUserNav] = useState<NavItemT[]>([]);
+    const [activeNavItem, setActiveNavItem] = useState<NavItemT>();
 
     const router = useRouter();
-    const stageId = useSelector<NormalizedState, string | undefined>(state => state.stageId);
-    const stages = useSelector<NormalizedState, Stages>(state => state.stages);
-    const user = useSelector<NormalizedState, LocalUser | undefined>(state => state.user);
-    const devices = useSelector<NormalizedState, Devices>(state => state.devices);
+    const stageId = useStageSelector<string | undefined>(state => state.stageId);
+    const stages = useStageSelector<Stages>(state => state.stages);
+    const user = useStageSelector<LocalUser | undefined>(state => state.user);
+    const devices = useStageSelector<Devices>(state => state.devices);
 
     useEffect(() => {
-        setActiveNavItem(mainNav.find(nav => nav.item.path === router.pathname));
+        let activeNavItem = mainNav.find(nav => nav.info.path === router.pathname);
+        if (!activeNavItem)
+            activeNavItem = userNav.find(nav => nav.info.path === router.pathname);
+        setActiveNavItem(activeNavItem);
     }, [router.pathname])
 
     useEffect(() => {
         if (user) {
-            const nav: MainNavItem[] = [];
+            const nav: NavItemT[] = [];
             if (stageId) {
                 nav.push({
                     icon: () => <img src="crop_landscape-24px.svg"/>,
-                    item: {
-                        label: stages.byId[stageId].name,
+                    label: stages.byId[stageId].name,
+                    info: {
                         path: '/'
-                    },
-                    mapItemToNode: renderItem,
-                    mapItemToString: renderItem,
+                    }
                 });
                 nav.push({
                     icon: () => <Filter/>,
-                    item: {
-                        label: "Mischpult",
+                    label: "Mischpult",
+                    info: {
                         path: '/mixer'
-                    },
-                    mapItemToNode: renderItem,
-                    mapItemToString: renderItem,
+                    }
                 });
                 nav.push({
                     icon: () => <Delete/>,
-                    item: {
-                        label: stages.byId[stageId].name + " verlassen",
+                    label: stages.byId[stageId].name + " verlassen",
+                    info: {
                         path: '/leave'
-                    },
-                    mapItemToNode: renderItem,
-                    mapItemToString: renderItem,
+                    }
                 });
             }
             nav.push(SHOW_ALL_STAGES);
@@ -92,23 +86,21 @@ const AppNavigation = () => {
         }
     }, [user, stageId, stages.byId, devices.remote])
 
+    if(authUser)
     return (
         <Layer>
             <div className={containerStyles}>
                 <AppNavBar
-                    appDisplayName={<TextLink hideUnderline={true} href={"/"}>Digital Stage</TextLink>}
-                    mainNav={mainNav}
-                    isNavItemActive={({item}: any) => {
-                        return (item.item.path && router.pathname === item.item.path) || isActive(mainNav, item, activeNavItem);
-                    }}
-                    onNavItemSelect={({item}: any) => {
+                    title={<TextLink hideUnderline={true} href={"/"}>Digital Stage</TextLink>}
+                    mainItems={mainNav}
+                    onMainItemSelect={(item) => {
                         if (item === activeNavItem) return;
                         setActiveNavItem(item);
-                        if (item.item.path) {
-                            router.push(item.item.path);
+                        if (item.info && item.info.path) {
+                            router.push(item.info.path);
                         }
                     }}
-                    userNav={userNav}
+                    userItems={userNav}
                     username={user && user.name}
                     usernameSubtitle={authUser && authUser.email}
                     userImgUrl={user && user.avatarUrl}
@@ -116,5 +108,6 @@ const AppNavigation = () => {
             </div>
         </Layer>
     );
+    return null;
 };
 export default AppNavigation;

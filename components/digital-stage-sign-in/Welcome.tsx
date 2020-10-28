@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, createStyles, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
 import Button from "../base/Button";
+import Link from "next/link";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -47,10 +48,12 @@ const Welcome = () => {
                 </Grid>
                 <Grid container={true} direction='column' alignContent="center" alignItems="center">
                     <Typography variant="h3" className={classes.text}>Welcome back</Typography>
-                    <Button
-                        color="light"
-                        text="Sign in"
-                    />
+                    <Link href='/account/login'>
+                        <Button
+                            color="light"
+                            text="Sign in"
+                        />
+                    </Link>
                     <Typography variant="h6" className={`${classes.text} ${classes.center}`}>Sign into account or <br /> create a new one</Typography>
                 </Grid>
                 <Typography variant="h6" className={classes.text}>Version 0.00001</Typography>

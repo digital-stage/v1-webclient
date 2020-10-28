@@ -1,5 +1,5 @@
 import {
-    CustomGroupId, CustomStageMemberAudioProducerId, CustomStageMemberId,
+    CustomGroupId, CustomStageMemberAudioProducerId, CustomStageMemberId, CustomStageMemberOvTrackId,
     Device,
     DeviceId,
     GroupId,
@@ -13,16 +13,23 @@ import {ThreeDimensionAudioProperties} from "./common/model.utils";
 import {useCallback} from "react";
 import {
     AddCustomGroupPayload,
+    AddCustomStageMemberAudioPayload, AddCustomStageMemberOvPayload,
+    AddCustomStageMemberPayload,
     AddGroupPayload,
     AddStagePayload,
-    ChangeGroupPayload,
-    ChangeStageMemberAudioProducerPayload,
+    ChangeGroupPayload, ChangeStageMemberAudioProducerPayload,
     ChangeStageMemberOvTrackPayload,
     ChangeStageMemberPayload,
     ChangeStagePayload,
-    JoinStagePayload, RemoveCustomGroupPayload,
-    SetCustomGroupPayload, SetCustomStageMemberAudioProducerPayload, SetCustomStageMemberOvTrackPayload,
-    SetCustomStageMemberPayload, UpdateCustomGroupPayload
+    JoinStagePayload,
+    RemoveCustomGroupPayload,
+    RemoveCustomStageMemberAudioPayload, RemoveCustomStageMemberOvPayload,
+    RemoveCustomStageMemberPayload,
+    SetCustomGroupPayload, SetCustomStageMemberAudioPayload, SetCustomStageMemberOvPayload,
+    SetCustomStageMemberPayload,
+    UpdateCustomGroupPayload,
+    UpdateCustomStageMemberAudioPayload, UpdateCustomStageMemberOvPayload,
+    UpdateCustomStageMemberPayload
 } from "./common/payloads";
 import {ClientDeviceEvents, ClientStageEvents, ClientUserEvents} from "./common/events";
 import {useRequest} from "../useRequest";
@@ -45,40 +52,21 @@ export interface StageActionsProps {
     leaveStageForGood(id: StageId);
 
     // Customized group
-    addCustomGroup(groupId: GroupId, volume: number);
-
-    updateCustomGroup(customGroupId: CustomGroupId, volume: number);
-
-    //setCustomGroupVolume(groupId: GroupId, volume: number);
+    setCustomGroup(groupId: GroupId, volume: number);
 
     removeCustomGroup(customGroupId: GroupId);
 
-    //removeCustomGroupVolume(customGroupId: CustomGroupId);
+    setCustomStageMember(stageMemberId: StageMemberId, update: Partial<ThreeDimensionAudioProperties>);
 
-    /*
-    // Customized stage member
-    addCustomStageMember(stageMemberId: StageMemberId, initial: Partial<ThreeDimensionAudioProperties>);
-    */
-    updateCustomStageMember(customStageMemberId: CustomStageMemberId, update: Partial<ThreeDimensionAudioProperties>);
-/*
     removeCustomStageMember(customStageMemberId: CustomStageMemberId);
 
+    setCustomStageMemberAudio(stageMemberAudioId: StageMemberAudioProducerId, update: Partial<ThreeDimensionAudioProperties>);
 
-    // Customized stage member audio
-    addCustomStageMemberAudio(stageMemberId: StageMemberId, initial: Partial<ThreeDimensionAudioProperties>);
+    removeCustomStageMemberAudio(customStageMemberAudioId: CustomStageMemberAudioProducerId);
 
-    updateCustomStageMemberAudio(stageMemberAudioProducerId: StageMemberAudioProducerId, update: Partial<ThreeDimensionAudioProperties>);
+    setCustomStageMemberOv(stageMemberOvId: StageMemberOvTrackId, update: Partial<ThreeDimensionAudioProperties>);
 
-    removeCustomStageMemberAudio(stageMemberAudioProducerId: StageMemberAudioProducerId);
-
-
-    // Customized stage member ov track
-    addCustomStageMemberOvTrack(stageMemberOvTrackId: StageMemberOvTrackId, initial: Partial<ThreeDimensionAudioProperties>);
-
-    updateCustomStageMemberOvTrack(stageMemberAudioProducerId: CustomStageMemberAudioProducerId, update: Partial<ThreeDimensionAudioProperties>);
-
-    removeCustomStageMemberOvTrack(stageMemberAudioProducerId: CustomStageMemberAudioProducerId);
-    */
+    removeCustomStageMemberOv(customStageMemberOvId: CustomStageMemberOvTrackId);
 
     // Admin only
     updateStage(id: StageId, stage: Partial<Server.Stage>);
@@ -95,9 +83,9 @@ export interface StageActionsProps {
         isDirector: boolean;
     } & ThreeDimensionAudioProperties>);
 
-    //updateStageMemberAudio(id: StageMemberAudioProducerId, update: Partial<ThreeDimensionAudioProperties>);
+    updateStageMemberAudio(id: StageMemberAudioProducerId, update: Partial<ThreeDimensionAudioProperties>);
 
-    //updateStageMemberOvTrack(id: StageMemberOvTrackId, update: Partial<ThreeDimensionAudioProperties>);
+    updateStageMemberOv(id: StageMemberOvTrackId, update: Partial<ThreeDimensionAudioProperties>);
 }
 
 const useStageActions = (): StageActionsProps => {
@@ -230,42 +218,13 @@ const useStageActions = (): StageActionsProps => {
         }
     }, [socket]);
 
-    const addCustomGroup = useCallback((groupId: GroupId, volume: number) => {
+    const updateStageMemberOv = useCallback((id: StageMemberOvTrackId, update: Partial<ThreeDimensionAudioProperties>) => {
         if (socket) {
-            const payload: AddCustomGroupPayload = {
-                groupId: groupId,
-                volume: volume
-            }
-            socket.emit(ClientStageEvents.ADD_CUSTOM_GROUP, payload);
-        }
-    }, [socket]);
-
-    const updateCustomGroup = useCallback((customGroupId: GroupId, volume: number) => {
-        if (socket) {
-            const payload: UpdateCustomGroupPayload = {
-                customGroupId: customGroupId,
-                volume: volume
-            }
-            socket.emit(ClientStageEvents.UPDATE_CUSTOM_GROUP, payload);
-        }
-    }, [socket]);
-
-    const removeCustomGroup = useCallback((customGroupId: GroupId) => {
-        if (socket) {
-            const payload: RemoveCustomGroupPayload = {
-                customGroupId: customGroupId
-            }
-            socket.emit(ClientStageEvents.REMOVE_CUSTOM_GROUP, payload);
-        }
-    }, [socket]);
-
-    const setCustomStageMember = useCallback((stageMemberId: StageMemberId, update: Partial<ThreeDimensionAudioProperties>) => {
-        if (socket) {
-            const payload: SetCustomStageMemberPayload = {
-                stageMemberId: stageMemberId,
+            const payload: ChangeStageMemberOvTrackPayload = {
+                id: id,
                 update: update
             }
-            socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER, payload);
+            socket.emit(ClientStageEvents.CHANGE_STAGE_MEMBER_OV, payload);
         }
     }, [socket]);
 
@@ -279,19 +238,103 @@ const useStageActions = (): StageActionsProps => {
         }
     }, [socket]);
 
-    const updateStageMemberTrack = useCallback((id: StageMemberOvTrackId, update: Partial<ThreeDimensionAudioProperties>) => {
+    const addCustomGroup = useCallback((groupId: GroupId, volume: number) => {
         if (socket) {
-            const payload: ChangeStageMemberOvTrackPayload = {
+            const payload: AddCustomGroupPayload = {
+                groupId: groupId,
+                volume: volume
+            }
+            socket.emit(ClientStageEvents.ADD_CUSTOM_GROUP, payload);
+        }
+    }, [socket]);
+
+    const updateCustomGroup = useCallback((id: CustomGroupId, volume: number) => {
+        if (socket) {
+            const payload: UpdateCustomGroupPayload = {
+                id: id,
+                volume: volume
+            }
+            socket.emit(ClientStageEvents.UPDATE_CUSTOM_GROUP, payload);
+        }
+    }, [socket]);
+
+    const setCustomGroup = useCallback((groupId: GroupId, volume: number) => {
+        if (socket) {
+            const payload: SetCustomGroupPayload = {
+                groupId: groupId,
+                volume: volume
+            }
+            socket.emit(ClientStageEvents.SET_CUSTOM_GROUP, payload);
+        }
+    }, [socket]);
+
+    const removeCustomGroup = useCallback((id: GroupId) => {
+        if (socket) {
+            const payload: RemoveCustomGroupPayload = id;
+            socket.emit(ClientStageEvents.REMOVE_CUSTOM_GROUP, payload);
+        }
+    }, [socket]);
+
+    const addCustomStageMember = useCallback((stageMemberId: StageMemberId, initial: Partial<ThreeDimensionAudioProperties>) => {
+        if (socket) {
+            const payload: AddCustomStageMemberPayload = {
+                ...initial,
+                stageMemberId: stageMemberId
+            }
+            socket.emit(ClientStageEvents.ADD_CUSTOM_STAGE_MEMBER, payload);
+        }
+    }, [socket]);
+
+    const updateCustomStageMember = useCallback((id: CustomStageMemberId, update: Partial<ThreeDimensionAudioProperties>) => {
+        if (socket) {
+            const payload: UpdateCustomStageMemberPayload = {
                 id: id,
                 update: update
             }
-            socket.emit(ClientStageEvents.CHANGE_STAGE_MEMBER_OV, payload);
+            socket.emit(ClientStageEvents.UPDATE_CUSTOM_STAGE_MEMBER, payload);
+        }
+    }, [socket]);
+
+    const setCustomStageMember = useCallback((stageMemberId: StageMemberId, update: Partial<ThreeDimensionAudioProperties>) => {
+        if (socket) {
+            const payload: SetCustomStageMemberPayload = {
+                stageMemberId: stageMemberId,
+                update: update
+            }
+            socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER, payload);
+        }
+    }, [socket]);
+
+    const removeCustomStageMember = useCallback((id: GroupId) => {
+        if (socket) {
+            const payload: RemoveCustomStageMemberPayload = id;
+            socket.emit(ClientStageEvents.REMOVE_CUSTOM_STAGE_MEMBER, payload);
+        }
+    }, [socket]);
+
+    const addCustomStageMemberAudio = useCallback((stageMemberAudioId: StageMemberAudioProducerId, initial: Partial<ThreeDimensionAudioProperties>) => {
+        if (socket) {
+            const payload: AddCustomStageMemberAudioPayload = {
+                ...initial,
+                stageMemberAudioId: stageMemberAudioId
+            }
+            socket.emit(ClientStageEvents.ADD_CUSTOM_STAGE_MEMBER_AUDIO, payload);
+        }
+    }, [socket]);
+
+    const updateCustomStageMemberAudio = useCallback((id: CustomStageMemberAudioProducerId, update: Partial<ThreeDimensionAudioProperties>) => {
+        if (socket) {
+            const payload: UpdateCustomStageMemberAudioPayload = {
+                id: id,
+                update: update
+            }
+            socket.emit(ClientStageEvents.UPDATE_CUSTOM_STAGE_MEMBER_AUDIO, payload);
         }
     }, [socket]);
 
     const setCustomStageMemberAudio = useCallback((stageMemberAudioId: StageMemberAudioProducerId, update: Partial<ThreeDimensionAudioProperties>) => {
         if (socket) {
-            const payload: SetCustomStageMemberAudioProducerPayload = {
+            const payload: SetCustomStageMemberAudioPayload = {
                 stageMemberAudioId: stageMemberAudioId,
                 update: update
             }
@@ -299,10 +342,39 @@ const useStageActions = (): StageActionsProps => {
         }
     }, [socket]);
 
-
-    const setCustomStageMemberTrack = useCallback((stageMemberOvTrackId: StageMemberOvTrackId, update: Partial<ThreeDimensionAudioProperties>) => {
+    const removeCustomStageMemberAudio = useCallback((id: GroupId) => {
         if (socket) {
-            const payload: SetCustomStageMemberOvTrackPayload = {
+            const payload: RemoveCustomStageMemberAudioPayload = id;
+            socket.emit(ClientStageEvents.REMOVE_CUSTOM_STAGE_MEMBER_AUDIO, payload);
+        }
+    }, [socket]);
+
+    const addCustomStageMemberOv = useCallback((stageMemberOvTrackId: StageMemberOvTrackId, initial: Partial<ThreeDimensionAudioProperties> & {
+        gain: number;
+        directivity: "omni" | "cardioid"
+    }) => {
+        if (socket) {
+            const payload: AddCustomStageMemberOvPayload = {
+                ...initial,
+                stageMemberOvTrackId: stageMemberOvTrackId
+            }
+            socket.emit(ClientStageEvents.ADD_CUSTOM_STAGE_MEMBER_AUDIO, payload);
+        }
+    }, [socket]);
+
+    const updateCustomStageMemberOv = useCallback((id: CustomStageMemberOvTrackId, update: Partial<ThreeDimensionAudioProperties>) => {
+        if (socket) {
+            const payload: UpdateCustomStageMemberOvPayload = {
+                id: id,
+                update: update
+            }
+            socket.emit(ClientStageEvents.UPDATE_CUSTOM_STAGE_MEMBER_OV, payload);
+        }
+    }, [socket]);
+
+    const setCustomStageMemberOv = useCallback((stageMemberOvTrackId: StageMemberOvTrackId, update: Partial<ThreeDimensionAudioProperties>) => {
+        if (socket) {
+            const payload: SetCustomStageMemberOvPayload = {
                 stageMemberOvTrackId: stageMemberOvTrackId,
                 update: update
             }
@@ -310,6 +382,12 @@ const useStageActions = (): StageActionsProps => {
         }
     }, [socket]);
 
+    const removeCustomStageMemberOv = useCallback((id: GroupId) => {
+        if (socket) {
+            const payload: RemoveCustomStageMemberOvPayload = id;
+            socket.emit(ClientStageEvents.REMOVE_CUSTOM_STAGE_MEMBER_OV, payload);
+        }
+    }, [socket]);
 
     return {
         // Methods
@@ -324,15 +402,16 @@ const useStageActions = (): StageActionsProps => {
         updateGroup,
         removeGroup,
         updateStageMember,
-        addCustomGroup: addCustomGroup,
-        updateCustomGroup: updateCustomGroup,
+        setCustomGroup: setCustomGroup,
         removeCustomGroup: removeCustomGroup,
-        updateCustomStageMember: setCustomStageMember,
-        //setCustomStageMember: setCustomStageMember,
-        //updateStageMemberAudio: updateStageMemberAudio,
-        //setCustomStageMemberAudio: setCustomStageMemberAudio,
-        //updateStageMemberTrack: updateStageMemberTrack,
-        //setCustomStageMemberTrack: setCustomStageMemberTrack,
+        setCustomStageMember: setCustomStageMember,
+        removeCustomStageMember: removeCustomStageMember,
+        setCustomStageMemberAudio: setCustomStageMemberAudio,
+        removeCustomStageMemberAudio: removeCustomStageMemberAudio,
+        setCustomStageMemberOv: setCustomStageMemberOv,
+        removeCustomStageMemberOv: removeCustomStageMemberOv,
+        updateStageMemberAudio: updateStageMemberAudio,
+        updateStageMemberOv: updateStageMemberOv,
         leaveStageForGood: leaveStageForGood
     }
 }

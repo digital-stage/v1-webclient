@@ -13,6 +13,7 @@ import {enumerateDevices} from "./utils";
 import {Device} from "../common/model.server";
 import allActions from "./redux/actions";
 import {useDispatch} from "./redux";
+import {useErrors} from "../../useErrors";
 
 export interface SocketContextProps {
     socket?: SocketIOClient.Socket;
@@ -28,6 +29,7 @@ export const SocketContextProvider = (props: {
     const {token} = useAuth();
     const [socket, setSocket] = useState<SocketIOClient.Socket>(null);
     const dispatch = useDispatch();
+    const {reportError} = useErrors();
 
     const registerSocketHandlers = useCallback((socket) => {
         console.log("[useStages] Registering socket handlers");
@@ -191,6 +193,8 @@ export const SocketContextProvider = (props: {
                             name: browser + " (" + os + ")",
                             canAudio: devices.inputAudioDevices.length > 0,
                             canVideo: devices.inputVideoDevices.length > 0,
+                            receiveVideo: true,
+                            receiveAudio: true,
                             inputAudioDevices: devices.inputAudioDevices,
                             inputVideoDevices: devices.inputVideoDevices,
                             outputAudioDevices: devices.outputAudioDevices,
@@ -212,11 +216,12 @@ export const SocketContextProvider = (props: {
 
                 setSocket(socket);
                 console.log("[useStageContext] Created socket connection!");
-            });
+            })
+            .catch(error => reportError(error.message))
     }, [token]);
 
     useEffect(() => {
-        if( socket ) {
+        if (socket) {
             return () => {
                 console.log("[useStageContext] Closing socket connection...");
                 socket.removeAllListeners();

@@ -1,6 +1,7 @@
 import React, {Context, createContext, useCallback, useContext, useEffect, useState} from "react";
 import {AudioContext as RealAudioContext, IAudioContext} from "standardized-audio-context";
 import webAudioTouchUnlock from "./webAudioTouchUnlock";
+import {useErrors} from "../useErrors";
 
 interface AudioContextProps {
     audioContext?: IAudioContext,
@@ -14,6 +15,8 @@ export const AudioContextProvider = (props: {
     children: React.ReactNode
 }) => {
     const [context, setContext] = useState<IAudioContext>(undefined);
+    const {reportError} = useErrors();
+
     const createAudioContext = useCallback(async () => {
         if (context) {
             return context;
@@ -24,7 +27,8 @@ export const AudioContextProvider = (props: {
         return webAudioTouchUnlock(audioContext)
             .then((unlocked: boolean) => {
                 return audioContext;
-            });
+            })
+            .catch(error => reportError(error.message));
     }, []);
 
     useEffect(() => {
@@ -33,9 +37,7 @@ export const AudioContextProvider = (props: {
                 console.log("Audio engine initialized");
                 setContext(audioContext);
             })
-            .catch(() => {
-                console.error("eerror")
-            })
+            .catch(error => reportError(error.message))
     }, []);
 
     return (

@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
-  Link,
-  Grid,
   Container,
-  IconButton,
-  Icon,
   makeStyles,
-  Typography
 } from "@material-ui/core";
 
 import validator from 'validator';
 import Input from "../base/Input";
 import Button from "../base/Button";
-import {useAuth} from "../../lib/digitalstage/useAuth";
+import { useAuth } from "../../lib/digitalstage/useAuth";
+import Alert from "../base/Alert";
+import ResetLinkModal from "./ResetLinkModal";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -22,37 +19,11 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center"
   },
   back: {
-    color: "white",
     padding: theme.spacing(0),
     marginTop: theme.spacing(0),
   },
-  form: {
-    width: "70%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  input1: {
-    background: "white",
-    borderRadius: "25px",
-    color: "white",
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-    borderRadius: "25px",
-  },
-  buttonGroup: {
-    borderRadius: "50px",
-    margin: theme.spacing(2, 0, 2, 0),
-  },
-  iconButton: {
-    backgroundColor: "#897FE4",
-    width: "36px",
-    height: "36px",
-    borderRadius: "20px",
-  },
-  icon: {
-    color: "#fff",
-    fontSize: "20px",
-    marginTop: "8px"
+  marginTopBottom: {
+    margin: theme.spacing(2, 0),
   }
 }));
 
@@ -67,7 +38,7 @@ export interface IError {
 export default function SignUpForm(props: {
   onCompleted?: () => void
 }) {
-  const {createUserWithEmailAndPassword} = useAuth();
+  const { createUserWithEmailAndPassword } = useAuth();
 
   const classes = useStyles();
   const [email, setEmail] = useState("");
@@ -75,7 +46,15 @@ export default function SignUpForm(props: {
   const [username, setUsername] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [errors, setErrors] = useState<IError>({});
-  const [showAlert, setShowAlert] = useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+      setOpen(true);
+  };
+
+  const handleClose = () => {
+      setOpen(false);
+  };
 
   const validate = () => {
     const errorsList: IError = {}
@@ -88,8 +67,8 @@ export default function SignUpForm(props: {
     if (validator.isEmpty(password)) {
       errorsList.password = "Password is required"
     }
-    else if (!validator.matches(password, '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\\$%\\^&\\*]).{8,}$')) {
-      errorsList.password = "Password must contain numbers, special chars, uppercase and lowercase letters and at least 8 chars"
+    else if (!validator.matches(password, '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$')) {
+      errorsList.password = "Password must contain: at least one number, one uppercase and one lowercase letters and at least 8 chars"
     }
     if (validator.isEmpty(repeatPassword)) {
       errorsList.repeatPassword = "Repeat password"
@@ -118,22 +97,23 @@ export default function SignUpForm(props: {
       return createUserWithEmailAndPassword(email, password, {
         name: username
       })
-          .then(() => {
-            console.log("Allreight")
-            if( props.onCompleted )
-              props.onCompleted();
-          })
-          .catch(err => setErrors({
-            response: err.message
-          }));
+        .then(() => {
+          if (props.onCompleted)
+            props.onCompleted();
+            handleClickOpen();
+        })
+        .catch(err => setErrors({
+          response: err.message
+        }));
     }
   };
 
   return (
     <Container maxWidth="sm" className={classes.back}>
+      <ResetLinkModal open={open} handleClose={handleClose} />
       <div className={classes.paper}>
-        {/* {showAlert && <div className="alert-box"><p>{auth.signupError}</p></div>} */}
-        <form className={classes.form} noValidate={true} onSubmit={handleSubmit}>
+        {errors && errors.response && <Alert text={errors.response} severity="error" />}
+        <form noValidate={true} onSubmit={handleSubmit}>
           <Input
             required={true}
             id="email"
@@ -170,17 +150,13 @@ export default function SignUpForm(props: {
             error={errors && errors.repeatPassword}
             onChange={handleReapeatPasswordChange}
           />
-          <Button
-            color="primary"
-            text="Sign up"
-            type="submit"
-          />
-          {errors && errors.response && (
-              <div>
-                {errors.response}!!!!!!
-              </div>
-          )}
-          <Typography variant="h6">Or Via</Typography>
+          <div className={classes.marginTopBottom}>
+            <Button
+              color="primary"
+              text="Sign up"
+              type="submit"
+            />
+          </div>
         </form>
       </div>
     </Container>

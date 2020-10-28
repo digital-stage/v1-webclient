@@ -1,8 +1,8 @@
-import React, { MouseEventHandler } from "react";
+import React, {MouseEventHandler} from "react";
 import iconPath from "./IconsList";
-import theme from '../../styles/theme';
+import {useTheme} from "@material-ui/core";
 
-const defaultStyles = { display: "inline-block", verticalAlign: "middle" };
+const defaultStyles = {display: "inline-block", verticalAlign: "middle"};
 
 
 // type width = 24
@@ -40,37 +40,30 @@ const Icon = (props: Props) => {
         outlineColor,
         title
     } = props;
-    const styles = { ...defaultStyles, style };
+    const styles = {...defaultStyles, style};
+    const theme = useTheme();
+
     const [color, setIconColor] = React.useState(iconColor)
     return (
         <svg
             className={className}
             style={styles}
-            viewBox={`0 0 ${width} ${height}`}
-            width={`${width}px`}
-            height={`${height}px`}
+            viewBox={`0 0 ${width || 24} ${height || 24}`}
+            width={`${width || 24}px`}
+            height={`${height || 24}px`}
             xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
             onClick={onClick}
             onMouseEnter={() => setIconColor(theme.palette.common.white)}
-            onMouseLeave={() => setIconColor(iconColor)}
+            onMouseLeave={() => setIconColor(iconColor || theme.palette.grey[300])}
         >
             <title id={name}>{title}</title>
             <g fill={color}>
-                {circled && <circle cx="16" cy="16" r="16" fill={circleColor} />}
+                {circled && <circle cx="16" cy="16" r="16" fill={circleColor || "#E84040"}/>}
                 {iconPath(name, outlineColor)}
             </g>
         </svg>
     );
-};
-
-Icon.defaultProps = {
-    width: 24,
-    height: 24,
-    circled: false,
-    iconColor: theme.palette.grey[300],
-    circleColor: "#E84040",
-    viewBox: "0 0 24 24"
 };
 
 export default Icon

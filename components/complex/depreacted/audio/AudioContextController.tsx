@@ -1,47 +1,52 @@
 import {useAudioContext} from "../../../../lib/useAudioContext";
 import {styled} from "baseui";
-import React from "react";
-import {Button} from "baseui/button";
-
+import React, {useCallback, useEffect, useState} from "react";
+import Icon2 from "../../../base/Icon2";
+import {IconButton, withStyles} from "@material-ui/core";
 
 const StartAudioOverlay = styled("div", {
-    position: "absolute",
-    bottom: "20%",
-    left: "0",
-    width: "100%",
-    paddingLeft: "auto",
-    paddingRight: "auto",
+    position: "fixed",
+    bottom: "1rem",
+    left: "1rem"
 });
+const StartAudioButton = withStyles({})(IconButton);
 
 const AudioContextController = () => {
     const {audioContext, createAudioContext} = useAudioContext();
+    const [valid, setValid] = useState<boolean>(audioContext && audioContext.state === "running");
 
-    if (!audioContext) {
+    useEffect(() => {
+        setValid(audioContext && audioContext.state === "running");
+    }, [audioContext])
+
+    const start = useCallback(() => {
+        if (!audioContext) {
+            return createAudioContext().then(audioContext => {
+                if (audioContext.state === "suspended")
+                    return audioContext.resume()
+                        .then(() => {
+                            if (audioContext.state === "running")
+                                setValid(true);
+                        })
+            });
+        } else {
+            return audioContext.resume()
+                .then(() => {
+                    if (audioContext.state === "running")
+                        setValid(true);
+                })
+        }
+    }, [audioContext])
+
+    if (!valid) {
         return (
             <StartAudioOverlay>
-                <Button
-                    onClick={() =>
-                        createAudioContext().then(audioContext => {
-                            if (audioContext.state === "suspended")
-                                return audioContext.resume()
-                        })}
-                >
-                    Enable Audio Playback
-                </Button>
+                <StartAudioButton onClick={() => start()}>
+                    <Icon2 name="speaker-off"/>
+                </StartAudioButton>
             </StartAudioOverlay>
-        )
-    } /*else if (audioContext.state === "suspended") {
-        return (
-            <StartAudioOverlay>
-                <Button
-                    onClick={() => audioContext.resume()}
-                >
-                    Resume Audio Playback
-                </Button>
-            </StartAudioOverlay>
-        )
-    }*/
-
+        );
+    }
     return null;
 }
 export default AudioContextController;

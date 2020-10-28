@@ -359,7 +359,7 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
                     ...addItemToCollection<CustomAudioProducer>(state.customAudioProducers, action.payload._id, action.payload),
                     byAudioProducer: {
                         ...state.customAudioProducers.byAudioProducer,
-                        [action.payload.stageMemberAudioProducerId]: upsert<string>(state.customAudioProducers.byAudioProducer[action.payload.stageMemberAudioProducerId], action.payload._id)
+                        [action.payload.stageMemberAudioProducerId]: action.payload._id
                     }
                 }
             }
@@ -371,10 +371,7 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
                 customAudioProducers: {
                     ...state.customAudioProducers,
                     byId: _.omit(state.customAudioProducers.byId, action.payload),
-                    byAudioProducer: {
-                        ...state.customAudioProducers.byAudioProducer,
-                        [state.customAudioProducers.byId[action.payload].stageMemberAudioProducerId]: _.filter(state.customAudioProducers.byAudioProducer[state.customAudioProducers.byId[action.payload].stageMemberAudioProducerId], id => id !== action.payload),
-                    },
+                    byAudioProducer: _.omit(state.customAudioProducers.byAudioProducer, state.audioConsumers.byId[action.payload].audioProducer),
                     allIds: _.filter(state.stageMembers.allIds, id => id !== action.payload)
                 }
             };

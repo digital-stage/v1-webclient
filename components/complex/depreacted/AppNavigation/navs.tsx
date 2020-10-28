@@ -4,110 +4,81 @@ import {
     Overflow as UserIcon,
     Upload as Icon,
 } from 'baseui/icon';
-import {renderItem} from "./util";
-import {MainNavItemT, POSITION, UserNavItemT} from "baseui/app-nav-bar";
+import {NavItemT, POSITION} from "baseui/app-nav-bar";
 
 export interface Item {
     label: string;
     path?: string;
 }
 
-export interface MainNavItem extends MainNavItemT {
-    item: Item,
-    navPosition?: any
-}
-export interface UserNavItem extends UserNavItemT {
-    item: Item
-}
-
-export const SHOW_ALL_STAGES: MainNavItem = {
+export const SHOW_ALL_STAGES: NavItemT = {
     icon: () => <img src="filter_none-24px.svg"/>,
-    item: {
-        label: 'Meine Bühnen',
+    label: 'Meine Bühnen',
+    info: {
         path: '/stages'
-    },
-    mapItemToNode: renderItem,
-    mapItemToString: renderItem,
+    }
 }
 
-export const SHOW_LOCAL_DEVICE_ONLY: MainNavItem = {
+export const SHOW_LOCAL_DEVICE_ONLY: NavItemT = {
     icon: Icon,
-    item: {
-        label: 'Einstellungen',
+    label: 'Einstellungen',
+    info: {
         path: '/devices'
-    },
-    mapItemToNode: renderItem,
-    mapItemToString: renderItem,
+    }
 }
-export const SHOW_LOCAL_AND_REMOTE_DEVICES: MainNavItem = {
+export const SHOW_LOCAL_AND_REMOTE_DEVICES: NavItemT = {
     icon: ChevronDown,
-    item: {
-        label: 'Einstellungen'
-    },
-    mapItemToNode: renderItem,
-    mapItemToString: renderItem,
+    label: 'Einstellungen',
     navExitIcon: Delete,
     navPosition: {desktop: POSITION.horizontal},
-    nav: [
+    children: [
         {
             icon: Icon,
-            item: {
-                label: 'Dieses Gerät',
+            label: 'Dieses Gerät',
+            info: {
                 path: '/devices/local'
-            },
-            mapItemToNode: renderItem,
-            mapItemToString: renderItem,
+            }
         },
         {
             icon: Icon,
-            item: {
-                label: 'Andere Geräte',
+            label: 'Andere Geräte',
+            info: {
                 path: '/devices/remote'
-            },
-            mapItemToNode: renderItem,
-            mapItemToString: renderItem,
+            }
         }
     ]
 }
 
-export const USER_NAV: UserNavItem[] = [
+export const USER_NAV: NavItemT[] = [
     {
         icon: UserIcon,
-        item: {
-            label: 'Profil',
+        label: 'Profil',
+        info: {
             path: '/account/profile'
         },
-        mapItemToNode: renderItem,
-        mapItemToString: renderItem,
     },
     {
         icon: UserIcon,
-        item: {
-            label: 'Abmelden',
+        label: 'Abmelden',
+        info: {
             path: '/account/logout'
         },
-        mapItemToNode: renderItem,
-        mapItemToString: renderItem,
     }
 ];
 
-export const NO_USER_NAV: UserNavItem[] = [
+export const NO_USER_NAV: NavItemT[] = [
     {
         icon: Icon,
-        item: {
-            label: 'Registrieren',
+        label: 'Registrieren',
+        info: {
             path: '/account/signup'
-        },
-        mapItemToNode: renderItem,
-        mapItemToString: renderItem,
+        }
     },
     {
         icon: Icon,
-        item: {
-            label: 'Anmelden',
+        label: 'Anmelden',
+        info: {
             path: '/account/login'
-        },
-        mapItemToNode: renderItem,
-        mapItemToString: renderItem,
+        }
     },
 ]

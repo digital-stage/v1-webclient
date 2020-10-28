@@ -1,103 +1,89 @@
-import React, {useState} from "react";
-import {Box, createStyles, Grid, Icon, IconButton, Link, makeStyles, Theme, Typography} from "@material-ui/core";
+import React, { useState } from "react";
+import { createStyles, Grid, Slide, makeStyles, Theme, Typography } from "@material-ui/core";
 
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
+import ForgetPasswordForm from "./ForgetPasswordForm";
+import FormContainerView from "./FormContainerView";
 
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            background: "transparent linear-gradient(180deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%) 0% 0% no-repeat padding-box",
+            background: "transparent linear-gradient(221deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%) 0% 0% no-repeat padding-box;",
             minHeight: "100vh",
             color: theme.palette.common.white,
             paddingTop: theme.spacing(4),
-            paddingBottom: theme.spacing(4),
-        },
-        container: {
-            background: "#000000bf",
-            width: "300px",
-            borderRadius: "5px",
-            boxShadow: "0px 3px 50px rgba(11, 33, 64, 0.75) ",
-            padding: "15px 10px"
+            paddingBottom: theme.spacing(4)
         },
         controller: {
-            padding: "10px 30px",
+            padding: "10px 20px",
             cursor: "pointer",
             borderBottom: "2px solid transparent"
         },
         selectedController: {
-            transition: "border 0.5s ease-out",
+            transition: "border 1s ease-out",
             borderBottom: `2px solid ${theme.palette.primary.main}`
         },
         text: {
             paddingTop: theme.spacing(2),
             paddingBottom: theme.spacing(2),
         },
-        center: {
-            textAlign: "center"
-        },
-        iconButton: {
-            backgroundColor: "#897FE4",
-            width: "36px",
-            height: "36px",
-            borderRadius: "20px",
-        },
-        icon: {
-            color: "#fff",
-            fontSize: "20px",
-            marginTop: "8px"
+        forgetPassword: {
+            textAlign: "center",
+            cursor: "pointer"
         }
     }),
 );
 
 const Login = (props: {
-    mode: "signup" | "login"
+    mode: "signup" | "login" | "forget"
 }) => {
     const classes = useStyles();
     const [LoginOpen, setLoginOpen] = useState(props.mode === "login");
     const [SignupOpen, setSignupOpen] = useState(props.mode === "signup");
+    const [ForgetOpen, setForgetOpen] = useState(props.mode === "forget");
 
     const showLoginBox = () => {
         setLoginOpen(true);
+        setForgetOpen(false);
         setSignupOpen(false);
     };
 
     const showRegisterBox = () => {
         setSignupOpen(true);
+        setForgetOpen(false);
+        setLoginOpen(false);
+    };
+
+    const showForgetBox = () => {
+        setForgetOpen(true);
         setLoginOpen(false);
     };
 
     return (
-        <Grid
-            container={true}
-            direction="column"
-            alignItems="center"
-            alignContent="center"
-            justify='space-between'
-            className={classes.root}
-        >
+        <div className={classes.root}>
             <Grid container={true} direction='column' alignContent="center" alignItems="center">
                 <img
-                    src="images/welcome_icon.png"
-                    width="120"
+                    src="/images/welcome_icon.png"
+                    width="180"
                     height="auto"
                     alt="logo"
                 />
-                <Typography variant="h3" className={classes.text}>Welcome</Typography>
             </Grid>
-            <Box className={classes.container}>
+            <FormContainerView>
                 <Grid
                     container={true}
                     direction="row"
                     alignContent="center"
                     alignItems="center"
                     justify='space-evenly'
+                    className={classes.text}
                 >
                     <Typography
                         variant="h5"
                         onClick={showLoginBox}
-                        className={`${classes.controller} ${LoginOpen && classes.selectedController}`}
+                        className={`${classes.controller} ${(LoginOpen || ForgetOpen) && classes.selectedController}`}
                     >
                         Sign in
                     </Typography>
@@ -109,44 +95,19 @@ const Login = (props: {
                         Sign up
                     </Typography>
                 </Grid>
-                {LoginOpen && <SignInForm/>}
-                {SignupOpen && <SignUpForm/>}
-                <Grid className={classes.center}>
-                    <Link>
-                        <IconButton disabled={true}>
-                            <span className={classes.iconButton}
-                            >
-                                <Icon
-                                    className={`fab fa-facebook-f ${classes.icon}`}
-                                />
-                            </span>
-                        </IconButton>
-                    </Link>
-                    <Link>
-                        <IconButton>
-                            <span className={classes.iconButton}>
-                                <Icon
-                                    className={`fab fa-google ${classes.icon}`}
-                                />
-                            </span>
-                        </IconButton>
-                    </Link>
-                    <Link>
-                        <IconButton>
-                            <span className={classes.iconButton}>
-                                <Icon
-                                    className={`fab fa-microsoft ${classes.icon}`}
-                                />
-                            </span>
-                        </IconButton>
-                    </Link>
-                </Grid>
-
-            </Box>
-            <Box>
-                <Typography variant="h6" className={classes.text}>Enter stage ID to join as Guest</Typography>
-            </Box>
-        </Grid>
+                {LoginOpen && <SignInForm />}
+                {SignupOpen && <SignUpForm />}
+                {ForgetOpen && <ForgetPasswordForm onClick={showLoginBox} />}
+                {LoginOpen && <Typography
+                    variant="h6"
+                    onClick={showForgetBox}
+                    className={classes.forgetPassword}
+                >
+                    Forgot password?
+                    </Typography>
+                }
+            </FormContainerView>
+        </div>
     );
 };
 

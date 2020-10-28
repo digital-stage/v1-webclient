@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useState} from "react";
 import cookie from 'js-cookie';
+import {useErrors} from "../../useErrors";
 
 export interface AuthUser {
     _id: string;
@@ -18,7 +19,7 @@ export interface AuthProps {
         avatarUrl?: string;
     }): Promise<any>;
 
-    signInWithEmailAndPassword(email: string, password: string): Promise<any>;
+    signInWithEmailAndPassword(email: string, password: string, staySignedIn?: boolean): Promise<any>;
 
     requestPasswordReset(email: string): Promise<any>;
 
@@ -38,12 +39,15 @@ const getUserByToken = (token: string): Promise<AuthUser> => fetch(process.env.N
     }
 }).then(result => result.json()).then(json => json as AuthUser);
 
+export const AuthContextConsumer = AuthContext.Consumer;
+
 export const AuthContextProvider = (props: {
     children: React.ReactNode
 }) => {
     const [token, setToken] = useState<string>();
     const [user, setUser] = useState<AuthUser>();
     const [loading, setLoading] = useState<boolean>(true);
+    const {reportError} = useErrors();
 
     const createUserWithEmailAndPassword = useCallback((email: string, password: string, additional?: {
         name: string;
@@ -73,12 +77,13 @@ export const AuthContextProvider = (props: {
                     setToken(token);
                     cookie.set('token', token, {expires: 7});
                 }))
+            .catch(error => reportError(error.message))
             .finally(() => {
                 setLoading(false);
             });
     }, []);
 
-    const signInWithEmailAndPassword = useCallback((email: string, password: string) => {
+    const signInWithEmailAndPassword = useCallback((email: string, password: string, staySignedIn?: boolean) => {
         setLoading(true);
         return fetch(process.env.NEXT_PUBLIC_AUTH_URL + "/login", {
             headers: {
@@ -99,8 +104,9 @@ export const AuthContextProvider = (props: {
                 .then(user => {
                     setUser(user);
                     setToken(token);
-                    cookie.set('token', token, {expires: 7});
+                    cookie.set('token', token, {expires: staySignedIn ? 7 : 1});
                 }))
+            .catch(error => reportError(error.message))
             .finally(() => {
                 setLoading(false);
             });
@@ -122,7 +128,8 @@ export const AuthContextProvider = (props: {
                 if (!result.ok) {
                     throw new Error("Unbekannte E-Mail Adresse")
                 }
-            });
+            })
+            .catch(error => reportError(error.message))
     }, []);
 
     const resetPassword = useCallback((resetToken: string, password: string) => {
@@ -142,7 +149,8 @@ export const AuthContextProvider = (props: {
                 if (!result.ok) {
                     throw new Error("Abgelaufener Link")
                 }
-            });
+            })
+            .catch(error => reportError(error.message))
     }, []);
 
     const logout = useCallback(() => {
@@ -163,6 +171,7 @@ export const AuthContextProvider = (props: {
                     setUser(undefined);
                 }
             })
+            .catch(error => reportError(error.message))
             .finally(() => {
                 setLoading(false);
             })
@@ -177,6 +186,7 @@ export const AuthContextProvider = (props: {
                 .then(user => {
                     setUser(user);
                     setToken(token);
+                    console.log("[useAuth] Have token and user");
                 })
                 .catch(error => {
                     console.error(error);
@@ -185,10 +195,13 @@ export const AuthContextProvider = (props: {
                     cookie.remove('token');
                 })
                 .finally(() => {
+                    console.log("[useAuth] Set loading to false");
                     setLoading(false);
                 })
         } else {
+            console.log("[useAuth] Token is not available (anymore / yet)");
             setUser(undefined);
+            console.log("[useAuth] Set loading to false");
             setLoading(false);
         }
         return () => {
