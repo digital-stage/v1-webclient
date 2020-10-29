@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import Link from "next/link";
-import Icon2 from "../base/Icon2";
-import useStageSelector from "../../lib/digitalstage/useStageSelector";
+import Icon2 from "../../base/Icon2";
+import useStageSelector from "../../../lib/digitalstage/useStageSelector";
 import {styled} from "styletron-react";
-import IconButton from "./IconButton";
-import ViewQuiltIcon from '@material-ui/icons/ViewQuilt';
+import IconButton from "../../base/IconButton";
 
 const Wrapper = styled("div", {
     position: "fixed",
@@ -28,7 +27,7 @@ const StageOrMixerSwitcher = (props: {
         return (
             <Wrapper className={props.className}>
                 <Link href={mixerShown ? "/" : "/mixer"}>
-                    <IconButton color="inherit">
+                    <IconButton color="secondary">
                         <Icon2 size={64} name={mixerShown ? "stage" : "mixer"}/>
                     </IconButton>
                 </Link>

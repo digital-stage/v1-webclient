@@ -3,12 +3,13 @@ import React from "react";
 import useStageSelector, {useIsStageAdmin} from "../../../../lib/digitalstage/useStageSelector";
 import {CustomGroup, Group} from "../../../../lib/digitalstage/useStageContext/model";
 import useStageActions from "../../../../lib/digitalstage/useStageActions";
-import ChannelPanel from "../../../experimental/audio/ChannelPanel";
 import StageMemberChannel from "./StageMemberChannel";
 import {useStageWebAudio} from "../../../../lib/useStageWebAudio";
 import {styled} from "styletron-react";
+import ChannelStrip from "../../../elements/audio/ChannelStrip";
+import {Typography} from "@material-ui/core";
 
-const ColoredChannelPanel = styled(ChannelPanel, {
+const ColoredChannelPanel = styled(ChannelStrip, {
     backgroundColor: "rgba(80,80,80,1)",
     borderRadius: "20px",
     marginRight: ".5rem",
@@ -28,17 +29,20 @@ const GroupChannel = (props: {
 
     return (
         <ColoredChannelPanel
-            name={group.name}
+            addHeader={<Typography variant="h5">group.name</Typography>}
 
             analyser={byGroup[props.groupId] ? byGroup[props.groupId].analyserNode : undefined}
 
             volume={group.volume}
+            muted={group.muted}
             customVolume={customGroup ? customGroup.volume : undefined}
+            customMuted={customGroup ? customGroup.muted : undefined}
 
-            onVolumeChanged={isAdmin ? volume => updateGroup(group._id, {
-                volume: volume
+            onVolumeChanged={isAdmin ? (volume, muted) => updateGroup(group._id, {
+                volume: volume,
+                muted: muted
             }) : undefined}
-            onCustomVolumeChanged={volume => setCustomGroup(group._id, volume)}
+            onCustomVolumeChanged={(volume, muted) => setCustomGroup(group._id, volume, muted)}
             onCustomVolumeReset={() => {
                 if (removeCustomGroup)
                     return removeCustomGroup(customGroup._id)

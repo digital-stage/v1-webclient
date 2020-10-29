@@ -1,6 +1,6 @@
 import React, {useRef} from "react";
 import {IAnalyserNode, IAudioContext} from "standardized-audio-context";
-import useAnimationFrame from "../../../lib/useAnimationFrame";
+import useAnimationFrame from "../../../../lib/useAnimationFrame";
 import {styled} from "baseui";
 
 const Canvas = styled("canvas", {
@@ -26,7 +26,8 @@ function getAverageVolume(array: Uint8Array): number {
 const LevelMeter = (
     props: {
         analyser: IAnalyserNode<IAudioContext>,
-        vertical?: boolean
+        vertical?: boolean,
+        className?: string
     }
 ) => {
     const canvasRef = useRef<HTMLCanvasElement>();
@@ -62,7 +63,7 @@ const LevelMeter = (
     });
 
     return (
-        <Canvas ref={canvasRef}/>
+        <Canvas className={props.className} ref={canvasRef}/>
     )
 }
 export default LevelMeter;

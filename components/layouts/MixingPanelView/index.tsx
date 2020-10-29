@@ -10,7 +10,7 @@ const Wrapper = styled("div", {
     flexDirection: "row",
     flexWrap: "nowrap",
     overflowX: "scroll",
-    overflowY: "hidden",
+    overflowY: "auto",
     whiteSpace: "nowrap",
 });
 

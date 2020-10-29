@@ -1,5 +1,5 @@
 import React from "react";
-import {styled, useStyletron} from "styletron-react";
+import {useStyletron} from "styletron-react";
 import MixingPanelView from "../components/layouts/MixingPanelView";
 import useTheme from "@material-ui/core/styles/useTheme";
 

@@ -2,7 +2,7 @@ import {useStyletron} from "baseui";
 import React from "react";
 import {Avatar} from "baseui/avatar";
 import OnlineStatus from "../../complex/depreacted/theme/OnlineStatus";
-import CanvasPlayer from "../../experimental/CanvasPlayer";
+import CanvasPlayer from "../../elements/video/CanvasPlayer";
 import {Typography} from "@material-ui/core";
 import {ExtendedStageMember, useIsStageAdmin} from "../../../lib/digitalstage/useStageSelector";
 import StarBorderIcon from '@material-ui/icons/StarBorder';

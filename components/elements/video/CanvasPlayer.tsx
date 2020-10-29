@@ -1,6 +1,6 @@
 import React from "react";
 import {styled} from "baseui";
-import {VideoConsumer} from "../../lib/digitalstage/useStageContext/model";
+import {VideoConsumer} from "../../../lib/digitalstage/useStageContext/model";
 
 interface CanvasElement extends HTMLCanvasElement {
     captureStream(): MediaStream;

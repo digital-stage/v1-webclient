@@ -1,13 +1,16 @@
-import {getTrackBackground, Range} from "react-range";
+import {Direction, getTrackBackground, Range} from "react-range";
 import React from "react";
 import {styled, useStyletron} from "styletron-react";
 import {RGBColor} from "./index";
 
 const Wrapper = styled("div", {
-    width: "100%"
+    display: "flex",
+    height: '100%',
+    flexDirection: 'column',
+    boxSizing: "border-box",
 });
 
-const HorizontalSlider = (props: {
+const VerticalSlider = (props: {
     min: number;
     max: number;
     step: number;
@@ -18,14 +21,16 @@ const HorizontalSlider = (props: {
     width: number;
     text?: string;
     showMarks?: boolean;
-    convertMark?: (value: number) => string;
+    className?: string;
+    alignLabel?: "left" | "right";
 }) => {
     const [css] = useStyletron();
 
     const solidColor = `rgba(${props.color[0]},${props.color[1]},${props.color[2]},0.6)`;
     return (
-        <Wrapper>
+        <Wrapper className={props.className}>
             <Range
+                direction={Direction.Up}
                 step={props.step}
                 min={props.min}
                 max={props.max}
@@ -35,33 +40,33 @@ const HorizontalSlider = (props: {
                     if (props.onFinalChange)
                         props.onFinalChange(values[0]);
                 }}
-                renderMark={props.showMarks ? ({props: markProps, index}) => (
+                renderMark={({props: markProps, index}) => (
                     <div
                         {...markProps}
                         className={css({
                             ...markProps.style,
-                            width: index % 2 ? '1px' : '2px',
-                            height: index % 2 ? (props.width / 2) + "px" : props.width + "px",
+                            height: index % 2 ? '1px' : '2px',
+                            width: index % 2 ? (props.width / 2) + "px" : props.width + "px",
                             backgroundColor: index * props.step > props.max - props.value ? solidColor : 'rgba(255,255,255,0.2)'
                         })}
                     />
-                ) : undefined}
+                )}
                 renderTrack={({props: trackProps, children}) => (
                     <div
                         onMouseDown={trackProps.onMouseDown}
                         onTouchStart={trackProps.onTouchStart}
                         className={css({
                             ...trackProps.style,
-                            height: props.width + "px",
+                            flexGrow: 1,
                             display: 'flex',
-                            width: '100%'
+                            height: '100%'
                         })}
                     >
                         <div
                             ref={trackProps.ref}
                             className={css({
-                                height: props.width + "px",
-                                width: '100%',
+                                width: props.width + "px",
+                                height: '100%',
                                 borderWidth: "1px",
                                 borderStyle: "solid",
                                 borderColor: solidColor,
@@ -69,14 +74,16 @@ const HorizontalSlider = (props: {
                                     values: [props.value],
                                     colors: ["rgba(255,255,255,0.2)", "transparent"],
                                     min: props.min,
-                                    max: props.max
+                                    max: props.max,
+                                    direction: Direction.Up
                                 }),
                                 ":hover": {
                                     background: getTrackBackground({
                                         values: [props.value],
                                         colors: [`rgba(${props.color[0]},${props.color[1]},${props.color[2]},0.6)`, "transparent"],
                                         min: props.min,
-                                        max: props.max
+                                        max: props.max,
+                                        direction: Direction.Up
                                     })
                                 },
                                 alignSelf: 'center'
@@ -86,6 +93,7 @@ const HorizontalSlider = (props: {
                         </div>
                     </div>
                 )}
+
                 renderThumb={({props: thumbProps, isDragged}) => {
                     return (
                         <div
@@ -108,7 +116,8 @@ const HorizontalSlider = (props: {
                                     className={css({
                                         position: 'absolute',
                                         top: "0px",
-                                        left: (props.width + 4) + "px",
+                                        right: props.alignLabel && props.alignLabel === "left" ? (props.width + 4) + "px" : undefined,
+                                        left: !props.alignLabel || props.alignLabel === "right" ? (props.width + 4) + "px" : undefined,
                                         color: '#000',
                                         fontWeight: 'bold',
                                         padding: '4px',
@@ -134,4 +143,4 @@ const HorizontalSlider = (props: {
         </Wrapper>
     );
 }
-export default HorizontalSlider;
+export default VerticalSlider;

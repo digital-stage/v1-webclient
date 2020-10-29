@@ -11,12 +11,14 @@ const Icon2 = (props: {
     label?: string;
     size?: number,
     onClick?: MouseEventHandler<HTMLOrSVGElement>,
-    circled?: boolean
+    circled?: boolean;
+    className?: string;
 }) => {
     const [css] = useStyletron();
 
     return (
         <Svg
+            className={props.className}
             width={props.size || 24}
             height={props.size || 24}
             viewBox={`0 0 24 24`}

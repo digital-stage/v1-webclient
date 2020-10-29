@@ -13,7 +13,6 @@ import {CssBaseline, ThemeProvider} from '@material-ui/core';
 import MediasoupProvider from "../lib/digitalstage/useMediasoup";
 import {wrapper} from "../lib/digitalstage/useStageContext/redux";
 import {DarkModeConsumer, DarkModeProvider} from "../lib/useDarkModeSwitch";
-import AudioContextController from "../components/complex/depreacted/audio/AudioContextController";
 import StageWebAudioProvider from "../lib/useStageWebAudio";
 import PageWrapper from "../components/layouts/PageWrapper";
 import {DSDarkTheme, DSLightTheme} from "../components/DSTheme";
@@ -63,11 +62,13 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                                                 width: 100%;
                                             }
                                             body {
-                                                min-height: 100%;
+                                                min-height: 100vh;
                                                 font-family: var(--font-sans);
                                                 color: ${darkMode ? "#ffffff" : "#000000"};
                                                 background-color: ${darkMode ? "#343434" : "#ffffff"};
                                                 background: linear-gradient(218deg, rgba(52,52,52,1) 0%, rgba(20,20,20,1) 100%);
+                                                background-repeat: no-repeat;
+                                                background-attachment: fixed;
                                                 background-size: cover;
                                                 transition-timing-function: cubic-bezier(0, 0, 1, 1);
                                                 transition: color 200ms, background-color 200ms;
@@ -86,8 +87,6 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                                                                     <Component {...pageProps} />
                                                                 </PageWrapper>
                                                             </StageWebAudioProvider>
-
-                                                            <AudioContextController/>
 
                                                             <StageJoiner/>
 

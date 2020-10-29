@@ -1,13 +1,13 @@
 import React from "react";
 import useStageSelector, {useIsStageAdmin} from "../../../../lib/digitalstage/useStageSelector";
 import {CustomStageMember, StageMember, User} from "../../../../lib/digitalstage/common/model.server";
-import ChannelPanel from "../../../experimental/audio/ChannelPanel";
+import ChannelStrip from "../../../elements/audio/ChannelStrip";
 import useStageActions from "../../../../lib/digitalstage/useStageActions";
 import AudioProducerChannel from "./AudioProducerChannel";
 import {useStageWebAudio} from "../../../../lib/useStageWebAudio";
 import {styled} from "styletron-react";
 
-const ColoredChannelPanel = styled(ChannelPanel, {
+const ColoredChannelPanel = styled(ChannelStrip, {
     backgroundColor: "rgba(130,100,130,1)"
 })
 

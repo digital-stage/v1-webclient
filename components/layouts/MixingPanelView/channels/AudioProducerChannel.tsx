@@ -2,11 +2,11 @@ import React from "react";
 import useStageSelector, {useIsStageAdmin} from "../../../../lib/digitalstage/useStageSelector";
 import {AudioProducer, CustomAudioProducer} from "../../../../lib/digitalstage/useStageContext/model";
 import {useStageWebAudio} from "../../../../lib/useStageWebAudio";
-import ChannelPanel from "../../../experimental/audio/ChannelPanel";
 import useStageActions from "../../../../lib/digitalstage/useStageActions";
 import {styled} from "styletron-react";
+import ChannelStrip from "../../../elements/audio/ChannelStrip";
 
-const ColoredChannelPanel = styled(ChannelPanel, {
+const ColoredChannelPanel = styled(ChannelStrip, {
     backgroundColor: "rgba(100,100,130,1)"
 })
 

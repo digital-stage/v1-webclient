@@ -1,7 +1,7 @@
 import useStageSelector, {useConductors} from "../../../lib/digitalstage/useStageSelector";
 import {StageMember} from "../../../lib/digitalstage/common/model.server";
 import {Stage, VideoConsumer} from "../../../lib/digitalstage/useStageContext/model";
-import CanvasPlayer from "../../experimental/CanvasPlayer";
+import CanvasPlayer from "../../elements/video/CanvasPlayer";
 import React from "react";
 import {useStyletron} from "styletron-react";
 import StageMemberView from "./StageMemberView";

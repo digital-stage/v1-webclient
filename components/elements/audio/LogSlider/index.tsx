@@ -36,6 +36,8 @@ const LogSlider = (props: {
     onEnd?: (volume: number) => any;
     width: number;
     vertical?: boolean;
+    className?: string;
+    alignLabel?: "left" | "right";
 }) => {
     const [value, setValue] = useState<number>();
     const [dbValue, setDbValue] = useState<number>(props.volume);
@@ -77,9 +79,11 @@ const LogSlider = (props: {
         }
     }, [props.onEnd])
 
-    if (props.vertical) {
+    /*
+    if (!props.vertical) {
         return (
-            <VerticalSlider
+            <HorizontalSlider
+                className={props.className}
                 min={MIN}
                 max={MAX}
                 step={STEP}
@@ -89,13 +93,14 @@ const LogSlider = (props: {
                 color={props.color}
                 width={props.width}
                 text={formatDbMeasure(dbValue)}
-                showMarks={true}
+
             />
         )
-    }
+    }*/
 
     return (
-        <HorizontalSlider
+        <VerticalSlider
+            className={props.className}
             min={MIN}
             max={MAX}
             step={STEP}
@@ -105,7 +110,8 @@ const LogSlider = (props: {
             color={props.color}
             width={props.width}
             text={formatDbMeasure(dbValue)}
-
+            alignLabel={props.alignLabel}
+            showMarks={true}
         />
     )
 };
