@@ -16,7 +16,6 @@ import {DarkModeConsumer, DarkModeProvider} from "../lib/useDarkModeSwitch";
 import StageWebAudioProvider from "../lib/useStageWebAudio";
 import PageWrapper from "../components/layouts/PageWrapper";
 import {DSDarkTheme, DSLightTheme} from "../components/DSTheme";
-import i18n from '../i18n'
 import {ErrorsProvider} from "../lib/useErrors";
 
 const MyApp: FC<AppProps> = ({Component, pageProps}) => {
@@ -105,4 +104,4 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
         </>
     )
 }
-export default i18n.appWithTranslation(wrapper.withRedux(MyApp));
+export default wrapper.withRedux(MyApp);
