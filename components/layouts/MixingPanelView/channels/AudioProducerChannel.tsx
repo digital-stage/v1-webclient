@@ -5,6 +5,7 @@ import {useStageWebAudio} from "../../../../lib/useStageWebAudio";
 import useStageActions from "../../../../lib/digitalstage/useStageActions";
 import {styled} from "styletron-react";
 import ChannelStrip from "../../../elements/audio/ChannelStrip";
+import {Typography} from "@material-ui/core";
 
 const ColoredChannelPanel = styled(ChannelStrip, {
     backgroundColor: "rgba(100,100,130,1)"
@@ -23,17 +24,21 @@ const AudioProducerChannel = (props: {
 
     return (
         <ColoredChannelPanel
+            addHeader={<Typography variant="h5">Track</Typography>}
             analyser={byAudioProducer[props.audioProducerId] ? byAudioProducer[props.audioProducerId].analyserNode : undefined}
-            name="Track"
 
             volume={audioProducer.volume}
+            muted={audioProducer.muted}
             customVolume={customAudioProducer ? customAudioProducer.volume : undefined}
+            customMuted={customAudioProducer ? customAudioProducer.muted : undefined}
 
-            onVolumeChanged={volume => updateStageMemberAudio(audioProducer._id, {
-                volume: volume
+            onVolumeChanged={(volume, muted) => updateStageMemberAudio(audioProducer._id, {
+                volume: volume,
+                muted: muted
             })}
-            onCustomVolumeChanged={volume => setCustomStageMemberAudio(audioProducer._id, {
-                volume: volume
+            onCustomVolumeChanged={(volume, muted) => setCustomStageMemberAudio(audioProducer._id, {
+                volume: volume,
+                muted: muted
             })}
             onCustomVolumeReset={() => {
                 if (customAudioProducer)

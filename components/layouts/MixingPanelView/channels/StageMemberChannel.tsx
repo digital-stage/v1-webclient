@@ -6,6 +6,7 @@ import useStageActions from "../../../../lib/digitalstage/useStageActions";
 import AudioProducerChannel from "./AudioProducerChannel";
 import {useStageWebAudio} from "../../../../lib/useStageWebAudio";
 import {styled} from "styletron-react";
+import {Typography} from "@material-ui/core";
 
 const ColoredChannelPanel = styled(ChannelStrip, {
     backgroundColor: "rgba(130,100,130,1)"
@@ -26,16 +27,22 @@ const StageMemberChannel = (props: {
 
     return (
         <ColoredChannelPanel
-            name={user.name}
-            volume={stageMember.volume}
-            analyser={byStageMember[props.stageMemberId] ? byStageMember[props.stageMemberId].analyserNode : undefined}
-            customVolume={customStageMember ? customStageMember.volume : undefined}
+            addHeader={<Typography variant="h5">{user.name}</Typography>}
 
-            onVolumeChanged={volume => updateStageMember(stageMember._id, {
-                volume: volume
+            volume={stageMember.volume}
+            muted={stageMember.muted}
+            customVolume={customStageMember ? customStageMember.volume : undefined}
+            customMuted={customStageMember ? customStageMember.muted : undefined}
+
+            analyser={byStageMember[props.stageMemberId] ? byStageMember[props.stageMemberId].analyserNode : undefined}
+
+            onVolumeChanged={(volume, muted) => updateStageMember(stageMember._id, {
+                volume: volume,
+                muted: muted
             })}
-            onCustomVolumeChanged={volume => setCustomStageMember(stageMember._id, {
-                volume: volume
+            onCustomVolumeChanged={(volume, muted) => setCustomStageMember(stageMember._id, {
+                volume: volume,
+                muted: muted
             })}
             onCustomVolumeReset={() => {
                 if (customStageMember)
