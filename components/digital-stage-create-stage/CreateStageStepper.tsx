@@ -3,15 +3,11 @@ import clsx from 'clsx';
 import { Stepper, Step, StepLabel, StepConnector, StepIconProps, makeStyles, Theme, createStyles, withStyles, Grid } from '@material-ui/core';
 import Button from '../base/Button';
 import Icon from '../base/Icon';
-// import ButtonStyled from '../../Components/Form/Button';
-// import Icons from '../../Components/Icons/Icons';
-// import { CreateStageSuccessStep } from './CreateStageFinalStep';
-// import { SelectPresetStep } from './SelectPresetStep';
-// import { AddInformatinStep } from './AddInformatinStep';
-// import { InviteUsersStep } from './InviteUsersStep';
-// import { AssignRolesStep } from './AssignRolesStep';
-// import { CreateStageStep } from './CreateStageStep';
-// import { useCreateStage } from '../../hooks/useCreateStage';
+import AddInformatinStep from './AddInformationStep';
+import { useStage } from '../stage/useStage';
+import AdvancedSettings from './AdvancedSettings';
+import useStageActions from '../../lib/digitalstage/useStageActions';
+import CreateStageSuccessStep from './CreateStageSuccessStep';
 
 
 const ColorlibConnector = withStyles({
@@ -93,10 +89,7 @@ function ColorlibStepIcon(props: StepIconProps) {
 
     const icons: { [index: string]: React.ReactElement } = {
         1: <Icon name="edit" iconColor="#fff" />,
-        2: <Icon name="group-preset" iconColor="#fff" />,
-        3: <Icon name="add-users" iconColor="#fff" />,
-        4: <Icon name="assign-roles" width={32} height={32} iconColor="#fff" />,
-        5: <Icon name="check" iconColor="#fff" />,
+        // 2: <Icon name="settings" iconColor="#fff" />,
     };
 
     return (
@@ -137,48 +130,45 @@ const useStyles = makeStyles((theme: Theme) =>
             marginBottom: theme.spacing(1),
             color: "#fff",
             textAlign: "center",
-            maxHeight: "53vh",
-            overflowY: "auto"
+            // maxHeight: "90vh",
+            // overflowY: "auto",
+            "&::-webkit-scrollbar": {
+                width: "5px",
+                backgroundColor: "transparent"
+            },
+            "&::-webkit-scrollbar-track": {
+                borderRadius: "25px"
+            },
+            "&::-webkit-scrollbar-thumb": {
+                background: "white",
+                borderRadius: "25px"
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+                background: "white"
+            }
         }
     }),
 );
 
 function getSteps() {
-    return ['Add information', 'Select preset', 'Invite users', 'Assign roles', 'Create stage'];
+    return ['Add information',
+        // 'Advanced settings'
+    ];
 }
 
-
-export default function CustomizedSteppers() {
+export default function CustomizedSteppers(props: { onClick(): void }) {
     const classes = useStyles();
-    // const { resetCreateStageDialog } = useCreateStage();
     const [activeStep, setActiveStep] = React.useState(0);
-    const [error, setError] = React.useState<boolean>(false);
-    const [emptyField, setEmptyField] = React.useState<string>("");
+    const { valueLength, setError, info, advancedSettings, error, context, stage } = useStage()
     const steps = getSteps();
-
-    const handleEmptyField = (field: string) => setEmptyField(field)
+    const { createStage, updateStage } = useStageActions();
 
     function getStepContent(step: number) {
         switch (step) {
             case 0:
-                return "Add information"
-            // <AddInformatinStep
-            //     emptyField={handleEmptyField}
-            //     error={error} />;
-            case 1:
-                return "Select preset"
-            // <SelectPresetStep />;
-            case 2:
-                return "Invite users"
-            // <InviteUsersStep />;
-            case 3:
-                return "add role"
-            // <AssignRolesStep />;
-            case 4:
-                return "create stgae"
-            // <CreateStageStep />;
-            default:
-                return 'Unknown step';
+                return <AddInformatinStep />
+            // case 1:
+            //     return <AdvancedSettings/>
         }
     }
 
@@ -187,12 +177,21 @@ export default function CustomizedSteppers() {
     };
 
     const checkStep = () => {
-        if (emptyField.length > 0) {
-            handleNext()
-            setError(false)
+        if (valueLength.name > 0) {
+            handleNext();
+            setError({ name: false })
         }
         else {
-            setError(true)
+            setError({ name: true })
+        }
+
+        if (activeStep === steps.length - 1 && valueLength.name > 0) {
+            if (context === "new") {
+                createStage(info.name, info.password, advancedSettings.width, advancedSettings.length, advancedSettings.height, advancedSettings.damping, advancedSettings.absorption);
+            }
+            else if (context === "edit") {
+                updateStage(stage._id, {...info, ...advancedSettings});
+            }
         }
     }
 
@@ -221,18 +220,18 @@ export default function CustomizedSteppers() {
             <div>
                 {activeStep === steps.length ? (
                     <Grid container justify="center">
-                        {/* <CreateStageSuccessStep /> */}
+                        <CreateStageSuccessStep />
                         <Button
                             color="light"
                             text="Close"
                             type="submit"
-                            onClick={handleReset}
+                            onClick={props.onClick}
                         />
-                        <Button
+                        {/* <Button
                             color="primary"
                             text="Start stage"
                             type="submit"
-                        />
+                        /> */}
                     </Grid>
                 ) : (
                         <div>
@@ -250,10 +249,10 @@ export default function CustomizedSteppers() {
                                 />}
                                 <Button
                                     color="primary"
-                                    text={activeStep === steps.length - 1 ? 'Send invitation' : 'Next'}
+                                    text={activeStep === steps.length - 1 ? (context=== "new" ?'Create stage' : "Edit stage"): 'Next'}
                                     type="submit"
-                                    // onClick={checkStep}
-                                    onClick={handleNext}
+                                    onClick={checkStep}
+                                // onClick={handleNext}
                                 />
                             </Grid>
                         </div>

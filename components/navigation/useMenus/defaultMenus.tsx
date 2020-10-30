@@ -33,10 +33,10 @@ export const DefaultStageMenu: NavItem[] = [
         icon: <Icon2 name="stage"/>,
         path: "/stages"
     },
-    {
-        label: "Ereignisse",
-        icon: <Icon2 name="notification"/>
-    },
+    // {
+    //     label: "Ereignisse",
+    //     icon: <Icon2 name="notification"/>
+    // },
 ];
 
 export const DefaultSettingsMenu: NavItem[] = [

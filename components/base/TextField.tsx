@@ -9,7 +9,13 @@ export interface Props {
   multiline?: boolean,
   maxLength: number,
   label: string,
-  color: 'light' | "dark"
+  textColor: 'light' | "dark",
+  name: string,
+  onChange(e: React.ChangeEvent<HTMLInputElement>): void,
+  value: string | number,
+  valueLength: number,
+  type?: "text" | "password" | "number",
+  errorMessage?: "Something went wrong" | string
 }
 
 const useStyles = makeStyles<Theme, Props>((theme) => ({
@@ -22,13 +28,13 @@ const useStyles = makeStyles<Theme, Props>((theme) => ({
       borderBottomColor: ({ error }) => error ? '#FA000099' : '#FFFFFF99',
       backgroundColor: ({ error }) => error && "#9D131364",
       '& label.Mui-focused, .MuiFormLabel-root': {
-        color: ({ color }) => color === "dark" ? '#FFFFFF99' : theme.palette.grey[300],
+        color: ({ textColor }) => textColor === "dark" ? '#FFFFFF99' : theme.palette.grey[300],
         fontSize: "12px",
         fontWeight: 600,
         fontFamily: "Open Sans"
       },
       '& .MuiFilledInput-underline:before': {
-        borderBottomColor: ({ error, color }) => error ? '#FA000099' : color === "light" ? theme.palette.common.black : '#FFFFFF99',
+        borderBottomColor: ({ error, textColor }) => error ? '#FA000099' : textColor === "light" ? theme.palette.common.black : '#FFFFFF99',
       },
       '&:hover .MuiFilledInput-underline:before, .MuiFilledInput-underline:after': {
         borderBottomColor: ({ error }) => error ? '#FA000099' : theme.palette.secondary.main
@@ -47,7 +53,7 @@ const useStyles = makeStyles<Theme, Props>((theme) => ({
     },
   },
   input: {
-    color: ({ color }) => color === "dark" ? theme.palette.common.white : theme.palette.common.black,
+    color: ({ textColor }) => textColor === "dark" ? theme.palette.common.white : theme.palette.common.black,
     fontSize: "15px",
     fontWeight: "normal",
     fontFamily: "Open Sans"
@@ -59,16 +65,14 @@ export default function TextField(props: Props) {
     error,
     multiline,
     maxLength,
-    label
+    label,
+    name,
+    onChange,
+    value,
+    valueLength,
+    errorMessage
   } = props
   const classes = useStyles(props);
-  const [valueLength, setValueLength] = React.useState<number>(0)
-  const [value, setValue] = React.useState<string>("")
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
-    setValueLength(e.target.value.length)
-  }
 
   return (
     <form className={classes.root} noValidate autoComplete="off">
@@ -76,7 +80,7 @@ export default function TextField(props: Props) {
         inputProps={{
           maxLength
         }}
-        helperText={error ? "Something went wrong" : `${valueLength}/${maxLength}`}
+        helperText={error ? errorMessage : `${valueLength}/${maxLength}`}
         id="standard-basic"
         label={label}
         color="secondary"
@@ -84,10 +88,12 @@ export default function TextField(props: Props) {
         value={value}
         InputProps={{
           className: classes.input,
-          endAdornment: <InputAdornment position="end">{error && <Icon name="information"/>}</InputAdornment>
+          endAdornment: <InputAdornment position="end">{error && <Icon name="information" />}</InputAdornment>
         }}
         multiline={multiline}
-        onChange={handleChange}
+        onChange={onChange}
+        name={name}
+        {...props}
       />
     </form>
   );
@@ -97,5 +103,5 @@ TextField.defaultProps = {
   error: false,
   multiline: false,
   maxLength: 16,
-  color: "dark"
+  textColor: "dark"
 };

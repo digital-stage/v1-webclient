@@ -41,6 +41,10 @@ const BaseTheme = createMuiTheme({
         background: {
             default: "#343434",
             paper: "#101010"
+        },
+        action: {
+            disabledBackground: "#828282",
+            disabled: "#D1D1D1",
         }
     },
     typography: {

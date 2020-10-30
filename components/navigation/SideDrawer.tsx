@@ -1,14 +1,15 @@
-import React, {useCallback, useEffect} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import {Drawer} from '@material-ui/core';
+import React, { useCallback, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Drawer, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import useMenus, {NavItem} from "./useMenus";
-import {useRouter} from "next/router";
+import useMenus, { NavItem } from "./useMenus";
+import { useRouter } from "next/router";
 import Icon2 from "../base/Icon2";
+import DrawerContent from '../stage';
 
-const drawerWidth = 380;
+const drawerWidth = 350;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -157,7 +158,7 @@ export default function SideDrawer(props: {
                 <span className={classes.sideDrawer}>
                     <List>
                         <ListItem button onClick={() => setOpen(prev => !prev)}>
-                            <Icon2 name="menu"/>
+                            <Icon2 name="menu" />
                         </ListItem>
                     </List>
                     <List>
@@ -167,6 +168,7 @@ export default function SideDrawer(props: {
                         {menus.settingsNav.map(navItem => renderItem(navItem))}
                     </List>
                 </span>
+                <DrawerContent/>
             </div>
         </Drawer>
     );

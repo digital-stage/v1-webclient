@@ -119,7 +119,7 @@ export interface Stage {
     users: User[]
 }
 
-const stages: Stage[] = [
+export const stages: Stage[] = [
     { title: 'Bulshemier Theatre', mineStage: true, image: "/images/stage-icon.png", online: true, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }], description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis." },
     { title: 'National Theatre', mineStage: false, image: "/images/stage-icon.png", online: true, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }], description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis." },
     { title: 'Theatre National Royal', mineStage: true, image: "/images/stage-icon.png", online: false, users: [{ userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }, { userPhoto: "/images/stage-icon.png", username: "username" }], description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Architecto, corporis." },

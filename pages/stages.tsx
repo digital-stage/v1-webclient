@@ -1,17 +1,18 @@
 import Container from "../components/complex/depreacted/theme/layout/Container";
-import React, {useEffect, useState} from "react";
-import {useAuth} from "../lib/digitalstage/useAuth";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../lib/digitalstage/useAuth";
 import Loading from "../components/complex/depreacted/theme/Loading";
 import Login from "./account/login";
 import StageListView from "../components/layouts/StageListView";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import useStageSelector from "../lib/digitalstage/useStageSelector";
-import {Typography} from "@material-ui/core";
+import { Typography } from "@material-ui/core";
+import StageDetails from "../components/stage/StageDetails";
 
 
 const Stages = () => {
     const router = useRouter();
-    const {loading, user} = useAuth();
+    const { loading, user } = useAuth();
     const stageId = useStageSelector<string | undefined>(state => state.stageId);
     const [initialized, setInitialized] = useState<boolean>();
 
@@ -21,6 +22,7 @@ const Stages = () => {
                 router.push("/");
             }
         }
+        console.log(stageId)
     }, [stageId]);
 
     useEffect(() => {
@@ -31,13 +33,15 @@ const Stages = () => {
 
     if (!loading) {
         if (!user) {
-            return <Login/>
+            return <Login />
         } else {
-            return (
-                <Container>
+            return (<>
+                <StageDetails />
+                {/* <Container>
                     <Typography variant="h1">Meine Bühnen</Typography>
-                    <StageListView/>
-                </Container>
+                    <StageListView />
+                </Container> */}
+            </>
             );
         }
     }

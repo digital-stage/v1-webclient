@@ -1,8 +1,8 @@
 import React from 'react';
 import MaterialButton from '@material-ui/core/Button';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import {PropTypes, Typography} from '@material-ui/core';
-import Icon from './Icon';
+import { PropTypes, Typography } from '@material-ui/core';
+import Icon2 from './Icon2';
 
 export interface Props {
     color?: PropTypes.Color | "light" | "dark",
@@ -10,8 +10,9 @@ export interface Props {
     withIcon?: boolean,
     iconName?: string,
     iconColor?: string,
-    type?:"submit",
-    onClick?: () => void
+    type?: "submit",
+    onClick?: () => void,
+    disabled?: boolean
 }
 const useStyles = makeStyles<Theme, Props>((theme: Theme & Props) =>
     createStyles({
@@ -21,7 +22,7 @@ const useStyles = makeStyles<Theme, Props>((theme: Theme & Props) =>
             '&:hover': {
                 backgroundColor: ({ color }) => color === "dark" && theme.palette.common.black || color === "light" && theme.palette.common.white
             },
-            margin: theme.spacing(1),
+            margin: theme.spacing(1, 1, 1, 0),
             borderRadius: "21px",
             lineHeight: "initial",
             alignItems: "initial"
@@ -34,12 +35,11 @@ const useStyles = makeStyles<Theme, Props>((theme: Theme & Props) =>
 
 export default function Button(props: Props) {
     const {
-        color,
         text,
         type,
         withIcon,
         iconName,
-        iconColor,
+        disabled,
         onClick
     } = props
     const classes = useStyles(props);
@@ -53,8 +53,9 @@ export default function Button(props: Props) {
                 color={buttonColor}
                 className={classes.root}
                 type={type}
-                startIcon={withIcon && <Icon name={iconName} iconColor={iconColor} />}
+                startIcon={withIcon && <Icon2 name={iconName} />}
                 onClick={onClick}
+                disabled={disabled}
             >
                 <Typography variant="button">{text}</Typography>
             </MaterialButton>

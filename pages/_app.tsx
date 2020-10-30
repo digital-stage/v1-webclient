@@ -1,27 +1,28 @@
-import {AppProps} from 'next/app'
-import {Provider as StyletronProvider} from 'styletron-react'
-import {debug, styletron} from '../styletron'
-import {AuthContextProvider} from "../lib/digitalstage/useAuth";
-import {BaseProvider, DarkTheme, LightTheme} from "baseui";
-import React, {FC} from "react";
-import {SocketContextProvider} from "../lib/digitalstage/useStageContext";
-import {RequestContextProvider} from "../lib/useRequest";
+import { AppProps } from 'next/app'
+import { Provider as StyletronProvider } from 'styletron-react'
+import { debug, styletron } from '../styletron'
+import { AuthContextProvider } from "../lib/digitalstage/useAuth";
+import { BaseProvider, DarkTheme, LightTheme } from "baseui";
+import React, { FC } from "react";
+import { SocketContextProvider } from "../lib/digitalstage/useStageContext";
+import { RequestContextProvider } from "../lib/useRequest";
 import Head from 'next/head'
 import StageJoiner from "../components/layouts/StageJoiner";
 import LocalDeviceControl from '../components/layouts/LocalDeviceControl';
-import {AudioContextProvider} from "../lib/useAudioContext";
-import {CssBaseline, ThemeProvider} from '@material-ui/core';
+import { AudioContextProvider } from "../lib/useAudioContext";
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import MediasoupProvider from "../lib/digitalstage/useMediasoup";
-import {wrapper} from "../lib/digitalstage/useStageContext/redux";
-import {DarkModeConsumer, DarkModeProvider} from "../lib/useDarkModeSwitch";
+import { wrapper } from "../lib/digitalstage/useStageContext/redux";
+import { DarkModeConsumer, DarkModeProvider } from "../lib/useDarkModeSwitch";
 import AudioContextController from "../components/complex/depreacted/audio/AudioContextController";
 import StageWebAudioProvider from "../lib/useStageWebAudio";
 import PageWrapper from "../components/layouts/PageWrapper";
-import {DSDarkTheme, DSLightTheme} from "../components/DSTheme";
+import { DSDarkTheme, DSLightTheme } from "../components/DSTheme";
 import i18n from '../i18n'
-import {ErrorsProvider} from "../lib/useErrors";
+import { ErrorsProvider } from "../lib/useErrors";
+import { ProvideStage } from '../components/stage/useStage';
 
-const MyApp: FC<AppProps> = ({Component, pageProps}) => {
+const MyApp: FC<AppProps> = ({ Component, pageProps }) => {
     React.useEffect(() => {
         // Remove the server-side injected CSS.
         const jssStyles = document.querySelector('#jss-server-side');
@@ -33,7 +34,7 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
     return (
         <>
             <Head>
-                <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
+                <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
             </Head>
             <StyletronProvider value={styletron} debug={debug} debugAfterHydration>
                 <ErrorsProvider>
@@ -46,7 +47,7 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                                             <DarkModeConsumer>
                                                 {(darkMode) => (
                                                     <ThemeProvider theme={darkMode ? DSDarkTheme : DSLightTheme}>
-                                                        <CssBaseline/>
+                                                        <CssBaseline />
                                                         <BaseProvider theme={darkMode ? DarkTheme : LightTheme}>
                                                             <style jsx global>{`
                                             @import("https://use.fontawesome.com/releases/v5.12.0/css/all.css");
@@ -78,14 +79,16 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
                                         `}
                                                             </style>
                                                             <StageWebAudioProvider>
-                                                                <PageWrapper>
-                                                                    <Component {...pageProps} />
-                                                                </PageWrapper>
+                                                                <ProvideStage>
+                                                                    <PageWrapper>
+                                                                        <Component {...pageProps} />
+                                                                    </PageWrapper>
+                                                                </ProvideStage>
                                                             </StageWebAudioProvider>
 
-                                                            <AudioContextController/>
+                                                            <AudioContextController />
 
-                                                            <StageJoiner/>
+                                                            <StageJoiner />
 
                                                         </BaseProvider>
                                                     </ThemeProvider>
