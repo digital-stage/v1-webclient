@@ -2,6 +2,8 @@ import React, {useCallback, useEffect, useState} from "react";
 import HorizontalSlider from "./HorizontalSlider";
 import VerticalSlider from "./VerticalSlider";
 import {convertRangeToDbMeasure, formatDbMeasure} from "./utils";
+import {useStyletron} from "styletron-react";
+import {Typography} from "@material-ui/core";
 
 export type RGBColor = [number, number, number];
 
@@ -35,12 +37,12 @@ const LogSlider = (props: {
     onChange?: (volume: number) => any;
     onEnd?: (volume: number) => any;
     width: number;
-    vertical?: boolean;
     className?: string;
     alignLabel?: "left" | "right";
 }) => {
     const [value, setValue] = useState<number>();
     const [dbValue, setDbValue] = useState<number>(props.volume);
+    const [css] = useStyletron();
 
     const convertLinearToLog = useCallback((value: number): number => {
         if (value > NULL_VALUE) {
@@ -79,25 +81,6 @@ const LogSlider = (props: {
         }
     }, [props.onEnd])
 
-    /*
-    if (!props.vertical) {
-        return (
-            <HorizontalSlider
-                className={props.className}
-                min={MIN}
-                max={MAX}
-                step={STEP}
-                value={value}
-                onChange={handleSliderChange}
-                onFinalChange={handleFinalSliderChange}
-                color={props.color}
-                width={props.width}
-                text={formatDbMeasure(dbValue)}
-
-            />
-        )
-    }*/
-
     return (
         <VerticalSlider
             className={props.className}
@@ -109,9 +92,18 @@ const LogSlider = (props: {
             onFinalChange={handleFinalSliderChange}
             color={props.color}
             width={props.width}
-            text={formatDbMeasure(dbValue)}
+            text={formatDbMeasure(dbValue, true)}
             alignLabel={props.alignLabel}
             showMarks={true}
+            renderMarks={(index) => {
+                const value = MAX - (index * STEP);
+                const large: boolean = value === MIN || value === MAX || value === NULL_VALUE;
+                if (large)
+                    return (
+                            <Typography
+                                variant="caption">{formatDbMeasure(convertRangeToDbMeasure(convertLinearToLog(value)))}</Typography>
+                    );
+            }}
         />
     )
 };

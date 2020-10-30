@@ -1,4 +1,4 @@
-import {AppProps} from 'next/app'
+import App, {AppProps} from 'next/app'
 import {Provider as StyletronProvider} from 'styletron-react'
 import {debug, styletron} from '../styletron'
 import {AuthContextProvider} from "../lib/digitalstage/useAuth";
@@ -17,8 +17,9 @@ import StageWebAudioProvider from "../lib/useStageWebAudio";
 import PageWrapper from "../components/layouts/PageWrapper";
 import {DSDarkTheme, DSLightTheme} from "../components/DSTheme";
 import {ErrorsProvider} from "../lib/useErrors";
+import i18n from "../i18n";
 
-const MyApp: FC<AppProps> = ({Component, pageProps}) => {
+const MyApp = ({Component, pageProps}) => {
     React.useEffect(() => {
         // Remove the server-side injected CSS.
         const jssStyles = document.querySelector('#jss-server-side');
@@ -104,4 +105,4 @@ const MyApp: FC<AppProps> = ({Component, pageProps}) => {
         </>
     )
 }
-export default wrapper.withRedux(MyApp);
+export default i18n.appWithTranslation(wrapper.withRedux(MyApp));

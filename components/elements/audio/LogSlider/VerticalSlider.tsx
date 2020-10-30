@@ -1,12 +1,16 @@
 import {Direction, getTrackBackground, Range} from "react-range";
-import React from "react";
+import React, {useCallback} from "react";
 import {styled, useStyletron} from "styletron-react";
 import {RGBColor} from "./index";
+import {Typography} from "@material-ui/core";
+import {convertRangeToDbMeasure, formatDbMeasure} from "./utils";
 
 const Wrapper = styled("div", {
     display: "flex",
     height: '100%',
     flexDirection: 'column',
+    alignItem: "center",
+    justifyContent: "center",
     boxSizing: "border-box",
 });
 
@@ -21,10 +25,28 @@ const VerticalSlider = (props: {
     width: number;
     text?: string;
     showMarks?: boolean;
+    renderMarks?: (index: number) => React.ReactNode;
     className?: string;
     alignLabel?: "left" | "right";
 }) => {
     const [css] = useStyletron();
+
+    const renderSingleMark = useCallback((index: number) => {
+        const mark = props.renderMarks(index);
+        if (mark) {
+            return (
+                <div className={css({
+                    position: "absolute",
+                    top: "-400%",
+                    left: props.alignLabel && props.alignLabel === "left" ? "140%" : undefined,
+                    right: !props.alignLabel || props.alignLabel === "right" ? "140%" : undefined,
+                })}>
+                    {mark}
+                </div>
+            )
+        }
+        return undefined;
+    }, [props.renderMarks, props.alignLabel]);
 
     const solidColor = `rgba(${props.color[0]},${props.color[1]},${props.color[2]},0.6)`;
     return (
@@ -40,7 +62,7 @@ const VerticalSlider = (props: {
                     if (props.onFinalChange)
                         props.onFinalChange(values[0]);
                 }}
-                renderMark={({props: markProps, index}) => (
+                renderMark={props.showMarks ? ({props: markProps, index}) => (
                     <div
                         {...markProps}
                         className={css({
@@ -49,8 +71,10 @@ const VerticalSlider = (props: {
                             width: index % 2 ? (props.width / 2) + "px" : props.width + "px",
                             backgroundColor: index * props.step > props.max - props.value ? solidColor : 'rgba(255,255,255,0.2)'
                         })}
-                    />
-                )}
+                    >
+                        {renderSingleMark(index)}
+                    </div>
+                ) : undefined}
                 renderTrack={({props: trackProps, children}) => (
                     <div
                         onMouseDown={trackProps.onMouseDown}

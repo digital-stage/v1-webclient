@@ -4,7 +4,6 @@ import {Stage} from "../../../lib/digitalstage/common/model.server";
 import React, {useCallback, useEffect, useState} from "react";
 import {DefaultSettingsMenu, DefaultStageMenu, DefaultUserSignedInMenu, DefaultUserSignedOutMenu} from "./defaultMenus";
 import {Delete} from "baseui/icon";
-import ViewQuiltIcon from '@material-ui/icons/ViewQuilt';
 import Icon2 from "../../base/Icon2";
 
 export interface NavItem {

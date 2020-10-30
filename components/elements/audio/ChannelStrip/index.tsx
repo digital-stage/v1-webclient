@@ -1,10 +1,9 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback} from "react";
 import {Button} from "baseui/button";
 import {styled} from "baseui";
 import {IAnalyserNode, IAudioContext} from "standardized-audio-context";
 import LevelControlFader from "./LevelControlFader";
 import LevelMeter from "./LevelMeter";
-
 
 const Strip = styled("div", {
     position: "relative",
@@ -42,14 +41,10 @@ const VolumeFader = styled("div", {
 });
 
 const LeftVolumeFader = styled(LevelControlFader, {
-    width: "64px",
-    alignItems: "flex-end",
-    paddingRight: ".4rem"
+    padding: ".4rem"
 });
 const RightVolumeFader = styled(LevelControlFader, {
-    width: "64px",
-    alignItems: "flex-start",
-    paddingRight: ".4rem"
+    padding: ".4rem"
 });
 
 const VolumeMeter = styled(LevelMeter, {
