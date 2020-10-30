@@ -1,8 +1,7 @@
-import App, {AppProps} from 'next/app'
 import {Provider as StyletronProvider} from 'styletron-react'
 import {debug, styletron} from '../styletron'
 import {AuthContextProvider} from "../lib/digitalstage/useAuth";
-import {BaseProvider, DarkTheme, LightTheme} from "baseui";
+import {BaseProvider, LightTheme} from "baseui";
 import React, {FC} from "react";
 import {SocketContextProvider} from "../lib/digitalstage/useStageContext";
 import {RequestContextProvider} from "../lib/useRequest";
@@ -18,6 +17,7 @@ import PageWrapper from "../components/layouts/PageWrapper";
 import {DSDarkTheme, DSLightTheme} from "../components/DSTheme";
 import {ErrorsProvider} from "../lib/useErrors";
 import i18n from "../i18n";
+import DarkTheme from '../uikit/Theme';
 
 const MyApp = ({Component, pageProps}) => {
     React.useEffect(() => {
@@ -79,6 +79,12 @@ const MyApp = ({Component, pageProps}) => {
                                                 0%   { transform: translateY(0); }
                                                 50%  { transform: translateY(-20px); }
                                                 100% { transform: translateY(0); }
+                                            }
+                                            @keyframes ripple {
+                                              to {
+                                                opacity: 0;
+                                                transform: scale(2);
+                                              }
                                             }
                                         `}
                                                             </style>

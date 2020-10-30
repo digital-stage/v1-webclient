@@ -7,8 +7,29 @@ import {styled} from "styletron-react";
 import ChannelStrip from "../../../elements/audio/ChannelStrip";
 import {Typography} from "@material-ui/core";
 
-const ColoredChannelPanel = styled(ChannelStrip, {
-    backgroundColor: "rgba(100,100,130,1)"
+const Panel = styled("div", {
+    display: "flex",
+    flexDirection: "row",
+    height: "100%",
+})
+const Row = styled("div", {
+    display: "flex",
+    flexDirection: "row",
+    height: "100%"
+})
+const Column = styled("div", {
+    paddingLeft: "1rem",
+    paddingRight: "1rem",
+    paddingTop: "1rem",
+    paddingBottom: "1rem",
+    height: "100%"
+})
+const Header = styled("div", {
+    width: "100%",
+    height: "64px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
 })
 
 const AudioProducerChannel = (props: {
@@ -23,30 +44,37 @@ const AudioProducerChannel = (props: {
     const {updateStageMemberAudio, setCustomStageMemberAudio, removeCustomStageMemberAudio} = useStageActions();
 
     return (
-        <ColoredChannelPanel
-            addHeader={<Typography variant="h5">Track</Typography>}
-            analyser={byAudioProducer[props.audioProducerId] ? byAudioProducer[props.audioProducerId].analyserNode : undefined}
+        <Panel>
+            <Row>
+                <Column>
+                    <ChannelStrip
+                        addHeader={<Header><Typography variant="h5">Track</Typography></Header>}
+                        analyser={byAudioProducer[props.audioProducerId] ? byAudioProducer[props.audioProducerId].analyserNode : undefined}
 
-            volume={audioProducer.volume}
-            muted={audioProducer.muted}
-            customVolume={customAudioProducer ? customAudioProducer.volume : undefined}
-            customMuted={customAudioProducer ? customAudioProducer.muted : undefined}
+                        volume={audioProducer.volume}
+                        muted={audioProducer.muted}
+                        customVolume={customAudioProducer ? customAudioProducer.volume : undefined}
+                        customMuted={customAudioProducer ? customAudioProducer.muted : undefined}
 
-            onVolumeChanged={(volume, muted) => updateStageMemberAudio(audioProducer._id, {
-                volume: volume,
-                muted: muted
-            })}
-            onCustomVolumeChanged={(volume, muted) => setCustomStageMemberAudio(audioProducer._id, {
-                volume: volume,
-                muted: muted
-            })}
-            onCustomVolumeReset={() => {
-                if (customAudioProducer)
-                    return removeCustomStageMemberAudio(customAudioProducer._id)
-            }}
+                        onVolumeChanged={(volume, muted) => updateStageMemberAudio(audioProducer._id, {
+                            volume: volume,
+                            muted: muted
+                        })}
+                        onCustomVolumeChanged={(volume, muted) => setCustomStageMemberAudio(audioProducer._id, {
+                            volume: volume,
+                            muted: muted
+                        })}
+                        onCustomVolumeReset={() => {
+                            if (customAudioProducer)
+                                return removeCustomStageMemberAudio(customAudioProducer._id)
+                        }}
 
-            isAdmin={isAdmin}
-        />
+                        isAdmin={isAdmin}
+                    />
+                </Column>
+            </Row>
+        </Panel>
+
     )
 }
 export default AudioProducerChannel;

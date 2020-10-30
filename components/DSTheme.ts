@@ -6,7 +6,7 @@ const BaseTheme = createMuiTheme({
         "background": {"paper": "rgba(16, 16, 16, 1)", "default": "rgba(37, 37, 37, 1)"},
         "primary": {
             "light": "rgba(255, 89, 110, 1)",
-            "main": "rgba(242, 4, 67, 1)",
+            "main": "rgb(242,4,67)",
             "dark": "rgba(183, 0, 29, 1)",
             "contrastText": "#fff"
         },
