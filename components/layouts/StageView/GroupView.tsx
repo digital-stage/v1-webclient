@@ -3,18 +3,17 @@ import React from "react";
 import StageMemberView from "./StageMemberView";
 import {useStyletron} from "baseui";
 import {Cell, Grid} from "baseui/layout-grid";
-import {NormalizedState, StageMembers} from "../../../lib/digitalstage/useStageContext/schema";
-import {useSelector} from "../../../lib/digitalstage/useStageContext/redux";
 import {Typography} from "@material-ui/core";
+import {useStageMembersByGroup} from "../../../lib/digitalstage/useStageSelector";
 
 
 const GroupView = (props: {
     group: Group
 }) => {
     const [css] = useStyletron();
-    const stageMembers = useSelector<NormalizedState, StageMembers>(state => state.stageMembers);
+    const stageMembers = useStageMembersByGroup(props.group._id);
 
-    if (stageMembers.byGroup[props.group._id] && stageMembers.byGroup[props.group._id].length > 0) {
+    if (stageMembers.length > 0) {
         return (
             <div className={css({})}>
                 <Grid>
@@ -27,8 +26,8 @@ const GroupView = (props: {
                     flexWrap: 'wrap',
                     justifyContent: 'flex-start'
                 })}>
-                    {stageMembers.byGroup[props.group._id].map(id => (
-                        <StageMemberView key={id} stageMember={stageMembers.byId[id]}/>
+                    {stageMembers.map(stageMember => (
+                        <StageMemberView key={stageMember._id} stageMember={stageMember}/>
                     ))}
                 </div>
             </div>

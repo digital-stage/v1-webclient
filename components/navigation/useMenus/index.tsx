@@ -3,7 +3,7 @@ import useStageSelector from "../../../lib/digitalstage/useStageSelector";
 import {Stage} from "../../../lib/digitalstage/common/model.server";
 import React, {useCallback, useEffect, useState} from "react";
 import {DefaultSettingsMenu, DefaultStageMenu, DefaultUserSignedInMenu, DefaultUserSignedOutMenu} from "./defaultMenus";
-import {Delete, Overflow} from "baseui/icon";
+import {Delete} from "baseui/icon";
 import Icon2 from "../../base/Icon2";
 
 export interface NavItem {
@@ -47,8 +47,13 @@ const useMenus = (): {
             setStageNav([
                 {
                     label: stage.name,
-                    icon: <Icon2 name="band-vocals"/>,
+                    icon: <Icon2 name="stage"/>,
                     path: "/"
+                },
+                {
+                    label: "Mixer",
+                    icon: <Icon2 name="mixer"/>,
+                    path: "/mixer"
                 },
                 {
                     label: "Leave stage",

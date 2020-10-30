@@ -30,7 +30,7 @@ export const DefaultUserSignedInMenu: NavItem[] = [
 export const DefaultStageMenu: NavItem[] = [
     {
         label: "Meine Bühnen",
-        icon: <Icon2 name="stage"/>,
+        icon: <Icon2 name="stages"/>,
         path: "/stages"
     },
     // {

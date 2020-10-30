@@ -6,11 +6,9 @@ import MobileMenu from "../../navigation/MobileMenu";
 import {useTheme} from "@material-ui/styles";
 import {useStyletron} from "styletron-react";
 import LocalDeviceControl from "../LocalDeviceControl";
-import {BaseProvider} from "baseui";
-import StageJoiner from "../StageJoiner";
-
-
-
+import StageOrMixerSwitcher from "../../elements/sticky/StageOrMixerSwitcher";
+import AudioPlaybackStarter from "../../elements/sticky/AudioPlaybackStarter";
+import ProfileIcon from "../../elements/sticky/ProfileIcon";
 
 const PageWrapper = (props: {
     children: React.ReactNode
@@ -57,6 +55,12 @@ const PageWrapper = (props: {
             </main>
 
             <LocalDeviceControl/>
+
+            <StageOrMixerSwitcher/>
+
+            <AudioPlaybackStarter/>
+
+            <ProfileIcon/>
         </div>
     )
 };

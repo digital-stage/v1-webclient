@@ -6,14 +6,13 @@ import GroupChannel from "./channels/GroupChannel";
 const Wrapper = styled("div", {
     width: "100%",
     height: "100%",
-    maxHeight: "600px",
     display: "flex",
     flexDirection: "row",
-    flexWrap: "wrap",
-    overflowX: "auto",
-    overflowY: "hidden",
+    flexWrap: "nowrap",
+    overflowX: "scroll",
+    overflowY: "auto",
     whiteSpace: "nowrap",
-    padding: ".2rem"
+    padding: "1rem"
 });
 
 /***

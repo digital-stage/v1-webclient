@@ -12,8 +12,7 @@ import {useRequest} from "../../../lib/useRequest";
 import {Client} from "../../../lib/digitalstage/common/model.client";
 import useStageActions from "../../../lib/digitalstage/useStageActions";
 import {useSelector} from "../../../lib/digitalstage/useStageContext/redux";
-import {Groups, NormalizedState, Stages} from "../../../lib/digitalstage/useStageContext/schema";
-import {shallowEqual} from "react-redux";
+import {Groups, NormalizedState} from "../../../lib/digitalstage/useStageContext/schema";
 import i18n from "../../../i18n";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import List from "@material-ui/core/List";
@@ -31,8 +30,8 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import Avatar from "@material-ui/core/Avatar";
+import useStageSelector, {useStages} from "../../../lib/digitalstage/useStageSelector";
 
-const Label = styled("div", {})
 const GlobalActions = styled("div", {
     width: '100%',
     display: 'flex',
@@ -41,8 +40,6 @@ const GlobalActions = styled("div", {
     alignItems: 'center',
     justifyContent: 'flex-end'
 })
-const StageTopActions = withStyles({})(ButtonGroup);
-const GroupAdminActions = withStyles({})(ButtonGroup);
 
 const AccordionContent = withStyles({
     root: {
@@ -50,39 +47,6 @@ const AccordionContent = withStyles({
         flexDirection: "column"
     }
 })(AccordionDetails);
-
-const StageBottomActions = styled("div", {
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingTop: '1rem'
-});
-const GroupRow = styled("div", {
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    borderBottomStyle: 'solid',
-    borderBottomWidth: '1px',
-    borderBottomColor: 'rgb(203, 203, 203)'
-});
-const GroupTitle = styled("div", {
-    display: 'flex',
-    paddingTop: '1rem',
-    paddingBottom: '1rem',
-    alignItems: 'center',
-    flexGrow: 2
-})
-const GroupActions = styled("div", {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingTop: '1rem',
-    paddingBottom: '1rem',
-    flexGrow: 1
-});
 
 const AccordionTitle = styled("div", {
     display: 'flex',
@@ -99,8 +63,8 @@ const AccordionTitleActions = styled("div", {
 const StageListView = () => {
     const {t} = i18n.useTranslation('stages');
 
-    const stages = useSelector<NormalizedState, Stages>(state => state.stages, shallowEqual);
-    const groups = useSelector<NormalizedState, Groups>(state => state.groups);
+    const stages = useStages();
+    const groups = useStageSelector<Groups>(state => state.groups);
     const currentStageId = useSelector<NormalizedState, string | undefined>(state => state.stageId);
     const currentGroupId = useSelector<NormalizedState, string | undefined>(state => state.groupId);
     const {removeStage, removeGroup, leaveStage, leaveStageForGood} = useStageActions();
@@ -132,18 +96,17 @@ const StageListView = () => {
                 </Button>
             </GlobalActions>
             <div>
-                {stages.allIds.map(stageId => {
-                    const stage = stages.byId[stageId];
+                {stages.map(stage => {
                     return (
                         <Accordion
-                            expanded={expanded === `panel-${stageId}`}
-                            onChange={handleChange(`panel-${stageId}`)}
+                            expanded={expanded === `panel-${stage._id}`}
+                            onChange={handleChange(`panel-${stage._id}`)}
                             key={stage._id}
                         >
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon color="primary"/>}
-                                aria-controls={`panel-${stageId}-content`}
-                                id={`panel-${stageId}-header`}
+                                aria-controls={`panel-${stage._id}-content`}
+                                id={`panel-${stage._id}-header`}
                             >
                                 <AccordionTitle>
                                     <Typography variant="h4">{stage.name}</Typography>
@@ -152,7 +115,7 @@ const StageListView = () => {
                                     {stage.isAdmin && (
                                         <>
                                             <IconButton aria-label={t('add-group')}
-                                                        color="primary"
+                                                        color="secondary"
                                                         edge="start"
                                                         onClick={() => {
                                                             setCurrentStage(stage);
@@ -183,10 +146,10 @@ const StageListView = () => {
                             </AccordionSummary>
                             <AccordionContent>
                                 <List>
-                                    {groups.byStage[stageId] && groups.byStage[stageId].map(groupId => {
+                                    {groups.byStage[stage._id] && groups.byStage[stage._id].map(groupId => {
                                         const group = groups.byId[groupId];
                                         return (
-                                            <ListItem key={groupId} dense>
+                                            <ListItem key={group._id} dense>
                                                 <ListItemAvatar>
                                                     <Avatar>
                                                         <Icon2 name="group-preset"/>

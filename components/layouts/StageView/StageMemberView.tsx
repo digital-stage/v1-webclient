@@ -1,21 +1,66 @@
-import {StageMember} from "../../../lib/digitalstage/useStageContext/model";
 import {useStyletron} from "baseui";
 import React from "react";
 import {Avatar} from "baseui/avatar";
 import OnlineStatus from "../../complex/depreacted/theme/OnlineStatus";
-import CanvasPlayer from "../../experimental/CanvasPlayer";
-import {Users, VideoConsumers} from "../../../lib/digitalstage/useStageContext/schema";
+import CanvasPlayer from "../../elements/video/CanvasPlayer";
 import {Typography} from "@material-ui/core";
-import useStageSelector from "../../../lib/digitalstage/useStageSelector";
+import {ExtendedStageMember, useIsStageAdmin} from "../../../lib/digitalstage/useStageSelector";
+import StarBorderIcon from '@material-ui/icons/StarBorder';
+import StarIcon from '@material-ui/icons/Star';
+import useStageActions from "../../../lib/digitalstage/useStageActions";
 
-const StageMemberView = (props: {
-    stageMember: StageMember
+const StageMemberTitle = (props: {
+    stageMember: ExtendedStageMember
 }) => {
     const [css] = useStyletron();
-    const users = useStageSelector<Users>(state => state.users);
-    const videoConsumers = useStageSelector<VideoConsumers>(state => state.videoConsumers);
+    const {updateStageMember} = useStageActions();
+    const isAdmin = useIsStageAdmin();
 
-    const user = users.byId[props.stageMember.userId];
+    return (
+        <>
+            <div className={css({
+                display: 'flex',
+                width: 'calc(100% - 2rem)',
+                alignItems: 'center'
+            })}>
+                <div className={css({
+                    margin: '.5rem',
+                    flexGrow: 0
+                })}>
+                    <Avatar name={props.stageMember.name}/>
+                </div>
+                <div className={css({
+                    display: 'flex',
+                    flexGrow: 1
+                })}>
+                    <Typography variant="h5">{props.stageMember.name}</Typography>
+                </div>
+
+                {isAdmin && (
+                    <div className={css({
+                        display: 'flex',
+                        flexGrow: 0,
+                        cursor: "pointer"
+                    })}
+                         onClick={() => updateStageMember(props.stageMember._id, {
+                             isDirector: !props.stageMember.isDirector
+                         })}>
+                        {props.stageMember.isDirector ? <StarIcon/> : <StarBorderIcon/>}
+                    </div>
+                )}
+                <OnlineStatus overrides={{
+                    display: 'flex',
+                    flexGrow: 0
+                }} online={props.stageMember.online}/>
+            </div>
+        </>
+    )
+}
+
+const StageMemberView = (props: {
+    stageMember: ExtendedStageMember
+}) => {
+    const [css] = useStyletron();
 
     return (
         <div className={css({
@@ -33,15 +78,14 @@ const StageMemberView = (props: {
             <div className={css({
                 paddingTop: '100%'
             })}/>
-            {videoConsumers.byStageMember[props.stageMember._id] && videoConsumers.byStageMember[props.stageMember._id].length > 0 &&
+            {props.stageMember.videoConsumers.length > 0 &&
             <CanvasPlayer className={css({
                 position: "absolute",
                 top: 0,
                 left: 0,
                 width: "100%",
                 height: "100%"
-            })} consumers={videoConsumers.byStageMember[props.stageMember._id]
-                .map(id => videoConsumers.byId[id])}/>
+            })} consumers={props.stageMember.videoConsumers}/>
             }
             <div className={css({
                 position: "absolute",
@@ -50,23 +94,7 @@ const StageMemberView = (props: {
                 width: '100%',
                 height: '100%'
             })}>
-                <div className={css({
-                    display: 'flex',
-                    width: 'calc(100% - 2rem)',
-                    alignItems: 'center'
-                })}>
-                    <div className={css({
-                        margin: '.5rem'
-                    })}>
-                        <Avatar name={user.name}/>
-                    </div>
-                    <Typography variant="h5">{user.name}</Typography>
-                </div>
-                <OnlineStatus overrides={{
-                    position: "absolute",
-                    top: 0,
-                    right: 0,
-                }} online={props.stageMember.online}/>
+                <StageMemberTitle stageMember={props.stageMember}/>
             </div>
         </div>
     )

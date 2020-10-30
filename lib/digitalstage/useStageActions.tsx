@@ -52,7 +52,7 @@ export interface StageActionsProps {
     leaveStageForGood(id: StageId);
 
     // Customized group
-    setCustomGroup(groupId: GroupId, volume: number);
+    setCustomGroup(groupId: GroupId, volume: number, muted: boolean);
 
     removeCustomGroup(customGroupId: GroupId);
 
@@ -238,31 +238,34 @@ const useStageActions = (): StageActionsProps => {
         }
     }, [socket]);
 
-    const addCustomGroup = useCallback((groupId: GroupId, volume: number) => {
+    const addCustomGroup = useCallback((groupId: GroupId, volume: number, muted: boolean) => {
         if (socket) {
             const payload: AddCustomGroupPayload = {
                 groupId: groupId,
-                volume: volume
+                volume: volume,
+                muted: muted
             }
             socket.emit(ClientStageEvents.ADD_CUSTOM_GROUP, payload);
         }
     }, [socket]);
 
-    const updateCustomGroup = useCallback((id: CustomGroupId, volume: number) => {
+    const updateCustomGroup = useCallback((id: CustomGroupId, volume: number, muted: boolean) => {
         if (socket) {
             const payload: UpdateCustomGroupPayload = {
                 id: id,
-                volume: volume
+                volume: volume,
+                muted: muted
             }
             socket.emit(ClientStageEvents.UPDATE_CUSTOM_GROUP, payload);
         }
     }, [socket]);
 
-    const setCustomGroup = useCallback((groupId: GroupId, volume: number) => {
+    const setCustomGroup = useCallback((groupId: GroupId, volume: number, muted: boolean) => {
         if (socket) {
             const payload: SetCustomGroupPayload = {
                 groupId: groupId,
-                volume: volume
+                volume: volume,
+                muted: muted
             }
             socket.emit(ClientStageEvents.SET_CUSTOM_GROUP, payload);
         }

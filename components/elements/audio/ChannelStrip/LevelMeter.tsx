@@ -1,7 +1,7 @@
-import React, {useRef, useState} from "react";
+import React, {useRef} from "react";
 import {IAnalyserNode, IAudioContext} from "standardized-audio-context";
-import useAnimationFrame from "../../../lib/useAnimationFrame";
-import {styled, useStyletron} from "baseui";
+import useAnimationFrame from "../../../../lib/useAnimationFrame";
+import {styled} from "baseui";
 
 const Canvas = styled("canvas", {
     width: "100%",
@@ -25,7 +25,9 @@ function getAverageVolume(array: Uint8Array): number {
 
 const LevelMeter = (
     props: {
-        analyser: IAnalyserNode<IAudioContext>
+        analyser: IAnalyserNode<IAudioContext>,
+        vertical?: boolean,
+        className?: string
     }
 ) => {
     const canvasRef = useRef<HTMLCanvasElement>();
@@ -42,19 +44,26 @@ const LevelMeter = (
 
             context.clearRect(0, 0, width, height);
 
-            const gradient = context.createLinearGradient(0, 0, 0, height);
-            gradient.addColorStop(1, '#90EE90');
-            gradient.addColorStop(0.50, '#ffff00');
-            gradient.addColorStop(0.25, '#ff0000');
-            gradient.addColorStop(0, '#000000');
-            context.fillStyle = gradient;
-
-            context.fillRect(0, height - average, width, height);
+            if (props.vertical) {
+                const gradient = context.createLinearGradient(0, 0, width, 0);
+                gradient.addColorStop(0, '#90EE90');
+                gradient.addColorStop(0.75, '#ffff00');
+                gradient.addColorStop(1, '#ff0000');
+                context.fillStyle = gradient;
+                context.fillRect(0, 0, average, height);
+            } else {
+                const gradient = context.createLinearGradient(0, 0, 0, height);
+                gradient.addColorStop(1, '#90EE90');
+                gradient.addColorStop(0.75, '#ffff00');
+                gradient.addColorStop(0, '#ff0000');
+                context.fillStyle = gradient;
+                context.fillRect(0, height - average, width, height);
+            }
         }
     });
 
     return (
-        <Canvas ref={canvasRef}/>
+        <Canvas className={props.className} ref={canvasRef}/>
     )
 }
 export default LevelMeter;
