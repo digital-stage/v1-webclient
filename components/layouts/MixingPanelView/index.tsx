@@ -12,6 +12,7 @@ const Wrapper = styled("div", {
     overflowX: "scroll",
     overflowY: "auto",
     whiteSpace: "nowrap",
+    padding: "1rem"
 });
 
 /***

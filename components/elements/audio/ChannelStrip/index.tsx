@@ -11,6 +11,8 @@ const Strip = styled("div", {
     width: "200px",
     display: "flex",
     flexDirection: "column",
+    flexGrow: 1,
+    flexShrink: 0
 });
 
 const StripHeader = styled("div", {
@@ -34,17 +36,19 @@ const VolumeFader = styled("div", {
     flexShrink: 0,
     flexGrow: 1,
     height: "1px",
-    minHeight: "300px",
+    minHeight: "100px",
     display: "flex",
     flexDirection: "row",
     justifyContent: "center"
 });
 
 const LeftVolumeFader = styled(LevelControlFader, {
-    padding: ".4rem"
+    paddingLeft: ".4rem",
+    paddingRight: ".4rem"
 });
 const RightVolumeFader = styled(LevelControlFader, {
-    padding: ".4rem"
+    paddingLeft: ".4rem",
+    paddingRight: ".4rem"
 });
 
 const VolumeMeter = styled(LevelMeter, {

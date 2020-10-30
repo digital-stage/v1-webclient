@@ -11,22 +11,21 @@ const Mixer = () => {
         <div className={css({
             position: "absolute",
             width: "100vw",
-            height: "calc(100vh - 4rem)",
+            height: "100vh",
             top: "0",
             left: "0",
             overflowX: "scroll",
-            overflowY: "hidden",
-            display: "flex",
-            alignItems: "center",
-            marginTop: "4rem",
+            overflowY: "auto",
+            paddingTop: "2rem",
             [theme.breakpoints.up("md")]: {
-                marginTop: 0,
+                paddingTop: "0",
                 paddingLeft: "4rem"
             }
         })}>
             <div className={css({
                 height: "100%",
-                maxHeight: "600px"
+                maxHeight: "600px",
+                minHeight: "400px"
             })}>
                 <MixingPanelView/>
             </div>
