@@ -35,9 +35,13 @@ const Button = (
             overrides={{
                 Root: {
                     style: {
+                        ...props.style
+                    }
+                },
+                BaseButton: {
+                    style: {
                         position: "relative",
                         overflow: "hidden",
-                        ...props.style
                     }
                 }
             }}
