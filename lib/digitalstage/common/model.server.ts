@@ -30,6 +30,7 @@ export interface Router {
     ipv4: string;
     ipv6: string;
     port: number;
+    path: string;
     availableSlots: number;
     userId: UserId;
 }
