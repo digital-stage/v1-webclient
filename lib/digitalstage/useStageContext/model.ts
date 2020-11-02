@@ -1,6 +1,5 @@
-import * as Server from "../common/model.server";
 import mediasoupClient from "mediasoup-client";
-
+import * as Server from "../common/model.server";
 
 export type LocalUser = Server.User;
 export type User = Server.User;
@@ -17,28 +16,27 @@ export type CustomAudioProducer = Server.CustomStageMemberAudioProducer;
 export type OvTrack = Server.StageMemberOvTrack;
 export type CustomOvTrack = Server.CustomStageMemberOvTrack;
 export type AudioConsumer = {
-    _id: string;
-    stage: string;
-    stageMember: string;
-    audioProducer: string
-    msConsumer: mediasoupClient.types.Consumer
+  _id: string;
+  stage: string;
+  stageMember: string;
+  audioProducer: string;
+  msConsumer: mediasoupClient.types.Consumer;
 };
 export type VideoConsumer = {
-    _id: string;
-    stage: string;
-    stageMember: string;
-    videoProducer: string;
-    msConsumer: mediasoupClient.types.Consumer
+  _id: string;
+  stage: string;
+  stageMember: string;
+  videoProducer: string;
+  msConsumer: mediasoupClient.types.Consumer;
 };
 
-
 export interface Collection<T> {
-    byId: {
-        [id: string]: T
-    },
-    allIds: string[]
+  byId: {
+    [id: string]: T;
+  };
+  allIds: string[];
 }
 
 export interface ExtendedCollection<T> extends Collection<T> {
-    [keys: string]: any
+  [keys: string]: any;
 }

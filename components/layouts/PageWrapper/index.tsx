@@ -20,6 +20,7 @@ const PageWrapper = (props: {
     return (
         <div className={css({
             width: "100%",
+            minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
             [breakpoints.up('md')]: {
@@ -49,7 +50,10 @@ const PageWrapper = (props: {
             )}
             <main className={css({
                 flexGrow: 1,
-                flexShrink: 0
+                flexShrink: 0,
+                position: "relative",
+                display: "flex",
+                flexDirection: "column"
             })}>
                 {props.children}
             </main>

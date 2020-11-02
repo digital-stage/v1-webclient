@@ -111,13 +111,15 @@ const StageMemberChannel = (props: {
                     isAdmin={isAdmin}
                 />
             </Column>
-            <Row>
-                <InnerRow>
-                    {expanded && audioProducers && audioProducers.map(id => <ColumnWithChildren><AudioProducerChannel key={id}
-                                                                                                                  audioProducerId={id}/></ColumnWithChildren>)}
-                </InnerRow>
 
-            </Row>
+            {expanded && audioProducers && (
+                <Row>
+                    <InnerRow>
+                        {audioProducers.map(id => <ColumnWithChildren><AudioProducerChannel key={id} audioProducerId={id}/></ColumnWithChildren>)}
+                    </InnerRow>
+
+                </Row>
+            )}
         </Panel>
     )
 }

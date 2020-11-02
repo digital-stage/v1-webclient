@@ -15,7 +15,6 @@ const Panel = styled("div", {
     backgroundColor: "rgba(80,80,80,1)",
     display: "flex",
     flexDirection: "row",
-    height: "100%",
     borderRadius: "20px",
     marginRight: "1rem"
 })
@@ -54,7 +53,8 @@ const Header = styled("div", {
 })
 
 const GroupChannel = (props: {
-    groupId: GroupId
+    groupId: GroupId;
+    className?: string;
 }) => {
     const isAdmin: boolean = useIsStageAdmin();
     const group = useStageSelector<Group>(state => state.groups.byId[props.groupId]);
@@ -67,7 +67,7 @@ const GroupChannel = (props: {
     const [expanded, setExpanded] = useState<boolean>();
 
     return (
-        <Panel>
+        <Panel className={props.className}>
             <Column>
                 <ChannelStrip
                     addHeader={
@@ -111,12 +111,13 @@ const GroupChannel = (props: {
                 />
             </Column>
 
-            <Row>
-                <InnerRow>
-                    {expanded && stageMemberIds.map(id => <ColumnWithChildren><StageMemberChannel key={id}
-                                                                                                  stageMemberId={id}/></ColumnWithChildren>)}
-                </InnerRow>
-            </Row>
+            {expanded && (
+                <Row>
+                    <InnerRow>
+                        {stageMemberIds.map(id => <ColumnWithChildren><StageMemberChannel key={id} stageMemberId={id}/></ColumnWithChildren>)}
+                    </InnerRow>
+                </Row>
+            )}
         </Panel>
     )
 }

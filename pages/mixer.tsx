@@ -1,35 +1,28 @@
 import React from "react";
-import {useStyletron} from "styletron-react";
+import { styled } from "styletron-react";
 import MixingPanelView from "../components/layouts/MixingPanelView";
-import useTheme from "@material-ui/core/styles/useTheme";
+
+const Wrapper = styled("div", {
+  position: "relative",
+  border: "1px solid red",
+  overflowX: "scroll",
+  overflowY: "auto",
+  whiteSpace: "nowrap",
+
+  flexGrow: 1,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "flex-start",
+  width: "100%",
+  height: "100%",
+});
 
 const Mixer = () => {
-    const [css] = useStyletron();
-    const theme = useTheme();
-
-    return (
-        <div className={css({
-            position: "absolute",
-            width: "100vw",
-            height: "100vh",
-            top: "0",
-            left: "0",
-            overflowX: "scroll",
-            overflowY: "auto",
-            paddingTop: "2rem",
-            [theme.breakpoints.up("md")]: {
-                paddingTop: "0",
-                paddingLeft: "4rem"
-            }
-        })}>
-            <div className={css({
-                height: "100%",
-                maxHeight: "600px",
-                minHeight: "400px"
-            })}>
-                <MixingPanelView/>
-            </div>
-        </div>
-    )
-}
+  return (
+    <Wrapper>
+      <MixingPanelView />
+    </Wrapper>
+  );
+};
 export default Mixer;
