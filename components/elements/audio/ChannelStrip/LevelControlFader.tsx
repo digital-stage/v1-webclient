@@ -37,8 +37,9 @@ const LevelControlFader = (
 
     const handleEnd = useCallback((volume: number) => {
         setValue(volume);
-        props.onChanged(value, props.muted);
+        props.onChanged(volume, props.muted);
     }, [props.muted]);
+
     return (
         <Wrapper
             className={props.className}

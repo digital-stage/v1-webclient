@@ -6,7 +6,7 @@ import _ from "lodash";
 import {normalize} from "../normalizer";
 import {Stage} from "../../../common/model.server";
 import {
-    CustomAudioProducer,
+    CustomAudioProducer, CustomOvTrack,
     Device,
     StageMember,
     User
@@ -208,24 +208,20 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
                     allIds: upsert(state.customGroups.allIds, action.payload._id)
                 }
             };
-        case ServerStageEvents.CUSTOM_GROUP_SET:
+        case ServerStageEvents.CUSTOM_GROUP_CHANGED:
             return {
                 ...state,
                 customGroups: {
                     ...state.customGroups,
                     byId: {
                         ...state.customGroups.byId,
-                        [action.payload._id]: action.payload
-                    },
-                    byGroup: {
-                        ...state.customGroups.byGroup,
-                        [action.payload.groupId]: action.payload._id
-                    },
-                    allIds: upsert(state.customGroups.allIds, action.payload._id)
+                        [action.payload._id]: {
+                            ...state.customGroups.byId[action.payload._id],
+                            ...action.payload
+                        }
+                    }
                 }
             };
-        case ServerStageEvents.CUSTOM_GROUP_CHANGED:
-            return updateItem(state, "customGroups", action.payload._id, action.payload);
         case ServerStageEvents.CUSTOM_GROUP_REMOVED:
             return {
                 ...state,
@@ -299,7 +295,19 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
                 }
             };
         case ServerStageEvents.CUSTOM_STAGE_MEMBER_CHANGED:
-            return updateItem(state, "customStageMembers", action.payload._id, action.payload);
+            return {
+                ...state,
+                customStageMembers: {
+                    ...state.customStageMembers,
+                    byId: {
+                        ...state.customStageMembers.byId,
+                        [action.payload._id]: {
+                            ...state.customStageMembers.byId[action.payload._id],
+                            ...action.payload
+                        }
+                    }
+                }
+            };
         case ServerStageEvents.CUSTOM_STAGE_MEMBER_REMOVED:
             return {
                 ...state,
@@ -332,7 +340,19 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
                 }
             };
         case ServerStageEvents.STAGE_MEMBER_AUDIO_CHANGED:
-            return updateItem(state, "audioProducers", action.payload._id, action.payload);
+            return {
+                ...state,
+                audioProducers: {
+                    ...state.audioProducers,
+                    byId: {
+                        ...state.audioProducers.byId,
+                        [action.payload._id]: {
+                            ...state.audioProducers.byId[action.payload._id],
+                            ...action.payload
+                        }
+                    }
+                }
+            };
         case ServerStageEvents.STAGE_MEMBER_AUDIO_REMOVED:
             return {
                 ...state,
@@ -364,7 +384,19 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
                 }
             }
         case ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_CHANGED:
-            return updateItem(state, "customAudioProducers", action.payload._id, action.payload);
+            return {
+                ...state,
+                customAudioProducers: {
+                    ...state.customAudioProducers,
+                    byId: {
+                        ...state.customAudioProducers.byId,
+                        [action.payload._id]: {
+                            ...state.customAudioProducers.byId[action.payload._id],
+                            ...action.payload
+                        }
+                    }
+                }
+            };
         case ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_REMOVED:
             return {
                 ...state,
@@ -372,7 +404,7 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
                     ...state.customAudioProducers,
                     byId: _.omit(state.customAudioProducers.byId, action.payload),
                     byAudioProducer: _.omit(state.customAudioProducers.byAudioProducer, state.audioConsumers.byId[action.payload].audioProducer),
-                    allIds: _.filter(state.stageMembers.allIds, id => id !== action.payload)
+                    allIds: _.filter(state.customAudioProducers.allIds, id => id !== action.payload)
                 }
             };
 
@@ -397,7 +429,19 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
                 }
             }
         case ServerStageEvents.STAGE_MEMBER_VIDEO_CHANGED:
-            return updateItem(state, "videoProducers", action.payload._id, action.payload);
+            return {
+                ...state,
+                videoProducers: {
+                    ...state.videoProducers,
+                    byId: {
+                        ...state.videoProducers.byId,
+                        [action.payload._id]: {
+                            ...state.videoProducers.byId[action.payload._id],
+                            ...action.payload
+                        }
+                    }
+                }
+            };
         case ServerStageEvents.STAGE_MEMBER_VIDEO_REMOVED:
             if (!state.videoProducers.byId[action.payload]) {
                 console.error("Could not remove requested producer with id=" + action.payload);
@@ -417,6 +461,85 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (state: Readonly<N
                         [state.videoProducers.byId[action.payload].stageMemberId]: _.filter(state.videoProducers.byStageMember[state.videoProducers.byId[action.payload].stageMemberId], id => id !== action.payload),
                     },
                     allIds: _.filter(state.videoProducers.allIds, id => id !== action.payload)
+                }
+            };
+        case ServerStageEvents.STAGE_MEMBER_OV_ADDED:
+            return {
+                ...state,
+                ovTracks: {
+                    ...state.ovTracks,
+                    byId: {
+                        ...state.ovTracks.byId,
+                        [action.payload._id]: action.payload
+                    },
+                    byStageMember: {
+                        ...state.ovTracks.byStageMember,
+                        [action.payload.stageMemberId]: upsert(state.ovTracks.byStageMember[action.payload.stageMemberId], action.payload._id)
+                    },
+                    allIds: [...state.ovTracks.allIds, action.payload._id],
+                }
+            };
+        case ServerStageEvents.STAGE_MEMBER_OV_CHANGED:
+            return {
+                ...state,
+                ovTracks: {
+                    ...state.ovTracks,
+                    byId: {
+                        ...state.ovTracks.byId,
+                        [action.payload._id]: {
+                            ...state.ovTracks.byId[action.payload._id],
+                            ...action.payload
+                        }
+                    }
+                }
+            };
+        case ServerStageEvents.STAGE_MEMBER_OV_REMOVED:
+            return {
+                ...state,
+                ovTracks: {
+                    ...state.ovTracks,
+                    byId: _.omit(state.ovTracks.byId, action.payload),
+                    byStageMember: {
+                        ...state.ovTracks.byStageMember,
+                        [state.ovTracks.byId[action.payload].stageMemberId]: _.filter(state.ovTracks.byStageMember[state.ovTracks.byId[action.payload].stageMemberId], id => id !== action.payload),
+                    },
+                    allIds: _.filter(state.ovTracks.allIds, id => id !== action.payload)
+                }
+            };
+        case ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_ADDED:
+            return {
+                ...state,
+                customOvTracks: {
+                    ...state.customOvTracks,
+                    ...addItemToCollection<CustomOvTrack>(state.customOvTracks, action.payload._id, action.payload),
+                    byOvTrack: {
+                        ...state.customOvTracks.byOvTrack,
+                        [action.payload.stageMemberOvTrackId]: action.payload._id
+                    }
+                }
+            }
+        case ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_CHANGED:
+            return {
+                ...state,
+                customOvTracks: {
+                    ...state.customOvTracks,
+                    byId: {
+                        ...state.customOvTracks.byId,
+                        [action.payload._id]: {
+                            ...state.customAudioProducers.byId[action.payload._id],
+                            ...action.payload
+                        }
+                    }
+                }
+            };
+        case ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_REMOVED:
+            return {
+                ...state,
+                customOvTracks: {
+                    ...state.customOvTracks,
+                    byId: _.omit(state.customOvTracks.byId, action.payload),
+                    byOvTrack: _.omit(state.customOvTracks.byOvTrack, state.customOvTracks.byId[action.payload].stageMemberOvTrackId),
+                    allIds: _.filter(state.customOvTracks.allIds, id => id !== action.payload)
                 }
             };
 

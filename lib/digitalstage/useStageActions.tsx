@@ -13,7 +13,6 @@ import {ThreeDimensionAudioProperties} from "./common/model.utils";
 import {useCallback} from "react";
 import {
     AddCustomGroupPayload,
-    AddCustomStageMemberAudioPayload, AddCustomStageMemberOvPayload,
     AddCustomStageMemberPayload,
     AddGroupPayload,
     AddStagePayload,
@@ -28,7 +27,6 @@ import {
     SetCustomGroupPayload, SetCustomStageMemberAudioPayload, SetCustomStageMemberOvPayload,
     SetCustomStageMemberPayload,
     UpdateCustomGroupPayload,
-    UpdateCustomStageMemberAudioPayload, UpdateCustomStageMemberOvPayload,
     UpdateCustomStageMemberPayload
 } from "./common/payloads";
 import {ClientDeviceEvents, ClientStageEvents, ClientUserEvents} from "./common/events";
@@ -315,26 +313,6 @@ const useStageActions = (): StageActionsProps => {
         }
     }, [socket]);
 
-    const addCustomStageMemberAudio = useCallback((stageMemberAudioId: StageMemberAudioProducerId, initial: Partial<ThreeDimensionAudioProperties>) => {
-        if (socket) {
-            const payload: AddCustomStageMemberAudioPayload = {
-                ...initial,
-                stageMemberAudioId: stageMemberAudioId
-            }
-            socket.emit(ClientStageEvents.ADD_CUSTOM_STAGE_MEMBER_AUDIO, payload);
-        }
-    }, [socket]);
-
-    const updateCustomStageMemberAudio = useCallback((id: CustomStageMemberAudioProducerId, update: Partial<ThreeDimensionAudioProperties>) => {
-        if (socket) {
-            const payload: UpdateCustomStageMemberAudioPayload = {
-                id: id,
-                update: update
-            }
-            socket.emit(ClientStageEvents.UPDATE_CUSTOM_STAGE_MEMBER_AUDIO, payload);
-        }
-    }, [socket]);
-
     const setCustomStageMemberAudio = useCallback((stageMemberAudioId: StageMemberAudioProducerId, update: Partial<ThreeDimensionAudioProperties>) => {
         if (socket) {
             const payload: SetCustomStageMemberAudioPayload = {
@@ -349,29 +327,6 @@ const useStageActions = (): StageActionsProps => {
         if (socket) {
             const payload: RemoveCustomStageMemberAudioPayload = id;
             socket.emit(ClientStageEvents.REMOVE_CUSTOM_STAGE_MEMBER_AUDIO, payload);
-        }
-    }, [socket]);
-
-    const addCustomStageMemberOv = useCallback((stageMemberOvTrackId: StageMemberOvTrackId, initial: Partial<ThreeDimensionAudioProperties> & {
-        gain: number;
-        directivity: "omni" | "cardioid"
-    }) => {
-        if (socket) {
-            const payload: AddCustomStageMemberOvPayload = {
-                ...initial,
-                stageMemberOvTrackId: stageMemberOvTrackId
-            }
-            socket.emit(ClientStageEvents.ADD_CUSTOM_STAGE_MEMBER_AUDIO, payload);
-        }
-    }, [socket]);
-
-    const updateCustomStageMemberOv = useCallback((id: CustomStageMemberOvTrackId, update: Partial<ThreeDimensionAudioProperties>) => {
-        if (socket) {
-            const payload: UpdateCustomStageMemberOvPayload = {
-                id: id,
-                update: update
-            }
-            socket.emit(ClientStageEvents.UPDATE_CUSTOM_STAGE_MEMBER_OV, payload);
         }
     }, [socket]);
 

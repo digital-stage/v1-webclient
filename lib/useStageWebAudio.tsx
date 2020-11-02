@@ -9,7 +9,8 @@ import {useAudioContext} from "./useAudioContext";
 import {IMediaStreamAudioSourceNode} from "standardized-audio-context/src/interfaces/media-stream-audio-source-node";
 import {
     AudioConsumers,
-    AudioProducers,
+    AudioProducers, CustomAudioProducers,
+    CustomGroups, CustomStageMembers,
     Groups,
     StageMembers
 } from "./digitalstage/useStageContext/schema";
@@ -57,8 +58,11 @@ const StageWebAudioProvider = (
     // Incoming states from stage
     const stageId = useStageSelector<string>(state => state.stageId);
     const groups = useStageSelector<Groups>(state => state.groups);
+    const customGroups = useStageSelector<CustomGroups>(state => state.customGroups);
     const stageMembers = useStageSelector<StageMembers>(state => state.stageMembers);
+    const customStageMembers = useStageSelector<CustomStageMembers>(state => state.customStageMembers);
     const audioProducers = useStageSelector<AudioProducers>(state => state.audioProducers);
+    const customAudioProducers = useStageSelector<CustomAudioProducers>(state => state.customAudioProducers);
     const audioConsumers = useStageSelector<AudioConsumers>(state => state.audioConsumers);
 
     useEffect(() => {
@@ -88,7 +92,6 @@ const StageWebAudioProvider = (
 
                 setGroupNodes(prev => {
                     Object.keys(prev).forEach(id => {
-                        console.log("Checking " + id);
                         if (!groups.byId[id]) {
                             prev[id].sourceNode.disconnect();
                             prev[id].gainNode.disconnect();
@@ -97,13 +100,17 @@ const StageWebAudioProvider = (
                     });
 
                     const state = groups.byStage[stageId].reduce((items, id) => {
-                        console.log("Adding item " + id);
                         const item = groups.byId[id];
+                        const customItem = customGroups.byGroup[item._id] ? customGroups.byId[customGroups.byGroup[item._id]] : undefined;
                         if (!prev[id]) {
                             // Create nodes
                             const sourceNode = audioContext.createChannelMerger();
                             const gainNode = audioContext.createGain();
-                            gainNode.gain.value = item.volume;
+                            if (customItem) {
+                                gainNode.gain.value = customItem.volume;
+                            } else {
+                                gainNode.gain.value = item.volume;
+                            }
                             const analyserNode = audioContext.createAnalyser();
                             sourceNode.connect(gainNode);
                             gainNode.connect(analyserNode);
@@ -117,10 +124,31 @@ const StageWebAudioProvider = (
                                 }
                             }
                         } else {
+                            if (customItem) {
+                                if (customItem.muted) {
+                                    if (prev[item._id].gainNode.gain.value !== 0) {
+                                        console.log("Set GROUP value to muted")
+                                        prev[item._id].gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                                    }
+                                } else {
+                                    if (prev[item._id].gainNode.gain.value !== customItem.volume) {
+                                        console.log("Set GROUP value to " + customItem.volume)
+                                        prev[item._id].gainNode.gain.setValueAtTime(customItem.volume, audioContext.currentTime);
+                                    }
+                                }
+                            } else {
+                                if (item.muted) {
+                                    if (prev[item._id].gainNode.gain.value !== 0) {
+                                        console.log("Set GROUP value to mute")
+                                        prev[item._id].gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                                    }
+                                } else {
+                                    if (prev[item._id].gainNode.gain.value !== item.volume) {
+                                        console.log("Set GROUP value to " + item.volume)
+                                        prev[item._id].gainNode.gain.setValueAtTime(item.volume, audioContext.currentTime);
+                                    }
+                                }
 
-                            if (prev[item._id].gainNode.gain.value !== item.volume) {
-                                console.log("Set GROUP value to " + item.volume)
-                                prev[item._id].gainNode.gain.setValueAtTime(item.volume, audioContext.currentTime);
                             }
 
                             return {
@@ -143,7 +171,7 @@ const StageWebAudioProvider = (
                 });
             }
         }
-    }, [audioContext, rootNode, stageId, groups])
+    }, [audioContext, rootNode, stageId, groups, customGroups])
 
     useEffect(() => {
         if (audioContext) {
@@ -161,12 +189,17 @@ const StageWebAudioProvider = (
 
                     return stageMembers.byStage[stageId].reduce((items, id) => {
                         const item = stageMembers.byId[id];
+                        const customItem = customStageMembers.byStageMember[item._id] ? customStageMembers.byId[customStageMembers.byStageMember[item._id]] : undefined;
                         if (groupNodes[item.groupId]) {
                             if (!prev[item._id]) {
                                 // Create nodes
                                 const sourceNode = audioContext.createChannelMerger();
                                 const gainNode = audioContext.createGain();
-                                gainNode.gain.setValueAtTime(item.volume, audioContext.currentTime);
+                                if (customItem) {
+                                    gainNode.gain.value = customItem.volume;
+                                } else {
+                                    gainNode.gain.value = item.volume;
+                                }
                                 const analyserNode = audioContext.createAnalyser();
                                 sourceNode.connect(gainNode);
                                 gainNode.connect(analyserNode);
@@ -180,9 +213,30 @@ const StageWebAudioProvider = (
                                     }
                                 }
                             } else {
-                                if (prev[item._id].gainNode.gain.value !== item.volume) {
-                                    console.log("Set stage member " + item._id + " volume to " + item.volume);
-                                    prev[item._id].gainNode.gain.setValueAtTime(item.volume, audioContext.currentTime);
+                                if (customItem) {
+                                    if (customItem.muted) {
+                                        if (prev[item._id].gainNode.gain.value !== 0) {
+                                            console.log("Set stage member " + customItem._id + " volume to muted");
+                                            prev[item._id].gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                                        }
+                                    } else {
+                                        if (prev[item._id].gainNode.gain.value !== customItem.volume) {
+                                            console.log("Set stage member " + customItem._id + " volume to " + item.volume);
+                                            prev[item._id].gainNode.gain.setValueAtTime(customItem.volume, audioContext.currentTime);
+                                        }
+                                    }
+                                } else {
+                                    if (item.muted) {
+                                        if (prev[item._id].gainNode.gain.value !== 0) {
+                                            console.log("Set stage member " + item._id + " volume to muted");
+                                            prev[item._id].gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                                        }
+                                    } else {
+                                        if (prev[item._id].gainNode.gain.value !== item.volume) {
+                                            console.log("Set stage member " + item._id + " volume to " + item.volume);
+                                            prev[item._id].gainNode.gain.setValueAtTime(item.volume, audioContext.currentTime);
+                                        }
+                                    }
                                 }
                                 return {
                                     ...items,
@@ -204,7 +258,7 @@ const StageWebAudioProvider = (
                 });
             }
         }
-    }, [audioContext, stageId, groupNodes, stageMembers]);
+    }, [audioContext, stageId, groupNodes, stageMembers, customStageMembers]);
 
     useEffect(() => {
         if (audioContext) {
@@ -222,6 +276,7 @@ const StageWebAudioProvider = (
                     });
                     return audioProducers.byStage[stageId].reduce((items, id) => {
                         const item = audioProducers.byId[id];
+                        const customItem = customAudioProducers.byAudioProducer[item._id] ? customAudioProducers.byId[customAudioProducers.byAudioProducer[item._id]] : undefined;
                         if (stageMemberNodes[item.stageMemberId]) {
                             let gainNode;
                             let analyserNode;
@@ -237,9 +292,30 @@ const StageWebAudioProvider = (
                             } else {
                                 gainNode = prev[item._id].gainNode;
                                 analyserNode = prev[item._id].analyserNode;
-                                if (gainNode.gain.value !== item.volume) {
-                                    console.log("Set producer " + item._id + " volume to " + item.volume);
-                                    gainNode.gain.setValueAtTime(item.volume, audioContext.currentTime);
+                                if (customItem) {
+                                    if (customItem.muted) {
+                                        if (gainNode.gain.value !== 0) {
+                                            console.log("Set producer " + item._id + " volume to mute");
+                                            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                                        }
+                                    } else {
+                                        if (gainNode.gain.value !== customItem.volume) {
+                                            console.log("Set producer " + item._id + " volume to " + customItem.volume);
+                                            gainNode.gain.setValueAtTime(customItem.volume, audioContext.currentTime);
+                                        }
+                                    }
+                                } else {
+                                    if (item.muted) {
+                                        if (gainNode.gain.value !== 0) {
+                                            console.log("Set producer " + item._id + " volume to mute");
+                                            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                                        }
+                                    } else {
+                                        if (gainNode.gain.value !== item.volume) {
+                                            console.log("Set producer " + item._id + " volume to " + item.volume);
+                                            gainNode.gain.setValueAtTime(item.volume, audioContext.currentTime);
+                                        }
+                                    }
                                 }
                             }
                             if ((!prev[item._id] || !prev[item._id].sourceNode) && audioConsumers.byProducer[item._id]) {
@@ -284,7 +360,7 @@ const StageWebAudioProvider = (
                 });
             }
         }
-    }, [audioContext, stageMemberNodes, audioProducers, audioConsumers.byProducer]);
+    }, [audioContext, stageMemberNodes, audioProducers, audioConsumers.byProducer, customAudioProducers]);
 
     return (
         <StageWebAudioContext.Provider value={{

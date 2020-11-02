@@ -129,6 +129,26 @@ function normalize(prevState: Readonly<NormalizedState>, data: Partial<{
         })
     }
 
+    if (data.customStageMembers) {
+        data.customStageMembers.forEach(customStageMember => {
+            state = {
+                ...state,
+                customStageMembers: {
+                    ...state.customStageMembers,
+                    byId: {
+                        ...state.customStageMembers.byId,
+                        [customStageMember._id]: customStageMember
+                    },
+                    byStageMember: {
+                        ...state.customStageMembers.byStageMember,
+                        [customStageMember.stageMemberId]: customStageMember._id
+                    },
+                    allIds: [...state.stageMembers.allIds, customStageMember._id]
+                }
+            };
+        })
+    }
+
     if (data.videoProducers) {
         data.videoProducers.forEach(videoProducer => {
             state = {
@@ -172,6 +192,66 @@ function normalize(prevState: Readonly<NormalizedState>, data: Partial<{
                         [audioProducer.stageMemberId]: upsert<string>(state.audioProducers.byStageMember[audioProducer.stageMemberId], audioProducer._id)
                     },
                     allIds: [...state.audioProducers.allIds, audioProducer._id]
+                }
+            };
+        })
+    }
+
+    if (data.customAudioProducers) {
+        data.customAudioProducers.forEach(customAudioProducer => {
+            state = {
+                ...state,
+                customAudioProducers: {
+                    ...state.customAudioProducers,
+                    byId: {
+                        ...state.customAudioProducers.byId,
+                        [customAudioProducer._id]: customAudioProducer
+                    },
+                    byAudioProducer: {
+                        ...state.customAudioProducers.byAudioProducer,
+                        [customAudioProducer.stageMemberAudioProducerId]: customAudioProducer._id
+                    },
+                    allIds: [...state.customAudioProducers.allIds, customAudioProducer._id]
+                }
+            };
+        })
+    }
+
+    if (data.ovTracks) {
+        data.ovTracks.forEach(ovTrack => {
+            state = {
+                ...state,
+                ovTracks: {
+                    ...state.ovTracks,
+                    byId: {
+                        ...state.ovTracks.byId,
+                        [ovTrack._id]: ovTrack
+                    },
+                    byStageMember: {
+                        ...state.ovTracks.byStageMember,
+                        [ovTrack.stageMemberId]: upsert<string>(state.ovTracks.byStageMember[ovTrack.stageMemberId], ovTrack._id)
+                    },
+                    allIds: [...state.ovTracks.allIds, ovTrack._id]
+                }
+            };
+        })
+    }
+
+    if (data.customOvTracks) {
+        data.customOvTracks.forEach(customOvTrack => {
+            state = {
+                ...state,
+                customOvTracks: {
+                    ...state.customOvTracks,
+                    byId: {
+                        ...state.customOvTracks.byId,
+                        [customOvTrack._id]: customOvTrack
+                    },
+                    byOvTrack: {
+                        ...state.customOvTracks.byOvTrack,
+                        [customOvTrack.stageMemberOvTrackId]: customOvTrack._id
+                    },
+                    allIds: [...state.customOvTracks.allIds, customOvTrack._id]
                 }
             };
         })

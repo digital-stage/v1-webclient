@@ -87,7 +87,6 @@ export enum ServerStageEvents {
 
 
     CUSTOM_GROUP_ADDED = "custom-group-added",
-    CUSTOM_GROUP_SET = "custom-group-set",
     CUSTOM_GROUP_CHANGED = "custom-group-changed",
     CUSTOM_GROUP_REMOVED = "custom-group-removed",
 

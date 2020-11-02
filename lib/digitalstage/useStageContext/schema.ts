@@ -132,7 +132,7 @@ export interface CustomOvTracks {
         [id: string]: CustomOvTrack
     },
     byOvTrack: {
-        [ovTrack: string]: string[]
+        [ovTrack: string]: string
     },
     allIds: string[]
 }

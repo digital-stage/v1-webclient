@@ -130,13 +130,15 @@ export const MediasoupProvider = (props: {
 
     useEffect(() => {
         if (router) {
-            console.log("connecting to " + router.url + ":" + router.port + "/" + router.path);
             const connectionSettings = {
                 protocol: process.env.NEXT_PUBLIC_USE_SSL === "true" ? "wss://" : "http://",
                 secure: process.env.NEXT_PUBLIC_USE_SSL === "true"
             }
 
-            const connection = io(`${connectionSettings.protocol + router.url}:${router.port}/${router.path}`, {
+            console.log("NEXT VAR IS: " + process.env.NEXT_PUBLIC_USE_SSL);
+            console.log(`connecting to ${connectionSettings.protocol + router.url}:${router.port}`);
+
+            const connection = io(`${connectionSettings.protocol + router.url}:${router.port}`, {
                 secure: connectionSettings.secure
             });
 
