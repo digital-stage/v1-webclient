@@ -104,11 +104,11 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
           rtpCapabilities: mediasoupClient.types.RtpCapabilities,
         ) => {
           if (error) {
-            return console.error(error);
+            return reportError(error);
           }
           // Create device
           const createdDevice = new MediasoupDevice();
-          return device
+          return createdDevice
             .load({ routerRtpCapabilities: rtpCapabilities })
             .then(() => Promise.all([
               createWebRTCTransport(
@@ -170,11 +170,11 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
       );
 
       createdConnection.on('connect_error', (error) => {
-        console.error(error);
+        reportError(error);
       });
 
       createdConnection.on('connect_timeout', (error) => {
-        console.error(error);
+        reportError(error);
       });
 
       setConnection(createdConnection);
@@ -285,7 +285,6 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
 
   const startStreamAudio = useCallback(() => {
     if (sendTransport) {
-      console.log('[useMediasoup] start streaming audio');
       setWorking(true);
       return navigator.mediaDevices
         .getUserMedia({
@@ -341,7 +340,6 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
   }, [sendTransport, localDevice]);
 
   const stopStreamingAudio = useCallback(() => {
-    console.log('[useMediasoup] stop streaming audio');
     setWorking(true);
     // Assure, that we stop streaming all local audio producers
     return Promise.all(
@@ -439,7 +437,6 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
   }, [sendTransport, localDevice]);
 
   const stopStreamingVideo = useCallback(() => {
-    console.log('[useMediasoup] stop streaming video');
     setWorking(true);
     // Assure, that we stop streaming all local audio producers
     return Promise.all(
@@ -479,7 +476,6 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
   useEffect(() => {
     if (!working && localDevice) {
       if (sendVideo !== localDevice.sendVideo) {
-        console.log('Devices changed: sendVideo');
         if (localDevice.sendVideo) {
           startStreamVideo();
         } else {
@@ -488,7 +484,6 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
         setSendVideo(localDevice.sendVideo);
       }
       if (sendAudio !== localDevice.sendAudio) {
-        console.log('Devices changed: sendAudio');
         if (localDevice.sendAudio) {
           startStreamAudio();
         } else {
@@ -582,20 +577,16 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (receiveVideo) {
-      console.log('[useMediasoup] START CONSUMING VIDEO');
       setHandledVideoProducerIds(videoProducers.allIds);
     } else {
-      console.log('[useMediasoup] STOP CONSUMING VIDEO');
       setHandledVideoProducerIds([]);
     }
   }, [receiveVideo, videoProducers]);
 
   useEffect(() => {
     if (receiveAudio) {
-      console.log('[useMediasoup] START CONSUMING AUDIO');
       setHandledAudioProducerIds(audioProducers.allIds);
     } else {
-      console.log('[useMediasoup] STOP CONSUMING AUDIO');
       setHandledAudioProducerIds([]);
     }
   }, [receiveAudio, audioProducers]);

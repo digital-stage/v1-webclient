@@ -5,13 +5,13 @@ import React, {
   useContext,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 import {
   AudioContext as RealAudioContext,
   IAudioContext,
-} from "standardized-audio-context";
-import webAudioTouchUnlock from "./webAudioTouchUnlock";
-import { useErrors } from "../useErrors";
+} from 'standardized-audio-context';
+import webAudioTouchUnlock from './webAudioTouchUnlock';
+import { useErrors } from '../useErrors';
 
 interface AudioContextProps {
   audioContext?: IAudioContext;
@@ -20,10 +20,11 @@ interface AudioContextProps {
 }
 
 const AudioContext: Context<AudioContextProps> = createContext<
-  AudioContextProps
+AudioContextProps
 >(undefined);
 
 export const AudioContextProvider = (props: { children: React.ReactNode }) => {
+  const { children } = props;
   const [context, setContext] = useState<IAudioContext>(undefined);
   const { reportError } = useErrors();
 
@@ -34,21 +35,18 @@ export const AudioContextProvider = (props: { children: React.ReactNode }) => {
     const audioContext: IAudioContext = new RealAudioContext();
     console.log(
       `Base latency with sample rate ${audioContext.sampleRate}: ${Math.round(
-        1000 * audioContext.baseLatency
-      )}ms`
+        1000 * audioContext.baseLatency,
+      )}ms`,
     );
 
     return webAudioTouchUnlock(audioContext)
-      .then((unlocked: boolean) => {
-        return audioContext;
-      })
+      .then(() => audioContext)
       .catch((error) => reportError(error.message));
   }, []);
 
   useEffect(() => {
     createAudioContext()
       .then((audioContext) => {
-        console.log("Audio engine initialized");
         setContext(audioContext);
       })
       .catch((error) => reportError(error.message));
@@ -61,10 +59,9 @@ export const AudioContextProvider = (props: { children: React.ReactNode }) => {
         createAudioContext,
       }}
     >
-      {props.children}
+      {children}
     </AudioContext.Provider>
   );
 };
 
-export const useAudioContext = () =>
-  useContext<AudioContextProps>(AudioContext);
+export const useAudioContext = () => useContext<AudioContextProps>(AudioContext);

@@ -1,4 +1,4 @@
-import { schema } from "normalizr";
+import { schema } from 'normalizr';
 import {
   AudioConsumer,
   AudioProducer,
@@ -14,72 +14,72 @@ import {
   User,
   VideoConsumer,
   VideoProducer,
-} from "../../model";
+} from '../../model';
 
-const user = new schema.Entity<User>("users");
+const user = new schema.Entity<User>('users');
 
 const device = new schema.Entity<Device>(
-  "devices",
+  'devices',
   {
     user,
   },
-  { idAttribute: "_id" }
+  { idAttribute: '_id' },
 );
 
 const audioConsumer = new schema.Entity<AudioConsumer>(
-  "audioConsumers",
+  'audioConsumers',
   {},
-  { idAttribute: "_id" }
+  { idAttribute: '_id' },
 );
 
 const videoConsumer = new schema.Entity<VideoConsumer>(
-  "audioConsumers",
+  'audioConsumers',
   {},
-  { idAttribute: "_id" }
+  { idAttribute: '_id' },
 );
 
 const audioProducer = new schema.Entity<AudioProducer>(
-  "audioProducers",
+  'audioProducers',
   {},
-  { idAttribute: "_id" }
+  { idAttribute: '_id' },
 );
 
 const customAudioProducer = new schema.Entity<CustomAudioProducer>(
-  "customAudioProducers",
+  'customAudioProducers',
   {
     audioProducer,
   },
-  { idAttribute: "_id" }
+  { idAttribute: '_id' },
 );
 
 const videoProducer = new schema.Entity<VideoProducer>(
-  "videoProducers",
+  'videoProducers',
   {},
-  { idAttribute: "_id" }
+  { idAttribute: '_id' },
 );
 
 const ovTrack = new schema.Entity<OvTrack>(
-  "ovTracks",
+  'ovTracks',
   {},
-  { idAttribute: "_id" }
+  { idAttribute: '_id' },
 );
 
 const customOvTrack = new schema.Entity<CustomOvTrack>(
-  "customOvTracks",
+  'customOvTracks',
   {
     ovTrack,
   },
-  { idAttribute: "_id" }
+  { idAttribute: '_id' },
 );
 
 const customStageMember = new schema.Entity<CustomStageMember>(
-  "groups",
+  'groups',
   {},
-  { idAttribute: "_id" }
+  { idAttribute: '_id' },
 );
 
 const stageMember = new schema.Entity<StageMember>(
-  "groups",
+  'groups',
   {
     user,
     audioProducer: [audioProducer],
@@ -88,26 +88,26 @@ const stageMember = new schema.Entity<StageMember>(
     audioConsumers: [audioConsumer],
     videoConsumers: [videoConsumer],
   },
-  { idAttribute: "_id" }
+  { idAttribute: '_id' },
 );
 
 const customGroup = new schema.Entity<CustomGroup>(
-  "customGroups",
+  'customGroups',
   {},
-  { idAttribute: "_id" }
+  { idAttribute: '_id' },
 );
 
 const group = new schema.Entity<Group>(
-  "groups",
+  'groups',
   {
     stageMembers: [stageMember],
     customGroup,
   },
-  { idAttribute: "_id" }
+  { idAttribute: '_id' },
 );
 
 const stage = new schema.Entity<Stage>(
-  "stages",
+  'stages',
   {
     admins: [user],
     groups: [group],
@@ -118,7 +118,7 @@ const stage = new schema.Entity<Stage>(
     audioConsumers: [audioConsumer],
     videoConsumers: [videoConsumer],
   },
-  { idAttribute: "_id" }
+  { idAttribute: '_id' },
 );
 
 export interface StoreSchema {

@@ -1,3 +1,3 @@
-import normalize from "./util";
+import normalize from './util';
 
 export { normalize };

@@ -1,5 +1,5 @@
-import mediasoupClient from "mediasoup-client";
-import * as Server from "../common/model.server";
+import mediasoupClient from 'mediasoup-client';
+import * as Server from '../common/model.server';
 
 export type LocalUser = Server.User;
 export type User = Server.User;

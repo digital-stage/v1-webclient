@@ -1,18 +1,18 @@
-import _ from "lodash";
-import { NormalizedState } from "../schema";
-import { ExtendedCollection } from "../model";
+import _ from 'lodash';
+import { NormalizedState } from '../schema';
+import { ExtendedCollection } from '../model';
 
 export const upsert = function <T>(arr: Readonly<T[]>, value: T): T[] {
-  console.log("upsert");
+  console.log('upsert');
   if (!arr) {
-    console.log("array was null");
+    console.log('array was null');
     return [value];
   }
   if (_.indexOf<T>(arr, value) === -1) {
-    console.log("value was not found");
+    console.log('value was not found');
     return [...arr, value];
   }
-  console.log("value found");
+  console.log('value found');
   return [...arr];
 };
 
@@ -23,7 +23,7 @@ export const filter = function <T>(arr: Readonly<T[]>, value: T): T[] {
 export function addItemToCollection<T>(
   state: Readonly<ExtendedCollection<T>>,
   id: string,
-  payload: T
+  payload: T,
 ): ExtendedCollection<T> {
   return {
     ...state,
@@ -39,36 +39,32 @@ export const updateItem = (
   state: Readonly<NormalizedState>,
   group: string,
   id: string,
-  payload: any
-): NormalizedState => {
-  return {
-    ...state,
-    [group]: {
-      ...state[group],
-      byId: {
-        ...state[group].byId,
-        [id]: {
-          ...state[group].byId[id],
-          ...payload,
-        },
+  payload: any,
+): NormalizedState => ({
+  ...state,
+  [group]: {
+    ...state[group],
+    byId: {
+      ...state[group].byId,
+      [id]: {
+        ...state[group].byId[id],
+        ...payload,
       },
     },
-  };
-};
+  },
+});
 export const removeItem = (
   state: Readonly<NormalizedState>,
   group: string,
-  id: string
-): NormalizedState => {
-  return {
-    ...state,
-    [group]: {
-      ...state[group],
-      byId: _.omit(state[group].byId, id),
-      allIds: filter(state[group].allIds, id),
-    },
-  };
-};
+  id: string,
+): NormalizedState => ({
+  ...state,
+  [group]: {
+    ...state[group],
+    byId: _.omit(state[group].byId, id),
+    allIds: filter(state[group].allIds, id),
+  },
+});
 
 export const removeItemWithArrayReference = (
   state: Readonly<NormalizedState>,
@@ -78,28 +74,26 @@ export const removeItemWithArrayReference = (
     group: string;
     id: string;
     key: string;
-  }
-): NormalizedState => {
-  return {
-    ...state,
-    [reference.group]: {
-      ...state[reference.group],
-      byId: {
-        ...state[reference.group].byId,
-        [reference.id]: {
-          ...state[reference.group].byId[reference.id],
-          [reference.key]: state[reference.group].byId[reference.id][
-            reference.key
-          ].filter((refId) => refId !== id),
-        },
+  },
+): NormalizedState => ({
+  ...state,
+  [reference.group]: {
+    ...state[reference.group],
+    byId: {
+      ...state[reference.group].byId,
+      [reference.id]: {
+        ...state[reference.group].byId[reference.id],
+        [reference.key]: state[reference.group].byId[reference.id][
+          reference.key
+        ].filter((refId) => refId !== id),
       },
     },
-    [group]: {
-      byId: _.omit(state[group].byId, id),
-      allIds: filter(state[group].allIds, id),
-    },
-  };
-};
+  },
+  [group]: {
+    byId: _.omit(state[group].byId, id),
+    allIds: filter(state[group].allIds, id),
+  },
+});
 
 export const removeItemWithReference = (
   state: Readonly<NormalizedState>,
@@ -109,23 +103,21 @@ export const removeItemWithReference = (
     group: string;
     id: string;
     key: string;
-  }
-): NormalizedState => {
-  return {
-    ...state,
-    [reference.group]: {
-      ...state[reference.group],
-      byId: {
-        ...state[reference.group].byId,
-        [reference.id]: {
-          ...state[reference.group].byId[reference.id],
-          [reference.key]: undefined,
-        },
+  },
+): NormalizedState => ({
+  ...state,
+  [reference.group]: {
+    ...state[reference.group],
+    byId: {
+      ...state[reference.group].byId,
+      [reference.id]: {
+        ...state[reference.group].byId[reference.id],
+        [reference.key]: undefined,
       },
     },
-    [group]: {
-      byId: _.omit(state[group].byId, id),
-      allIds: filter(state[group].allIds, id),
-    },
-  };
-};
+  },
+  [group]: {
+    byId: _.omit(state[group].byId, id),
+    allIds: filter(state[group].allIds, id),
+  },
+});

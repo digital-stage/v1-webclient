@@ -14,7 +14,7 @@ import {
   User,
   VideoConsumer,
   VideoProducer,
-} from "./model";
+} from './model';
 
 export interface Devices {
   byId: {
