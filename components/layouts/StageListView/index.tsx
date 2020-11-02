@@ -13,7 +13,6 @@ import {Client} from "../../../lib/digitalstage/common/model.client";
 import useStageActions from "../../../lib/digitalstage/useStageActions";
 import {useSelector} from "../../../lib/digitalstage/useStageContext/redux";
 import {Groups, NormalizedState} from "../../../lib/digitalstage/useStageContext/schema";
-import i18n from "../../../i18n";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import List from "@material-ui/core/List";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar/ListItemAvatar";
@@ -61,7 +60,6 @@ const AccordionTitleActions = styled("div", {
 })
 
 const StageListView = () => {
-    const {t} = i18n.useTranslation('stages');
 
     const stages = useStages();
     const groups = useStageSelector<Groups>(state => state.groups);
@@ -92,7 +90,7 @@ const StageListView = () => {
                     variant="contained"
                     startIcon={<AddIcon/>}
                     onClick={() => setCreateStageIsOpen(prevState => !prevState)}>
-                    {t('add-stage')}
+                    Bühne hinzufügen
                 </Button>
             </GlobalActions>
             <div>
@@ -114,7 +112,7 @@ const StageListView = () => {
                                 <AccordionTitleActions>
                                     {stage.isAdmin && (
                                         <>
-                                            <IconButton aria-label={t('add-group')}
+                                            <IconButton aria-label={"Gruppe hinzufügen"}
                                                         color="secondary"
                                                         edge="start"
                                                         onClick={() => {
@@ -132,7 +130,7 @@ const StageListView = () => {
                                             </IconButton>
                                         </>
                                     )}
-                                    <IconButton aria-label={t(stage.isAdmin ? 'remove-stage' : 'leave-stage')}
+                                    <IconButton aria-label={stage.isAdmin ? "Bühne entfernen" : "Bühne verlassen"}
                                                 color="primary" edge="end"
                                                 onClick={() => {
                                                     if (stage.isAdmin)
@@ -160,7 +158,7 @@ const StageListView = () => {
                                                         <IconButton
                                                             size="small"
                                                             edge="start"
-                                                            aria-label={t('change-group')}
+                                                            aria-label={"Gruppe wechseln"}
                                                             onClick={() => {
                                                                 setCurrentGroup(group);
                                                                 setModifyGroupIsOpen(true);
@@ -171,7 +169,7 @@ const StageListView = () => {
                                                         <IconButton
                                                             size="small"
                                                             edge="end"
-                                                            aria-label={t('remove-group')}
+                                                            aria-label={"Gruppe entfernen"}
                                                             onClick={() => removeGroup(group._id)}
                                                         >
                                                             <DeleteIcon/>
@@ -192,7 +190,7 @@ const StageListView = () => {
                                                                 }
                                                             }}
                                                         >
-                                                            {currentStageId && stage._id === currentStageId && group._id === currentGroupId ? t('leave') : t('join')}
+                                                            {currentStageId && stage._id === currentStageId && group._id === currentGroupId ? "Verlassen" : "Beitreten"}
                                                         </Button>
                                                         <Button
                                                             variant="outlined"
@@ -203,7 +201,7 @@ const StageListView = () => {
                                                                 setCopyLinkOpen(prevState => !prevState);
                                                             }}
                                                         >
-                                                            {t('invite')}
+                                                            Einladen
                                                         </Button>
                                                     </ButtonGroup>
                                                 </ListItemSecondaryAction>

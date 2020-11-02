@@ -16,10 +16,8 @@ import StageWebAudioProvider from "../lib/useStageWebAudio";
 import PageWrapper from "../components/layouts/PageWrapper";
 import {DSDarkTheme, DSLightTheme} from "../components/DSTheme";
 import {ErrorsProvider} from "../lib/useErrors";
-import i18n from "../i18n";
 import DarkTheme from '../uikit/Theme';
-import { ProvideStage } from '../components/stage/useStage';
-
+import {ProvideStage} from '../components/stage/useStage';
 
 const MyApp = ({Component, pageProps}) => {
     React.useEffect(() => {
@@ -33,7 +31,7 @@ const MyApp = ({Component, pageProps}) => {
     return (
         <>
             <Head>
-                <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+                <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
             </Head>
             <StyletronProvider value={styletron} debug={debug} debugAfterHydration>
                 <ErrorsProvider>
@@ -46,7 +44,7 @@ const MyApp = ({Component, pageProps}) => {
                                             <DarkModeConsumer>
                                                 {(darkMode) => (
                                                     <ThemeProvider theme={darkMode ? DSDarkTheme : DSLightTheme}>
-                                                        <CssBaseline />
+                                                        <CssBaseline/>
                                                         <BaseProvider theme={darkMode ? DarkTheme : LightTheme}>
                                                             <style jsx global>{`
                                                             @import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins:wght@600&display=swap');
@@ -115,4 +113,4 @@ const MyApp = ({Component, pageProps}) => {
         </>
     )
 }
-export default i18n.appWithTranslation(wrapper.withRedux(MyApp));
+export default wrapper.withRedux(MyApp);
