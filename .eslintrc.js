@@ -4,6 +4,7 @@ module.exports = {
         project: './tsconfig.json'
     },
     rules: {
+        "react/require-default-props": 0,
         "no-underscore-dangle": 0
     }
 };

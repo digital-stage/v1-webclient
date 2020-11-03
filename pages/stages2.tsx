@@ -7,9 +7,8 @@ import Loading from '../components/complex/depreacted/theme/Loading';
 import Login from './account/login';
 import StageListView from '../components/layouts/StageListView';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
-import StageDetails from '../components/stage/StageDetails';
 
-const Stages = () => {
+const Stages2 = () => {
   const router = useRouter();
   const { loading, user } = useAuth();
   const stageId = useStageSelector<string | undefined>((state) => state.stageId);
@@ -21,7 +20,6 @@ const Stages = () => {
         router.push('/');
       }
     }
-    console.log(stageId);
   }, [stageId]);
 
   useEffect(() => {
@@ -35,13 +33,10 @@ const Stages = () => {
       return <Login />;
     }
     return (
-      <>
-        <StageDetails />
-        {/* <Container>
-                    <Typography variant="h1">Meine Bühnen</Typography>
-                    <StageListView />
-                </Container> */}
-      </>
+      <Container>
+        <Typography variant="h1">Meine Bühnen</Typography>
+        <StageListView />
+      </Container>
     );
   }
 
@@ -51,4 +46,4 @@ const Stages = () => {
     </Loading>
   );
 };
-export default Stages;
+export default Stages2;

@@ -1,71 +1,73 @@
-import {Theme} from "@material-ui/core/styles";
-import {useAuth} from "../../../lib/digitalstage/useAuth";
-import React from "react";
-import SideDrawer from "../../navigation/SideDrawer";
-import MobileMenu from "../../navigation/MobileMenu";
-import {useTheme} from "@material-ui/styles";
-import {useStyletron} from "styletron-react";
-import LocalDeviceControl from "../LocalDeviceControl";
-import StageOrMixerSwitcher from "../../elements/sticky/StageOrMixerSwitcher";
-import AudioPlaybackStarter from "../../elements/sticky/AudioPlaybackStarter";
-import ProfileIcon from "../../elements/sticky/ProfileIcon";
+import React from 'react';
+import { useStyletron } from 'baseui';
+import { useAuth } from '../../../lib/digitalstage/useAuth';
+import MobileMenu from '../../navigation/MobileMenu';
+import LocalDeviceControl from '../LocalDeviceControl';
+import StageOrMixerSwitcher from '../../elements/sticky/StageOrMixerSwitcher';
+import AudioPlaybackStarter from '../../elements/sticky/AudioPlaybackStarter';
+import ProfileIcon from '../../elements/sticky/ProfileIcon';
+import SideNavigation from '../SideNavigation';
 
 const PageWrapper = (props: {
-    children: React.ReactNode
+  children: React.ReactNode
 }) => {
-    const {user} = useAuth();
-    const {breakpoints} = useTheme<Theme>();
-    const [css] = useStyletron();
+  const { children } = props;
+  const { user } = useAuth();
+  const [css, theme] = useStyletron();
 
-    return (
-        <div className={css({
-            width: "100%",
-            minHeight: "100vh",
-            display: "flex",
-            flexDirection: "column",
-            [breakpoints.up('md')]: {
-                flexDirection: user ? "row" : "column"
-            }
-        })}>
-            {user && (
-                <>
-                    <div className={css({
-                        display: "none",
-                        [breakpoints.up('md')]: {
-                            display: "flex"
-                        }
-                    })}>
-                        <SideDrawer/>
-                    </div>
-                    <div className={css({
-                        display: "block",
-                        width: "100%",
-                        [breakpoints.up('md')]: {
-                            display: "none"
-                        }
-                    })}>
-                        <MobileMenu/>
-                    </div>
-                </>
-            )}
-            <main className={css({
-                flexGrow: 1,
-                flexShrink: 0,
-                position: "relative",
-                display: "flex",
-                flexDirection: "column"
-            })}>
-                {props.children}
-            </main>
+  return (
+    <div className={css({
+      width: '100%',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      [theme.mediaQuery.large]: {
+        flexDirection: user ? 'row' : 'column',
+      },
+    })}
+    >
+      {user && (
+        <>
+          <div className={css({
+            display: 'none',
+            [theme.mediaQuery.large]: {
+              display: 'flex',
+            },
+          })}
+          >
+            <SideNavigation />
+          </div>
+          <div className={css({
+            display: 'block',
+            width: '100%',
+            [theme.mediaQuery.large]: {
+              display: 'none',
+            },
+          })}
+          >
+            <MobileMenu />
+          </div>
+        </>
+      )}
+      <main className={css({
+        flexGrow: 1,
+        flexShrink: 0,
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+      })}
+      >
+        {children}
+      </main>
 
-            <LocalDeviceControl/>
+      <LocalDeviceControl />
 
-            <StageOrMixerSwitcher/>
+      <StageOrMixerSwitcher />
 
-            <AudioPlaybackStarter/>
+      <AudioPlaybackStarter />
 
-            <ProfileIcon/>
-        </div>
-    )
+      <ProfileIcon />
+    </div>
+  );
 };
 export default PageWrapper;

@@ -1,28 +1,37 @@
-import React from "react";
-import { styled } from "styletron-react";
-import MixingPanelView from "../components/layouts/MixingPanelView";
+import React from 'react';
+import { styled } from 'styletron-react';
+import MixingPanelView from '../components/layouts/MixingPanelView';
 
-const Wrapper = styled("div", {
-  position: "relative",
-  border: "1px solid red",
-  overflowX: "scroll",
-  overflowY: "auto",
-  whiteSpace: "nowrap",
-
+const Wrapper = styled('div', {
+  position: 'relative',
+  border: '1px solid red',
+  whiteSpace: 'nowrap',
   flexGrow: 1,
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "flex-start",
-  width: "100%",
-  height: "100%",
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
+  width: '100%',
+  height: '100%',
+});
+const ScrollPane = styled('div', {
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+  top: 0,
+  left: 0,
+  bottom: 0,
+  right: 0,
+  overflowX: 'scroll',
+  overflowY: 'auto',
+
 });
 
-const Mixer = () => {
-  return (
-    <Wrapper>
+const Mixer = () => (
+  <Wrapper>
+    <ScrollPane>
       <MixingPanelView />
-    </Wrapper>
-  );
-};
+    </ScrollPane>
+  </Wrapper>
+);
 export default Mixer;
