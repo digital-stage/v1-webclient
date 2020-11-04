@@ -4,7 +4,7 @@ import { Typography } from '@material-ui/core';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Loading from '../../components/complex/depreacted/theme/Loading';
 import ResetPassword from '../../components/digital-stage-sign-in/ResetPassword';
-import PageWrapper from '../layout/PageWrapper';
+import PageWrapper from '../../components/new/PageWrapper';
 
 const Reset = () => {
   const router = useRouter();

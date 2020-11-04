@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Login from '../../components/digital-stage-sign-in';
-import PageWrapper from '../layout/PageWrapper';
+import PageWrapper from '../../components/new/PageWrapper';
 
 const LoginScreen = () => {
   const router = useRouter();

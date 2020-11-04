@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Container from '../../components/complex/depreacted/theme/layout/Container';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Loading from '../../components/complex/depreacted/theme/Loading';
-import PageWrapper from '../layout/PageWrapper';
+import PageWrapper from '../../components/new/PageWrapper';
 
 const Logout = () => {
   const router = useRouter();
