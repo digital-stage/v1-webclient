@@ -4,8 +4,8 @@ import { useAuth } from '../../../lib/digitalstage/useAuth';
 import MobileMenu from '../../navigation/MobileMenu';
 import LocalDeviceControl from '../LocalDeviceControl';
 import StageOrMixerSwitcher from '../../elements/sticky/StageOrMixerSwitcher';
-import AudioPlaybackStarter from '../../elements/sticky/AudioPlaybackStarter';
-import ProfileIcon from '../../elements/sticky/ProfileIcon';
+import AudioPlaybackStarter from '../../new/Menu/AudioPlaybackStarter';
+import ProfileIcon from '../../new/Menu/ProfileIcon';
 import SideNavigation from '../SideNavigation';
 
 const PageWrapper = (props: {

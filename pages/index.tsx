@@ -8,7 +8,9 @@ import PageWrapperWithStage from '../components/new/PageWrapperWithStage';
 import StagePane from '../components/panes/StagePane';
 import StagesListPane from '../components/panes/StagesListPane';
 import LocalDeviceControl from '../components/layouts/LocalDeviceControl';
-import AudioPlaybackStarter from '../components/elements/sticky/AudioPlaybackStarter';
+import AudioPlaybackStarter from '../components/new/Menu/AudioPlaybackStarter';
+import FixedLeaveButton from '../components/new/Menu/FixedLeaveButton';
+import PageWrapper from '../components/new/PageWrapper';
 
 const Layout = () => {
   const router = useRouter();
@@ -23,11 +25,18 @@ const Layout = () => {
       // On stage related pages (all except sign in handling) wrap with PagWrapperWithStage
       return (
         <>
-          <PageWrapperWithStage>
-            {stageId ? <StagePane /> : <StagesListPane />}
-          </PageWrapperWithStage>
+          {stageId ? (
+            <PageWrapperWithStage>
+              <StagePane />
+            </PageWrapperWithStage>
+          ) : (
+            <PageWrapper>
+              <StagesListPane />
+            </PageWrapper>
+          )}
           <LocalDeviceControl />
           <AudioPlaybackStarter />
+          <FixedLeaveButton />
         </>
       );
     }
