@@ -97,7 +97,7 @@ export default function EditGroupModal(props: {
                                 value={name}
                                 valueLength={nameLength}
                                 error={error}
-                                errorMessage="Group name is required"
+                                errormessage="Group name is required"
                             />
                         </Box>
                         <Grid
