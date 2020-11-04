@@ -3,6 +3,8 @@ import React from 'react';
 
 const Wrapper = styled('div', {});
 const VideoSettingsPane = () => (
-  <Wrapper />
+  <Wrapper>
+    VIDEO SETTINGS
+  </Wrapper>
 );
 export default VideoSettingsPane;

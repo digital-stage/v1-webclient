@@ -1,5 +1,6 @@
 import { styled } from 'styletron-react';
 import React from 'react';
+import StageListView from '../layouts/StageListView';
 
 const Wrapper = styled('div', {
 
@@ -18,7 +19,7 @@ const StagesListPane = () => (
       STAGE LIST
     </StagesList>
     <StageDetail>
-      STAGE DETAIL
+      <StageListView />
     </StageDetail>
   </Wrapper>
 );

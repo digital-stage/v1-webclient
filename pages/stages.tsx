@@ -21,7 +21,6 @@ const Stages = () => {
         router.push('/');
       }
     }
-    console.log(stageId);
   }, [stageId]);
 
   useEffect(() => {

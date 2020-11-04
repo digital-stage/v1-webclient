@@ -1,12 +1,12 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { H1 } from 'baseui/typography';
-import { useAuth } from '../lib/digitalstage/useAuth';
-import Loading from '../components/complex/depreacted/theme/Loading';
-import useStageSelector from '../lib/digitalstage/useStageSelector';
-import PageWrapperWithStage from './layout/PageWrapperWithStage';
-import StagePane from '../components/panes/StagePane';
-import StagesListPane from '../components/panes/StagesListPane';
+import { useAuth } from '../../lib/digitalstage/useAuth';
+import useStageSelector from '../../lib/digitalstage/useStageSelector';
+import PageWrapperWithStage from './PageWrapperWithStage';
+import StagePane from '../../components/panes/StagePane';
+import StagesListPane from '../../components/panes/StagesListPane';
+import Loading from '../../components/complex/depreacted/theme/Loading';
 
 const Layout = () => {
   const router = useRouter();
@@ -29,7 +29,7 @@ const Layout = () => {
 
   return (
     <Loading>
-      <H1>Neues Layout im Anmarsch!</H1>
+      <H1>Lade ...</H1>
     </Loading>
   );
 };
