@@ -7,6 +7,8 @@ import useStageSelector from '../lib/digitalstage/useStageSelector';
 import PageWrapperWithStage from './layout/PageWrapperWithStage';
 import StagePane from '../components/panes/StagePane';
 import StagesListPane from '../components/panes/StagesListPane';
+import LocalDeviceControl from '../components/layouts/LocalDeviceControl';
+import AudioPlaybackStarter from '../components/elements/sticky/AudioPlaybackStarter';
 
 const Layout = () => {
   const router = useRouter();
@@ -20,9 +22,13 @@ const Layout = () => {
     } else {
       // On stage related pages (all except sign in handling) wrap with PagWrapperWithStage
       return (
-        <PageWrapperWithStage>
-          {stageId ? <StagePane /> : <StagesListPane />}
-        </PageWrapperWithStage>
+        <>
+          <PageWrapperWithStage>
+            {stageId ? <StagePane /> : <StagesListPane />}
+          </PageWrapperWithStage>
+          <LocalDeviceControl />
+          <AudioPlaybackStarter />
+        </>
       );
     }
   }
