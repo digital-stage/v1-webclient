@@ -4,6 +4,8 @@ import React from 'react';
 const Wrapper = styled('div', {});
 
 const AudioSettingsPane = () => (
-  <Wrapper />
+  <Wrapper>
+    AUDIO SETTINGS
+  </Wrapper>
 );
 export default AudioSettingsPane;

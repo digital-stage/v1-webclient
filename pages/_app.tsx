@@ -91,9 +91,7 @@ const MyApp = ({ Component, pageProps }) => {
                               </style>
                               <StageWebAudioProvider>
                                 <ProvideStage>
-                                  <PageWrapper>
-                                    <Component {...pageProps} />
-                                  </PageWrapper>
+                                  <Component {...pageProps} />
                                 </ProvideStage>
                               </StageWebAudioProvider>
 

@@ -1,4 +1,6 @@
 const SettingsPane = () => (
-  <div />
+  <div>
+    SETTINGS
+  </div>
 );
 export default SettingsPane;

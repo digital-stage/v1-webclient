@@ -1,24 +1,25 @@
-import React, {useEffect} from "react";
-import {useRouter} from "next/router";
-import {useAuth} from "../../lib/digitalstage/useAuth";
-import Welcome from "../../components/digital-stage-sign-in/Welcome";
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useAuth } from '../../lib/digitalstage/useAuth';
+import Welcome from '../../components/digital-stage-sign-in/Welcome';
+import PageWrapper from '../layout/PageWrapper';
 
 const WelcomeScreen = () => {
-    const router = useRouter();
-    const {loading, user} = useAuth();
+  const router = useRouter();
+  const { loading, user } = useAuth();
 
-    useEffect(() => {
-        router.prefetch("/account/signup");
-        router.prefetch("/account/signin");
-        router.prefetch("/account/forgot");
-    }, []);
+  useEffect(() => {
+    router.prefetch('/account/signup');
+    router.prefetch('/account/signin');
+    router.prefetch('/account/forgot');
+  }, []);
 
-    if (!loading) {
-        if (user) {
-            router.push("/");
-        }
+  if (!loading) {
+    if (user) {
+      router.push('/');
     }
+  }
 
-    return <Welcome/>
+  return <PageWrapper><Welcome /></PageWrapper>;
 };
 export default WelcomeScreen;
