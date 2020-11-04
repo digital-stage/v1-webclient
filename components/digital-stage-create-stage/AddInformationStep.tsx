@@ -24,7 +24,7 @@ const AddInformatinStep = () => {
         value={stageInfo && stageInfo.name}
         valueLength={valueLength && valueLength.name}
         error={nameError}
-        errorMessage="Stage name is required"
+        errormessage="Stage name is required"
       />
       <TextField
         label="Password"
