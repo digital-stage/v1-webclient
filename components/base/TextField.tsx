@@ -15,7 +15,7 @@ export interface Props {
   value: string | number,
   valueLength: number,
   type?: "text" | "password" | "number",
-  errorMessage?: "Something went wrong" | string
+  errormessage?: "Something went wrong" | string
 }
 
 const useStyles = makeStyles<Theme, Props>((theme) => ({
@@ -70,7 +70,7 @@ export default function TextField(props: Props) {
     onChange,
     value,
     valueLength,
-    errorMessage
+    errormessage
   } = props
   const classes = useStyles(props);
 
@@ -80,7 +80,7 @@ export default function TextField(props: Props) {
         inputProps={{
           maxLength
         }}
-        helperText={error ? errorMessage : `${valueLength}/${maxLength}`}
+        helperText={error ? errormessage : `${valueLength}/${maxLength}`}
         id="standard-basic"
         label={label}
         color="secondary"
