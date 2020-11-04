@@ -1,25 +1,25 @@
 import { Provider as StyletronProvider } from 'styletron-react';
 import { BaseProvider, LightTheme } from 'baseui';
-import React, { FC } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
+import { AppProps } from 'next/app';
 import { debug, styletron } from '../styletron';
 import { AuthContextProvider } from '../lib/digitalstage/useAuth';
 import { SocketContextProvider } from '../lib/digitalstage/useStageContext';
 import { RequestContextProvider } from '../lib/useRequest';
 import StageJoiner from '../components/elements/StageJoiner';
 import { AudioContextProvider } from '../lib/useAudioContext';
-import MediasoupProvider from '../lib/digitalstage/useMediasoup';
+import { MediasoupProvider } from '../lib/digitalstage/useMediasoup';
 import { wrapper } from '../lib/digitalstage/useStageContext/redux';
 import { DarkModeConsumer, DarkModeProvider } from '../lib/useDarkModeSwitch';
 import StageWebAudioProvider from '../lib/useStageWebAudio';
-import PageWrapper from '../components/layouts/PageWrapper';
 import { DSDarkTheme, DSLightTheme } from '../components/DSTheme';
 import { ErrorsProvider } from '../lib/useErrors';
 import DarkTheme from '../uikit/Theme';
 import { ProvideStage } from '../components/stage/useStage';
 
-const MyApp = ({ Component, pageProps }) => {
+const MyApp = ({ Component, pageProps }: AppProps) => {
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
@@ -91,6 +91,7 @@ const MyApp = ({ Component, pageProps }) => {
                               </style>
                               <StageWebAudioProvider>
                                 <ProvideStage>
+                                  {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                                   <Component {...pageProps} />
                                 </ProvideStage>
                               </StageWebAudioProvider>

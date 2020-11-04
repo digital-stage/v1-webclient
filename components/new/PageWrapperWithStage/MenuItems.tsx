@@ -1,10 +1,10 @@
 import React from 'react';
 import NavItem from '../Menu/NavItem';
 import Icon from '../../../uikit/Icon';
-import AudioSettingsPane from '../../../components/panes/AudioSettingsPane';
-import VideoSettingsPane from '../../../components/panes/VideoSettingsPane';
-import MixerPane from '../../../components/panes/MixerPane';
-import SettingsPane from '../../../components/panes/SettingsPane';
+import AudioSettingsPane from '../../panes/AudioSettingsPane';
+import VideoSettingsPane from '../../panes/VideoSettingsPane';
+import MixerPane from '../../panes/MixerPane';
+import SettingsPane from '../../panes/SettingsPane';
 
 export const UpperNavItems: NavItem[] = [
   {

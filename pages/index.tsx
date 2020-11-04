@@ -4,7 +4,7 @@ import { H1 } from 'baseui/typography';
 import { useAuth } from '../lib/digitalstage/useAuth';
 import Loading from '../components/complex/depreacted/theme/Loading';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
-import PageWrapperWithStage from './layout/PageWrapperWithStage';
+import PageWrapperWithStage from '../components/new/PageWrapperWithStage';
 import StagePane from '../components/panes/StagePane';
 import StagesListPane from '../components/panes/StagesListPane';
 import LocalDeviceControl from '../components/layouts/LocalDeviceControl';

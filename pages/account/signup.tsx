@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Login from '../../components/digital-stage-sign-in';
 import Loading from '../../components/complex/depreacted/theme/Loading';
-import PageWrapper from '../layout/PageWrapper';
+import PageWrapper from '../../components/new/PageWrapper';
 
 const SignUp = () => {
   const router = useRouter();
