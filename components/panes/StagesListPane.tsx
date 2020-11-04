@@ -1,26 +1,18 @@
 import { styled } from 'styletron-react';
 import React from 'react';
+import { H1 } from 'baseui/typography';
 import StageListView from '../layouts/StageListView';
 
 const Wrapper = styled('div', {
 
 });
-const StagesList = styled('div', {
-
-});
-
-const StageDetail = styled('div', {
-
-});
 
 const StagesListPane = () => (
   <Wrapper>
-    <StagesList>
-      STAGE LIST
-    </StagesList>
-    <StageDetail>
-      <StageListView />
-    </StageDetail>
+    <H1>
+      My Stages
+    </H1>
+    <StageListView />
   </Wrapper>
 );
 export default StagesListPane;

@@ -15,6 +15,7 @@ const SideBarItem = styled<{ $selected: boolean }, 'div', Theme>('div', ({ $them
   paddingRight: '1rem',
   color: $selected ? $theme.colors.primary100 : $theme.colors.primary600,
   backgroundColor: $selected ? $theme.colors.backgroundPrimary : 'none',
+  outline: 'none',
 }));
 
 const SideBar = (props: {
