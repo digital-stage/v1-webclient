@@ -4,15 +4,17 @@ import { Theme } from 'baseui/theme';
 import NavItem from '../NavItem';
 
 const SideBarWrapper = styled('div', ({ $theme }) => ({
-  width: '55px',
   display: 'flex',
   flexDirection: 'column',
-  backgroundColor: $theme.colors.backgroundPrimary,
+  backgroundColor: $theme.colors.backgroundSecondary,
 }));
 
 const SideBarItem = styled<{ $selected: boolean }, 'div', Theme>('div', ({ $theme, $selected }) => ({
   width: '100%',
-  backgroundColor: $selected ? $theme.colors.backgroundSecondary : 'none',
+  paddingLeft: '1rem',
+  paddingRight: '1rem',
+  color: $selected ? $theme.colors.primary100 : $theme.colors.primary600,
+  backgroundColor: $selected ? $theme.colors.backgroundPrimary : 'none',
 }));
 
 const SideBar = (props: {

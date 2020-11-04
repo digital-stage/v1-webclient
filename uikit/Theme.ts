@@ -6,6 +6,7 @@ export interface COLOR {
   secondary: 'secondary';
   tertiary: 'tertiary';
 }
+
 export interface SHAPE {
   default: 'default';
   pill: 'pill';
@@ -17,6 +18,7 @@ export interface SHAPE {
 export interface KIND extends COLOR {
   minimal: 'minimal';
 }
+
 export interface SIZE {
   compact: 'compact';
   default: 'default';
@@ -31,6 +33,7 @@ const primitives: Partial<ThemePrimitives> = {
 
   mono100: 'rgba(255,255,255,1)',
   mono400: 'rgba(80,80,80,1)',
+  mono600: 'rgba(47, 47, 47, 1)',
   mono700: 'rgba(37, 37, 37, 1)',
   mono1000: 'rgba(16, 16, 16, 1)',
 };
@@ -46,7 +49,7 @@ const overrides = {
     buttonSecondarySpinnerForeground: primitives.accent700,
     buttonSecondarySpinnerBackground: primitives.accent300,
 
-    backgroundPrimary: primitives.mono700,
+    backgroundPrimary: primitives.mono1000,
     backgroundSecondary: primitives.mono700,
     backgroundTertiary: primitives.mono400,
   },

@@ -14,7 +14,7 @@ const Leave = () => {
   useEffect(() => {
     if (ready) {
       if (stageId) leaveStage();
-      else router.push('/stages');
+      else router.push('/');
     }
   }, [ready, stageId]);
 
