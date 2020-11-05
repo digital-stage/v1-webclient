@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Typography } from '@material-ui/core';
-import Loading from '../components/complex/depreacted/theme/Loading';
+import Loading from '../components/new/elements/Loading';
 import useStageActions from '../lib/digitalstage/useStageActions';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
 

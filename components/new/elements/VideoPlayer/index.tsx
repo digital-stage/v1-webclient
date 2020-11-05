@@ -67,7 +67,7 @@ class VideoPlayer extends React.Component<Props, States> {
 
   componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<States>): void {
     const { consumers } = this.props;
-    const { size, animationFrames } = this.state;
+    const { size, animationFrames, drawing } = this.state;
     if (prevProps.consumers !== consumers
         || prevState.size !== size) {
       // Video producers or size of wrapper has changed
@@ -146,8 +146,8 @@ class VideoPlayer extends React.Component<Props, States> {
       }
     }
 
-    if (prevState.drawing !== this.state.drawing) {
-      if (this.state.drawing) {
+    if (prevState.drawing !== drawing) {
+      if (drawing) {
         this.animationFrameId = window.requestAnimationFrame(this.drawAnimationFrames);
       } else {
         window.cancelAnimationFrame(this.animationFrameId);
@@ -174,7 +174,7 @@ class VideoPlayer extends React.Component<Props, States> {
       const context = this.canvasRef.current.getContext('2d');
       context.fillStyle = 'black';
       // context.strokeStyle = 'red';
-      context.fillRect(0, 0, this.state.size.width, this.state.size.height);
+      context.fillRect(0, 0, size.width, size.height);
       this.state.animationFrames.forEach(
         (animationFrame: AnimationFrame) => {
           const videoWidth: number = (animationFrame.src as HTMLVideoElement).videoWidth as number;
@@ -203,7 +203,7 @@ class VideoPlayer extends React.Component<Props, States> {
 
   render() {
     const { className } = this.props;
-    const { size, wrapperRef } = this.state;
+    const { size } = this.state;
     return (
       <div className={className} ref={this.wrapperRef}>
         <Canvas

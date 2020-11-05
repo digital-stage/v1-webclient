@@ -8,9 +8,9 @@ import { Notification } from 'baseui/notification';
 import {
   Modal, ModalBody, ModalButton, ModalFooter, ModalHeader,
 } from 'baseui/modal';
-import Container from '../../components/complex/depreacted/theme/layout/Container';
-import Loading from '../../components/complex/depreacted/theme/Loading';
+import Loading from '../../components/new/elements/Loading';
 import { useAuth } from '../../lib/digitalstage/useAuth';
+import Container from '../../components/new/elements/Container';
 
 const Forgot = () => {
   const router = useRouter();

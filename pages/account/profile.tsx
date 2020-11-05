@@ -1,9 +1,9 @@
 import { HeadingLarge } from 'baseui/typography';
 import React from 'react';
-import Container from '../../components/complex/depreacted/theme/layout/Container';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import useStageSelector from '../../lib/digitalstage/useStageSelector';
 import Layout from '../../components/Layout';
+import Container from '../../components/new/elements/Container';
 
 const Profile = () => {
   const { user: authUser } = useAuth();

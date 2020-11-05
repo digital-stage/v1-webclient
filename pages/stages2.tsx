@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Typography } from '@material-ui/core';
-import Container from '../components/complex/depreacted/theme/layout/Container';
 import { useAuth } from '../lib/digitalstage/useAuth';
-import Loading from '../components/complex/depreacted/theme/Loading';
+import Loading from '../components/new/elements/Loading';
 import Login from './account/login';
 import StageListView from '../components/new/elements/StageList';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
+import Container from '../components/new/elements/Container';
 
 const Stages2 = () => {
   const router = useRouter();

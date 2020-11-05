@@ -1,43 +1,41 @@
-//import FlexContainer from "../components/complex/depreacted/theme/FlexContainer";
-import React from "react";
-import { useAuth } from "../lib/digitalstage/useAuth";
-import Loading from "../components/complex/depreacted/theme/Loading";
-import { DisplayMedium } from "baseui/typography";
-import Login from "./account/login";
-import Button from "../components/base/Button";
-import SwitchButton from "../components/base/SwitchButton";
-import RadioButton from "../components/base/RadioButton";
-import Checkbox from "../components/base/Checkbox";
-import Slider from "../components/base/Slider";
-import Chip from "../components/base/Chip";
-import TextField from "../components/base/TextField";
-import { Typography } from "@material-ui/core";
-import Icon from "../components/base/Icon";
-import Welcome from "../components/digital-stage-sign-in/Welcome";
-import LoginIndex from '../components/digital-stage-sign-in'
-import Home from "../components/digital-stage-home";
-
-
+// import FlexContainer from "../components/complex/depreacted/theme/FlexContainer";
+import React from 'react';
+import { DisplayMedium } from 'baseui/typography';
+import { Typography } from '@material-ui/core';
+import { useAuth } from '../lib/digitalstage/useAuth';
+import Loading from '../components/new/elements/Loading';
+import Login from './account/login';
+import Button from '../components/base/Button';
+import SwitchButton from '../components/base/SwitchButton';
+import RadioButton from '../components/base/RadioButton';
+import Checkbox from '../components/base/Checkbox';
+import Slider from '../components/base/Slider';
+import Chip from '../components/base/Chip';
+import TextField from '../components/base/TextField';
+import Icon from '../components/base/Icon';
+import Welcome from '../components/digital-stage-sign-in/Welcome';
+import LoginIndex from '../components/digital-stage-sign-in';
+import Home from '../components/digital-stage-home';
 
 const Components = () => {
-    const { loading, user } = useAuth();
+  const { loading, user } = useAuth();
 
-    const [deg, setDeg] = React.useState<number>(0)
+  const [deg, setDeg] = React.useState<number>(0);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, newValue: number | number[]) => {
-        setDeg(newValue as number)
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, newValue: number | number[]) => {
+    setDeg(newValue as number);
+  };
+
+  if (!loading) {
+    if (!user) {
+      return <Login />;
     }
-
-    if (!loading) {
-        if (!user) {
-            return <Login />
-        } else {
-            return (
-                <div>
-                    <Welcome/>
-                    <LoginIndex mode="login"/>
-                    <Home/>
-                    {/* <FlexContainer>
+    return (
+      <div>
+        <Welcome />
+        <LoginIndex mode="login" />
+        <Home />
+        {/* <FlexContainer>
                         <Button color="primary" text="Primary" withIcon iconName="settings" iconColor="white" />
                         <Button color="secondary" text="Seconday" />
                         <Button color="light" text="Light" />
@@ -92,13 +90,14 @@ const Components = () => {
                     <FlexContainer>
                         <Icon name="settings" />
                     </FlexContainer> */}
-                </div>
-            );
-        }
-    }
+      </div>
+    );
+  }
 
-    return <Loading>
-        <DisplayMedium>Lade ...</DisplayMedium>
-    </Loading>;
-}
+  return (
+    <Loading>
+      <DisplayMedium>Lade ...</DisplayMedium>
+    </Loading>
+  );
+};
 export default Components;

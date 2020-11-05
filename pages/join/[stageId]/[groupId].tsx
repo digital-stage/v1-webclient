@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { DisplayMedium } from 'baseui/typography';
 import { useRequest } from '../../../lib/useRequest';
-import Loading from '../../../components/complex/depreacted/theme/Loading';
+import Loading from '../../../components/new/elements/Loading';
 
 const Join = () => {
   const router = useRouter();

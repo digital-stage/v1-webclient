@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { DisplayMedium, HeadingLarge } from 'baseui/typography';
 import { useRouter } from 'next/router';
-import Container from '../../components/complex/depreacted/theme/layout/Container';
 import { useAuth } from '../../lib/digitalstage/useAuth';
-import Loading from '../../components/complex/depreacted/theme/Loading';
+import Loading from '../../components/new/elements/Loading';
 import PageWrapper from '../../components/new/elements/PageWrapper';
+import Container from '../../components/new/elements/Container';
 
 const Logout = () => {
   const router = useRouter();
