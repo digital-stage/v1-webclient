@@ -1,8 +1,8 @@
 import React from 'react';
 import { styled } from 'styletron-react';
-import StageView from '../layouts/StageView';
-import useStageSelector from '../../lib/digitalstage/useStageSelector';
-import { Stages } from '../../lib/digitalstage/useStageContext/schema';
+import StageView from '../../layouts/StageView';
+import useStageSelector from '../../../lib/digitalstage/useStageSelector';
+import { Stages } from '../../../lib/digitalstage/useStageContext/schema';
 
 const Wrapper = styled('div', {});
 

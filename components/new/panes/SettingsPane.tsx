@@ -3,12 +3,12 @@ import React, { useCallback, useEffect } from 'react';
 import _ from 'lodash';
 import { Button } from 'baseui/button';
 import Link from 'next/link';
-import useStageSelector from '../../lib/digitalstage/useStageSelector';
-import { Device } from '../../lib/digitalstage/common/model.server';
-import useStageActions from '../../lib/digitalstage/useStageActions';
-import enumerateDevices from '../../lib/digitalstage/useStageContext/utils';
-import Container from '../complex/depreacted/theme/layout/Container';
-import DeviceView from '../complex/depreacted/devices/DeviceView';
+import useStageSelector from '../../../lib/digitalstage/useStageSelector';
+import { Device } from '../../../lib/digitalstage/common/model.server';
+import useStageActions from '../../../lib/digitalstage/useStageActions';
+import enumerateDevices from '../../../lib/digitalstage/useStageContext/utils';
+import Container from '../../complex/depreacted/theme/layout/Container';
+import DeviceView from '../../complex/depreacted/devices/DeviceView';
 
 const SettingsPane = () => {
   const localDevice = useStageSelector<Device>(
