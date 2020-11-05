@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Login from '../../components/digital-stage-sign-in';
-import Loading from '../../components/complex/depreacted/theme/Loading';
+import Loading from '../../components/new/elements/Loading';
 import PageWrapper from '../../components/new/elements/PageWrapper';
 
 const SignUp = () => {

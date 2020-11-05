@@ -7,8 +7,8 @@ import useStageSelector from '../../../lib/digitalstage/useStageSelector';
 import { Device } from '../../../lib/digitalstage/common/model.server';
 import useStageActions from '../../../lib/digitalstage/useStageActions';
 import enumerateDevices from '../../../lib/digitalstage/useStageContext/utils';
-import Container from '../../complex/depreacted/theme/layout/Container';
 import DeviceView from '../elements/DeviceView';
+import Container from '../elements/Container';
 
 const SettingsPane = () => {
   const localDevice = useStageSelector<Device>(

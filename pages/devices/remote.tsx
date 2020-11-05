@@ -1,7 +1,7 @@
 import React from 'react';
-import Container from '../../components/complex/depreacted/theme/layout/Container';
 import DeviceView from '../../components/new/elements/DeviceView';
 import useStageSelector from '../../lib/digitalstage/useStageSelector';
+import Container from '../../components/new/elements/Container';
 
 const Remote = () => {
   const { remoteDevices } = useStageSelector((state) => ({

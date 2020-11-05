@@ -3,12 +3,12 @@ import { Button } from 'baseui/button';
 import Link from 'next/link';
 import { useStyletron } from 'baseui';
 import _ from 'lodash';
-import Container from '../../components/complex/depreacted/theme/layout/Container';
 import DeviceView from '../../components/new/elements/DeviceView';
 import useStageSelector from '../../lib/digitalstage/useStageSelector';
 import { Device } from '../../lib/digitalstage/common/model.server';
 import enumerateDevices from '../../lib/digitalstage/useStageContext/utils';
 import useStageActions from '../../lib/digitalstage/useStageActions';
+import Container from '../../components/new/elements/Container';
 
 const Index = () => {
   const localDevice = useStageSelector<Device>(

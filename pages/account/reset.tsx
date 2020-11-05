@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { Typography } from '@material-ui/core';
 import { useAuth } from '../../lib/digitalstage/useAuth';
-import Loading from '../../components/complex/depreacted/theme/Loading';
+import Loading from '../../components/new/elements/Loading';
 import ResetPassword from '../../components/digital-stage-sign-in/ResetPassword';
 import PageWrapper from '../../components/new/elements/PageWrapper';
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Typography } from '@material-ui/core';
 import { useAuth } from '../lib/digitalstage/useAuth';
-import Loading from '../components/complex/depreacted/theme/Loading';
+import Loading from '../components/new/elements/Loading';
 import Login from './account/login';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
 import StageDetails from '../components/stage/StageDetails';

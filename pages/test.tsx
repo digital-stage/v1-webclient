@@ -6,7 +6,7 @@ import { DisplayMedium } from 'baseui/typography';
 import { Notification } from 'baseui/notification';
 import { KIND } from 'baseui/toast';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
-import Container from '../components/complex/depreacted/theme/layout/Container';
+import Container from '../components/new/elements/Container';
 
 const Test = () => {
   const { localDevice } = useStageSelector((state) => ({

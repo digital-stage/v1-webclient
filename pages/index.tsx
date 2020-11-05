@@ -2,16 +2,16 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { H1 } from 'baseui/typography';
 import { useAuth } from '../lib/digitalstage/useAuth';
-import Loading from '../components/complex/depreacted/theme/Loading';
+import Loading from '../components/new/elements/Loading';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
 import PageWrapperWithStage from '../components/new/elements/PageWrapperWithStage';
 import StagePane from '../components/new/panes/StagePane';
 import StagesListPane from '../components/new/panes/StagesListPane';
 import LocalDeviceControl from '../components/new/elements/LocalDeviceControl';
-import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/AudioPlaybackStarter';
 import FixedLeaveButton from '../components/new/elements/Menu/FixedLeaveButton';
 import PageWrapper from '../components/new/elements/PageWrapper';
 import Container from '../components/new/elements/Container';
+import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/FixedAudioPlaybackStarterButton';
 
 const Layout = () => {
   const router = useRouter();

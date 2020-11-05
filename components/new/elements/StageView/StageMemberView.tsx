@@ -4,7 +4,7 @@ import { Avatar } from 'baseui/avatar';
 import { Typography } from '@material-ui/core';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import StarIcon from '@material-ui/icons/Star';
-import OnlineStatus from '../../../complex/depreacted/theme/OnlineStatus';
+import OnlineStatus from '../OnlineStatus';
 import { ExtendedStageMember, useIsStageAdmin } from '../../../../lib/digitalstage/useStageSelector';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import VideoPlayer from '../VideoPlayer';

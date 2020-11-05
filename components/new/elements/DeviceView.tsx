@@ -5,7 +5,7 @@ import { Card, StyledAction, StyledBody } from 'baseui/card/index';
 import { Checkbox } from 'baseui/checkbox/index';
 import { Check, Delete } from 'baseui/icon/index';
 import { Button, KIND, SIZE } from 'baseui/button/index';
-import SingleSelect from '../../complex/depreacted/theme/form/SingleSelect';
+import SingleSelect from './SingleSelect';
 import { Device } from '../../../lib/digitalstage/common/model.server';
 import useStageActions from '../../../lib/digitalstage/useStageActions';
 

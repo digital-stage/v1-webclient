@@ -2,9 +2,9 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from 'baseui/button';
 import { useStyletron } from 'baseui';
-import Container from '../../components/complex/depreacted/theme/layout/Container';
 import DeviceView from '../../components/new/elements/DeviceView';
 import useStageSelector from '../../lib/digitalstage/useStageSelector';
+import Container from '../../components/new/elements/Container';
 
 const Local = () => {
   const { localDevice } = useStageSelector((state) => ({
