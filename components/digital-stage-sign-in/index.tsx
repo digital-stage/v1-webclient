@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createStyles, Grid, Slide, makeStyles, Theme, Typography } from "@material-ui/core";
+import { createStyles, Grid, Slide, makeStyles, Theme, Typography, Collapse, Zoom, Fade } from "@material-ui/core";
 
 import SignInForm from "./SignInForm";
 import SignUpForm from "./SignUpForm";
@@ -64,12 +64,13 @@ const Login = (props: {
     return (
         <div className={classes.root}>
             <Grid container={true} direction='column' alignContent="center" alignItems="center">
-                <img
+                <Fade in={props.mode === "login"}  timeout={700}><img
                     src="/images/welcome_icon.png"
                     width="180"
                     height="auto"
                     alt="logo"
                 />
+                </Fade>
             </Grid>
             <FormContainerView>
                 <Grid
@@ -95,9 +96,9 @@ const Login = (props: {
                         Sign up
                     </Typography>
                 </Grid>
-                {LoginOpen && <SignInForm />}
-                {SignupOpen && <SignUpForm />}
-                {ForgetOpen && <ForgetPasswordForm onClick={showLoginBox} />}
+                <Collapse in={LoginOpen} timeout={700}>{LoginOpen && <SignInForm />}</Collapse>
+                <Collapse in={SignupOpen} timeout={700}> {SignupOpen && <SignUpForm />}</Collapse>
+                <Collapse in={ForgetOpen} timeout={700}>{ForgetOpen && <ForgetPasswordForm onClick={showLoginBox} />}</Collapse>
                 {LoginOpen && <Typography
                     variant="h6"
                     onClick={showForgetBox}

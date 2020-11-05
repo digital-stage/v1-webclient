@@ -63,7 +63,7 @@ export default function SignInForm(props: {
         e.preventDefault();
         const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
-            return signInWithEmailAndPassword(email, password)
+            return signInWithEmailAndPassword(email, password, checked)
                 .then(() => {
                     if (props.onCompleted)
                         props.onCompleted();
