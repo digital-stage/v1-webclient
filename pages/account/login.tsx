@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Login from '../../components/digital-stage-sign-in';
-import PageWrapper from '../../components/new/elements/PageWrapper';
+import Layout from '../../components/Layout';
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -19,6 +19,10 @@ const LoginScreen = () => {
     }
   }
 
-  return <PageWrapper><Login mode="login" /></PageWrapper>;
+  return (
+    <Layout>
+      <Login mode="login" />
+    </Layout>
+  );
 };
 export default LoginScreen;
