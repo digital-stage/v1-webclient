@@ -1,7 +1,7 @@
 export default {
   colors: {
-    text: 'hsl(212, 100%, 5%)',
-    background: '#fff',
+    text: '#fff',
+    background: '#1c1c1c',
     primary: 'hsl(173, 70%, 35%)',
     secondary: 'hsl(315, 97%, 26%)',
     tertiary: 'hsl(211, 39%, 31%)', // cambridge blue
@@ -10,7 +10,7 @@ export default {
     danger: 'hsl(276, 65%, 85%)',
     navigation: 'hsl(333, 50%, 8%)',
     dsbackground:
-      'transparent linear-gradient(221deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%) 0% 0% no-repeat padding-box;',
+      'transparent linear-gradient(221deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%) 0% 0% no-repeat padding-box',
     error: {
       placeholder: 'hsl(333, 95%, 25%)',
       background: 'hsl(333, 50%, 89%)',
@@ -61,13 +61,14 @@ export default {
   fontSizes: [14, 16, 18, 20, 24, 32, 48, 64, 72, 96],
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   breakpoints: [600, 900, 1200, 1500].map((n) => `${n}px`),
-  radii: {},
+  radii: {
+    button: '21px',
+  },
   sizes: {
     container: {
       fullscreen: '100%',
       largeplus: 'calc(920px + 20vw)',
       smallplus: 'calc(640px + 10vw)',
-
       wide: '1407px',
       default: '800px',
       small: '400px',
@@ -75,6 +76,26 @@ export default {
     page: {
       default: '1280px',
     },
+  },
+  text: {
+    default: {
+      color: 'text',
+      fontSize: 3,
+    },
+    caps: {
+      textTransform: 'uppercase',
+      letterSpacing: '0.2em',
+    },
+    heading: {
+      color: 'text',
+      fontFamily: 'heading',
+      fontWeight: 'heading',
+      lineHeight: 'heading',
+    },
+  },
+  button: {
+    primary: {},
+    secondary: {},
   },
   cards: {
     primary: {
