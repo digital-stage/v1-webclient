@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Welcome from '../../components/digital-stage-sign-in/Welcome';
-import PageWrapper from '../../components/new/PageWrapper';
+import PageWrapper from '../../components/new/elements/PageWrapper';
 
 const WelcomeScreen = () => {
   const router = useRouter();

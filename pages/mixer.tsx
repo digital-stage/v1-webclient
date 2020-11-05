@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from 'styletron-react';
-import MixingPanelView from '../components/layouts/MixingPanelView';
+import MixingPanelView from '../components/new/elements/MixingPanel';
 
 const Wrapper = styled('div', {
   position: 'relative',

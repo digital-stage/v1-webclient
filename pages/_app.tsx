@@ -8,7 +8,7 @@ import { debug, styletron } from '../styletron';
 import { AuthContextProvider } from '../lib/digitalstage/useAuth';
 import { SocketContextProvider } from '../lib/digitalstage/useStageContext';
 import { RequestContextProvider } from '../lib/useRequest';
-import StageJoiner from '../components/elements/StageJoiner';
+import StageJoiner from '../components/new/elements/StageJoiner';
 import { AudioContextProvider } from '../lib/useAudioContext';
 import { MediasoupProvider } from '../lib/digitalstage/useMediasoup';
 import { wrapper } from '../lib/digitalstage/useStageContext/redux';

@@ -5,7 +5,7 @@ import Container from '../components/complex/depreacted/theme/layout/Container';
 import { useAuth } from '../lib/digitalstage/useAuth';
 import Loading from '../components/complex/depreacted/theme/Loading';
 import Login from './account/login';
-import StageListView from '../components/layouts/StageListView';
+import StageListView from '../components/new/elements/StageList';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
 
 const Stages2 = () => {

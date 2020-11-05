@@ -34,7 +34,7 @@ Currently a dockerization of all services is planned and on it's way.
 - [Mediasoup client documentation](https://mediasoup.org/documentation/v3/mediasoup-client/api/) - learn about the WebRTC / SFU implementation
 
 #### For later
-- [Capture a MediaStream From a Canvas, Video or Audio Element](https://developers.google.com/web/updates/2016/10/capture-stream) - Capture MediaStream from canvas (for implementing streaming to video platforms later) - we used this tutorial to implement the video inside canvas component (CanvasPlayer.tsx)
+- [Capture a MediaStream From a Canvas, Video or Audio Element](https://developers.google.com/web/updates/2016/10/capture-stream) - Capture MediaStream from canvas (for implementing streaming to video platforms later) - we used this tutorial to implement the video inside canvas component (VideoCanvasPlayer.tsx)
 
 
 Visit [http://www.digital-stage.org](http://www.digital-stage.org)

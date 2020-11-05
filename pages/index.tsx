@@ -4,14 +4,14 @@ import { H1 } from 'baseui/typography';
 import { useAuth } from '../lib/digitalstage/useAuth';
 import Loading from '../components/complex/depreacted/theme/Loading';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
-import PageWrapperWithStage from '../components/new/PageWrapperWithStage';
+import PageWrapperWithStage from '../components/new/elements/PageWrapperWithStage';
 import StagePane from '../components/new/panes/StagePane';
 import StagesListPane from '../components/new/panes/StagesListPane';
-import LocalDeviceControl from '../components/layouts/LocalDeviceControl';
-import AudioPlaybackStarter from '../components/new/Menu/AudioPlaybackStarter';
-import FixedLeaveButton from '../components/new/Menu/FixedLeaveButton';
-import PageWrapper from '../components/new/PageWrapper';
-import Container from '../components/new/Container';
+import LocalDeviceControl from '../components/new/elements/LocalDeviceControl';
+import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/AudioPlaybackStarter';
+import FixedLeaveButton from '../components/new/elements/Menu/FixedLeaveButton';
+import PageWrapper from '../components/new/elements/PageWrapper';
+import Container from '../components/new/elements/Container';
 
 const Layout = () => {
   const router = useRouter();
@@ -38,7 +38,7 @@ const Layout = () => {
             </PageWrapper>
           )}
           <LocalDeviceControl />
-          <AudioPlaybackStarter />
+          <FixedAudioPlaybackStarterButton />
           <FixedLeaveButton />
         </>
       );

@@ -1,6 +1,6 @@
 import React from 'react';
 import Container from '../../components/complex/depreacted/theme/layout/Container';
-import DeviceView from '../../components/complex/depreacted/devices/DeviceView';
+import DeviceView from '../../components/new/elements/DeviceView';
 import useStageSelector from '../../lib/digitalstage/useStageSelector';
 
 const Remote = () => {
