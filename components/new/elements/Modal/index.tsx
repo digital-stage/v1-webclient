@@ -2,25 +2,33 @@ import { styled } from 'baseui';
 import { Theme } from 'baseui/theme';
 import React, { useEffect, useState } from 'react';
 import { Delete } from 'baseui/icon';
-import Button from '../../../../uikit/Button';
+// import Button from '../../../../uikit/Button
+import { Button } from 'theme-ui';
 
-const ModalWrapper = styled<{ $hidden?: boolean }, 'div', Theme>('div', ({ $theme, $hidden }) => ({
-  position: 'absolute',
-  width: '100%',
-  height: '100%',
-  top: 0,
-  left: 0,
-  bottom: 0,
-  right: 0,
-  backgroundColor: $hidden ? 'transparent' : $theme.colors.backgroundOverlayDark,
-  transitionDuration: $theme.animation.timing200,
-  transitionProperty: 'background-color',
-  transitionFunction: $theme.animation.easeInCurve,
-  display: 'flex',
-}));
-const ModalContent = styled<{ $width: string, $maxWidth: string, $hidden?: boolean }, 'div', Theme>('div', ({
-  $theme, $hidden, $width, $maxWidth,
-}) => ({
+const ModalWrapper = styled<{ $hidden?: boolean }, 'div', Theme>(
+  'div',
+  ({ $theme, $hidden }) => ({
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    backgroundColor: $hidden
+      ? 'transparent'
+      : $theme.colors.backgroundOverlayDark,
+    transitionDuration: $theme.animation.timing200,
+    transitionProperty: 'background-color',
+    transitionFunction: $theme.animation.easeInCurve,
+    display: 'flex',
+  })
+);
+const ModalContent = styled<
+  { $width: string; $maxWidth: string; $hidden?: boolean },
+  'div',
+  Theme
+>('div', ({ $theme, $hidden, $width, $maxWidth }) => ({
   position: 'relative',
   width: '100%',
   height: '100%',
@@ -60,11 +68,9 @@ const Modal = (props: {
   open: boolean;
   size?: SIZE[keyof SIZE];
   onClose: () => void;
-  position?: 'absolute' | 'bottom'
+  position?: 'absolute' | 'bottom';
 }) => {
-  const {
-    children, open, onClose, size, position,
-  } = props;
+  const { children, open, onClose, size, position } = props;
   // Animation related property
   const [hidden, setHidden] = useState<boolean>(!open);
   const [rendered, setRendered] = useState<boolean>(open);

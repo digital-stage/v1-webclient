@@ -1,7 +1,7 @@
 import React from 'react';
 import DeviceView from '../../components/new/elements/DeviceView';
 import useStageSelector from '../../lib/digitalstage/useStageSelector';
-import Container from '../../components/new/elements/Container';
+import Container from '../../components/Container';
 
 const Remote = () => {
   const { remoteDevices } = useStageSelector((state) => ({
@@ -13,7 +13,9 @@ const Remote = () => {
       {remoteDevices && (
         <>
           <h2>Meine anderen Geräte</h2>
-          {remoteDevices.map((remoteDevice) => <DeviceView device={remoteDevice} />)}
+          {remoteDevices.map((remoteDevice) => (
+            <DeviceView device={remoteDevice} />
+          ))}
         </>
       )}
     </Container>

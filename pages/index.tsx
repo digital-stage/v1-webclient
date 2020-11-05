@@ -9,8 +9,8 @@ import StagePane from '../components/new/panes/StagePane';
 import StagesListPane from '../components/new/panes/StagesListPane';
 import LocalDeviceControl from '../components/new/elements/LocalDeviceControl';
 import FixedLeaveButton from '../components/new/elements/Menu/FixedLeaveButton';
-import PageWrapper from '../components/new/elements/PageWrapper';
-import Container from '../components/new/elements/Container';
+import Layout from '../components/Layout';
+import Container from '../components/Container';
 import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/FixedAudioPlaybackStarterButton';
 
 const Layout = () => {
@@ -33,11 +33,11 @@ const Layout = () => {
               <StagePane />
             </PageWrapperWithStage>
           ) : (
-            <PageWrapper>
+            <Layout>
               <Container>
                 <StagesListPane />
               </Container>
-            </PageWrapper>
+            </Layout>
           )}
           <LocalDeviceControl />
           <FixedAudioPlaybackStarterButton />

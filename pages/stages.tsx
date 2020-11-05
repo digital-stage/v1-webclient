@@ -10,7 +10,9 @@ import StageDetails from '../components/stage/StageDetails';
 const Stages = () => {
   const router = useRouter();
   const { loading, user } = useAuth();
-  const stageId = useStageSelector<string | undefined>((state) => state.stageId);
+  const stageId = useStageSelector<string | undefined>(
+    (state) => state.stageId
+  );
   const [initialized, setInitialized] = useState<boolean>();
 
   useEffect(() => {
@@ -31,15 +33,7 @@ const Stages = () => {
     if (!user) {
       return <Login />;
     }
-    return (
-      <>
-        <StageDetails />
-        {/* <Container>
-                    <Typography variant="h1">Meine Bühnen</Typography>
-                    <StageListView />
-                </Container> */}
-      </>
-    );
+    return <StageDetails />;
   }
 
   return (

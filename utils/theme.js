@@ -44,8 +44,8 @@ export default {
     },
   },
   fonts: {
-    body: 'Rubik, Verdana, sans-serif',
-    heading: 'Inter, Verdana, sans-serif',
+    body: "'Open Sans', Verdana, sans-serif",
+    heading: 'Poppins, Verdana, sans-serif',
     monospace: "Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace",
     // SANSERATA
   },
@@ -92,17 +92,14 @@ export default {
   styles: {
     root: {
       fontFamily: 'body',
-      // lineHeight: 'body',
       fontWeight: 'body',
       fontSize: 2,
       'h1,h2,h3': {
         fontFamily: 'heading',
-        // lineHeight: 'heading',
         fontWeight: 'heading',
-        color: 'tertiary',
+        color: 'primary',
       },
       h1: {
-        // fontSize: `2.125rem`,
         fontSize: 5,
         hyphens: ['auto', 'manual'],
       },

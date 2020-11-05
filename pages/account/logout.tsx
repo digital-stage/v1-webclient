@@ -3,8 +3,8 @@ import { DisplayMedium, HeadingLarge } from 'baseui/typography';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Loading from '../../components/new/elements/Loading';
-import PageWrapper from '../../components/new/elements/PageWrapper';
-import Container from '../../components/new/elements/Container';
+import Layout from '../../components/Layout';
+import Container from '../../components/Container';
 
 const Logout = () => {
   const router = useRouter();
@@ -12,21 +12,20 @@ const Logout = () => {
   const { logout, loading } = useAuth();
 
   useEffect(() => {
-    logout()
-      .then(() => {
-        setLoggedOut(true);
-        router.push('/account/login');
-      });
+    logout().then(() => {
+      setLoggedOut(true);
+      router.push('/account/login');
+    });
   }, []);
 
   if (!loading) {
     if (loggedOut) {
       return (
-        <PageWrapper>
+        <Layout>
           <Container>
             <HeadingLarge>Abgemeldet!</HeadingLarge>
           </Container>
-        </PageWrapper>
+        </Layout>
       );
     }
   }

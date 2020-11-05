@@ -20,16 +20,12 @@ const Text = styled('div', {
   animationName: 'bounce',
 });
 
-const Loading = (props: {
-  children: React.ReactNode
-}) => {
+const Loading = (props: { children: React.ReactNode }) => {
   const { children } = props;
 
   return (
     <Wrapper>
-      <Text>
-        {children}
-      </Text>
+      <Text>{children}</Text>
     </Wrapper>
   );
 };

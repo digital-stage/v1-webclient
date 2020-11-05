@@ -12,7 +12,7 @@ enum Type {
 
 const Container = (props: {
   children: React.ReactNode;
-  type: Type | Type.default;
+  type?: Type | Type.default;
 }) => {
   const { children, type } = props;
 
