@@ -72,7 +72,7 @@ const PageWrapperWithStage = (props: {
           onSelected={(item) => {
             if (currentItem && modalOpen && currentItem.label === item.label) {
               setModalOpen(false);
-              setCurrentItem(undefined);
+              setCurrentItem(item);
             } else {
               setCurrentItem(item);
               setModalOpen(true);
@@ -88,7 +88,6 @@ const PageWrapperWithStage = (props: {
           onSelected={(item) => {
             if (currentItem && modalOpen && currentItem.label === item.label) {
               setModalOpen(false);
-              setCurrentItem(undefined);
             } else {
               setCurrentItem(item);
               setModalOpen(true);
@@ -101,7 +100,10 @@ const PageWrapperWithStage = (props: {
           <Modal
             size={currentItem.size}
             open={modalOpen}
-            onClose={() => setModalOpen(false)}
+            onClose={() => {
+              setModalOpen(false);
+              setCurrentItem(undefined);
+            }}
           >
             {currentItem.content}
 

@@ -58,7 +58,7 @@ export interface SIZE {
 const Modal = (props: {
   children: React.ReactNode;
   open: boolean;
-  size: SIZE[keyof SIZE];
+  size?: SIZE[keyof SIZE];
   onClose: () => void;
   position?: 'absolute' | 'bottom'
 }) => {

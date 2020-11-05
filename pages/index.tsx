@@ -11,6 +11,7 @@ import LocalDeviceControl from '../components/layouts/LocalDeviceControl';
 import AudioPlaybackStarter from '../components/new/Menu/AudioPlaybackStarter';
 import FixedLeaveButton from '../components/new/Menu/FixedLeaveButton';
 import PageWrapper from '../components/new/PageWrapper';
+import Container from '../components/new/Container';
 
 const Layout = () => {
   const router = useRouter();
@@ -19,7 +20,7 @@ const Layout = () => {
 
   if (!loading) {
     if (!user) {
-      // Forward to welcome page (with PageWrapper instead of PageWrapperWithStage)
+      // Forward to welcome page (with PageWrapper instead of PageWrapperWithStage)<
       router.push('/account/welcome');
     } else {
       // On stage related pages (all except sign in handling) wrap with PagWrapperWithStage
@@ -31,7 +32,9 @@ const Layout = () => {
             </PageWrapperWithStage>
           ) : (
             <PageWrapper>
-              <StagesListPane />
+              <Container>
+                <StagesListPane />
+              </Container>
             </PageWrapper>
           )}
           <LocalDeviceControl />
