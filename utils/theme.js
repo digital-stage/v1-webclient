@@ -16,12 +16,14 @@ export default {
       background: '#9D131364',
     },
     gray: [
-      'hsl(173, 5%, 15%)',
-      'hsl(173, 5%, 35%)',
-      'hsl(173, 5%, 55%)',
-      'hsl(173, 5%, 75%)',
-      'hsl(173, 5%, 85%)',
-      'hsl(173, 5%, 95%)',
+      '#D1D1D1',
+      '#B3B3B3',
+      '#828282',
+      '#535353',
+      '#282828',
+      '#181818',
+      '#101010',
+      '#000000',
     ],
     modes: {
       dark: {
@@ -111,6 +113,8 @@ export default {
       borderRadius: 'button',
       color: 'text',
       bg: 'primary',
+      width: 'auto',
+      height: 'auto',
     },
     secondary: {
       variant: 'buttons.primary',
@@ -186,7 +190,7 @@ export default {
       'h1,h2,h3': {
         fontFamily: 'heading',
         fontWeight: 'heading',
-        color: 'primary',
+        color: 'gray.0',
       },
       h1: {
         fontSize: 5,
@@ -306,6 +310,14 @@ export default {
       '&.highlight': {
         background: 'hsla(0, 0%, 30%, .5)',
       },
+    },
+  },
+  images: {
+    avatar: {
+      width: 30,
+      height: 30,
+      borderRadius: 99999,
+      mr: 3,
     },
   },
 };

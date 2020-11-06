@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Typography } from '@material-ui/core';
+import { Heading } from 'theme-ui';
 import { useAuth } from '../lib/digitalstage/useAuth';
 import Loading from '../components/new/elements/Loading';
 import Login from './account/login';
@@ -36,7 +36,7 @@ const Stages2 = () => {
     }
     return (
       <Container>
-        <Typography variant="h1">Meine Bühnen</Typography>
+        <Heading variant="h1">Meine Bühnen</Heading>
         <StageListView />
       </Container>
     );
@@ -44,7 +44,7 @@ const Stages2 = () => {
 
   return (
     <Loading>
-      <Typography variant="h1">Lade ...</Typography>
+      <Heading variant="h1">Lade ...</Heading>
     </Loading>
   );
 };

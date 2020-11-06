@@ -9,7 +9,7 @@ import StagePane from '../components/new/panes/StagePane';
 import StagesListPane from '../components/new/panes/StagesListPane';
 import LocalDeviceControl from '../components/new/elements/LocalDeviceControl';
 import FixedLeaveButton from '../components/new/elements/Menu/FixedLeaveButton';
-import Layout from '../components/Layout';
+import Layout1 from '../components/Layout';
 import Container from '../components/Container';
 import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/FixedAudioPlaybackStarterButton';
 
@@ -33,11 +33,11 @@ const Index = () => {
               <StagePane />
             </PageWrapperWithStage>
           ) : (
-            <Layout>
+            <Layout1>
               <Container>
                 <StagesListPane />
               </Container>
-            </Layout>
+            </Layout1>
           )}
           <LocalDeviceControl />
           <FixedAudioPlaybackStarterButton />
