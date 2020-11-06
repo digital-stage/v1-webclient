@@ -1,9 +1,10 @@
+/** @jsx jsx */
 import { useRouter } from 'next/router';
-import React from 'react';
-import { Typography } from '@material-ui/core';
+import * as React from 'react';
+import { jsx, Heading } from 'theme-ui';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Loading from '../../components/new/elements/Loading';
-import ResetPassword from '../../components/digital-stage-sign-in/ResetPassword';
+import ResetPasswordForm from '../../components/authForms/ResetPasswordForm';
 import Layout from '../../components/Layout';
 
 const Reset = () => {
@@ -18,7 +19,7 @@ const Reset = () => {
       return (
         <Layout>
           {token && !Array.isArray(token) && (
-            <ResetPassword resetToken={token} targetUrl="/account/login" />
+            <ResetPasswordForm resetToken={token} />
           )}
         </Layout>
       );
@@ -27,7 +28,7 @@ const Reset = () => {
 
   return (
     <Loading>
-      <Typography variant="h1">Lade...</Typography>
+      <Heading variant="h1">Lade ...</Heading>
     </Loading>
   );
 };

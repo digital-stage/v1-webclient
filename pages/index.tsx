@@ -13,7 +13,7 @@ import Layout from '../components/Layout';
 import Container from '../components/Container';
 import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/FixedAudioPlaybackStarterButton';
 
-const Layout = () => {
+const Index = () => {
   const router = useRouter();
   const { loading, user } = useAuth();
   const stageId = useStageSelector<string | undefined>(
@@ -53,4 +53,4 @@ const Layout = () => {
     </Loading>
   );
 };
-export default Layout;
+export default Index;

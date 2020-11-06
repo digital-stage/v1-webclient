@@ -1,121 +1,94 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React, { useState } from 'react';
-import { Typography, Container, makeStyles } from '@material-ui/core';
-
-import validator from 'validator';
-import { jsx, Flex, Button } from 'theme-ui';
-import { BluetoothConnectedOutlined } from '@material-ui/icons';
-import Input from '../base/Input';
-import ButtonOld from '../base/Button';
-import Checkbox from '../base/Checkbox';
+import * as React from 'react';
+import { jsx, Box, Button, Flex, Label, Text } from 'theme-ui';
+import { Formik, Form, Field, FormikHelpers } from 'formik';
+import * as Yup from 'yup';
 import { useAuth } from '../../lib/digitalstage/useAuth';
-import Alert from '../base/Alert';
+import InputField from '../InputField';
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    textAlign: 'center',
-  },
-  back: {
-    padding: theme.spacing(0),
-    marginTop: theme.spacing(0),
-  },
-}));
+export interface Values {
+  email: string;
+  password: string;
+  staySignedIn: boolean;
+}
 export interface IError {
   email?: string;
   password?: string;
-  response?: string;
+  staySignedIn?: boolean;
 }
 
-export default function SignInForm(props: { onCompleted?: () => void }) {
+const SignInForm = () => {
   const { signInWithEmailAndPassword } = useAuth();
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [checked, setChecked] = useState<boolean>(false);
-  const [errors, setErrors] = useState<IError>({});
-  const classes = useStyles();
 
-  const validate = () => {
-    const errorsList: IError = {};
-    if (validator.isEmpty(email)) {
-      errorsList.email = 'Email is required';
-    } else if (!validator.isEmail(email)) {
-      errorsList.email = 'Enter a valid email';
-    }
-    if (validator.isEmpty(password)) {
-      errorsList.password = 'Password is required';
-    }
-    setErrors(errorsList);
-    return errorsList;
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setEmail(e.target.value);
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setPassword(e.target.value);
-  const handleCheckboxChange = (event) => setChecked(event.target.checked);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length === 0) {
-      return signInWithEmailAndPassword(email, password)
-        .then(() => {
-          if (props.onCompleted) {
-            props.onCompleted();
-          }
-        })
-        .catch((err) =>
-          setErrors({
-            response: err.message,
-          })
-        );
-    }
-  };
+  const SignInSchema = Yup.object().shape({
+    email: Yup.string()
+      .email('Enter a valid email')
+      .required('Email is required'),
+    password: Yup.string().required('Password is required'),
+  });
 
   return (
-    <Container maxWidth="sm" className={classes.back}>
-      <div className={classes.paper}>
-        {errors && errors.response && (
-          <Alert text={errors.response} severity="error" />
+    <Box>
+      <Formik
+        initialValues={{
+          email: '',
+          password: '',
+          staySignedIn: false,
+        }}
+        validationSchema={SignInSchema}
+        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) => {
+          console.log(values);
+          return signInWithEmailAndPassword(
+            values.email,
+            values.password,
+            values.staySignedIn
+          )
+            .then((res) => {
+              console.log(res);
+              resetForm(null);
+            })
+            .catch((err) => console.log(err));
+        }}
+      >
+        {({ errors, touched }) => (
+          <Form>
+            <Field
+              as={InputField}
+              id="email"
+              label="Email"
+              type="text"
+              name="email"
+              autocomplete="email"
+              error={errors.email && touched.email}
+            />
+            <Field
+              as={InputField}
+              id="password"
+              label="Password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              error={errors.password && touched.password}
+            />
+            <Label sx={{ mt: 3 }}>
+              <Field type="checkbox" name="staySignedIn" />
+              <Text sx={{ fontSize: 14, ml: 2 }}>Remember me</Text>
+            </Label>
+            <Flex sx={{ justifyContent: 'center', my: 3 }}>
+              <Button type="submit">Sign In</Button>
+            </Flex>
+          </Form>
         )}
-        <form noValidate onSubmit={handleSubmit}>
-          <Input
-            required
-            id="email"
-            placeholder="Email"
-            name="email"
-            type="text"
-            error={errors && errors.email}
-            onChange={handleEmailChange}
-          />
-          <Input
-            required
-            name="password"
-            placeholder="Password"
-            type="password"
-            id="password"
-            error={errors && errors.password}
-            onChange={handlePasswordChange}
-          />
-          <Checkbox
-            value="remember"
-            label="Stay signed in"
-            checked={checked}
-            handleChange={handleCheckboxChange}
-          />
+      </Formik>
 
-          <Button type="submit">Sign In</Button>
-        </form>
-        <Flex sx={{ justifyContent: 'center', mt: 4, mb: 2 }}>
-          <Button as="a" variant="text" href="/account/forgot">
-            Forgot password?
-          </Button>
-        </Flex>
-      </div>
-    </Container>
+      <Flex sx={{ justifyContent: 'center', mt: 4, mb: 2 }}>
+        <Button as="a" variant="text" href="/account/forgot">
+          Forgot password?
+        </Button>
+      </Flex>
+    </Box>
   );
-}
+};
+
+export default SignInForm;

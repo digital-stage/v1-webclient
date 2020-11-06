@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx, Box, Button, Flex } from 'theme-ui';
-import { Formik, Form, Field, FormikHelpers, ErrorMessage } from 'formik';
+import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import InputField from '../InputField';
@@ -13,7 +13,7 @@ interface Values {
   email: string;
   name: string;
   password: string;
-  repeatPassword: string;
+  passwordRepeat: string;
 }
 
 const SignUpForm = () => {
@@ -38,15 +38,13 @@ const SignUpForm = () => {
       .max(70, 'Too Long!')
       .required('Username is required'),
     password: Yup.string()
-      .min(2, 'Too Short!')
+      .min(8, 'Too Short!')
       .matches(
-        /^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$'/,
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
         'Password must contain: at least one number, one uppercase and one lowercase letters and at least 8 chars'
       )
       .required('Password is required'),
-    repeatPassword: Yup.string()
-      .min(2, 'Too Short!')
-      .max(70, 'Too Long!')
+    passwordRepeat: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
       .required('Repeat password is required'),
   });
@@ -60,26 +58,26 @@ const SignUpForm = () => {
           email: '',
           name: '',
           password: '',
-          repeatPassword: '',
-          response: '',
+          passwordRepeat: '',
         }}
         validationSchema={SignUpSchema}
-        onSubmit={(
-          values: Values,
-          { setSubmitting }: FormikHelpers<Values>
-        ) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 500);
-
-          return createUserWithEmailAndPassword(values.email, values.password, {
-            name: values.name,
-          })
-            .then(() => {
-              handleClickOpen();
-            })
-            .catch((err) => console.error(err));
+        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) => {
+          console.log(values);
+          return (
+            createUserWithEmailAndPassword(
+              values.email,
+              values.password,
+              values.name
+            )
+              .then((res) => {
+                // TODO: We need to check how we could refactor this
+                handleClickOpen();
+                resetForm(null);
+              })
+              // eslint-disable-next-line no-console
+              .catch((err) => console.error(err))
+              .finally()
+          );
         }}
       >
         {({ errors, touched }) => (
