@@ -1,6 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React, { useState } from 'react';
+import * as React from 'react';
 import { makeStyles } from '@material-ui/core';
 import { Formik, Field, Form } from 'formik';
 import validator from 'validator';
@@ -34,15 +34,15 @@ interface IError {
   response?: string;
 }
 
-export default function ForgetPasswordForm(props: {
+const ForgetPasswordForm = (props: {
   onCompleted?: () => void;
   onClick: () => void;
-}) {
+}) => {
   const classes = useStyles();
   const { requestPasswordReset } = useAuth();
-  const [email, setEmail] = useState<string>('');
-  const [repeatEmail, setRepeatEmail] = useState<string>('');
-  const [errors, setErrors] = useState<IError>({});
+  const [email, setEmail] = React.useState<string>('');
+  const [repeatEmail, setRepeatEmail] = React.useState<string>('');
+  const [errors, setErrors] = React.useState<IError>({});
   const [open, setOpen] = React.useState(false);
   const [resend, setResend] = React.useState(false);
 
@@ -124,61 +124,61 @@ export default function ForgetPasswordForm(props: {
         resend={resend}
       />
 
-      <Formik
-        initialValues={{ name: '', email: '' }}
-        onSubmit={async (values) => {
-          await new Promise((resolve) => setTimeout(resolve, 500));
-          alert(JSON.stringify(values, null, 2));
-        }}
-      >
-        <Form>
-          <Field name="name" type="text" />
-          <Field name="email" type="email" />
-          <button type="submit">Submit</button>
-        </Form>
-      </Formik>
-
       <div className={classes.paper}>
-        {errors && errors.response && (
-          <Alert text={errors.response} severity="error" />
-        )}
-        <form noValidate onSubmit={handleSubmit}>
-          <Box sx={{ textAlign: 'left' }}>
-            <Heading as="h2" sx={{ my: 3 }}>
-              Reset your password
-            </Heading>
-            <Text>Enter your email address to restore your password</Text>
-          </Box>
+        <Formik
+          initialValues={{ email: '', repeatEmail: '' }}
+          onSubmit={async (values) => {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            alert(JSON.stringify(values, null, 2));
+          }}
+        >
+          <Form>
+            <Field name="name" type="text" />
+            <Field name="email" type="email" />
+            <button type="submit">Submit</button>
 
-          <Input
-            required
-            id="email"
-            placeholder="E-mail"
-            name="email"
-            type="text"
-            error={errors && errors.email}
-            onChange={handleEmailChange}
-          />
-          <Input
-            required
-            id="repeatEmail"
-            placeholder="Repeat e-mail"
-            name="repeatEmail"
-            type="text"
-            error={errors && errors.repeatEmail}
-            onChange={handleRepeatEmailChange}
-          />
+            {errors && errors.response && (
+              <Alert text={errors.response} severity="error" />
+            )}
 
-          <Flex sx={{ justifyContent: 'center', my: 3 }}>
-            <Button variant="white" onClick={props.onClick}>
-              Cancel
-            </Button>
-            <Button variant="secondary" type="submit">
-              Reset
-            </Button>
-          </Flex>
-        </form>
+            <Box sx={{ textAlign: 'left' }}>
+              <Heading as="h3" sx={{ my: 3 }}>
+                Reset your password
+              </Heading>
+              <Text>Enter your email address to restore your password</Text>
+            </Box>
+            <Field name="name" type="text" />
+            <Input
+              id="email"
+              placeholder="E-mail"
+              name="email"
+              type="text"
+              error={errors && errors.email}
+              onChange={handleEmailChange}
+            />
+            <ErrorMessage name="email" />
+            <Input
+              id="repeatEmail"
+              placeholder="Repeat e-mail"
+              name="repeatEmail"
+              type="text"
+              error={errors && errors.repeatEmail}
+              onChange={handleRepeatEmailChange}
+            />
+
+            <Flex sx={{ justifyContent: 'center', my: 3 }}>
+              <Button variant="white" onClick={props.onClick}>
+                Cancel
+              </Button>
+              <Button variant="primary" type="submit">
+                Reset
+              </Button>
+            </Flex>
+          </Form>
+        </Formik>
       </div>
     </Box>
   );
-}
+};
+
+export default ForgetPasswordForm;
