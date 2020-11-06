@@ -9,10 +9,9 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar/ListItemAvatar';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
+// import IconButton from '@material-ui/core/IconButton';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
-import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -30,15 +29,9 @@ import ModifyGroupModal from './ModifyGroupModal';
 import CreateStageModal from './CreateStageModal';
 import CreateGroupModal from './CreateGroupModal';
 import useStageSelector, { useStages } from '../../../../lib/digitalstage/useStageSelector';
+import { IconButton, Button, Flex } from 'theme-ui';
 
-const GlobalActions = styled('div', {
-  width: '100%',
-  display: 'flex',
-  paddingTop: '1rem',
-  paddingBottom: '1rem',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-});
+
 
 const AccordionContent = withStyles({
   root: {
@@ -84,17 +77,18 @@ const StageListView = () => {
 
   return (
     <>
-      <GlobalActions>
-        <Button
-          size="large"
-          color="primary"
-          variant="contained"
-          startIcon={<AddIcon />}
+      <Flex
+       sx={{
+        justifyContent:"flex-end",
+      }}
+      >
+        <IconButton
+          variant="primary"
           onClick={() => setCreateStageIsOpen((prevState) => !prevState)}
         >
-          Bühne hinzufügen
-        </Button>
-      </GlobalActions>
+          <AddIcon /> Bühne hinzufügen
+        </IconButton>
+      </Flex>
       <div>
         {stages.map((stage) => (
           <Accordion
@@ -163,61 +157,61 @@ const StageListView = () => {
                       <ListItemText
                         primary={group.name}
                         secondary={stage.isAdmin && (
-                        <ButtonGroup size="small" color="secondary" variant="text">
-                          <IconButton
-                            size="small"
-                            edge="start"
-                            aria-label="Gruppe wechseln"
-                            onClick={() => {
-                              setCurrentGroup(group);
-                              setModifyGroupIsOpen(true);
-                            }}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            edge="end"
-                            aria-label="Gruppe entfernen"
-                            onClick={() => removeGroup(group._id)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </ButtonGroup>
+                          <ButtonGroup size="small" color="secondary" variant="text">
+                            <IconButton
+                              size="small"
+                              edge="start"
+                              aria-label="Gruppe wechseln"
+                              onClick={() => {
+                                setCurrentGroup(group);
+                                setModifyGroupIsOpen(true);
+                              }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                            <IconButton
+                              size="small"
+                              edge="end"
+                              aria-label="Gruppe entfernen"
+                              onClick={() => removeGroup(group._id)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </ButtonGroup>
                         )}
                       />
 
                       <ListItemSecondaryAction>
-                        <ButtonGroup>
-                          <Button
-                            variant={currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'contained' : 'outlined'}
-                            color={currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'primary' : 'inherit'}
-                            onClick={() => {
-                              if (
-                                currentStageId
-                                  && stage._id === currentStageId
-                                  && group._id === currentGroupId
-                              ) {
-                                leaveStage();
-                              } else {
-                                setRequest(stage._id, group._id, stage.password);
-                              }
-                            }}
-                          >
-                            {currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'Verlassen' : 'Beitreten'}
+                        {/* <ButtonGroup> */}
+                        <Button
+                          variant={currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'primary' : 'secondary'}
+                          // color={currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'primary' : 'inherit'}
+                          onClick={() => {
+                            if (
+                              currentStageId
+                              && stage._id === currentStageId
+                              && group._id === currentGroupId
+                            ) {
+                              leaveStage();
+                            } else {
+                              setRequest(stage._id, group._id, stage.password);
+                            }
+                          }}
+                        >
+                          {currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'Verlassen' : 'Beitreten'}
+                        </Button>
+                        <Button
+                          variant="primary"
+                          // color="inherit"
+                          onClick={() => {
+                            setCurrentStage(stage);
+                            setCurrentGroup(group);
+                            setCopyLinkOpen((prevState) => !prevState);
+                          }}
+                        >
+                          Einladen
                           </Button>
-                          <Button
-                            variant="outlined"
-                            color="inherit"
-                            onClick={() => {
-                              setCurrentStage(stage);
-                              setCurrentGroup(group);
-                              setCopyLinkOpen((prevState) => !prevState);
-                            }}
-                          >
-                            Einladen
-                          </Button>
-                        </ButtonGroup>
+                        {/* </ButtonGroup> */}
                       </ListItemSecondaryAction>
                     </ListItem>
                   );

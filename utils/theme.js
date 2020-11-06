@@ -113,6 +113,8 @@ export default {
       borderRadius: 'button',
       color: 'text',
       bg: 'primary',
+      width:"auto",
+      height:"auto"
     },
     secondary: {
       variant: 'buttons.primary',
@@ -188,7 +190,7 @@ export default {
       'h1,h2,h3': {
         fontFamily: 'heading',
         fontWeight: 'heading',
-        color: 'primary',
+        color: 'gray.0',
       },
       h1: {
         fontSize: 5,
