@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, createStyles, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
-import Button from "../base/Button";
+import Button from "../Button";
 import Link from "next/link";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -50,9 +50,10 @@ const Welcome = () => {
                     <Typography variant="h3" className={classes.text}>Welcome back</Typography>
                     <Link href='/account/login'>
                         <Button
-                            color="light"
-                            text="Sign in"
-                        />
+                            // variant="secondary/\"
+                        >
+                            Sign in
+                        </Button>
                     </Link>
                     <Typography variant="h6" className={`${classes.text} ${classes.center}`}>Sign into account or <br /> create a new one</Typography>
                 </Grid>

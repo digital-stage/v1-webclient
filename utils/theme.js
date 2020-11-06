@@ -1,8 +1,16 @@
 export default {
   colors: {
-    text: 'hsl(212, 100%, 5%)',
-    background: '#fff',
-    primary: 'hsl(173, 70%, 35%)',
+    text: {
+      dark: 'gray[4]',
+      light: 'gray[0]',
+    },
+    background: 'red',
+    primary: {
+      light: 'rgba(255, 89, 110, 1)',
+      main: 'rgb(242,4,67)',
+      dark: 'rgba(183, 0, 29, 1)',
+      contrastText: '#fff',
+    },
     secondary: 'hsl(315, 97%, 26%)',
     tertiary: 'hsl(211, 39%, 31%)', // cambridge blue
     muted: 'hsl(211, 16%, 68%)',
@@ -16,13 +24,33 @@ export default {
       background: 'hsl(333, 50%, 89%)',
     },
     gray: [
-      'hsl(173, 5%, 15%)',
-      'hsl(173, 5%, 35%)',
-      'hsl(173, 5%, 55%)',
-      'hsl(173, 5%, 75%)',
-      'hsl(173, 5%, 85%)',
-      'hsl(173, 5%, 95%)',
+      '#D1D1D1',
+      '#B3B3B3',
+      '#828282',
+      '#535353',
+      '#282828',
+      '#181818',
+      '#101010',
+      '#000000',
     ],
+    buttons: {
+      primary: {
+        color: 'green',
+        bg: 'red',
+      },
+      secondary: {
+        color: 'background',
+        bg: 'secondary',
+      },
+      light: {
+        color: 'background',
+        bg: 'gray',
+      },
+      dark: {
+        color: 'background',
+        bg: 'gray',
+      },
+    },
     modes: {
       dark: {
         text: '#fff',
