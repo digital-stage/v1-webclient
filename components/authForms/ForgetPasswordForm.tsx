@@ -1,14 +1,12 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import React, { useState } from 'react';
-import {
-  Typography,
-  Container,
-  makeStyles,
-  Grid,
-} from '@material-ui/core';
-
+import { makeStyles } from '@material-ui/core';
+import { Formik, Field, Form } from 'formik';
 import validator from 'validator';
+import { jsx, Box, Heading, Text, Flex, Button } from 'theme-ui';
 import Input from '../base/Input';
-import Button from '../base/Button';
+
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Alert from '../base/Alert';
 import ResetLinkModal from './ResetLinkModal';
@@ -28,9 +26,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left',
     padding: theme.spacing(2, 2, 0, 2),
   },
-  marginTopBottom: {
-    margin: theme.spacing(2, 0),
-  },
 }));
 
 interface IError {
@@ -40,8 +35,8 @@ interface IError {
 }
 
 export default function ForgetPasswordForm(props: {
-  onCompleted?: () => void,
-  onClick: () => void
+  onCompleted?: () => void;
+  onClick: () => void;
 }) {
   const classes = useStyles();
   const { requestPasswordReset } = useAuth();
@@ -79,8 +74,10 @@ export default function ForgetPasswordForm(props: {
     return errorsList;
   };
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
-  const handleRepeatEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setRepeatEmail(e.target.value);
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setEmail(e.target.value);
+  const handleRepeatEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setRepeatEmail(e.target.value);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,9 +88,11 @@ export default function ForgetPasswordForm(props: {
           if (props.onCompleted) props.onCompleted();
           handleClickOpen();
         })
-        .catch((err) => setErrors({
-          response: err.message,
-        }));
+        .catch((err) =>
+          setErrors({
+            response: err.message,
+          })
+        );
     }
     return null;
   };
@@ -117,20 +116,40 @@ export default function ForgetPasswordForm(props: {
   };
 
   return (
-    <Container maxWidth="sm" className={classes.back}>
+    <Box>
       <ResetLinkModal
         open={open}
         handleClose={handleClose}
         onClick={handleResend}
         resend={resend}
       />
+
+      <Formik
+        initialValues={{ name: '', email: '' }}
+        onSubmit={async (values) => {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          alert(JSON.stringify(values, null, 2));
+        }}
+      >
+        <Form>
+          <Field name="name" type="text" />
+          <Field name="email" type="email" />
+          <button type="submit">Submit</button>
+        </Form>
+      </Formik>
+
       <div className={classes.paper}>
-        {errors && errors.response && <Alert text={errors.response} severity="error" />}
+        {errors && errors.response && (
+          <Alert text={errors.response} severity="error" />
+        )}
         <form noValidate onSubmit={handleSubmit}>
-          <div className={classes.text}>
-            <Typography variant="h5">Reset your password</Typography>
-            <Typography variant="subtitle2">Enter your email address to restore your password</Typography>
-          </div>
+          <Box sx={{ textAlign: 'left' }}>
+            <Heading as="h2" sx={{ my: 3 }}>
+              Reset your password
+            </Heading>
+            <Text>Enter your email address to restore your password</Text>
+          </Box>
+
           <Input
             required
             id="email"
@@ -149,24 +168,17 @@ export default function ForgetPasswordForm(props: {
             error={errors && errors.repeatEmail}
             onChange={handleRepeatEmailChange}
           />
-          <Grid
-            container
-            justify="center"
-            className={classes.marginTopBottom}
-          >
-            <Button
-              color="light"
-              text="Cancel"
-              onClick={props.onClick}
-            />
-            <Button
-              color="primary"
-              text="Reset"
-              type="submit"
-            />
-          </Grid>
+
+          <Flex sx={{ justifyContent: 'center', my: 3 }}>
+            <Button variant="white" onClick={props.onClick}>
+              Cancel
+            </Button>
+            <Button variant="secondary" type="submit">
+              Reset
+            </Button>
+          </Flex>
         </form>
       </div>
-    </Container>
+    </Box>
   );
 }

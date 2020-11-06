@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/digitalstage/useAuth';
-import Login from '../../components/digital-stage-sign-in';
+import AuthPageContainer from '../../components/AuthPageContainer';
+import AuthPageLinks from '../../components/AuthPageLinks';
+import SignInForm from '../../components/authForms/SignInForm';
 import Layout from '../../components/Layout';
 
 const LoginScreen = () => {
@@ -21,7 +23,10 @@ const LoginScreen = () => {
 
   return (
     <Layout>
-      <Login mode="login" />
+      <AuthPageContainer>
+        <AuthPageLinks />
+        <SignInForm />
+      </AuthPageContainer>
     </Layout>
   );
 };

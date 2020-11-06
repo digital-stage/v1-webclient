@@ -2,9 +2,9 @@ export default {
   colors: {
     text: '#fff',
     background: '#1c1c1c',
-    primary: 'hsl(173, 70%, 35%)',
-    secondary: 'hsl(315, 97%, 26%)',
-    tertiary: 'hsl(211, 39%, 31%)', // cambridge blue
+    primary: '#F20544',
+    secondary: '#2452CE',
+    tertiary: '#012340', // cambridge blue
     muted: 'hsl(211, 16%, 68%)',
     accent: 'hsl(45, 100%, 50%)',
     danger: 'hsl(276, 65%, 85%)',
@@ -51,7 +51,7 @@ export default {
   },
   fontWeights: {
     body: 300,
-    heading: 700,
+    heading: 600,
     bold: 600,
   },
   lineHeight: {
@@ -72,15 +72,23 @@ export default {
       wide: '1407px',
       default: '800px',
       small: '400px',
+      tiny: '300px',
     },
     page: {
       default: '1280px',
     },
   },
+  shadows: {
+    default: '0px 23px 17px #00000052',
+  },
   text: {
     default: {
       color: 'text',
-      fontSize: 3,
+      fontSize: 1,
+    },
+    hint: {
+      fontSize: 0,
+      color: 'gray.1',
     },
     caps: {
       textTransform: 'uppercase',
@@ -93,9 +101,69 @@ export default {
       lineHeight: 'heading',
     },
   },
-  button: {
-    primary: {},
-    secondary: {},
+  buttons: {
+    primary: {
+      fontFamily: 'heading',
+      fontSize: 0,
+      m: 2,
+      py: 2,
+      px: 3,
+      borderRadius: 'button',
+      color: 'text',
+      bg: 'primary',
+    },
+    secondary: {
+      variant: 'buttons.primary',
+      color: 'text',
+      bg: 'secondary',
+    },
+    white: {
+      variant: 'buttons.primary',
+      color: 'background',
+      bg: 'text',
+    },
+    login: {
+      fontFamily: 'heading',
+      fontSize: 3,
+      bg: 'background',
+      color: 'text',
+      padding: '10px 20px',
+      my: 2,
+      py: 3,
+      px: 3,
+      cursor: 'pointer',
+      borderBottom: '2px solid transparent',
+      ':hover,:active,:focus': {
+        border: 'none',
+        transition: 'border 1s ease-out',
+        borderBottom: '2px solid transparent',
+        borderColor: 'secondary',
+      },
+    },
+    text: {
+      border: 'none',
+      bg: 'transparent',
+      m: 0,
+      p: 0,
+      cursor: 'pointer',
+    },
+  },
+  links: {
+    auth: {
+      fontFamily: 'heading',
+      fontSize: 3,
+      my: 2,
+      py: 3,
+      px: 3,
+      color: 'text',
+      textDecoration: 'none',
+      borderBottom: '2px solid transparent',
+      transition: 'border 1s ease-out',
+      ':active,:visited': { color: 'text' },
+      ':hover': {
+        borderBottomColor: 'primary',
+      },
+    },
   },
   cards: {
     primary: {
@@ -114,7 +182,7 @@ export default {
     root: {
       fontFamily: 'body',
       fontWeight: 'body',
-      fontSize: 2,
+      fontSize: 1,
       'h1,h2,h3': {
         fontFamily: 'heading',
         fontWeight: 'heading',
