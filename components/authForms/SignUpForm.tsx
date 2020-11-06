@@ -1,168 +1,135 @@
-import React, { useState } from 'react';
-import { Container, makeStyles } from '@material-ui/core';
-
-import validator from 'validator';
-import Input from '../base/Input';
-import Button from '../base/Button';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Box, Button, Flex } from 'theme-ui';
+import { Formik, Form, Field, FormikHelpers, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 import { useAuth } from '../../lib/digitalstage/useAuth';
+import InputField from '../InputField';
 import Alert from '../base/Alert';
 import ResetLinkModal from './ResetLinkModal';
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    textAlign: 'center',
-  },
-  back: {
-    padding: theme.spacing(0),
-    marginTop: theme.spacing(0),
-  },
-  marginTopBottom: {
-    margin: theme.spacing(2, 0),
-  },
-}));
-
-export interface IError {
-  email?: string;
-  username?: string;
-  password?: string;
-  repeatPassword?: string;
-  response?: string;
+interface Values {
+  email: string;
+  name: string;
+  password: string;
+  repeatPassword: string;
 }
 
-export default function SignUpForm(props: { onCompleted?: () => void }) {
+const SignUpForm = () => {
   const { createUserWithEmailAndPassword } = useAuth();
 
-  const classes = useStyles();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState('');
-  const [errors, setErrors] = useState<IError>({});
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpen(!open);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpen(!open);
   };
 
-  const validate = () => {
-    const errorsList: IError = {};
-
-    if (validator.isEmpty(email)) {
-      errorsList.email = 'Email is required';
-    } else if (!validator.isEmail(email)) {
-      errorsList.email = 'Enter a valid email';
-    }
-
-    if (validator.isEmpty(password)) {
-      errorsList.password = 'Password is required';
-    } else if (
-      !validator.matches(password, '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$')
-    ) {
-      errorsList.password =
-        'Password must contain: at least one number, one uppercase and one lowercase letters and at least 8 chars';
-    }
-
-    if (validator.isEmpty(repeatPassword)) {
-      errorsList.repeatPassword = 'Repeat password';
-    }
-    if (validator.isEmpty(username)) {
-      errorsList.username = 'Username is required';
-    }
-    if (!validator.equals(password, repeatPassword)) {
-      errorsList.repeatPassword = 'Passwords must be equal';
-      errorsList.password = 'Passwords must be equal';
-    }
-    setErrors(errorsList);
-    return errorsList;
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setEmail(e.target.value);
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setUsername(e.target.value);
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setPassword(e.target.value);
-  const handleReapeatPasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => setRepeatPassword(e.target.value);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length === 0) {
-      return createUserWithEmailAndPassword(email, password, {
-        name: username,
-      })
-        .then(() => {
-          if (props.onCompleted) {
-            props.onCompleted();
-          }
-          handleClickOpen();
-        })
-        .catch((err) =>
-          setErrors({
-            response: err.message,
-          })
-        );
-    }
-  };
+  const SignUpSchema = Yup.object().shape({
+    email: Yup.string()
+      .email('Enter a valid email')
+      .required('Email is required'),
+    name: Yup.string()
+      .min(2, 'Too Short!')
+      .max(70, 'Too Long!')
+      .required('Username is required'),
+    password: Yup.string()
+      .min(2, 'Too Short!')
+      .matches(
+        /^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$'/,
+        'Password must contain: at least one number, one uppercase and one lowercase letters and at least 8 chars'
+      )
+      .required('Password is required'),
+    repeatPassword: Yup.string()
+      .min(2, 'Too Short!')
+      .max(70, 'Too Long!')
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .required('Repeat password is required'),
+  });
 
   return (
-    <Container maxWidth="sm" className={classes.back}>
+    <Box>
       <ResetLinkModal open={open} handleClose={handleClose} />
-      <div className={classes.paper}>
-        {errors && errors.response && (
-          <Alert text={errors.response} severity="error" />
+
+      <Formik
+        initialValues={{
+          email: '',
+          name: '',
+          password: '',
+          repeatPassword: '',
+          response: '',
+        }}
+        validationSchema={SignUpSchema}
+        onSubmit={(
+          values: Values,
+          { setSubmitting }: FormikHelpers<Values>
+        ) => {
+          setTimeout(() => {
+            alert(JSON.stringify(values, null, 2));
+            setSubmitting(false);
+          }, 500);
+
+          return createUserWithEmailAndPassword(values.email, values.password, {
+            name: values.name,
+          })
+            .then(() => {
+              handleClickOpen();
+            })
+            .catch((err) => console.error(err));
+        }}
+      >
+        {({ errors, touched }) => (
+          <Form>
+            <Field
+              as={InputField}
+              id="email"
+              type="text"
+              label="Email"
+              // placeholder="Email"
+              name="email"
+              error={errors.email && touched.email}
+            />
+
+            <Field
+              as={InputField}
+              id="name"
+              label="Username"
+              // placeholder="Username"
+              name="name"
+              type="text"
+              error={errors.name && touched.name}
+            />
+            <Field
+              as={InputField}
+              id="password"
+              label="Password"
+              // placeholder="Password"
+              name="password"
+              type="password"
+              error={errors.password && touched.password}
+            />
+            <Field
+              as={InputField}
+              id="passwordRepeat"
+              label="Repeat password"
+              // placeholder="Repeat password"
+              type="password"
+              name="passwordRepeat"
+              error={errors.passwordRepeat && touched.passwordRepeat}
+            />
+
+            <Flex sx={{ justifyContent: 'center', my: 3 }}>
+              <Button type="submit">Sign Up</Button>
+            </Flex>
+          </Form>
         )}
-        <form noValidate onSubmit={handleSubmit}>
-          <Input
-            required
-            id="email"
-            type="text"
-            placeholder="Email"
-            name="email"
-            error={errors && errors.email}
-            onChange={handleEmailChange}
-          />
-          <Input
-            required
-            id="Username"
-            placeholder="Username"
-            name="Username"
-            type="text"
-            error={errors && errors.username}
-            onChange={handleUsernameChange}
-          />
-          <Input
-            required
-            id="passwrod"
-            placeholder="Password"
-            name="password"
-            type="password"
-            error={errors && errors.password}
-            onChange={handlePasswordChange}
-          />
-          <Input
-            required
-            id="Repeat password"
-            placeholder="Repeat password"
-            type="password"
-            name="password"
-            error={errors && errors.repeatPassword}
-            onChange={handleReapeatPasswordChange}
-          />
-          <div className={classes.marginTopBottom}>
-            <Button color="primary" text="Sign up" type="submit" />
-          </div>
-        </form>
-      </div>
-    </Container>
+      </Formik>
+    </Box>
   );
-}
+};
+
+export default SignUpForm;

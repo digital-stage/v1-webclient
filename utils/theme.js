@@ -12,8 +12,8 @@ export default {
     dsbackground:
       'transparent linear-gradient(221deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%) 0% 0% no-repeat padding-box',
     error: {
-      placeholder: 'hsl(333, 95%, 25%)',
-      background: 'hsl(333, 50%, 89%)',
+      bottomBorder: '#FA000099',
+      background: '#9D131364',
     },
     gray: [
       'hsl(173, 5%, 15%)',
