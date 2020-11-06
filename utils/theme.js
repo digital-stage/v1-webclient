@@ -1,24 +1,16 @@
 export default {
   colors: {
-    text: {
-      dark: 'gray[4]',
-      light: 'gray[0]',
-    },
-    background: 'red',
-    primary: {
-      light: 'rgba(255, 89, 110, 1)',
-      main: 'rgb(242,4,67)',
-      dark: 'rgba(183, 0, 29, 1)',
-      contrastText: '#fff',
-    },
-    secondary: 'hsl(315, 97%, 26%)',
-    tertiary: 'hsl(211, 39%, 31%)', // cambridge blue
+    text: '#fff',
+    background: '#1c1c1c',
+    primary: '#F20544',
+    secondary: '#2452CE',
+    tertiary: '#012340', // cambridge blue
     muted: 'hsl(211, 16%, 68%)',
     accent: 'hsl(45, 100%, 50%)',
     danger: 'hsl(276, 65%, 85%)',
     navigation: 'hsl(333, 50%, 8%)',
     dsbackground:
-      'transparent linear-gradient(221deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%) 0% 0% no-repeat padding-box;',
+      'transparent linear-gradient(221deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%) 0% 0% no-repeat padding-box',
     error: {
       placeholder: 'hsl(333, 95%, 25%)',
       background: 'hsl(333, 50%, 89%)',
@@ -33,24 +25,6 @@ export default {
       '#101010',
       '#000000',
     ],
-    buttons: {
-      primary: {
-        color: 'green',
-        bg: 'red',
-      },
-      secondary: {
-        color: 'background',
-        bg: 'secondary',
-      },
-      light: {
-        color: 'background',
-        bg: 'gray',
-      },
-      dark: {
-        color: 'background',
-        bg: 'gray',
-      },
-    },
     modes: {
       dark: {
         text: '#fff',
@@ -79,7 +53,7 @@ export default {
   },
   fontWeights: {
     body: 300,
-    heading: 700,
+    heading: 600,
     bold: 600,
   },
   lineHeight: {
@@ -89,19 +63,108 @@ export default {
   fontSizes: [14, 16, 18, 20, 24, 32, 48, 64, 72, 96],
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   breakpoints: [600, 900, 1200, 1500].map((n) => `${n}px`),
-  radii: {},
+  radii: {
+    button: '21px',
+  },
   sizes: {
     container: {
       fullscreen: '100%',
       largeplus: 'calc(920px + 20vw)',
       smallplus: 'calc(640px + 10vw)',
-
       wide: '1407px',
       default: '800px',
       small: '400px',
+      tiny: '300px',
     },
     page: {
       default: '1280px',
+    },
+  },
+  shadows: {
+    default: '0px 23px 17px #00000052',
+  },
+  text: {
+    default: {
+      color: 'text',
+      fontSize: 1,
+    },
+    hint: {
+      fontSize: 0,
+      color: 'gray.1',
+    },
+    caps: {
+      textTransform: 'uppercase',
+      letterSpacing: '0.2em',
+    },
+    heading: {
+      color: 'text',
+      fontFamily: 'heading',
+      fontWeight: 'heading',
+      lineHeight: 'heading',
+    },
+  },
+  buttons: {
+    primary: {
+      fontFamily: 'heading',
+      fontSize: 0,
+      m: 2,
+      py: 2,
+      px: 3,
+      borderRadius: 'button',
+      color: 'text',
+      bg: 'primary',
+    },
+    secondary: {
+      variant: 'buttons.primary',
+      color: 'text',
+      bg: 'secondary',
+    },
+    white: {
+      variant: 'buttons.primary',
+      color: 'background',
+      bg: 'text',
+    },
+    login: {
+      fontFamily: 'heading',
+      fontSize: 3,
+      bg: 'background',
+      color: 'text',
+      padding: '10px 20px',
+      my: 2,
+      py: 3,
+      px: 3,
+      cursor: 'pointer',
+      borderBottom: '2px solid transparent',
+      ':hover,:active,:focus': {
+        border: 'none',
+        transition: 'border 1s ease-out',
+        borderBottom: '2px solid transparent',
+        borderColor: 'secondary',
+      },
+    },
+    text: {
+      border: 'none',
+      bg: 'transparent',
+      m: 0,
+      p: 0,
+      cursor: 'pointer',
+    },
+  },
+  links: {
+    auth: {
+      fontFamily: 'heading',
+      fontSize: 3,
+      my: 2,
+      py: 3,
+      px: 3,
+      color: 'text',
+      textDecoration: 'none',
+      borderBottom: '2px solid transparent',
+      transition: 'border 1s ease-out',
+      ':active,:visited': { color: 'text' },
+      ':hover': {
+        borderBottomColor: 'primary',
+      },
     },
   },
   cards: {
@@ -121,7 +184,7 @@ export default {
     root: {
       fontFamily: 'body',
       fontWeight: 'body',
-      fontSize: 2,
+      fontSize: 1,
       'h1,h2,h3': {
         fontFamily: 'heading',
         fontWeight: 'heading',

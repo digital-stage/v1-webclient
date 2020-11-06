@@ -7,7 +7,6 @@ enum Type {
   default = 'default',
   flex = 'flex',
   wide = 'wide',
-  card = 'card',
 }
 
 const Container = (props: {
@@ -21,13 +20,12 @@ const Container = (props: {
       sx={{
         display: 'flex',
         flexDirection: type !== 'flex' ? 'column' : 'row',
-        boxSizing: type === 'card' && 'border-box',
-        width: type === 'card' ? 'container.small' : type !== 'flex' && '100%',
+        width: type !== 'flex' && '100%',
         maxWidth:
           type === 'default'
             ? 'container.default'
             : type === 'wide' && 'container.wide',
-        mt: type === 'flex' ? 4 : type === 'card' && '10vh',
+        mt: type === 'flex' && 4,
         mx: 'auto',
         px: 4, // px: '16px',
         justifyContent: type === 'flex' && 'space-around',

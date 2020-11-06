@@ -1,22 +1,19 @@
-import React, { useState } from "react";
-import {
-  Container,
-  makeStyles,
-} from "@material-ui/core";
+import React, { useState } from 'react';
+import { Container, makeStyles } from '@material-ui/core';
 
 import validator from 'validator';
-import Input from "../base/Input";
-import Button from "../base/Button";
-import { useAuth } from "../../lib/digitalstage/useAuth";
-import Alert from "../base/Alert";
-import ResetLinkModal from "./ResetLinkModal";
+import Input from '../base/Input';
+import Button from '../base/Button';
+import { useAuth } from '../../lib/digitalstage/useAuth';
+import Alert from '../base/Alert';
+import ResetLinkModal from './ResetLinkModal';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    textAlign: "center"
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
   },
   back: {
     padding: theme.spacing(0),
@@ -24,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   marginTopBottom: {
     margin: theme.spacing(2, 0),
-  }
+  },
 }));
 
 export interface IError {
@@ -35,76 +32,85 @@ export interface IError {
   response?: string;
 }
 
-export default function SignUpForm(props: {
-  onCompleted?: () => void
-}) {
+export default function SignUpForm(props: { onCompleted?: () => void }) {
   const { createUserWithEmailAndPassword } = useAuth();
 
   const classes = useStyles();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
-  const [repeatPassword, setRepeatPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
   const [errors, setErrors] = useState<IError>({});
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
-      setOpen(true);
+    setOpen(true);
   };
 
   const handleClose = () => {
-      setOpen(false);
+    setOpen(false);
   };
 
   const validate = () => {
-    const errorsList: IError = {}
+    const errorsList: IError = {};
+
     if (validator.isEmpty(email)) {
-      errorsList.email = "Email is required"
+      errorsList.email = 'Email is required';
+    } else if (!validator.isEmail(email)) {
+      errorsList.email = 'Enter a valid email';
     }
-    else if (!validator.isEmail(email)) {
-      errorsList.email = "Enter a valid email"
-    }
+
     if (validator.isEmpty(password)) {
-      errorsList.password = "Password is required"
+      errorsList.password = 'Password is required';
+    } else if (
+      !validator.matches(password, '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$')
+    ) {
+      errorsList.password =
+        'Password must contain: at least one number, one uppercase and one lowercase letters and at least 8 chars';
     }
-    else if (!validator.matches(password, '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$')) {
-      errorsList.password = "Password must contain: at least one number, one uppercase and one lowercase letters and at least 8 chars"
-    }
+
     if (validator.isEmpty(repeatPassword)) {
-      errorsList.repeatPassword = "Repeat password"
+      errorsList.repeatPassword = 'Repeat password';
     }
     if (validator.isEmpty(username)) {
-      errorsList.username = "Username is required"
+      errorsList.username = 'Username is required';
     }
     if (!validator.equals(password, repeatPassword)) {
-      errorsList.repeatPassword = "Passwords must be equal"
-      errorsList.password = "Passwords must be equal"
+      errorsList.repeatPassword = 'Passwords must be equal';
+      errorsList.password = 'Passwords must be equal';
     }
-    setErrors(errorsList)
-    return errorsList
-  }
+    setErrors(errorsList);
+    return errorsList;
+  };
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)
-  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)
-  const handleReapeatPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => setRepeatPassword(e.target.value)
-
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setEmail(e.target.value);
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setUsername(e.target.value);
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setPassword(e.target.value);
+  const handleReapeatPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => setRepeatPassword(e.target.value);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
       return createUserWithEmailAndPassword(email, password, {
-        name: username
+        name: username,
       })
         .then(() => {
-          if (props.onCompleted)
+          if (props.onCompleted) {
             props.onCompleted();
-            handleClickOpen();
+          }
+          handleClickOpen();
         })
-        .catch(err => setErrors({
-          response: err.message
-        }));
+        .catch((err) =>
+          setErrors({
+            response: err.message,
+          })
+        );
     }
   };
 
@@ -112,10 +118,12 @@ export default function SignUpForm(props: {
     <Container maxWidth="sm" className={classes.back}>
       <ResetLinkModal open={open} handleClose={handleClose} />
       <div className={classes.paper}>
-        {errors && errors.response && <Alert text={errors.response} severity="error" />}
-        <form noValidate={true} onSubmit={handleSubmit}>
+        {errors && errors.response && (
+          <Alert text={errors.response} severity="error" />
+        )}
+        <form noValidate onSubmit={handleSubmit}>
           <Input
-            required={true}
+            required
             id="email"
             type="text"
             placeholder="Email"
@@ -124,7 +132,7 @@ export default function SignUpForm(props: {
             onChange={handleEmailChange}
           />
           <Input
-            required={true}
+            required
             id="Username"
             placeholder="Username"
             name="Username"
@@ -133,7 +141,7 @@ export default function SignUpForm(props: {
             onChange={handleUsernameChange}
           />
           <Input
-            required={true}
+            required
             id="passwrod"
             placeholder="Password"
             name="password"
@@ -142,7 +150,7 @@ export default function SignUpForm(props: {
             onChange={handlePasswordChange}
           />
           <Input
-            required={true}
+            required
             id="Repeat password"
             placeholder="Repeat password"
             type="password"
@@ -151,11 +159,7 @@ export default function SignUpForm(props: {
             onChange={handleReapeatPasswordChange}
           />
           <div className={classes.marginTopBottom}>
-            <Button
-              color="primary"
-              text="Sign up"
-              type="submit"
-            />
+            <Button color="primary" text="Sign up" type="submit" />
           </div>
         </form>
       </div>
