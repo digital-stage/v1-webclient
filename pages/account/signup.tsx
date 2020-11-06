@@ -4,7 +4,7 @@ import { useAuth } from '../../lib/digitalstage/useAuth';
 import Layout from '../../components/Layout';
 import AuthPageContainer from '../../components/AuthPageContainer';
 import AuthPageLinks from '../../components/AuthPageLinks';
-import SignUpForm from '../../components/digital-stage-sign-in/SignUpForm';
+import SignUpForm from '../../components/authForms/SignUpForm';
 
 const SignUp = () => {
   const router = useRouter();
