@@ -113,8 +113,8 @@ export default {
       borderRadius: 'button',
       color: 'text',
       bg: 'primary',
-      width:"auto",
-      height:"auto"
+      width: 'auto',
+      height: 'auto',
     },
     secondary: {
       variant: 'buttons.primary',
@@ -310,6 +310,14 @@ export default {
       '&.highlight': {
         background: 'hsla(0, 0%, 30%, .5)',
       },
+    },
+  },
+  images: {
+    avatar: {
+      width: 30,
+      height: 30,
+      borderRadius: 99999,
+      mr: 3,
     },
   },
 };
