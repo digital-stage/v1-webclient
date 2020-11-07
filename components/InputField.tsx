@@ -1,15 +1,18 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Input, Label, Box, Text } from 'theme-ui';
+import {
+  jsx, Input, Label, Box, Text,
+} from 'theme-ui';
 import { ErrorMessage } from 'formik';
 
 // TODO: add TS interface / type
-const InputField = ({ id, label, name, error, ...rest }) => (
+const InputField = ({
+  id, label, name, error, ...rest
+}) => (
   <Box sx={{ mt: 4 }}>
     <Label
-      for
-      id={id}
+      htmlFor={id}
       sx={{
         fontSize: 12,
         color: 'muted',
@@ -21,6 +24,7 @@ const InputField = ({ id, label, name, error, ...rest }) => (
     </Label>
     <Input
       id={id}
+      name={name}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
       sx={{
@@ -34,7 +38,9 @@ const InputField = ({ id, label, name, error, ...rest }) => (
         ':active,:-webkit-autofill': {
           borderBottomColor: 'text',
           // ThemeUI color does not work on this prop
+          // fWebkitTextFillColor: 'white', // this does not work
           '-webkit-text-fill-color': 'white',
+          webkitTextFillColor: 'pink',
           boxShadow: '0 0 0px 1000px #1c1c1c inset',
         },
       }}

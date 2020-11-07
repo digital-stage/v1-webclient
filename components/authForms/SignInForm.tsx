@@ -1,11 +1,17 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Button, Flex, Label, Text } from 'theme-ui';
-import { Formik, Form, Field, FormikHelpers } from 'formik';
+import {
+  jsx, Box, Button, Flex, Label, Text,
+} from 'theme-ui';
+import {
+  Formik, Form, Field, FormikHelpers,
+} from 'formik';
 import * as Yup from 'yup';
+import { errorMonitor } from 'stream';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import InputField from '../InputField';
+import { useErrors } from '../../lib/useErrors';
 
 export interface Values {
   email: string;
@@ -20,6 +26,7 @@ export interface IError {
 
 const SignInForm = () => {
   const { signInWithEmailAndPassword } = useAuth();
+  const { reportError } = useErrors;
 
   const SignInSchema = Yup.object().shape({
     email: Yup.string()
@@ -37,19 +44,16 @@ const SignInForm = () => {
           staySignedIn: false,
         }}
         validationSchema={SignInSchema}
-        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) => {
-          console.log(values);
-          return signInWithEmailAndPassword(
-            values.email,
-            values.password,
-            values.staySignedIn
-          )
-            .then((res) => {
-              console.log(res);
-              resetForm(null);
-            })
-            .catch((err) => console.log(err));
-        }}
+        // eslint-disable-next-line max-len
+        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) => signInWithEmailAndPassword(
+          values.email,
+          values.password,
+          values.staySignedIn,
+        )
+          .then(() => {
+            resetForm(null);
+          })
+          .catch((err) => reportError(err.message))}
       >
         {({ errors, touched }) => (
           <Form>

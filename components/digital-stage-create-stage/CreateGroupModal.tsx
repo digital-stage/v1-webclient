@@ -1,4 +1,9 @@
-import React from 'react';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import {
+  jsx, Button, Text, Heading, Box
+} from 'theme-ui';
 import {
     Dialog,
     DialogContent,
@@ -9,12 +14,10 @@ import {
     createStyles,
     Typography,
     Grid,
-    Box
 } from '@material-ui/core';
 import Icon from '../base/Icon';
 import {useStage} from '../stage/useStage';
 import TextField from '../base/TextField';
-import Button from '../base/Button';
 import useStageActions from '../../lib/digitalstage/useStageActions';
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -103,16 +106,9 @@ export default function CreateStageModal(props: {
                             container
                             justify="center"
                         >
-                            <Button
-                                color="light"
-                                text="Cancel"
-                                onClick={handleClose}
-                            />
-                            <Button
-                                color="primary"
-                                text="Create"
-                                type="submit"
-                            />
+                            <Button variant="white" onClick={handleClose}>Cancel</Button>
+                            <Button type="submit">Create</Button>
+                            
                         </Grid>
                     </form>
                 </DialogContent>

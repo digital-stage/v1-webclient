@@ -1,7 +1,9 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import React, { useEffect } from "react";
-import { Collapse, createStyles, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
-import Button from "../base/Button";
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import {jsx, Button} from "theme-ui";
+import { Collapse, createStyles, Grid, makeStyles, Theme, Typography } from "@material-ui/core"
+import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
 import CreateStageModal from "../digital-stage-create-stage/CreateStageModal";
@@ -141,12 +143,7 @@ const StagesList = () => {
                 })}</div>
             </div>
             <div style={{ textAlign: "right" }}>
-                <Button
-                    color="primary"
-                    text="Create stage"
-                    type="submit"
-                    onClick={() => { setOpenCreateStageModal(true); handleSetContext("new") }}
-                />
+                <Button type="submit" onClick={() => { setOpenCreateStageModal(true); handleSetContext("new") }}>Create stage</Button>
             </div>
         </div>);
 };

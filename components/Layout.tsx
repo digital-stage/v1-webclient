@@ -1,10 +1,14 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box } from 'theme-ui';
+import {
+  jsx, Box, Flex, Spinner,
+} from 'theme-ui';
+import { useAuth } from '../lib/digitalstage/useAuth';
 
 const Layout = (props: { children: React.ReactNode }) => {
   const { children } = props;
+  const { loading } = useAuth();
 
   return (
     <Box
@@ -14,7 +18,21 @@ const Layout = (props: { children: React.ReactNode }) => {
         minHeight: '100vh',
       }}
     >
-      {children}
+      {loading ? (
+        <Flex sx={{
+          position: 'fixed',
+          top: 0,
+          right: 0,
+          bg: 'hsla(0, 0%, 11%, 0.4)',
+          height: '100vh',
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+        >
+          <Spinner sx={{ color: 'text' }} />
+        </Flex>
+      ) : children}
     </Box>
   );
 };

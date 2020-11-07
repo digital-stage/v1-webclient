@@ -1,35 +1,28 @@
+/** @jsxRuntime classic */
 /** @jsx jsx */
-import { useRouter } from 'next/router';
 import * as React from 'react';
-import { jsx, Heading } from 'theme-ui';
+import { useRouter } from 'next/router';
+import { jsx } from 'theme-ui';
 import { useAuth } from '../../lib/digitalstage/useAuth';
-import Loading from '../../components/new/elements/Loading';
-import ResetPasswordForm from '../../components/authForms/ResetPasswordForm';
 import Layout from '../../components/Layout';
+import AuthPageContainer from '../../components/AuthPageContainer';
+import ResetPasswordForm from '../../components/authForms/ResetPasswordForm';
 
 const Reset = () => {
   const router = useRouter();
-  const { loading, user } = useAuth();
+  const { user } = useAuth();
   const { token } = router.query;
 
-  if (!loading) {
-    if (user) {
-      router.push('/');
-    } else {
-      return (
-        <Layout>
-          {token && !Array.isArray(token) && (
-            <ResetPasswordForm resetToken={token} />
-          )}
-        </Layout>
-      );
-    }
+  if (user) {
+    router.push('/');
   }
 
   return (
-    <Loading>
-      <Heading variant="h1">Lade ...</Heading>
-    </Loading>
+    <Layout>
+      <AuthPageContainer>
+        <ResetPasswordForm resetToken={token} />
+      </AuthPageContainer>
+    </Layout>
   );
 };
 

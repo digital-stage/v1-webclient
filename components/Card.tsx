@@ -10,17 +10,21 @@ enum Size {
 
 const Card = (props: {
   children: React.ReactNode;
+  maxWidth?: string;
   size?: string | Size.default;
+  white?: boolean | false
 }) => {
-  const { children, size } = props;
+  const {
+    children, maxWidth, size, white,
+  } = props;
 
   return (
     <Box
       sx={{
-        bg: 'background',
+        bg: white ? 'text' : 'background',
         boxShadow: 'default',
         width: '90vw',
-        maxWidth: size === 'auth' && 'container.tiny',
+        maxWidth: size === 'auth' ? 'container.tiny' : maxWidth,
         borderRadius: '18px',
         py: 3,
         px: 4,

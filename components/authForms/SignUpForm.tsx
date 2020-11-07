@@ -1,12 +1,17 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Button, Flex } from 'theme-ui';
-import { Formik, Form, Field, FormikHelpers } from 'formik';
+import {
+  jsx, Box, Button, Flex,
+} from 'theme-ui';
+import {
+  Formik, Form, Field, FormikHelpers,
+} from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import InputField from '../InputField';
 import Alert from '../base/Alert';
+import { useErrors } from '../../lib/useErrors';
 import ResetLinkModal from './ResetLinkModal';
 
 interface Values {
@@ -18,6 +23,7 @@ interface Values {
 
 const SignUpForm = () => {
   const { createUserWithEmailAndPassword } = useAuth();
+  const { reportError } = useErrors();
 
   const [open, setOpen] = React.useState(false);
 
@@ -41,7 +47,7 @@ const SignUpForm = () => {
       .min(8, 'Too Short!')
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
-        'Password must contain: at least one number, one uppercase and one lowercase letters and at least 8 chars'
+        'Password must contain: at least one number, one uppercase and one lowercase letters and at least 8 chars',
       )
       .required('Password is required'),
     passwordRepeat: Yup.string()
@@ -67,15 +73,14 @@ const SignUpForm = () => {
             createUserWithEmailAndPassword(
               values.email,
               values.password,
-              values.name
+              values.name,
             )
               .then((res) => {
                 // TODO: We need to check how we could refactor this
                 handleClickOpen();
                 resetForm(null);
               })
-              // eslint-disable-next-line no-console
-              .catch((err) => console.error(err))
+              .catch((err) => reportError(err))
               .finally()
           );
         }}

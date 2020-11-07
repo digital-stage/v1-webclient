@@ -1,4 +1,10 @@
-import React from 'react';
+// TODO: We need a new modal, which is free of Material and related components
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import {
+  jsx, Button, Text, Heading,
+} from 'theme-ui';
 import {
   createStyles,
   makeStyles,
@@ -9,26 +15,23 @@ import {
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import Button from '../base/Button';
 
-const styles = (theme: Theme) =>
-  createStyles({
-    root: {
-      margin: 0,
-      padding: theme.spacing(2),
-      backgroundColor: '#fff',
-    },
-    closeButton: {
-      position: 'absolute',
-      right: theme.spacing(1),
-      top: theme.spacing(1),
-      color: theme.palette.grey[500],
-    },
-  });
+const styles = (theme: Theme) => createStyles({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
+    backgroundColor: '#fff',
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
+});
 
 export interface DialogTitleProps extends WithStyles<typeof styles> {
   id: string;
@@ -37,10 +40,12 @@ export interface DialogTitleProps extends WithStyles<typeof styles> {
 }
 
 const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
-  const { children, classes, onClose, ...other } = props;
+  const {
+    children, classes, onClose, ...other
+  } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
+      <Heading as="h6">{children}</Heading>
       {onClose ? (
         <IconButton
           aria-label="close"
@@ -68,12 +73,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ResetLinkModal(props: {
+const ResetLinkModal = (props: {
   open: boolean;
-  handleClose: () => void;
-  onClick?: () => void;
   resend?: boolean;
-}) {
+}) => {
+  const { open, resend } = props;
   const classes = useStyles();
 
   return (
@@ -81,33 +85,31 @@ export default function ResetLinkModal(props: {
       <Dialog
         onClose={props.handleClose}
         aria-labelledby="customized-dialog-title"
-        open={props.open}
+        open={open}
         className={classes.paper}
       >
         <DialogTitle id="customized-dialog-title" onClose={props.handleClose} />
         <DialogContent>
-          <Typography variant="h5" color="textSecondary">
-            {!props.resend
+          <Heading as="h5">
+            {!resend
               ? 'Password reset link has been sent'
               : 'Password reset link has been sent again!'}
-          </Typography>
-          <Typography variant="h6" color="textSecondary">
+          </Heading>
+          <Text>
             Click on the reset link sent to your e-mail
-          </Typography>
+          </Text>
+
           <Typography variant="subtitle1" color="textSecondary">
-            {!props.resend
+            {!resend
               ? 'Use the new password to sign in. Aftewards you will be asked to create e new password'
               : 'Your activation link has been sent to your e-mail address. If you still have not received your email check your e-mail address'}
           </Typography>
-          {!props.resend && (
-            <Button
-              color="primary"
-              text="Resend reset link"
-              onClick={props.onClick}
-            />
-          )}
+
+          {!resend && <Button onClick={props.onClick}>Resend reset link</Button>}
         </DialogContent>
       </Dialog>
     </div>
   );
-}
+};
+
+export default ResetLinkModal;

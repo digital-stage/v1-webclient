@@ -2,7 +2,9 @@
 /** @jsx jsx */
 import * as React from 'react';
 import Link from 'next/link';
-import { jsx, Button, Flex, Heading, Text } from 'theme-ui';
+import {
+  jsx, Button, Flex, Heading, Text,
+} from 'theme-ui';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Layout from '../../components/Layout';
@@ -47,7 +49,7 @@ const Welcome = () => {
           </Heading>
 
           <Link href="/account/login">
-            <Button>Sign In</Button>
+            <Button variant="white">Sign In</Button>
           </Link>
 
           <Text sx={{ my: 2, textAlign: 'center' }}>

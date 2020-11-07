@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import * as React from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import AuthPageContainer from '../../components/AuthPageContainer';
@@ -8,17 +8,15 @@ import Layout from '../../components/Layout';
 
 const LoginScreen = () => {
   const router = useRouter();
-  const { loading, user } = useAuth();
+  const { user } = useAuth();
 
-  useEffect(() => {
+  React.useEffect(() => {
     router.prefetch('/account/signup');
     router.prefetch('/account/forgot');
   }, []);
 
-  if (!loading) {
-    if (user) {
-      router.push('/');
-    }
+  if (user) {
+    router.push('/');
   }
 
   return (

@@ -10,6 +10,11 @@ const SignUp = () => {
   const router = useRouter();
   const { user } = useAuth();
 
+  React.useEffect(() => {
+    router.prefetch('/account/login');
+    router.prefetch('/account/forgot');
+  }, []);
+
   if (user) {
     router.push('/');
   }

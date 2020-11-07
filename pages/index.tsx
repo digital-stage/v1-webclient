@@ -1,6 +1,8 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import React from 'react';
 import { useRouter } from 'next/router';
-import { H1 } from 'baseui/typography';
+import {jsx, Heading, Text, Box} from 'theme-ui'
 import { useAuth } from '../lib/digitalstage/useAuth';
 import Loading from '../components/new/elements/Loading';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
@@ -9,7 +11,7 @@ import StagePane from '../components/new/panes/StagePane';
 import StagesListPane from '../components/new/panes/StagesListPane';
 import LocalDeviceControl from '../components/new/elements/LocalDeviceControl';
 import FixedLeaveButton from '../components/new/elements/Menu/FixedLeaveButton';
-import Layout1 from '../components/Layout';
+import Layout from '../components/Layout';
 import Container from '../components/Container';
 import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/FixedAudioPlaybackStarterButton';
 
@@ -22,35 +24,37 @@ const Index = () => {
 
   if (!loading) {
     if (!user) {
-      // Forward to welcome page (with PageWrapper instead of PageWrapperWithStage)<
-      router.push('/account/welcome');
+      router.push('/account/welcome')
     } else {
       // On stage related pages (all except sign in handling) wrap with PagWrapperWithStage
       return (
-        <>
+        <React.Fragment>
           {stageId ? (
             <PageWrapperWithStage>
               <StagePane />
             </PageWrapperWithStage>
           ) : (
-            <Layout1>
+            <Layout>
               <Container>
                 <StagesListPane />
               </Container>
-            </Layout1>
+            </Layout>
           )}
           <LocalDeviceControl />
           <FixedAudioPlaybackStarterButton />
           <FixedLeaveButton />
-        </>
+        </React.Fragment>
       );
     }
   }
 
   return (
+    <Layout>
     <Loading>
-      <H1>Neues Layout im Anmarsch!</H1>
+      <Heading as="h1">Neues Layout im Anmarsch!</Heading>
     </Loading>
+    </Layout>
   );
 };
+
 export default Index;

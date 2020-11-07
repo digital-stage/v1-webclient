@@ -1,9 +1,13 @@
-import React, { useEffect } from 'react';
-import { Dialog, DialogContent, useMediaQuery, makeStyles, useTheme, Theme, createStyles, Typography, Grid, Box } from '@material-ui/core';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import {
+  jsx, Button, Text, Heading, Box
+} from 'theme-ui';
+import { Dialog, DialogContent, useMediaQuery, makeStyles, useTheme, Theme, createStyles, Typography, Grid } from '@material-ui/core';
 import Icon from '../base/Icon';
 import { useStage } from '../stage/useStage';
 import TextField from '../base/TextField';
-import Button from '../base/Button';
 import useStageActions from '../../lib/digitalstage/useStageActions';
 import { Group } from '../../lib/digitalstage/useStageContext/model';
 
@@ -63,7 +67,7 @@ export default function EditGroupModal(props: {
         }
     };
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (props.group) {
             setName(props.group.name)
             setNameLength(props.group.name.length)
@@ -104,16 +108,10 @@ export default function EditGroupModal(props: {
                             container
                             justify="center"
                         >
-                            <Button
-                                color="light"
-                                text="Cancel"
-                                onClick={handleClose}
-                            />
-                            <Button
-                                color="primary"
-                                text="Edit"
-                                type="submit"
-                            />
+                            <Button variant="white" onClick={handleClose}>Cancel</Button>
+                            <Button type="submit">Edit</Button>
+                           
+                         
                         </Grid>
                     </form>
                 </DialogContent>

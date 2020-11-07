@@ -1,7 +1,11 @@
-import React from 'react';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import {
+  jsx, Button, Grid, Heading, Text,
+} from 'theme-ui';
 import clsx from 'clsx';
-import { Stepper, Step, StepLabel, StepConnector, StepIconProps, makeStyles, Theme, createStyles, withStyles, Grid } from '@material-ui/core';
-import Button from '../base/Button';
+import { Stepper, Step, StepLabel, StepConnector, StepIconProps, makeStyles, Theme, createStyles, withStyles } from '@material-ui/core';
 import Icon from '../base/Icon';
 import AddInformatinStep from './AddInformationStep';
 import { useStage } from '../stage/useStage';
@@ -247,13 +251,11 @@ export default function CustomizedSteppers(props: { onClick(): void }) {
                                     // disabled={activeStep === 0}
                                     onClick={handleBack}
                                 />}
-                                <Button
-                                    color="primary"
-                                    text={activeStep === steps.length - 1 ? (context=== "new" ?'Create stage' : "Edit stage"): 'Next'}
-                                    type="submit"
-                                    onClick={checkStep}
-                                // onClick={handleNext}
-                                />
+
+                                    <Button type="submit"
+                                    onClick={checkStep}>{activeStep === steps.length - 1 ? (context=== "new" ?'Create stage' : "Edit stage"): 'Next'}</Button>
+
+                               
                             </Grid>
                         </div>
                     )}

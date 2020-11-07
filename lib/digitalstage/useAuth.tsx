@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import * as React from 'react';
 import cookie from 'js-cookie';
-import { useErrors } from '../../useErrors';
+import fetch from 'isomorphic-unfetch';
+import { useErrors } from '../useErrors';
 
 export interface AuthUser {
   _id: string;
@@ -36,29 +37,28 @@ export interface AuthProps {
 
 const AuthContext = React.createContext<AuthProps>(undefined);
 
-export const useAuth = (): AuthProps =>
-  React.useContext<AuthProps>(AuthContext);
+export const useAuth = (): AuthProps => React.useContext<AuthProps>(AuthContext);
 
-const getUserByToken = (token: string): Promise<AuthUser> =>
-  fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/profile`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then((result) => result.json())
-    .then((json) => json as AuthUser);
+const getUserByToken = (token: string): Promise<AuthUser> => fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/profile`, {
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  },
+})
+  .then((result) => result.json())
+  .then((json) => json as AuthUser);
 
 export const AuthContextConsumer = AuthContext.Consumer;
 
 export const AuthContextProvider = (props: { children: React.ReactNode }) => {
   const { children } = props;
-  const [token, setToken] = useState<string>();
-  const [user, setUser] = useState<AuthUser>();
-  const [loading, setLoading] = useState<boolean>(true);
   const { reportError } = useErrors();
 
-  const createUserWithEmailAndPassword = useCallback(
+  const [token, setToken] = React.useState<string>();
+  const [user, setUser] = React.useState<AuthUser>();
+  const [loading, setLoading] = React.useState<boolean>(true);
+
+  const createUserWithEmailAndPassword = React.useCallback(
     (email: string, password: string, name: string, avatarUrl?: string) => {
       setLoading(true);
       return fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/signup`, {
@@ -78,13 +78,11 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
           if (result.ok) return result.json();
           throw new Error(result.statusText);
         })
-        .then((resToken) =>
-          getUserByToken(resToken).then((resUser) => {
-            setUser(resUser);
-            setToken(resToken);
-            cookie.set('token', resToken, { expires: 7 });
-          })
-        )
+        .then((resToken) => getUserByToken(resToken).then((resUser) => {
+          setUser(resUser);
+          setToken(resToken);
+          cookie.set('token', resToken, { expires: 7 });
+        }))
         .catch((error) => {
           reportError(error.message);
           console.error(error);
@@ -93,10 +91,10 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
           setLoading(false);
         });
     },
-    []
+    [],
   );
 
-  const signInWithEmailAndPassword = useCallback(
+  const signInWithEmailAndPassword = React.useCallback(
     (email: string, password: string, staySignedIn?: boolean) => {
       setLoading(true);
       return fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/login`, {
@@ -113,63 +111,59 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
           if (result.ok) return result.json();
           throw new Error(result.statusText);
         })
-        .then((resToken) =>
-          getUserByToken(resToken).then((resUser) => {
-            setUser(resUser);
-            setToken(resToken);
-            cookie.set('token', resToken, { expires: staySignedIn ? 7 : 1 });
-          })
-        )
+        .then((resToken) => getUserByToken(resToken).then((resUser) => {
+          setUser(resUser);
+          setToken(resToken);
+          cookie.set('token', resToken, { expires: staySignedIn ? 7 : 1 });
+        }))
         .catch((error) => reportError(error.message))
         .finally(() => {
           setLoading(false);
         });
     },
-    []
+    [],
   );
 
-  const requestPasswordReset = useCallback(
-    (email: string) =>
-      fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/forgot`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          email,
-        }),
+  const requestPasswordReset = React.useCallback(
+    (email: string) => fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/forgot`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        email,
+      }),
+    })
+      .then((result) => {
+        if (!result.ok) {
+          throw new Error('Unbekannte E-Mail Adresse');
+        }
       })
-        .then((result) => {
-          if (!result.ok) {
-            throw new Error('Unbekannte E-Mail Adresse');
-          }
-        })
-        .catch((error) => reportError(error.message)),
-    []
+      .catch((error) => reportError(error.message)),
+    [],
   );
 
-  const resetPassword = useCallback(
-    (resetToken: string, password: string) =>
-      fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/reset`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          token: resetToken,
-          password,
-        }),
+  const resetPassword = React.useCallback(
+    (resetToken: string, password: string) => fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/reset`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        token: resetToken,
+        password,
+      }),
+    })
+      .then((result) => {
+        if (!result.ok) {
+          throw new Error('Abgelaufener Link');
+        }
       })
-        .then((result) => {
-          if (!result.ok) {
-            throw new Error('Abgelaufener Link');
-          }
-        })
-        .catch((error) => reportError(error.message)),
-    []
+      .catch((error) => reportError(error.message)),
+    [],
   );
 
-  const logout = useCallback(() => {
+  const logout = React.useCallback(() => {
     setLoading(true);
     return fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/logout`, {
       headers: {
@@ -191,7 +185,7 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
       });
   }, [token]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     // First get cookie
     const resToken = cookie.get('token');
     if (resToken) {

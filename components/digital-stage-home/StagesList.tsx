@@ -1,57 +1,22 @@
-import React, { useEffect } from "react";
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import {
+  jsx, Box, Button, Grid, Heading, Text,
+} from 'theme-ui';
 import StageCard from "./StageCard";
-import { Collapse, createStyles, Grid, makeStyles, Theme, Typography } from "@material-ui/core";
-import Input from "../base/Input";
-import Button from "../base/Button";
+import { Collapse, createStyles, makeStyles, Theme } from "@material-ui/core";
+import InputField from "../InputField";
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import clsx from 'clsx';
 import CreateStageModal from "../digital-stage-create-stage/CreateStageModal";
 import { Stage } from "../../lib/digitalstage/common/model.server";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            padding: theme.spacing(3, 3, 3, 0),
-            width: "100%"
-        },
-        clickable: {
-            cursor: "pointer"
-        },
-        leftBorder: {
-            borderLeft: "4px solid white"
-        },
-        leftBorderNormal: {
-            borderLeft: "4px solid $dark - gray - 01"
-        },
-        paddingLeft: {
-            paddingLeft: theme.spacing(3),
-        },
-        stagesList: {
-            maxHeight: "calc(100vh - 190px)",
-            minHeight: "calc(100vh - 840px)",
-            overflowY: "scroll",
-            "&::-webkit-scrollbar": {
-                width: "5px",
-                backgroundColor: "transparent"
-            },
-            "&::-webkit-scrollbar-track": {
-                borderRadius: "25px"
-            },
-            "&::-webkit-scrollbar-thumb": {
-                background: "white",
-                borderRadius: "25px"
-            },
-            "&::-webkit-scrollbar-thumb:hover": {
-                background: "white"
-            }
-        }
-    }),
-);
+
 
 const StagesList = (props: { onClick(i: number): void, stages: any }) => {
     const { stages } = props
-    const classes = useStyles()
+    
     const [list, setList] = React.useState(stages);
     const [selected, setSelected] = React.useState("");
     const [checkedMyStage, setCheckedMyStage] = React.useState(true);
@@ -75,7 +40,7 @@ const StagesList = (props: { onClick(i: number): void, stages: any }) => {
         setSelected("")
     }
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (selected.length > 0) {
             let filteredList = stages.filter(el => el.title.toLowerCase().includes(selected.toLowerCase()))
             setList(filteredList)
@@ -88,13 +53,14 @@ const StagesList = (props: { onClick(i: number): void, stages: any }) => {
 
 
     return (
-        <div className={classes.root}>
+        <Box>
             <CreateStageModal
                 open={openCreateStageModal}
                 handleClose={() => setOpenCreateStageModal(false)}
             />
-            <Typography variant="h5" className={classes.paddingLeft}>Stages</Typography>
-            <Input
+            <Heading as="h5" sx={{pl:3}}>Stages</Heading>
+            
+            <InputField
                 onChange={onChangeHandler}
                 placeholder="Search stages"
                 context="search"
@@ -102,58 +68,77 @@ const StagesList = (props: { onClick(i: number): void, stages: any }) => {
                 name="stage name"
                 type="text"
             />
-            <div className={classes.stagesList}>
+            <Box sx={{
+            maxHeight: "calc(100vh - 190px)",
+            minHeight: "calc(100vh - 840px)",
+            overflowY: "scroll",
+            "&::-webkit-scrollbar": {
+                width: "5px",
+                backgroundColor: "transparent"
+            },
+            "&::-webkit-scrollbar-track": {
+                borderRadius: "25px"
+            },
+            "&::-webkit-scrollbar-thumb": {
+                background: "white",
+                borderRadius: "25px"
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+                background: "white"
+            }
+        }}>
                 <Grid
                     container={true}
                     alignItems='center'
                 >
-                    <Typography variant="h5" className={classes.paddingLeft}>My stages</Typography>
+                    <Heading as="h5" sx={{pl: 3}}>My Stages</Heading>
+                    
                     <div onClick={handleMySatgeClick} >
                         {!checkedMyStage ? <ExpandMoreIcon style={{ color: "#fff" }} /> : <ExpandLessIcon style={{ color: "#fff" }} />}
                     </div>
                 </Grid>
                 <div> {list.map((option, i) => {
                     return (
-                        <div onClick={() => { props.onClick(i); setclickedId(i) }} className={clsx(classes.clickable, {
-                            [classes.leftBorder]: clickedId === i,
-                            [classes.leftBorderNormal]: !(clickedId === i),
-                        })} key={option.title}>
+                        <Box onClick={() => { props.onClick(i); setclickedId(i) }} 
+
+                        sx={{borderLeft: clickedId ? "4px solid white" : "4px solid $dark - gray - 01"}}
+
+                    
+
+                         key={option.title}>
                             <Collapse in={checkedMyStage}>
                                 {option.mineStage &&
                                     <StageCard stage={option} />
                                 }
                             </Collapse>
-                        </div>
+                        </Box>
                     )
                 })}</div>
                 <Grid
                     container={true}
                     alignItems='center'
                 >
-                    <Typography variant="h5" className={classes.paddingLeft}>Joined stages</Typography>
+                    <Heading as="h5" sx={{pl: 3}}>Joined Stages</Heading>
                     <div onClick={handleJoindeStagesClick}>{!checkedJoindedStages ? <ExpandMoreIcon style={{ color: "#fff" }} /> : <ExpandLessIcon style={{ color: "#fff" }} />}</div>
                 </Grid>
                 <div> {list.map((option, i) => {
                     return (
-                        <div onClick={() => { props.onClick(i); setclickedId(i) }} className={clsx(classes.clickable, {
-                            [classes.leftBorder]: clickedId === i,
-                            [classes.leftBorderNormal]: !(clickedId === i),
-                        })}
+                        <Box onClick={() => { props.onClick(i); setclickedId(i) }} 
+                        sx={{borderLeft: clickedId ? "4px solid white" : "4px solid $dark - gray - 01"}}
+                        
+                       
                             key={option.title}>
                             <Collapse in={checkedJoindedStages}>
                                 {!option.mineStage && <StageCard stage={option} />}
                             </Collapse>
-                        </div>
+                        </Box>
                     )
                 })}</div>
-            </div>
-            <Button
-                color="primary"
-                text="Create stage"
-                type="submit"
-                onClick={() => setOpenCreateStageModal(true)}
-            />
-        </div>);
+            </Box>
+            <Button  type="submit"
+                onClick={() => setOpenCreateStageModal(true)}>Create stage</Button>
+           
+        </Box>);
 };
 
 export default StagesList;

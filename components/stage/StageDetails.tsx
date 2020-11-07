@@ -1,6 +1,8 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import React, { useEffect, useState } from "react";
-import { Box, createStyles, Grid, IconButton, makeStyles, Theme, Typography, withStyles } from "@material-ui/core";
-import Button from "../base/Button";
+import { createStyles, Grid, IconButton, makeStyles, Theme, Typography, withStyles } from "@material-ui/core";
+import {jsx, Box, Button, IconButton as IB} from "theme-ui";
 import { useStage } from "./useStage";
 import { useSelector } from "react-redux";
 import { Groups, NormalizedState } from "../../lib/digitalstage/useStageContext/schema";
@@ -198,31 +200,20 @@ const StageDetails = () => {
                     container
                     justify="flex-start"
                 >
-                    <Button
-                        color="light"
-                        text="Edit"
-                        type="submit"
-                        withIcon
-                        iconName="edit"
-                        onClick={() => { setOpenCreateStageModal(true); handleSetContext("edit") }}
-                    />
-                    <Button
-                        color="primary"
-                        text="Create group"
-                        type="submit"
-                        onClick={() => { setOpenCreateGroupModal(true); }}
-                    />
-                    <Button
-                        color="primary"
-                        text="Delete"
-                        type="submit"
-                        onClick={() => {
+                    <Button variant="white" type="submit" onClick={() => { setOpenCreateStageModal(true); handleSetContext("edit") }}>Edit stage</Button>
+                    {/** // TODO: Check for a real icon button
+                    <IconButton variant="white" type="submit" onClick={() => { setOpenCreateStageModal(true); handleSetContext("edit") }}>Edit stage</IconButton>
+                    */}
+                    <Button type="submit" onClick={() => { setOpenCreateGroupModal(true); }}>Create group</Button>
+
+                    <Button type="submit" onClick={() => {
                             if (stage.isAdmin)
                                 removeStage(stage.id)
                             else
                                 leaveStageForGood(stage.id)
-                        }}
-                    />
+                        }}>Delete stage</Button>
+                    
+                   
                 </Grid>
             </Grid>
         </Grid>

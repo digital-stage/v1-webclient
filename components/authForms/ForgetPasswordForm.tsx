@@ -1,14 +1,17 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
+import Router from 'next/router';
+import {
+  jsx, Box, Heading, Text, Flex, Button,
+} from 'theme-ui';
+import {
+  Formik, Field, Form, FormikHelpers,
+} from 'formik';
+import * as Yup from 'yup';
 import { makeStyles } from '@material-ui/core';
-import { Formik, Field, Form } from 'formik';
-import validator from 'validator';
-import { jsx, Box, Heading, Text, Flex, Button } from 'theme-ui';
-import Input from '../base/Input';
-
+import InputField from '../InputField';
 import { useAuth } from '../../lib/digitalstage/useAuth';
-import Alert from '../base/Alert';
 import ResetLinkModal from './ResetLinkModal';
 
 const useStyles = makeStyles((theme) => ({
@@ -34,10 +37,7 @@ interface IError {
   response?: string;
 }
 
-const ForgetPasswordForm = (props: {
-  onCompleted?: () => void;
-  onClick: () => void;
-}) => {
+const ForgetPasswordForm = (props) => {
   const classes = useStyles();
   const { requestPasswordReset } = useAuth();
   const [email, setEmail] = React.useState<string>('');
@@ -74,26 +74,13 @@ const ForgetPasswordForm = (props: {
     return errorsList;
   };
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setEmail(e.target.value);
-  const handleRepeatEmailChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setRepeatEmail(e.target.value);
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
+  const handleRepeatEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setRepeatEmail(e.target.value);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = validate();
-    if (Object.keys(validationErrors).length === 0) {
-      return requestPasswordReset(email)
-        .then(() => {
-          if (props.onCompleted) props.onCompleted();
-          handleClickOpen();
-        })
-        .catch((err) =>
-          setErrors({
-            response: err.message,
-          })
-        );
-    }
+
     return null;
   };
 
@@ -127,39 +114,41 @@ const ForgetPasswordForm = (props: {
       <div className={classes.paper}>
         <Formik
           initialValues={{ email: '', repeatEmail: '' }}
-          onSubmit={async (values) => {
-            await new Promise((resolve) => setTimeout(resolve, 500));
-            alert(JSON.stringify(values, null, 2));
-          }}
+          onSubmit={async (values) => requestPasswordReset(email)
+            .then(() => {
+              if (props.onCompleted) props.onCompleted();
+              handleClickOpen();
+            })
+            .catch((err) => setErrors({
+              response: err.message,
+            }))}
         >
           <Form>
             <Field name="name" type="text" />
             <Field name="email" type="email" />
             <button type="submit">Submit</button>
 
-            {errors && errors.response && (
-              <Alert text={errors.response} severity="error" />
-            )}
-
             <Box sx={{ textAlign: 'left' }}>
-              <Heading as="h3" sx={{ my: 3 }}>
+              <Heading as="h3" sx={{ my: 3, fontSize: 3 }}>
                 Reset your password
               </Heading>
               <Text>Enter your email address to restore your password</Text>
             </Box>
-            <Field name="name" type="text" />
-            <Input
+
+            <Field
+              as={InputField}
               id="email"
-              placeholder="E-mail"
+              label="E-mail"
               name="email"
               type="text"
               error={errors && errors.email}
               onChange={handleEmailChange}
             />
-            <ErrorMessage name="email" />
-            <Input
+
+            <Field
+              as={InputField}
               id="repeatEmail"
-              placeholder="Repeat e-mail"
+              label="Repeat Email"
               name="repeatEmail"
               type="text"
               error={errors && errors.repeatEmail}
@@ -170,7 +159,7 @@ const ForgetPasswordForm = (props: {
               <Button variant="white" onClick={props.onClick}>
                 Cancel
               </Button>
-              <Button variant="primary" type="submit">
+              <Button type="submit">
                 Reset
               </Button>
             </Flex>
