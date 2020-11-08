@@ -1,7 +1,7 @@
 import React from 'react';
 import { useStyletron } from 'baseui';
 import { Cell, Grid } from 'baseui/layout-grid';
-import { Typography } from '@material-ui/core';
+import { Heading } from 'baseui/heading';
 import StageMemberView from './StageMemberView';
 import { Group } from '../../../../lib/digitalstage/useStageContext/model';
 import { useStageMembersByGroup } from '../../../../lib/digitalstage/useStageSelector';
@@ -18,7 +18,7 @@ const GroupView = (props: {
       <div className={css({})}>
         <Grid>
           <Cell span={12}>
-            <Typography variant="h3">{props.group.name}</Typography>
+            <Heading>{props.group.name}</Heading>
           </Cell>
         </Grid>
         <div className={css({

@@ -1,9 +1,8 @@
 import { useStyletron } from 'baseui';
 import React from 'react';
 import { Avatar } from 'baseui/avatar';
-import { Typography } from '@material-ui/core';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
-import StarIcon from '@material-ui/icons/Star';
+import { HeadingSmall } from 'baseui/typography';
+import { Hide, Show } from 'baseui/icon';
 import OnlineStatus from '../OnlineStatus';
 import { ExtendedStageMember, useIsStageAdmin } from '../../../../lib/digitalstage/useStageSelector';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
@@ -37,7 +36,7 @@ const StageMemberTitle = (props: {
           flexGrow: 1,
         })}
         >
-          <Typography variant="h5">{stageMember.name}</Typography>
+          <HeadingSmall>{stageMember.name}</HeadingSmall>
         </div>
 
         {isAdmin && (
@@ -52,7 +51,7 @@ const StageMemberTitle = (props: {
             isDirector: !props.stageMember.isDirector,
           })}
         >
-          {stageMember.isDirector ? <StarIcon /> : <StarBorderIcon />}
+          {stageMember.isDirector ? <Show /> : <Hide />}
         </div>
         )}
         <OnlineStatus

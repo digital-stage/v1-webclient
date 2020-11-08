@@ -10,9 +10,7 @@
     "deploy": "vercel --prod"
   },
   "dependencies": {
-    "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.56",
     "baseui": "9.104.0",
     "formik": "^2.2.1",
     "js-cookie": "^2.2.1",

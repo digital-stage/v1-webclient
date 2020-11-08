@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { styled } from 'styletron-react';
-import { Typography } from '@material-ui/core';
 import { ChevronLeft, ChevronRight } from 'baseui/icon';
+import { Caption1 } from 'baseui/typography';
 import { GroupId } from '../../../../../lib/digitalstage/common/model.server';
 import useStageSelector, { useIsStageAdmin } from '../../../../../lib/digitalstage/useStageSelector';
 import { CustomGroup, Group } from '../../../../../lib/digitalstage/useStageContext/model';
@@ -96,10 +96,10 @@ const GroupChannel = (props: {
                   endEnhancer={() => (expanded ? <ChevronLeft /> : <ChevronRight />)}
                   onClick={() => setExpanded((prev) => !prev)}
                 >
-                  <Typography variant="h5">{group.name}</Typography>
+                  <Caption1>{group.name}</Caption1>
                 </Button>
               ) : (
-                <Typography variant="h5">{group.name}</Typography>
+                <Caption1>{group.name}</Caption1>
               )}
             </Header>
                       )}

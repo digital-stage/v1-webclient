@@ -4,6 +4,7 @@ import { useAuth } from '../../lib/digitalstage/useAuth';
 import Login from '../../components/digital-stage-sign-in';
 import Loading from '../../components/new/elements/Loading';
 import PageWrapper from '../../components/new/elements/PageWrapper';
+import SignUpForm from '../../components/new/forms/SignUpForm';
 
 const SignUp = () => {
   const router = useRouter();
@@ -23,7 +24,7 @@ const SignUp = () => {
 
   return (
     <PageWrapper>
-      <Login mode="signup" />
+      <SignUpForm />
     </PageWrapper>
   );
 };

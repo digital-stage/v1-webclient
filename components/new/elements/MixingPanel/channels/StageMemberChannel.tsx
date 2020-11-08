@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { styled } from 'styletron-react';
-import { Typography } from '@material-ui/core';
 import { ChevronLeft, ChevronRight } from 'baseui/icon';
+import { Caption1 } from 'baseui/typography';
 import useStageSelector, { useIsStageAdmin } from '../../../../../lib/digitalstage/useStageSelector';
 import { CustomStageMember, StageMember, User } from '../../../../../lib/digitalstage/common/model.server';
 import ChannelStrip from '../../ChannelStrip';
@@ -52,11 +52,22 @@ const Header = styled('div', {
 const StageMemberChannel = (props: {
   stageMemberId: string
 }) => {
+  const { stageMemberId } = props;
   const isAdmin: boolean = useIsStageAdmin();
-  const stageMember = useStageSelector<StageMember>((state) => state.stageMembers.byId[props.stageMemberId]);
-  const customStageMember = useStageSelector<CustomStageMember>((state) => (state.customStageMembers.byStageMember[props.stageMemberId] ? state.customStageMembers.byId[state.customStageMembers.byStageMember[props.stageMemberId]] : undefined));
+  const stageMember = useStageSelector<StageMember>(
+    (state) => state.stageMembers.byId[props.stageMemberId],
+  );
+  const customStageMember = useStageSelector<CustomStageMember>(
+    (state) => (state.customStageMembers.byStageMember[props.stageMemberId]
+      ? state.customStageMembers.byId[state.customStageMembers.byStageMember[props.stageMemberId]]
+      : undefined),
+  );
   const user = useStageSelector<User>((state) => state.users.byId[stageMember.userId]);
-  const audioProducers = useStageSelector<string[]>((state) => (state.audioProducers.byStageMember[props.stageMemberId] ? state.audioProducers.byStageMember[props.stageMemberId] : []));
+  const audioProducers = useStageSelector<string[]>(
+    (state) => (state.audioProducers.byStageMember[props.stageMemberId]
+      ? state.audioProducers.byStageMember[props.stageMemberId]
+      : []),
+  );
 
   const { byStageMember } = useStageWebAudio();
 
@@ -81,21 +92,19 @@ const StageMemberChannel = (props: {
                   endEnhancer={() => (expanded ? <ChevronLeft /> : <ChevronRight />)}
                   onClick={() => setExpanded((prev) => !prev)}
                 >
-                  <Typography variant="h5">{user.name}</Typography>
+                  <Caption1>{user.name}</Caption1>
                 </Button>
               ) : (
-                <Typography variant="h5">{user.name}</Typography>
+                <Caption1>{user.name}</Caption1>
               )}
             </Header>
                       )}
-
           volume={stageMember.volume}
           muted={stageMember.muted}
           customVolume={customStageMember ? customStageMember.volume : undefined}
           customMuted={customStageMember ? customStageMember.muted : undefined}
-
-          analyser={byStageMember[props.stageMemberId] ? byStageMember[props.stageMemberId].analyserNode : undefined}
-
+          analyser={byStageMember[stageMemberId]
+            ? byStageMember[stageMemberId].analyserNode : undefined}
           onVolumeChanged={(volume, muted) => updateStageMember(stageMember._id, {
             volume,
             muted,
@@ -106,6 +115,7 @@ const StageMemberChannel = (props: {
           })}
           onCustomVolumeReset={() => {
             if (customStageMember) return removeCustomStageMember(customStageMember._id);
+            return null;
           }}
           isAdmin={isAdmin}
         />
@@ -114,7 +124,11 @@ const StageMemberChannel = (props: {
       {expanded && audioProducers && (
         <Row>
           <InnerRow>
-            {audioProducers.map((id) => <ColumnWithChildren><AudioProducerChannel key={id} audioProducerId={id} /></ColumnWithChildren>)}
+            {audioProducers.map((id) => (
+              <ColumnWithChildren>
+                <AudioProducerChannel key={id} audioProducerId={id} />
+              </ColumnWithChildren>
+            ))}
           </InnerRow>
 
         </Row>

@@ -1,13 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useStyletron } from 'styletron-react';
-import useTheme from '@material-ui/core/styles/useTheme';
+import { useStyletron } from 'baseui';
 import Icon from '../../../../uikit/Icon';
 import { useAudioContext } from '../../../../lib/useAudioContext';
-import IconButton from '../../../base/IconButton';
+import Button from '../../../../uikit/Button';
 
 const FixedAudioPlaybackStarterButton = () => {
-  const [css] = useStyletron();
-  const { palette, breakpoints } = useTheme();
+  const [css, theme] = useStyletron();
   const { audioContext, createAudioContext } = useAudioContext();
   const [valid, setValid] = useState<boolean>(audioContext && audioContext.state === 'running');
 
@@ -39,25 +37,29 @@ const FixedAudioPlaybackStarterButton = () => {
         position: 'fixed',
         bottom: '1rem',
         left: '1rem',
-        color: palette.warning.main,
+        color: theme.colors.warning,
 
-        [breakpoints.up('md')]: {
+        [theme.mediaQuery.large]: {
           left: '4rem',
         },
       })}
       >
-        <IconButton color="inherit" onClick={() => start()}>
+        <Button
+          kind="minimal"
+          shape="circle"
+          onClick={() => start()}
+        >
           <Icon
             className={css({
-              color: palette.warning.main,
+              color: theme.colors.warning,
               ':hover': {
-                color: palette.warning.dark,
+                color: theme.colors.warning700,
               },
             })}
             size={64}
             name="speaker-off"
           />
-        </IconButton>
+        </Button>
       </div>
     );
   }

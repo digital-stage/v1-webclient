@@ -1,24 +1,9 @@
 import { styled } from 'baseui';
 import React, { useState } from 'react';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import List from '@material-ui/core/List';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar/ListItemAvatar';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
-import Icon from '../../../../uikit/Icon';
+import { Button } from 'baseui/button';
+import { Accordion, Panel } from 'baseui/accordion';
+import { ListItem, ListItemLabel } from 'baseui/list';
+import { Delete, Overflow, Plus } from 'baseui/icon';
 import { Groups, NormalizedState } from '../../../../lib/digitalstage/useStageContext/schema';
 import { useSelector } from '../../../../lib/digitalstage/useStageContext/redux';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
@@ -40,25 +25,6 @@ const GlobalActions = styled('div', {
   justifyContent: 'flex-end',
 });
 
-const AccordionContent = withStyles({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-})(AccordionDetails);
-
-const AccordionTitle = styled('div', {
-  display: 'flex',
-  flexGrow: 1,
-  alignItems: 'center',
-});
-const AccordionTitleActions = styled('div', {
-  flexGrow: 0,
-  display: 'flex',
-  justifyContent: 'flex-end',
-  alignItems: 'center',
-});
-
 const StageListView = () => {
   const stages = useStages();
   const groups = useStageSelector<Groups>((state) => state.groups);
@@ -76,157 +42,126 @@ const StageListView = () => {
   const [isModifyStageOpen, setModifyStageIsOpen] = useState<boolean>(false);
   const [isCopyLinkOpen, setCopyLinkOpen] = useState<boolean>();
 
-  const [expanded, setExpanded] = React.useState<string | false>(false);
-
-  const handleChange = (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
-    setExpanded(isExpanded ? panel : false);
-  };
-
   return (
     <>
       <GlobalActions>
         <Button
           size="large"
-          color="primary"
-          variant="contained"
-          startIcon={<AddIcon />}
+          kind="primary"
+          startEnhancer={<Plus />}
           onClick={() => setCreateStageIsOpen((prevState) => !prevState)}
         >
           Bühne hinzufügen
         </Button>
       </GlobalActions>
       <div>
-        {stages.map((stage) => (
-          <Accordion
-            expanded={expanded === `panel-${stage._id}`}
-            onChange={handleChange(`panel-${stage._id}`)}
-            key={stage._id}
-          >
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon color="primary" />}
-              aria-controls={`panel-${stage._id}-content`}
-              id={`panel-${stage._id}-header`}
+        <Accordion>
+          {stages.map((stage) => (
+            <Panel
+              title={stage.name}
+              key={stage._id}
             >
-              <AccordionTitle>
-                <Typography variant="h4">{stage.name}</Typography>
-              </AccordionTitle>
-              <AccordionTitleActions>
-                {stage.isAdmin && (
-                  <>
-                    <IconButton
-                      aria-label="Gruppe hinzufügen"
-                      color="secondary"
-                      edge="start"
-                      onClick={() => {
-                        setCurrentStage(stage);
-                        setCreateGroupIsOpen(true);
-                      }}
-                    >
-                      <AddIcon />
-                    </IconButton>
-                    <IconButton
-                      color="primary"
-                      aria-label="edit"
-                      onClick={() => {
-                        setCurrentStage(stage);
-                        setModifyStageIsOpen(true);
-                      }}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </>
-                )}
-                <IconButton
-                  aria-label={stage.isAdmin ? 'Bühne entfernen' : 'Bühne verlassen'}
-                  color="primary"
-                  edge="end"
-                  onClick={() => {
-                    if (stage.isAdmin) removeStage(stage._id);
-                    else leaveStageForGood(stage._id);
-                  }}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </AccordionTitleActions>
-            </AccordionSummary>
-            <AccordionContent>
-              <List>
-                {groups.byStage[stage._id] && groups.byStage[stage._id].map((groupId) => {
-                  const group = groups.byId[groupId];
-                  return (
-                    <ListItem key={group._id} dense>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <Icon name="group-preset" />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={group.name}
-                        secondary={stage.isAdmin && (
-                        <ButtonGroup size="small" color="secondary" variant="text">
-                          <IconButton
-                            size="small"
-                            edge="start"
-                            aria-label="Gruppe wechseln"
-                            onClick={() => {
-                              setCurrentGroup(group);
-                              setModifyGroupIsOpen(true);
-                            }}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            edge="end"
-                            aria-label="Gruppe entfernen"
-                            onClick={() => removeGroup(group._id)}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </ButtonGroup>
-                        )}
-                      />
+              {stage.isAdmin && (
+                <>
+                  <Button
+                    aria-label="Gruppe hinzufügen"
+                    shape="circle"
+                    kind="secondary"
+                    onClick={() => {
+                      setCurrentStage(stage);
+                      setCreateGroupIsOpen(true);
+                    }}
+                  >
+                    <Plus />
+                  </Button>
+                  <Button
+                    kind="primary"
+                    shape="circle"
+                    aria-label="edit"
+                    onClick={() => {
+                      setCurrentStage(stage);
+                      setModifyStageIsOpen(true);
+                    }}
+                  >
+                    <Overflow />
+                  </Button>
+                </>
+              )}
 
-                      <ListItemSecondaryAction>
-                        <ButtonGroup>
+              {groups.byStage[stage._id] && groups.byStage[stage._id].map((groupId) => {
+                const group = groups.byId[groupId];
+                return (
+                  <ListItem>
+                    <ListItemLabel>
+                      {group.name}
+                      <Button
+                        kind={currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'primary' : 'minimal'}
+                        onClick={() => {
+                          if (
+                            currentStageId
+                                    && stage._id === currentStageId
+                                    && group._id === currentGroupId
+                          ) {
+                            leaveStage();
+                          } else {
+                            setRequest(stage._id, group._id, stage.password);
+                          }
+                        }}
+                      >
+                        {currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'Verlassen' : 'Beitreten'}
+                      </Button>
+                      <Button
+                        kind="minimal"
+                        onClick={() => {
+                          setCurrentStage(stage);
+                          setCurrentGroup(group);
+                          setCopyLinkOpen((prevState) => !prevState);
+                        }}
+                      >
+                        Einladen
+                      </Button>
+                      {stage.isAdmin && (
+                        <>
                           <Button
-                            variant={currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'contained' : 'outlined'}
-                            color={currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'primary' : 'inherit'}
-                            onClick={() => {
-                              if (
-                                currentStageId
-                                  && stage._id === currentStageId
-                                  && group._id === currentGroupId
-                              ) {
-                                leaveStage();
-                              } else {
-                                setRequest(stage._id, group._id, stage.password);
-                              }
-                            }}
-                          >
-                            {currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'Verlassen' : 'Beitreten'}
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            color="inherit"
+                            kind="minimal"
                             onClick={() => {
                               setCurrentStage(stage);
                               setCurrentGroup(group);
-                              setCopyLinkOpen((prevState) => !prevState);
+                              setModifyGroupIsOpen((prevState) => !prevState);
                             }}
                           >
-                            Einladen
+                            Edit
                           </Button>
-                        </ButtonGroup>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                  );
-                })}
-              </List>
+                          <Button
+                            kind="minimal"
+                            onClick={() => {
+                              removeGroup(group._id);
+                            }}
+                          >
+                            Entfernen
+                          </Button>
+                        </>
+                      )}
+                    </ListItemLabel>
+                  </ListItem>
+                );
+              })}
 
-            </AccordionContent>
-          </Accordion>
-        ))}
+              <Button
+                aria-label={stage.isAdmin ? 'Bühne entfernen' : 'Bühne verlassen'}
+                kind="primary"
+                shape="circle"
+                onClick={() => {
+                  if (stage.isAdmin) removeStage(stage._id);
+                  else leaveStageForGood(stage._id);
+                }}
+              >
+                <Delete />
+              </Button>
+            </Panel>
+          ))}
+        </Accordion>
+
       </div>
       <CreateStageModal
         isOpen={isCreateStageOpen}

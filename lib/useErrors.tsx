@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from '@material-ui/core';
+  Modal, ModalBody, ModalFooter, ModalHeader,
+} from 'baseui/modal';
+import Button from '../uikit/Button';
 
 export interface ErrorsProps {
   errors: string[];
@@ -33,19 +30,19 @@ export const ErrorsProvider = (props: { children: React.ReactNode }) => {
     }}
     >
       {children}
-      <Dialog open={errors.length > 0} onClose={() => setErrors([])}>
-        <DialogTitle>Fehler</DialogTitle>
-        <DialogContent>
+      <Modal isOpen={errors.length > 0} onClose={() => setErrors([])}>
+        <ModalHeader>Fehler</ModalHeader>
+        <ModalBody>
           <ul>
             {errors.map((error) => <li>{error}</li>)}
           </ul>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setErrors([])} autoFocus>
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={() => setErrors([])}>
             Ignorieren
           </Button>
-        </DialogActions>
-      </Dialog>
+        </ModalFooter>
+      </Modal>
     </ErrorsContext.Provider>
   );
 };
