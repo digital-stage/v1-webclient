@@ -28,19 +28,17 @@ const InputField = ({
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
       sx={{
-        bg: error ? 'error.background' : 'transparent',
+        bg: error ? 'dangerBg' : 'transparent',
         color: 'text',
         border: 'transparent',
         borderBottom: '1px solid transparent',
-        borderBottomColor: error ? 'error.bottomBorder' : 'text',
+        borderBottomColor: error ? 'dangerUnderline' : 'text',
         borderRadius: 0,
         width: '100%',
         ':active,:-webkit-autofill': {
           borderBottomColor: 'text',
-          // ThemeUI color does not work on this prop
-          // fWebkitTextFillColor: 'white', // this does not work
-          '-webkit-text-fill-color': 'white',
-          webkitTextFillColor: 'pink',
+          // ThemeUI color does not work on this prop thus white instead of text
+          WebkitTextFillColor: 'white',
           boxShadow: '0 0 0px 1000px #1c1c1c inset',
         },
       }}

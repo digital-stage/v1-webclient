@@ -1,133 +1,62 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import Router from 'next/router';
 import {
-  jsx, Box, Heading, Text, Flex, Button,
+  jsx, Box, Heading, Text, Flex, Button, Message,
 } from 'theme-ui';
 import {
   Formik, Field, Form, FormikHelpers,
 } from 'formik';
 import * as Yup from 'yup';
-import { makeStyles } from '@material-ui/core';
 import InputField from '../InputField';
 import { useAuth } from '../../lib/digitalstage/useAuth';
-import ResetLinkModal from './ResetLinkModal';
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    textAlign: 'center',
-  },
-  back: {
-    padding: theme.spacing(0),
-    marginTop: theme.spacing(0),
-  },
-  text: {
-    textAlign: 'left',
-    padding: theme.spacing(2, 2, 0, 2),
-  },
-}));
-
-interface IError {
-  email?: string;
-  repeatEmail?: string;
-  response?: string;
+interface Values {
+  email: string;
+  repeatEmail: string;
 }
 
-const ForgetPasswordForm = (props) => {
-  const classes = useStyles();
+const ForgetPasswordForm = () => {
   const { requestPasswordReset } = useAuth();
-  const [email, setEmail] = React.useState<string>('');
-  const [repeatEmail, setRepeatEmail] = React.useState<string>('');
-  const [errors, setErrors] = React.useState<IError>({});
-  const [open, setOpen] = React.useState(false);
-  const [resend, setResend] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-    setResend(false);
-  };
+  const [msg, setMsg] = React.useState({ state: false, type: null, kids: null });
 
-  const validate = () => {
-    const errorsList: IError = {};
-    if (validator.isEmpty(email)) {
-      errorsList.email = 'Email is required';
-    } else if (!validator.isEmail(email)) {
-      errorsList.email = 'Enter a valid email';
-    } else if (!validator.equals(email, repeatEmail)) {
-      errorsList.email = 'Emails must be the same';
-    }
-    if (validator.isEmpty(repeatEmail)) {
-      errorsList.repeatEmail = 'Email is required';
-    } else if (!validator.isEmail(repeatEmail)) {
-      errorsList.repeatEmail = 'Enter a valid email';
-    } else if (!validator.equals(email, repeatEmail)) {
-      errorsList.repeatEmail = 'Emails must be the same';
-    }
-    setErrors(errorsList);
-    return errorsList;
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value);
-  const handleRepeatEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => setRepeatEmail(e.target.value);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const validationErrors = validate();
-
-    return null;
-  };
-
-  const handleResend = () => {
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length === 0) {
-      return requestPasswordReset(email)
-        .then(() => {
-          if (props.onCompleted) props.onCompleted();
-          setResend(true);
-        })
-        .catch((err) => {
-          setErrors({
-            response: err.message,
-          });
-          setResend(false);
-        });
-    }
-    return null;
-  };
+  const ForgetPasswordSchema = Yup.object().shape({
+    email: Yup.string()
+      .email('Enter a valid email')
+      .required('Email is required'),
+    repeatEmail: Yup.string()
+      .oneOf([Yup.ref('email'), null], 'Email must match')
+      .required('Repeat email is required'),
+  });
 
   return (
     <Box>
-      <ResetLinkModal
-        open={open}
-        handleClose={handleClose}
-        onClick={handleResend}
-        resend={resend}
-      />
-
-      <div className={classes.paper}>
-        <Formik
-          initialValues={{ email: '', repeatEmail: '' }}
-          onSubmit={async (values) => requestPasswordReset(email)
-            .then(() => {
-              if (props.onCompleted) props.onCompleted();
-              handleClickOpen();
-            })
-            .catch((err) => setErrors({
-              response: err.message,
-            }))}
-        >
+      <Formik
+        initialValues={{ email: '', repeatEmail: '' }}
+        validationSchema={ForgetPasswordSchema}
+        // eslint-disable-next-line max-len
+        onSubmit={async (values: Values, { resetForm }: FormikHelpers<Values>) => requestPasswordReset(values.email)
+          .then((res) => {
+            if (res === 200) {
+              setMsg({ state: true, type: 'success', kids: 'Link sent - check your mails' });
+              resetForm(null);
+            } else if (res === 404) {
+              setMsg({ state: true, type: 'danger', kids: 'Unknown email address' });
+            } else {
+              setMsg({ state: true, type: 'warning', kids: 'Oops - please try again' });
+            }
+          })
+          .catch((err) => {
+            setMsg({
+              state: true,
+              type: 'danger',
+              kids: { err },
+            });
+          })}
+      >
+        {({ errors, touched }) => (
           <Form>
-            <Field name="name" type="text" />
-            <Field name="email" type="email" />
-            <button type="submit">Submit</button>
-
             <Box sx={{ textAlign: 'left' }}>
               <Heading as="h3" sx={{ my: 3, fontSize: 3 }}>
                 Reset your password
@@ -135,37 +64,40 @@ const ForgetPasswordForm = (props) => {
               <Text>Enter your email address to restore your password</Text>
             </Box>
 
+            {msg.state && (
+            <Message variant={msg.type}>
+              {msg.kids}
+            </Message>
+            )}
+
             <Field
               as={InputField}
               id="email"
               label="E-mail"
               name="email"
               type="text"
-              error={errors && errors.email}
-              onChange={handleEmailChange}
+              error={errors.email && touched.email}
             />
-
             <Field
               as={InputField}
               id="repeatEmail"
               label="Repeat Email"
               name="repeatEmail"
               type="text"
-              error={errors && errors.repeatEmail}
-              onChange={handleRepeatEmailChange}
+              error={errors.repeatEmail && touched.repeatEmail}
             />
-
             <Flex sx={{ justifyContent: 'center', my: 3 }}>
-              <Button variant="white" onClick={props.onClick}>
+              <Button as="a" variant="white" href="/account/login">
                 Cancel
               </Button>
               <Button type="submit">
-                Reset
+                Send
               </Button>
             </Flex>
           </Form>
-        </Formik>
-      </div>
+        )}
+      </Formik>
+
     </Box>
   );
 };

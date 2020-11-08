@@ -7,14 +7,11 @@ export default {
     tertiary: '#012340', // cambridge blue
     muted: 'hsl(211, 16%, 68%)',
     accent: 'hsl(45, 100%, 50%)',
-    danger: 'hsl(276, 65%, 85%)',
+    danger: '#FA000099',
+    dangerBg: '#9D131364',
+    dangerUnderline: '#FA000099',
+    success: '#24A312',
     navigation: 'hsl(333, 50%, 8%)',
-    dsbackground:
-      'transparent linear-gradient(221deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%) 0% 0% no-repeat padding-box',
-    error: {
-      bottomBorder: '#FA000099',
-      background: '#9D131364',
-    },
     gray: [
       '#D1D1D1',
       '#B3B3B3',
@@ -180,6 +177,32 @@ export default {
       borderRadius: 2,
       border: '1px solid',
       borderColor: 'muted',
+    },
+  },
+  messages: {
+    info: {
+      mt: 4,
+      borderRadius: 0,
+      bg: 'text',
+      color: 'background',
+    },
+    success: {
+      variant: 'messages.info',
+      borderLeftColor: 'success',
+      bg: 'success',
+      color: 'text',
+    },
+    warning: {
+      variant: 'messages.info',
+      borderLeftColor: 'accent',
+      bg: 'accent',
+      color: 'background',
+    },
+    danger: {
+      variant: 'messages.info',
+      borderLeftColor: '#A61010',
+      bg: '#A61010',
+      color: 'text',
     },
   },
   styles: {

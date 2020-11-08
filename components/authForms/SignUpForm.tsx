@@ -10,9 +10,7 @@ import {
 import * as Yup from 'yup';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import InputField from '../InputField';
-import Alert from '../base/Alert';
 import { useErrors } from '../../lib/useErrors';
-import ResetLinkModal from './ResetLinkModal';
 
 interface Values {
   email: string;
@@ -24,16 +22,6 @@ interface Values {
 const SignUpForm = () => {
   const { createUserWithEmailAndPassword } = useAuth();
   const { reportError } = useErrors();
-
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(!open);
-  };
-
-  const handleClose = () => {
-    setOpen(!open);
-  };
 
   const SignUpSchema = Yup.object().shape({
     email: Yup.string()
@@ -57,8 +45,6 @@ const SignUpForm = () => {
 
   return (
     <Box>
-      <ResetLinkModal open={open} handleClose={handleClose} />
-
       <Formik
         initialValues={{
           email: '',
@@ -67,23 +53,18 @@ const SignUpForm = () => {
           passwordRepeat: '',
         }}
         validationSchema={SignUpSchema}
-        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) => {
-          console.log(values);
-          return (
-            createUserWithEmailAndPassword(
-              values.email,
-              values.password,
-              values.name,
-            )
-              .then((res) => {
-                // TODO: We need to check how we could refactor this
-                handleClickOpen();
-                resetForm(null);
-              })
-              .catch((err) => reportError(err))
-              .finally()
-          );
-        }}
+        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) => (
+          createUserWithEmailAndPassword(
+            values.email,
+            values.password,
+            values.name,
+          )
+            .then((res) => {
+              resetForm(null);
+            })
+            .catch((err) => reportError(err))
+            .finally()
+        )}
       >
         {({ errors, touched }) => (
           <Form>
@@ -101,7 +82,6 @@ const SignUpForm = () => {
               as={InputField}
               id="name"
               label="Username"
-              // placeholder="Username"
               name="name"
               type="text"
               error={errors.name && touched.name}
@@ -110,7 +90,6 @@ const SignUpForm = () => {
               as={InputField}
               id="password"
               label="Password"
-              // placeholder="Password"
               name="password"
               type="password"
               error={errors.password && touched.password}
@@ -119,7 +98,6 @@ const SignUpForm = () => {
               as={InputField}
               id="passwordRepeat"
               label="Repeat password"
-              // placeholder="Repeat password"
               type="password"
               name="passwordRepeat"
               error={errors.passwordRepeat && touched.passwordRepeat}
