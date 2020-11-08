@@ -47,6 +47,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                     </StageWebAudioProvider>
                     <StageJoiner />
                   </ThemenProviderThemeUi>
+
                 </AudioContextProvider>
               </MediasoupProvider>
             </SocketContextProvider>

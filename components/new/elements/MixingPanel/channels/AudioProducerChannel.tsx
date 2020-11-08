@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from 'styletron-react';
-import { Typography } from '@material-ui/core';
+import { Caption1 } from 'baseui/typography';
 import useStageSelector, { useIsStageAdmin } from '../../../../../lib/digitalstage/useStageSelector';
 import { AudioProducer, CustomAudioProducer } from '../../../../../lib/digitalstage/useStageContext/model';
 import { useStageWebAudio } from '../../../../../lib/useStageWebAudio';
@@ -35,27 +35,39 @@ const Header = styled('div', {
 const AudioProducerChannel = (props: {
   audioProducerId: string
 }) => {
+  const { audioProducerId } = props;
   const isAdmin: boolean = useIsStageAdmin();
-  const audioProducer = useStageSelector<AudioProducer>((state) => state.audioProducers.byId[props.audioProducerId]);
-  const customAudioProducer = useStageSelector<CustomAudioProducer>((state) => (state.customAudioProducers.byAudioProducer[props.audioProducerId] ? state.customAudioProducers.byId[state.customAudioProducers.byAudioProducer[props.audioProducerId]] : undefined));
+  const audioProducer = useStageSelector<AudioProducer>(
+    (state) => state.audioProducers.byId[props.audioProducerId],
+  );
+  const customAudioProducer = useStageSelector<CustomAudioProducer>(
+    (state) => (state.customAudioProducers.byAudioProducer[props.audioProducerId]
+      ? state.customAudioProducers
+        .byId[state.customAudioProducers.byAudioProducer[props.audioProducerId]]
+      : undefined),
+  );
 
   const { byAudioProducer } = useStageWebAudio();
 
-  const { updateStageMemberAudio, setCustomStageMemberAudio, removeCustomStageMemberAudio } = useStageActions();
+  const {
+    updateStageMemberAudio,
+    setCustomStageMemberAudio,
+    removeCustomStageMemberAudio,
+  } = useStageActions();
 
   return (
     <Panel>
       <Row>
         <Column>
           <ChannelStrip
-            addHeader={<Header><Typography variant="h5">Track</Typography></Header>}
-            analyser={byAudioProducer[props.audioProducerId] ? byAudioProducer[props.audioProducerId].analyserNode : undefined}
-
+            addHeader={<Header><Caption1>Track</Caption1></Header>}
+            analyser={byAudioProducer[audioProducerId]
+              ? byAudioProducer[audioProducerId].analyserNode
+              : undefined}
             volume={audioProducer.volume}
             muted={audioProducer.muted}
             customVolume={customAudioProducer ? customAudioProducer.volume : undefined}
             customMuted={customAudioProducer ? customAudioProducer.muted : undefined}
-
             onVolumeChanged={(volume, muted) => updateStageMemberAudio(audioProducer._id, {
               volume,
               muted,
@@ -66,8 +78,8 @@ const AudioProducerChannel = (props: {
             })}
             onCustomVolumeReset={() => {
               if (customAudioProducer) return removeCustomStageMemberAudio(customAudioProducer._id);
+              return null;
             }}
-
             isAdmin={isAdmin}
           />
         </Column>

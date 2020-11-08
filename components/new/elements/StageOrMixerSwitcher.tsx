@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { styled } from 'styletron-react';
 import Icon from '../../../uikit/Icon';
 import useStageSelector from '../../../lib/digitalstage/useStageSelector';
-import IconButton from '../../base/IconButton';
+import Button from '../../../uikit/Button';
 
 const Wrapper = styled('div', {
   position: 'fixed',
@@ -27,9 +27,11 @@ const StageOrMixerSwitcher = (props: {
     return (
       <Wrapper className={props.className}>
         <Link href={mixerShown ? '/' : '/mixer'}>
-          <IconButton color="secondary">
+          <Button
+            shape="circle"
+          >
             <Icon size={64} name={mixerShown ? 'stage' : 'mixer'} />
-          </IconButton>
+          </Button>
         </Link>
       </Wrapper>
     );

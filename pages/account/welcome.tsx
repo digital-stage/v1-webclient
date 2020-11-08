@@ -1,11 +1,11 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import {
   jsx, Button, Flex, Heading, Text,
 } from 'theme-ui';
-import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Layout from '../../components/Layout';
 
@@ -49,7 +49,7 @@ const Welcome = () => {
           </Heading>
 
           <Link href="/account/login">
-            <Button variant="white">Sign In</Button>
+            <Button as="a" variant="white" href="/account/login">Sign In</Button>
           </Link>
 
           <Text sx={{ my: 2, textAlign: 'center' }}>
@@ -62,6 +62,7 @@ const Welcome = () => {
         <Text variant="hint">Version 0.00001</Text>
       </Flex>
     </Layout>
+
   );
 };
 
