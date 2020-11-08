@@ -6,7 +6,7 @@ import {
   ServerDeviceEvents,
   ServerGlobalEvents,
   ServerStageEvents,
-  ServerUserEvents,
+  ServerUserEvents
 } from '../common/events';
 import * as Server from '../common/model.server';
 import enumerateDevices from './utils';
@@ -17,8 +17,8 @@ import { useErrors } from '../../useErrors';
 
 const SocketContext = React.createContext<SocketIOClient.Socket>(undefined);
 
-export const useSocket = ()
-: SocketIOClient.Socket => React.useContext<SocketIOClient.Socket>(SocketContext);
+export const useSocket = (): SocketIOClient.Socket =>
+  React.useContext<SocketIOClient.Socket>(SocketContext);
 
 export const SocketContextProvider = (props: { children: React.ReactNode }) => {
   const { children } = props;
@@ -28,7 +28,7 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
   const { reportError } = useErrors();
 
   const registerSocketHandlers = useCallback(
-    (currSocket) => {
+    currSocket => {
       console.log('[useStages] Registering currSocket handlers');
 
       currSocket.on(ServerGlobalEvents.READY, () => {
@@ -39,26 +39,32 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
         ServerDeviceEvents.LOCAL_DEVICE_READY,
         (payload: Server.Device) => {
           dispatch(
-            allActions.deviceActions.server.handleLocalDeviceReady(payload),
+            allActions.deviceActions.server.handleLocalDeviceReady(payload)
           );
-        },
+        }
       );
 
       currSocket.on(ServerUserEvents.USER_READY, (payload: Server.User) => {
         dispatch(allActions.server.handleUserReady(payload));
       });
 
-      currSocket.on(ServerDeviceEvents.DEVICE_ADDED, (payload: Server.Device) => {
-        dispatch(allActions.deviceActions.server.addDevice(payload));
-      });
-      currSocket.on(ServerDeviceEvents.DEVICE_CHANGED, (payload: Server.Device) => {
-        dispatch(allActions.deviceActions.server.changeDevice(payload));
-      });
+      currSocket.on(
+        ServerDeviceEvents.DEVICE_ADDED,
+        (payload: Server.Device) => {
+          dispatch(allActions.deviceActions.server.addDevice(payload));
+        }
+      );
+      currSocket.on(
+        ServerDeviceEvents.DEVICE_CHANGED,
+        (payload: Server.Device) => {
+          dispatch(allActions.deviceActions.server.changeDevice(payload));
+        }
+      );
       currSocket.on(
         ServerDeviceEvents.DEVICE_REMOVED,
         (payload: Server.DeviceId) => {
           dispatch(allActions.deviceActions.server.removeDevice(payload));
-        },
+        }
       );
 
       currSocket.on(ServerStageEvents.USER_ADDED, (payload: Server.User) => {
@@ -67,9 +73,12 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
       currSocket.on(ServerStageEvents.USER_CHANGED, (payload: Server.User) => {
         dispatch(allActions.stageActions.server.changeUser(payload));
       });
-      currSocket.on(ServerStageEvents.USER_REMOVED, (payload: Server.UserId) => {
-        dispatch(allActions.stageActions.server.removeUser(payload));
-      });
+      currSocket.on(
+        ServerStageEvents.USER_REMOVED,
+        (payload: Server.UserId) => {
+          dispatch(allActions.stageActions.server.removeUser(payload));
+        }
+      );
 
       currSocket.on(ServerStageEvents.STAGE_ADDED, (payload: Server.Stage) => {
         dispatch(allActions.stageActions.server.addStage(payload));
@@ -78,193 +87,205 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
         ServerStageEvents.STAGE_JOINED,
         (payload: Server.InitialStagePackage) => {
           dispatch(allActions.stageActions.server.handleStageJoined(payload));
-        },
+        }
       );
       currSocket.on(ServerStageEvents.STAGE_LEFT, () => {
         dispatch(allActions.stageActions.server.handleStageLeft());
       });
-      currSocket.on(ServerStageEvents.STAGE_CHANGED, (payload: Server.Stage) => {
-        dispatch(allActions.stageActions.server.changeStage(payload));
-      });
-      currSocket.on(ServerStageEvents.STAGE_REMOVED, (payload: Server.UserId) => {
-        dispatch(allActions.stageActions.server.removeStage(payload));
-      });
+      currSocket.on(
+        ServerStageEvents.STAGE_CHANGED,
+        (payload: Server.Stage) => {
+          dispatch(allActions.stageActions.server.changeStage(payload));
+        }
+      );
+      currSocket.on(
+        ServerStageEvents.STAGE_REMOVED,
+        (payload: Server.UserId) => {
+          dispatch(allActions.stageActions.server.removeStage(payload));
+        }
+      );
 
       currSocket.on(ServerStageEvents.GROUP_ADDED, (payload: Server.Group) => {
         dispatch(allActions.stageActions.server.addGroup(payload));
       });
-      currSocket.on(ServerStageEvents.GROUP_CHANGED, (payload: Server.Group) => {
-        dispatch(allActions.stageActions.server.changeGroup(payload));
-      });
-      currSocket.on(ServerStageEvents.GROUP_REMOVED, (payload: Server.GroupId) => {
-        dispatch(allActions.stageActions.server.removeGroup(payload));
-      });
+      currSocket.on(
+        ServerStageEvents.GROUP_CHANGED,
+        (payload: Server.Group) => {
+          dispatch(allActions.stageActions.server.changeGroup(payload));
+        }
+      );
+      currSocket.on(
+        ServerStageEvents.GROUP_REMOVED,
+        (payload: Server.GroupId) => {
+          dispatch(allActions.stageActions.server.removeGroup(payload));
+        }
+      );
 
       currSocket.on(
         ServerStageEvents.CUSTOM_GROUP_ADDED,
         (payload: Server.CustomGroup) => {
           dispatch(allActions.stageActions.server.addCustomGroup(payload));
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.CUSTOM_GROUP_CHANGED,
         (payload: Server.CustomGroup) => {
           dispatch(allActions.stageActions.server.changeCustomGroup(payload));
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.CUSTOM_GROUP_REMOVED,
         (payload: Server.CustomGroupId) => {
           dispatch(allActions.stageActions.server.removeCustomGroup(payload));
-        },
+        }
       );
 
       currSocket.on(
         ServerStageEvents.STAGE_MEMBER_ADDED,
         (payload: Server.StageMember) => {
           dispatch(allActions.stageActions.server.addStageMember(payload));
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.STAGE_MEMBER_CHANGED,
         (payload: Server.StageMember) => {
           dispatch(allActions.stageActions.server.changeStageMember(payload));
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.STAGE_MEMBER_REMOVED,
         (payload: Server.StageMemberId) => {
           dispatch(allActions.stageActions.server.removeStageMember(payload));
-        },
+        }
       );
 
       currSocket.on(
         ServerStageEvents.CUSTOM_STAGE_MEMBER_ADDED,
         (payload: Server.CustomStageMember) => {
           dispatch(
-            allActions.stageActions.server.addCustomStageMember(payload),
+            allActions.stageActions.server.addCustomStageMember(payload)
           );
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.CUSTOM_STAGE_MEMBER_CHANGED,
         (payload: Server.CustomStageMember) => {
           dispatch(
-            allActions.stageActions.server.changeCustomStageMember(payload),
+            allActions.stageActions.server.changeCustomStageMember(payload)
           );
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.CUSTOM_STAGE_MEMBER_REMOVED,
         (payload: Server.CustomStageMemberId) => {
           dispatch(
-            allActions.stageActions.server.removeCustomStageMember(payload),
+            allActions.stageActions.server.removeCustomStageMember(payload)
           );
-        },
+        }
       );
 
       currSocket.on(
         ServerStageEvents.STAGE_MEMBER_VIDEO_ADDED,
         (payload: Server.StageMemberVideoProducer) => {
           dispatch(allActions.stageActions.server.addVideoProducer(payload));
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.STAGE_MEMBER_VIDEO_CHANGED,
         (payload: Server.StageMemberVideoProducer) => {
           dispatch(allActions.stageActions.server.changeVideoProducer(payload));
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.STAGE_MEMBER_VIDEO_REMOVED,
         (payload: Server.StageMemberVideoProducerId) => {
           dispatch(allActions.stageActions.server.removeVideoProducer(payload));
-        },
+        }
       );
 
       currSocket.on(
         ServerStageEvents.STAGE_MEMBER_AUDIO_ADDED,
         (payload: Server.StageMemberAudioProducer) => {
           dispatch(allActions.stageActions.server.addAudioProducer(payload));
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.STAGE_MEMBER_AUDIO_CHANGED,
         (payload: Server.StageMemberAudioProducer) => {
           dispatch(allActions.stageActions.server.changeAudioProducer(payload));
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.STAGE_MEMBER_AUDIO_REMOVED,
         (payload: Server.StageMemberAudioProducerId) => {
           dispatch(allActions.stageActions.server.removeAudioProducer(payload));
-        },
+        }
       );
 
       currSocket.on(
         ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_ADDED,
         (payload: Server.CustomStageMemberAudioProducer) => {
           dispatch(
-            allActions.stageActions.server.addCustomAudioProducer(payload),
+            allActions.stageActions.server.addCustomAudioProducer(payload)
           );
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_CHANGED,
         (payload: Server.CustomStageMemberAudioProducer) => {
           dispatch(
-            allActions.stageActions.server.changeCustomAudioProducer(payload),
+            allActions.stageActions.server.changeCustomAudioProducer(payload)
           );
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_REMOVED,
         (payload: Server.CustomStageMemberAudioProducerId) => {
           dispatch(
-            allActions.stageActions.server.removeCustomAudioProducer(payload),
+            allActions.stageActions.server.removeCustomAudioProducer(payload)
           );
-        },
+        }
       );
 
       currSocket.on(
         ServerStageEvents.STAGE_MEMBER_OV_ADDED,
         (payload: Server.StageMemberOvTrack) => {
           dispatch(allActions.stageActions.server.addOvTrack(payload));
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.STAGE_MEMBER_OV_CHANGED,
         (payload: Server.StageMemberOvTrack) => {
           dispatch(allActions.stageActions.server.changeOvTrack(payload));
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.STAGE_MEMBER_OV_REMOVED,
         (payload: Server.StageMemberOvTrackId) => {
           dispatch(allActions.stageActions.server.removeOvTrack(payload));
-        },
+        }
       );
 
       currSocket.on(
         ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_ADDED,
         (payload: Server.CustomStageMemberOvTrack) => {
           dispatch(allActions.stageActions.server.addCustomOvTrack(payload));
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_CHANGED,
         (payload: Server.CustomStageMemberOvTrack) => {
           dispatch(allActions.stageActions.server.changeCustomOvTrack(payload));
-        },
+        }
       );
       currSocket.on(
         ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_REMOVED,
         (payload: Server.CustomStageMemberOvTrackId) => {
           dispatch(allActions.stageActions.server.removeCustomOvTrack(payload));
-        },
+        }
       );
     },
-    [dispatch],
+    [dispatch]
   );
 
   const createSocket = useCallback(() => {
@@ -273,16 +294,16 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
     const browser = bowser.getBrowserName();
 
     enumerateDevices()
-      .then((devices) => {
+      .then(devices => {
         let inputAudioDeviceId;
         let outputAudioDeviceId;
         let inputVideoDeviceId = 'default';
-        if (devices.inputAudioDevices.find((d) => d.id === 'label')) {
+        if (devices.inputAudioDevices.find(d => d.id === 'label')) {
           inputAudioDeviceId = 'default';
         } else if (devices.inputAudioDevices.length > 0) {
           inputAudioDeviceId = devices.inputAudioDevices[0].id;
         }
-        if (devices.outputAudioDevices.find((d) => d.id === 'label')) {
+        if (devices.outputAudioDevices.find(d => d.id === 'label')) {
           outputAudioDeviceId = 'default';
         } else if (devices.outputAudioDevices.length > 0) {
           outputAudioDeviceId = devices.outputAudioDevices[0].id;
@@ -306,9 +327,9 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
               outputAudioDevices: devices.outputAudioDevices,
               inputAudioDeviceId,
               inputVideoDeviceId,
-              outputAudioDeviceId,
-            } as Device),
-          },
+              outputAudioDeviceId
+            } as Device)
+          }
         });
 
         registerSocketHandlers(createdSocket);
@@ -318,13 +339,13 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
         });
         createdSocket.on('disconnect', () => {
           console.debug(
-            '[useStageContext] Disconnected from server, try to reconnect',
+            '[useStageContext] Disconnected from server, try to reconnect'
           );
         });
 
         setSocket(createdSocket);
       })
-      .catch((error) => reportError(error.message));
+      .catch(error => reportError(error.message));
   }, [token]);
 
   useEffect(() => {
@@ -348,8 +369,6 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
   }, [token]);
 
   return (
-    <SocketContext.Provider value={socket}>
-      {children}
-    </SocketContext.Provider>
+    <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
   );
 };

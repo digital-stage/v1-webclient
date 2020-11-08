@@ -10,9 +10,7 @@ const ToggleButton = (props: {
   kind?: KIND[keyof KIND];
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => any;
 }) => {
-  const {
-    children, active, style, size, kind, onClick,
-  } = props;
+  const { children, active, style, size, kind, onClick } = props;
   return (
     <Button
       onClick={onClick}

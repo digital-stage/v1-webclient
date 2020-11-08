@@ -3,20 +3,18 @@ import { styled, useStyletron } from 'styletron-react';
 import generatePath from './generatePath';
 
 const Svg = styled('svg', {
-  fill: 'currentColor',
+  fill: 'currentColor'
 });
 
 const Icon = (props: {
-  name: string,
+  name: string;
   label?: string;
-  size?: number,
-  onClick?: MouseEventHandler<HTMLOrSVGElement>,
+  size?: number;
+  onClick?: MouseEventHandler<HTMLOrSVGElement>;
   className?: string;
 }) => {
   const [css] = useStyletron();
-  const {
-    name, className, size, onClick, label,
-  } = props;
+  const { name, className, size, onClick, label } = props;
 
   return (
     <Svg
@@ -29,9 +27,10 @@ const Icon = (props: {
       onClick={onClick}
     >
       <title id={name}>{label || name}</title>
-      <g className={css({
-        fill: 'currentColor',
-      })}
+      <g
+        className={css({
+          fill: 'currentColor'
+        })}
       >
         {generatePath(name, 'currentColor')}
       </g>

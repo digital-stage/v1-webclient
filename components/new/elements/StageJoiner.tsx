@@ -1,8 +1,10 @@
-import React, {
-  useCallback, useEffect, useRef, useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  Modal, ModalBody, ModalButton, ModalFooter, ModalHeader,
+  Modal,
+  ModalBody,
+  ModalButton,
+  ModalFooter,
+  ModalHeader
 } from 'baseui/modal';
 import { Input } from 'baseui/input';
 import { useRequest } from '../../../lib/useRequest';
@@ -18,12 +20,10 @@ import useStageSelector from '../../../lib/digitalstage/useStageSelector';
  * @constructor
  */
 const StageJoiner = () => {
-  const { ready } = useStageSelector((state) => ({
-    ready: state.ready,
+  const { ready } = useStageSelector(state => ({
+    ready: state.ready
   }));
-  const {
-    stageId, groupId, password, setRequest,
-  } = useRequest();
+  const { stageId, groupId, password, setRequest } = useRequest();
   const { joinStage } = useStageActions();
   const [retries, setRetries] = useState<number>(0);
   const [wrongPassword, setWrongPassword] = useState<boolean>();
@@ -34,7 +34,7 @@ const StageJoiner = () => {
     // Try to connect
     console.log(`Joining stage${stageId}`);
     joinStage(stageId, groupId, password)
-      .catch((error) => {
+      .catch(error => {
         console.log('Could not join stage');
         console.log(error);
         if (error === Errors.INVALID_PASSWORD) {
@@ -68,7 +68,9 @@ const StageJoiner = () => {
       >
         <ModalHeader>Bühne nicht gefunden</ModalHeader>
         <ModalFooter>
-          <ModalButton isSelected onClick={() => setNotFound(false)}>Verstanden</ModalButton>
+          <ModalButton isSelected onClick={() => setNotFound(false)}>
+            Verstanden
+          </ModalButton>
         </ModalFooter>
       </Modal>
       <Modal
@@ -76,17 +78,21 @@ const StageJoiner = () => {
         onClose={() => setWrongPassword(false)}
         unstable_ModalBackdropScroll
       >
-        <ModalHeader>{retries === 0 ? 'Passwort notwendig' : 'Falsches Passwort'}</ModalHeader>
+        <ModalHeader>
+          {retries === 0 ? 'Passwort notwendig' : 'Falsches Passwort'}
+        </ModalHeader>
         <ModalBody>
           <Input inputRef={passwordRef} type="password" />
         </ModalBody>
         <ModalFooter>
-          <ModalButton onClick={() => setWrongPassword(false)}>Abbrechen</ModalButton>
+          <ModalButton onClick={() => setWrongPassword(false)}>
+            Abbrechen
+          </ModalButton>
           <ModalButton
             isSelected
             onClick={() => {
               const updatePassword = passwordRef.current.value;
-              setRetries((prevState) => prevState + 1);
+              setRetries(prevState => prevState + 1);
               setRequest(stageId, groupId, updatePassword);
             }}
           >

@@ -5,7 +5,7 @@ import useAnimationFrame from '../../../../lib/useAnimationFrame';
 
 const Canvas = styled('canvas', {
   width: '100%',
-  height: '100%',
+  height: '100%'
 });
 
 function getAverageVolume(array: Uint8Array): number {
@@ -21,13 +21,11 @@ function getAverageVolume(array: Uint8Array): number {
   return values / length;
 }
 
-const LevelMeter = (
-  props: {
-    analyser: IAnalyserNode<IAudioContext>,
-    vertical?: boolean,
-    className?: string
-  },
-) => {
+const LevelMeter = (props: {
+  analyser: IAnalyserNode<IAudioContext>;
+  vertical?: boolean;
+  className?: string;
+}) => {
   const { className } = props;
   const canvasRef = useRef<HTMLCanvasElement>();
 
@@ -39,7 +37,9 @@ const LevelMeter = (
       const { width } = canvasRef.current;
       const { height } = canvasRef.current;
 
-      const context: CanvasRenderingContext2D = canvasRef.current.getContext('2d');
+      const context: CanvasRenderingContext2D = canvasRef.current.getContext(
+        '2d'
+      );
 
       context.clearRect(0, 0, width, height);
 
@@ -61,8 +61,6 @@ const LevelMeter = (
     }
   });
 
-  return (
-    <Canvas className={className} ref={canvasRef} />
-  );
+  return <Canvas className={className} ref={canvasRef} />;
 };
 export default LevelMeter;

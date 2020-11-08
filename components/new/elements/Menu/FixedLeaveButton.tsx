@@ -10,25 +10,21 @@ const Wrapper = styled('div', ({ $theme }) => ({
   bottom: '1rem',
   right: '1rem',
   color: $theme.colors.negative,
-  currentColor: $theme.colors.negative,
+  currentColor: $theme.colors.negative
 }));
 
 const RedIcon = styled(Icon, ({ $theme }) => ({
-  color: $theme.colors.negative,
+  color: $theme.colors.negative
 }));
 
 const FixedLeaveButton = () => {
-  const stageId = useStageSelector<string>((state) => state.stageId);
+  const stageId = useStageSelector<string>(state => state.stageId);
 
   if (stageId) {
     return (
       <Wrapper>
         <Link href="/leave">
-          <Button
-            kind="minimal"
-            shape="circle"
-            size="large"
-          >
+          <Button kind="minimal" shape="circle" size="large">
             <RedIcon name="leave" />
           </Button>
         </Link>

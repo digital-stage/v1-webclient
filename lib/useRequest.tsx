@@ -11,7 +11,8 @@ export interface Request {
 
 const RequestContext = React.createContext<Request>(undefined);
 
-export const useRequest = (): Request => React.useContext<Request>(RequestContext);
+export const useRequest = (): Request =>
+  React.useContext<Request>(RequestContext);
 
 export const RequestContextProvider = (props: {
   children: React.ReactNode;
@@ -31,7 +32,7 @@ export const RequestContextProvider = (props: {
           setStageId(reqStageId);
           setGroupId(reqGroupId);
           setPassword(reqPassword);
-        },
+        }
       }}
     >
       {children}

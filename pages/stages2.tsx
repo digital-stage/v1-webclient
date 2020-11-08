@@ -11,9 +11,7 @@ import Container from '../components/Container';
 const Stages2 = () => {
   const router = useRouter();
   const { loading, user } = useAuth();
-  const stageId = useStageSelector<string | undefined>(
-    (state) => state.stageId
-  );
+  const stageId = useStageSelector<string | undefined>(state => state.stageId);
   const [initialized, setInitialized] = useState<boolean>();
 
   useEffect(() => {

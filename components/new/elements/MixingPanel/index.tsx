@@ -14,7 +14,7 @@ const Wrapper = styled('div', {
   alignItems: 'stretch',
   justifyContent: 'flex-start',
   flexWrap: 'nowrap',
-  padding: '1rem',
+  padding: '1rem'
 });
 
 /** *
@@ -22,13 +22,15 @@ const Wrapper = styled('div', {
  * @constructor
  */
 const MixingPanelView = () => {
-  const groupIds = useStageSelector<string[]>(
-    (state) => (state.stageId ? state.groups.byStage[state.stageId] : []),
+  const groupIds = useStageSelector<string[]>(state =>
+    state.stageId ? state.groups.byStage[state.stageId] : []
   );
 
   return (
     <Wrapper>
-      {groupIds.map((id) => <GroupChannel key={id} groupId={id} />)}
+      {groupIds.map(id => (
+        <GroupChannel key={id} groupId={id} />
+      ))}
     </Wrapper>
   );
 };

@@ -13,13 +13,12 @@ const Schema = Yup.object().shape({
   email: Yup.string()
     .email('Ungültige E-Mail Adresse')
     .required('Wird benötigt'),
-  password: Yup.string()
-    .required('Wird benötigt'),
+  password: Yup.string().required('Wird benötigt')
 });
 const LoginForm = (props: {
-  onCompleted?: () => void,
-  targetUrl?: string,
-  backLink?: string
+  onCompleted?: () => void;
+  targetUrl?: string;
+  backLink?: string;
 }) => {
   const { onCompleted, targetUrl, backLink } = props;
   const [loginError, setError] = useState<string>();
@@ -27,30 +26,28 @@ const LoginForm = (props: {
   const formik = useFormik({
     initialValues: {
       email: '',
-      password: '',
+      password: ''
     },
     validationSchema: Schema,
-    onSubmit: (values: {
-      email: string,
-      password: string
-    }) => signInWithEmailAndPassword(values.email, values.password)
-      .then(() => {
-        setError(undefined);
-        if (onCompleted) {
-          onCompleted();
-        }
-        if (targetUrl) {
-          return Router.push(targetUrl);
-        }
-        return null;
-      })
-      .catch((err) => {
-        if (err.message === 'Unauthorized') {
-          setError('Falsches Passwort oder unbekannte E-Mail Adresse');
-        } else {
-          setError(`Unbekannter Fehler: ${err.message}`);
-        }
-      }),
+    onSubmit: (values: { email: string; password: string }) =>
+      signInWithEmailAndPassword(values.email, values.password)
+        .then(() => {
+          setError(undefined);
+          if (onCompleted) {
+            onCompleted();
+          }
+          if (targetUrl) {
+            return Router.push(targetUrl);
+          }
+          return null;
+        })
+        .catch(err => {
+          if (err.message === 'Unauthorized') {
+            setError('Falsches Passwort oder unbekannte E-Mail Adresse');
+          } else {
+            setError(`Unbekannter Fehler: ${err.message}`);
+          }
+        })
   });
 
   return (
@@ -61,9 +58,9 @@ const LoginForm = (props: {
         overrides={{
           Label: {
             style: {
-              color: 'inherit',
-            },
-          },
+              color: 'inherit'
+            }
+          }
         }}
       >
         <Input
@@ -79,9 +76,9 @@ const LoginForm = (props: {
         overrides={{
           Label: {
             style: {
-              color: 'inherit',
-            },
-          },
+              color: 'inherit'
+            }
+          }
         }}
         label="Passwort"
         error={formik.errors.password}
@@ -96,20 +93,14 @@ const LoginForm = (props: {
         />
       </FormControl>
 
-      {loginError && (
-        <Notification kind="negative">
-          {loginError}
-        </Notification>
-      )}
+      {loginError && <Notification kind="negative">{loginError}</Notification>}
 
       <Button disabled={!formik.isValid} type="submit">
         Login
       </Button>
       {backLink && (
         <Link href={backLink}>
-          <Button kind={KIND.secondary}>
-            Back
-          </Button>
+          <Button kind={KIND.secondary}>Back</Button>
         </Link>
       )}
     </form>

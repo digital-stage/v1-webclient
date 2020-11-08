@@ -9,22 +9,24 @@ const ConductorsView = () => {
 
   if (conductors.length > 0) {
     return (
-      <div className={css({
-        position: 'fixed',
-        top: '10vh',
-        left: '10vw',
-        width: '80vw',
-        height: '80vh',
-        backgroundColor: 'black',
-      })}
-      >
-        <div className={css({
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'flex-start',
+      <div
+        className={css({
+          position: 'fixed',
+          top: '10vh',
+          left: '10vw',
+          width: '80vw',
+          height: '80vh',
+          backgroundColor: 'black'
         })}
+      >
+        <div
+          className={css({
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'flex-start'
+          })}
         >
-          {conductors.map((conductor) => (
+          {conductors.map(conductor => (
             <StageMemberView key={conductor._id} stageMember={conductor} />
           ))}
         </div>

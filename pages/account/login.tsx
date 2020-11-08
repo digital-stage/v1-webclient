@@ -20,14 +20,12 @@ const LoginScreen = () => {
   }
 
   return (
-
     <Layout>
       <AuthPageContainer>
         <AuthPageLinks />
         <SignInForm />
       </AuthPageContainer>
     </Layout>
-
   );
 };
 export default LoginScreen;

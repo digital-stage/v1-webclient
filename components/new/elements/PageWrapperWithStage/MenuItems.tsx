@@ -12,15 +12,15 @@ export const UpperNavItems: NavItem[] = [
     icon: <Icon name="settings" />,
     href: 'audio',
     content: <AudioSettingsPane />,
-    size: 'small',
+    size: 'small'
   },
   {
     label: 'Video settings',
     icon: <Icon name="settings" />,
     href: 'video',
     content: <VideoSettingsPane />,
-    size: 'small',
-  },
+    size: 'small'
+  }
 ];
 export const CenteredNavItems: NavItem[] = [
   {
@@ -28,8 +28,8 @@ export const CenteredNavItems: NavItem[] = [
     icon: <Icon name="mixer" />,
     href: 'video',
     content: <MixerPane />,
-    size: 'large',
-  },
+    size: 'large'
+  }
 ];
 export const LowerNavItems: NavItem[] = [
   {
@@ -37,6 +37,6 @@ export const LowerNavItems: NavItem[] = [
     icon: <Icon name="settings" />,
     href: 'settings',
     content: <SettingsPane />,
-    size: 'large',
-  },
+    size: 'large'
+  }
 ];

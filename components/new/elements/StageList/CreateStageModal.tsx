@@ -1,16 +1,24 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Box, Flex, Button } from 'theme-ui';
+
 import {
-  Modal, ModalBody, ModalButton, ModalFooter, ModalHeader,
+  Modal,
+  ModalBody,
+  ModalButton,
+  ModalFooter,
+  ModalHeader
 } from 'baseui/modal';
 import { FormControl } from 'baseui/form-control';
 import { Input } from 'baseui/input';
-import React from 'react';
 import { KIND } from 'baseui/button';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { Accordion, Panel } from 'baseui/accordion';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
 
-const Schema = Yup.object().shape({
+const CreateStageSchema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Zu kurz')
     .max(100, 'Zu lang')
@@ -18,17 +26,24 @@ const Schema = Yup.object().shape({
   password: Yup.string()
     .min(5, 'Zu kurz')
     .max(50, 'Zu lang'),
-  width: Yup.number().min(0.1).max(1000),
-  length: Yup.number().min(0.1).max(1000),
-  height: Yup.number().min(0.1).max(1000),
-  absorption: Yup.number().min(0.1).max(1),
-  reflection: Yup.number().min(0.1).max(1),
+  width: Yup.number()
+    .min(0.1)
+    .max(1000),
+  length: Yup.number()
+    .min(0.1)
+    .max(1000),
+  height: Yup.number()
+    .min(0.1)
+    .max(1000),
+  absorption: Yup.number()
+    .min(0.1)
+    .max(1),
+  reflection: Yup.number()
+    .min(0.1)
+    .max(1)
 });
 
-const CreateStageModal = (props: {
-  isOpen?: boolean;
-  onClose?: () => any;
-}) => {
+const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }) => {
   const { isOpen, onClose } = props;
   const { createStage } = useStageActions();
   const formik = useFormik({
@@ -40,10 +55,10 @@ const CreateStageModal = (props: {
       length: 13,
       height: 7.5,
       damping: 0.7,
-      absorption: 0.6,
+      absorption: 0.6
     },
-    validationSchema: Schema,
-    onSubmit: (values) => {
+    validationSchema: CreateStageSchema,
+    onSubmit: values => {
       createStage(
         values.name,
         values.password,
@@ -51,11 +66,10 @@ const CreateStageModal = (props: {
         values.length,
         values.height,
         values.damping,
-        values.absorption,
+        values.absorption
       );
-      // Close modal
       props.onClose();
-    },
+    }
   });
 
   return (
@@ -97,6 +111,7 @@ const CreateStageModal = (props: {
             />
           </FormControl>
 
+          {/** 
           <Accordion>
             <Panel title="Erweiterte Einstellungen">
               <FormControl
@@ -171,13 +186,13 @@ const CreateStageModal = (props: {
               </FormControl>
             </Panel>
           </Accordion>
+          */}
         </ModalBody>
         <ModalFooter>
-          <ModalButton type="button" kind={KIND.tertiary} onClick={onClose}>Abbrechen</ModalButton>
-          <ModalButton
-            disabled={!formik.isValid}
-            type="submit"
-          >
+          <ModalButton type="button" kind={KIND.tertiary} onClick={onClose}>
+            Abbrechen
+          </ModalButton>
+          <ModalButton disabled={!formik.isValid} type="submit">
             Erstellen
           </ModalButton>
         </ModalFooter>

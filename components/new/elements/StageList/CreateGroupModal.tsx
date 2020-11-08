@@ -1,8 +1,15 @@
-import * as Yup from 'yup';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Box, Flex, Button } from 'theme-ui';
 import { useFormik } from 'formik';
-import React from 'react';
+import * as Yup from 'yup';
 import {
-  Modal, ModalBody, ModalButton, ModalFooter, ModalHeader,
+  Modal,
+  ModalBody,
+  ModalButton,
+  ModalFooter,
+  ModalHeader
 } from 'baseui/modal';
 import { Input } from 'baseui/input';
 import { FormControl } from 'baseui/form-control';
@@ -14,28 +21,26 @@ const Schema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Zu kurz')
     .max(100, 'Zu lang')
-    .required('Wird benötigt'),
+    .required('Wird benötigt')
 });
 
 const CreateGroupModal = (props: {
   stage: Client.Stage;
   isOpen?: boolean;
   onClose?: () => any;
-
 }) => {
   const { stage, isOpen, onClose } = props;
   const { createGroup } = useStageActions();
   const formik = useFormik({
     validateOnMount: true,
     initialValues: {
-      name: '',
+      name: ''
     },
     validationSchema: Schema,
-    onSubmit: (values) => {
+    onSubmit: values => {
       createGroup(stage._id, values.name);
-      // Close modal
       props.onClose();
-    },
+    }
   });
 
   return (
@@ -64,11 +69,10 @@ const CreateGroupModal = (props: {
           </FormControl>
         </ModalBody>
         <ModalFooter>
-          <ModalButton type="button" kind={KIND.tertiary} onClick={onClose}>Abbrechen</ModalButton>
-          <ModalButton
-            disabled={!formik.isValid}
-            type="submit"
-          >
+          <ModalButton type="button" kind={KIND.tertiary} onClick={onClose}>
+            Abbrechen
+          </ModalButton>
+          <ModalButton disabled={!formik.isValid} type="submit">
             Gruppe erstellen
           </ModalButton>
         </ModalFooter>

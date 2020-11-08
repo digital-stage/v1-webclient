@@ -16,10 +16,12 @@ const Join = () => {
   useEffect(() => {
     if (router.query) {
       const { stageId, groupId, password } = router.query;
-      if (stageId
-                && groupId
-                && !Array.isArray(stageId)
-                && !Array.isArray(groupId)) {
+      if (
+        stageId &&
+        groupId &&
+        !Array.isArray(stageId) &&
+        !Array.isArray(groupId)
+      ) {
         if (password && !Array.isArray(password)) {
           setRequest(stageId, groupId, password);
         } else {
@@ -30,7 +32,11 @@ const Join = () => {
     }
   }, [router.query]);
 
-  return <Loading><DisplayMedium>Lade...</DisplayMedium></Loading>;
+  return (
+    <Loading>
+      <DisplayMedium>Lade...</DisplayMedium>
+    </Loading>
+  );
 };
 
 export default Join;

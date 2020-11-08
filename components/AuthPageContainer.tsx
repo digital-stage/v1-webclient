@@ -14,12 +14,12 @@ const AuthPageContainer = (props: { children: React.ReactNode }) => {
         alignItems: 'center',
         minHeight: '100vh',
         px: 3,
-        py: 4,
+        py: 4
       }}
     >
       <Box
         sx={{
-          mb: [4, null, 5],
+          mb: [4, null, 5]
         }}
       >
         <img

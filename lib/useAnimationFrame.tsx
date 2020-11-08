@@ -6,7 +6,7 @@ const useAnimationFrame = (callback: (deltaTime: number) => any) => {
   const requestRef = React.useRef<number>();
   const previousTimeRef = React.useRef<number>();
 
-  const animate = (time) => {
+  const animate = time => {
     if (previousTimeRef.current !== undefined) {
       const deltaTime = time - previousTimeRef.current;
       callback(deltaTime);

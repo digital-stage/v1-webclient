@@ -1,12 +1,8 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import {
-  jsx, Box, Heading, Text, Flex, Button, Message,
-} from 'theme-ui';
-import {
-  Formik, Field, Form, FormikHelpers,
-} from 'formik';
+import { jsx, Box, Heading, Text, Flex, Button, Message } from 'theme-ui';
+import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import InputField from '../InputField';
 import { useAuth } from '../../lib/digitalstage/useAuth';
@@ -19,7 +15,11 @@ interface Values {
 const ForgetPasswordForm = () => {
   const { requestPasswordReset } = useAuth();
 
-  const [msg, setMsg] = React.useState({ state: false, type: null, kids: null });
+  const [msg, setMsg] = React.useState({
+    state: false,
+    type: null,
+    kids: null
+  });
 
   const ForgetPasswordSchema = Yup.object().shape({
     email: Yup.string()
@@ -27,7 +27,7 @@ const ForgetPasswordForm = () => {
       .required('Email is required'),
     repeatEmail: Yup.string()
       .oneOf([Yup.ref('email'), null], 'Email must match')
-      .required('Repeat email is required'),
+      .required('Repeat email is required')
   });
 
   return (
@@ -36,24 +36,41 @@ const ForgetPasswordForm = () => {
         initialValues={{ email: '', repeatEmail: '' }}
         validationSchema={ForgetPasswordSchema}
         // eslint-disable-next-line max-len
-        onSubmit={async (values: Values, { resetForm }: FormikHelpers<Values>) => requestPasswordReset(values.email)
-          .then((res) => {
-            if (res === 200) {
-              setMsg({ state: true, type: 'success', kids: 'Link sent - check your mails' });
-              resetForm(null);
-            } else if (res === 404) {
-              setMsg({ state: true, type: 'danger', kids: 'Unknown email address' });
-            } else {
-              setMsg({ state: true, type: 'warning', kids: 'Oops - please try again' });
-            }
-          })
-          .catch((err) => {
-            setMsg({
-              state: true,
-              type: 'danger',
-              kids: { err },
-            });
-          })}
+        onSubmit={async (
+          values: Values,
+          { resetForm }: FormikHelpers<Values>
+        ) =>
+          requestPasswordReset(values.email)
+            .then(res => {
+              if (res === 200) {
+                setMsg({
+                  state: true,
+                  type: 'success',
+                  kids: 'Link sent - check your mails'
+                });
+                resetForm(null);
+              } else if (res === 404) {
+                setMsg({
+                  state: true,
+                  type: 'danger',
+                  kids: 'Unknown email address'
+                });
+              } else {
+                setMsg({
+                  state: true,
+                  type: 'warning',
+                  kids: 'Oops - please try again'
+                });
+              }
+            })
+            .catch(err => {
+              setMsg({
+                state: true,
+                type: 'danger',
+                kids: { err }
+              });
+            })
+        }
       >
         {({ errors, touched }) => (
           <Form>
@@ -64,11 +81,7 @@ const ForgetPasswordForm = () => {
               <Text>Enter your email address to restore your password</Text>
             </Box>
 
-            {msg.state && (
-            <Message variant={msg.type}>
-              {msg.kids}
-            </Message>
-            )}
+            {msg.state && <Message variant={msg.type}>{msg.kids}</Message>}
 
             <Field
               as={InputField}
@@ -90,14 +103,11 @@ const ForgetPasswordForm = () => {
               <Button as="a" variant="white" href="/account/login">
                 Cancel
               </Button>
-              <Button type="submit">
-                Send
-              </Button>
+              <Button type="submit">Send</Button>
             </Flex>
           </Form>
         )}
       </Formik>
-
     </Box>
   );
 };

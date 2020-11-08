@@ -2,14 +2,15 @@
 /** @jsx jsx */
 import React from 'react';
 import { useRouter } from 'next/router';
-import {jsx, Heading, Text, Box} from 'theme-ui'
+import { jsx, Heading, Text, Box } from 'theme-ui';
 import { useAuth } from '../lib/digitalstage/useAuth';
 import Loading from '../components/new/elements/Loading';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
 import PageWrapperWithStage from '../components/new/elements/PageWrapperWithStage';
 import StagePane from '../components/new/panes/StagePane';
-import StagesListPane from '../components/new/panes/StagesListPane';
-import LocalDeviceControl from '../components/new/elements/LocalDeviceControl';
+import StageListView from '../components/new/elements/StageList';
+
+import DeviceControl from '../components/new/elements/DeviceControl';
 import FixedLeaveButton from '../components/new/elements/Menu/FixedLeaveButton';
 import Layout from '../components/Layout';
 import Container from '../components/Container';
@@ -18,13 +19,11 @@ import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/Fix
 const Index = () => {
   const router = useRouter();
   const { loading, user } = useAuth();
-  const stageId = useStageSelector<string | undefined>(
-    (state) => state.stageId
-  );
+  const stageId = useStageSelector<string | undefined>(state => state.stageId);
 
   if (!loading) {
     if (!user) {
-      router.push('/account/welcome')
+      router.push('/account/welcome');
     } else {
       // On stage related pages (all except sign in handling) wrap with PagWrapperWithStage
       return (
@@ -36,11 +35,15 @@ const Index = () => {
           ) : (
             <Layout>
               <Container>
-                <StagesListPane />
+                <div>
+                  <h1>My Stages</h1>
+                  <StageListView />
+                </div>
               </Container>
             </Layout>
           )}
-          <LocalDeviceControl />
+
+          <DeviceControl />
           <FixedAudioPlaybackStarterButton />
           <FixedLeaveButton />
         </React.Fragment>
@@ -50,9 +53,9 @@ const Index = () => {
 
   return (
     <Layout>
-    <Loading>
-      <Heading as="h1">Neues Layout im Anmarsch!</Heading>
-    </Loading>
+      <Loading>
+        <Heading as="h1">Neues Layout im Anmarsch!</Heading>
+      </Loading>
     </Layout>
   );
 };

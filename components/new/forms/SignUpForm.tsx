@@ -23,21 +23,22 @@ const Schema = Yup.object().shape({
     .required('Wird benötigt'),
   confirmPassword: Yup.string()
     .required()
-    .test('passwords-match', 'Die Passwörter stimmen nicht überein', function (value) {
+    .test('passwords-match', 'Die Passwörter stimmen nicht überein', function(
+      value
+    ) {
       return this.parent.password === value;
     }),
-  agreeToTerms: Yup.boolean()
-    .test(
-      'is-true',
-      'Bitte lese und akzeptiere unsere Datenschutzbestimmungen',
-      (value) => value === true,
-    ),
+  agreeToTerms: Yup.boolean().test(
+    'is-true',
+    'Bitte lese und akzeptiere unsere Datenschutzbestimmungen',
+    value => value === true
+  )
 });
 
 const SignUpForm = (props: {
-  onCompleted?: () => void,
-  targetUrl?: string,
-  backLink?: string
+  onCompleted?: () => void;
+  targetUrl?: string;
+  backLink?: string;
 }) => {
   const { onCompleted, targetUrl, backLink } = props;
   const [error, setError] = useState<string>(null);
@@ -49,14 +50,14 @@ const SignUpForm = (props: {
       email: '',
       password: '',
       confirmPassword: '',
-      agreeToTerms: false,
+      agreeToTerms: false
     },
     validationSchema: Schema,
-    onSubmit: (values) => createUserWithEmailAndPassword(values.email, values.password, {
-      name: values.name,
-    })
-      .then(
-        () => {
+    onSubmit: values =>
+      createUserWithEmailAndPassword(values.email, values.password, {
+        name: values.name
+      })
+        .then(() => {
           setError(undefined);
           if (onCompleted) {
             onCompleted();
@@ -65,17 +66,13 @@ const SignUpForm = (props: {
             return Router.push(targetUrl);
           }
           return null;
-        },
-      )
-      .catch((requestError) => setError(requestError.message)),
+        })
+        .catch(requestError => setError(requestError.message))
   });
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <FormControl
-        label="Name"
-        error={formik.errors.name}
-      >
+      <FormControl label="Name" error={formik.errors.name}>
         <Input
           required
           name="name"
@@ -84,10 +81,7 @@ const SignUpForm = (props: {
         />
       </FormControl>
 
-      <FormControl
-        label="E-Mail Adresse"
-        error={formik.errors.email}
-      >
+      <FormControl label="E-Mail Adresse" error={formik.errors.email}>
         <Input
           required
           name="email"
@@ -96,10 +90,7 @@ const SignUpForm = (props: {
           onBlur={formik.handleBlur}
         />
       </FormControl>
-      <FormControl
-        label="Passwort"
-        error={formik.errors.password}
-      >
+      <FormControl label="Passwort" error={formik.errors.password}>
         <Input
           required
           name="password"
@@ -122,9 +113,7 @@ const SignUpForm = (props: {
           onBlur={formik.handleBlur}
         />
       </FormControl>
-      <FormControl
-        error={formik.errors.agreeToTerms}
-      >
+      <FormControl error={formik.errors.agreeToTerms}>
         <Checkbox
           required
           name="agreeToTerms"
@@ -133,28 +122,22 @@ const SignUpForm = (props: {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         >
-          Durch die Nutzung dieser Website stimmst du der Verwendung von Cookies zu. Weitere
-          Informationen dazu findest du in unserer Datenschutzerklärung / Impressum.
+          Durch die Nutzung dieser Website stimmst du der Verwendung von Cookies
+          zu. Weitere Informationen dazu findest du in unserer
+          Datenschutzerklärung / Impressum.
         </Checkbox>
       </FormControl>
 
-      {error && (
-        <Notification kind="negative">
-          {error}
-        </Notification>
-      )}
+      {error && <Notification kind="negative">{error}</Notification>}
 
       <Button disabled={!formik.isValid} type="submit">
         Registrieren
       </Button>
       {backLink && (
         <Link href={backLink}>
-          <Button kind={KIND.secondary}>
-            Zurück
-          </Button>
+          <Button kind={KIND.secondary}>Zurück</Button>
         </Link>
       )}
-
     </form>
   );
 };

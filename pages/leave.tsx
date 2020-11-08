@@ -7,8 +7,8 @@ import useStageSelector from '../lib/digitalstage/useStageSelector';
 
 const Leave = () => {
   const router = useRouter();
-  const ready = useStageSelector<boolean>((state) => state.ready);
-  const stageId = useStageSelector<string | undefined>((state) => state.stageId);
+  const ready = useStageSelector<boolean>(state => state.ready);
+  const stageId = useStageSelector<string | undefined>(state => state.stageId);
   const { leaveStage } = useStageActions();
 
   useEffect(() => {

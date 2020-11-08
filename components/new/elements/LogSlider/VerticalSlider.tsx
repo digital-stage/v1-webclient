@@ -9,7 +9,7 @@ const Wrapper = styled('div', {
   flexDirection: 'column',
   alignItem: 'center',
   justifyContent: 'center',
-  boxSizing: 'border-box',
+  boxSizing: 'border-box'
 });
 
 const VerticalSlider = (props: {
@@ -29,23 +29,33 @@ const VerticalSlider = (props: {
 }) => {
   const [css] = useStyletron();
 
-  const renderSingleMark = useCallback((index: number) => {
-    const mark = props.renderMarks(index);
-    if (mark) {
-      return (
-        <div className={css({
-          position: 'absolute',
-          top: '-400%',
-          left: props.alignLabel && props.alignLabel === 'left' ? '140%' : undefined,
-          right: !props.alignLabel || props.alignLabel === 'right' ? '140%' : undefined,
-        })}
-        >
-          {mark}
-        </div>
-      );
-    }
-    return undefined;
-  }, [props.renderMarks, props.alignLabel]);
+  const renderSingleMark = useCallback(
+    (index: number) => {
+      const mark = props.renderMarks(index);
+      if (mark) {
+        return (
+          <div
+            className={css({
+              position: 'absolute',
+              top: '-400%',
+              left:
+                props.alignLabel && props.alignLabel === 'left'
+                  ? '140%'
+                  : undefined,
+              right:
+                !props.alignLabel || props.alignLabel === 'right'
+                  ? '140%'
+                  : undefined
+            })}
+          >
+            {mark}
+          </div>
+        );
+      }
+      return undefined;
+    },
+    [props.renderMarks, props.alignLabel]
+  );
 
   const solidColor = `rgba(${props.color[0]},${props.color[1]},${props.color[2]},0.6)`;
   return (
@@ -56,23 +66,31 @@ const VerticalSlider = (props: {
         min={props.min}
         max={props.max}
         values={[props.value]}
-        onChange={(values) => props.onChange(values[0])}
-        onFinalChange={(values) => {
+        onChange={values => props.onChange(values[0])}
+        onFinalChange={values => {
           if (props.onFinalChange) props.onFinalChange(values[0]);
         }}
-        renderMark={props.showMarks ? ({ props: markProps, index }) => (
-          <div
-            {...markProps}
-            className={css({
-              ...markProps.style,
-              height: index % 2 ? '1px' : '2px',
-              width: index % 2 ? `${props.width / 2}px` : `${props.width}px`,
-              backgroundColor: index * props.step > props.max - props.value ? solidColor : 'rgba(255,255,255,0.2)',
-            })}
-          >
-            {renderSingleMark(index)}
-          </div>
-        ) : undefined}
+        renderMark={
+          props.showMarks
+            ? ({ props: markProps, index }) => (
+                <div
+                  {...markProps}
+                  className={css({
+                    ...markProps.style,
+                    height: index % 2 ? '1px' : '2px',
+                    width:
+                      index % 2 ? `${props.width / 2}px` : `${props.width}px`,
+                    backgroundColor:
+                      index * props.step > props.max - props.value
+                        ? solidColor
+                        : 'rgba(255,255,255,0.2)'
+                  })}
+                >
+                  {renderSingleMark(index)}
+                </div>
+              )
+            : undefined
+        }
         renderTrack={({ props: trackProps, children }) => (
           <div
             onMouseDown={trackProps.onMouseDown}
@@ -81,7 +99,7 @@ const VerticalSlider = (props: {
               ...trackProps.style,
               flexGrow: 1,
               display: 'flex',
-              height: '100%',
+              height: '100%'
             })}
           >
             <div
@@ -97,25 +115,27 @@ const VerticalSlider = (props: {
                   colors: ['rgba(255,255,255,0.2)', 'transparent'],
                   min: props.min,
                   max: props.max,
-                  direction: Direction.Up,
+                  direction: Direction.Up
                 }),
                 ':hover': {
                   background: getTrackBackground({
                     values: [props.value],
-                    colors: [`rgba(${props.color[0]},${props.color[1]},${props.color[2]},0.6)`, 'transparent'],
+                    colors: [
+                      `rgba(${props.color[0]},${props.color[1]},${props.color[2]},0.6)`,
+                      'transparent'
+                    ],
                     min: props.min,
                     max: props.max,
-                    direction: Direction.Up,
-                  }),
+                    direction: Direction.Up
+                  })
                 },
-                alignSelf: 'center',
+                alignSelf: 'center'
               })}
             >
               {children}
             </div>
           </div>
         )}
-
         renderThumb={({ props: thumbProps, isDragged }) => (
           <div
             {...thumbProps}
@@ -129,7 +149,7 @@ const VerticalSlider = (props: {
               justifyContent: 'center',
               alignItems: 'center',
               outlineColor: solidColor,
-              boxShadow: '0px 1px 6px #AAA',
+              boxShadow: '0px 1px 6px #AAA'
             })}
           >
             {props.text && (
@@ -137,14 +157,20 @@ const VerticalSlider = (props: {
                 className={css({
                   position: 'absolute',
                   top: '0px',
-                  right: props.alignLabel && props.alignLabel === 'left' ? `${props.width + 4}px` : undefined,
-                  left: !props.alignLabel || props.alignLabel === 'right' ? `${props.width + 4}px` : undefined,
+                  right:
+                    props.alignLabel && props.alignLabel === 'left'
+                      ? `${props.width + 4}px`
+                      : undefined,
+                  left:
+                    !props.alignLabel || props.alignLabel === 'right'
+                      ? `${props.width + 4}px`
+                      : undefined,
                   color: '#000',
                   fontWeight: 'bold',
                   padding: '4px',
                   borderRadius: '4px',
                   backgroundColor: solidColor,
-                  whiteSpace: 'nowrap',
+                  whiteSpace: 'nowrap'
                 })}
               >
                 {props.text}
@@ -154,7 +180,7 @@ const VerticalSlider = (props: {
               className={css({
                 width: '16px',
                 height: '4px',
-                backgroundColor: isDragged ? solidColor : '#CCC',
+                backgroundColor: isDragged ? solidColor : '#CCC'
               })}
             />
           </div>

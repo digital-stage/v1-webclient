@@ -21,7 +21,7 @@ const ModalWrapper = styled<{ $hidden?: boolean }, 'div', Theme>(
     transitionDuration: $theme.animation.timing200,
     transitionProperty: 'background-color',
     transitionFunction: $theme.animation.easeInCurve,
-    display: 'flex',
+    display: 'flex'
   })
 );
 const ModalContent = styled<
@@ -39,8 +39,8 @@ const ModalContent = styled<
   transform: $hidden ? 'translate(-100%)' : 'translateX(0)',
   [$theme.mediaQuery.medium]: {
     width: $width,
-    maxWidth: $maxWidth,
-  },
+    maxWidth: $maxWidth
+  }
 }));
 const ModalCloseAction = styled('div', {
   width: '100%',
@@ -48,11 +48,11 @@ const ModalCloseAction = styled('div', {
   alignItems: 'center',
   flexGrow: 0,
   flexShrink: 0,
-  justifyContent: 'flex-end',
+  justifyContent: 'flex-end'
 });
 const Backdrop = styled('div', {
   flexShrink: 1,
-  flexGrow: 1,
+  flexGrow: 1
 });
 
 export interface SIZE {
@@ -124,7 +124,7 @@ const Modal = (props: {
               style={{
                 position: 'absolute',
                 top: 0,
-                right: 0,
+                right: 0
               }}
               kind="minimal"
               shape="circle"

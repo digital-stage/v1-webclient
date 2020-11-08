@@ -9,19 +9,17 @@ import Container from '../../components/Container';
 
 const Profile = () => {
   const { user: authUser } = useAuth();
-  const { user } = useStageSelector((state) => ({ user: state.user }));
+  const { user } = useStageSelector(state => ({ user: state.user }));
 
   return (
     <Layout>
       <Container>
         {user && (
-
           <React.Fragment>
             <Heading>{user.name}</Heading>
             <Heading>{authUser.email}</Heading>
             {user.avatarUrl && <Heading>{user.avatarUrl}</Heading>}
           </React.Fragment>
-
         )}
       </Container>
     </Layout>

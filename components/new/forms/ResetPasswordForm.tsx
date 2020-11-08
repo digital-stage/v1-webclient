@@ -16,47 +16,43 @@ const Schema = Yup.object().shape({
     .required('Wird benötigt'),
   confirmPassword: Yup.string()
     .required()
-    .test('passwords-match', 'Die Passwörter stimmen nicht überein', function (value) {
+    .test('passwords-match', 'Die Passwörter stimmen nicht überein', function(
+      value
+    ) {
       return this.parent.password === value;
-    }),
+    })
 });
 
 const ResetPasswordForm = (props: {
-  resetToken: string,
-  onCompleted?: () => void,
-  targetUrl?: string,
-  backLink?: string
+  resetToken: string;
+  onCompleted?: () => void;
+  targetUrl?: string;
+  backLink?: string;
 }) => {
-  const {
-    resetToken, onCompleted, targetUrl, backLink,
-  } = props;
+  const { resetToken, onCompleted, targetUrl, backLink } = props;
   const [error, setError] = useState<string>(null);
   const { resetPassword } = useAuth();
 
   const formik = useFormik({
     initialValues: {
       password: '',
-      confirmPassword: '',
+      confirmPassword: ''
     },
     validationSchema: Schema,
-    onSubmit: (values) => resetPassword(resetToken, values.password)
-      .then(
-        () => {
+    onSubmit: values =>
+      resetPassword(resetToken, values.password)
+        .then(() => {
           setError(undefined);
           if (onCompleted) onCompleted();
           if (targetUrl) return Router.push(targetUrl);
           return null;
-        },
-      )
-      .catch((requestError) => setError(requestError.message)),
+        })
+        .catch(requestError => setError(requestError.message))
   });
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <FormControl
-        label="Passwort"
-        error={formik.errors.password}
-      >
+      <FormControl label="Passwort" error={formik.errors.password}>
         <Input
           required
           name="password"
@@ -80,23 +76,16 @@ const ResetPasswordForm = (props: {
         />
       </FormControl>
 
-      {error && (
-        <Notification kind="negative">
-          {error}
-        </Notification>
-      )}
+      {error && <Notification kind="negative">{error}</Notification>}
 
       <Button disabled={!formik.isValid} type="submit">
         Passwort zurücksetzen
       </Button>
       {backLink && (
         <Link href={backLink}>
-          <Button kind={KIND.secondary}>
-            Zurück
-          </Button>
+          <Button kind={KIND.secondary}>Zurück</Button>
         </Link>
       )}
-
     </form>
   );
 };

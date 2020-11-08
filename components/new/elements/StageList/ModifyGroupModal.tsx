@@ -1,8 +1,16 @@
-import * as Yup from 'yup';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Box, Flex, Button } from 'theme-ui';
+
 import { useFormik } from 'formik';
-import React, { useEffect } from 'react';
+import * as Yup from 'yup';
 import {
-  Modal, ModalBody, ModalButton, ModalFooter, ModalHeader,
+  Modal,
+  ModalBody,
+  ModalButton,
+  ModalFooter,
+  ModalHeader
 } from 'baseui/modal/index';
 import { Input } from 'baseui/input/index';
 import { FormControl } from 'baseui/form-control/index';
@@ -14,32 +22,30 @@ const Schema = Yup.object().shape({
   name: Yup.string()
     .min(2, 'Zu kurz')
     .max(100, 'Zu lang')
-    .required('Wird benötigt'),
+    .required('Wird benötigt')
 });
 
 const ModifyGroupModal = (props: {
   group: Client.Group;
   isOpen?: boolean;
   onClose?: () => any;
-
 }) => {
   const { group, isOpen, onClose } = props;
   const { updateGroup } = useStageActions();
   const formik = useFormik({
     initialValues: {
-      name: group ? group.name : '',
+      name: group ? group.name : ''
     },
     validationSchema: Schema,
-    onSubmit: (values) => {
+    onSubmit: values => {
       updateGroup(group._id, {
-        name: values.name,
+        name: values.name
       });
-      // Close modal
       onClose();
-    },
+    }
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (group) formik.setValues({ name: group.name });
   }, [group]);
 
@@ -69,11 +75,10 @@ const ModifyGroupModal = (props: {
           </FormControl>
         </ModalBody>
         <ModalFooter>
-          <ModalButton type="button" kind={KIND.tertiary} onClick={onClose}>Abbrechen</ModalButton>
-          <ModalButton
-            disabled={!formik.isValid}
-            type="submit"
-          >
+          <ModalButton type="button" kind={KIND.tertiary} onClick={onClose}>
+            Abbrechen
+          </ModalButton>
+          <ModalButton disabled={!formik.isValid} type="submit">
             Gruppe erstellen
           </ModalButton>
         </ModalFooter>

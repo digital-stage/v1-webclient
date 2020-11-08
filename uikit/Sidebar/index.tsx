@@ -7,12 +7,12 @@ const Wrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  justifyContent: 'space-between',
+  justifyContent: 'space-between'
 });
 const ItemContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
-  border: '1px solid red',
+  border: '1px solid red'
 });
 const Item = styled('div', {});
 
@@ -31,35 +31,30 @@ export interface DrawerNavItem extends Omit<BaseNavItem, 'href'> {
 
 const Sidebar = (props: {
   className?: string;
-  upperItems?: Array<NavItem | DrawerNavItem>,
-  centeredItems?: Array<NavItem | DrawerNavItem>,
-  lowerItems?: Array<NavItem | DrawerNavItem>,
+  upperItems?: Array<NavItem | DrawerNavItem>;
+  centeredItems?: Array<NavItem | DrawerNavItem>;
+  lowerItems?: Array<NavItem | DrawerNavItem>;
 }) => {
-  const {
-    className, upperItems, centeredItems, lowerItems,
-  } = props;
+  const { className, upperItems, centeredItems, lowerItems } = props;
   return (
     <Wrapper className={className}>
       <ItemContainer>
-        {upperItems && upperItems
-          .map((item) => (item.icon
-            ? item.icon
-            : <Item>{item.label}</Item>
-          ))}
+        {upperItems &&
+          upperItems.map(item =>
+            item.icon ? item.icon : <Item>{item.label}</Item>
+          )}
       </ItemContainer>
       <ItemContainer>
-        {centeredItems && centeredItems
-          .map((item) => (item.icon
-            ? item.icon
-            : <Item>{item.label}</Item>
-          ))}
+        {centeredItems &&
+          centeredItems.map(item =>
+            item.icon ? item.icon : <Item>{item.label}</Item>
+          )}
       </ItemContainer>
       <ItemContainer>
-        {lowerItems && lowerItems
-          .map((item) => (item.icon
-            ? item.icon
-            : <Item>{item.label}</Item>
-          ))}
+        {lowerItems &&
+          lowerItems.map(item =>
+            item.icon ? item.icon : <Item>{item.label}</Item>
+          )}
       </ItemContainer>
     </Wrapper>
   );

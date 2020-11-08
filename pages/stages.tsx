@@ -8,9 +8,7 @@ import StageDetails from '../components/stage/StageDetails';
 const Stages = () => {
   const router = useRouter();
   const { user } = useAuth();
-  const stageId = useStageSelector<string | undefined>(
-    (state) => state.stageId
-  );
+  const stageId = useStageSelector<string | undefined>(state => state.stageId);
   const [initialized, setInitialized] = useState<boolean>();
 
   useEffect(() => {
@@ -27,13 +25,10 @@ const Stages = () => {
     }
   }, [router.pathname]);
 
-  
-    if (!user) {
-      return <Login />;
-    }
-    return <StageDetails />
-  
-
+  if (!user) {
+    return <Login />;
+  }
+  return <StageDetails />;
 };
 
 export default Stages;

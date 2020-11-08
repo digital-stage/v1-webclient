@@ -12,7 +12,7 @@ export const DarkModeProvider = (props: { children: React.ReactNode }) => {
   const { children } = props;
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const stageId = useSelector<NormalizedState, string | undefined>(
-    (state) => state.stageId,
+    state => state.stageId
   );
 
   useEffect(() => {

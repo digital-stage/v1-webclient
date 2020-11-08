@@ -9,13 +9,11 @@ import Button from '../../../uikit/Button';
 const Wrapper = styled('div', {
   position: 'fixed',
   bottom: '1rem',
-  right: '1rem',
+  right: '1rem'
 });
 
-const StageOrMixerSwitcher = (props: {
-  className?: string
-}) => {
-  const currentStageId = useStageSelector<string>((state) => state.stageId);
+const StageOrMixerSwitcher = (props: { className?: string }) => {
+  const currentStageId = useStageSelector<string>(state => state.stageId);
   const { pathname } = useRouter();
   const [mixerShown, setMixerShown] = useState<boolean>(false);
 
@@ -27,9 +25,7 @@ const StageOrMixerSwitcher = (props: {
     return (
       <Wrapper className={props.className}>
         <Link href={mixerShown ? '/' : '/mixer'}>
-          <Button
-            shape="circle"
-          >
+          <Button shape="circle">
             <Icon size={64} name={mixerShown ? 'stage' : 'mixer'} />
           </Button>
         </Link>

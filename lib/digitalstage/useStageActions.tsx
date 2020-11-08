@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 import {
   CustomGroupId,
   CustomStageMemberAudioProducerId,
@@ -10,10 +10,10 @@ import {
   StageId,
   StageMemberAudioProducerId,
   StageMemberId,
-  StageMemberOvTrackId,
-} from "./common/model.server";
-import * as Server from "./common/model.server";
-import { ThreeDimensionAudioProperties } from "./common/model.utils";
+  StageMemberOvTrackId
+} from './common/model.server';
+import * as Server from './common/model.server';
+import { ThreeDimensionAudioProperties } from './common/model.utils';
 import {
   AddCustomGroupPayload,
   AddCustomStageMemberPayload,
@@ -34,17 +34,17 @@ import {
   SetCustomStageMemberOvPayload,
   SetCustomStageMemberPayload,
   UpdateCustomGroupPayload,
-  UpdateCustomStageMemberPayload,
-} from "./common/payloads";
+  UpdateCustomStageMemberPayload
+} from './common/payloads';
 import {
   ClientDeviceEvents,
   ClientStageEvents,
-  ClientUserEvents,
-} from "./common/events";
-import { useRequest } from "../useRequest";
-import { useSocket } from "./useStageContext";
-import { NormalizedState } from "./useStageContext/schema";
-import { useSelector } from "./useStageContext/redux";
+  ClientUserEvents
+} from './common/events';
+import { useRequest } from '../useRequest';
+import { useSocket } from './useStageContext';
+import { NormalizedState } from './useStageContext/schema';
+import { useSelector } from './useStageContext/redux';
 
 export interface StageActionsProps {
   updateDevice(id: DeviceId, device: Partial<Device>);
@@ -134,16 +134,16 @@ export interface StageActionsProps {
 const useStageActions = (): StageActionsProps => {
   const socket = useSocket();
   const stageId = useSelector<NormalizedState, string | undefined>(
-    (state) => state.stageId
+    state => state.stageId
   );
   const { setRequest } = useRequest();
 
   const updateDevice = useCallback(
-    (deviceId: string, device: Partial<Omit<Device, "_id">>) => {
+    (deviceId: string, device: Partial<Omit<Device, '_id'>>) => {
       if (socket) {
         socket.emit(ClientDeviceEvents.UPDATE_DEVICE, {
           ...device,
-          _id: deviceId,
+          _id: deviceId
         });
       } else {
         throw new Error("Socket connection wasn't ready");
@@ -157,7 +157,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         socket.emit(ClientUserEvents.CHANGE_USER, {
           name,
-          avatarUrl,
+          avatarUrl
         });
       } else {
         throw new Error("Socket connection wasn't ready");
@@ -184,7 +184,7 @@ const useStageActions = (): StageActionsProps => {
           length: length || 13,
           height: height || 7.5,
           damping: reflection || 0.7,
-          absorption: absorption || 0.6,
+          absorption: absorption || 0.6
         };
         socket.emit(ClientStageEvents.ADD_STAGE, payload);
       }
@@ -197,7 +197,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: ChangeStagePayload = {
           id,
-          update: stage,
+          update: stage
         };
         socket.emit(ClientStageEvents.CHANGE_STAGE, payload);
       }
@@ -211,10 +211,10 @@ const useStageActions = (): StageActionsProps => {
         const payload: JoinStagePayload = {
           stageId,
           groupId,
-          password: password || undefined,
+          password: password || undefined
         };
         return new Promise<void>((resolve, reject) => {
-          socket.emit(ClientStageEvents.JOIN_STAGE, payload, (error) => {
+          socket.emit(ClientStageEvents.JOIN_STAGE, payload, error => {
             if (!error) resolve();
             else reject(error);
           });
@@ -257,7 +257,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: AddGroupPayload = {
           stageId,
-          name,
+          name
         };
         socket.emit(ClientStageEvents.ADD_GROUP, payload);
       }
@@ -270,7 +270,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: ChangeGroupPayload = {
           id,
-          update,
+          update
         };
         socket.emit(ClientStageEvents.CHANGE_GROUP, payload);
       }
@@ -299,7 +299,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: ChangeStageMemberPayload = {
           id,
-          update,
+          update
         };
         socket.emit(ClientStageEvents.CHANGE_STAGE_MEMBER, payload);
       }
@@ -315,7 +315,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: ChangeStageMemberOvTrackPayload = {
           id,
-          update,
+          update
         };
         socket.emit(ClientStageEvents.CHANGE_STAGE_MEMBER_OV, payload);
       }
@@ -331,7 +331,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: ChangeStageMemberAudioProducerPayload = {
           id,
-          update,
+          update
         };
         socket.emit(ClientStageEvents.CHANGE_STAGE_MEMBER_AUDIO, payload);
       }
@@ -345,7 +345,7 @@ const useStageActions = (): StageActionsProps => {
         const payload: SetCustomGroupPayload = {
           groupId,
           volume,
-          muted,
+          muted
         };
         socket.emit(ClientStageEvents.SET_CUSTOM_GROUP, payload);
       }
@@ -371,7 +371,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: SetCustomStageMemberPayload = {
           stageMemberId,
-          update,
+          update
         };
         socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER, payload);
       }
@@ -397,7 +397,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: SetCustomStageMemberAudioPayload = {
           stageMemberAudioId,
-          update,
+          update
         };
         socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER_AUDIO, payload);
       }
@@ -426,7 +426,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: SetCustomStageMemberOvPayload = {
           stageMemberOvTrackId,
-          update,
+          update
         };
         socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER_OV, payload);
       }
@@ -467,7 +467,7 @@ const useStageActions = (): StageActionsProps => {
     removeCustomStageMemberOv,
     updateStageMemberAudio,
     updateStageMemberOv,
-    leaveStageForGood,
+    leaveStageForGood
   };
 };
 

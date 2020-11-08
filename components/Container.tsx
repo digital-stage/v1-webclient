@@ -6,7 +6,7 @@ import { jsx, Box } from 'theme-ui';
 enum Type {
   default = 'default',
   flex = 'flex',
-  wide = 'wide',
+  wide = 'wide'
 }
 
 const Container = (props: {
@@ -28,7 +28,7 @@ const Container = (props: {
         mt: type === 'flex' && 4,
         mx: 'auto',
         px: 4, // px: '16px',
-        justifyContent: type === 'flex' && 'space-around',
+        justifyContent: type === 'flex' && 'space-around'
       }}
     >
       {children}

@@ -12,12 +12,12 @@ const Wrapper = styled('div', {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  zIndex: 100,
+  zIndex: 100
 });
 const Text = styled('div', {
   animationDuration: '1s',
   animationIterationCount: 'infinite',
-  animationName: 'bounce',
+  animationName: 'bounce'
 });
 
 const Loading = (props: { children: React.ReactNode }) => {

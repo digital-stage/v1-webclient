@@ -6,7 +6,7 @@ import NavItem from '../NavItem';
 
 const AppBarWrapper = styled('div', {
   width: '100%',
-  height: '72px',
+  height: '72px'
 });
 const AppBarIcon = styled('div', {});
 const AppBar = (props: {
@@ -20,7 +20,7 @@ const AppBar = (props: {
   return (
     <>
       <AppBarWrapper role="menu" className={className}>
-        <AppBarIcon onClick={() => setOpen((prev) => !prev)}>
+        <AppBarIcon onClick={() => setOpen(prev => !prev)}>
           <Menu />
         </AppBarIcon>
       </AppBarWrapper>
@@ -29,10 +29,10 @@ const AppBar = (props: {
           Root: {
             style: ({ $theme }) => ({
               [$theme.mediaQuery.medium]: {
-                display: 'none',
-              },
-            }),
-          },
+                display: 'none'
+              }
+            })
+          }
         }}
         autoFocus
         closeable
@@ -40,18 +40,19 @@ const AppBar = (props: {
         anchor="left"
         isOpen={open}
       >
-        {navItems && navItems.map((item, index) => (
-          <div
-            tabIndex={index}
-            role="presentation"
-            onClick={() => {
-              setOpen(false);
-              onSelected(item);
-            }}
-          >
-            {item.label}
-          </div>
-        ))}
+        {navItems &&
+          navItems.map((item, index) => (
+            <div
+              tabIndex={index}
+              role="presentation"
+              onClick={() => {
+                setOpen(false);
+                onSelected(item);
+              }}
+            >
+              {item.label}
+            </div>
+          ))}
       </Drawer>
     </>
   );

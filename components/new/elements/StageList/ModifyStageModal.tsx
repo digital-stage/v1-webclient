@@ -1,12 +1,21 @@
-import * as Yup from 'yup';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Box, Flex, Button } from 'theme-ui';
 import { useFormik } from 'formik';
-import React, { useEffect } from 'react';
+import * as Yup from 'yup';
+
 import {
-  Modal, ModalBody, ModalButton, ModalFooter, ModalHeader,
+  Modal,
+  ModalBody,
+  ModalButton,
+  ModalFooter,
+  ModalHeader
 } from 'baseui/modal/index';
 import { Input } from 'baseui/input/index';
 import { FormControl } from 'baseui/form-control/index';
 import { KIND } from 'baseui/button/index';
+
 import { Accordion, Panel } from 'baseui/accordion/index';
 import { Client } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
@@ -19,41 +28,52 @@ const Schema = Yup.object().shape({
   password: Yup.string()
     .min(5, 'Zu kurz')
     .max(50, 'Zu lang'),
-  width: Yup.number().min(0.1).max(1000),
-  length: Yup.number().min(0.1).max(1000),
-  height: Yup.number().min(0.1).max(1000),
-  absorption: Yup.number().min(0.1).max(1),
-  reflection: Yup.number().min(0.1).max(1),
+  width: Yup.number()
+    .min(0.1)
+    .max(1000),
+  length: Yup.number()
+    .min(0.1)
+    .max(1000),
+  height: Yup.number()
+    .min(0.1)
+    .max(1000),
+  absorption: Yup.number()
+    .min(0.1)
+    .max(1),
+  reflection: Yup.number()
+    .min(0.1)
+    .max(1)
 });
 
 const ModifyStageModal = (props: {
   stage: Client.Stage;
   isOpen?: boolean;
   onClose?: () => any;
-
 }) => {
   const { stage, isOpen, onClose } = props;
   const { updateStage } = useStageActions();
   const formik = useFormik({
-    initialValues: stage ? {
-      name: stage.name,
-      password: stage.password,
-      width: stage.width,
-      length: stage.length,
-      height: stage.height,
-      absorption: stage.absorption,
-      damping: stage.damping,
-    } : {
-      name: '',
-      password: '',
-      width: 25,
-      length: 13,
-      height: 7.5,
-      damping: 0.7,
-      absorption: 0.6,
-    },
+    initialValues: stage
+      ? {
+          name: stage.name,
+          password: stage.password,
+          width: stage.width,
+          length: stage.length,
+          height: stage.height,
+          absorption: stage.absorption,
+          damping: stage.damping
+        }
+      : {
+          name: '',
+          password: '',
+          width: 25,
+          length: 13,
+          height: 7.5,
+          damping: 0.7,
+          absorption: 0.6
+        },
     validationSchema: Schema,
-    onSubmit: (values) => {
+    onSubmit: values => {
       updateStage(stage._id, {
         name: values.name,
         password: values.password,
@@ -61,14 +81,13 @@ const ModifyStageModal = (props: {
         length: values.length,
         height: values.height,
         absorption: values.absorption,
-        damping: values.damping,
+        damping: values.damping
       });
-      // Close modal
       onClose();
-    },
+    }
   });
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (stage) {
       formik.setValues({
         name: stage.name,
@@ -77,7 +96,7 @@ const ModifyStageModal = (props: {
         length: stage.length,
         height: stage.height,
         absorption: stage.absorption,
-        damping: stage.damping,
+        damping: stage.damping
       });
     }
   }, [stage]);
@@ -197,11 +216,10 @@ const ModifyStageModal = (props: {
           </Accordion>
         </ModalBody>
         <ModalFooter>
-          <ModalButton type="button" kind={KIND.tertiary} onClick={onClose}>Abbrechen</ModalButton>
-          <ModalButton
-            disabled={!formik.isValid}
-            type="submit"
-          >
+          <ModalButton type="button" kind={KIND.tertiary} onClick={onClose}>
+            Abbrechen
+          </ModalButton>
+          <ModalButton disabled={!formik.isValid} type="submit">
             Bühne ändern
           </ModalButton>
         </ModalFooter>

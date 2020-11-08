@@ -6,19 +6,12 @@ const Wrapper = styled('div', ({ $theme }) => ({
   display: 'flex',
   flexDirection: 'row',
   borderRadius: '20px',
-  marginRight: '1rem',
+  marginRight: '1rem'
 }));
 
-const Panel = (props: {
-  children: React.ReactNode,
-  className?: string
-}) => {
+const Panel = (props: { children: React.ReactNode; className?: string }) => {
   const { children, className } = props;
 
-  return (
-    <Wrapper className={className}>
-      {children}
-    </Wrapper>
-  );
+  return <Wrapper className={className}>{children}</Wrapper>;
 };
 export default Panel;

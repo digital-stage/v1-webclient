@@ -21,11 +21,11 @@ const Logout = () => {
 
   return (
     loggedOut && (
-    <Layout>
-      <Container>
-        <Heading>Abgemeldet!</Heading>
-      </Container>
-    </Layout>
+      <Layout>
+        <Container>
+          <Heading>Abgemeldet!</Heading>
+        </Container>
+      </Layout>
     )
   );
 };

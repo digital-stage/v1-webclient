@@ -7,27 +7,23 @@ const Wrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  justifyContent: 'center',
+  justifyContent: 'center'
 });
 
 const VolumeAction = styled('div', {
   display: 'block',
-  paddingBottom: '.6rem',
+  paddingBottom: '.6rem'
 });
 
-const LevelControlFader = (
-  props: {
-    muted: boolean;
-    volume: number;
-    color?: RGBColor;
-    onChanged: (volume: number, muted: boolean) => any;
-    className?: string;
-    alignLabel?: 'left' | 'right'
-  },
-) => {
-  const {
-    volume, onChanged, muted, className, color, alignLabel,
-  } = props;
+const LevelControlFader = (props: {
+  muted: boolean;
+  volume: number;
+  color?: RGBColor;
+  onChanged: (volume: number, muted: boolean) => any;
+  className?: string;
+  alignLabel?: 'left' | 'right';
+}) => {
+  const { volume, onChanged, muted, className, color, alignLabel } = props;
   const [value, setValue] = useState<number>(volume);
 
   useEffect(() => {
@@ -38,15 +34,16 @@ const LevelControlFader = (
     onChanged(value, !muted);
   }, [value, muted]);
 
-  const handleEnd = useCallback((updatedVolume: number) => {
-    setValue(updatedVolume);
-    onChanged(updatedVolume, muted);
-  }, [muted]);
+  const handleEnd = useCallback(
+    (updatedVolume: number) => {
+      setValue(updatedVolume);
+      onChanged(updatedVolume, muted);
+    },
+    [muted]
+  );
 
   return (
-    <Wrapper
-      className={className}
-    >
+    <Wrapper className={className}>
       <VolumeAction>
         <Button
           kind={muted ? 'primary' : 'minimal'}
@@ -64,7 +61,7 @@ const LevelControlFader = (
         width={16}
         color={color || [255, 255, 255]}
         volume={value}
-        onChange={(changedVolume) => setValue(changedVolume)}
+        onChange={changedVolume => setValue(changedVolume)}
         onEnd={handleEnd}
         alignLabel={alignLabel}
       />

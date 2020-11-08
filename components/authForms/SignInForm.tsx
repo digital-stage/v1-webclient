@@ -1,17 +1,11 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import {
-  jsx, Box, Button, Flex, Label, Text,
-} from 'theme-ui';
-import {
-  Formik, Form, Field, FormikHelpers,
-} from 'formik';
+import { jsx, Box, Button, Flex, Label, Text, Message } from 'theme-ui';
+import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { errorMonitor } from 'stream';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import InputField from '../InputField';
-import { useErrors } from '../../lib/useErrors';
 
 export interface Values {
   email: string;
@@ -26,13 +20,18 @@ export interface IError {
 
 const SignInForm = () => {
   const { signInWithEmailAndPassword } = useAuth();
-  const { reportError } = useErrors;
+
+  const [msg, setMsg] = React.useState({
+    state: false,
+    type: null,
+    kids: null
+  });
 
   const SignInSchema = Yup.object().shape({
     email: Yup.string()
       .email('Enter a valid email')
       .required('Email is required'),
-    password: Yup.string().required('Password is required'),
+    password: Yup.string().required('Password is required')
   });
 
   return (
@@ -41,22 +40,32 @@ const SignInForm = () => {
         initialValues={{
           email: '',
           password: '',
-          staySignedIn: false,
+          staySignedIn: false
         }}
         validationSchema={SignInSchema}
         // eslint-disable-next-line max-len
-        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) => signInWithEmailAndPassword(
-          values.email,
-          values.password,
-          values.staySignedIn,
-        )
-          .then(() => {
-            resetForm(null);
-          })
-          .catch((err) => reportError(err.message))}
+        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) =>
+          signInWithEmailAndPassword(
+            values.email,
+            values.password,
+            values.staySignedIn
+          )
+            .then(() => {
+              resetForm(null);
+            })
+            .catch(err =>
+              setMsg({
+                state: true,
+                type: 'danger',
+                kids: { err }
+              })
+            )
+        }
       >
         {({ errors, touched }) => (
           <Form>
+            {msg.state && <Message variant={msg.type}>{msg.kids}</Message>}
+
             <Field
               as={InputField}
               id="email"

@@ -22,25 +22,6 @@ export default {
       '#101010',
       '#000000',
     ],
-    modes: {
-      dark: {
-        text: '#fff',
-        background: '#1c1c1c',
-        primary: '#F52887',
-        secondary: '#4EE2EC',
-        muted: 'lightgray',
-        accent: 'secondary',
-        danger: '#d13b40',
-        gray: [
-          'whitesmoke',
-          'gainsboro',
-          'lightgray',
-          'silver',
-          'darkgray',
-          'gray',
-        ],
-      },
-    },
   },
   fonts: {
     body: "'Open Sans', Verdana, sans-serif",
@@ -147,6 +128,16 @@ export default {
       m: 0,
       p: 0,
       cursor: 'pointer',
+    },
+    circle: {
+      border: 'none',
+      m: 0,
+      p: 0,
+      bg: 'secondary',
+      width: '64px',
+      height: '64px',
+      color: 'text',
+      borderRadius: '32px',
     },
   },
   links: {
