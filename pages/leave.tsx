@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Typography } from '@material-ui/core';
+import { Display } from 'baseui/typography';
 import Loading from '../components/new/elements/Loading';
 import useStageActions from '../lib/digitalstage/useStageActions';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
@@ -20,7 +20,7 @@ const Leave = () => {
 
   return (
     <Loading>
-      <Typography variant="h1">Verlasse Bühne...</Typography>
+      <Display>Verlasse Bühne...</Display>
     </Loading>
   );
 };

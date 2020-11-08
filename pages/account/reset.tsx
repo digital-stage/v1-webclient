@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Typography } from '@material-ui/core';
+import { Display, HeadingLarge } from 'baseui/typography';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Loading from '../../components/new/elements/Loading';
-import ResetPassword from '../../components/digital-stage-sign-in/ResetPassword';
 import PageWrapper from '../../components/new/elements/PageWrapper';
+import ResetPasswordForm from '../../components/new/forms/ResetPasswordForm';
+import Container from '../../components/new/elements/Container';
 
 const Reset = () => {
   const router = useRouter();
@@ -16,20 +17,19 @@ const Reset = () => {
       router.push('/');
     } else {
       return (
-      // <Container>
-      //     <HeadingLarge>Passwort zurücksetzen</HeadingLarge>
         <PageWrapper>
-          {token && !Array.isArray(token) && (
-          // <ResetForm resetToken={token}/>
-          <ResetPassword resetToken={token} targetUrl="/account/login" />
-          )}
+          <Container>
+            <HeadingLarge>Passwort zurücksetzen</HeadingLarge>
+            {token && !Array.isArray(token) && (
+            <ResetPasswordForm resetToken={token} targetUrl="/account/login" />
+            )}
+          </Container>
         </PageWrapper>
-      // </Container>
       );
     }
   }
 
-  return <Loading><Typography variant="h1">Lade...</Typography></Loading>;
+  return <Loading><Display>Lade...</Display></Loading>;
 };
 
 export default Reset;
