@@ -2,6 +2,7 @@ import React from 'react';
 import { useStyletron } from 'baseui';
 import { Cell, Grid } from 'baseui/layout-grid';
 import { Heading } from 'baseui/heading';
+import { H2 } from 'baseui/typography';
 import StageMemberView from './StageMemberView';
 import { Group } from '../../../../lib/digitalstage/useStageContext/model';
 import { useStageMembersByGroup } from '../../../../lib/digitalstage/useStageSelector';
@@ -18,7 +19,7 @@ const GroupView = (props: {
       <div className={css({})}>
         <Grid>
           <Cell span={12}>
-            <Heading>{props.group.name}</Heading>
+            <H2>{props.group.name}</H2>
           </Cell>
         </Grid>
         <div className={css({

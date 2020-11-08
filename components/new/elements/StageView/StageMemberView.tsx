@@ -1,7 +1,7 @@
 import { useStyletron } from 'baseui';
 import React from 'react';
 import { Avatar } from 'baseui/avatar';
-import { HeadingSmall } from 'baseui/typography';
+import { H5, HeadingSmall } from 'baseui/typography';
 import { Hide, Show } from 'baseui/icon';
 import OnlineStatus from '../OnlineStatus';
 import { ExtendedStageMember, useIsStageAdmin } from '../../../../lib/digitalstage/useStageSelector';
@@ -36,7 +36,7 @@ const StageMemberTitle = (props: {
           flexGrow: 1,
         })}
         >
-          <HeadingSmall>{stageMember.name}</HeadingSmall>
+          <H5>{stageMember.name}</H5>
         </div>
 
         {isAdmin && (

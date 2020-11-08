@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Display, HeadingLarge } from 'baseui/typography';
+import { Display, H1, HeadingLarge } from 'baseui/typography';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Loading from '../../components/new/elements/Loading';
 import PageWrapper from '../../components/new/elements/PageWrapper';
@@ -19,7 +19,7 @@ const Reset = () => {
       return (
         <PageWrapper>
           <Container>
-            <HeadingLarge>Passwort zurücksetzen</HeadingLarge>
+            <H1>Passwort zurücksetzen</H1>
             {token && !Array.isArray(token) && (
             <ResetPasswordForm resetToken={token} targetUrl="/account/login" />
             )}

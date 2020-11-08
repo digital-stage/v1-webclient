@@ -1,4 +1,4 @@
-import { HeadingLarge } from 'baseui/typography';
+import { H1, HeadingLarge } from 'baseui/typography';
 import React from 'react';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import useStageSelector from '../../lib/digitalstage/useStageSelector';
@@ -16,9 +16,9 @@ const Profile = () => {
       <Container>
         {user && (
         <>
-          <HeadingLarge>{user.name}</HeadingLarge>
-          <HeadingLarge>{authUser.email}</HeadingLarge>
-          <HeadingLarge>{user.avatarUrl}</HeadingLarge>
+          <H1>{user.name}</H1>
+          <H1>{authUser.email}</H1>
+          <H1>{user.avatarUrl}</H1>
         </>
         )}
       </Container>

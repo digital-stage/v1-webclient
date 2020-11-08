@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DisplayMedium, HeadingLarge } from 'baseui/typography';
+import { DisplayMedium, H1, HeadingLarge } from 'baseui/typography';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Loading from '../../components/new/elements/Loading';
@@ -24,7 +24,7 @@ const Logout = () => {
       return (
         <PageWrapper>
           <Container>
-            <HeadingLarge>Abgemeldet!</HeadingLarge>
+            <H1>Abgemeldet!</H1>
           </Container>
         </PageWrapper>
       );

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { HeadingLarge } from 'baseui/typography';
+import { H1, HeadingLarge } from 'baseui/typography';
 import { Input } from 'baseui/input';
 import { FormControl } from 'baseui/form-control';
 import { Button } from 'baseui/button';
@@ -25,7 +25,7 @@ const Forgot = () => {
     } else {
       return (
         <Container>
-          <HeadingLarge>Passwort zurücksetzen</HeadingLarge>
+          <H1>Passwort zurücksetzen</H1>
           <FormControl
             label="E-Mail Adresse"
           >
