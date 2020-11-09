@@ -1,23 +1,27 @@
-import React, { useCallback, useEffect, useState } from 'react';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import {
+  jsx, Box, Button, Flex,
+} from 'theme-ui';
 import { useStyletron } from 'baseui';
-import Icon from '../../../../uikit/Icon';
+import { FaMicrophone } from 'react-icons/fa';
 import { useAudioContext } from '../../../../lib/useAudioContext';
-import Button from '../../../../uikit/Button';
 
 const FixedAudioPlaybackStarterButton = () => {
   const [css, theme] = useStyletron();
   const { audioContext, createAudioContext } = useAudioContext();
-  const [valid, setValid] = useState<boolean>(
-    audioContext && audioContext.state === 'running'
+  const [valid, setValid] = React.useState<boolean>(
+    audioContext && audioContext.state === 'running',
   );
 
-  useEffect(() => {
+  React.useEffect(() => {
     setValid(audioContext && audioContext.state === 'running');
   }, [audioContext]);
 
-  const start = useCallback(() => {
+  const start = React.useCallback(() => {
     if (!audioContext) {
-      return createAudioContext().then(createdAudioContext => {
+      return createAudioContext().then((createdAudioContext) => {
         if (createdAudioContext.state === 'suspended') {
           return createdAudioContext.resume().then(() => {
             if (createdAudioContext.state === 'running') setValid(true);
@@ -41,20 +45,15 @@ const FixedAudioPlaybackStarterButton = () => {
           color: theme.colors.warning,
 
           [theme.mediaQuery.large]: {
-            left: '4rem'
-          }
+            left: '4rem',
+          },
         })}
       >
-        <Button kind="minimal" shape="circle" onClick={() => start()}>
-          <Icon
-            className={css({
-              color: theme.colors.warning,
-              ':hover': {
-                color: theme.colors.warning700
-              }
-            })}
+        <Button kind="minimal" variant="circle" onClick={() => start()}>
+          <FaMicrophone
+            sx={{ color: 'accent' }}
             size={64}
-            name="speaker-off"
+            name="Microphone Off"
           />
         </Button>
       </div>

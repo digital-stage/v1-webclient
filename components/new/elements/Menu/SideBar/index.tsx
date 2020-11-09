@@ -1,79 +1,55 @@
-import { styled } from 'baseui';
-import React from 'react';
-import { Theme } from 'baseui/theme';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Box, Flex } from 'theme-ui';
 import NavItem from '../NavItem';
 
-const SideBarWrapper = styled('div', ({ $theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  backgroundColor: $theme.colors.backgroundSecondary
-}));
-
-const SideBarItem = styled<{ $selected: boolean }, 'div', Theme>(
-  'div',
-  ({ $theme, $selected }) => ({
-    width: '100%',
-    paddingLeft: '1rem',
-    paddingRight: '1rem',
-    color: $selected ? $theme.colors.primary100 : $theme.colors.primary600,
-    backgroundColor: $selected ? $theme.colors.backgroundPrimary : 'none',
-    outline: 'none'
-  })
-);
-
 const SideBar = (props: {
-  className?: string;
   upperLinks?: NavItem[];
   centeredLinks?: NavItem[];
   lowerLinks?: NavItem[];
-  onSelected: (navItem: NavItem) => void;
   selected?: NavItem;
+  onSelected: (navItem: NavItem) => void;
 }) => {
   const {
-    className,
     upperLinks,
     centeredLinks,
     lowerLinks,
     onSelected,
-    selected
+    selected,
   } = props;
 
+  const SideBarItem = (item, index) => (
+    <Box
+      selected={selected && item.label === selected.label}
+      tabIndex={index}
+      role="presentation"
+      onClick={() => onSelected(item)}
+      sx={{
+        width: '100%',
+        color: 'text',
+        bg: 'primary',
+        px: '1rem',
+        outline: 'none',
+      }}
+    >
+      {item.icon ? item.icon : item.label}
+    </Box>
+  );
+
   return (
-    <SideBarWrapper role="menu" className={className}>
-      {upperLinks &&
-        upperLinks.map((item, index) => (
-          <SideBarItem
-            $selected={selected && item.label === selected.label}
-            tabIndex={index}
-            role="presentation"
-            onClick={() => onSelected(item)}
-          >
-            {item.icon ? item.icon : item.label}
-          </SideBarItem>
-        ))}
-      {centeredLinks &&
-        centeredLinks.map((item, index) => (
-          <SideBarItem
-            $selected={selected && item.label === selected.label}
-            tabIndex={index}
-            role="presentation"
-            onClick={() => onSelected(item)}
-          >
-            {item.icon ? item.icon : item.label}
-          </SideBarItem>
-        ))}
-      {lowerLinks &&
-        lowerLinks.map((item, index) => (
-          <SideBarItem
-            $selected={selected && item.label === selected.label}
-            tabIndex={index}
-            role="presentation"
-            onClick={() => onSelected(item)}
-          >
-            {item.icon ? item.icon : item.label}
-          </SideBarItem>
-        ))}
-    </SideBarWrapper>
+    <Flex role="menu" sx={{ flexDirection: 'column', bg: 'red' }}>
+      {upperLinks && upperLinks.map((item, index) => (
+        <SideBarItem item={item} index={index} selected={selected} />
+      ))}
+      {centeredLinks && centeredLinks.map((item, index) => (
+        <SideBarItem item={item} index={index} selected={selected} />
+      ))}
+      {lowerLinks && lowerLinks.map((item, index) => (
+        <SideBarItem item={item} index={index} selected={selected} />
+      ))}
+    </Flex>
   );
 };
+
 export default SideBar;
