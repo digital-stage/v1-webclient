@@ -4,11 +4,11 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useState
+  useState,
 } from 'react';
 import {
   AudioContext as RealAudioContext,
-  IAudioContext
+  IAudioContext,
 } from 'standardized-audio-context';
 import webAudioTouchUnlock from './webAudioTouchUnlock';
 import { useErrors } from '../useErrors';
@@ -20,7 +20,7 @@ interface AudioContextProps {
 }
 
 const AudioContext: Context<AudioContextProps> = createContext<
-  AudioContextProps
+AudioContextProps
 >(undefined);
 
 export const AudioContextProvider = (props: { children: React.ReactNode }) => {
@@ -33,30 +33,25 @@ export const AudioContextProvider = (props: { children: React.ReactNode }) => {
       return context;
     }
     const audioContext: IAudioContext = new RealAudioContext();
-    console.log(
-      `Base latency with sample rate ${audioContext.sampleRate}: ${Math.round(
-        1000 * audioContext.baseLatency
-      )}ms`
-    );
 
     return webAudioTouchUnlock(audioContext)
       .then(() => audioContext)
-      .catch(error => reportError(error.message));
+      .catch((error) => reportError(error.message));
   }, []);
 
   useEffect(() => {
     createAudioContext()
-      .then(audioContext => {
+      .then((audioContext) => {
         setContext(audioContext);
       })
-      .catch(error => reportError(error.message));
+      .catch((error) => reportError(error.message));
   }, []);
 
   return (
     <AudioContext.Provider
       value={{
         audioContext: context,
-        createAudioContext
+        createAudioContext,
       }}
     >
       {children}
@@ -64,5 +59,4 @@ export const AudioContextProvider = (props: { children: React.ReactNode }) => {
   );
 };
 
-export const useAudioContext = () =>
-  useContext<AudioContextProps>(AudioContext);
+export const useAudioContext = () => useContext<AudioContextProps>(AudioContext);

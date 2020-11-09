@@ -88,63 +88,60 @@ export const createWebRTCTransport = (
   socket: SocketIOClient.Socket,
   device: mediasoupClient.Device,
   direction: 'send' | 'receive',
-): Promise<mediasoupClient.types.Transport> => {
-  console.log('createWebRTCTransport');
-  return new Promise<mediasoupClient.types.Transport>((resolve, reject) => {
-    socket.emit(
-      RouterRequests.CreateTransport,
-      {},
-      (
-        error: string,
-        transportOptions: mediasoupClient.types.TransportOptions,
-      ) => {
-        if (error) {
-          return reject(error);
-        }
-        const transport: mediasoupClient.types.Transport = direction === 'send'
-          ? device.createSendTransport(transportOptions)
-          : device.createRecvTransport(transportOptions);
-        transport.on(
-          'connect',
-          async ({ dtlsParameters }, callback, errCallback) => {
-            socket.emit(
-              RouterRequests.ConnectTransport,
-              {
-                transportId: transport.id,
-                dtlsParameters,
-              },
-              (transportError: string) => {
-                if (transportError) return errCallback(error);
-                return callback();
-              },
-            );
-          },
-        );
-        if (direction === 'send') {
-          transport.on('produce', async (producer, callback, errCallback) => {
-            socket.emit(
-              RouterRequests.CreateProducer,
-              {
-                transportId: transport.id,
-                kind: producer.kind,
-                rtpParameters: producer.rtpParameters,
-                appData: producer.appData,
-              },
-              (produceError, payload) => {
-                if (produceError) return errCallback(produceError);
-                return callback({
-                  ...producer,
-                  id: payload.id,
-                });
-              },
-            );
-          });
-        }
-        return resolve(transport);
-      },
-    );
-  });
-};
+): Promise<mediasoupClient.types.Transport> => new Promise<mediasoupClient.types.Transport>((resolve, reject) => {
+  socket.emit(
+    RouterRequests.CreateTransport,
+    {},
+    (
+      error: string,
+      transportOptions: mediasoupClient.types.TransportOptions,
+    ) => {
+      if (error) {
+        return reject(error);
+      }
+      const transport: mediasoupClient.types.Transport = direction === 'send'
+        ? device.createSendTransport(transportOptions)
+        : device.createRecvTransport(transportOptions);
+      transport.on(
+        'connect',
+        async ({ dtlsParameters }, callback, errCallback) => {
+          socket.emit(
+            RouterRequests.ConnectTransport,
+            {
+              transportId: transport.id,
+              dtlsParameters,
+            },
+            (transportError: string) => {
+              if (transportError) return errCallback(error);
+              return callback();
+            },
+          );
+        },
+      );
+      if (direction === 'send') {
+        transport.on('produce', async (producer, callback, errCallback) => {
+          socket.emit(
+            RouterRequests.CreateProducer,
+            {
+              transportId: transport.id,
+              kind: producer.kind,
+              rtpParameters: producer.rtpParameters,
+              appData: producer.appData,
+            },
+            (produceError, payload) => {
+              if (produceError) return errCallback(produceError);
+              return callback({
+                ...producer,
+                id: payload.id,
+              });
+            },
+          );
+        });
+      }
+      return resolve(transport);
+    },
+  );
+});
 
 export const createProducer = (
   transport: mediasoupClient.types.Transport,

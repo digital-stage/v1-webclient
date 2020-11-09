@@ -8,16 +8,13 @@ interface Props {
   variant?: 'primary' | 'secondary' | 'light' | 'dark';
 }
 
-const Button = ({ children, variant = 'primary' }: Props) => {
-  console.log(variant);
-  return (
-    <ThemeButton
-      sx={{
-        variant: `buttons.${variant}`
-      }}
-    >
-      {children}
-    </ThemeButton>
-  );
-};
+const Button = ({ children, variant = 'primary' }: Props) => (
+  <ThemeButton
+    sx={{
+      variant: `buttons.${variant}`,
+    }}
+  >
+    {children}
+  </ThemeButton>
+);
 export default Button;

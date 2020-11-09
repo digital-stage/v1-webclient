@@ -1,10 +1,12 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback, useRef, useState,
+} from 'react';
 import {
   Modal,
   ModalBody,
   ModalButton,
   ModalFooter,
-  ModalHeader
+  ModalHeader,
 } from 'baseui/modal';
 import { Input } from 'baseui/input';
 import { useRequest } from '../../../lib/useRequest';
@@ -20,10 +22,12 @@ import useStageSelector from '../../../lib/digitalstage/useStageSelector';
  * @constructor
  */
 const StageJoiner = () => {
-  const { ready } = useStageSelector(state => ({
-    ready: state.ready
+  const { ready } = useStageSelector((state) => ({
+    ready: state.ready,
   }));
-  const { stageId, groupId, password, setRequest } = useRequest();
+  const {
+    stageId, groupId, password, setRequest,
+  } = useRequest();
   const { joinStage } = useStageActions();
   const [retries, setRetries] = useState<number>(0);
   const [wrongPassword, setWrongPassword] = useState<boolean>();
@@ -32,28 +36,23 @@ const StageJoiner = () => {
 
   const retryJoiningStage = useCallback(() => {
     // Try to connect
-    console.log(`Joining stage${stageId}`);
     joinStage(stageId, groupId, password)
-      .catch(error => {
-        console.log('Could not join stage');
-        console.log(error);
+      .catch((error) => {
+        console.error(error);
         if (error === Errors.INVALID_PASSWORD) {
           setWrongPassword(true);
         } else {
           setNotFound(true);
         }
       })
-      .then(() => {
-        console.log('Joined');
-      });
+      .then(() => {});
   }, [joinStage, stageId, groupId, password]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (ready) {
       if (stageId && groupId) {
         setNotFound(false);
         setWrongPassword(false);
-        console.log('Connecting');
         retryJoiningStage();
       }
     }
@@ -92,7 +91,7 @@ const StageJoiner = () => {
             isSelected
             onClick={() => {
               const updatePassword = passwordRef.current.value;
-              setRetries(prevState => prevState + 1);
+              setRetries((prevState) => prevState + 1);
               setRequest(stageId, groupId, updatePassword);
             }}
           >
