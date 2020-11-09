@@ -107,6 +107,11 @@ export default {
       color: 'background',
       bg: 'text',
     },
+    black: {
+      variant: 'buttons.primary',
+      color: 'text',
+      bg: 'background',
+    },
     outline: {
       variant: 'buttons.primary',
       borderColor: 'text',
