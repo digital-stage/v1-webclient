@@ -11,9 +11,15 @@ enum Size {
   wide = 'wide',
 }
 
-const Container = (props: { children: React.ReactNode; row?: boolean; size?: Size }): JSX.Element => {
-  const { children, row = false, size = 'default' } = props;
-
+const Container = ({
+  children,
+  row = false,
+  size = Size.default,
+}: {
+  children: React.ReactNode;
+  row?: boolean;
+  size?: Size;
+}): JSX.Element => {
   return (
     <Flex
       sx={{

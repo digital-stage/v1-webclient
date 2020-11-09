@@ -4,7 +4,6 @@ import * as React from 'react';
 import { jsx, Box, Flex } from 'theme-ui';
 import Card from './Card';
 
-
 const AuthPageContainer = (props: { children: React.ReactNode }): JSX.Element => {
   const { children } = props;
 

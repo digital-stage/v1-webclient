@@ -53,15 +53,24 @@ const DialogContent = withStyles((theme: Theme) => ({
   },
 }))(MuiDialogContent);
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   paper: {
     width: '400px',
     margin: '0 auto',
   },
 }));
 
-const ResetLinkModal = (props: { open: boolean; resend?: boolean }) => {
-  const { open, resend } = props;
+const ResetLinkModal = ({
+  open,
+  resend,
+  handleClose,
+  onClick,
+}: {
+  open: boolean;
+  resend?: boolean;
+  handleClose: () => void;
+  onClick: () => void;
+}): JSX.Element => {
   const classes = useStyles();
 
   return (
@@ -69,12 +78,12 @@ const ResetLinkModal = (props: { open: boolean; resend?: boolean }) => {
       <Box />
       <div>
         <Dialog
-          onClose={props.handleClose}
+          onClose={handleClose}
           aria-labelledby="customized-dialog-title"
           open={open}
           className={classes.paper}
         >
-          <DialogTitle id="customized-dialog-title" onClose={props.handleClose} />
+          <DialogTitle id="customized-dialog-title" onClose={handleClose} />
           <DialogContent>
             <Heading as="h5">
               {!resend
@@ -89,7 +98,7 @@ const ResetLinkModal = (props: { open: boolean; resend?: boolean }) => {
                 : 'Your activation link has been sent to your e-mail address. If you still have not received your email check your e-mail address'}
             </Typography>
 
-            {!resend && <Button onClick={props.onClick}>Resend reset link</Button>}
+            {!resend && <Button onClick={onClick}>Resend reset link</Button>}
           </DialogContent>
         </Dialog>
       </div>

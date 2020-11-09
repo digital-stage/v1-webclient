@@ -21,9 +21,7 @@ const MobileAppBar = styled(AppBar)({
   flexGrow: 0,
 });
 
-const PageWrapperWithStage = (props: { children: React.ReactNode }) => {
-  const { children } = props;
-
+const PageWrapperWithStage = ({ children }: { children: React.ReactNode }): JSX.Element => {
   const { user } = useAuth();
 
   const [currentItem, setCurrentItem] = React.useState<NavItem>();
