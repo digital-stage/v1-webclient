@@ -103,6 +103,11 @@ export default {
       color: 'background',
       bg: 'text',
     },
+    black: {
+      variant: 'buttons.primary',
+      color: 'text',
+      bg: 'background',
+    },
     login: {
       fontFamily: 'heading',
       fontSize: 3,

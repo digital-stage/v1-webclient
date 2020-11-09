@@ -1,28 +1,20 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Flex, Button } from 'theme-ui';
-import { useFormik } from 'formik';
+import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import {
-  Modal,
-  ModalBody,
-  ModalButton,
-  ModalFooter,
-  ModalHeader
-} from 'baseui/modal';
-import { Input } from 'baseui/input';
-import { FormControl } from 'baseui/form-control';
-import { KIND } from 'baseui/button';
 import { Client } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
+import Modal from '../Modal';
+import InputField from '../../../InputField';
+import { jsx, Button, Flex, Heading, Message } from 'theme-ui';
 
-const Schema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, 'Zu kurz')
-    .max(100, 'Zu lang')
-    .required('Wird benötigt')
-});
+export interface Values {
+  name: string;
+}
+export interface IError {
+  name?: string;
+}
 
 const CreateGroupModal = (props: {
   stage: Client.Stage;
@@ -30,53 +22,71 @@ const CreateGroupModal = (props: {
   onClose?: () => any;
 }) => {
   const { stage, isOpen, onClose } = props;
+  const [msg, setMsg] = React.useState({
+    state: false,
+    type: null,
+    kids: null
+  });
   const { createGroup } = useStageActions();
-  const formik = useFormik({
-    validateOnMount: true,
-    initialValues: {
-      name: ''
-    },
-    validationSchema: Schema,
-    onSubmit: values => {
-      createGroup(stage._id, values.name);
-      props.onClose();
-    }
+
+  const CreateGroupSchema = Yup.object().shape({
+    name: Yup.string()
+      .min(2, 'Zu kurz')
+      .max(100, 'Zu lang')
+      .required('Wird benötigt')
   });
 
   return (
     <Modal
-      closeable
       isOpen={isOpen}
       onClose={onClose}
-      unstable_ModalBackdropScroll
     >
-      <form onSubmit={formik.handleSubmit}>
-        <ModalHeader>Neue Gruppe erstellen</ModalHeader>
-        <ModalBody>
-          <FormControl
-            label={() => 'Name'}
-            caption={() => 'Gib der Gruppe einen aussagekräftigen Namen'}
-            error={formik.errors.name}
-          >
-            <Input
+      <Formik
+        initialValues={{
+          name: ''
+        }}
+        validationSchema={CreateGroupSchema}
+        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) => {
+          createGroup(stage._id, values.name)
+          props.onClose()
+            .then(() => {
+              resetForm(null);
+            })
+            .catch(err =>
+              setMsg({
+                state: true,
+                type: 'danger',
+                kids: { err }
+              })
+            )
+        }}
+      >
+        {({ errors, touched }) => (
+          <Form>
+            {msg.state && <Message variant={msg.type}>{msg.kids}</Message>}
+
+            <Heading as="h3" sx={{ color: "background", fontSize: 3 }}>Neue Gruppe erstellen</Heading>
+            <Field
+              as={InputField}
               required
               type="text"
               name="name"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+              id="name"
+              label="Group name"
+              version="dark"
+              error={errors.name && touched.name}
             />
-          </FormControl>
-        </ModalBody>
-        <ModalFooter>
-          <ModalButton type="button" kind={KIND.tertiary} onClick={onClose}>
-            Abbrechen
-          </ModalButton>
-          <ModalButton disabled={!formik.isValid} type="submit">
-            Gruppe erstellen
-          </ModalButton>
-        </ModalFooter>
-      </form>
+            <Flex sx={{ justifyContent: "space-between", py: 3 }}>
+              <Button variant="black" onClick={onClose}>
+                Abbrechen
+               </Button>
+              <Button type="submit">
+                Gruppe erstellen
+               </Button>
+            </Flex>
+          </Form>
+        )}
+      </Formik>
     </Modal>
   );
 };

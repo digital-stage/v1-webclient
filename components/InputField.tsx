@@ -5,13 +5,16 @@ import { jsx, Input, Label, Box, Text } from 'theme-ui';
 import { ErrorMessage } from 'formik';
 
 // TODO: add TS interface / type
-const InputField = ({ id, label, name, error, ...rest }) => (
+export interface Type {
+  version: "light" | "dark";
+}
+const InputField = ({ id, label, name, error, version, ...rest }) => (
   <Box sx={{ mt: 4 }}>
     <Label
       htmlFor={id}
       sx={{
         fontSize: 12,
-        color: 'muted',
+        color: version === "dark" ? "#00000099" : 'muted',
         pl: 2,
         bg: error && '#9D131364'
       }}
@@ -25,10 +28,10 @@ const InputField = ({ id, label, name, error, ...rest }) => (
       {...rest}
       sx={{
         bg: error ? 'dangerBg' : 'transparent',
-        color: 'text',
+        color: version === "dark" ? 'background' : 'text',
         border: 'transparent',
         borderBottom: '1px solid transparent',
-        borderBottomColor: error ? 'dangerUnderline' : 'text',
+        borderBottomColor: error ? 'dangerUnderline' : version === "dark" ? 'background' : 'text',
         borderRadius: 0,
         width: '100%',
         ':active,:-webkit-autofill': {
