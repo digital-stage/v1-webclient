@@ -32,19 +32,14 @@ const StageJoiner = () => {
 
   const retryJoiningStage = useCallback(() => {
     // Try to connect
-    console.log(`Joining stage${stageId}`);
     joinStage(stageId, groupId, password)
       .catch((error) => {
-        console.log('Could not join stage');
-        console.log(error);
+        console.error(error);
         if (error === Errors.INVALID_PASSWORD) {
           setWrongPassword(true);
         } else {
           setNotFound(true);
         }
-      })
-      .then(() => {
-        console.log('Joined');
       });
   }, [joinStage, stageId, groupId, password]);
 
@@ -53,7 +48,6 @@ const StageJoiner = () => {
       if (stageId && groupId) {
         setNotFound(false);
         setWrongPassword(false);
-        console.log('Connecting');
         retryJoiningStage();
       }
     }

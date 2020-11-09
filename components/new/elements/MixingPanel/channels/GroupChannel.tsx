@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { styled } from 'styletron-react';
 import { ChevronLeft, ChevronRight } from 'baseui/icon';
 import { Caption1 } from 'baseui/typography';
+import { Button } from 'baseui/button';
 import { GroupId } from '../../../../../lib/digitalstage/common/model.server';
 import useStageSelector, { useIsStageAdmin } from '../../../../../lib/digitalstage/useStageSelector';
 import { CustomGroup, Group } from '../../../../../lib/digitalstage/useStageContext/model';
@@ -9,7 +10,6 @@ import useStageActions from '../../../../../lib/digitalstage/useStageActions';
 import StageMemberChannel from './StageMemberChannel';
 import { useStageWebAudio } from '../../../../../lib/useStageWebAudio';
 import ChannelStrip from '../../ChannelStrip';
-import Button from '../../../../../uikit/Button';
 import Panel from '../../../../../uikit/Panel';
 
 const PanelRow = styled(Panel, {
@@ -87,9 +87,13 @@ const GroupChannel = (props: {
             <Header>
               {stageMemberIds.length > 0 ? (
                 <Button
-                  style={{
-                    width: '100%',
-                    height: '100%',
+                  overrides={{
+                    Root: {
+                      style: {
+                        width: '100%',
+                        height: '100%',
+                      },
+                    },
                   }}
                   shape="pill"
                   kind="minimal"

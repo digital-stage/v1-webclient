@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useStyletron } from 'baseui';
+import { Button } from 'baseui/button';
 import Icon from '../../../../uikit/Icon';
 import { useAudioContext } from '../../../../lib/useAudioContext';
-import Button from '../../../../uikit/Button';
 
 const FixedAudioPlaybackStarterButton = () => {
   const [css, theme] = useStyletron();

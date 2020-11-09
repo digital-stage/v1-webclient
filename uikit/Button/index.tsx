@@ -4,7 +4,6 @@ import { CSSProperties } from 'react';
 import {
   KIND, SHAPE, SIZE,
 } from '../Theme';
-import Ripples from '../Ripples';
 
 const Button = (
   props: {
@@ -46,7 +45,6 @@ const Button = (
       shape={shape}
     >
       {children}
-      <Ripples />
     </BaseButton>
   );
 };

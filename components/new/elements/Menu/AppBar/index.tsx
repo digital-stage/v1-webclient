@@ -42,6 +42,7 @@ const AppBar = (props: {
       >
         {navItems && navItems.map((item, index) => (
           <div
+            key={item.label}
             tabIndex={index}
             role="presentation"
             onClick={() => {

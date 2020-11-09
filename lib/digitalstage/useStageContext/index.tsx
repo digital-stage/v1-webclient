@@ -29,7 +29,7 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
 
   const registerSocketHandlers = useCallback(
     (currSocket) => {
-      console.log('[useStages] Registering currSocket handlers');
+      console.debug('[useStages] Registering currSocket handlers');
 
       currSocket.on(ServerGlobalEvents.READY, () => {
         dispatch(allActions.server.setReady());

@@ -2,7 +2,7 @@ import { styled } from 'baseui';
 import { Theme } from 'baseui/theme';
 import React, { useEffect, useState } from 'react';
 import { Delete } from 'baseui/icon';
-import Button from '../../../../uikit/Button';
+import { Button } from 'baseui/button';
 
 const ModalWrapper = styled<{ $hidden?: boolean }, 'div', Theme>('div', ({ $theme, $hidden }) => ({
   position: 'absolute',
@@ -115,10 +115,14 @@ const Modal = (props: {
         <ModalContent $hidden={hidden} $width={width} $maxWidth={maxWidth}>
           <ModalCloseAction>
             <Button
-              style={{
-                position: 'absolute',
-                top: 0,
-                right: 0,
+              overrides={{
+                Root: {
+                  style: {
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                  },
+                },
               }}
               kind="minimal"
               shape="circle"

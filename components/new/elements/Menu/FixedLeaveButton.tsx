@@ -1,7 +1,7 @@
 import { styled } from 'baseui';
 import Link from 'next/link';
 import React from 'react';
-import Button from '../../../../uikit/Button';
+import { Button } from 'baseui/button';
 import Icon from '../../../../uikit/Icon';
 import useStageSelector from '../../../../lib/digitalstage/useStageSelector';
 

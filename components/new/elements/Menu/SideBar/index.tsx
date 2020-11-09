@@ -34,6 +34,7 @@ const SideBar = (props: {
     <SideBarWrapper role="menu" className={className}>
       {upperLinks && upperLinks.map((item, index) => (
         <SideBarItem
+          key={item.label}
           $selected={selected && item.label === selected.label}
           tabIndex={index}
           role="presentation"
@@ -44,6 +45,7 @@ const SideBar = (props: {
       ))}
       {centeredLinks && centeredLinks.map((item, index) => (
         <SideBarItem
+          key={item.label}
           $selected={selected && item.label === selected.label}
           tabIndex={index}
           role="presentation"
@@ -54,6 +56,7 @@ const SideBar = (props: {
       ))}
       {lowerLinks && lowerLinks.map((item, index) => (
         <SideBarItem
+          key={item.label}
           $selected={selected && item.label === selected.label}
           tabIndex={index}
           role="presentation"

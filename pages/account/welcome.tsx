@@ -5,10 +5,10 @@ import {
   Caption1, DisplaySmall, LabelLarge,
 } from 'baseui/typography';
 import Link from 'next/link';
+import { Button } from 'baseui/button';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import PageWrapper from '../../components/new/elements/PageWrapper';
 import Container from '../../components/new/elements/Container';
-import Button from '../../uikit/Button';
 
 const Wrapper = styled('div', {
   minHeight: '100vh',

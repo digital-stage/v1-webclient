@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { styled } from 'styletron-react';
+import { Button } from 'baseui/button';
 import LogSlider, { RGBColor } from '../LogSlider';
-import Button from '../../../../uikit/Button';
 
 const Wrapper = styled('div', {
   display: 'flex',

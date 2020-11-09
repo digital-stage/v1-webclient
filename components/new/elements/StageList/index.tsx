@@ -15,17 +15,48 @@ import ModifyGroupModal from './ModifyGroupModal';
 import CreateStageModal from './CreateStageModal';
 import CreateGroupModal from './CreateGroupModal';
 import useStageSelector, { useStages } from '../../../../lib/digitalstage/useStageSelector';
+import { SECONDARY } from '../../../../uikit/Theme';
 
-const GlobalActions = styled('div', {
-  width: '100%',
-  display: 'flex',
+const Wrapper = styled('div', ({ $theme }) => ({
+  display: 'block',
+  backgroundColor: $theme.colors.backgroundPrimary,
+  boxShadow: '0px 23px 17px #00000052',
   paddingTop: '1rem',
   paddingBottom: '1rem',
+  borderRadius: '18px',
+}));
+
+const PanelHeader = styled('div', {
+  width: '100%',
+  display: 'flex',
+  alignItems: 'space-between',
+});
+const PanelHeaderTitle = styled('div', {
+  display: 'flex',
+  flexGrow: 1,
   alignItems: 'center',
-  justifyContent: 'flex-end',
+});
+const PanelHeaderActions = styled('div', {
+  display: 'flex',
+  flexGrow: 0,
 });
 
-const StageListView = () => {
+const GroupLine = styled('div', {
+  display: 'flex',
+  alignItems: 'space-between',
+  width: '100%',
+});
+const GroupTitle = styled('div', {
+  display: 'flex',
+  flexGrow: 1,
+  alignItems: 'center',
+});
+const GroupActions = styled('div', {
+  display: 'flex',
+  flexGrow: 0,
+});
+
+const StageList = () => {
   const stages = useStages();
   const groups = useStageSelector<Groups>((state) => state.groups);
   const currentStageId = useSelector<NormalizedState, string | undefined>((state) => state.stageId);
@@ -44,7 +75,7 @@ const StageListView = () => {
 
   return (
     <>
-      <GlobalActions>
+      <Wrapper>
         <Button
           size="large"
           kind="primary"
@@ -53,76 +84,103 @@ const StageListView = () => {
         >
           Bühne hinzufügen
         </Button>
-      </GlobalActions>
-      <div>
-        <Accordion>
+        <Accordion
+          overrides={{
+            Header: {
+              style: ({ $theme }) => ({
+                backgroundColor: $theme.colors.backgroundPrimary,
+              }),
+            },
+            Content: {
+              style: ({ $theme }) => ({
+                backgroundColor: $theme.colors.mono1000,
+              }),
+            },
+
+          }}
+        >
           {stages.map((stage) => (
             <Panel
-              title={stage.name}
+              title={(
+                <PanelHeader>
+                  <PanelHeaderTitle>
+                    {stage.name}
+                  </PanelHeaderTitle>
+                  <PanelHeaderActions>
+                    {stage.isAdmin ? (
+                      <>
+                        <Button
+                          overrides={{
+                            BaseButton: {
+                              style: {
+                                color: SECONDARY,
+                              },
+                            },
+                          }}
+                          kind="minimal"
+                          shape="circle"
+                          onClick={() => {
+                            setCurrentStage(stage);
+                            setModifyStageIsOpen(true);
+                          }}
+                        >
+                          <img src="/static/icons/edit.svg" alt="Edit" />
+                        </Button>
+                        <Button
+                          overrides={{
+                            BaseButton: {
+                              style: {
+                                color: SECONDARY,
+                              },
+                            },
+                          }}
+                          kind="minimal"
+                          shape="circle"
+                          onClick={() => {
+                            removeStage(stage._id);
+                          }}
+                        >
+                          <img src="/static/icons/delete.svg" alt="Delete" />
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        overrides={{
+                          BaseButton: {
+                            style: {
+                              color: SECONDARY,
+                            },
+                          },
+                        }}
+                        kind="minimal"
+                        shape="circle"
+                        onClick={() => {
+                          leaveStageForGood(stage._id);
+                        }}
+                      >
+                        <img src="/static/icons/delete.svg" alt="Delete" />
+                      </Button>
+                    )}
+                  </PanelHeaderActions>
+                </PanelHeader>
+              )}
               key={stage._id}
             >
-              {stage.isAdmin && (
-                <>
-                  <Button
-                    aria-label="Gruppe hinzufügen"
-                    shape="circle"
-                    kind="secondary"
-                    onClick={() => {
-                      setCurrentStage(stage);
-                      setCreateGroupIsOpen(true);
-                    }}
-                  >
-                    <Plus />
-                  </Button>
-                  <Button
-                    kind="primary"
-                    shape="circle"
-                    aria-label="edit"
-                    onClick={() => {
-                      setCurrentStage(stage);
-                      setModifyStageIsOpen(true);
-                    }}
-                  >
-                    <Overflow />
-                  </Button>
-                </>
-              )}
-
               {groups.byStage[stage._id] && groups.byStage[stage._id].map((groupId) => {
                 const group = groups.byId[groupId];
                 return (
-                  <ListItem>
-                    <ListItemLabel>
-                      {group.name}
-                      <Button
-                        kind={currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'primary' : 'minimal'}
-                        onClick={() => {
-                          if (
-                            currentStageId
-                                    && stage._id === currentStageId
-                                    && group._id === currentGroupId
-                          ) {
-                            leaveStage();
-                          } else {
-                            setRequest(stage._id, group._id, stage.password);
-                          }
-                        }}
-                      >
-                        {currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'Verlassen' : 'Beitreten'}
-                      </Button>
-                      <Button
-                        kind="minimal"
-                        onClick={() => {
-                          setCurrentStage(stage);
-                          setCurrentGroup(group);
-                          setCopyLinkOpen((prevState) => !prevState);
-                        }}
-                      >
-                        Einladen
-                      </Button>
-                      {stage.isAdmin && (
+                  <ListItem
+                    key={groupId}
+                  >
+                    <GroupLine>
+                      <GroupTitle>
+                        {group.name}
+                      </GroupTitle>
+                      <GroupActions>
+                        {stage.isAdmin && (
                         <>
                           <Button
+                            shape="circle"
                             kind="minimal"
                             onClick={() => {
                               setCurrentStage(stage);
@@ -130,39 +188,72 @@ const StageListView = () => {
                               setModifyGroupIsOpen((prevState) => !prevState);
                             }}
                           >
-                            Edit
+                            <img src="/static/icons/edit.svg" alt="Edit" />
                           </Button>
                           <Button
+                            shape="circle"
                             kind="minimal"
                             onClick={() => {
                               removeGroup(group._id);
                             }}
                           >
-                            Entfernen
+                            <img src="/static/icons/delete.svg" alt="Delete" />
                           </Button>
                         </>
-                      )}
-                    </ListItemLabel>
+                        )}
+                        <Button
+                          shape="pill"
+                          kind="minimal"
+                          onClick={() => {
+                            setCurrentStage(stage);
+                            setCurrentGroup(group);
+                            setCopyLinkOpen((prevState) => !prevState);
+                          }}
+                        >
+                          Invite
+                        </Button>
+                        <Button
+                          shape="pill"
+                          kind={currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'primary' : 'minimal'}
+                          onClick={() => {
+                            if (
+                              currentStageId
+                                && stage._id === currentStageId
+                                && group._id === currentGroupId
+                            ) {
+                              leaveStage();
+                            } else {
+                              setRequest(stage._id, group._id, stage.password);
+                            }
+                          }}
+                        >
+                          {currentStageId && stage._id === currentStageId && group._id === currentGroupId ? 'Leave' : 'Enter stage'}
+                        </Button>
+                      </GroupActions>
+                    </GroupLine>
                   </ListItem>
                 );
               })}
 
-              <Button
-                aria-label={stage.isAdmin ? 'Bühne entfernen' : 'Bühne verlassen'}
-                kind="primary"
-                shape="circle"
-                onClick={() => {
-                  if (stage.isAdmin) removeStage(stage._id);
-                  else leaveStageForGood(stage._id);
-                }}
-              >
-                <Delete />
-              </Button>
+              {stage.isAdmin && (
+                <>
+                  <Button
+                    kind="minimal"
+                    onClick={() => {
+                      setCurrentStage(stage);
+                      setCreateGroupIsOpen(true);
+                    }}
+                    startEnhancer={<img src="/static/icons/add.svg" alt="Add group" />}
+                  >
+                    Create new group
+                  </Button>
+                </>
+              )}
             </Panel>
           ))}
         </Accordion>
 
-      </div>
+      </Wrapper>
       <CreateStageModal
         isOpen={isCreateStageOpen}
         onClose={() => setCreateStageIsOpen(false)}
@@ -191,4 +282,4 @@ const StageListView = () => {
     </>
   );
 };
-export default StageListView;
+export default StageList;

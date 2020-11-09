@@ -33,7 +33,7 @@ export const AudioContextProvider = (props: { children: React.ReactNode }) => {
       return context;
     }
     const audioContext: IAudioContext = new RealAudioContext();
-    console.log(
+    console.debug(
       `Base latency with sample rate ${audioContext.sampleRate}: ${Math.round(
         1000 * audioContext.baseLatency,
       )}ms`,

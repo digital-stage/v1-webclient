@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Modal, ModalBody, ModalFooter, ModalHeader,
 } from 'baseui/modal';
-import Button from '../uikit/Button';
+import { Button } from 'baseui/button';
 
 export interface ErrorsProps {
   errors: string[];

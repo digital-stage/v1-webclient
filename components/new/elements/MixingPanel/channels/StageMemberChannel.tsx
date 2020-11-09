@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { styled } from 'styletron-react';
 import { ChevronLeft, ChevronRight } from 'baseui/icon';
 import { Caption1 } from 'baseui/typography';
+import { Button } from 'baseui/button';
 import useStageSelector, { useIsStageAdmin } from '../../../../../lib/digitalstage/useStageSelector';
 import { CustomStageMember, StageMember, User } from '../../../../../lib/digitalstage/common/model.server';
 import ChannelStrip from '../../ChannelStrip';
 import useStageActions from '../../../../../lib/digitalstage/useStageActions';
 import AudioProducerChannel from './AudioProducerChannel';
 import { useStageWebAudio } from '../../../../../lib/useStageWebAudio';
-import Button from '../../../../../uikit/Button';
 
 const Panel = styled('div', {
   display: 'flex',
@@ -83,9 +83,13 @@ const StageMemberChannel = (props: {
             <Header>
               {audioProducers.length > 0 ? (
                 <Button
-                  style={{
-                    width: '100%',
-                    height: '100%',
+                  overrides={{
+                    Root: {
+                      style: {
+                        width: '100%',
+                        height: '100%',
+                      },
+                    },
                   }}
                   shape="pill"
                   kind="minimal"

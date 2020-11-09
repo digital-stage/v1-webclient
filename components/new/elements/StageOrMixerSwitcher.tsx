@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { styled } from 'styletron-react';
+import { Button } from 'baseui/button';
 import Icon from '../../../uikit/Icon';
 import useStageSelector from '../../../lib/digitalstage/useStageSelector';
-import Button from '../../../uikit/Button';
 
 const Wrapper = styled('div', {
   position: 'fixed',

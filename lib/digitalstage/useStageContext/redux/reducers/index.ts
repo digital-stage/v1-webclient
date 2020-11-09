@@ -52,7 +52,6 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (
   state: Readonly<NormalizedState> = InitialNormalizedState,
   action: ReducerAction,
 ): NormalizedState => {
-  console.log(action.type);
   switch (action.type) {
     case AdditionalReducerTypes.RESET:
       return InitialNormalizedState;
@@ -140,8 +139,6 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (
       };
 
     case ServerStageEvents.STAGE_JOINED:
-      console.log('JOINED STAGE!');
-      console.log(action.payload);
       return normalize(state, {
         ...action.payload,
         stages: action.payload.stage ? [action.payload.stage] : [],
