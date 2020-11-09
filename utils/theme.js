@@ -87,6 +87,8 @@ export default {
       m: 2,
       py: 2,
       px: 3,
+      border: '1px solid transparent',
+      borderColor: 'primary',
       borderRadius: 'button',
       color: 'text',
       bg: 'primary',
@@ -95,13 +97,21 @@ export default {
     },
     secondary: {
       variant: 'buttons.primary',
+      borderColor: 'secondary',
       color: 'text',
       bg: 'secondary',
     },
     white: {
       variant: 'buttons.primary',
+      borderColor: 'text',
       color: 'background',
       bg: 'text',
+    },
+    outline: {
+      variant: 'buttons.primary',
+      borderColor: 'text',
+      color: 'text',
+      bg: 'transparent',
     },
     login: {
       fontFamily: 'heading',

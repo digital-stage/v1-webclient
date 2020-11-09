@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 import { GroupId, StageId } from './digitalstage/common/model.server';
 
 export interface Request {
@@ -11,16 +11,15 @@ export interface Request {
 
 const RequestContext = React.createContext<Request>(undefined);
 
-export const useRequest = (): Request =>
-  React.useContext<Request>(RequestContext);
+export const useRequest = (): Request => React.useContext<Request>(RequestContext);
 
 export const RequestContextProvider = (props: {
   children: React.ReactNode;
 }) => {
   const { children } = props;
-  const [stageId, setStageId] = useState<StageId>();
-  const [groupId, setGroupId] = useState<StageId>();
-  const [password, setPassword] = useState<string>();
+  const [stageId, setStageId] = React.useState<StageId>();
+  const [groupId, setGroupId] = React.useState<StageId>();
+  const [password, setPassword] = React.useState<string>();
 
   return (
     <RequestContext.Provider
@@ -32,7 +31,7 @@ export const RequestContextProvider = (props: {
           setStageId(reqStageId);
           setGroupId(reqGroupId);
           setPassword(reqPassword);
-        }
+        },
       }}
     >
       {children}

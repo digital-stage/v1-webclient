@@ -8,10 +8,10 @@ import {
   FaVideo,
   FaVideoSlash,
 } from 'react-icons/fa';
-import useStageActions from '../../../lib/digitalstage/useStageActions';
-import useStageSelector from '../../../lib/digitalstage/useStageSelector';
+import useStageActions from '../lib/digitalstage/useStageActions';
+import useStageSelector from '../lib/digitalstage/useStageSelector';
 
-const DeviceControl = () => {
+const StageDeviceController = () => {
   const { localDevice } = useStageSelector((state) => ({
     localDevice: state.devices.local
       ? state.devices.byId[state.devices.local]
@@ -76,4 +76,4 @@ const DeviceControl = () => {
   );
 };
 
-export default DeviceControl;
+export default StageDeviceController;
