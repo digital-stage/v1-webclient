@@ -2,20 +2,13 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx, Flex, Button } from 'theme-ui';
-import {
-  FaMicrophone,
-  FaMicrophoneSlash,
-  FaVideo,
-  FaVideoSlash,
-} from 'react-icons/fa';
+import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash } from 'react-icons/fa';
 import useStageActions from '../lib/digitalstage/useStageActions';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
 
-const StageDeviceController = () => {
+const StageDeviceController = (): JSX.Element => {
   const { localDevice } = useStageSelector((state) => ({
-    localDevice: state.devices.local
-      ? state.devices.byId[state.devices.local]
-      : undefined,
+    localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
   }));
   const { updateDevice } = useStageActions();
 
@@ -39,37 +32,27 @@ const StageDeviceController = () => {
       {localDevice.canVideo && (
         <Button
           variant="circle"
-          label={
-            localDevice.sendVideo ? 'Kamera deaktivieren' : 'Kamera aktivieren'
+          label={localDevice.sendVideo ? 'Kamera deaktivieren' : 'Kamera aktivieren'}
+          onClick={() =>
+            updateDevice(localDevice._id, {
+              sendVideo: !localDevice.sendVideo,
+            })
           }
-          onClick={() => updateDevice(localDevice._id, {
-            sendVideo: !localDevice.sendVideo,
-          })}
         >
-          {localDevice.sendVideo ? (
-            <FaVideo size="24px" />
-          ) : (
-            <FaVideoSlash size="24px" />
-          )}
+          {localDevice.sendVideo ? <FaVideo size="24px" /> : <FaVideoSlash size="24px" />}
         </Button>
       )}
       {localDevice.canAudio && (
         <Button
           variant="circle"
-          label={
-            localDevice.sendAudio
-              ? 'Mikrofon deaktivieren'
-              : 'Mikrofon aktivieren'
+          label={localDevice.sendAudio ? 'Mikrofon deaktivieren' : 'Mikrofon aktivieren'}
+          onClick={() =>
+            updateDevice(localDevice._id, {
+              sendAudio: !localDevice.sendAudio,
+            })
           }
-          onClick={() => updateDevice(localDevice._id, {
-            sendAudio: !localDevice.sendAudio,
-          })}
         >
-          {localDevice.sendAudio ? (
-            <FaMicrophone size="24px" />
-          ) : (
-            <FaMicrophoneSlash size="24px" />
-          )}
+          {localDevice.sendAudio ? <FaMicrophone size="24px" /> : <FaMicrophoneSlash size="24px" />}
         </Button>
       )}
     </Flex>

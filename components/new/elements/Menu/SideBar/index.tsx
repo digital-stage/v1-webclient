@@ -11,13 +11,7 @@ const SideBar = (props: {
   selected?: NavItem;
   onSelected: (navItem: NavItem) => void;
 }) => {
-  const {
-    upperLinks,
-    centeredLinks,
-    lowerLinks,
-    onSelected,
-    selected,
-  } = props;
+  const { upperLinks, centeredLinks, lowerLinks, onSelected, selected } = props;
 
   const SideBarItem = (item, index) => (
     <Box
@@ -39,15 +33,18 @@ const SideBar = (props: {
 
   return (
     <Flex role="menu" sx={{ flexDirection: 'column', bg: 'red' }}>
-      {upperLinks && upperLinks.map((item, index) => (
-        <SideBarItem item={item} index={index} selected={selected} />
-      ))}
-      {centeredLinks && centeredLinks.map((item, index) => (
-        <SideBarItem item={item} index={index} selected={selected} />
-      ))}
-      {lowerLinks && lowerLinks.map((item, index) => (
-        <SideBarItem item={item} index={index} selected={selected} />
-      ))}
+      {upperLinks &&
+        upperLinks.map((item, index) => (
+          <SideBarItem item={item} key={index} index={index} selected={selected} />
+        ))}
+      {centeredLinks &&
+        centeredLinks.map((item, index) => (
+          <SideBarItem item={item} key={index} index={index} selected={selected} />
+        ))}
+      {lowerLinks &&
+        lowerLinks.map((item, index) => (
+          <SideBarItem item={item} key={index} index={index} selected={selected} />
+        ))}
     </Flex>
   );
 };

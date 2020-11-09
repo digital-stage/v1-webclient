@@ -3,13 +3,7 @@
 import * as React from 'react';
 import { jsx, Box, Flex, Button } from 'theme-ui';
 
-import {
-  Modal,
-  ModalBody,
-  ModalButton,
-  ModalFooter,
-  ModalHeader
-} from 'baseui/modal';
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal';
 import { FormControl } from 'baseui/form-control';
 import { Input } from 'baseui/input';
 import { KIND } from 'baseui/button';
@@ -19,28 +13,13 @@ import { Accordion, Panel } from 'baseui/accordion';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
 
 const CreateStageSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, 'Zu kurz')
-    .max(100, 'Zu lang')
-    .required('Wird benötigt'),
-  password: Yup.string()
-    .min(5, 'Zu kurz')
-    .max(50, 'Zu lang'),
-  width: Yup.number()
-    .min(0.1)
-    .max(1000),
-  length: Yup.number()
-    .min(0.1)
-    .max(1000),
-  height: Yup.number()
-    .min(0.1)
-    .max(1000),
-  absorption: Yup.number()
-    .min(0.1)
-    .max(1),
-  reflection: Yup.number()
-    .min(0.1)
-    .max(1)
+  name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
+  password: Yup.string().min(5, 'Zu kurz').max(50, 'Zu lang'),
+  width: Yup.number().min(0.1).max(1000),
+  length: Yup.number().min(0.1).max(1000),
+  height: Yup.number().min(0.1).max(1000),
+  absorption: Yup.number().min(0.1).max(1),
+  reflection: Yup.number().min(0.1).max(1),
 });
 
 const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }) => {
@@ -55,10 +34,10 @@ const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }) => {
       length: 13,
       height: 7.5,
       damping: 0.7,
-      absorption: 0.6
+      absorption: 0.6,
     },
     validationSchema: CreateStageSchema,
-    onSubmit: values => {
+    onSubmit: (values) => {
       createStage(
         values.name,
         values.password,
@@ -69,16 +48,11 @@ const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }) => {
         values.absorption
       );
       props.onClose();
-    }
+    },
   });
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-      closeable
-      unstable_ModalBackdropScroll
-    >
+    <Modal isOpen={isOpen} onClose={onClose} closeable unstable_ModalBackdropScroll>
       <form onSubmit={formik.handleSubmit}>
         <ModalHeader>Neue Bühne erstellen</ModalHeader>
         <ModalBody>

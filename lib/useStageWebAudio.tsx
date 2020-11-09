@@ -1,10 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  IAnalyserNode,
-  IAudioContext,
-  IAudioNode,
-  IGainNode
-} from 'standardized-audio-context';
+import { IAnalyserNode, IAudioContext, IAudioNode, IGainNode } from 'standardized-audio-context';
 
 import { IMediaStreamAudioSourceNode } from 'standardized-audio-context/src/interfaces/media-stream-audio-source-node';
 import useStageSelector from './digitalstage/useStageSelector';
@@ -16,7 +11,7 @@ import {
   CustomGroups,
   CustomStageMembers,
   Groups,
-  StageMembers
+  StageMembers,
 } from './digitalstage/useStageContext/schema';
 
 export interface StageWebAudioNodes {
@@ -53,34 +48,22 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
   const [, setRootGainNode] = useState<IGainNode<IAudioContext>>();
   const [rootNode, setRootNode] = useState<IAudioNode<IAudioContext>>();
   const [groupNodes, setGroupNodes] = useState<StageWebAudioNodes>({});
-  const [stageMemberNodes, setStageMemberNodes] = useState<StageWebAudioNodes>(
-    {}
-  );
-  const [audioProducerNodes, setAudioProducerNodes] = useState<
-    StageWebAudioConsumerNodes
-  >({});
+  const [stageMemberNodes, setStageMemberNodes] = useState<StageWebAudioNodes>({});
+  const [audioProducerNodes, setAudioProducerNodes] = useState<StageWebAudioConsumerNodes>({});
 
   // Incoming states from stage
-  const stageId = useStageSelector<string>(state => state.stageId);
-  const groups = useStageSelector<Groups>(state => state.groups);
-  const customGroups = useStageSelector<CustomGroups>(
-    state => state.customGroups
-  );
-  const stageMembers = useStageSelector<StageMembers>(
-    state => state.stageMembers
-  );
+  const stageId = useStageSelector<string>((state) => state.stageId);
+  const groups = useStageSelector<Groups>((state) => state.groups);
+  const customGroups = useStageSelector<CustomGroups>((state) => state.customGroups);
+  const stageMembers = useStageSelector<StageMembers>((state) => state.stageMembers);
   const customStageMembers = useStageSelector<CustomStageMembers>(
-    state => state.customStageMembers
+    (state) => state.customStageMembers
   );
-  const audioProducers = useStageSelector<AudioProducers>(
-    state => state.audioProducers
-  );
+  const audioProducers = useStageSelector<AudioProducers>((state) => state.audioProducers);
   const customAudioProducers = useStageSelector<CustomAudioProducers>(
-    state => state.customAudioProducers
+    (state) => state.customAudioProducers
   );
-  const audioConsumers = useStageSelector<AudioConsumers>(
-    state => state.audioConsumers
-  );
+  const audioConsumers = useStageSelector<AudioConsumers>((state) => state.audioConsumers);
 
   useEffect(() => {
     if (audioContext && audioPlayerRef && !rootNode) {
@@ -105,8 +88,8 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
   useEffect(() => {
     if (audioContext && rootNode) {
       if (stageId && groups.byStage[stageId]) {
-        setGroupNodes(prev => {
-          Object.keys(prev).forEach(id => {
+        setGroupNodes((prev) => {
+          Object.keys(prev).forEach((id) => {
             if (!groups.byId[id]) {
               prev[id].sourceNode.disconnect();
               prev[id].gainNode.disconnect();
@@ -137,21 +120,16 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
                 [item._id]: {
                   sourceNode,
                   gainNode,
-                  analyserNode
-                }
+                  analyserNode,
+                },
               };
             }
             if (customItem) {
               if (customItem.muted) {
                 if (prev[item._id].gainNode.gain.value !== 0) {
-                  prev[item._id].gainNode.gain.setValueAtTime(
-                    0,
-                    audioContext.currentTime
-                  );
+                  prev[item._id].gainNode.gain.setValueAtTime(0, audioContext.currentTime);
                 }
-              } else if (
-                prev[item._id].gainNode.gain.value !== customItem.volume
-              ) {
+              } else if (prev[item._id].gainNode.gain.value !== customItem.volume) {
                 prev[item._id].gainNode.gain.setValueAtTime(
                   customItem.volume,
                   audioContext.currentTime
@@ -159,27 +137,21 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
               }
             } else if (item.muted) {
               if (prev[item._id].gainNode.gain.value !== 0) {
-                prev[item._id].gainNode.gain.setValueAtTime(
-                  0,
-                  audioContext.currentTime
-                );
+                prev[item._id].gainNode.gain.setValueAtTime(0, audioContext.currentTime);
               }
             } else if (prev[item._id].gainNode.gain.value !== item.volume) {
-              prev[item._id].gainNode.gain.setValueAtTime(
-                item.volume,
-                audioContext.currentTime
-              );
+              prev[item._id].gainNode.gain.setValueAtTime(item.volume, audioContext.currentTime);
             }
 
             return {
               ...items,
-              [item._id]: prev[item._id]
+              [item._id]: prev[item._id],
             };
           }, {});
         });
       } else {
-        setGroupNodes(prev => {
-          Object.keys(prev).forEach(id => {
+        setGroupNodes((prev) => {
+          Object.keys(prev).forEach((id) => {
             prev[id].sourceNode.disconnect();
             prev[id].gainNode.disconnect();
             prev[id].analyserNode.disconnect();
@@ -194,9 +166,9 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
     if (audioContext) {
       if (stageId && stageMembers.byStage[stageId]) {
         // Create for each group node an audio player
-        setStageMemberNodes(prev => {
+        setStageMemberNodes((prev) => {
           // Clean up old nodes
-          Object.keys(prev).forEach(id => {
+          Object.keys(prev).forEach((id) => {
             if (!stageMembers.byId[id]) {
               prev[id].sourceNode.disconnect();
               prev[id].gainNode.disconnect();
@@ -207,9 +179,7 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
           return stageMembers.byStage[stageId].reduce((items, id) => {
             const item = stageMembers.byId[id];
             const customItem = customStageMembers.byStageMember[item._id]
-              ? customStageMembers.byId[
-                  customStageMembers.byStageMember[item._id]
-                ]
+              ? customStageMembers.byId[customStageMembers.byStageMember[item._id]]
               : undefined;
             if (groupNodes[item.groupId]) {
               if (!prev[item._id]) {
@@ -230,21 +200,16 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
                   [item._id]: {
                     sourceNode,
                     gainNode,
-                    analyserNode
-                  }
+                    analyserNode,
+                  },
                 };
               }
               if (customItem) {
                 if (customItem.muted) {
                   if (prev[item._id].gainNode.gain.value !== 0) {
-                    prev[item._id].gainNode.gain.setValueAtTime(
-                      0,
-                      audioContext.currentTime
-                    );
+                    prev[item._id].gainNode.gain.setValueAtTime(0, audioContext.currentTime);
                   }
-                } else if (
-                  prev[item._id].gainNode.gain.value !== customItem.volume
-                ) {
+                } else if (prev[item._id].gainNode.gain.value !== customItem.volume) {
                   prev[item._id].gainNode.gain.setValueAtTime(
                     customItem.volume,
                     audioContext.currentTime
@@ -252,28 +217,22 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
                 }
               } else if (item.muted) {
                 if (prev[item._id].gainNode.gain.value !== 0) {
-                  prev[item._id].gainNode.gain.setValueAtTime(
-                    0,
-                    audioContext.currentTime
-                  );
+                  prev[item._id].gainNode.gain.setValueAtTime(0, audioContext.currentTime);
                 }
               } else if (prev[item._id].gainNode.gain.value !== item.volume) {
-                prev[item._id].gainNode.gain.setValueAtTime(
-                  item.volume,
-                  audioContext.currentTime
-                );
+                prev[item._id].gainNode.gain.setValueAtTime(item.volume, audioContext.currentTime);
               }
               return {
                 ...items,
-                [item._id]: prev[item._id]
+                [item._id]: prev[item._id],
               };
             }
             return items;
           }, {});
         });
       } else {
-        setStageMemberNodes(prev => {
-          Object.keys(prev).forEach(id => {
+        setStageMemberNodes((prev) => {
+          Object.keys(prev).forEach((id) => {
             prev[id].sourceNode.disconnect();
             prev[id].gainNode.disconnect();
             prev[id].analyserNode.disconnect();
@@ -288,9 +247,9 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
     if (audioContext) {
       if (stageId && audioProducers.byStage[stageId]) {
         // Create for each group node an audio player
-        setAudioProducerNodes(prev => {
+        setAudioProducerNodes((prev) => {
           // Clean up old nodes
-          Object.keys(prev).forEach(id => {
+          Object.keys(prev).forEach((id) => {
             if (!audioProducers.byId[id]) {
               if (prev[id].sourceNode) prev[id].sourceNode.disconnect();
               prev[id].gainNode.disconnect();
@@ -300,9 +259,7 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
           return audioProducers.byStage[stageId].reduce((items, id) => {
             const item = audioProducers.byId[id];
             const customItem = customAudioProducers.byAudioProducer[item._id]
-              ? customAudioProducers.byId[
-                  customAudioProducers.byAudioProducer[item._id]
-                ]
+              ? customAudioProducers.byId[customAudioProducers.byAudioProducer[item._id]]
               : undefined;
             if (stageMemberNodes[item.stageMemberId]) {
               let gainNode;
@@ -315,9 +272,7 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
                 // gainNode.gain.setValueAtTime(item.volume, audioContext.currentTime);
                 analyserNode = audioContext.createAnalyser();
                 gainNode.connect(analyserNode);
-                gainNode.connect(
-                  stageMemberNodes[item.stageMemberId].sourceNode
-                );
+                gainNode.connect(stageMemberNodes[item.stageMemberId].sourceNode);
               } else {
                 gainNode = prev[item._id].gainNode;
                 analyserNode = prev[item._id].analyserNode;
@@ -327,20 +282,14 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
                       gainNode.gain.setValueAtTime(0, audioContext.currentTime);
                     }
                   } else if (gainNode.gain.value !== customItem.volume) {
-                    gainNode.gain.setValueAtTime(
-                      customItem.volume,
-                      audioContext.currentTime
-                    );
+                    gainNode.gain.setValueAtTime(customItem.volume, audioContext.currentTime);
                   }
                 } else if (item.muted) {
                   if (gainNode.gain.value !== 0) {
                     gainNode.gain.setValueAtTime(0, audioContext.currentTime);
                   }
                 } else if (gainNode.gain.value !== item.volume) {
-                  gainNode.gain.setValueAtTime(
-                    item.volume,
-                    audioContext.currentTime
-                  );
+                  gainNode.gain.setValueAtTime(item.volume, audioContext.currentTime);
                 }
               }
               if (
@@ -348,11 +297,8 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
                 audioConsumers.byProducer[item._id]
               ) {
                 // See, if there is a consumer
-                const audioConsumer =
-                  audioConsumers.byId[audioConsumers.byProducer[item._id]];
-                const stream = new MediaStream([
-                  audioConsumer.msConsumer.track
-                ]);
+                const audioConsumer = audioConsumers.byId[audioConsumers.byProducer[item._id]];
+                const stream = new MediaStream([audioConsumer.msConsumer.track]);
 
                 element = new Audio();
                 element.srcObject = stream;
@@ -372,16 +318,16 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
                   gainNode,
                   analyserNode,
                   sourceNode,
-                  element
-                }
+                  element,
+                },
               };
             }
             return items;
           }, {});
         });
       } else {
-        setAudioProducerNodes(prev => {
-          Object.keys(prev).forEach(id => {
+        setAudioProducerNodes((prev) => {
+          Object.keys(prev).forEach((id) => {
             if (prev[id].sourceNode) prev[id].sourceNode.disconnect();
             prev[id].gainNode.disconnect();
             prev[id].analyserNode.disconnect();
@@ -395,7 +341,7 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
     stageMemberNodes,
     audioProducers,
     audioConsumers.byProducer,
-    customAudioProducers
+    customAudioProducers,
   ]);
 
   return (
@@ -403,7 +349,7 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
       value={{
         byGroup: groupNodes,
         byStageMember: stageMemberNodes,
-        byAudioProducer: audioProducerNodes
+        byAudioProducer: audioProducerNodes,
       }}
     >
       {children}

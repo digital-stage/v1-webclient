@@ -5,13 +5,7 @@ import { jsx, Box, Flex, Button } from 'theme-ui';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import {
-  Modal,
-  ModalBody,
-  ModalButton,
-  ModalFooter,
-  ModalHeader
-} from 'baseui/modal/index';
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal/index';
 import { Input } from 'baseui/input/index';
 import { FormControl } from 'baseui/form-control/index';
 import { KIND } from 'baseui/button/index';
@@ -21,28 +15,13 @@ import { Client } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
 
 const Schema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, 'Zu kurz')
-    .max(100, 'Zu lang')
-    .required('Wird benötigt'),
-  password: Yup.string()
-    .min(5, 'Zu kurz')
-    .max(50, 'Zu lang'),
-  width: Yup.number()
-    .min(0.1)
-    .max(1000),
-  length: Yup.number()
-    .min(0.1)
-    .max(1000),
-  height: Yup.number()
-    .min(0.1)
-    .max(1000),
-  absorption: Yup.number()
-    .min(0.1)
-    .max(1),
-  reflection: Yup.number()
-    .min(0.1)
-    .max(1)
+  name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
+  password: Yup.string().min(5, 'Zu kurz').max(50, 'Zu lang'),
+  width: Yup.number().min(0.1).max(1000),
+  length: Yup.number().min(0.1).max(1000),
+  height: Yup.number().min(0.1).max(1000),
+  absorption: Yup.number().min(0.1).max(1),
+  reflection: Yup.number().min(0.1).max(1),
 });
 
 const ModifyStageModal = (props: {
@@ -61,7 +40,7 @@ const ModifyStageModal = (props: {
           length: stage.length,
           height: stage.height,
           absorption: stage.absorption,
-          damping: stage.damping
+          damping: stage.damping,
         }
       : {
           name: '',
@@ -70,10 +49,10 @@ const ModifyStageModal = (props: {
           length: 13,
           height: 7.5,
           damping: 0.7,
-          absorption: 0.6
+          absorption: 0.6,
         },
     validationSchema: Schema,
-    onSubmit: values => {
+    onSubmit: (values) => {
       updateStage(stage._id, {
         name: values.name,
         password: values.password,
@@ -81,10 +60,10 @@ const ModifyStageModal = (props: {
         length: values.length,
         height: values.height,
         absorption: values.absorption,
-        damping: values.damping
+        damping: values.damping,
       });
       onClose();
-    }
+    },
   });
 
   React.useEffect(() => {
@@ -96,18 +75,13 @@ const ModifyStageModal = (props: {
         length: stage.length,
         height: stage.height,
         absorption: stage.absorption,
-        damping: stage.damping
+        damping: stage.damping,
       });
     }
   }, [stage]);
 
   return (
-    <Modal
-      closeable
-      isOpen={isOpen}
-      onClose={onClose}
-      unstable_ModalBackdropScroll
-    >
+    <Modal closeable isOpen={isOpen} onClose={onClose} unstable_ModalBackdropScroll>
       <form onSubmit={formik.handleSubmit}>
         <ModalHeader>Bühne ändern</ModalHeader>
         <ModalBody>

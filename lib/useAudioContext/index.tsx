@@ -1,15 +1,5 @@
-import React, {
-  Context,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import {
-  AudioContext as RealAudioContext,
-  IAudioContext,
-} from 'standardized-audio-context';
+import React, { Context, createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { AudioContext as RealAudioContext, IAudioContext } from 'standardized-audio-context';
 import webAudioTouchUnlock from './webAudioTouchUnlock';
 import { useErrors } from '../useErrors';
 
@@ -19,9 +9,7 @@ interface AudioContextProps {
   createAudioContext(): Promise<IAudioContext>;
 }
 
-const AudioContext: Context<AudioContextProps> = createContext<
-AudioContextProps
->(undefined);
+const AudioContext: Context<AudioContextProps> = createContext<AudioContextProps>(undefined);
 
 export const AudioContextProvider = (props: { children: React.ReactNode }) => {
   const { children } = props;

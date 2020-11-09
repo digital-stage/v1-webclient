@@ -2,11 +2,11 @@ import React from 'react';
 import { styled } from 'styletron-react';
 import { Caption1 } from 'baseui/typography';
 import useStageSelector, {
-  useIsStageAdmin
+  useIsStageAdmin,
 } from '../../../../../lib/digitalstage/useStageSelector';
 import {
   AudioProducer,
-  CustomAudioProducer
+  CustomAudioProducer,
 } from '../../../../../lib/digitalstage/useStageContext/model';
 import { useStageWebAudio } from '../../../../../lib/useStageWebAudio';
 import useStageActions from '../../../../../lib/digitalstage/useStageActions';
@@ -15,35 +15,35 @@ import ChannelStrip from '../../ChannelStrip';
 const Panel = styled('div', {
   display: 'flex',
   flexDirection: 'row',
-  height: '100%'
+  height: '100%',
 });
 const Row = styled('div', {
   display: 'flex',
   flexDirection: 'row',
-  height: '100%'
+  height: '100%',
 });
 const Column = styled('div', {
   paddingLeft: '1rem',
   paddingRight: '1rem',
   paddingTop: '1rem',
   paddingBottom: '1rem',
-  height: '100%'
+  height: '100%',
 });
 const Header = styled('div', {
   width: '100%',
   height: '64px',
   display: 'flex',
   justifyContent: 'center',
-  alignItems: 'center'
+  alignItems: 'center',
 });
 
 const AudioProducerChannel = (props: { audioProducerId: string }) => {
   const { audioProducerId } = props;
   const isAdmin: boolean = useIsStageAdmin();
   const audioProducer = useStageSelector<AudioProducer>(
-    state => state.audioProducers.byId[props.audioProducerId]
+    (state) => state.audioProducers.byId[props.audioProducerId]
   );
-  const customAudioProducer = useStageSelector<CustomAudioProducer>(state =>
+  const customAudioProducer = useStageSelector<CustomAudioProducer>((state) =>
     state.customAudioProducers.byAudioProducer[props.audioProducerId]
       ? state.customAudioProducers.byId[
           state.customAudioProducers.byAudioProducer[props.audioProducerId]
@@ -56,7 +56,7 @@ const AudioProducerChannel = (props: { audioProducerId: string }) => {
   const {
     updateStageMemberAudio,
     setCustomStageMemberAudio,
-    removeCustomStageMemberAudio
+    removeCustomStageMemberAudio,
   } = useStageActions();
 
   return (
@@ -76,27 +76,22 @@ const AudioProducerChannel = (props: { audioProducerId: string }) => {
             }
             volume={audioProducer.volume}
             muted={audioProducer.muted}
-            customVolume={
-              customAudioProducer ? customAudioProducer.volume : undefined
-            }
-            customMuted={
-              customAudioProducer ? customAudioProducer.muted : undefined
-            }
+            customVolume={customAudioProducer ? customAudioProducer.volume : undefined}
+            customMuted={customAudioProducer ? customAudioProducer.muted : undefined}
             onVolumeChanged={(volume, muted) =>
               updateStageMemberAudio(audioProducer._id, {
                 volume,
-                muted
+                muted,
               })
             }
             onCustomVolumeChanged={(volume, muted) =>
               setCustomStageMemberAudio(audioProducer._id, {
                 volume,
-                muted
+                muted,
               })
             }
             onCustomVolumeReset={() => {
-              if (customAudioProducer)
-                return removeCustomStageMemberAudio(customAudioProducer._id);
+              if (customAudioProducer) return removeCustomStageMemberAudio(customAudioProducer._id);
               return null;
             }}
             isAdmin={isAdmin}

@@ -6,7 +6,7 @@ interface NavItem {
   icon?: React.ReactNode;
   href?: string;
   content?: React.ReactNode;
-  size?: SIZE[keyof SIZE]
+  size?: SIZE[keyof SIZE];
 }
 
 export default NavItem;

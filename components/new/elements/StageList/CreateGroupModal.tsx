@@ -4,13 +4,7 @@ import * as React from 'react';
 import { jsx, Box, Flex, Button } from 'theme-ui';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import {
-  Modal,
-  ModalBody,
-  ModalButton,
-  ModalFooter,
-  ModalHeader
-} from 'baseui/modal';
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal';
 import { Input } from 'baseui/input';
 import { FormControl } from 'baseui/form-control';
 import { KIND } from 'baseui/button';
@@ -18,10 +12,7 @@ import { Client } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
 
 const Schema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, 'Zu kurz')
-    .max(100, 'Zu lang')
-    .required('Wird benötigt')
+  name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
 });
 
 const CreateGroupModal = (props: {
@@ -34,22 +25,17 @@ const CreateGroupModal = (props: {
   const formik = useFormik({
     validateOnMount: true,
     initialValues: {
-      name: ''
+      name: '',
     },
     validationSchema: Schema,
-    onSubmit: values => {
+    onSubmit: (values) => {
       createGroup(stage._id, values.name);
       props.onClose();
-    }
+    },
   });
 
   return (
-    <Modal
-      closeable
-      isOpen={isOpen}
-      onClose={onClose}
-      unstable_ModalBackdropScroll
-    >
+    <Modal closeable isOpen={isOpen} onClose={onClose} unstable_ModalBackdropScroll>
       <form onSubmit={formik.handleSubmit}>
         <ModalHeader>Neue Gruppe erstellen</ModalHeader>
         <ModalBody>

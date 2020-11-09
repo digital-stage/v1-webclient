@@ -9,11 +9,11 @@ import Button from '../../../uikit/Button';
 const Wrapper = styled('div', {
   position: 'fixed',
   bottom: '1rem',
-  right: '1rem'
+  right: '1rem',
 });
 
 const StageOrMixerSwitcher = (props: { className?: string }) => {
-  const currentStageId = useStageSelector<string>(state => state.stageId);
+  const currentStageId = useStageSelector<string>((state) => state.stageId);
   const { pathname } = useRouter();
   const [mixerShown, setMixerShown] = useState<boolean>(false);
 

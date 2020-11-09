@@ -24,7 +24,7 @@ export default function ResetPasswordForm(props: { resetToken: string }) {
   const [msg, setMsg] = React.useState({
     state: false,
     type: null,
-    kids: null
+    kids: null,
   });
 
   const ResetPasswordSchema = Yup.object().shape({
@@ -37,7 +37,7 @@ export default function ResetPasswordForm(props: { resetToken: string }) {
       .required('Password is required'),
     passwordRepeat: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .required('Repeat password is required')
+      .required('Repeat password is required'),
   });
 
   return (
@@ -45,7 +45,7 @@ export default function ResetPasswordForm(props: { resetToken: string }) {
       <Formik
         initialValues={{
           password: '',
-          repeatPassword: ''
+          repeatPassword: '',
         }}
         validationSchema={ResetPasswordSchema}
         onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) =>
@@ -54,11 +54,11 @@ export default function ResetPasswordForm(props: { resetToken: string }) {
               resetForm(null);
               router.push('/account/login');
             })
-            .catch(err =>
+            .catch((err) =>
               setMsg({
                 state: true,
                 type: 'danger',
-                kids: { err }
+                kids: { err },
               })
             )
         }
@@ -70,8 +70,7 @@ export default function ResetPasswordForm(props: { resetToken: string }) {
                 Set new password
               </Heading>
               <Text>
-                Set a new password with 8 characters including 1 number and 1
-                uppercase letter
+                Set a new password with 8 characters including 1 number and 1 uppercase letter
               </Text>
             </Box>
 

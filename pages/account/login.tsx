@@ -6,7 +6,7 @@ import AuthPageLinks from '../../components/AuthPageLinks';
 import SignInForm from '../../components/authForms/SignInForm';
 import Layout from '../../components/Layout';
 
-const LoginScreen = () => {
+const LoginScreen = (): JSX.Element => {
   const router = useRouter();
   const { user } = useAuth();
 

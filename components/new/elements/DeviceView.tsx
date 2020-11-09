@@ -12,7 +12,7 @@ import useStageActions from '../../../lib/digitalstage/useStageActions';
 const CardTitle = styled('div', {
   display: 'flex',
   justifyContent: 'space-between',
-  alignItems: 'center'
+  alignItems: 'center',
 });
 
 const DeviceView = (props: { device?: Device }) => {
@@ -26,8 +26,7 @@ const DeviceView = (props: { device?: Device }) => {
     <Card
       title={
         <CardTitle>
-          {device.name} ({device._id})
-          {device.online ? <Check size={32} /> : <Delete size={32} />}
+          {device.name} ({device._id}){device.online ? <Check size={32} /> : <Delete size={32} />}
         </CardTitle>
       }
     >
@@ -43,7 +42,7 @@ const DeviceView = (props: { device?: Device }) => {
         <div
           className={css({
             width: '100%',
-            display: 'flex'
+            display: 'flex',
           })}
         >
           <Button
@@ -51,7 +50,7 @@ const DeviceView = (props: { device?: Device }) => {
             kind={device.sendVideo ? KIND.primary : KIND.secondary}
             onClick={() => {
               updateDevice(props.device._id, {
-                sendVideo: !props.device.sendVideo
+                sendVideo: !props.device.sendVideo,
               });
             }}
           >
@@ -63,7 +62,7 @@ const DeviceView = (props: { device?: Device }) => {
             kind={device.sendAudio ? KIND.primary : KIND.secondary}
             onClick={() => {
               updateDevice(props.device._id, {
-                sendAudio: !props.device.sendAudio
+                sendAudio: !props.device.sendAudio,
               });
             }}
           >
@@ -74,7 +73,7 @@ const DeviceView = (props: { device?: Device }) => {
             kind={device.receiveVideo ? KIND.primary : KIND.secondary}
             onClick={() => {
               updateDevice(props.device._id, {
-                receiveVideo: !props.device.receiveVideo
+                receiveVideo: !props.device.receiveVideo,
               });
             }}
           >
@@ -85,7 +84,7 @@ const DeviceView = (props: { device?: Device }) => {
             kind={device.receiveAudio ? KIND.primary : KIND.secondary}
             onClick={() => {
               updateDevice(device._id, {
-                receiveAudio: !device.receiveAudio
+                receiveAudio: !device.receiveAudio,
               });
             }}
           >
@@ -96,20 +95,20 @@ const DeviceView = (props: { device?: Device }) => {
           className={css({
             width: '100%',
             display: 'flex',
-            flexWrap: 'wrap'
+            flexWrap: 'wrap',
           })}
         >
           <SingleSelect
             className={css({
               flexBasis: 0,
               maxWidth: '100%',
-              flexGrow: 1
+              flexGrow: 1,
             })}
             options={device.inputAudioDevices || []}
             id={device.inputAudioDeviceId}
-            onSelect={id =>
+            onSelect={(id) =>
               updateDevice(device._id, {
-                inputAudioDeviceId: id
+                inputAudioDeviceId: id,
               })
             }
           />
@@ -117,13 +116,13 @@ const DeviceView = (props: { device?: Device }) => {
             className={css({
               flexBasis: 0,
               maxWidth: '100%',
-              flexGrow: 1
+              flexGrow: 1,
             })}
             options={device.outputAudioDevices || []}
             id={device.outputAudioDeviceId}
-            onSelect={id =>
+            onSelect={(id) =>
               updateDevice(device._id, {
-                outputAudioDeviceId: id
+                outputAudioDeviceId: id,
               })
             }
           />
@@ -131,13 +130,13 @@ const DeviceView = (props: { device?: Device }) => {
             className={css({
               flexBasis: 0,
               maxWidth: '100%',
-              flexGrow: 1
+              flexGrow: 1,
             })}
             options={device.inputVideoDevices || []}
             id={device.inputVideoDeviceId}
-            onSelect={id =>
+            onSelect={(id) =>
               updateDevice(device._id, {
-                inputVideoDeviceId: id
+                inputVideoDeviceId: id,
               })
             }
           />

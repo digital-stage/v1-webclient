@@ -3,13 +3,7 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx, Button, Text, Heading, Box } from 'theme-ui';
-import {
-  createStyles,
-  makeStyles,
-  Theme,
-  withStyles,
-  WithStyles
-} from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
@@ -22,14 +16,14 @@ const styles = (theme: Theme) =>
     root: {
       margin: 0,
       padding: theme.spacing(2),
-      backgroundColor: '#fff'
+      backgroundColor: '#fff',
     },
     closeButton: {
       position: 'absolute',
       right: theme.spacing(1),
       top: theme.spacing(1),
-      color: theme.palette.grey[500]
-    }
+      color: theme.palette.grey[500],
+    },
   });
 
 export interface DialogTitleProps extends WithStyles<typeof styles> {
@@ -44,11 +38,7 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
       <Heading as="h6">{children}</Heading>
       {onClose ? (
-        <IconButton
-          aria-label="close"
-          className={classes.closeButton}
-          onClick={onClose}
-        >
+        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
           <CloseIcon />
         </IconButton>
       ) : null}
@@ -59,15 +49,15 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
 const DialogContent = withStyles((theme: Theme) => ({
   root: {
     padding: theme.spacing(3),
-    backgroundColor: '#fff'
-  }
+    backgroundColor: '#fff',
+  },
 }))(MuiDialogContent);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     width: '400px',
-    margin: '0 auto'
-  }
+    margin: '0 auto',
+  },
 }));
 
 const ResetLinkModal = (props: { open: boolean; resend?: boolean }) => {
@@ -84,10 +74,7 @@ const ResetLinkModal = (props: { open: boolean; resend?: boolean }) => {
           open={open}
           className={classes.paper}
         >
-          <DialogTitle
-            id="customized-dialog-title"
-            onClose={props.handleClose}
-          />
+          <DialogTitle id="customized-dialog-title" onClose={props.handleClose} />
           <DialogContent>
             <Heading as="h5">
               {!resend
@@ -102,9 +89,7 @@ const ResetLinkModal = (props: { open: boolean; resend?: boolean }) => {
                 : 'Your activation link has been sent to your e-mail address. If you still have not received your email check your e-mail address'}
             </Typography>
 
-            {!resend && (
-              <Button onClick={props.onClick}>Resend reset link</Button>
-            )}
+            {!resend && <Button onClick={props.onClick}>Resend reset link</Button>}
           </DialogContent>
         </Dialog>
       </div>

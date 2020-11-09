@@ -12,7 +12,7 @@ const Wrapper = styled('div', {
   alignItems: 'center',
   justifyContent: 'flex-start',
   width: '100%',
-  height: '100%'
+  height: '100%',
 });
 const ScrollPane = styled('div', {
   position: 'absolute',
@@ -23,7 +23,7 @@ const ScrollPane = styled('div', {
   bottom: 0,
   right: 0,
   overflowX: 'scroll',
-  overflowY: 'auto'
+  overflowY: 'auto',
 });
 
 const MixerPane = () => (

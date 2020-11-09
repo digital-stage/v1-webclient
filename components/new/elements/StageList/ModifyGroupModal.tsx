@@ -5,13 +5,7 @@ import { jsx, Box, Flex, Button } from 'theme-ui';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import {
-  Modal,
-  ModalBody,
-  ModalButton,
-  ModalFooter,
-  ModalHeader
-} from 'baseui/modal/index';
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal/index';
 import { Input } from 'baseui/input/index';
 import { FormControl } from 'baseui/form-control/index';
 import { KIND } from 'baseui/button/index';
@@ -19,10 +13,7 @@ import { Client } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
 
 const Schema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, 'Zu kurz')
-    .max(100, 'Zu lang')
-    .required('Wird benötigt')
+  name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
 });
 
 const ModifyGroupModal = (props: {
@@ -34,15 +25,15 @@ const ModifyGroupModal = (props: {
   const { updateGroup } = useStageActions();
   const formik = useFormik({
     initialValues: {
-      name: group ? group.name : ''
+      name: group ? group.name : '',
     },
     validationSchema: Schema,
-    onSubmit: values => {
+    onSubmit: (values) => {
       updateGroup(group._id, {
-        name: values.name
+        name: values.name,
       });
       onClose();
-    }
+    },
   });
 
   React.useEffect(() => {
@@ -50,12 +41,7 @@ const ModifyGroupModal = (props: {
   }, [group]);
 
   return (
-    <Modal
-      closeable
-      isOpen={isOpen}
-      onClose={onClose}
-      unstable_ModalBackdropScroll
-    >
+    <Modal closeable isOpen={isOpen} onClose={onClose} unstable_ModalBackdropScroll>
       <form onSubmit={formik.handleSubmit}>
         <ModalHeader>Gruppe ändern</ModalHeader>
         <ModalBody>

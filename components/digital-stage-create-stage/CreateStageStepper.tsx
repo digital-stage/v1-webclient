@@ -12,7 +12,7 @@ import {
   makeStyles,
   Theme,
   createStyles,
-  withStyles
+  withStyles,
 } from '@material-ui/core';
 import Icon from '../base/Icon';
 import AddInformatinStep from './AddInformationStep';
@@ -23,24 +23,24 @@ import CreateStageSuccessStep from './CreateStageSuccessStep';
 
 const ColorlibConnector = withStyles({
   alternativeLabel: {
-    top: 22
+    top: 22,
   },
   active: {
     '& $line': {
-      backgroundImage: 'linear-gradient(to right, #472B51, #81254E, #B61E4A)'
-    }
+      backgroundImage: 'linear-gradient(to right, #472B51, #81254E, #B61E4A)',
+    },
   },
   completed: {
     '& $line': {
-      backgroundImage: 'linear-gradient(to right, #472B51, #81254E, #B61E4A)'
-    }
+      backgroundImage: 'linear-gradient(to right, #472B51, #81254E, #B61E4A)',
+    },
   },
   line: {
     height: 3,
     border: 0,
     backgroundColor: '#777777',
-    borderRadius: 1
-  }
+    borderRadius: 1,
+  },
 })(StepConnector);
 
 const useColorlibStepIconStyles = makeStyles({
@@ -53,43 +53,43 @@ const useColorlibStepIconStyles = makeStyles({
     display: 'flex',
     borderRadius: '50%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   active: {
     boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
     '&.icon1': {
-      backgroundColor: '#5D2950 !important'
+      backgroundColor: '#5D2950 !important',
     },
     '&.icon2': {
-      backgroundColor: '#472B51'
+      backgroundColor: '#472B51',
     },
     '&.icon3': {
-      backgroundColor: '#81254E'
+      backgroundColor: '#81254E',
     },
     '&.icon4': {
-      backgroundColor: '#B61E4A'
+      backgroundColor: '#B61E4A',
     },
     '&.icon5': {
-      backgroundColor: '#DD1947'
-    }
+      backgroundColor: '#DD1947',
+    },
   },
   completed: {
     '&.icon1': {
-      backgroundColor: '#5D2950 !important'
+      backgroundColor: '#5D2950 !important',
     },
     '&.icon2': {
-      backgroundColor: '#472B51'
+      backgroundColor: '#472B51',
     },
     '&.icon3': {
-      backgroundColor: '#81254E'
+      backgroundColor: '#81254E',
     },
     '&.icon4': {
-      backgroundColor: '#B61E4A'
+      backgroundColor: '#B61E4A',
     },
     '&.icon5': {
-      backgroundColor: '#DD1947'
-    }
-  }
+      backgroundColor: '#DD1947',
+    },
+  },
 });
 
 function ColorlibStepIcon(props: StepIconProps) {
@@ -97,7 +97,7 @@ function ColorlibStepIcon(props: StepIconProps) {
   const { active, completed } = props;
 
   const icons: { [index: string]: React.ReactElement } = {
-    1: <Icon name="edit" iconColor="#fff" />
+    1: <Icon name="edit" iconColor="#fff" />,
     // 2: <Icon name="settings" iconColor="#fff" />,
   };
 
@@ -107,7 +107,7 @@ function ColorlibStepIcon(props: StepIconProps) {
         classes.root,
         {
           [classes.active]: active,
-          [classes.completed]: completed
+          [classes.completed]: completed,
         },
         `icon${props.icon}`
       )}
@@ -122,20 +122,20 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: '100%',
       '& .MuiPaper-root': {
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
       },
       '& .MuiStepLabel-label': {
-        color: '#777777'
+        color: '#777777',
       },
       '& .MuiStepLabel-label.MuiStepLabel-active, .MuiStepLabel-label.MuiStepLabel-completed': {
-        color: '#fff'
+        color: '#fff',
       },
       '& .MuiStepper-root': {
-        padding: '0px'
-      }
+        padding: '0px',
+      },
     },
     button: {
-      marginRight: theme.spacing(2)
+      marginRight: theme.spacing(2),
     },
     instructions: {
       marginTop: theme.spacing(1),
@@ -146,25 +146,25 @@ const useStyles = makeStyles((theme: Theme) =>
       // overflowY: "auto",
       '&::-webkit-scrollbar': {
         width: '5px',
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
       },
       '&::-webkit-scrollbar-track': {
-        borderRadius: '25px'
+        borderRadius: '25px',
       },
       '&::-webkit-scrollbar-thumb': {
         background: 'white',
-        borderRadius: '25px'
+        borderRadius: '25px',
       },
       '&::-webkit-scrollbar-thumb:hover': {
-        background: 'white'
-      }
-    }
+        background: 'white',
+      },
+    },
   })
 );
 
 function getSteps() {
   return [
-    'Add information'
+    'Add information',
     // 'Advanced settings'
   ];
 }
@@ -172,15 +172,7 @@ function getSteps() {
 export default function CustomizedSteppers(props: { onClick(): void }) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
-  const {
-    valueLength,
-    setError,
-    info,
-    advancedSettings,
-    error,
-    context,
-    stage
-  } = useStage();
+  const { valueLength, setError, info, advancedSettings, error, context, stage } = useStage();
   const steps = getSteps();
   const { createStage, updateStage } = useStageActions();
 
@@ -193,11 +185,11 @@ export default function CustomizedSteppers(props: { onClick(): void }) {
     }
   }
 
-  const handleNext = () => {
-    setActiveStep(prevActiveStep => prevActiveStep + 1);
+  const handleNext = (): JSX.Element => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
-  const checkStep = () => {
+  const checkStep = (): JSX.Element => {
     if (valueLength.name > 0) {
       handleNext();
       setError({ name: false });
@@ -222,22 +214,18 @@ export default function CustomizedSteppers(props: { onClick(): void }) {
     }
   };
 
-  const handleBack = () => {
-    setActiveStep(prevActiveStep => prevActiveStep - 1);
+  const handleBack = (): JSX.Element => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleReset = () => {
+  const handleReset = (): JSX.Element => {
     setActiveStep(0);
     // resetCreateStageDialog()
   };
 
   return (
     <div className={classes.root}>
-      <Stepper
-        alternativeLabel={true}
-        activeStep={activeStep}
-        connector={<ColorlibConnector />}
-      >
+      <Stepper alternativeLabel={true} activeStep={activeStep} connector={<ColorlibConnector />}>
         {steps.map((label, i) => (
           <Step key={label}>
             <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
@@ -248,12 +236,7 @@ export default function CustomizedSteppers(props: { onClick(): void }) {
         {activeStep === steps.length ? (
           <Grid container justify="center">
             <CreateStageSuccessStep />
-            <Button
-              color="light"
-              text="Close"
-              type="submit"
-              onClick={props.onClick}
-            />
+            <Button color="light" text="Close" type="submit" onClick={props.onClick} />
             {/* <Button
                             color="primary"
                             text="Start stage"

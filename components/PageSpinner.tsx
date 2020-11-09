@@ -3,8 +3,7 @@
 import * as React from 'react';
 import { jsx, Flex, Spinner } from 'theme-ui';
 
-const PageSpinner = () => (
-
+const PageSpinner = (): JSX.Element => (
   <Flex
     sx={{
       position: 'fixed',
@@ -19,7 +18,6 @@ const PageSpinner = () => (
   >
     <Spinner sx={{ color: 'text' }} />
   </Flex>
-
 );
 
 export default PageSpinner;

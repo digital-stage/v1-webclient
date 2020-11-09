@@ -1,11 +1,5 @@
-import { ServerStageEvents } from "../../../common/events";
-import {
-  Group,
-  InitialStagePackage,
-  Stage,
-  StageMember,
-  User,
-} from "../../../common/model.server";
+import { ServerStageEvents } from '../../../common/events';
+import { Group, InitialStagePackage, Stage, StageMember, User } from '../../../common/model.server';
 import {
   AudioConsumer,
   AudioProducer,
@@ -16,8 +10,8 @@ import {
   OvTrack,
   VideoConsumer,
   VideoProducer,
-} from "../../model";
-import { AdditionalReducerTypes } from "../reducers";
+} from '../../model';
+import { AdditionalReducerTypes } from '../reducers';
 
 const addUser = (user: User) => {
   return {
@@ -62,7 +56,7 @@ const handleStageJoined = (payload: InitialStagePackage) => {
     payload,
   };
 };
-const handleStageLeft = () => {
+const handleStageLeft = (): JSX.Element => {
   return {
     type: ServerStageEvents.STAGE_LEFT,
   };
@@ -188,9 +182,7 @@ const addCustomAudioProducer = (customAudioProducer: CustomAudioProducer) => {
     payload: customAudioProducer,
   };
 };
-const changeCustomAudioProducer = (
-  customAudioProducer: Partial<CustomAudioProducer>
-) => {
+const changeCustomAudioProducer = (customAudioProducer: Partial<CustomAudioProducer>) => {
   return {
     type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_CHANGED,
     payload: customAudioProducer,

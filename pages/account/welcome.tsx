@@ -7,7 +7,7 @@ import { jsx, Button, Flex, Heading, Text } from 'theme-ui';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Layout from '../../components/Layout';
 
-const Welcome = () => {
+const Welcome = (): JSX.Element => {
   const router = useRouter();
   const { user } = useAuth();
 
@@ -24,16 +24,11 @@ const Welcome = () => {
           justifyContent: 'space-between',
           minHeight: '100vh',
           px: 10,
-          py: 4
+          py: 4,
         }}
       >
         <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
-          <img
-            src="/images/white_logo.png"
-            width="80"
-            height="auto"
-            alt="logo"
-          />
+          <img src="/images/white_logo.png" width="80" height="auto" alt="logo" />
 
           <Heading as="h4" m={3}>
             Your digital stage for art, music

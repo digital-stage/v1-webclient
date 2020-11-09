@@ -8,15 +8,12 @@ import {
   makeStyles,
   Theme,
   Typography,
-  withStyles
+  withStyles,
 } from '@material-ui/core';
 import { jsx, Box, Button, IconButton as IB } from 'theme-ui';
 import { useStage } from './useStage';
 import { useSelector } from 'react-redux';
-import {
-  Groups,
-  NormalizedState
-} from '../../lib/digitalstage/useStageContext/schema';
+import { Groups, NormalizedState } from '../../lib/digitalstage/useStageContext/schema';
 import { useRequest } from '../../lib/useRequest';
 import CreateStageModal from '../digital-stage-create-stage/CreateStageModal';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
@@ -33,30 +30,30 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       textAlign: 'left',
       width: '100vw',
-      margin: theme.spacing(6, 0, 0, 15)
+      margin: theme.spacing(6, 0, 0, 15),
     },
     block: {
-      display: 'block !important'
+      display: 'block !important',
     },
     groupColorSpan: {
       width: '32px',
       height: '32px',
       borderRadius: '50%',
       display: 'block',
-      margin: '0 auto'
+      margin: '0 auto',
     },
     group: {
       textAlign: 'center',
-      margin: theme.spacing(1, 3, 1, 0)
+      margin: theme.spacing(1, 3, 1, 0),
     },
     groupContainer: {
       maxWidth: '70vw',
-      overflowX: 'auto'
+      overflowX: 'auto',
     },
     img: {
       borderRadius: '50%',
-      margin: theme.spacing(0, 3)
-    }
+      margin: theme.spacing(0, 3),
+    },
   })
 );
 
@@ -67,13 +64,13 @@ const DeviceIcon = withStyles((theme: Theme) => ({
     backgroundColor: theme.palette.background.default,
     '&:hover': {
       color: theme.palette.common.black,
-      backgroundColor: theme.palette.common.white
+      backgroundColor: theme.palette.common.white,
     },
     '&:active': {
       color: theme.palette.common.black,
-      backgroundColor: theme.palette.common.white
-    }
-  }
+      backgroundColor: theme.palette.common.white,
+    },
+  },
 }))(IconButton);
 
 const colors: string[] = [
@@ -96,13 +93,13 @@ const colors: string[] = [
   '#0B2D71',
   '#BFBFBF',
   '#F61D1D',
-  '#4D4D4D'
+  '#4D4D4D',
 ];
 
-const StageDetails = () => {
+const StageDetails = (): JSX.Element => {
   const classes = useStyles();
   const { stage, handleSetContext } = useStage();
-  const groups = useSelector<NormalizedState, Groups>(state => state.groups);
+  const groups = useSelector<NormalizedState, Groups>((state) => state.groups);
   const [stageGroupsById, setStageGroupsById] = React.useState<string[]>();
   const { setRequest } = useRequest();
   const [link, setLink] = useState<string>();
@@ -114,10 +111,8 @@ const StageDetails = () => {
 
   const copyLink = (groupId: string) => {
     if (stage && groupId) {
-      const port: string = window.location.port
-        ? ':' + window.location.port
-        : '';
-      let link: string =
+      const port: string = window.location.port ? ':' + window.location.port : '';
+      const link: string =
         window.location.protocol +
         '//' +
         window.location.hostname +
@@ -177,12 +172,7 @@ const StageDetails = () => {
             Groups
           </Typography>
         )}
-        <Grid
-          container
-          justify="flex-start"
-          direction="row"
-          className={classes.groupContainer}
-        >
+        <Grid container justify="flex-start" direction="row" className={classes.groupContainer}>
           {stageGroupsById &&
             stageGroupsById.map((id, i) => {
               const group = groups.byId[id];
@@ -192,11 +182,7 @@ const StageDetails = () => {
                     style={{ backgroundColor: colors[i] }}
                     className={classes.groupColorSpan}
                   ></span>
-                  <Typography
-                    variant="body2"
-                    color="textPrimary"
-                    className={classes.block}
-                  >
+                  <Typography variant="body2" color="textPrimary" className={classes.block}>
                     {group && group.name}
                   </Typography>
                   <Grid container>
@@ -209,9 +195,7 @@ const StageDetails = () => {
                         setCurrentGroup(group);
                       }}
                     >
-                      <EditOutlinedIcon
-                        style={{ color: '#F20544', fontSize: '18px' }}
-                      />
+                      <EditOutlinedIcon style={{ color: '#F20544', fontSize: '18px' }} />
                     </DeviceIcon>
                     <DeviceIcon
                       color="inherit"
@@ -219,9 +203,7 @@ const StageDetails = () => {
                       title="Delete group"
                       onClick={() => removeGroup(group._id)}
                     >
-                      <DeleteOutlinedIcon
-                        style={{ color: '#F20544', fontSize: '18px' }}
-                      />
+                      <DeleteOutlinedIcon style={{ color: '#F20544', fontSize: '18px' }} />
                     </DeviceIcon>
                     <DeviceIcon
                       color="inherit"
@@ -229,21 +211,15 @@ const StageDetails = () => {
                       title="Copy link"
                       onClick={() => copyLink(group._id)}
                     >
-                      <FileCopyOutlinedIcon
-                        style={{ color: '#F20544', fontSize: '18px' }}
-                      />
+                      <FileCopyOutlinedIcon style={{ color: '#F20544', fontSize: '18px' }} />
                     </DeviceIcon>
                     <DeviceIcon
                       color="inherit"
                       size="medium"
                       title="Enter group"
-                      onClick={() =>
-                        setRequest(stage._id, group._id, stage.password)
-                      }
+                      onClick={() => setRequest(stage._id, group._id, stage.password)}
                     >
-                      <InputOutlinedIcon
-                        style={{ color: '#F20544', fontSize: '18px' }}
-                      />
+                      <InputOutlinedIcon style={{ color: '#F20544', fontSize: '18px' }} />
                     </DeviceIcon>
                   </Grid>
                 </Grid>

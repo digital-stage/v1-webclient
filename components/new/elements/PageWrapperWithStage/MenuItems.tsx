@@ -2,9 +2,7 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx } from 'theme-ui';
-import {
-  FaVideo, FaMicrophone, FaMusic, FaCog,
-} from 'react-icons/fa';
+import { FaVideo, FaMicrophone, FaMusic, FaCog } from 'react-icons/fa';
 import NavItem from '../Menu/NavItem';
 import AudioSettingsPane from '../../panes/AudioSettingsPane';
 import VideoSettingsPane from '../../panes/VideoSettingsPane';

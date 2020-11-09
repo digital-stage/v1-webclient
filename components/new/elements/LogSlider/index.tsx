@@ -45,14 +45,12 @@ const LogSlider = (props: {
     (value: number): number => {
       if (value > NULL_VALUE) {
         const y = (value - NULL_VALUE) / (MAX - NULL_VALUE);
-        return (
-          Math.pow(y, UPPER_BASE) * (props.max - props.middle) + props.middle
-        );
+        return Math.pow(y, UPPER_BASE) * (props.max - props.middle) + props.middle;
       }
       const y = (value / NULL_VALUE) * (LOWER_BASE - 1) + 1;
       return getBaseLog(LOWER_BASE, y);
     },
-    [props.middle, props.max],
+    [props.middle, props.max]
   );
 
   const convertLogToLinear = useCallback(
@@ -60,19 +58,14 @@ const LogSlider = (props: {
       if (value > props.middle) {
         return (
           Math.round(
-            Math.pow(
-              (value - props.middle) / (props.max - props.middle),
-              1 / UPPER_BASE,
-            )
-              * (MAX - NULL_VALUE),
+            Math.pow((value - props.middle) / (props.max - props.middle), 1 / UPPER_BASE) *
+              (MAX - NULL_VALUE)
           ) + NULL_VALUE
         );
       }
-      return Math.round(
-        ((Math.pow(LOWER_BASE, value) - 1) / (LOWER_BASE - 1)) * NULL_VALUE,
-      );
+      return Math.round(((Math.pow(LOWER_BASE, value) - 1) / (LOWER_BASE - 1)) * NULL_VALUE);
     },
-    [props.middle, props.max],
+    [props.middle, props.max]
   );
 
   useEffect(() => {
@@ -87,7 +80,7 @@ const LogSlider = (props: {
         props.onChange(volume);
       }
     },
-    [props.onChange],
+    [props.onChange]
   );
 
   const handleFinalSliderChange = useCallback(
@@ -97,7 +90,7 @@ const LogSlider = (props: {
         props.onEnd(volume);
       }
     },
-    [props.onEnd],
+    [props.onEnd]
   );
 
   return (
@@ -120,9 +113,7 @@ const LogSlider = (props: {
         if (large) {
           return (
             <Caption1>
-              {formatDbMeasure(
-                convertRangeToDbMeasure(convertLinearToLog(value)),
-              )}
+              {formatDbMeasure(convertRangeToDbMeasure(convertLinearToLog(value)))}
             </Caption1>
           );
         }

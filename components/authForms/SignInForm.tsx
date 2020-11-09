@@ -18,20 +18,18 @@ export interface IError {
   staySignedIn?: boolean;
 }
 
-const SignInForm = () => {
+const SignInForm = (): JSX.Element => {
   const { signInWithEmailAndPassword } = useAuth();
 
   const [msg, setMsg] = React.useState({
     state: false,
     type: null,
-    kids: null
+    kids: null,
   });
 
   const SignInSchema = Yup.object().shape({
-    email: Yup.string()
-      .email('Enter a valid email')
-      .required('Email is required'),
-    password: Yup.string().required('Password is required')
+    email: Yup.string().email('Enter a valid email').required('Email is required'),
+    password: Yup.string().required('Password is required'),
   });
 
   return (
@@ -40,24 +38,20 @@ const SignInForm = () => {
         initialValues={{
           email: '',
           password: '',
-          staySignedIn: false
+          staySignedIn: false,
         }}
         validationSchema={SignInSchema}
         // eslint-disable-next-line max-len
         onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) =>
-          signInWithEmailAndPassword(
-            values.email,
-            values.password,
-            values.staySignedIn
-          )
+          signInWithEmailAndPassword(values.email, values.password, values.staySignedIn)
             .then(() => {
               resetForm(null);
             })
-            .catch(err =>
+            .catch((err) =>
               setMsg({
                 state: true,
                 type: 'danger',
-                kids: { err }
+                kids: { err },
               })
             )
         }

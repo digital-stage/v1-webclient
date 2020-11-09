@@ -1,11 +1,8 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Flex, Box } from 'theme-ui';
-
-import { useStyletron } from 'baseui';
+import { jsx, Flex, Box, Heading } from 'theme-ui';
 import { Avatar } from 'baseui/avatar';
-import { H5, HeadingSmall } from 'baseui/typography';
 import { FaVideo, FaVideoSlash } from 'react-icons/fa';
 import OnlineStatus from '../OnlineStatus';
 import {
@@ -17,49 +14,49 @@ import VideoPlayer from '../VideoPlayer';
 
 const StageMemberTitle = (props: { stageMember: ExtendedStageMember }) => {
   const { stageMember } = props;
-  const [css] = useStyletron();
+
   const { updateStageMember } = useStageActions();
   const isAdmin = useIsStageAdmin();
 
   return (
-    <div
-      className={css({
-        display: 'flex',
+    <Flex
+      sx={{
         width: 'calc(100% - 2rem)',
         alignItems: 'center',
-      })}
+      }}
     >
-      <div
-        className={css({
+      <Box
+        sx={{
           margin: '.5rem',
           flexGrow: 0,
-        })}
+        }}
       >
         <Avatar name={stageMember.name} />
-      </div>
-      <div
-        className={css({
+      </Box>
+      <Box
+        sx={{
           display: 'flex',
           flexGrow: 1,
-        })}
+        }}
       >
-        <H5>{stageMember.name}</H5>
-      </div>
+        <Heading as="h5">{stageMember.name}</Heading>
+      </Box>
 
       {isAdmin && (
-      <div
-        role="presentation"
-        className={css({
-          display: 'flex',
-          flexGrow: 0,
-          cursor: 'pointer',
-        })}
-        onClick={() => updateStageMember(stageMember._id, {
-          isDirector: !props.stageMember.isDirector,
-        })}
-      >
-        {stageMember.isDirector ? <FaVideo /> : <FaVideoSlash />}
-      </div>
+        <Flex
+          role="presentation"
+          sx={{
+            flexGrow: 0,
+            cursor: 'pointer',
+          }}
+          onClick={() =>
+            updateStageMember(stageMember._id, {
+              isDirector: !props.stageMember.isDirector,
+            })
+          }
+        >
+          {stageMember.isDirector ? <FaVideo /> : <FaVideoSlash />}
+        </Flex>
       )}
       <OnlineStatus
         overrides={{
@@ -68,8 +65,7 @@ const StageMemberTitle = (props: { stageMember: ExtendedStageMember }) => {
         }}
         online={stageMember.online}
       />
-    </div>
-
+    </Flex>
   );
 };
 

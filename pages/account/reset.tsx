@@ -8,7 +8,7 @@ import Layout from '../../components/Layout';
 import AuthPageContainer from '../../components/AuthPageContainer';
 import ResetPasswordForm from '../../components/authForms/ResetPasswordForm';
 
-const Reset = () => {
+const Reset = (): JSX.Element => {
   const router = useRouter();
   const { user } = useAuth();
   const { token } = router.query;

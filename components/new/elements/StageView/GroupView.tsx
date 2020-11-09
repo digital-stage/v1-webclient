@@ -24,10 +24,10 @@ const GroupView = (props: { group: Group }) => {
           className={css({
             display: 'flex',
             flexWrap: 'wrap',
-            justifyContent: 'flex-start'
+            justifyContent: 'flex-start',
           })}
         >
-          {stageMembers.map(stageMember => (
+          {stageMembers.map((stageMember) => (
             <StageMemberView key={stageMember._id} stageMember={stageMember} />
           ))}
         </div>

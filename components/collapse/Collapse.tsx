@@ -13,7 +13,7 @@ const Collapse = (props: { children: React.ReactNode }) => {
     <Box
       sx={{
         background: '#181818 0% 0% no-repeat padding-box',
-        minWidth: '60vw'
+        minWidth: '60vw',
       }}
     >
       <CollapseTitle onClick={() => setOpen(!isOpen)} isOpen={isOpen} />

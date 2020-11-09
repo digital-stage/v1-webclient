@@ -1,9 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import {
-  jsx, Flex,
-} from 'theme-ui';
+import { jsx, Flex } from 'theme-ui';
 import styled from '@emotion/styled';
 import { useAuth } from '../../../../lib/digitalstage/useAuth';
 import Modal from '../Modal';
@@ -36,13 +34,13 @@ const PageWrapperWithStage = (props: { children: React.ReactNode }) => {
   }
 
   return (
-    <Flex sx={{
-      flexDirection: ['column', 'row'],
-      width: '100%',
-      height: '100%',
-      minHeight: '100vh',
-      bg: 'yellow',
-    }}
+    <Flex
+      sx={{
+        flexDirection: ['column', 'row'],
+        width: '100%',
+        height: '100%',
+        minHeight: '100vh',
+      }}
     >
       <DesktopSideBar
         selected={currentItem}
@@ -70,10 +68,11 @@ const PageWrapperWithStage = (props: { children: React.ReactNode }) => {
           }
         }}
       />
-      <Flex sx={{
-        flexDirection: 'column',
-        flexGrow: 1,
-      }}
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          flexGrow: 1,
+        }}
       >
         {children}
         {currentItem && (

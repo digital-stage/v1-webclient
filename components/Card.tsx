@@ -5,7 +5,7 @@ import { jsx, Box } from 'theme-ui';
 
 enum Size {
   default = 'default',
-  auth = 'auth'
+  auth = 'auth',
 }
 
 const Card = (props: {
@@ -13,7 +13,7 @@ const Card = (props: {
   maxWidth?: string;
   size?: string | Size.default;
   white?: boolean | false;
-}) => {
+}): JSX.Element => {
   const { children, maxWidth, size, white } = props;
 
   return (
@@ -27,7 +27,7 @@ const Card = (props: {
         py: 3,
         px: 4,
         my: 4,
-        mx: 'auto'
+        mx: 'auto',
       }}
     >
       {children}

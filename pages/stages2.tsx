@@ -8,10 +8,10 @@ import StageListView from '../components/new/elements/StageList';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
 import Container from '../components/Container';
 
-const Stages2 = () => {
+const Stages2 = (): JSX.Element => {
   const router = useRouter();
   const { loading, user } = useAuth();
-  const stageId = useStageSelector<string | undefined>(state => state.stageId);
+  const stageId = useStageSelector<string | undefined>((state) => state.stageId);
   const [initialized, setInitialized] = useState<boolean>();
 
   useEffect(() => {

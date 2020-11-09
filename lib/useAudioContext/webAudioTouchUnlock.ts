@@ -1,4 +1,4 @@
-import { IAudioContext } from "standardized-audio-context";
+import { IAudioContext } from 'standardized-audio-context';
 
 export default function webAudioTouchUnlock(context: IAudioContext) {
   return new Promise<boolean>((resolve, reject) => {
@@ -7,12 +7,12 @@ export default function webAudioTouchUnlock(context: IAudioContext) {
             return;
         } */
 
-    if (context.state === "suspended" && "ontouchstart" in window) {
-      const unlock = () => {
+    if (context.state === 'suspended' && 'ontouchstart' in window) {
+      const unlock = (): JSX.Element => {
         context.resume().then(
           () => {
-            document.body.removeEventListener("touchstart", unlock);
-            document.body.removeEventListener("touchend", unlock);
+            document.body.removeEventListener('touchstart', unlock);
+            document.body.removeEventListener('touchend', unlock);
 
             resolve(true);
           },
@@ -22,8 +22,8 @@ export default function webAudioTouchUnlock(context: IAudioContext) {
         );
       };
 
-      document.body.addEventListener("touchstart", unlock, false);
-      document.body.addEventListener("touchend", unlock, false);
+      document.body.addEventListener('touchstart', unlock, false);
+      document.body.addEventListener('touchend', unlock, false);
     } else {
       resolve(false);
     }

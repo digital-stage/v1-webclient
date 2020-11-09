@@ -19,7 +19,7 @@ export const filter = function <T>(arr: Readonly<T[]>, value: T): T[] {
 export function addItemToCollection<T>(
   state: Readonly<ExtendedCollection<T>>,
   id: string,
-  payload: T,
+  payload: T
 ): ExtendedCollection<T> {
   return {
     ...state,
@@ -35,7 +35,7 @@ export const updateItem = (
   state: Readonly<NormalizedState>,
   group: string,
   id: string,
-  payload: any,
+  payload: any
 ): NormalizedState => ({
   ...state,
   [group]: {
@@ -52,7 +52,7 @@ export const updateItem = (
 export const removeItem = (
   state: Readonly<NormalizedState>,
   group: string,
-  id: string,
+  id: string
 ): NormalizedState => ({
   ...state,
   [group]: {
@@ -70,7 +70,7 @@ export const removeItemWithArrayReference = (
     group: string;
     id: string;
     key: string;
-  },
+  }
 ): NormalizedState => ({
   ...state,
   [reference.group]: {
@@ -79,9 +79,9 @@ export const removeItemWithArrayReference = (
       ...state[reference.group].byId,
       [reference.id]: {
         ...state[reference.group].byId[reference.id],
-        [reference.key]: state[reference.group].byId[reference.id][
-          reference.key
-        ].filter((refId) => refId !== id),
+        [reference.key]: state[reference.group].byId[reference.id][reference.key].filter(
+          (refId) => refId !== id
+        ),
       },
     },
   },
@@ -99,7 +99,7 @@ export const removeItemWithReference = (
     group: string;
     id: string;
     key: string;
-  },
+  }
 ): NormalizedState => ({
   ...state,
   [reference.group]: {

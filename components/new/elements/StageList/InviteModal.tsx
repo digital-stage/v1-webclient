@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Modal,
-  ModalBody,
-  ModalButton,
-  ModalFooter,
-  ModalHeader
-} from 'baseui/modal';
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Input } from 'baseui/input';
 import { Checkbox } from 'baseui/checkbox';
@@ -26,10 +20,8 @@ const InviteModal = (props: {
   useEffect(() => {
     setCopied(false);
     if (stage && group) {
-      const port: string = window.location.port
-        ? `:${window.location.port}`
-        : '';
-      let generatedLink: string = `${window.location.protocol}//${window.location.hostname}${port}/join/${stage._id}/${group._id}`;
+      const port: string = window.location.port ? `:${window.location.port}` : '';
+      let generatedLink = `${window.location.protocol}/${window.location.hostname}${port}/join/${stage._id}/${group._id}`;
       if (usePassword && stage.password && includePassword) {
         generatedLink += `?password=${stage.password}`;
       }
@@ -48,7 +40,7 @@ const InviteModal = (props: {
         {usePassword && stage.password && (
           <Checkbox
             checked={includePassword}
-            onChange={event => setIncludePassword(event.currentTarget.checked)}
+            onChange={(event) => setIncludePassword(event.currentTarget.checked)}
           >
             Füge Passwort mit an
           </Checkbox>

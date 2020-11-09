@@ -10,7 +10,7 @@ const StageView = (props: { stage: Stage }) => {
 
   return (
     <div>
-      {groups.map(group => (
+      {groups.map((group) => (
         <GroupView key={group._id} group={group} />
       ))}
       <ConductorsView />

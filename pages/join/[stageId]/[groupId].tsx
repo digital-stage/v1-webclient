@@ -4,7 +4,7 @@ import { DisplayMedium } from 'baseui/typography';
 import { useRequest } from '../../../lib/useRequest';
 import Loading from '../../../components/new/elements/Loading';
 
-const Join = () => {
+const Join = (): JSX.Element => {
   const router = useRouter();
 
   const { setRequest } = useRequest();
@@ -16,12 +16,7 @@ const Join = () => {
   useEffect(() => {
     if (router.query) {
       const { stageId, groupId, password } = router.query;
-      if (
-        stageId &&
-        groupId &&
-        !Array.isArray(stageId) &&
-        !Array.isArray(groupId)
-      ) {
+      if (stageId && groupId && !Array.isArray(stageId) && !Array.isArray(groupId)) {
         if (password && !Array.isArray(password)) {
           setRequest(stageId, groupId, password);
         } else {

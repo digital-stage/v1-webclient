@@ -6,13 +6,11 @@ import { DisplayMedium } from 'baseui/typography';
 import { Notification } from 'baseui/notification';
 import { KIND } from 'baseui/toast';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
-import Container from '../components/new/elements/Container';
+import Container from '../components/Container';
 
-const Test = () => {
-  const { localDevice } = useStageSelector(state => ({
-    localDevice: state.devices.local
-      ? state.devices.byId[state.devices.local]
-      : undefined
+const Test = (): JSX.Element => {
+  const { localDevice } = useStageSelector((state) => ({
+    localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
   }));
   const [error, setError] = useState<string>();
   const [videoTested, setVideoTested] = useState<boolean>();
@@ -25,19 +23,19 @@ const Test = () => {
         audio:
           localDevice && localDevice.inputAudioDeviceId
             ? {
-                deviceId: localDevice.inputAudioDeviceId
+                deviceId: localDevice.inputAudioDeviceId,
               }
-            : true
+            : true,
       })
-      .then(stream => {
+      .then((stream) => {
         if (stream.getAudioTracks().length > 0) {
           setAudioTested(true);
         } else {
           setError('Audiogerät ist nicht korrekt konfiguriert');
         }
-        stream.getAudioTracks().forEach(track => track.stop());
+        stream.getAudioTracks().forEach((track) => track.stop());
       })
-      .catch(userMediaError => setError(userMediaError.message));
+      .catch((userMediaError) => setError(userMediaError.message));
   }, [localDevice]);
 
   const testVideo = useCallback(() => {
@@ -47,19 +45,19 @@ const Test = () => {
         video:
           localDevice && localDevice.inputAudioDeviceId
             ? {
-                deviceId: localDevice.inputAudioDeviceId
+                deviceId: localDevice.inputAudioDeviceId,
               }
-            : true
+            : true,
       })
-      .then(stream => {
+      .then((stream) => {
         if (stream.getVideoTracks().length > 0) {
           setVideoTested(true);
         } else {
           setError('Videogerät ist nicht korrekt konfiguriert');
         }
-        stream.getVideoTracks().forEach(track => track.stop());
+        stream.getVideoTracks().forEach((track) => track.stop());
       })
-      .catch(userMediaError => setError(userMediaError.message));
+      .catch((userMediaError) => setError(userMediaError.message));
   }, [localDevice]);
 
   return (
@@ -68,17 +66,11 @@ const Test = () => {
       <>
         {error && (
           <Notification kind={KIND.negative}>
-            {error === 'Permission denied'
-              ? 'Bitte aktiviere der Gerät'
-              : error}
+            {error === 'Permission denied' ? 'Bitte aktiviere der Gerät' : error}
           </Notification>
         )}
         <ListItem
-          endEnhancer={() => (
-            <ListItemLabel>
-              {audioTested ? <Check /> : <Delete />}
-            </ListItemLabel>
-          )}
+          endEnhancer={() => <ListItemLabel>{audioTested ? <Check /> : <Delete />}</ListItemLabel>}
         >
           <ListItemLabel>
             {audioTested ? (
@@ -89,11 +81,7 @@ const Test = () => {
           </ListItemLabel>
         </ListItem>
         <ListItem
-          endEnhancer={() => (
-            <ListItemLabel>
-              {videoTested ? <Check /> : <Delete />}
-            </ListItemLabel>
-          )}
+          endEnhancer={() => <ListItemLabel>{videoTested ? <Check /> : <Delete />}</ListItemLabel>}
         >
           <ListItemLabel>
             {videoTested ? (
