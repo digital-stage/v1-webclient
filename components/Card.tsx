@@ -21,7 +21,7 @@ const Card = (props: {
       sx={{
         bg: white ? 'text' : 'background',
         boxShadow: 'default',
-        width: '90vw',
+        width: '100%',
         maxWidth: size === 'auth' ? 'container.tiny' : maxWidth,
         borderRadius: '18px',
         py: 3,

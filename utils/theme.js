@@ -47,10 +47,9 @@ export default {
   sizes: {
     container: {
       fullscreen: '100%',
-      largeplus: 'calc(920px + 20vw)',
-      smallplus: 'calc(640px + 10vw)',
       wide: '1407px',
       default: '800px',
+      stage: '600px',
       small: '400px',
       tiny: '300px',
     },

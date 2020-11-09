@@ -2,30 +2,28 @@
 /** @jsx jsx */
 import React from 'react';
 import { useRouter } from 'next/router';
-import { jsx, Heading, Text, Box } from 'theme-ui';
+import { jsx, Heading } from 'theme-ui';
 import { useAuth } from '../lib/digitalstage/useAuth';
-import Loading from '../components/new/elements/Loading';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
 import PageWrapperWithStage from '../components/new/elements/PageWrapperWithStage';
 import StagePane from '../components/new/panes/StagePane';
 import StageListView from '../components/new/elements/StageList';
-
 import DeviceControl from '../components/new/elements/DeviceControl';
 import FixedLeaveButton from '../components/new/elements/Menu/FixedLeaveButton';
 import Layout from '../components/Layout';
 import Container from '../components/Container';
+import PageSpinner from '../components/PageSpinner';
 import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/FixedAudioPlaybackStarterButton';
 
 const Index = () => {
   const router = useRouter();
   const { loading, user } = useAuth();
-  const stageId = useStageSelector<string | undefined>(state => state.stageId);
+  const stageId = useStageSelector<string | undefined>((state) => state.stageId);
 
   if (!loading) {
     if (!user) {
       router.push('/account/welcome');
     } else {
-      // On stage related pages (all except sign in handling) wrap with PagWrapperWithStage
       return (
         <React.Fragment>
           {stageId ? (
@@ -34,18 +32,17 @@ const Index = () => {
             </PageWrapperWithStage>
           ) : (
             <Layout>
-              <Container>
-                <div>
-                  <h1>My Stages</h1>
-                  <StageListView />
-                </div>
+              <Container size="stage">
+                <Heading as="h1">Meine Bühnen</Heading>
+                <StageListView />
               </Container>
             </Layout>
           )}
-
+          {/** TODO: active in the right context but not in general
           <DeviceControl />
           <FixedAudioPlaybackStarterButton />
           <FixedLeaveButton />
+          */}
         </React.Fragment>
       );
     }
@@ -53,9 +50,7 @@ const Index = () => {
 
   return (
     <Layout>
-      <Loading>
-        <Heading as="h1">Neues Layout im Anmarsch!</Heading>
-      </Loading>
+      <PageSpinner />
     </Layout>
   );
 };

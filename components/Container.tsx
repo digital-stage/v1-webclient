@@ -1,38 +1,42 @@
+/* eslint-disable no-nested-ternary */
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import React from 'react';
-import { jsx, Box } from 'theme-ui';
+import { jsx, Flex } from 'theme-ui';
 
-enum Type {
+enum Size {
   default = 'default',
   flex = 'flex',
-  wide = 'wide'
+  stage = 'stage',
+  wide = 'wide',
 }
 
 const Container = (props: {
   children: React.ReactNode;
-  type?: Type | Type.default;
+  row?: boolean;
+  size?: Size;
 }) => {
-  const { children, type } = props;
+  const { children, row = false, size = 'default' } = props;
 
   return (
-    <Box
+    <Flex
       sx={{
-        display: 'flex',
-        flexDirection: type !== 'flex' ? 'column' : 'row',
-        width: type !== 'flex' && '100%',
+        flexDirection: row ? 'row' : 'column',
+        width: '100%',
         maxWidth:
-          type === 'default'
+          size === 'default'
             ? 'container.default'
-            : type === 'wide' && 'container.wide',
-        mt: type === 'flex' && 4,
+            : size === 'wide'
+              ? 'container.wide'
+              : size === 'stage' && 'container.stage',
+        mt: row && 4,
         mx: 'auto',
-        px: 4, // px: '16px',
-        justifyContent: type === 'flex' && 'space-around'
+        px: 4,
+        justifyContent: row && 'space-around',
       }}
     >
       {children}
-    </Box>
+    </Flex>
   );
 };
 export default Container;
