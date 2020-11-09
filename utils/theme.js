@@ -12,16 +12,7 @@ export default {
     dangerUnderline: '#FA000099',
     success: '#24A312',
     navigation: 'hsl(333, 50%, 8%)',
-    gray: [
-      '#D1D1D1',
-      '#B3B3B3',
-      '#828282',
-      '#535353',
-      '#282828',
-      '#181818',
-      '#101010',
-      '#000000',
-    ],
+    gray: ['#D1D1D1', '#B3B3B3', '#828282', '#535353', '#282828', '#181818', '#101010', '#000000'],
   },
   fonts: {
     body: "'Open Sans', Verdana, sans-serif",

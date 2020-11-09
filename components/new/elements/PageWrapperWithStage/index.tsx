@@ -11,7 +11,7 @@ import AppBar from '../Menu/AppBar';
 import { CenteredNavItems, LowerNavItems, UpperNavItems } from './MenuItems';
 
 const DesktopSideBar = styled(SideBar)({
-  display: ['none', 'none'],
+  display: ['none', 'flex'],
   flexGrow: 0,
   zIndex: 100,
 });
@@ -40,6 +40,7 @@ const PageWrapperWithStage = ({ children }: { children: React.ReactNode }): JSX.
         minHeight: '100vh',
       }}
     >
+      {/** 
       <DesktopSideBar
         selected={currentItem}
         upperLinks={UpperNavItems}
@@ -55,6 +56,7 @@ const PageWrapperWithStage = ({ children }: { children: React.ReactNode }): JSX.
           }
         }}
       />
+      */}
       <MobileAppBar
         navItems={[...UpperNavItems, ...CenteredNavItems, ...LowerNavItems]}
         onSelected={(item) => {
