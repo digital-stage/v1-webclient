@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal';
-import Button from '../uikit/Button';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Button } from 'theme-ui';
+import {
+  Modal, ModalBody, ModalFooter, ModalHeader,
+} from 'baseui/modal';
 
 export interface ErrorsProps {
   errors: string[];
@@ -11,22 +15,21 @@ export interface ErrorsProps {
 const ErrorsContext = React.createContext<ErrorsProps>({
   errors: [],
   reportError: () => {},
-  clearErrors: () => {}
+  clearErrors: () => {},
 });
 
-export const useErrors = (): ErrorsProps =>
-  React.useContext<ErrorsProps>(ErrorsContext);
+export const useErrors = (): ErrorsProps => React.useContext<ErrorsProps>(ErrorsContext);
 
 export const ErrorsProvider = (props: { children: React.ReactNode }) => {
-  const [errors, setErrors] = useState<string[]>([]);
+  const [errors, setErrors] = React.useState<string[]>([]);
   const { children } = props;
 
   return (
     <ErrorsContext.Provider
       value={{
         errors,
-        reportError: (error: string) => setErrors(prev => [...prev, error]),
-        clearErrors: () => setErrors([])
+        reportError: (error: string) => setErrors((prev) => [...prev, error]),
+        clearErrors: () => setErrors([]),
       }}
     >
       {children}
@@ -34,13 +37,13 @@ export const ErrorsProvider = (props: { children: React.ReactNode }) => {
         <ModalHeader>Fehler</ModalHeader>
         <ModalBody>
           <ul>
-            {errors.map(error => (
+            {errors.map((error) => (
               <li>{error}</li>
             ))}
           </ul>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={() => setErrors([])}>Ignorieren</Button>
+          <Button onClick={() => setErrors([])}>Schliessen</Button>
         </ModalFooter>
       </Modal>
     </ErrorsContext.Provider>

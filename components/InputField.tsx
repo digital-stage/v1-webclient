@@ -1,14 +1,15 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Input, Label, Box, Text } from 'theme-ui';
+import {
+  jsx, Input, Label, Box, Text,
+} from 'theme-ui';
 import { ErrorMessage } from 'formik';
 
 // TODO: add TS interface / type
-export interface Type {
-  version: "light" | "dark";
-}
-const InputField = ({ id, label, name, error, version, ...rest }) => (
+const InputField = ({
+  id, label, name, version, error, ...rest
+}) => (
   <Box sx={{ mt: 4 }}>
     <Label
       htmlFor={id}
@@ -16,7 +17,7 @@ const InputField = ({ id, label, name, error, version, ...rest }) => (
         fontSize: 12,
         color: version === "dark" ? "#00000099" : 'muted',
         pl: 2,
-        bg: error && '#9D131364'
+        bg: error && '#9D131364',
       }}
     >
       {label}
@@ -24,6 +25,7 @@ const InputField = ({ id, label, name, error, version, ...rest }) => (
     <Input
       id={id}
       name={name}
+      autocomplete={name === 'password' ? 'on' : name}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
       sx={{
@@ -38,18 +40,18 @@ const InputField = ({ id, label, name, error, version, ...rest }) => (
           borderBottomColor: 'text',
           // ThemeUI color does not work on this prop thus white instead of text
           WebkitTextFillColor: 'white',
-          boxShadow: '0 0 0px 1000px #1c1c1c inset'
-        }
+          boxShadow: '0 0 0px 1000px #1c1c1c inset',
+        },
       }}
     />
     <ErrorMessage
       name={name}
-      render={msg => (
+      render={(msg) => (
         <Text
           sx={{
             fontSize: 10,
             color: '#707070',
-            pt: 1
+            pt: 1,
           }}
         >
           {msg}

@@ -8,8 +8,8 @@ import useStageSelector from '../lib/digitalstage/useStageSelector';
 import PageWrapperWithStage from '../components/new/elements/PageWrapperWithStage';
 import StagePane from '../components/new/panes/StagePane';
 import StageListView from '../components/new/elements/StageList';
-import DeviceControl from '../components/new/elements/DeviceControl';
-import FixedLeaveButton from '../components/new/elements/Menu/FixedLeaveButton';
+import StageDeviceController from '../components/StageDeviceController';
+import StageLeaver from '../components/StageLeaver';
 import Layout from '../components/Layout';
 import Container from '../components/Container';
 import PageSpinner from '../components/PageSpinner';
@@ -25,25 +25,23 @@ const Index = () => {
       router.push('/account/welcome');
     } else {
       return (
-        <React.Fragment>
+        <Layout>
           {stageId ? (
-            <PageWrapperWithStage>
-              <StagePane />
-            </PageWrapperWithStage>
+            <React.Fragment>
+              <PageWrapperWithStage>
+                <StagePane />
+              </PageWrapperWithStage>
+              <StageDeviceController />
+              <FixedAudioPlaybackStarterButton />
+              <StageLeaver />
+            </React.Fragment>
           ) : (
-            <Layout>
-              <Container size="stage">
-                <Heading as="h1">Meine Bühnen</Heading>
-                <StageListView />
-              </Container>
-            </Layout>
+            <Container size="stage">
+              <Heading as="h1">Meine Bühnen</Heading>
+              <StageListView />
+            </Container>
           )}
-          {/** TODO: active in the right context but not in general
-          <DeviceControl />
-          <FixedAudioPlaybackStarterButton />
-          <FixedLeaveButton />
-          */}
-        </React.Fragment>
+        </Layout>
       );
     }
   }

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useStyletron } from 'styletron-react';
 import { Caption1 } from 'baseui/typography';
 import VerticalSlider from './VerticalSlider';
 import { convertRangeToDbMeasure, formatDbMeasure } from './utils';
@@ -41,7 +40,6 @@ const LogSlider = (props: {
 }) => {
   const [value, setValue] = useState<number>();
   const [dbValue, setDbValue] = useState<number>(props.volume);
-  const [css] = useStyletron();
 
   const convertLinearToLog = useCallback(
     (value: number): number => {
@@ -54,7 +52,7 @@ const LogSlider = (props: {
       const y = (value / NULL_VALUE) * (LOWER_BASE - 1) + 1;
       return getBaseLog(LOWER_BASE, y);
     },
-    [props.middle, props.max]
+    [props.middle, props.max],
   );
 
   const convertLogToLinear = useCallback(
@@ -64,17 +62,17 @@ const LogSlider = (props: {
           Math.round(
             Math.pow(
               (value - props.middle) / (props.max - props.middle),
-              1 / UPPER_BASE
-            ) *
-              (MAX - NULL_VALUE)
+              1 / UPPER_BASE,
+            )
+              * (MAX - NULL_VALUE),
           ) + NULL_VALUE
         );
       }
       return Math.round(
-        ((Math.pow(LOWER_BASE, value) - 1) / (LOWER_BASE - 1)) * NULL_VALUE
+        ((Math.pow(LOWER_BASE, value) - 1) / (LOWER_BASE - 1)) * NULL_VALUE,
       );
     },
-    [props.middle, props.max]
+    [props.middle, props.max],
   );
 
   useEffect(() => {
@@ -89,7 +87,7 @@ const LogSlider = (props: {
         props.onChange(volume);
       }
     },
-    [props.onChange]
+    [props.onChange],
   );
 
   const handleFinalSliderChange = useCallback(
@@ -99,7 +97,7 @@ const LogSlider = (props: {
         props.onEnd(volume);
       }
     },
-    [props.onEnd]
+    [props.onEnd],
   );
 
   return (
@@ -116,15 +114,14 @@ const LogSlider = (props: {
       text={formatDbMeasure(dbValue, true)}
       alignLabel={props.alignLabel}
       showMarks
-      renderMarks={index => {
+      renderMarks={(index) => {
         const value = MAX - index * STEP;
-        const large: boolean =
-          value === MIN || value === MAX || value === NULL_VALUE;
+        const large: boolean = value === MIN || value === MAX || value === NULL_VALUE;
         if (large) {
           return (
             <Caption1>
               {formatDbMeasure(
-                convertRangeToDbMeasure(convertLinearToLog(value))
+                convertRangeToDbMeasure(convertLinearToLog(value)),
               )}
             </Caption1>
           );

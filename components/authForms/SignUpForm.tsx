@@ -1,8 +1,12 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Button, Flex, Message } from 'theme-ui';
-import { Formik, Form, Field, FormikHelpers } from 'formik';
+import {
+  jsx, Box, Button, Flex, Message,
+} from 'theme-ui';
+import {
+  Formik, Form, Field, FormikHelpers,
+} from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import InputField from '../InputField';
@@ -22,7 +26,7 @@ const SignUpForm = () => {
   const [msg, setMsg] = React.useState({
     state: false,
     type: null,
-    kids: null
+    kids: null,
   });
 
   const SignUpSchema = Yup.object().shape({
@@ -37,12 +41,12 @@ const SignUpForm = () => {
       .min(8, 'Too Short!')
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
-        'Password must contain: at least one number, one uppercase and one lowercase letters and at least 8 chars'
+        'Password must contain: at least one number, one uppercase and one lowercase letters and at least 8 chars',
       )
       .required('Password is required'),
     passwordRepeat: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .required('Repeat password is required')
+      .required('Repeat password is required'),
   });
 
   return (
@@ -52,40 +56,35 @@ const SignUpForm = () => {
           email: '',
           name: '',
           password: '',
-          passwordRepeat: ''
+          passwordRepeat: '',
         }}
         validationSchema={SignUpSchema}
-        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) =>
-          createUserWithEmailAndPassword(
-            values.email,
-            values.password,
-            values.name
-          )
-            .then(res => {
-              console.log('SignUp', res);
-              if (res === 201) {
-                setMsg({
-                  state: true,
-                  type: 'success',
-                  kids: 'Please log in to your new account'
-                });
-                resetForm(null);
-              } else {
-                setMsg({
-                  state: true,
-                  type: 'warning',
-                  kids: 'Oops - please try again'
-                });
-              }
-            })
-            .catch(err =>
+        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) => createUserWithEmailAndPassword(
+          values.email,
+          values.password,
+          values.name,
+        )
+          .then((res) => {
+            if (res === 201) {
               setMsg({
                 state: true,
-                type: 'danger',
-                kids: { err }
-              })
-            )
-        }
+                type: 'success',
+                kids: 'Please log in to your new account',
+              });
+              resetForm(null);
+            } else {
+              setMsg({
+                state: true,
+                type: 'warning',
+                kids: 'Oops - please try again',
+              });
+            }
+          })
+          .catch((err) => setMsg({
+            state: true,
+            type: 'danger',
+            kids: { err },
+          }))}
       >
         {({ errors, touched }) => (
           <Form>

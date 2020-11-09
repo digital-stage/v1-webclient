@@ -11,9 +11,8 @@ import {
   IconButton,
   Heading,
 } from 'theme-ui';
-import { Accordion, Panel } from 'baseui/accordion';
-import { ListItem, ListItemLabel } from 'baseui/list';
 import {
+  FaPlus,
   FaPen,
   FaTrash,
   FaChevronDown,
@@ -37,17 +36,7 @@ import useStageSelector, {
 import Card from '../../../Card';
 import StageOverviewLinks from '../../../StageOverviewLinks';
 
-{ /**  TODO: WORK in PROGRESS POC */ }
-const Accordion2 = ({ children }) => (
-  <Flex
-    sx={{
-      flexDirection: 'column',
-      height: '72px',
-    }}
-  >
-    {children}
-  </Flex>
-);
+/**  TODO: WORK in PROGRESS POC */
 
 const StageListView = () => {
   const stages = useStages();
@@ -73,183 +62,179 @@ const StageListView = () => {
   const [isModifyGroupOpen, setModifyGroupIsOpen] = React.useState<boolean>(
     false,
   );
-
   const [isModifyStageOpen, setModifyStageIsOpen] = React.useState<boolean>(
     false,
   );
   const [isCopyLinkOpen, setCopyLinkOpen] = React.useState<boolean>();
 
+  const handleGroupOverview = () => {
+
+  };
+
   return (
     <Card>
 
       <StageOverviewLinks />
-
       {/**  TODO: WORK in PROGRESS */}
-      <Accordion2>
-        {stages.map((stage) => (
-          <React.Fragment>
-            <Box sx={{ width: '100%', py: '24px' }}>
-              <Flex key={stage._id} sx={{ justifyContent: 'space-between' }}>
-                <Box bg="primary">Box</Box>
-                <Heading
-                  as="h3"
-                  sx={{ color: 'gray.0', flexBasis: 'max-content' }}
-                >
-                  {stage.name}
-                </Heading>
-
-                <Box bg="primary">
-                  <IconButton
-                    aria-label="edit"
-                    onClick={() => {
-                      setCurrentStage(stage);
-                      setModifyStageIsOpen(true);
-                    }}
+      <Flex sx={{ flexDirection: 'column' }}>
+        {stages.map((stage) => {
+          console.log('stage', stage);
+          return (
+            <Box>
+              <Box sx={{ width: '100%', py: '24px' }}>
+                <Flex key={stage._id} sx={{ justifyContent: 'space-between' }}>
+                  <Box bg="primary">Box</Box>
+                  <Heading
+                    as="h3"
+                    sx={{ color: 'gray.0', flexBasis: 'max-content' }}
                   >
-                    <FaPen />
-                  </IconButton>
+                    {stage.name}
+                  </Heading>
 
-                  <IconButton
-                    aria-label={
+                  <Box sx={{ color: 'secondary' }}>
+                    <IconButton
+                      aria-label="Bühne bearbeiten"
+                      onClick={() => {
+                        setCurrentStage(stage);
+                        setModifyStageIsOpen(true);
+                      }}
+                    >
+                      <FaPen />
+                    </IconButton>
+                    <IconButton
+                      aria-label={
                       stage.isAdmin ? 'Bühne entfernen' : 'Bühne verlassen'
                     }
-                    onClick={() => {
-                      if (stage.isAdmin) removeStage(stage._id);
-                      else leaveStageForGood(stage._id);
-                    }}
-                  >
-                    <FaTrash />
-                  </IconButton>
-                  <IconButton
-                    aria-label={
-                      stage.isAdmin ? 'Bühne entfernen' : 'Bühne verlassen'
-                    }
-                    onClick={() => {
-                      if (stage.isAdmin) removeStage(stage._id);
-                      else leaveStageForGood(stage._id);
-                    }}
-                  >
-                    <FaChevronLeft />
-                  </IconButton>
-                </Box>
-              </Flex>
-            </Box>
-            <Divider sx={{ color: 'gray.2' }} />
-          </React.Fragment>
-        ))}
-      </Accordion2>
+                      onClick={() => {
+                        if (stage.isAdmin) removeStage(stage._id);
+                        else leaveStageForGood(stage._id);
+                      }}
+                    >
+                      <FaTrash />
+                    </IconButton>
+                    <IconButton
+                      aria-label="Gruppenübersicht"
+                      onClick={() => { handleGroupOverview(stage._id); }}
+                    >
+                      <FaChevronLeft />
+                    </IconButton>
+                  </Box>
+                </Flex>
+              </Box>
+              <Box sx={{ bg: 'gray.5', mx: '-32px', px: '48px' }}>
 
-      <Accordion>
-        {stages.map((stage) => (
-          <Panel title={stage.name} key={stage._id}>
-            {stage.isAdmin && (
-              <Flex>
-                <Button
-                  aria-label="Gruppe hinzufügen"
-                  variant="secondary"
-                  onClick={() => {
-                    setCurrentStage(stage);
-                    setCreateGroupIsOpen(true);
-                  }}
-                >
-                  Plus Icon - Gruppe hinzufügen
-                </Button>
-                <Button
-                  variant="white"
-                  aria-label="edit"
-                  onClick={() => {
-                    setCurrentStage(stage);
-                    setModifyStageIsOpen(true);
-                  }}
-                >
-                  Overflow Icon - Edit Stage
-                </Button>
-              </Flex>
-            )}
-
-            {groups.byStage[stage._id]
+                {groups.byStage[stage._id]
               && groups.byStage[stage._id].map((groupId) => {
+                console.log('groupId', groupId);
                 const group = groups.byId[groupId];
+                console.log('group', group);
 
                 return (
-                  <ul>
-                    <li>
-                      {group.name}
-                      <Button
-                        kind={
-                          currentStageId
-                          && stage._id === currentStageId
-                          && group._id === currentGroupId
-                            ? 'primary'
-                            : 'minimal'
-                        }
-                        onClick={() => {
-                          if (
-                            currentStageId
-                            && stage._id === currentStageId
-                            && group._id === currentGroupId
-                          ) {
-                            leaveStage();
-                          } else {
-                            setRequest(stage._id, group._id, stage.password);
-                          }
-                        }}
+                  <React.Fragment>
+                    <Flex key={group._id} sx={{ justifyContent: 'space-between' }}>
+                      <Box bg="primary">Box</Box>
+                      <Heading
+                        as="h3"
+                        sx={{ color: 'gray.0', flexBasis: 'max-content' }}
                       >
-                        {currentStageId
-                        && stage._id === currentStageId
-                        && group._id === currentGroupId
-                          ? 'Verlassen'
-                          : 'Beitreten'}
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          setCurrentStage(stage);
-                          setCurrentGroup(group);
-                          setCopyLinkOpen((prevState) => !prevState);
-                        }}
-                      >
-                        Einladen
-                      </Button>
+                        {group.name}
+                      </Heading>
 
                       {stage.isAdmin && (
                         <React.Fragment>
-                          <Button
-                            variant="white"
-                            onClick={() => {
-                              setCurrentStage(stage);
-                              setCurrentGroup(group);
-                              setModifyGroupIsOpen((prevState) => !prevState);
-                            }}
-                          >
-                            Edit Group
-                          </Button>
-                          <Button
-                            variant="white"
-                            onClick={() => {
-                              removeGroup(group._id);
-                            }}
-                          >
-                            Remove Group
-                          </Button>
+                          <Box>
+                            <IconButton
+                              aria-label="Gruppe bearbeiten"
+                              onClick={() => {
+                                setCurrentStage(stage);
+                                setCurrentGroup(group);
+                                setModifyGroupIsOpen((prevState) => !prevState);
+                              }}
+                            >
+                              <FaPen />
+                            </IconButton>
+                            <IconButton
+                              aria-label="Gruppe entfernen"
+                              onClick={() => {
+                                removeGroup(group._id);
+                              }}
+                            >
+                              <FaTrash />
+                            </IconButton>
+                          </Box>
+
+                          <Box>
+                            <Button
+                              variant="outline"
+                              onClick={() => {
+                                setCurrentStage(stage);
+                                setCurrentGroup(group);
+                                setCopyLinkOpen((prevState) => !prevState);
+                              }}
+                            >
+                              Einladen
+                            </Button>
+                            <Button
+                              variant="secondary"
+                              onClick={() => {
+                                if (
+                                  currentStageId
+                          && stage._id === currentStageId
+                          && group._id === currentGroupId
+                                ) {
+                                  leaveStage();
+                                } else {
+                                  setRequest(stage._id, group._id, stage.password);
+                                }
+                              }}
+                            >
+                              {currentStageId
+                      && stage._id === currentStageId
+                      && group._id === currentGroupId
+                                ? 'Verlassen'
+                                : 'Betreten'}
+                            </Button>
+
+                          </Box>
                         </React.Fragment>
                       )}
-                    </li>
-                  </ul>
+                    </Flex>
+
+                  </React.Fragment>
                 );
               })}
 
-            <Button
-              aria-label={stage.isAdmin ? 'Bühne entfernen' : 'Bühne verlassen'}
-              onClick={() => {
-                if (stage.isAdmin) removeStage(stage._id);
-                else leaveStageForGood(stage._id);
-              }}
-            >
-              Delete Icon - Bühne entfernen/verlassen
-            </Button>
-          </Panel>
-        ))}
-      </Accordion>
+                {stage.isAdmin && (
+                <Flex>
+                  <Button
+                    variant="text"
+                    onClick={() => {
+                      setCurrentStage(stage);
+                      setCreateGroupIsOpen(true);
+                    }}
+                  >
+                    <Box
+                      as="span"
+                      sx={{
+                        color: 'secondary',
+                        textAlign: 'center',
+                        pt: 2,
+                        mr: [2, null, 3],
+                      }}
+                    >
+                      <FaPlus />
+                    </Box>
+                    {' '}
+                    Neue Gruppe erstellen
+                  </Button>
+                </Flex>
+                )}
+              </Box>
+              <Divider sx={{ color: 'gray.2' }} />
+            </Box>
+          );
+        })}
+      </Flex>
 
       <CreateGroupModal
         stage={currentStage}
