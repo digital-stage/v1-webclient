@@ -54,6 +54,7 @@ const StageOverviewLinks = () => {
           width: ['100%', '50%'], pt: [0, 4], pb: 4, px: 3, textAlign: 'center',
         }}
         >
+          {/** TODO: Join function is currently missing */}
           <Button
             variant="text"
             onClick={() => setCreateStageIsOpen((prevState) => !prevState)}
