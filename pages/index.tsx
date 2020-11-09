@@ -25,7 +25,7 @@ const Index = () => {
       router.push('/account/welcome');
     } else {
       return (
-        <React.Fragment>
+        <Layout>
           {stageId ? (
             <React.Fragment>
               <PageWrapperWithStage>
@@ -36,14 +36,12 @@ const Index = () => {
               <StageLeaver />
             </React.Fragment>
           ) : (
-            <Layout>
-              <Container size="stage">
-                <Heading as="h1">Meine Bühnen</Heading>
-                <StageListView />
-              </Container>
-            </Layout>
+            <Container size="stage">
+              <Heading as="h1">Meine Bühnen</Heading>
+              <StageListView />
+            </Container>
           )}
-        </React.Fragment>
+        </Layout>
       );
     }
   }

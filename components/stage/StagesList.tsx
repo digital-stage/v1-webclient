@@ -10,9 +10,8 @@ import {
   Theme,
   Typography
 } from '@material-ui/core';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
+import { shallowEqual } from 'react-redux';
 import CreateStageModal from '../digital-stage-create-stage/CreateStageModal';
 import StageCard from './StageCard';
 import { useSelector } from '../../lib/digitalstage/useStageContext/redux';
@@ -21,7 +20,6 @@ import {
   NormalizedState,
   Stages
 } from '../../lib/digitalstage/useStageContext/schema';
-import { shallowEqual } from 'react-redux';
 import { Client } from '../../lib/digitalstage/common/model.client';
 import { useStage } from './useStage';
 
@@ -108,15 +106,15 @@ const StagesList = () => {
         Stages
       </Typography>
       <div className={classes.stagesList}>
-        <Grid container={true} alignItems="center">
+        <Grid container alignItems="center">
           <Typography variant="h5" className={classes.paddingLeft}>
             My stages
           </Typography>
           <div onClick={handleMySatgeClick}>
             {!checkedMyStage ? (
-              <ExpandMoreIcon style={{ color: '#fff' }} />
+              <span>ExpandMoreIcon</span>
             ) : (
-              <ExpandLessIcon style={{ color: '#fff' }} />
+              <span>ExpandLessIcon</span>
             )}
           </div>
         </Grid>
@@ -146,15 +144,15 @@ const StagesList = () => {
               );
             })}
         </div>
-        <Grid container={true} alignItems="center">
+        <Grid container alignItems="center">
           <Typography variant="h5" className={classes.paddingLeft}>
             Joined stages
           </Typography>
           <div onClick={handleJoindeStagesClick}>
             {!checkedJoindedStages ? (
-              <ExpandMoreIcon style={{ color: '#fff' }} />
+              <span>ExpandMoreIcon</span>
             ) : (
-              <ExpandLessIcon style={{ color: '#fff' }} />
+              <span>ExpandLessIcon</span>
             )}
           </div>
         </Grid>
