@@ -1,13 +1,13 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { Formik, Form, Field, FormikHelpers } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { Client } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import Modal from '../Modal';
 import InputField from '../../../InputField';
-import { jsx, Button, Flex, Heading, Message } from 'theme-ui';
+import { jsx, Button, Flex, Heading } from 'theme-ui';
 
 export interface Values {
   name: string;
@@ -22,11 +22,6 @@ const CreateGroupModal = (props: {
   onClose?: () => any;
 }) => {
   const { stage, isOpen, onClose } = props;
-  const [msg, setMsg] = React.useState({
-    state: false,
-    type: null,
-    kids: null
-  });
   const { createGroup } = useStageActions();
 
   const CreateGroupSchema = Yup.object().shape({
@@ -46,25 +41,13 @@ const CreateGroupModal = (props: {
           name: ''
         }}
         validationSchema={CreateGroupSchema}
-        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) => {
+        onSubmit={(values: Values) => {
           createGroup(stage._id, values.name)
           props.onClose()
-            .then(() => {
-              resetForm(null);
-            })
-            .catch(err =>
-              setMsg({
-                state: true,
-                type: 'danger',
-                kids: { err }
-              })
-            )
         }}
       >
         {({ errors, touched }) => (
           <Form>
-            {msg.state && <Message variant={msg.type}>{msg.kids}</Message>}
-
             <Heading as="h3" sx={{ color: "background", fontSize: 3 }}>Neue Gruppe erstellen</Heading>
             <Field
               as={InputField}

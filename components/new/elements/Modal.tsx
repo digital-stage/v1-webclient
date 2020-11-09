@@ -5,7 +5,7 @@ import { jsx, Box } from 'theme-ui';
 import { MdClose } from "react-icons/md";
 
 interface Props {
-    onClose: void,
+    onClose(): any,
     isOpen: boolean,
     children: React.ReactNode
 }
