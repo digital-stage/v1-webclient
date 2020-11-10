@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import * as React from 'react';
 import {
-  jsx, Flex, Button, Heading,
+  jsx, Flex, Button, Text,
 } from 'theme-ui';
 import { useFormik, FormikProvider, Field } from 'formik';
 import * as Yup from 'yup';
@@ -18,10 +18,7 @@ const Schema = Yup.object().shape({
     .required('Wird benötigt'),
   password: Yup.string()
     .min(5, 'Zu kurz')
-    .max(50, 'Zu lang')
-    .oneOf([Yup.ref('repeatPassword'), null], 'Passwords must match'),
-  repeatPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+    .max(50, 'Zu lang'),
   width: Yup.number()
     .min(0.1)
     .max(1000),
@@ -51,7 +48,6 @@ const ModifyStageModal = (props: {
       ? {
         name: stage.name,
         password: stage.password,
-        repeatPassword: stage.password,
         width: stage.width,
         length: stage.length,
         height: stage.height,
@@ -61,7 +57,6 @@ const ModifyStageModal = (props: {
       : {
         name: '',
         password: '',
-        repeatPassword: '',
         width: 25,
         length: 13,
         height: 7.5,
@@ -88,7 +83,6 @@ const ModifyStageModal = (props: {
       formik.setValues({
         name: stage.name,
         password: stage.password,
-        repeatPassword: stage.password,
         width: stage.width,
         length: stage.length,
         height: stage.height,
@@ -103,9 +97,9 @@ const ModifyStageModal = (props: {
       isOpen={isOpen}
       onClose={onClose}
     >
+      <Text variant="title">Bühne ändern</Text>
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
-          <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>Bühne ändern</Heading>
           <Field
             as={InputField}
             type="text"
@@ -123,15 +117,6 @@ const ModifyStageModal = (props: {
             label="Password"
             version="dark"
             error={formik.errors.password && formik.touched.password}
-          />
-          <Field
-            as={InputField}
-            type="text"
-            name="repeatPassword"
-            id="repeatPassword"
-            label="Repeat password"
-            version="dark"
-            error={formik.errors.repeatPassword && formik.touched.repeatPassword}
           />
           <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
             <Button variant="black" type="button" onClick={onClose}>

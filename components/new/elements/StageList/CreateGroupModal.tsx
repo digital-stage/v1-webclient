@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import * as React from 'react';
 import {
-  jsx, Button, Flex, Heading,
+  jsx, Button, Flex, Text,
 } from 'theme-ui';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
@@ -11,11 +11,8 @@ import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import Modal from '../Modal';
 import InputField from '../../../InputField';
 
-export interface Values {
+interface Values {
   name: string;
-}
-export interface IError {
-  name?: string;
 }
 
 const CreateGroupModal = (props: {
@@ -35,6 +32,8 @@ const CreateGroupModal = (props: {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
+      <Text variant="title">Neue Gruppe erstellen</Text>
+      <Text variant="subTitle">After creating the group you can copy the link and invite people</Text>
       <Formik
         initialValues={{
           name: '',
@@ -47,8 +46,6 @@ const CreateGroupModal = (props: {
       >
         {({ errors, touched }) => (
           <Form>
-            <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>Neue Gruppe erstellen</Heading>
-            <Heading as="h3" sx={{ color: 'background', fontSize: 0, my: 2 }}>After creating the group you can copy the link and invite people</Heading>
             <Field
               as={InputField}
               type="text"

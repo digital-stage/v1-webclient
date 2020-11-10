@@ -2,7 +2,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import React from 'react';
-import { jsx, Box } from 'theme-ui';
+import { jsx, Box, IconButton } from 'theme-ui';
 import { MdClose } from 'react-icons/md';
 
 interface Props {
@@ -17,8 +17,8 @@ const Modal = (props: Props) => (props.isOpen ? (
       position: 'fixed',
       top: 0,
       left: 0,
-      width: '100%',
-      height: '100%',
+      width: '100vw',
+      height: '100vh',
       bg: 'modalBg',
       transition: 'background 6s ease-in-out',
     }}
@@ -28,7 +28,7 @@ const Modal = (props: Props) => (props.isOpen ? (
         position: 'fixed',
         background: 'white',
         padding: 3,
-        width: '332px',
+        width: 'container.tiny',
         height: 'auto',
         top: '50%',
         left: '50%',
@@ -45,7 +45,7 @@ const Modal = (props: Props) => (props.isOpen ? (
           pt: 2,
         }}
       >
-        <span onClick={props.onClose} style={{ cursor: 'pointer' }}><MdClose /></span>
+        <IconButton onClick={props.onClose} style={{ cursor: 'pointer' }}><MdClose /></IconButton>
       </Box>
       <main>
         {props.children}

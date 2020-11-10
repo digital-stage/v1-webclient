@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import * as React from 'react';
 import {
-  jsx, Flex, Button, Heading,
+  jsx, Flex, Button, Text,
 } from 'theme-ui';
 
 import {
@@ -50,10 +50,10 @@ const ModifyGroupModal = (props: {
       isOpen={isOpen}
       onClose={onClose}
     >
+      <Text variant="title">Gruppe ändern</Text>
+      <Text variant="subTitle">Change your group name into a clearer name message</Text>
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
-          <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>Gruppe ändern</Heading>
-          <Heading as="h3" sx={{ color: 'background', fontSize: 0, my: 2 }}>Change your group name into a clearer name message</Heading>
           <Field
             as={InputField}
             type="text"

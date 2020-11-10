@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import * as React from 'react';
 import {
-  jsx, Button, Flex, Heading,
+  jsx, Button, Flex, Text,
 } from 'theme-ui';
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';
@@ -10,25 +10,14 @@ import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import Modal from '../Modal';
 import InputField from '../../../InputField';
 
-export interface Values {
+interface Values {
   name: string,
   password: string,
-  repeatPassword: string,
   width: number,
   length: number,
   height: number,
   damping: number,
   absorption: number
-}
-export interface IError {
-  name?: string,
-  password?: string,
-  repeatPassword?: string,
-  width?: string,
-  length?: string,
-  height?: string,
-  damping?: string,
-  absorption?: string
 }
 
 const CreateStageSchema = Yup.object().shape({
@@ -38,10 +27,7 @@ const CreateStageSchema = Yup.object().shape({
     .required('Wird benötigt'),
   password: Yup.string()
     .min(5, 'Zu kurz')
-    .max(50, 'Zu lang')
-    .oneOf([Yup.ref('repeatPassword'), null], 'Passwords must match'),
-  repeatPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+    .max(50, 'Zu lang'),
   width: Yup.number()
     .min(0.1)
     .max(1000),
@@ -68,11 +54,11 @@ const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }) => {
       isOpen={isOpen}
       onClose={onClose}
     >
+      <Text variant="title">Neue Bühne erstellen</Text>
       <Formik
         initialValues={{
           name: '',
           password: '',
-          repeatPassword: '',
           width: 25,
           length: 13,
           height: 7.5,
@@ -95,7 +81,6 @@ const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }) => {
       >
         {({ errors, touched }) => (
           <Form>
-            <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>Neue Bühne erstellen</Heading>
             <Field
               as={InputField}
               type="text"
@@ -114,15 +99,6 @@ const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }) => {
               label="Password"
               version="dark"
               error={errors.password && touched.password}
-            />
-            <Field
-              as={InputField}
-              type="text"
-              name="repeatPassword"
-              id="repeatPassword"
-              label="Repeat password"
-              version="dark"
-              error={errors.repeatPassword && touched.repeatPassword}
             />
             {/**
           <Accordion>

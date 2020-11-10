@@ -5,7 +5,7 @@ import { jsx, Input, Label, Box, Text } from 'theme-ui';
 import { ErrorMessage } from 'formik';
 
 // TODO: add TS interface / type
-export interface Props {
+interface Props {
   id: string,
   label: string,
   name: string,
@@ -22,7 +22,7 @@ const InputField = ({
       htmlFor={id}
       sx={{
         fontSize: 12,
-        color: version === 'dark' ? '#00000099' : 'muted',
+        color: version === 'dark' ? 'gray.3' : 'muted',
         pl: 2,
         bg: error && '#9D131364',
       }}

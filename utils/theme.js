@@ -52,7 +52,7 @@ export default {
       default: '800px',
       stage: '600px',
       small: '400px',
-      tiny: '300px',
+      tiny: '332px',
     },
     page: {
       default: '1280px',
@@ -80,6 +80,19 @@ export default {
       fontWeight: 'heading',
       lineHeight: 'heading',
     },
+    title:{
+      color: 'background',
+      fontFamily: 'heading',
+      fontWeight: 'heading',
+      lineHeight: 'heading',
+    },
+    subTitle:{
+      color: 'background',
+      fontSize: 0,
+      fontFamily: 'body',
+      fontWeight: 'body',
+      lineHeight: 'body',
+    }
   },
   buttons: {
     primary: {
