@@ -1,19 +1,18 @@
-import React from 'react';
-import { StyleObject, useStyletron } from 'styletron-react';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Box } from 'theme-ui';
 
-const OnlineStatus = (props: { overrides?: StyleObject; online: boolean }) => {
-  const [css] = useStyletron();
-  return (
-    <div
-      className={css({
-        width: '1rem',
-        height: '1rem',
-        backgroundColor: props.online ? 'green' : 'red',
-        borderRadius: '50%',
-        margin: '.5rem',
-        ...props.overrides,
-      })}
-    />
-  );
-};
+const OnlineStatus = ({ online }: { online: boolean }): JSX.Element => (
+  <Box
+    sx={{
+      display: 'inline-block',
+      width: '0.75rem',
+      height: '0.75rem',
+      bg: online ? 'success' : 'danger',
+      borderRadius: '50%',
+    }}
+  />
+);
+
 export default OnlineStatus;

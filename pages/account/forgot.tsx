@@ -14,7 +14,7 @@ const SignUp = (): JSX.Element => {
   }
 
   return (
-    <Layout>
+    <Layout auth>
       <AuthPageContainer>
         <ForgetPasswordForm />
       </AuthPageContainer>

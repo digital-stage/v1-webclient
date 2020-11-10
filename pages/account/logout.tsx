@@ -21,7 +21,7 @@ const Logout = (): JSX.Element => {
 
   return (
     loggedOut && (
-      <Layout>
+      <Layout auth>
         <Container>
           <Heading>Abgemeldet!</Heading>
         </Container>

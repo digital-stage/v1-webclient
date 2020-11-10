@@ -20,7 +20,7 @@ const LoginScreen = (): JSX.Element => {
   }
 
   return (
-    <Layout>
+    <Layout auth>
       <AuthPageContainer>
         <AuthPageLinks />
         <SignInForm />

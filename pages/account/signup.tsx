@@ -20,7 +20,7 @@ const SignUp = (): JSX.Element => {
   }
 
   return (
-    <Layout>
+    <Layout auth>
       <AuthPageContainer>
         <AuthPageLinks />
         <SignUpForm />

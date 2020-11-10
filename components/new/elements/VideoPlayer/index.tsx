@@ -1,20 +1,12 @@
-import React from 'react';
-import { styled } from 'baseui';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Box } from 'theme-ui';
 import { VideoConsumer } from '../../../../lib/digitalstage/useStageContext/model';
 
 interface CanvasElement extends HTMLCanvasElement {
   captureStream(): MediaStream;
 }
-
-const Canvas = styled('canvas', {
-  width: '100%',
-  height: '100%',
-  stroke: 'red',
-});
-const HiddenContainer = styled('div', {
-  display: 'none',
-});
-
 interface AnimationFrame {
   id: string; // Id from videoTrack
   src: CanvasImageSource;
@@ -26,7 +18,6 @@ interface AnimationFrame {
 
 interface Props {
   consumers: VideoConsumer[];
-  className?: string;
 }
 
 interface States {
@@ -159,20 +150,19 @@ class VideoPlayer extends React.Component<Props, States> {
     this.wrapperRef.current.removeEventListener('resize', this.handleResize);
   }
 
-  private handleResize = (): JSX.Element => {
+  private handleResize = () => {
     const size: DOMRect = this.wrapperRef.current.getBoundingClientRect();
     this.setState({
       size,
     });
   };
 
-  private drawAnimationFrames = (): JSX.Element => {
+  private drawAnimationFrames = () => {
     const { size } = this.state;
     if (size && this.canvasRef) {
       this.canvasRef.current.width = this.canvasRef.current.width + 0;
       const context = this.canvasRef.current.getContext('2d');
       context.fillStyle = 'black';
-      // context.strokeStyle = 'red';
       context.fillRect(0, 0, size.width, size.height);
       this.state.animationFrames.forEach((animationFrame: AnimationFrame) => {
         const videoWidth: number = (animationFrame.src as HTMLVideoElement).videoWidth as number;
@@ -183,9 +173,6 @@ class VideoPlayer extends React.Component<Props, States> {
         );
         const x = animationFrame.x + (animationFrame.width / 2 - (videoWidth / 2) * scale);
         const y = animationFrame.y + (animationFrame.height / 2 - (videoHeight / 2) * scale);
-
-        // context.strokeRect(animationFrame.x, animationFrame.y, animationFrame.width, animationFrame.height);
-        // context.fillRect(animationFrame.x, animationFrame.y, animationFrame.width, animationFrame.height);
 
         context.drawImage(
           animationFrame.src,
@@ -204,12 +191,17 @@ class VideoPlayer extends React.Component<Props, States> {
   };
 
   render() {
-    const { className } = this.props;
     const { size } = this.state;
     return (
-      <div className={className} ref={this.wrapperRef}>
-        <Canvas ref={this.canvasRef} width={size && size.width} height={size && size.height} />
-        <HiddenContainer ref={this.videoContainerRef} />
+      <div ref={this.wrapperRef}>
+        <Box
+          as="canvas"
+          sx={{ width: '100%', height: '100%', stroke: 'red' }}
+          ref={this.canvasRef}
+          width={size && size.width}
+          height={size && size.height}
+        />
+        <Box sx={{ display: 'none' }} ref={this.videoContainerRef} />
       </div>
     );
   }

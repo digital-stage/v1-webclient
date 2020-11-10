@@ -25,8 +25,6 @@ const SideBar = ({
     index: number;
     selected2: boolean;
   }) => {
-    console.log('SBI', item);
-
     return (
       <Box
         selected={selected2 && item.label === selected2.label}
@@ -51,7 +49,6 @@ const SideBar = ({
       BERT
       {UpperNavItems &&
         UpperNavItems.map((item, index) => {
-          console.log(item);
           return <SideBarItem item={item} key={index} index={index} selected2={selected} />;
         })}
       {CenteredNavItems &&
