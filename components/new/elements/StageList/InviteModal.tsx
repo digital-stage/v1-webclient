@@ -14,10 +14,8 @@ const InviteModal = (props: {
   isOpen?: boolean;
   onClose?: () => any;
   usePassword?: boolean;
-}) => {
-  const {
-    stage, group, usePassword, isOpen, onClose,
-  } = props;
+}): JSX.Element => {
+  const { stage, group, usePassword, isOpen, onClose } = props;
   const [includePassword, setIncludePassword] = useState<boolean>(false);
   const [link, setLink] = useState<string>();
   const [isCopied, setCopied] = useState<boolean>(false);

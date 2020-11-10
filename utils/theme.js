@@ -13,16 +13,7 @@ export default {
     success: '#24A312',
     navigation: 'hsl(333, 50%, 8%)',
     modalBg: '#000000B2',
-    gray: [
-      '#D1D1D1',
-      '#B3B3B3',
-      '#828282',
-      '#535353',
-      '#282828',
-      '#181818',
-      '#101010',
-      '#000000',
-    ],
+    gray: ['#D1D1D1', '#B3B3B3', '#828282', '#535353', '#282828', '#181818', '#101010', '#000000'],
   },
   fonts: {
     body: "'Open Sans', Verdana, sans-serif",
@@ -43,6 +34,7 @@ export default {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   breakpoints: [600, 900, 1200, 1500].map((n) => `${n}px`),
   radii: {
+    card: '18px',
     button: '21px',
   },
   sizes: {

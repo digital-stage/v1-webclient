@@ -21,10 +21,7 @@ interface Values {
 }
 
 const CreateStageSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, 'Zu kurz')
-    .max(100, 'Zu lang')
-    .required('Wird benötigt'),
+  name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
   password: Yup.string()
     .min(5, 'Zu kurz')
     .max(50, 'Zu lang'),
@@ -45,7 +42,7 @@ const CreateStageSchema = Yup.object().shape({
     .max(1),
 });
 
-const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }) => {
+const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }): JSX.Element => {
   const { isOpen, onClose } = props;
   const { createStage } = useStageActions();
 
@@ -74,7 +71,7 @@ const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }) => {
             values.length,
             values.height,
             values.damping,
-            values.absorption,
+            values.absorption
           );
           props.onClose();
         }}
@@ -180,9 +177,7 @@ const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }) => {
               <Button variant="black" type="button" onClick={onClose}>
                 Abbrechen
               </Button>
-              <Button type="submit">
-                Erstellen
-              </Button>
+              <Button type="submit">Erstellen</Button>
             </Flex>
           </Form>
         )}

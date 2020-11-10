@@ -14,9 +14,7 @@ interface Props {
   type: string,
   value?: any
 }
-const InputField = ({
-  id, label, name, error, version, ...rest
-}: Props) => (
+const InputField = ({ id, label, name, error, version, ...rest }: Props): JSX.Element => (
   <Box sx={{ mt: 4 }}>
     <Label
       htmlFor={id}
@@ -32,7 +30,7 @@ const InputField = ({
     <Input
       id={id}
       name={name}
-        // eslint-disable-next-line react/jsx-props-no-spreading
+      // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
       sx={{
         bg: error ? 'dangerBg' : 'transparent',

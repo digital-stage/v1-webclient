@@ -12,10 +12,7 @@ import Modal from '../Modal';
 import InputField from '../../../InputField';
 
 const Schema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, 'Zu kurz')
-    .max(100, 'Zu lang')
-    .required('Wird benötigt'),
+  name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
   password: Yup.string()
     .min(5, 'Zu kurz')
     .max(50, 'Zu lang'),
@@ -40,7 +37,7 @@ const ModifyStageModal = (props: {
   stage: Client.Stage;
   isOpen?: boolean;
   onClose?: () => any;
-}) => {
+}): JSX.Element => {
   const { stage, isOpen, onClose } = props;
   const { updateStage } = useStageActions();
   const formik = useFormik({
@@ -122,9 +119,7 @@ const ModifyStageModal = (props: {
             <Button variant="black" type="button" onClick={onClose}>
               Abbrechen
             </Button>
-            <Button type="submit">
-              Bühne ändern
-            </Button>
+            <Button type="submit">Bühne ändern</Button>
           </Flex>
         </form>
       </FormikProvider>

@@ -8,8 +8,8 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { Client } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
-import Modal from '../Modal';
 import InputField from '../../../InputField';
+import Modal from '../Modal';
 
 interface Values {
   name: string;
@@ -24,10 +24,7 @@ const CreateGroupModal = (props: {
   const { createGroup } = useStageActions();
 
   const CreateGroupSchema = Yup.object().shape({
-    name: Yup.string()
-      .min(2, 'Zu kurz')
-      .max(100, 'Zu lang')
-      .required('Wird benötigt'),
+    name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
   });
 
   return (
@@ -59,9 +56,7 @@ const CreateGroupModal = (props: {
               <Button variant="black" onClick={onClose}>
                 Abbrechen
               </Button>
-              <Button type="submit">
-                Gruppe erstellen
-              </Button>
+              <Button type="submit">Gruppe erstellen</Button>
             </Flex>
           </Form>
         )}

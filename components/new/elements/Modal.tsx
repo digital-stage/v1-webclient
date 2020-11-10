@@ -6,9 +6,9 @@ import { jsx, Box, IconButton } from 'theme-ui';
 import { MdClose } from 'react-icons/md';
 
 interface Props {
-  onClose(): any,
-  isOpen: boolean,
-  children: React.ReactNode
+  onClose(): any;
+  isOpen: boolean;
+  children: React.ReactNode;
 }
 
 const Modal = (props: Props) => (props.isOpen ? (
@@ -47,11 +47,10 @@ const Modal = (props: Props) => (props.isOpen ? (
       >
         <IconButton onClick={props.onClose} style={{ cursor: 'pointer' }}><MdClose /></IconButton>
       </Box>
-      <main>
-        {props.children}
-      </main>
+      <main>{props.children}</main>
     </Box>
   </Box>
-) : null);
+) : null
+)
 
 export default Modal;
