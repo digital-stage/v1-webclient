@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Button, Heading } from 'theme-ui';
+import {
+  Flex, Button, Text, Message,
+} from 'theme-ui';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Checkbox } from 'baseui/checkbox';
 import { Client } from '../../../../lib/digitalstage/common/model.client';
@@ -36,9 +38,8 @@ const InviteModal = (props: {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>
-        Leute einladen
-      </Heading>
+      <Text variant="title">Leute einladen</Text>
+      {isCopied && <Message variant="success">Link in der Zwischenablage!</Message>}
       {usePassword && stage.password && (
         <Checkbox
           checked={includePassword}
@@ -49,17 +50,17 @@ const InviteModal = (props: {
       )}
       <InputField type="text" id="link" name="link" label="Link" value={link} version="dark" />
       <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
+        <Button variant="black" onClick={onClose}>Schließen</Button>
         <CopyToClipboard
           text={link}
           onCopy={() => {
             setCopied(true);
           }}
         >
-          <Button autoFocus>{isCopied ? 'Link in der Zwischenablage!' : 'Kopiere Link'}</Button>
+          <Button autoFocus>
+            Kopiere Link
+          </Button>
         </CopyToClipboard>
-        <Button variant="black" nClick={onClose}>
-          Schließen
-        </Button>
       </Flex>
     </Modal>
   );

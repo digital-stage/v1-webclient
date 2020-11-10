@@ -1,7 +1,9 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Flex, Button, Heading } from 'theme-ui';
+import {
+  jsx, Flex, Button, Text,
+} from 'theme-ui';
 import { useFormik, FormikProvider, Field } from 'formik';
 import * as Yup from 'yup';
 import { Client } from '../../../../lib/digitalstage/common/model.client';
@@ -13,14 +15,22 @@ const Schema = Yup.object().shape({
   name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
   password: Yup.string()
     .min(5, 'Zu kurz')
-    .max(50, 'Zu lang')
-    .oneOf([Yup.ref('repeatPassword'), null], 'Passwords must match'),
-  repeatPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match'),
-  width: Yup.number().min(0.1).max(1000),
-  length: Yup.number().min(0.1).max(1000),
-  height: Yup.number().min(0.1).max(1000),
-  absorption: Yup.number().min(0.1).max(1),
-  reflection: Yup.number().min(0.1).max(1),
+    .max(50, 'Zu lang'),
+  width: Yup.number()
+    .min(0.1)
+    .max(1000),
+  length: Yup.number()
+    .min(0.1)
+    .max(1000),
+  height: Yup.number()
+    .min(0.1)
+    .max(1000),
+  absorption: Yup.number()
+    .min(0.1)
+    .max(1),
+  reflection: Yup.number()
+    .min(0.1)
+    .max(1),
 });
 
 const ModifyStageModal = (props: {
@@ -33,25 +43,23 @@ const ModifyStageModal = (props: {
   const formik = useFormik({
     initialValues: stage
       ? {
-          name: stage.name,
-          password: stage.password,
-          repeatPassword: stage.password,
-          width: stage.width,
-          length: stage.length,
-          height: stage.height,
-          absorption: stage.absorption,
-          damping: stage.damping,
-        }
+        name: stage.name,
+        password: stage.password,
+        width: stage.width,
+        length: stage.length,
+        height: stage.height,
+        absorption: stage.absorption,
+        damping: stage.damping,
+      }
       : {
-          name: '',
-          password: '',
-          repeatPassword: '',
-          width: 25,
-          length: 13,
-          height: 7.5,
-          damping: 0.7,
-          absorption: 0.6,
-        },
+        name: '',
+        password: '',
+        width: 25,
+        length: 13,
+        height: 7.5,
+        damping: 0.7,
+        absorption: 0.6,
+      },
     validationSchema: Schema,
     onSubmit: (values) => {
       updateStage(stage._id, {
@@ -72,7 +80,6 @@ const ModifyStageModal = (props: {
       formik.setValues({
         name: stage.name,
         password: stage.password,
-        repeatPassword: stage.password,
         width: stage.width,
         length: stage.length,
         height: stage.height,
@@ -83,12 +90,13 @@ const ModifyStageModal = (props: {
   }, [stage]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+    >
+      <Text variant="title">Bühne ändern</Text>
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
-          <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>
-            Bühne ändern
-          </Heading>
           <Field
             as={InputField}
             type="text"
@@ -106,15 +114,6 @@ const ModifyStageModal = (props: {
             label="Password"
             version="dark"
             error={formik.errors.password && formik.touched.password}
-          />
-          <Field
-            as={InputField}
-            type="text"
-            name="repeatPassword"
-            id="repeatPassword"
-            label="Repeat password"
-            version="dark"
-            error={formik.errors.repeatPassword && formik.touched.repeatPassword}
           />
           <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
             <Button variant="black" type="button" onClick={onClose}>
