@@ -33,7 +33,7 @@ const Container = ({
             : size === 'stage' && 'container.stage',
         mt: row && 4,
         mx: 'auto',
-        px: 4,
+        px: [1, 2, 4],
         justifyContent: row && 'space-around',
       }}
     >
