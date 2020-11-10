@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import * as Bowser from 'bowser';
-import io from 'socket.io-client';
 import { useAuth } from '../useAuth';
 import {
   ServerDeviceEvents,
@@ -14,16 +13,18 @@ import { Device } from '../common/model.server';
 import allActions from './redux/actions';
 import { useDispatch } from './redux';
 import { useErrors } from '../../useErrors';
+import TeckosClientWithJWT from '../../websocket/TeckosClientWithJWT';
+import TeckosClient from '../../websocket/TeckosClient';
 
-const SocketContext = React.createContext<SocketIOClient.Socket>(undefined);
+const SocketContext = React.createContext<TeckosClient>(undefined);
 
 export const useSocket = ()
-: SocketIOClient.Socket => React.useContext<SocketIOClient.Socket>(SocketContext);
+: TeckosClient => React.useContext<TeckosClient>(SocketContext);
 
 export const SocketContextProvider = (props: { children: React.ReactNode }) => {
   const { children } = props;
   const { token } = useAuth();
-  const [socket, setSocket] = useState<SocketIOClient.Socket>(null);
+  const [socket, setSocket] = useState<TeckosClient>(null);
   const dispatch = useDispatch();
   const { reportError } = useErrors();
 
@@ -291,24 +292,21 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
           inputVideoDeviceId = devices.inputVideoDevices[0].id;
         }
 
-        const createdSocket = io(process.env.NEXT_PUBLIC_API_URL, {
+        const createdSocket = new TeckosClientWithJWT(process.env.NEXT_PUBLIC_API_URL, token, {
           // secure: process.env.NODE_ENV !== "development",
-          query: {
-            token,
-            device: JSON.stringify({
-              name: `${browser} (${os})`,
-              canAudio: devices.inputAudioDevices.length > 0,
-              canVideo: devices.inputVideoDevices.length > 0,
-              receiveVideo: true,
-              receiveAudio: true,
-              inputAudioDevices: devices.inputAudioDevices,
-              inputVideoDevices: devices.inputVideoDevices,
-              outputAudioDevices: devices.outputAudioDevices,
-              inputAudioDeviceId,
-              inputVideoDeviceId,
-              outputAudioDeviceId,
-            } as Device),
-          },
+          device: JSON.stringify({
+            name: `${browser} (${os})`,
+            canAudio: devices.inputAudioDevices.length > 0,
+            canVideo: devices.inputVideoDevices.length > 0,
+            receiveVideo: true,
+            receiveAudio: true,
+            inputAudioDevices: devices.inputAudioDevices,
+            inputVideoDevices: devices.inputVideoDevices,
+            outputAudioDevices: devices.outputAudioDevices,
+            inputAudioDeviceId,
+            inputVideoDeviceId,
+            outputAudioDeviceId,
+          } as Device),
         });
 
         registerSocketHandlers(createdSocket);

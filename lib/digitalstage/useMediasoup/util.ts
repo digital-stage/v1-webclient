@@ -4,6 +4,7 @@ import {
   StageMemberAudioProducer,
   StageMemberVideoProducer,
 } from '../common/model.server';
+import { TeckosClient } from '../../websocket';
 
 export enum RouterEvents {
   TransportCloses = 'transport-closed',
@@ -85,12 +86,11 @@ export const getFastestRouter = (): Promise<Router> => fetchGet<Router[]>(`${pro
   });
 
 export const createWebRTCTransport = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   device: mediasoupClient.Device,
   direction: 'send' | 'receive',
-): Promise<mediasoupClient.types.Transport> => {
-  console.log('createWebRTCTransport');
-  return new Promise<mediasoupClient.types.Transport>((resolve, reject) => {
+): Promise<mediasoupClient.types.Transport> => new Promise<mediasoupClient.types.Transport>(
+  (resolve, reject) => {
     socket.emit(
       RouterRequests.CreateTransport,
       {},
@@ -143,8 +143,8 @@ export const createWebRTCTransport = (
         return resolve(transport);
       },
     );
-  });
-};
+  },
+);
 
 export const createProducer = (
   transport: mediasoupClient.types.Transport,
@@ -169,7 +169,7 @@ export const pauseProducer = (
 );
 
 export const resumeProducer = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   producer: mediasoupClient.types.Producer,
 ): Promise<mediasoupClient.types.Producer> => new Promise<mediasoupClient.types.Producer>(
   (resolve, reject) => socket.emit(
@@ -184,7 +184,7 @@ export const resumeProducer = (
 );
 
 export const stopProducer = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   producer: mediasoupClient.types.Producer,
 ): Promise<mediasoupClient.types.Producer> => new Promise<mediasoupClient.types.Producer>(
   (resolve, reject) => socket.emit(RouterRequests.CloseProducer, producer.id, (error?: string) => {
@@ -195,7 +195,7 @@ export const stopProducer = (
 );
 
 export const createConsumer = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   device: mediasoupClient.Device,
   transport: mediasoupClient.types.Transport,
   remoteProducer: StageMemberAudioProducer | StageMemberVideoProducer,
@@ -232,7 +232,7 @@ export const createConsumer = (
 );
 
 export const resumeConsumer = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   consumer: mediasoupClient.types.Consumer,
 ): Promise<mediasoupClient.types.Consumer> => {
   if (consumer.paused) {
@@ -250,7 +250,7 @@ export const resumeConsumer = (
 };
 
 export const pauseConsumer = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   consumer: mediasoupClient.types.Consumer,
 ): Promise<mediasoupClient.types.Consumer> => {
   if (!consumer.paused) {
@@ -268,7 +268,7 @@ export const pauseConsumer = (
 };
 
 export const closeConsumer = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   consumer: mediasoupClient.types.Consumer,
 ): Promise<mediasoupClient.types.Consumer> => new Promise<mediasoupClient.types.Consumer>(
   (resolve, reject) => socket.emit(

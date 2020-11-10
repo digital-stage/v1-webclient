@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import mediasoupClient from 'mediasoup-client';
-import io from 'socket.io-client';
 import { Device as MediasoupDevice } from 'mediasoup-client/lib/Device';
 import {
   closeConsumer,
@@ -35,6 +34,7 @@ import {
 } from '../useStageContext/schema';
 import useStageSelector from '../useStageSelector';
 import { useErrors } from '../../useErrors';
+import { TeckosClient } from '../../websocket';
 
 const TIMEOUT_MS = 4000;
 
@@ -65,7 +65,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
 
   const [working, setWorking] = useState<boolean>(false);
   const [router, setRouter] = useState<Router>();
-  const [connection, setConnection] = useState<SocketIOClient.Socket>();
+  const [connection, setConnection] = useState<TeckosClient>();
   const [device, setDevice] = useState<mediasoupClient.types.Device>();
   const [sendTransport, setSendTransport] = useState<
   mediasoupClient.types.Transport
@@ -162,12 +162,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
         }`,
       );
 
-      const createdConnection = io(
-        `${connectionSettings.protocol + router.url}:${router.port}`,
-        {
-          secure: connectionSettings.secure,
-        },
-      );
+      const createdConnection = new TeckosClient(`${connectionSettings.protocol + router.url}:${router.port}`);
 
       createdConnection.on('connect_error', (error) => {
         reportError(error);
