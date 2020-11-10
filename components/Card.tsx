@@ -13,8 +13,9 @@ const Card = (props: {
   maxWidth?: string;
   size?: string | Size.default;
   white?: boolean | false;
+  mt?: number;
 }): JSX.Element => {
-  const { children, maxWidth, size, white } = props;
+  const { children, maxWidth, size, white, mt } = props;
 
   return (
     <Box
@@ -23,10 +24,11 @@ const Card = (props: {
         boxShadow: 'default',
         width: '100%',
         maxWidth: size === 'auth' ? 'container.tiny' : maxWidth,
-        borderRadius: '18px',
+        borderRadius: 'card',
         py: 3,
-        px: 4,
+        px: [3, 4],
         my: 4,
+        mt: mt && mt,
         mx: 'auto',
       }}
     >

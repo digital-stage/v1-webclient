@@ -1,9 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import {
-  jsx, Button, Flex, Heading,
-} from 'theme-ui';
+import { jsx, Button, Flex, Heading } from 'theme-ui';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { Client } from '../../../../lib/digitalstage/common/model.client';
@@ -11,10 +9,10 @@ import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import Modal from '../Modal';
 import InputField from '../../../InputField';
 
-export interface Values {
+interface Values {
   name: string;
 }
-export interface IError {
+interface IError {
   name?: string;
 }
 
@@ -27,10 +25,7 @@ const CreateGroupModal = (props: {
   const { createGroup } = useStageActions();
 
   const CreateGroupSchema = Yup.object().shape({
-    name: Yup.string()
-      .min(2, 'Zu kurz')
-      .max(100, 'Zu lang')
-      .required('Wird benötigt'),
+    name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
   });
 
   return (
@@ -47,8 +42,12 @@ const CreateGroupModal = (props: {
       >
         {({ errors, touched }) => (
           <Form>
-            <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>Neue Gruppe erstellen</Heading>
-            <Heading as="h3" sx={{ color: 'background', fontSize: 0, my: 2 }}>After creating the group you can copy the link and invite people</Heading>
+            <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>
+              Neue Gruppe erstellen
+            </Heading>
+            <Heading as="h3" sx={{ color: 'background', fontSize: 0, my: 2 }}>
+              After creating the group you can copy the link and invite people
+            </Heading>
             <Field
               as={InputField}
               type="text"
@@ -62,9 +61,7 @@ const CreateGroupModal = (props: {
               <Button variant="black" onClick={onClose}>
                 Abbrechen
               </Button>
-              <Button type="submit">
-                Gruppe erstellen
-              </Button>
+              <Button type="submit">Gruppe erstellen</Button>
             </Flex>
           </Form>
         )}

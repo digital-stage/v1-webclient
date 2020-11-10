@@ -1,73 +1,54 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import {
-  jsx, Button, Flex, Heading,
-} from 'theme-ui';
+import { jsx, Button, Flex, Heading } from 'theme-ui';
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import Modal from '../Modal';
 import InputField from '../../../InputField';
 
-export interface Values {
-  name: string,
-  password: string,
-  repeatPassword: string,
-  width: number,
-  length: number,
-  height: number,
-  damping: number,
-  absorption: number
+interface Values {
+  name: string;
+  password: string;
+  repeatPassword: string;
+  width: number;
+  length: number;
+  height: number;
+  damping: number;
+  absorption: number;
 }
-export interface IError {
-  name?: string,
-  password?: string,
-  repeatPassword?: string,
-  width?: string,
-  length?: string,
-  height?: string,
-  damping?: string,
-  absorption?: string
+interface IError {
+  name?: string;
+  password?: string;
+  repeatPassword?: string;
+  width?: string;
+  length?: string;
+  height?: string;
+  damping?: string;
+  absorption?: string;
 }
 
 const CreateStageSchema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, 'Zu kurz')
-    .max(100, 'Zu lang')
-    .required('Wird benötigt'),
+  name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
   password: Yup.string()
     .min(5, 'Zu kurz')
     .max(50, 'Zu lang')
     .oneOf([Yup.ref('repeatPassword'), null], 'Passwords must match'),
-  repeatPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match'),
-  width: Yup.number()
-    .min(0.1)
-    .max(1000),
-  length: Yup.number()
-    .min(0.1)
-    .max(1000),
-  height: Yup.number()
-    .min(0.1)
-    .max(1000),
-  absorption: Yup.number()
-    .min(0.1)
-    .max(1),
-  reflection: Yup.number()
-    .min(0.1)
-    .max(1),
+  repeatPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match'),
+  width: Yup.number().min(0.1).max(1000),
+  length: Yup.number().min(0.1).max(1000),
+  height: Yup.number().min(0.1).max(1000),
+  absorption: Yup.number().min(0.1).max(1),
+  reflection: Yup.number().min(0.1).max(1),
 });
 
-const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }) => {
+const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }): JSX.Element => {
   const { isOpen, onClose } = props;
   const { createStage } = useStageActions();
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <Modal isOpen={isOpen} onClose={onClose}>
       <Formik
         initialValues={{
           name: '',
@@ -88,14 +69,16 @@ const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }) => {
             values.length,
             values.height,
             values.damping,
-            values.absorption,
+            values.absorption
           );
           props.onClose();
         }}
       >
         {({ errors, touched }) => (
           <Form>
-            <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>Neue Bühne erstellen</Heading>
+            <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>
+              Neue Bühne erstellen
+            </Heading>
             <Field
               as={InputField}
               type="text"
@@ -204,9 +187,7 @@ const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }) => {
               <Button variant="black" type="button" onClick={onClose}>
                 Abbrechen
               </Button>
-              <Button type="submit">
-                Erstellen
-              </Button>
+              <Button type="submit">Erstellen</Button>
             </Flex>
           </Form>
         )}

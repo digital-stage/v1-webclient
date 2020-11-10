@@ -1,13 +1,9 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import {
-  jsx, Flex, Button, Heading,
-} from 'theme-ui';
+import { jsx, Flex, Button, Heading } from 'theme-ui';
 
-import {
-  Field, FormikProvider, useFormik,
-} from 'formik';
+import { Field, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Client } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
@@ -15,17 +11,14 @@ import Modal from '../Modal';
 import InputField from '../../../InputField';
 
 const Schema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, 'Zu kurz')
-    .max(100, 'Zu lang')
-    .required('Wird benötigt'),
+  name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
 });
 
 const ModifyGroupModal = (props: {
   group: Client.Group;
   isOpen?: boolean;
   onClose?: () => any;
-}) => {
+}): JSX.Element => {
   const { group, isOpen, onClose } = props;
   const { updateGroup } = useStageActions();
   const formik = useFormik({
@@ -46,14 +39,15 @@ const ModifyGroupModal = (props: {
   }, [group]);
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <Modal isOpen={isOpen} onClose={onClose}>
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
-          <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>Gruppe ändern</Heading>
-          <Heading as="h3" sx={{ color: 'background', fontSize: 0, my: 2 }}>Change your group name into a clearer name message</Heading>
+          <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>
+            Gruppe ändern
+          </Heading>
+          <Heading as="h3" sx={{ color: 'background', fontSize: 0, my: 2 }}>
+            Change your group name into a clearer name message
+          </Heading>
           <Field
             as={InputField}
             type="text"

@@ -30,6 +30,12 @@ const ForgetPasswordForm = (): JSX.Element => {
 
   return (
     <Box>
+      <Box sx={{ textAlign: 'left' }}>
+        <Heading as="h3" sx={{ my: 3, fontSize: 3 }}>
+          Reset your password
+        </Heading>
+        <Text>Enter your email address to restore your password</Text>
+      </Box>
       <Formik
         initialValues={{ email: '', repeatEmail: '' }}
         validationSchema={ForgetPasswordSchema}
@@ -69,13 +75,6 @@ const ForgetPasswordForm = (): JSX.Element => {
       >
         {({ errors, touched }) => (
           <Form>
-            <Box sx={{ textAlign: 'left' }}>
-              <Heading as="h3" sx={{ my: 3, fontSize: 3 }}>
-                Reset your password
-              </Heading>
-              <Text>Enter your email address to restore your password</Text>
-            </Box>
-
             {msg.state && <Message variant={msg.type}>{msg.kids}</Message>}
 
             <Field
