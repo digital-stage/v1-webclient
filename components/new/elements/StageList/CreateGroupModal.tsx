@@ -1,13 +1,15 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
+import {
+  jsx, Button, Flex, Heading,
+} from 'theme-ui';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { Client } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import Modal from '../Modal';
 import InputField from '../../../InputField';
-import { jsx, Button, Flex, Heading } from 'theme-ui';
 
 export interface Values {
   name: string;
@@ -28,7 +30,7 @@ const CreateGroupModal = (props: {
     name: Yup.string()
       .min(2, 'Zu kurz')
       .max(100, 'Zu lang')
-      .required('Wird benötigt')
+      .required('Wird benötigt'),
   });
 
   return (
@@ -38,20 +40,20 @@ const CreateGroupModal = (props: {
     >
       <Formik
         initialValues={{
-          name: ''
+          name: '',
         }}
         validationSchema={CreateGroupSchema}
         onSubmit={(values: Values) => {
-          createGroup(stage._id, values.name)
-          props.onClose()
+          createGroup(stage._id, values.name);
+          props.onClose();
         }}
       >
         {({ errors, touched }) => (
           <Form>
-            <Heading as="h3" sx={{ color: "background", fontSize: 3 }}>Neue Gruppe erstellen</Heading>
+            <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>Neue Gruppe erstellen</Heading>
+            <Heading as="h3" sx={{ color: 'background', fontSize: 0, my: 2 }}>After creating the group you can copy the link and invite people</Heading>
             <Field
               as={InputField}
-              required
               type="text"
               name="name"
               id="name"
@@ -59,13 +61,13 @@ const CreateGroupModal = (props: {
               version="dark"
               error={errors.name && touched.name}
             />
-            <Flex sx={{ justifyContent: "space-between", py: 3 }}>
+            <Flex sx={{ justifyContent: 'space-between', py: 3 }}>
               <Button variant="black" onClick={onClose}>
                 Abbrechen
-               </Button>
+              </Button>
               <Button type="submit">
                 Gruppe erstellen
-               </Button>
+              </Button>
             </Flex>
           </Form>
         )}

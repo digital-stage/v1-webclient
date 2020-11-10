@@ -7,15 +7,24 @@ import {
 import { ErrorMessage } from 'formik';
 
 // TODO: add TS interface / type
+export interface Props {
+  id: string,
+  label: string,
+  name: string,
+  error?: string,
+  version?: string,
+  type: string,
+  value?: any
+}
 const InputField = ({
-  id, label, name, version, error, ...rest
-}) => (
+  id, label, name, error, version, ...rest
+}: Props) => (
   <Box sx={{ mt: 4 }}>
     <Label
       htmlFor={id}
       sx={{
         fontSize: 12,
-        color: version === "dark" ? "#00000099" : 'muted',
+        color: version === 'dark' ? '#00000099' : 'muted',
         pl: 2,
         bg: error && '#9D131364',
       }}
@@ -25,15 +34,15 @@ const InputField = ({
     <Input
       id={id}
       name={name}
-      autocomplete={name === 'password' ? 'on' : name}
-      // eslint-disable-next-line react/jsx-props-no-spreading
+        // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
       sx={{
         bg: error ? 'dangerBg' : 'transparent',
-        color: version === "dark" ? 'background' : 'text',
+        color: version === 'dark' ? 'background' : 'text',
         border: 'transparent',
         borderBottom: '1px solid transparent',
-        borderBottomColor: error ? 'dangerUnderline' : version === "dark" ? 'background' : 'text',
+        // eslint-disable-next-line no-nested-ternary
+        borderBottomColor: error ? 'dangerUnderline' : version === 'dark' ? 'background' : 'text',
         borderRadius: 0,
         width: '100%',
         ':active,:-webkit-autofill': {
@@ -44,20 +53,22 @@ const InputField = ({
         },
       }}
     />
-    <ErrorMessage
-      name={name}
-      render={(msg) => (
-        <Text
-          sx={{
-            fontSize: 10,
-            color: '#707070',
-            pt: 1,
-          }}
-        >
-          {msg}
-        </Text>
-      )}
-    />
+    {error ? (
+      <ErrorMessage
+        name={name}
+        render={(msg) => (
+          <Text
+            sx={{
+              fontSize: 10,
+              color: '#707070',
+              pt: 1,
+            }}
+          >
+            {msg}
+          </Text>
+        )}
+      />
+    ) : null}
   </Box>
 );
 

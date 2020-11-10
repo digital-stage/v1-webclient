@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Modal,
-  ModalBody,
-  ModalButton,
-  ModalFooter,
-  ModalHeader
-} from 'baseui/modal';
+  Flex, Button, Heading,
+} from 'theme-ui';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Input } from 'baseui/input';
 import { Checkbox } from 'baseui/checkbox';
 import { Client } from '../../../../lib/digitalstage/common/model.client';
+import Modal from '../Modal';
+import InputField from '../../../InputField';
 
 const InviteModal = (props: {
   stage: Client.Stage;
@@ -18,7 +15,9 @@ const InviteModal = (props: {
   onClose?: () => any;
   usePassword?: boolean;
 }) => {
-  const { stage, group, usePassword, isOpen, onClose } = props;
+  const {
+    stage, group, usePassword, isOpen, onClose,
+  } = props;
   const [includePassword, setIncludePassword] = useState<boolean>(false);
   const [link, setLink] = useState<string>();
   const [isCopied, setCopied] = useState<boolean>(false);
@@ -42,32 +41,30 @@ const InviteModal = (props: {
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} unstable_ModalBackdropScroll>
-      <ModalHeader>Leute einladen</ModalHeader>
-      <ModalBody>
-        {usePassword && stage.password && (
-          <Checkbox
-            checked={includePassword}
-            onChange={event => setIncludePassword(event.currentTarget.checked)}
-          >
-            Füge Passwort mit an
-          </Checkbox>
-        )}
-        <Input type="text" value={link} />
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>Leute einladen</Heading>
+      {usePassword && stage.password && (
+        <Checkbox
+          checked={includePassword}
+          onChange={(event) => setIncludePassword(event.currentTarget.checked)}
+        >
+          Füge Passwort mit an
+        </Checkbox>
+      )}
+      <InputField type="text" id="link" name="link" label="Link" value={link} version="dark" />
+      <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
         <CopyToClipboard
           text={link}
           onCopy={() => {
             setCopied(true);
           }}
         >
-          <ModalButton autoFocus>
+          <Button autoFocus>
             {isCopied ? 'Link in der Zwischenablage!' : 'Kopiere Link'}
-          </ModalButton>
+          </Button>
         </CopyToClipboard>
-      </ModalBody>
-      <ModalFooter>
-        <ModalButton onClick={onClose}>Schließen</ModalButton>
-      </ModalFooter>
+        <Button variant="black" nClick={onClose}>Schließen</Button>
+      </Flex>
     </Modal>
   );
 };

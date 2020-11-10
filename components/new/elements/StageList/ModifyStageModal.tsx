@@ -1,24 +1,15 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Flex, Button } from 'theme-ui';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-
 import {
-  Modal,
-  ModalBody,
-  ModalButton,
-  ModalFooter,
-  ModalHeader
-} from 'baseui/modal/index';
-import { Input } from 'baseui/input/index';
-import { FormControl } from 'baseui/form-control/index';
-import { KIND } from 'baseui/button/index';
-
-import { Accordion, Panel } from 'baseui/accordion/index';
+  jsx, Flex, Button, Heading,
+} from 'theme-ui';
+import { useFormik, FormikProvider, Field } from 'formik';
+import * as Yup from 'yup';
 import { Client } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
+import Modal from '../Modal';
+import InputField from '../../../InputField';
 
 const Schema = Yup.object().shape({
   name: Yup.string()
@@ -27,7 +18,10 @@ const Schema = Yup.object().shape({
     .required('Wird benötigt'),
   password: Yup.string()
     .min(5, 'Zu kurz')
-    .max(50, 'Zu lang'),
+    .max(50, 'Zu lang')
+    .oneOf([Yup.ref('repeatPassword'), null], 'Passwords must match'),
+  repeatPassword: Yup.string()
+    .oneOf([Yup.ref('password'), null], 'Passwords must match'),
   width: Yup.number()
     .min(0.1)
     .max(1000),
@@ -42,7 +36,7 @@ const Schema = Yup.object().shape({
     .max(1),
   reflection: Yup.number()
     .min(0.1)
-    .max(1)
+    .max(1),
 });
 
 const ModifyStageModal = (props: {
@@ -55,25 +49,27 @@ const ModifyStageModal = (props: {
   const formik = useFormik({
     initialValues: stage
       ? {
-          name: stage.name,
-          password: stage.password,
-          width: stage.width,
-          length: stage.length,
-          height: stage.height,
-          absorption: stage.absorption,
-          damping: stage.damping
-        }
+        name: stage.name,
+        password: stage.password,
+        repeatPassword: stage.password,
+        width: stage.width,
+        length: stage.length,
+        height: stage.height,
+        absorption: stage.absorption,
+        damping: stage.damping,
+      }
       : {
-          name: '',
-          password: '',
-          width: 25,
-          length: 13,
-          height: 7.5,
-          damping: 0.7,
-          absorption: 0.6
-        },
+        name: '',
+        password: '',
+        repeatPassword: '',
+        width: 25,
+        length: 13,
+        height: 7.5,
+        damping: 0.7,
+        absorption: 0.6,
+      },
     validationSchema: Schema,
-    onSubmit: values => {
+    onSubmit: (values) => {
       updateStage(stage._id, {
         name: values.name,
         password: values.password,
@@ -81,10 +77,10 @@ const ModifyStageModal = (props: {
         length: values.length,
         height: values.height,
         absorption: values.absorption,
-        damping: values.damping
+        damping: values.damping,
       });
       onClose();
-    }
+    },
   });
 
   React.useEffect(() => {
@@ -92,138 +88,61 @@ const ModifyStageModal = (props: {
       formik.setValues({
         name: stage.name,
         password: stage.password,
+        repeatPassword: stage.password,
         width: stage.width,
         length: stage.length,
         height: stage.height,
         absorption: stage.absorption,
-        damping: stage.damping
+        damping: stage.damping,
       });
     }
   }, [stage]);
 
   return (
     <Modal
-      closeable
       isOpen={isOpen}
       onClose={onClose}
-      unstable_ModalBackdropScroll
     >
-      <form onSubmit={formik.handleSubmit}>
-        <ModalHeader>Bühne ändern</ModalHeader>
-        <ModalBody>
-          <FormControl
-            label={() => 'Name'}
-            caption={() => 'Gib der Bühne einen aussagekräftigen Namen'}
-            error={formik.errors.name}
-          >
-            <Input
-              required
-              type="text"
-              name="name"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-          </FormControl>
-          <FormControl
-            label={() => 'Passwort'}
-            caption={() => 'Optional: Verwende ein Zugangspasswort'}
-            error={formik.errors.password}
-          >
-            <Input
-              type="text"
-              name="password"
-              required={false}
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-          </FormControl>
-
-          <Accordion>
-            <Panel title="Erweiterte Einstellungen">
-              <FormControl
-                label={() => 'Breite'}
-                caption={() => 'Breite der Bühne'}
-                error={formik.errors.width}
-              >
-                <Input
-                  type="number"
-                  name="width"
-                  required={false}
-                  value={formik.values.width}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-              </FormControl>
-              <FormControl
-                label={() => 'Länge'}
-                caption={() => 'Länge der Bühne'}
-                error={formik.errors.length}
-              >
-                <Input
-                  type="number"
-                  name="length"
-                  required={false}
-                  value={formik.values.length}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-              </FormControl>
-              <FormControl
-                label={() => 'Höhe'}
-                caption={() => 'Höhe der Bühne'}
-                error={formik.errors.height}
-              >
-                <Input
-                  type="number"
-                  name="height"
-                  required={false}
-                  value={formik.values.height}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-              </FormControl>
-              <FormControl
-                label={() => 'Dämpfung'}
-                caption={() => 'Dämpfungsfaktor der Bühnenwände'}
-                error={formik.errors.damping}
-              >
-                <Input
-                  type="number"
-                  name="reflection"
-                  required={false}
-                  value={formik.values.damping}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-              </FormControl>
-              <FormControl
-                label={() => 'Absorption'}
-                caption={() => 'Absorption der Bühnenwände'}
-                error={formik.errors.absorption}
-              >
-                <Input
-                  type="number"
-                  name="absorption"
-                  required={false}
-                  value={formik.values.absorption}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-              </FormControl>
-            </Panel>
-          </Accordion>
-        </ModalBody>
-        <ModalFooter>
-          <ModalButton type="button" kind={KIND.tertiary} onClick={onClose}>
-            Abbrechen
-          </ModalButton>
-          <ModalButton disabled={!formik.isValid} type="submit">
-            Bühne ändern
-          </ModalButton>
-        </ModalFooter>
-      </form>
+      <FormikProvider value={formik}>
+        <form onSubmit={formik.handleSubmit}>
+          <Heading as="h3" sx={{ color: 'background', fontSize: 3 }}>Bühne ändern</Heading>
+          <Field
+            as={InputField}
+            type="text"
+            name="name"
+            id="name"
+            label="Group name"
+            version="dark"
+            error={formik.errors.name && formik.touched.name}
+          />
+          <Field
+            as={InputField}
+            type="text"
+            name="password"
+            id="password"
+            label="Password"
+            version="dark"
+            error={formik.errors.password && formik.touched.password}
+          />
+          <Field
+            as={InputField}
+            type="text"
+            name="repeatPassword"
+            id="repeatPassword"
+            label="Repeat password"
+            version="dark"
+            error={formik.errors.repeatPassword && formik.touched.repeatPassword}
+          />
+          <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
+            <Button variant="black" type="button" onClick={onClose}>
+              Abbrechen
+            </Button>
+            <Button type="submit">
+              Bühne ändern
+            </Button>
+          </Flex>
+        </form>
+      </FormikProvider>
     </Modal>
   );
 };

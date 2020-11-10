@@ -12,6 +12,7 @@ export default {
     dangerUnderline: '#FA000099',
     success: '#24A312',
     navigation: 'hsl(333, 50%, 8%)',
+    modalBg: '#000000B2',
     gray: [
       '#D1D1D1',
       '#B3B3B3',
@@ -38,7 +39,7 @@ export default {
     body: '1.5',
     heading: '1.125',
   },
-  fontSizes: [14, 16, 18, 20, 24, 32, 48, 64, 72, 96],
+  fontSizes: [13, 16, 18, 20, 24, 32, 48, 64, 72, 96],
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   breakpoints: [600, 900, 1200, 1500].map((n) => `${n}px`),
   radii: {
@@ -110,6 +111,7 @@ export default {
     black: {
       variant: 'buttons.primary',
       color: 'text',
+      borderColor: 'background',
       bg: 'background',
     },
     outline: {
