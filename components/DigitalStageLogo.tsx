@@ -12,9 +12,9 @@ const Logo = ({
   single = false,
   width = 110,
 }: {
-  icon: boolean;
-  single: boolean;
-  width: string | number;
+  icon?: boolean;
+  single?: boolean;
+  width?: string | number;
 }): JSX.Element => {
   const viewBoxWidth = icon ? '36' : '110';
   const StyledSvg = styled('svg')({
@@ -25,18 +25,16 @@ const Logo = ({
     '.st4': { clipPath: 'url(#SVGID_8_)' },
     '.st5': { fill: single ? 'currentColor' : 'url(#SVGID_9_)' },
     '.st6': { fill: single ? 'currentColor' : '#E41446' },
+    width: width,
   });
 
   return (
     <StyledSvg
-      sx={{ width: width }}
       viewBox={`16 16 ${viewBoxWidth} 44`}
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      //style={{enableBackground:'new 0 0 141.1 75.5'}}
       xmlSpace="preserve"
-      style={{ backgroundColor: 'red' }}
     >
       <title>Digital Stage Logo</title>
       <g>

@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { jsx, Button, Flex, Heading, Text } from 'theme-ui';
+import DigitalStageLogo from '../../components/DigitalStageLogo';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import Layout from '../../components/Layout';
 
@@ -16,7 +17,7 @@ const Welcome = (): JSX.Element => {
   }
 
   return (
-    <Layout>
+    <Layout auth>
       <Flex
         sx={{
           flexDirection: 'column',
@@ -28,7 +29,7 @@ const Welcome = (): JSX.Element => {
         }}
       >
         <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
-          <img src="/images/white_logo.png" width="80" height="auto" alt="logo" />
+          <DigitalStageLogo single icon width={80} />
 
           <Heading as="h4" m={3}>
             Your digital stage for art, music
