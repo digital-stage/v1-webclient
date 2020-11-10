@@ -5,10 +5,10 @@ import Login from './account/login';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
 import StageDetails from '../components/stage/StageDetails';
 
-const Stages = () => {
+const Stages = (): JSX.Element => {
   const router = useRouter();
   const { user } = useAuth();
-  const stageId = useStageSelector<string | undefined>(state => state.stageId);
+  const stageId = useStageSelector<string | undefined>((state) => state.stageId);
   const [initialized, setInitialized] = useState<boolean>();
 
   useEffect(() => {

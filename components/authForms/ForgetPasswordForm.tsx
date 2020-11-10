@@ -12,22 +12,20 @@ interface Values {
   repeatEmail: string;
 }
 
-const ForgetPasswordForm = () => {
+const ForgetPasswordForm = (): JSX.Element => {
   const { requestPasswordReset } = useAuth();
 
   const [msg, setMsg] = React.useState({
     state: false,
     type: null,
-    kids: null
+    kids: null,
   });
 
   const ForgetPasswordSchema = Yup.object().shape({
-    email: Yup.string()
-      .email('Enter a valid email')
-      .required('Email is required'),
+    email: Yup.string().email('Enter a valid email').required('Email is required'),
     repeatEmail: Yup.string()
       .oneOf([Yup.ref('email'), null], 'Email must match')
-      .required('Repeat email is required')
+      .required('Repeat email is required'),
   });
 
   return (
@@ -36,38 +34,35 @@ const ForgetPasswordForm = () => {
         initialValues={{ email: '', repeatEmail: '' }}
         validationSchema={ForgetPasswordSchema}
         // eslint-disable-next-line max-len
-        onSubmit={async (
-          values: Values,
-          { resetForm }: FormikHelpers<Values>
-        ) =>
+        onSubmit={async (values: Values, { resetForm }: FormikHelpers<Values>) =>
           requestPasswordReset(values.email)
-            .then(res => {
+            .then((res) => {
               if (res === 200) {
                 setMsg({
                   state: true,
                   type: 'success',
-                  kids: 'Link sent - check your mails'
+                  kids: 'Link sent - check your mails',
                 });
                 resetForm(null);
               } else if (res === 404) {
                 setMsg({
                   state: true,
                   type: 'danger',
-                  kids: 'Unknown email address'
+                  kids: 'Unknown email address',
                 });
               } else {
                 setMsg({
                   state: true,
                   type: 'warning',
-                  kids: 'Oops - please try again'
+                  kids: 'Oops - please try again',
                 });
               }
             })
-            .catch(err => {
+            .catch((err) => {
               setMsg({
                 state: true,
                 type: 'danger',
-                kids: { err }
+                kids: { err },
               });
             })
         }

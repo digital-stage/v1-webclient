@@ -15,7 +15,7 @@ import Container from '../components/Container';
 import PageSpinner from '../components/PageSpinner';
 import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/FixedAudioPlaybackStarterButton';
 
-const Index = () => {
+const Index = (): JSX.Element => {
   const router = useRouter();
   const { loading, user } = useAuth();
   const stageId = useStageSelector<string | undefined>((state) => state.stageId);
@@ -25,7 +25,7 @@ const Index = () => {
       router.push('/account/welcome');
     } else {
       return (
-        <Layout>
+        <Layout sidebar={!!stageId}>
           {stageId ? (
             <React.Fragment>
               <PageWrapperWithStage>

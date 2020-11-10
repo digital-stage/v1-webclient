@@ -10,7 +10,7 @@ import {
   StageId,
   StageMemberAudioProducerId,
   StageMemberId,
-  StageMemberOvTrackId
+  StageMemberOvTrackId,
 } from './common/model.server';
 import * as Server from './common/model.server';
 import { ThreeDimensionAudioProperties } from './common/model.utils';
@@ -34,13 +34,9 @@ import {
   SetCustomStageMemberOvPayload,
   SetCustomStageMemberPayload,
   UpdateCustomGroupPayload,
-  UpdateCustomStageMemberPayload
+  UpdateCustomStageMemberPayload,
 } from './common/payloads';
-import {
-  ClientDeviceEvents,
-  ClientStageEvents,
-  ClientUserEvents
-} from './common/events';
+import { ClientDeviceEvents, ClientStageEvents, ClientUserEvents } from './common/events';
 import { useRequest } from '../useRequest';
 import { useSocket } from './useStageContext';
 import { NormalizedState } from './useStageContext/schema';
@@ -62,11 +58,7 @@ export interface StageActionsProps {
     absorption?: number
   );
 
-  joinStage(
-    stageId: StageId,
-    groupId: GroupId,
-    password: string | null
-  ): Promise<void>;
+  joinStage(stageId: StageId, groupId: GroupId, password: string | null): Promise<void>;
 
   leaveStage();
 
@@ -89,9 +81,7 @@ export interface StageActionsProps {
     update: Partial<ThreeDimensionAudioProperties>
   );
 
-  removeCustomStageMemberAudio(
-    customStageMemberAudioId: CustomStageMemberAudioProducerId
-  );
+  removeCustomStageMemberAudio(customStageMemberAudioId: CustomStageMemberAudioProducerId);
 
   setCustomStageMemberOv(
     stageMemberOvId: StageMemberOvTrackId,
@@ -125,17 +115,12 @@ export interface StageActionsProps {
     update: Partial<ThreeDimensionAudioProperties>
   );
 
-  updateStageMemberOv(
-    id: StageMemberOvTrackId,
-    update: Partial<ThreeDimensionAudioProperties>
-  );
+  updateStageMemberOv(id: StageMemberOvTrackId, update: Partial<ThreeDimensionAudioProperties>);
 }
 
 const useStageActions = (): StageActionsProps => {
   const socket = useSocket();
-  const stageId = useSelector<NormalizedState, string | undefined>(
-    state => state.stageId
-  );
+  const stageId = useSelector<NormalizedState, string | undefined>((state) => state.stageId);
   const { setRequest } = useRequest();
 
   const updateDevice = useCallback(
@@ -143,7 +128,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         socket.emit(ClientDeviceEvents.UPDATE_DEVICE, {
           ...device,
-          _id: deviceId
+          _id: deviceId,
         });
       } else {
         throw new Error("Socket connection wasn't ready");
@@ -157,7 +142,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         socket.emit(ClientUserEvents.CHANGE_USER, {
           name,
-          avatarUrl
+          avatarUrl,
         });
       } else {
         throw new Error("Socket connection wasn't ready");
@@ -184,7 +169,7 @@ const useStageActions = (): StageActionsProps => {
           length: length || 13,
           height: height || 7.5,
           damping: reflection || 0.7,
-          absorption: absorption || 0.6
+          absorption: absorption || 0.6,
         };
         socket.emit(ClientStageEvents.ADD_STAGE, payload);
       }
@@ -197,7 +182,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: ChangeStagePayload = {
           id,
-          update: stage
+          update: stage,
         };
         socket.emit(ClientStageEvents.CHANGE_STAGE, payload);
       }
@@ -211,10 +196,10 @@ const useStageActions = (): StageActionsProps => {
         const payload: JoinStagePayload = {
           stageId,
           groupId,
-          password: password || undefined
+          password: password || undefined,
         };
         return new Promise<void>((resolve, reject) => {
-          socket.emit(ClientStageEvents.JOIN_STAGE, payload, error => {
+          socket.emit(ClientStageEvents.JOIN_STAGE, payload, (error) => {
             if (!error) resolve();
             else reject(error);
           });
@@ -257,7 +242,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: AddGroupPayload = {
           stageId,
-          name
+          name,
         };
         socket.emit(ClientStageEvents.ADD_GROUP, payload);
       }
@@ -270,7 +255,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: ChangeGroupPayload = {
           id,
-          update
+          update,
         };
         socket.emit(ClientStageEvents.CHANGE_GROUP, payload);
       }
@@ -299,7 +284,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: ChangeStageMemberPayload = {
           id,
-          update
+          update,
         };
         socket.emit(ClientStageEvents.CHANGE_STAGE_MEMBER, payload);
       }
@@ -308,14 +293,11 @@ const useStageActions = (): StageActionsProps => {
   );
 
   const updateStageMemberOv = useCallback(
-    (
-      id: StageMemberOvTrackId,
-      update: Partial<ThreeDimensionAudioProperties>
-    ) => {
+    (id: StageMemberOvTrackId, update: Partial<ThreeDimensionAudioProperties>) => {
       if (socket) {
         const payload: ChangeStageMemberOvTrackPayload = {
           id,
-          update
+          update,
         };
         socket.emit(ClientStageEvents.CHANGE_STAGE_MEMBER_OV, payload);
       }
@@ -324,14 +306,11 @@ const useStageActions = (): StageActionsProps => {
   );
 
   const updateStageMemberAudio = useCallback(
-    (
-      id: StageMemberAudioProducerId,
-      update: Partial<ThreeDimensionAudioProperties>
-    ) => {
+    (id: StageMemberAudioProducerId, update: Partial<ThreeDimensionAudioProperties>) => {
       if (socket) {
         const payload: ChangeStageMemberAudioProducerPayload = {
           id,
-          update
+          update,
         };
         socket.emit(ClientStageEvents.CHANGE_STAGE_MEMBER_AUDIO, payload);
       }
@@ -345,7 +324,7 @@ const useStageActions = (): StageActionsProps => {
         const payload: SetCustomGroupPayload = {
           groupId,
           volume,
-          muted
+          muted,
         };
         socket.emit(ClientStageEvents.SET_CUSTOM_GROUP, payload);
       }
@@ -364,14 +343,11 @@ const useStageActions = (): StageActionsProps => {
   );
 
   const setCustomStageMember = useCallback(
-    (
-      stageMemberId: StageMemberId,
-      update: Partial<ThreeDimensionAudioProperties>
-    ) => {
+    (stageMemberId: StageMemberId, update: Partial<ThreeDimensionAudioProperties>) => {
       if (socket) {
         const payload: SetCustomStageMemberPayload = {
           stageMemberId,
-          update
+          update,
         };
         socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER, payload);
       }
@@ -397,7 +373,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: SetCustomStageMemberAudioPayload = {
           stageMemberAudioId,
-          update
+          update,
         };
         socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER_AUDIO, payload);
       }
@@ -409,10 +385,7 @@ const useStageActions = (): StageActionsProps => {
     (id: GroupId) => {
       if (socket) {
         const payload: RemoveCustomStageMemberAudioPayload = id;
-        socket.emit(
-          ClientStageEvents.REMOVE_CUSTOM_STAGE_MEMBER_AUDIO,
-          payload
-        );
+        socket.emit(ClientStageEvents.REMOVE_CUSTOM_STAGE_MEMBER_AUDIO, payload);
       }
     },
     [socket]
@@ -426,7 +399,7 @@ const useStageActions = (): StageActionsProps => {
       if (socket) {
         const payload: SetCustomStageMemberOvPayload = {
           stageMemberOvTrackId,
-          update
+          update,
         };
         socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER_OV, payload);
       }
@@ -467,7 +440,7 @@ const useStageActions = (): StageActionsProps => {
     removeCustomStageMemberOv,
     updateStageMemberAudio,
     updateStageMemberOv,
-    leaveStageForGood
+    leaveStageForGood,
   };
 };
 

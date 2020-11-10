@@ -1,18 +1,16 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import {
-  jsx, Box, Button, Flex,
-} from 'theme-ui';
+import { jsx, Box, Button, Flex } from 'theme-ui';
 import { useStyletron } from 'baseui';
 import { FaMicrophone } from 'react-icons/fa';
 import { useAudioContext } from '../../../../lib/useAudioContext';
 
-const FixedAudioPlaybackStarterButton = () => {
+const FixedAudioPlaybackStarterButton = (): JSX.Element => {
   const [css, theme] = useStyletron();
   const { audioContext, createAudioContext } = useAudioContext();
   const [valid, setValid] = React.useState<boolean>(
-    audioContext && audioContext.state === 'running',
+    audioContext && audioContext.state === 'running'
   );
 
   React.useEffect(() => {
@@ -50,11 +48,7 @@ const FixedAudioPlaybackStarterButton = () => {
         })}
       >
         <Button kind="minimal" variant="circle" onClick={() => start()}>
-          <FaMicrophone
-            sx={{ color: 'accent' }}
-            size={64}
-            name="Microphone Off"
-          />
+          <FaMicrophone sx={{ color: 'accent' }} size={64} name="Microphone Off" />
         </Button>
       </div>
     );

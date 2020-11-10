@@ -21,8 +21,8 @@ export interface IError {
 const CreateGroupModal = (props: {
   stage: Client.Stage;
   isOpen?: boolean;
-  onClose?: () => any;
-}) => {
+  onClose?: () => never;
+}): JSX.Element => {
   const { stage, isOpen, onClose } = props;
   const { createGroup } = useStageActions();
 
@@ -34,10 +34,7 @@ const CreateGroupModal = (props: {
   });
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <Modal isOpen={isOpen} onClose={onClose}>
       <Formik
         initialValues={{
           name: '',

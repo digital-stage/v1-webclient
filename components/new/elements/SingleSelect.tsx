@@ -12,9 +12,7 @@ const SingleSelect = (props: {
   className?: string;
 }) => {
   const value: Option =
-    props.options &&
-    props.id &&
-    props.options.find(option => option.id === props.id);
+    props.options && props.id && props.options.find((option) => option.id === props.id);
   return (
     <div className={props.className}>
       <Select

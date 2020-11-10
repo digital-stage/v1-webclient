@@ -2,24 +2,13 @@
 /** @jsx jsx */
 import React, { useEffect } from 'react';
 import { jsx, Button } from 'theme-ui';
-import {
-  Collapse,
-  createStyles,
-  Grid,
-  makeStyles,
-  Theme,
-  Typography
-} from '@material-ui/core';
+import { Collapse, createStyles, Grid, makeStyles, Theme, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import { shallowEqual } from 'react-redux';
 import CreateStageModal from '../digital-stage-create-stage/CreateStageModal';
 import StageCard from './StageCard';
 import { useSelector } from '../../lib/digitalstage/useStageContext/redux';
-import {
-  Groups,
-  NormalizedState,
-  Stages
-} from '../../lib/digitalstage/useStageContext/schema';
+import { Groups, NormalizedState, Stages } from '../../lib/digitalstage/useStageContext/schema';
 import { Client } from '../../lib/digitalstage/common/model.client';
 import { useStage } from './useStage';
 
@@ -27,19 +16,19 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       padding: theme.spacing(3, 3, 3, 0),
-      width: '100%'
+      width: '100%',
     },
     clickable: {
-      cursor: 'pointer'
+      cursor: 'pointer',
     },
     leftBorder: {
-      borderLeft: '4px solid white'
+      borderLeft: '4px solid white',
     },
     leftBorderNormal: {
-      borderLeft: '4px solid transparent'
+      borderLeft: '4px solid transparent',
     },
     paddingLeft: {
-      paddingLeft: theme.spacing(3)
+      paddingLeft: theme.spacing(3),
     },
     stagesList: {
       margin: theme.spacing(2, 0),
@@ -48,28 +37,25 @@ const useStyles = makeStyles((theme: Theme) =>
       overflowY: 'scroll',
       '&::-webkit-scrollbar': {
         width: '5px',
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
       },
       '&::-webkit-scrollbar-track': {
-        borderRadius: '25px'
+        borderRadius: '25px',
       },
       '&::-webkit-scrollbar-thumb': {
         background: 'white',
-        borderRadius: '25px'
+        borderRadius: '25px',
       },
       '&::-webkit-scrollbar-thumb:hover': {
-        background: 'white'
-      }
-    }
+        background: 'white',
+      },
+    },
   })
 );
 
-const StagesList = () => {
-  const stages = useSelector<NormalizedState, Stages>(
-    state => state.stages,
-    shallowEqual
-  );
-  const groups = useSelector<NormalizedState, Groups>(state => state.groups);
+const StagesList = (): JSX.Element => {
+  const stages = useSelector<NormalizedState, Stages>((state) => state.stages, shallowEqual);
+  const groups = useSelector<NormalizedState, Groups>((state) => state.groups);
   const classes = useStyles();
   const [list, setList] = React.useState(stages);
   const [checkedMyStage, setCheckedMyStage] = React.useState(true);
@@ -78,12 +64,12 @@ const StagesList = () => {
   const [openCreateStageModal, setOpenCreateStageModal] = React.useState(false);
   const { handleSetStage, handleSetContext } = useStage();
 
-  const handleMySatgeClick = () => {
-    setCheckedMyStage(prev => !prev);
+  const handleMySatgeClick = (): JSX.Element => {
+    setCheckedMyStage((prev) => !prev);
   };
 
-  const handleJoindeStagesClick = () => {
-    setCheckedJoinedStages(prev => !prev);
+  const handleJoindeStagesClick = (): JSX.Element => {
+    setCheckedJoinedStages((prev) => !prev);
   };
 
   useEffect(() => {
@@ -111,17 +97,13 @@ const StagesList = () => {
             My stages
           </Typography>
           <div onClick={handleMySatgeClick}>
-            {!checkedMyStage ? (
-              <span>ExpandMoreIcon</span>
-            ) : (
-              <span>ExpandLessIcon</span>
-            )}
+            {!checkedMyStage ? <span>ExpandMoreIcon</span> : <span>ExpandLessIcon</span>}
           </div>
         </Grid>
         <div>
           {' '}
           {list.allIds.length > 0 &&
-            list.allIds.map(id => {
+            list.allIds.map((id) => {
               const stage = list.byId[id];
               return (
                 <div
@@ -130,10 +112,8 @@ const StagesList = () => {
                     handleSetStage(stage);
                   }}
                   className={clsx(classes.clickable, {
-                    [classes.leftBorder]:
-                      currentStage && currentStage._id === id,
-                    [classes.leftBorderNormal]:
-                      currentStage && !(currentStage._id === id)
+                    [classes.leftBorder]: currentStage && currentStage._id === id,
+                    [classes.leftBorderNormal]: currentStage && !(currentStage._id === id),
                   })}
                   key={id}
                 >
@@ -149,17 +129,13 @@ const StagesList = () => {
             Joined stages
           </Typography>
           <div onClick={handleJoindeStagesClick}>
-            {!checkedJoindedStages ? (
-              <span>ExpandMoreIcon</span>
-            ) : (
-              <span>ExpandLessIcon</span>
-            )}
+            {!checkedJoindedStages ? <span>ExpandMoreIcon</span> : <span>ExpandLessIcon</span>}
           </div>
         </Grid>
         <div>
           {' '}
           {list.allIds.length > 0 &&
-            list.allIds.map(id => {
+            list.allIds.map((id) => {
               const stage = list.byId[id];
               return (
                 <div
@@ -168,10 +144,8 @@ const StagesList = () => {
                     handleSetStage(stage);
                   }}
                   className={clsx(classes.clickable, {
-                    [classes.leftBorder]:
-                      currentStage && currentStage._id === id,
-                    [classes.leftBorderNormal]:
-                      currentStage && !(currentStage._id === id)
+                    [classes.leftBorder]: currentStage && currentStage._id === id,
+                    [classes.leftBorderNormal]: currentStage && !(currentStage._id === id),
                   })}
                   key={id}
                 >

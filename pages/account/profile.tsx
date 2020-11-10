@@ -7,9 +7,9 @@ import useStageSelector from '../../lib/digitalstage/useStageSelector';
 import Layout from '../../components/Layout';
 import Container from '../../components/Container';
 
-const Profile = () => {
+const Profile = (): JSX.Element => {
   const { user: authUser } = useAuth();
-  const { user } = useStageSelector(state => ({ user: state.user }));
+  const { user } = useStageSelector((state) => ({ user: state.user }));
 
   return (
     <Layout>

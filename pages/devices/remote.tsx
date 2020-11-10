@@ -3,9 +3,9 @@ import DeviceView from '../../components/new/elements/DeviceView';
 import useStageSelector from '../../lib/digitalstage/useStageSelector';
 import Container from '../../components/Container';
 
-const Remote = () => {
-  const { remoteDevices } = useStageSelector(state => ({
-    remoteDevices: state.devices.remote.map(id => state.devices.byId[id])
+const Remote = (): JSX.Element => {
+  const { remoteDevices } = useStageSelector((state) => ({
+    remoteDevices: state.devices.remote.map((id) => state.devices.byId[id]),
   }));
 
   return (
@@ -13,7 +13,7 @@ const Remote = () => {
       {remoteDevices && (
         <>
           <h2>Meine anderen Geräte</h2>
-          {remoteDevices.map(remoteDevice => (
+          {remoteDevices.map((remoteDevice) => (
             <DeviceView device={remoteDevice} />
           ))}
         </>

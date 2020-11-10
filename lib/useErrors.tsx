@@ -2,9 +2,7 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx, Button } from 'theme-ui';
-import {
-  Modal, ModalBody, ModalFooter, ModalHeader,
-} from 'baseui/modal';
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal';
 
 export interface ErrorsProps {
   errors: string[];
@@ -14,8 +12,12 @@ export interface ErrorsProps {
 
 const ErrorsContext = React.createContext<ErrorsProps>({
   errors: [],
-  reportError: () => {},
-  clearErrors: () => {},
+  reportError: () => {
+    // do nothing.
+  },
+  clearErrors: () => {
+    // do nothing.
+  },
 });
 
 export const useErrors = (): ErrorsProps => React.useContext<ErrorsProps>(ErrorsContext);
@@ -37,8 +39,8 @@ export const ErrorsProvider = (props: { children: React.ReactNode }) => {
         <ModalHeader>Fehler</ModalHeader>
         <ModalBody>
           <ul>
-            {errors.map((error) => (
-              <li>{error}</li>
+            {errors.map((error, index) => (
+              <li key={index}>{error}</li>
             ))}
           </ul>
         </ModalBody>

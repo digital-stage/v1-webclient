@@ -6,11 +6,9 @@ import DeviceView from '../../components/new/elements/DeviceView';
 import useStageSelector from '../../lib/digitalstage/useStageSelector';
 import Container from '../../components/Container';
 
-const Local = () => {
-  const { localDevice } = useStageSelector(state => ({
-    localDevice: state.devices.local
-      ? state.devices.byId[state.devices.local]
-      : undefined
+const Local = (): JSX.Element => {
+  const { localDevice } = useStageSelector((state) => ({
+    localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
   }));
   const [css] = useStyletron();
 
@@ -21,7 +19,7 @@ const Local = () => {
       <div
         className={css({
           marginTop: '2rem',
-          marginBottom: '2rem'
+          marginBottom: '2rem',
         })}
       >
         <Link href="/test">

@@ -1,9 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import {
-  jsx, Box, Button, Flex,
-} from 'theme-ui';
+import { jsx, Box, Button, Flex } from 'theme-ui';
 import LogSlider, { RGBColor } from '../LogSlider';
 
 const LevelControlFader = (props: {
@@ -13,9 +11,7 @@ const LevelControlFader = (props: {
   onChanged: (volume: number, muted: boolean) => any;
   alignLabel?: 'left' | 'right';
 }) => {
-  const {
-    volume, onChanged, muted, color, alignLabel,
-  } = props;
+  const { volume, onChanged, muted, color, alignLabel } = props;
   const [value, setValue] = React.useState<number>(volume);
 
   React.useEffect(() => {
@@ -31,20 +27,22 @@ const LevelControlFader = (props: {
       setValue(updatedVolume);
       onChanged(updatedVolume, muted);
     },
-    [muted],
+    [muted]
   );
 
   return (
-    <Flex sx={{
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}
-    >
-      <Box sx={{
-        display: 'block',
-        paddingBottom: '.6rem',
+    <Flex
+      sx={{
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
+    >
+      <Box
+        sx={{
+          display: 'block',
+          paddingBottom: '.6rem',
+        }}
       >
         <Button
           kind={muted ? 'primary' : 'minimal'}

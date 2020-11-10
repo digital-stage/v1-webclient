@@ -7,17 +7,17 @@ import stageReducer, { ReducerAction } from './reducers';
 let store: Store<NormalizedState, ReducerAction>;
 
 function initStore(
-  preloadedState: NormalizedState = InitialNormalizedState,
+  preloadedState: NormalizedState = InitialNormalizedState
 ): Store<NormalizedState, ReducerAction> {
   return createStore<NormalizedState, ReducerAction, any, any>(
     stageReducer,
     preloadedState,
-    composeWithDevTools(applyMiddleware()),
+    composeWithDevTools(applyMiddleware())
   );
 }
 
 export const initializeStore = (
-  preloadedState: NormalizedState,
+  preloadedState: NormalizedState
 ): Store<NormalizedState, ReducerAction> => {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   let _store: Store<NormalizedState> = store ?? initStore(preloadedState);

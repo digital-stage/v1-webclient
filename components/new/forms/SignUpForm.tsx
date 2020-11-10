@@ -11,35 +11,22 @@ import { Checkbox, LABEL_PLACEMENT } from 'baseui/checkbox';
 import { useAuth } from '../../../lib/digitalstage/useAuth';
 
 const Schema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, 'Zu kurz')
-    .max(50, 'Zu lang'),
-  email: Yup.string()
-    .email('Ungültige E-Mail Adresse')
-    .required('Wird benötigt'),
-  password: Yup.string()
-    .min(10, 'Zu kurz')
-    .max(50, 'Zu lang')
-    .required('Wird benötigt'),
+  name: Yup.string().min(2, 'Zu kurz').max(50, 'Zu lang'),
+  email: Yup.string().email('Ungültige E-Mail Adresse').required('Wird benötigt'),
+  password: Yup.string().min(10, 'Zu kurz').max(50, 'Zu lang').required('Wird benötigt'),
   confirmPassword: Yup.string()
     .required()
-    .test('passwords-match', 'Die Passwörter stimmen nicht überein', function(
-      value
-    ) {
+    .test('passwords-match', 'Die Passwörter stimmen nicht überein', function (value) {
       return this.parent.password === value;
     }),
   agreeToTerms: Yup.boolean().test(
     'is-true',
     'Bitte lese und akzeptiere unsere Datenschutzbestimmungen',
-    value => value === true
-  )
+    (value) => value === true
+  ),
 });
 
-const SignUpForm = (props: {
-  onCompleted?: () => void;
-  targetUrl?: string;
-  backLink?: string;
-}) => {
+const SignUpForm = (props: { onCompleted?: () => void; targetUrl?: string; backLink?: string }) => {
   const { onCompleted, targetUrl, backLink } = props;
   const [error, setError] = useState<string>(null);
   const { createUserWithEmailAndPassword } = useAuth();
@@ -50,12 +37,12 @@ const SignUpForm = (props: {
       email: '',
       password: '',
       confirmPassword: '',
-      agreeToTerms: false
+      agreeToTerms: false,
     },
     validationSchema: Schema,
-    onSubmit: values =>
+    onSubmit: (values) =>
       createUserWithEmailAndPassword(values.email, values.password, {
-        name: values.name
+        name: values.name,
       })
         .then(() => {
           setError(undefined);
@@ -67,18 +54,13 @@ const SignUpForm = (props: {
           }
           return null;
         })
-        .catch(requestError => setError(requestError.message))
+        .catch((requestError) => setError(requestError.message)),
   });
 
   return (
     <form onSubmit={formik.handleSubmit}>
       <FormControl label="Name" error={formik.errors.name}>
-        <Input
-          required
-          name="name"
-          value={formik.values.name}
-          onChange={formik.handleChange}
-        />
+        <Input required name="name" value={formik.values.name} onChange={formik.handleChange} />
       </FormControl>
 
       <FormControl label="E-Mail Adresse" error={formik.errors.email}>
@@ -100,10 +82,7 @@ const SignUpForm = (props: {
           onBlur={formik.handleBlur}
         />
       </FormControl>
-      <FormControl
-        label="Passwort bestätigen"
-        error={formik.errors.confirmPassword}
-      >
+      <FormControl label="Passwort bestätigen" error={formik.errors.confirmPassword}>
         <Input
           required
           name="confirmPassword"
@@ -122,9 +101,8 @@ const SignUpForm = (props: {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
         >
-          Durch die Nutzung dieser Website stimmst du der Verwendung von Cookies
-          zu. Weitere Informationen dazu findest du in unserer
-          Datenschutzerklärung / Impressum.
+          Durch die Nutzung dieser Website stimmst du der Verwendung von Cookies zu. Weitere
+          Informationen dazu findest du in unserer Datenschutzerklärung / Impressum.
         </Checkbox>
       </FormControl>
 

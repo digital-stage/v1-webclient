@@ -1,9 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import {
-  jsx, Input, Label, Box, Text,
-} from 'theme-ui';
+import { jsx, Input, Label, Box, Text } from 'theme-ui';
 import { ErrorMessage } from 'formik';
 
 // TODO: add TS interface / type

@@ -6,7 +6,7 @@ import AuthPageContainer from '../../components/AuthPageContainer';
 import AuthPageLinks from '../../components/AuthPageLinks';
 import SignUpForm from '../../components/authForms/SignUpForm';
 
-const SignUp = () => {
+const SignUp = (): JSX.Element => {
   const router = useRouter();
   const { user } = useAuth();
 

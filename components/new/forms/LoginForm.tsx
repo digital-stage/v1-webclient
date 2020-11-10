@@ -10,23 +10,17 @@ import Link from 'next/link';
 import { useAuth } from '../../../lib/digitalstage/useAuth';
 
 const Schema = Yup.object().shape({
-  email: Yup.string()
-    .email('Ungültige E-Mail Adresse')
-    .required('Wird benötigt'),
-  password: Yup.string().required('Wird benötigt')
+  email: Yup.string().email('Ungültige E-Mail Adresse').required('Wird benötigt'),
+  password: Yup.string().required('Wird benötigt'),
 });
-const LoginForm = (props: {
-  onCompleted?: () => void;
-  targetUrl?: string;
-  backLink?: string;
-}) => {
+const LoginForm = (props: { onCompleted?: () => void; targetUrl?: string; backLink?: string }) => {
   const { onCompleted, targetUrl, backLink } = props;
   const [loginError, setError] = useState<string>();
   const { signInWithEmailAndPassword } = useAuth();
   const formik = useFormik({
     initialValues: {
       email: '',
-      password: ''
+      password: '',
     },
     validationSchema: Schema,
     onSubmit: (values: { email: string; password: string }) =>
@@ -41,13 +35,13 @@ const LoginForm = (props: {
           }
           return null;
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.message === 'Unauthorized') {
             setError('Falsches Passwort oder unbekannte E-Mail Adresse');
           } else {
             setError(`Unbekannter Fehler: ${err.message}`);
           }
-        })
+        }),
   });
 
   return (
@@ -58,9 +52,9 @@ const LoginForm = (props: {
         overrides={{
           Label: {
             style: {
-              color: 'inherit'
-            }
-          }
+              color: 'inherit',
+            },
+          },
         }}
       >
         <Input
@@ -76,9 +70,9 @@ const LoginForm = (props: {
         overrides={{
           Label: {
             style: {
-              color: 'inherit'
-            }
-          }
+              color: 'inherit',
+            },
+          },
         }}
         label="Passwort"
         error={formik.errors.password}

@@ -10,17 +10,12 @@ import Link from 'next/link';
 import { useAuth } from '../../../lib/digitalstage/useAuth';
 
 const Schema = Yup.object().shape({
-  password: Yup.string()
-    .min(10, 'Zu kurz')
-    .max(50, 'Zu lang')
-    .required('Wird benötigt'),
+  password: Yup.string().min(10, 'Zu kurz').max(50, 'Zu lang').required('Wird benötigt'),
   confirmPassword: Yup.string()
     .required()
-    .test('passwords-match', 'Die Passwörter stimmen nicht überein', function(
-      value
-    ) {
+    .test('passwords-match', 'Die Passwörter stimmen nicht überein', function (value) {
       return this.parent.password === value;
-    })
+    }),
 });
 
 const ResetPasswordForm = (props: {
@@ -36,10 +31,10 @@ const ResetPasswordForm = (props: {
   const formik = useFormik({
     initialValues: {
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
     },
     validationSchema: Schema,
-    onSubmit: values =>
+    onSubmit: (values) =>
       resetPassword(resetToken, values.password)
         .then(() => {
           setError(undefined);
@@ -47,7 +42,7 @@ const ResetPasswordForm = (props: {
           if (targetUrl) return Router.push(targetUrl);
           return null;
         })
-        .catch(requestError => setError(requestError.message))
+        .catch((requestError) => setError(requestError.message)),
   });
 
   return (
@@ -62,10 +57,7 @@ const ResetPasswordForm = (props: {
           onBlur={formik.handleBlur}
         />
       </FormControl>
-      <FormControl
-        label="Passwort bestätigen"
-        error={formik.errors.confirmPassword}
-      >
+      <FormControl label="Passwort bestätigen" error={formik.errors.confirmPassword}>
         <Input
           required
           name="confirmPassword"

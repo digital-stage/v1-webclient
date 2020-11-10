@@ -1,8 +1,8 @@
-import stageActions from "./stageActions";
-import deviceActions from "./deviceActions";
-import { ServerGlobalEvents, ServerUserEvents } from "../../../common/events";
-import * as Server from "../../../common/model.server";
-import { AdditionalReducerTypes } from "../reducers";
+import stageActions from './stageActions';
+import deviceActions from './deviceActions';
+import { ServerGlobalEvents, ServerUserEvents } from '../../../common/events';
+import * as Server from '../../../common/model.server';
+import { AdditionalReducerTypes } from '../reducers';
 
 const handleUserReady = (user: Server.User) => {
   return {

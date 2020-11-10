@@ -5,54 +5,48 @@ import { Delete } from 'baseui/icon';
 // import Button from '../../../../uikit/Button
 import { Button } from 'theme-ui';
 
-const ModalWrapper = styled<{ $hidden?: boolean }, 'div', Theme>(
-  'div',
-  ({ $theme, $hidden }) => ({
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    backgroundColor: $hidden
-      ? 'transparent'
-      : $theme.colors.backgroundOverlayDark,
-    transitionDuration: $theme.animation.timing200,
-    transitionProperty: 'background-color',
-    transitionFunction: $theme.animation.easeInCurve,
-    display: 'flex'
-  })
-);
-const ModalContent = styled<
-  { $width: string; $maxWidth: string; $hidden?: boolean },
-  'div',
-  Theme
->('div', ({ $theme, $hidden, $width, $maxWidth }) => ({
-  position: 'relative',
+const ModalWrapper = styled<{ $hidden?: boolean }, 'div', Theme>('div', ({ $theme, $hidden }) => ({
+  position: 'absolute',
   width: '100%',
   height: '100%',
-  backgroundColor: $theme.colors.backgroundPrimary,
+  top: 0,
+  left: 0,
+  bottom: 0,
+  right: 0,
+  backgroundColor: $hidden ? 'transparent' : $theme.colors.backgroundOverlayDark,
   transitionDuration: $theme.animation.timing200,
-  transitionProperty: 'transform,width,max-width',
+  transitionProperty: 'background-color',
   transitionFunction: $theme.animation.easeInCurve,
-  transform: $hidden ? 'translate(-100%)' : 'translateX(0)',
-  [$theme.mediaQuery.medium]: {
-    width: $width,
-    maxWidth: $maxWidth
-  }
+  display: 'flex',
 }));
+const ModalContent = styled<{ $width: string; $maxWidth: string; $hidden?: boolean }, 'div', Theme>(
+  'div',
+  ({ $theme, $hidden, $width, $maxWidth }) => ({
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    backgroundColor: $theme.colors.backgroundPrimary,
+    transitionDuration: $theme.animation.timing200,
+    transitionProperty: 'transform,width,max-width',
+    transitionFunction: $theme.animation.easeInCurve,
+    transform: $hidden ? 'translate(-100%)' : 'translateX(0)',
+    [$theme.mediaQuery.medium]: {
+      width: $width,
+      maxWidth: $maxWidth,
+    },
+  })
+);
 const ModalCloseAction = styled('div', {
   width: '100%',
   display: 'flex',
   alignItems: 'center',
   flexGrow: 0,
   flexShrink: 0,
-  justifyContent: 'flex-end'
+  justifyContent: 'flex-end',
 });
 const Backdrop = styled('div', {
   flexShrink: 1,
-  flexGrow: 1
+  flexGrow: 1,
 });
 
 export interface SIZE {
@@ -124,7 +118,7 @@ const Modal = (props: {
               style={{
                 position: 'absolute',
                 top: 0,
-                right: 0
+                right: 0,
               }}
               kind="minimal"
               shape="circle"

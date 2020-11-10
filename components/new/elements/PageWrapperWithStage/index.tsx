@@ -1,9 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import {
-  jsx, Flex,
-} from 'theme-ui';
+import { jsx, Flex } from 'theme-ui';
 import styled from '@emotion/styled';
 import { useAuth } from '../../../../lib/digitalstage/useAuth';
 import Modal from '../Modal';
@@ -13,7 +11,7 @@ import AppBar from '../Menu/AppBar';
 import { CenteredNavItems, LowerNavItems, UpperNavItems } from './MenuItems';
 
 const DesktopSideBar = styled(SideBar)({
-  display: ['none', 'none'],
+  display: ['none', 'flex'],
   flexGrow: 0,
   zIndex: 100,
 });
@@ -23,9 +21,7 @@ const MobileAppBar = styled(AppBar)({
   flexGrow: 0,
 });
 
-const PageWrapperWithStage = (props: { children: React.ReactNode }) => {
-  const { children } = props;
-
+const PageWrapperWithStage = ({ children }: { children: React.ReactNode }): JSX.Element => {
   const { user } = useAuth();
 
   const [currentItem, setCurrentItem] = React.useState<NavItem>();
@@ -36,14 +32,15 @@ const PageWrapperWithStage = (props: { children: React.ReactNode }) => {
   }
 
   return (
-    <Flex sx={{
-      flexDirection: ['column', 'row'],
-      width: '100%',
-      height: '100%',
-      minHeight: '100vh',
-      bg: 'yellow',
-    }}
+    <Flex
+      sx={{
+        flexDirection: ['column', 'row'],
+        width: '100%',
+        height: '100%',
+        minHeight: '100vh',
+      }}
     >
+      {/** 
       <DesktopSideBar
         selected={currentItem}
         upperLinks={UpperNavItems}
@@ -59,6 +56,7 @@ const PageWrapperWithStage = (props: { children: React.ReactNode }) => {
           }
         }}
       />
+      */}
       <MobileAppBar
         navItems={[...UpperNavItems, ...CenteredNavItems, ...LowerNavItems]}
         onSelected={(item) => {
@@ -70,10 +68,11 @@ const PageWrapperWithStage = (props: { children: React.ReactNode }) => {
           }
         }}
       />
-      <Flex sx={{
-        flexDirection: 'column',
-        flexGrow: 1,
-      }}
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          flexGrow: 1,
+        }}
       >
         {children}
         {currentItem && (

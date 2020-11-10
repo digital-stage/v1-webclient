@@ -7,7 +7,7 @@ import { useAuth } from '../../lib/digitalstage/useAuth';
 import Layout from '../../components/Layout';
 import Container from '../../components/Container';
 
-const Logout = () => {
+const Logout = (): JSX.Element => {
   const router = useRouter();
   const [loggedOut, setLoggedOut] = React.useState<boolean>(false);
   const { logout } = useAuth();

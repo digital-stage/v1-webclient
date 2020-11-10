@@ -5,7 +5,7 @@ import Layout from '../../components/Layout';
 import AuthPageContainer from '../../components/AuthPageContainer';
 import ForgetPasswordForm from '../../components/authForms/ForgetPasswordForm';
 
-const SignUp = () => {
+const SignUp = (): JSX.Element => {
   const router = useRouter();
   const { user } = useAuth();
 

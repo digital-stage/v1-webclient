@@ -5,7 +5,7 @@ import { jsx, Box } from 'theme-ui';
 import { useConductors } from '../../../../lib/digitalstage/useStageSelector';
 import StageMemberView from './StageMemberView';
 
-const ConductorsView = () => {
+const ConductorsView = (): JSX.Element => {
   const conductors = useConductors();
 
   if (conductors.length > 0) {

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { jsx, Button, Flex } from 'theme-ui';
 import { BiExit } from 'react-icons/bi';
 
-const StageLeaver = () => (
+const StageLeaver = (): JSX.Element => (
   <Flex
     sx={{
       position: 'fixed',

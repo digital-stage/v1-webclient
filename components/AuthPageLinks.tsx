@@ -8,15 +8,15 @@ import { useRouter } from 'next/router';
 const navItems = [
   {
     label: 'Sign In',
-    uri: '/account/login'
+    uri: '/account/login',
   },
   {
     label: 'Sign Up',
-    uri: '/account/signup'
-  }
+    uri: '/account/signup',
+  },
 ];
 
-const AuthPageLinks = () => {
+const AuthPageLinks = (): JSX.Element => {
   const { pathname } = useRouter();
 
   return (
@@ -28,7 +28,7 @@ const AuthPageLinks = () => {
             variant="auth"
             href={item.uri}
             sx={{
-              borderBottomColor: pathname === item.uri && 'primary'
+              borderBottomColor: pathname === item.uri && 'primary',
             }}
           >
             {item.label}

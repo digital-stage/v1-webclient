@@ -251,8 +251,7 @@ export interface StageMemberVideoProducer {
   stageId: StageId;
 }
 
-export interface StageMemberAudioProducer
-  extends ThreeDimensionAudioProperties {
+export interface StageMemberAudioProducer extends ThreeDimensionAudioProperties {
   _id: StageMemberVideoProducerId;
   stageMemberId: StageMemberId; // <-- RELATION
   globalProducerId: GlobalAudioProducerId; // <-- RELATION
@@ -264,8 +263,7 @@ export interface StageMemberAudioProducer
   stageId: StageId;
 }
 
-export interface CustomStageMemberAudioProducer
-  extends ThreeDimensionAudioProperties {
+export interface CustomStageMemberAudioProducer extends ThreeDimensionAudioProperties {
   _id: CustomStageMemberAudioProducerId;
   userId: UserId; // <-- RELATION
   stageMemberAudioProducerId: StageMemberAudioProducerId; // <-- RELATION
@@ -285,9 +283,7 @@ export interface CustomStageMemberAudioProducer
  * maybe for integrating webrtc and ov later and use
  * the web audio api panner for 3D audio interpolation later.
  */
-export interface StageMemberOvTrack
-  extends Track,
-  ThreeDimensionAudioProperties {
+export interface StageMemberOvTrack extends Track, ThreeDimensionAudioProperties {
   _id: StageMemberOvTrackId;
   trackId: TrackId; // <-- RELATION
   stageMemberId: StageMemberId; // <-- RELATION
@@ -306,8 +302,7 @@ export interface StageMemberOvTrack
 /**
  * Each user can overwrite the global stage member track settings with personal preferences.
  */
-export interface CustomStageMemberOvTrack
-  extends ThreeDimensionAudioProperties {
+export interface CustomStageMemberOvTrack extends ThreeDimensionAudioProperties {
   _id: CustomStageMemberOvTrackId;
 
   userId: UserId; // <-- RELATION

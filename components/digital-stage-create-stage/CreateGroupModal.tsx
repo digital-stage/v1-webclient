@@ -11,7 +11,7 @@ import {
   Theme,
   createStyles,
   Typography,
-  Grid
+  Grid,
 } from '@material-ui/core';
 import Icon from '../base/Icon';
 import { useStage } from '../stage/useStage';
@@ -21,18 +21,18 @@ import useStageActions from '../../lib/digitalstage/useStageActions';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)'
+      boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
     },
     paper: {
       textTransform: 'initial',
       backgroundColor: '#2A2A2A',
-      maxHeight: 'unset !important'
+      maxHeight: 'unset !important',
     },
     icon: {
       textAlign: 'right',
       cursor: 'pointer',
-      padding: theme.spacing(1)
-    }
+      padding: theme.spacing(1),
+    },
   })
 );
 
@@ -49,7 +49,7 @@ export default function CreateStageModal(props: {
   const [nameLength, setNameLength] = React.useState<number>(0);
   const [error, setError] = React.useState<boolean>(false);
 
-  const handleClose = () => {
+  const handleClose = (): JSX.Element => {
     props.handleCloseCreateGroup(false);
     setName('');
     setNameLength(0);
@@ -79,7 +79,7 @@ export default function CreateStageModal(props: {
         aria-labelledby="responsive-dialog-title"
         classes={{
           root: classes.root,
-          paper: classes.paper
+          paper: classes.paper,
         }}
       >
         <div className={classes.icon} onClick={handleClose}>
