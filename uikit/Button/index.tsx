@@ -16,15 +16,13 @@ const Button = (
     style?: CSSProperties;
     startEnhancer?: React.ReactNode;
     endEnhancer?: React.ReactNode;
-    ref?: React.Ref<HTMLButtonElement>
   },
 ) => {
   const {
-    children, startEnhancer, endEnhancer, onClick, style, kind, shape, size, ref,
+    children, startEnhancer, endEnhancer, onClick, style, kind, shape, size,
   } = props;
   return (
     <BaseButton
-      ref={ref}
       startEnhancer={startEnhancer}
       endEnhancer={endEnhancer}
       onClick={onClick}

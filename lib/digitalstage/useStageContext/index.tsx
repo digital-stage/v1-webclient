@@ -319,6 +319,8 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
           );
         });
 
+        createdSocket.connect();
+
         setSocket(createdSocket);
       })
       .catch((error) => reportError(error));

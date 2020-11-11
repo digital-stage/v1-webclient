@@ -17,6 +17,9 @@ import { ErrorsProvider } from '../lib/useErrors';
 import DarkTheme from '../uikit/Theme';
 import ErrorHandler from "../components/ErrorHandler";
 
+console.log("Using API server: " + process.env.NEXT_PUBLIC_API_URL)
+console.log("Using router distribution server: " + process.env.NEXT_PUBLIC_ROUTERS_URL)
+
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <>
     <Head>

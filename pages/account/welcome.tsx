@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import PageWrapper from '../../components/new/elements/PageWrapper';
 import Container from '../../components/new/elements/Container';
-import Button from '../../uikit/Button';
+import {Button} from "baseui/button";
 
 const Wrapper = styled('div', {
   minHeight: '100vh',
