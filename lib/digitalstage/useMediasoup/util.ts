@@ -1,4 +1,5 @@
 import mediasoupClient from 'mediasoup-client';
+import { TeckosClient } from 'teckos-client';
 import { Router, StageMemberAudioProducer, StageMemberVideoProducer } from '../common/model.server';
 
 export enum RouterEvents {
@@ -83,7 +84,7 @@ export const getFastestRouter = (): Promise<Router> =>
     });
 
 export const createWebRTCTransport = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   device: mediasoupClient.Device,
   direction: 'send' | 'receive'
 ): Promise<mediasoupClient.types.Transport> =>
@@ -149,7 +150,7 @@ export const createProducer = (
     },
   });
 export const pauseProducer = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   producer: mediasoupClient.types.Producer
 ): Promise<mediasoupClient.types.Producer> =>
   new Promise<mediasoupClient.types.Producer>((resolve, reject) =>
@@ -161,7 +162,7 @@ export const pauseProducer = (
   );
 
 export const resumeProducer = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   producer: mediasoupClient.types.Producer
 ): Promise<mediasoupClient.types.Producer> =>
   new Promise<mediasoupClient.types.Producer>((resolve, reject) =>
@@ -173,7 +174,7 @@ export const resumeProducer = (
   );
 
 export const stopProducer = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   producer: mediasoupClient.types.Producer
 ): Promise<mediasoupClient.types.Producer> =>
   new Promise<mediasoupClient.types.Producer>((resolve, reject) =>
@@ -185,7 +186,7 @@ export const stopProducer = (
   );
 
 export const createConsumer = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   device: mediasoupClient.Device,
   transport: mediasoupClient.types.Transport,
   remoteProducer: StageMemberAudioProducer | StageMemberVideoProducer
@@ -221,7 +222,7 @@ export const createConsumer = (
   });
 
 export const resumeConsumer = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   consumer: mediasoupClient.types.Consumer
 ): Promise<mediasoupClient.types.Consumer> => {
   if (consumer.paused) {
@@ -237,7 +238,7 @@ export const resumeConsumer = (
 };
 
 export const pauseConsumer = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   consumer: mediasoupClient.types.Consumer
 ): Promise<mediasoupClient.types.Consumer> => {
   if (!consumer.paused) {
@@ -253,7 +254,7 @@ export const pauseConsumer = (
 };
 
 export const closeConsumer = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   consumer: mediasoupClient.types.Consumer
 ): Promise<mediasoupClient.types.Consumer> =>
   new Promise<mediasoupClient.types.Consumer>((resolve, reject) =>

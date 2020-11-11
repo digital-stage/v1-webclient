@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import {
-  CustomGroupId,
   CustomStageMemberAudioProducerId,
   CustomStageMemberId,
   CustomStageMemberOvTrackId,
@@ -15,8 +14,6 @@ import {
 import * as Server from './common/model.server';
 import { ThreeDimensionAudioProperties } from './common/model.utils';
 import {
-  AddCustomGroupPayload,
-  AddCustomStageMemberPayload,
   AddGroupPayload,
   AddStagePayload,
   ChangeGroupPayload,
@@ -33,8 +30,6 @@ import {
   SetCustomStageMemberAudioPayload,
   SetCustomStageMemberOvPayload,
   SetCustomStageMemberPayload,
-  UpdateCustomGroupPayload,
-  UpdateCustomStageMemberPayload,
 } from './common/payloads';
 import { ClientDeviceEvents, ClientStageEvents, ClientUserEvents } from './common/events';
 import { useRequest } from '../useRequest';
@@ -191,11 +186,11 @@ const useStageActions = (): StageActionsProps => {
   );
 
   const joinStage = useCallback(
-    (stageId: StageId, groupId: GroupId, password: string): Promise<void> => {
+    (reqStageId: StageId, reqGroupId: GroupId, password: string): Promise<void> => {
       if (socket) {
         const payload: JoinStagePayload = {
-          stageId,
-          groupId,
+          stageId: reqStageId,
+          groupId: reqGroupId,
           password: password || undefined,
         };
         return new Promise<void>((resolve, reject) => {
@@ -205,6 +200,7 @@ const useStageActions = (): StageActionsProps => {
           });
         });
       }
+      return null;
     },
     [socket]
   );
@@ -238,10 +234,10 @@ const useStageActions = (): StageActionsProps => {
   );
 
   const createGroup = useCallback(
-    (stageId: StageId, name: string) => {
+    (createStageId: StageId, name: string) => {
       if (socket) {
         const payload: AddGroupPayload = {
-          stageId,
+          stageId: createStageId,
           name,
         };
         socket.emit(ClientStageEvents.ADD_GROUP, payload);

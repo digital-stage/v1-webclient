@@ -1,8 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Avatar, Box, Button } from 'theme-ui';
-import { FaUser } from 'react-icons/fa';
+import { jsx, Box } from 'theme-ui';
 import DigitalStageLogo from './DigitalStageLogo';
 import PageSpinner from './PageSpinner';
 import { useAuth } from '../lib/digitalstage/useAuth';
