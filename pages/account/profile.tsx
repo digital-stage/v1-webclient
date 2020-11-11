@@ -12,7 +12,7 @@ const Profile = (): JSX.Element => {
   const { user } = useStageSelector((state) => ({ user: state.user }));
 
   return (
-    <Layout>
+    <Layout auth>
       <Container>
         {user && (
           <React.Fragment>

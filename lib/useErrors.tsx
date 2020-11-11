@@ -1,8 +1,8 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Button } from 'theme-ui';
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'baseui/modal';
+import { jsx, Box, Button, Heading } from 'theme-ui';
+import Modal from '../components/new/elements/Modal';
 
 export interface ErrorsProps {
   errors: string[];
@@ -36,17 +36,15 @@ export const ErrorsProvider = (props: { children: React.ReactNode }) => {
     >
       {children}
       <Modal isOpen={errors.length > 0} onClose={() => setErrors([])}>
-        <ModalHeader>Fehler</ModalHeader>
-        <ModalBody>
+        <Heading>Fehler</Heading>
+        <Box>
           <ul>
             {errors.map((error, index) => (
               <li key={index}>{error}</li>
             ))}
           </ul>
-        </ModalBody>
-        <ModalFooter>
-          <Button onClick={() => setErrors([])}>Schliessen</Button>
-        </ModalFooter>
+        </Box>
+        <Button onClick={() => setErrors([])}>Schliessen</Button>
       </Modal>
     </ErrorsContext.Provider>
   );

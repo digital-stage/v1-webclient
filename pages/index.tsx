@@ -1,11 +1,10 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React from 'react';
+import * as React from 'react';
 import { useRouter } from 'next/router';
 import { jsx, Heading } from 'theme-ui';
 import { useAuth } from '../lib/digitalstage/useAuth';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
-import PageWrapperWithStage from '../components/new/elements/PageWrapperWithStage';
 import StagePane from '../components/new/panes/StagePane';
 import StageListView from '../components/new/elements/StageList';
 import StageDeviceController from '../components/StageDeviceController';
@@ -28,16 +27,17 @@ const Index = (): JSX.Element => {
         <Layout sidebar={!!stageId}>
           {stageId ? (
             <React.Fragment>
-              <PageWrapperWithStage>
-                <StagePane />
-              </PageWrapperWithStage>
-              <StageDeviceController />
+              <StagePane />
+
               <FixedAudioPlaybackStarterButton />
+              <StageDeviceController />
               <StageLeaver />
             </React.Fragment>
           ) : (
             <Container size="stage">
-              <Heading as="h1">Meine Bühnen</Heading>
+              <Heading as="h1" sx={{ ml: 3, mt: [4, 5] }}>
+                Meine Bühnen
+              </Heading>
               <StageListView />
             </Container>
           )}

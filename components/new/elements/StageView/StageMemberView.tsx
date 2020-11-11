@@ -1,8 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Flex, Box, Heading } from 'theme-ui';
-import { Avatar } from 'baseui/avatar';
+import { jsx, Flex, Box, Heading, IconButton } from 'theme-ui';
 import { FaVideo, FaVideoSlash } from 'react-icons/fa';
 import OnlineStatus from '../OnlineStatus';
 import {
@@ -19,36 +18,22 @@ const StageMemberTitle = (props: { stageMember: ExtendedStageMember }) => {
   const isAdmin = useIsStageAdmin();
 
   return (
-    <Flex
+    <Box
       sx={{
-        width: 'calc(100% - 2rem)',
+        minWidth: '100%',
+        flexDirection: 'column',
         alignItems: 'center',
+        p: 3,
       }}
     >
-      <Box
-        sx={{
-          margin: '.5rem',
-          flexGrow: 0,
-        }}
-      >
-        <Avatar name={stageMember.name} />
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          flexGrow: 1,
-        }}
-      >
-        <Heading as="h5">{stageMember.name}</Heading>
-      </Box>
+      {/** <Avatar name={stageMember.name} /> */}
+
+      <Heading as="h5">
+        <OnlineStatus online={stageMember.online} /> {stageMember.name}{' '}
+      </Heading>
 
       {isAdmin && (
-        <Flex
-          role="presentation"
-          sx={{
-            flexGrow: 0,
-            cursor: 'pointer',
-          }}
+        <IconButton
           onClick={() =>
             updateStageMember(stageMember._id, {
               isDirector: !props.stageMember.isDirector,
@@ -56,37 +41,28 @@ const StageMemberTitle = (props: { stageMember: ExtendedStageMember }) => {
           }
         >
           {stageMember.isDirector ? <FaVideo /> : <FaVideoSlash />}
-        </Flex>
+        </IconButton>
       )}
-      <OnlineStatus
-        overrides={{
-          display: 'flex',
-          flexGrow: 0,
-        }}
-        online={stageMember.online}
-      />
-    </Flex>
+    </Box>
   );
 };
 
-const StageMemberView = (props: { stageMember: ExtendedStageMember }) => {
-  const { stageMember } = props;
-
+const StageMemberView = ({ stageMember }: { stageMember: ExtendedStageMember }): JSX.Element => {
   return (
     <Flex
       sx={{
         position: 'relative',
-        width: ['50%', '25%'],
         backgroundImage: 'url("/images/white_logo.png")',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundSize: '20%',
+        bg: 'lightblue',
       }}
     >
       <Box sx={{ pt: '100%' }} />
       {stageMember.videoConsumers.length > 0 && (
         <VideoPlayer
-          style={{
+          sx={{
             position: 'absolute',
             top: 0,
             left: 0,

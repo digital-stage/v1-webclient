@@ -49,7 +49,7 @@ export default function CreateStageModal(props: {
   const [nameLength, setNameLength] = React.useState<number>(0);
   const [error, setError] = React.useState<boolean>(false);
 
-  const handleClose = (): JSX.Element => {
+  const handleClose = () => {
     props.handleCloseCreateGroup(false);
     setName('');
     setNameLength(0);

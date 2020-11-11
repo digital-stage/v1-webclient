@@ -1,13 +1,21 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box } from 'theme-ui';
+import { jsx, Avatar, Box, Button } from 'theme-ui';
+import { FaUser } from 'react-icons/fa';
+import DigitalStageLogo from './DigitalStageLogo';
 import PageSpinner from './PageSpinner';
 import { useAuth } from '../lib/digitalstage/useAuth';
 import SideNavigation from './new/elements/Menu/SideBar';
+import TopNavigation from './new/elements/Menu/AppBar';
 
-const Layout = (props: { children: React.ReactNode; sidebar?: boolean }): JSX.Element => {
-  const { children, sidebar = false } = props;
+interface Props {
+  children: React.ReactNode;
+  sidebar?: boolean;
+  auth?: boolean;
+}
+
+const Layout = ({ children, sidebar, auth }: Props): JSX.Element => {
   const { loading } = useAuth();
 
   const [currentItem, setCurrentItem] = React.useState(null);
@@ -23,6 +31,8 @@ const Layout = (props: { children: React.ReactNode; sidebar?: boolean }): JSX.El
     >
       {loading ? (
         <PageSpinner />
+      ) : auth ? (
+        <Box>{children}</Box>
       ) : (
         <Box
           sx={{
@@ -60,16 +70,36 @@ const Layout = (props: { children: React.ReactNode; sidebar?: boolean }): JSX.El
           )}
           <Box
             sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: sidebar ? 'flex-end' : 'space-between',
               height: '72px',
-              bg: ['red', 'blue'],
+              py: 2,
+              px: [3, 4],
+              //bg: ['red', 'blue'],
             }}
           >
-            TopNav
+            {sidebar || (
+              <Box>
+                <DigitalStageLogo single />
+              </Box>
+            )}
+            <TopNavigation
+              onSelected={(item) => {
+                if (currentItem && modalOpen && currentItem.label === item.label) {
+                  setModalOpen(false);
+                } else {
+                  setCurrentItem(item);
+                  setModalOpen(true);
+                }
+              }}
+            />
           </Box>
+
           <Box
             sx={{
               minHeight: 'calc(100vh - 72px)',
-              bg: 'pink',
+              bg: sidebar && 'background',
             }}
           >
             {children}

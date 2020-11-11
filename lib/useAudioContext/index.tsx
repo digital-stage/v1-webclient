@@ -11,7 +11,7 @@ interface AudioContextProps {
 
 const AudioContext: Context<AudioContextProps> = createContext<AudioContextProps>(undefined);
 
-export const AudioContextProvider = (props: { children: React.ReactNode }) => {
+export const AudioContextProvider = (props: { children: React.ReactNode }): JSX.Element => {
   const { children } = props;
   const [context, setContext] = useState<IAudioContext>(undefined);
   const { reportError } = useErrors();

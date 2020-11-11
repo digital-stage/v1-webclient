@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { jsx, Box, Flex } from 'theme-ui';
 import Card from './Card';
+import DigitalStageLogo from './DigitalStageLogo';
 
 const AuthPageContainer = (props: { children: React.ReactNode }): JSX.Element => {
   const { children } = props;
@@ -22,7 +23,7 @@ const AuthPageContainer = (props: { children: React.ReactNode }): JSX.Element =>
           mb: [4, null, 5],
         }}
       >
-        <img src="/images/welcome_icon.png" width="180" height="auto" alt="logo" />
+        <DigitalStageLogo single width={180} />
       </Box>
       <Card size="auth">{children}</Card>
     </Flex>

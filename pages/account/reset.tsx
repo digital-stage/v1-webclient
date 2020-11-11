@@ -18,7 +18,7 @@ const Reset = (): JSX.Element => {
   }
 
   return (
-    <Layout>
+    <Layout auth>
       <AuthPageContainer>
         <ResetPasswordForm resetToken={token} />
       </AuthPageContainer>

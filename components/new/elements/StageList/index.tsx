@@ -41,7 +41,7 @@ const StageListView = (): JSX.Element => {
   };
 
   return (
-    <Card>
+    <Card mt={3}>
       <StageOverviewLinks />
       {/**  TODO: WORK in PROGRESS */}
       <Flex sx={{ flexDirection: 'column' }}>
