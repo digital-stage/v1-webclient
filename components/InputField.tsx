@@ -6,13 +6,13 @@ import { ErrorMessage } from 'formik';
 
 // TODO: add TS interface / type
 interface Props {
-  id: string,
-  label: string,
-  name: string,
-  error?: string,
-  version?: string,
-  type: string,
-  value?: any
+  id: string;
+  label: string;
+  name: string;
+  error?: string;
+  version?: string;
+  type: string;
+  value?: any;
 }
 const InputField = ({ id, label, name, error, version, ...rest }: Props): JSX.Element => (
   <Box sx={{ mt: 4 }}>

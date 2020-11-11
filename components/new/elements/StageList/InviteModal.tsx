@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Flex, Button, Text, Message,
-} from 'theme-ui';
+import { Flex, Button, Text, Message } from 'theme-ui';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Checkbox } from 'baseui/checkbox';
 import { Client } from '../../../../lib/digitalstage/common/model.client';
@@ -50,16 +48,16 @@ const InviteModal = (props: {
       )}
       <InputField type="text" id="link" name="link" label="Link" value={link} version="dark" />
       <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
-        <Button variant="black" onClick={onClose}>Schließen</Button>
+        <Button variant="black" onClick={onClose}>
+          Schließen
+        </Button>
         <CopyToClipboard
           text={link}
           onCopy={() => {
             setCopied(true);
           }}
         >
-          <Button autoFocus>
-            Kopiere Link
-          </Button>
+          <Button autoFocus>Kopiere Link</Button>
         </CopyToClipboard>
       </Flex>
     </Modal>

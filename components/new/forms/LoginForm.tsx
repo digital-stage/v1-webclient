@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx } from 'theme-ui';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import Router from 'next/router';
@@ -13,9 +16,10 @@ const Schema = Yup.object().shape({
   email: Yup.string().email('Ungültige E-Mail Adresse').required('Wird benötigt'),
   password: Yup.string().required('Wird benötigt'),
 });
-const LoginForm = (props: { onCompleted?: () => void; targetUrl?: string; backLink?: string }) => {
+
+const LoginForm = (props: { onCompleted?: () => void; targetUrl?: string; backLink?: string }): JSX.Element => {
   const { onCompleted, targetUrl, backLink } = props;
-  const [loginError, setError] = useState<string>();
+  const [loginError, setError] = React.useState<string>();
   const { signInWithEmailAndPassword } = useAuth();
   const formik = useFormik({
     initialValues: {

@@ -104,8 +104,8 @@ const Index = (): JSX.Element => {
       {remoteDevices && remoteDevices.length > 0 && (
         <>
           <h2>Meine anderen Geräte</h2>
-          {remoteDevices.map((remoteDevice) => (
-            <DeviceView device={remoteDevice} />
+          {remoteDevices.map((remoteDevice, index) => (
+            <DeviceView key={index} device={remoteDevice} />
           ))}
         </>
       )}

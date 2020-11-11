@@ -1,9 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import {
-  jsx, Button, Flex, Text,
-} from 'theme-ui';
+import { jsx, Button, Flex, Text } from 'theme-ui';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { Client } from '../../../../lib/digitalstage/common/model.client';
@@ -30,7 +28,9 @@ const CreateGroupModal = (props: {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <Text variant="title">Neue Gruppe erstellen</Text>
-      <Text variant="subTitle">After creating the group you can copy the link and invite people</Text>
+      <Text variant="subTitle">
+        After creating the group you can copy the link and invite people
+      </Text>
       <Formik
         initialValues={{
           name: '',

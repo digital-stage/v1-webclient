@@ -1,9 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import {
-  jsx, Button, Flex, Text,
-} from 'theme-ui';
+import { jsx, Button, Flex, Text } from 'theme-ui';
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
@@ -11,35 +9,23 @@ import Modal from '../Modal';
 import InputField from '../../../InputField';
 
 interface Values {
-  name: string,
-  password: string,
-  width: number,
-  length: number,
-  height: number,
-  damping: number,
-  absorption: number
+  name: string;
+  password: string;
+  width: number;
+  length: number;
+  height: number;
+  damping: number;
+  absorption: number;
 }
 
 const CreateStageSchema = Yup.object().shape({
   name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
-  password: Yup.string()
-    .min(5, 'Zu kurz')
-    .max(50, 'Zu lang'),
-  width: Yup.number()
-    .min(0.1)
-    .max(1000),
-  length: Yup.number()
-    .min(0.1)
-    .max(1000),
-  height: Yup.number()
-    .min(0.1)
-    .max(1000),
-  absorption: Yup.number()
-    .min(0.1)
-    .max(1),
-  reflection: Yup.number()
-    .min(0.1)
-    .max(1),
+  password: Yup.string().min(5, 'Zu kurz').max(50, 'Zu lang'),
+  width: Yup.number().min(0.1).max(1000),
+  length: Yup.number().min(0.1).max(1000),
+  height: Yup.number().min(0.1).max(1000),
+  absorption: Yup.number().min(0.1).max(1),
+  reflection: Yup.number().min(0.1).max(1),
 });
 
 const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }): JSX.Element => {
@@ -47,10 +33,7 @@ const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }): JSX
   const { createStage } = useStageActions();
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <Modal isOpen={isOpen} onClose={onClose}>
       <Text variant="title">Neue Bühne erstellen</Text>
       <Formik
         initialValues={{
