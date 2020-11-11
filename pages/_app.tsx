@@ -15,6 +15,7 @@ import { DarkModeConsumer, DarkModeProvider } from '../lib/useDarkModeSwitch';
 import StageWebAudioProvider from '../lib/useStageWebAudio';
 import { ErrorsProvider } from '../lib/useErrors';
 import DarkTheme from '../uikit/Theme';
+import ErrorHandler from "../components/ErrorHandler";
 
 const MyApp = ({ Component, pageProps }: AppProps) => (
   <>
@@ -77,7 +78,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
                           </style>
                           <StageWebAudioProvider>
                             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                            <Component {...pageProps} />
+                            <ErrorHandler>
+                              <Component {...pageProps} />
+                            </ErrorHandler>
                           </StageWebAudioProvider>
 
                           <StageJoiner />

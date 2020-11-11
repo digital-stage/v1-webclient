@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import * as Bowser from 'bowser';
+import { TeckosClient, TeckosClientWithJWT } from 'teckos-client';
 import { useAuth } from '../useAuth';
 import {
   ServerDeviceEvents,
@@ -13,8 +14,6 @@ import { Device } from '../common/model.server';
 import allActions from './redux/actions';
 import { useDispatch } from './redux';
 import { useErrors } from '../../useErrors';
-import TeckosClientWithJWT from '../../websocket/TeckosClientWithJWT';
-import TeckosClient from '../../websocket/TeckosClient';
 
 const SocketContext = React.createContext<TeckosClient>(undefined);
 
@@ -322,7 +321,7 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
 
         setSocket(createdSocket);
       })
-      .catch((error) => reportError(error.message));
+      .catch((error) => reportError(error));
   }, [token]);
 
   useEffect(() => {

@@ -1,48 +1,38 @@
 import React, { useState } from 'react';
-import {
-  Modal, ModalBody, ModalFooter, ModalHeader,
-} from 'baseui/modal';
-import Button from '../uikit/Button';
 
 export interface ErrorsProps {
-  errors: string[];
-  reportError: (error: string) => any;
-  clearErrors: () => any;
+  warnings: Error[];
+  reportWarning: (warning: Error) => any;
+  errors: Error[];
+  reportError: (error: Error) => any;
+  clear: () => any;
 }
 
 const ErrorsContext = React.createContext<ErrorsProps>({
+  warnings: [],
+  reportWarning: () => {},
   errors: [],
   reportError: () => {},
-  clearErrors: () => {},
+  clear: () => {},
 });
 
 export const useErrors = (): ErrorsProps => React.useContext<ErrorsProps>(ErrorsContext);
 
 export const ErrorsProvider = (props: { children: React.ReactNode }) => {
-  const [errors, setErrors] = useState<string[]>([]);
+  const [warnings, setWarnings] = useState<Error[]>([]);
+  const [errors, setErrors] = useState<Error[]>([]);
   const { children } = props;
 
   return (
     <ErrorsContext.Provider value={{
+      warnings,
+      reportWarning: (warning: Error) => setWarnings((prev) => [...prev, warning]),
       errors,
-      reportError: (error: string) => setErrors((prev) => [...prev, error]),
-      clearErrors: () => setErrors([]),
+      reportError: (error: Error) => setErrors((prev) => [...prev, error]),
+      clear: () => setErrors([]),
     }}
     >
       {children}
-      <Modal isOpen={errors.length > 0} onClose={() => setErrors([])}>
-        <ModalHeader>Fehler</ModalHeader>
-        <ModalBody>
-          <ul>
-            {errors.map((error) => <li>{error}</li>)}
-          </ul>
-        </ModalBody>
-        <ModalFooter>
-          <Button onClick={() => setErrors([])}>
-            Ignorieren
-          </Button>
-        </ModalFooter>
-      </Modal>
     </ErrorsContext.Provider>
   );
 };

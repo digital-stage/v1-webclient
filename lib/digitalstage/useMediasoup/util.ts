@@ -1,10 +1,10 @@
 import mediasoupClient from 'mediasoup-client';
+import { TeckosClient } from 'teckos-client';
 import {
   Router,
   StageMemberAudioProducer,
   StageMemberVideoProducer,
 } from '../common/model.server';
-import { TeckosClient } from '../../websocket';
 
 export enum RouterEvents {
   TransportCloses = 'transport-closed',
@@ -157,7 +157,7 @@ export const createProducer = (
   },
 });
 export const pauseProducer = (
-  socket: SocketIOClient.Socket,
+  socket: TeckosClient,
   producer: mediasoupClient.types.Producer,
 ): Promise<mediasoupClient.types.Producer> => new Promise<mediasoupClient.types.Producer>(
   (resolve, reject) => socket

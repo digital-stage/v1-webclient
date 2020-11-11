@@ -13,10 +13,12 @@ import PageWrapper from '../components/new/elements/PageWrapper';
 import Container from '../components/new/elements/Container';
 import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/FixedAudioPlaybackStarterButton';
 
+
 const Layout = () => {
   const router = useRouter();
   const { loading, user } = useAuth();
   const stageId = useStageSelector<string | undefined>((state) => state.stageId);
+
 
   if (!loading) {
     if (!user) {

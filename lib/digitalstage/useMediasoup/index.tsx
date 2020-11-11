@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import mediasoupClient from 'mediasoup-client';
 import { Device as MediasoupDevice } from 'mediasoup-client/lib/Device';
+import { TeckosClient } from 'teckos-client';
 import {
   closeConsumer,
   createConsumer,
@@ -34,7 +35,6 @@ import {
 } from '../useStageContext/schema';
 import useStageSelector from '../useStageSelector';
 import { useErrors } from '../../useErrors';
-import { TeckosClient } from '../../websocket';
 
 const TIMEOUT_MS = 4000;
 
@@ -44,7 +44,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
   const { children } = props;
   const socket = useSocket();
   const dispatch = useDispatch();
-  const { reportError } = useErrors();
+  const { reportError, reportWarning } = useErrors();
 
   const localDevice = useSelector<NormalizedState, Device>((state) => {
     if (state.devices.local) return state.devices.byId[state.devices.local];
@@ -104,7 +104,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
           rtpCapabilities: mediasoupClient.types.RtpCapabilities,
         ) => {
           if (error) {
-            return reportError(error);
+            return reportError(new Error(error));
           }
           // Create device
           const createdDevice = new MediasoupDevice();
@@ -213,7 +213,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
             }),
           ));
       }
-      reportError(`Could not find producer=${producerId}`);
+      reportError(new Error(`Could not find producer=${producerId}`));
       return null;
     },
     [connection, device, receiveTransport, videoProducers, videoConsumers],
@@ -230,7 +230,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
           allActions.stageActions.client.removeVideoConsumer(consumerId),
         ));
       }
-      reportError(`Could not find consumer for producer ${producerId}`);
+      reportError(new Error(`Could not find consumer for producer ${producerId}`));
       return null;
     },
     [connection, videoConsumers],
@@ -255,7 +255,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
             }),
           ));
       }
-      reportError(`Could not find producer=${producerId}`);
+      reportError(new Error(`Could not find producer=${producerId}`));
       return null;
     },
     [connection, device, receiveTransport, audioProducers, audioConsumers],
@@ -272,7 +272,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
           allActions.stageActions.client.removeAudioConsumer(consumerId),
         ));
       }
-      reportError(`Could not find consumer for producer ${producerId}`);
+      reportError(new Error(`Could not find consumer for producer ${producerId}`));
       return null;
     },
     [connection, audioConsumers],
@@ -306,7 +306,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
                   globalProducer: GlobalAudioProducer,
                 ) => {
                   if (error) {
-                    reportError(error);
+                    reportWarning(new Error(error));
                     return stopProducer(socket, producer).then(() => reject(new Error(error)));
                   }
                   setLocalAudioProducers((prevState) => [
@@ -330,7 +330,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
         ))
         .finally(() => setWorking(false));
     }
-    reportError('FIXME: Send transport is still undefined ...');
+    reportError(new Error('FIXME: Send transport is still undefined ...'));
     return null;
   }, [sendTransport, localDevice]);
 
@@ -349,7 +349,6 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
               localAudioProducer.audioProducerId,
               (error?: string) => {
                 if (error) {
-                  reportError(error);
                   reject(new Error(error));
                 }
                 resolve();
@@ -400,7 +399,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
                     globalProducer: GlobalVideoProducer,
                   ) => {
                     if (error) {
-                      reportError(error);
+                      reportWarning(new Error(error));
                       return stopProducer(socket, producer).then(() => reject(new Error(error)));
                     }
                     setLocalVideoProducers((prevState) => [
@@ -427,7 +426,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
           setWorking(false);
         });
     }
-    reportError('FIXME: Send transport is still undefined ...');
+    reportWarning(new Error('FIXME: Send transport is still undefined ...'));
     return null;
   }, [sendTransport, localDevice]);
 
@@ -444,7 +443,6 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
                 localVideoProducer.videoProducerId,
                 (error?: string) => {
                   if (error) {
-                    reportError(error);
                     reject(new Error(error));
                   }
                   resolve();
