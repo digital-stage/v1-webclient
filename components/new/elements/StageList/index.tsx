@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Divider, Flex, Button, IconButton, Heading } from 'theme-ui';
+import { jsx, Box, Divider, Flex, Button, IconButton, Heading, Avatar } from 'theme-ui';
 import { FaPlus, FaPen, FaTrash } from 'react-icons/fa';
 import { Groups, NormalizedState } from '../../../../lib/digitalstage/useStageContext/schema';
 import { useSelector } from '../../../../lib/digitalstage/useStageContext/redux';
@@ -15,9 +15,9 @@ import CreateGroupModal from './CreateGroupModal';
 import useStageSelector, { useStages } from '../../../../lib/digitalstage/useStageSelector';
 import Card from '../../../Card';
 import StageOverviewLinks from '../../../StageOverviewLinks';
-import Collapse from '../../../Collapse'
-import CollapseBody from '../../../CollapseBody'
-import CollapseHeader from '../../../CollapseHeader'
+import Collapse from '../../../Collapse';
+import CollapseHeader from '../../../CollapseHeader';
+import CollapseBody from '../../../CollapseBody';
 
 /**  TODO: WORK in PROGRESS POC */
 
@@ -75,14 +75,6 @@ const StageListView = (): JSX.Element => {
                     >
                       <FaTrash />
                     </IconButton>
-                    {/* <IconButton
-                        aria-label="Gruppenübersicht"
-                        onClick={() => {
-                          handleGroupOverview(stage._id);
-                        }}
-                      >
-                        <FaChevronLeft />
-                      </IconButton> */}
                   </Box>
                 </Flex>
               </Box>

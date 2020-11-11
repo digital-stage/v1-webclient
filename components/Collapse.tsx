@@ -1,6 +1,7 @@
+/* eslint-disable react/destructuring-assignment */
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import * as React from 'react';
+import React from 'react';
 import { jsx, Flex } from 'theme-ui';
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
   id: string;
 }
 
-const Collapse = ({ id, children }: Props): JSX.Element => (
+const Collapse = ({ children, id }: Props): JSX.Element => (
   <Flex
     id={id}
     sx={{

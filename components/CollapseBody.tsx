@@ -8,7 +8,7 @@ interface Props {
   isOpen: boolean;
 }
 
-const CollapseBody = ({ children, isOpen }: Props): JSX.Element => {
+const CollapseBody = ({ children, isOpen }: Props) => {
   return isOpen ? (
     <Box
       sx={{

@@ -17,8 +17,13 @@ const Schema = Yup.object().shape({
   password: Yup.string().required('Wird benötigt'),
 });
 
-const LoginForm = (props: { onCompleted?: () => void; targetUrl?: string; backLink?: string }): JSX.Element => {
-  const { onCompleted, targetUrl, backLink } = props;
+interface Props {
+  onCompleted?: () => void;
+  targetUrl?: string;
+  backLink?: string;
+}
+
+const LoginForm = ({ onCompleted, targetUrl, backLink }: Props): JSX.Element => {
   const [loginError, setError] = React.useState<string>();
   const { signInWithEmailAndPassword } = useAuth();
   const formik = useFormik({

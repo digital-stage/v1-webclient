@@ -12,14 +12,11 @@ const Local = (): JSX.Element => {
     localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
   }));
 
-
   return (
     <Container>
       <Heading>Dieses Gerät</Heading>
       {localDevice && <DeviceView device={localDevice} />}
-      <Box
-        sx={{my: '2rem'}}
-      >
+      <Box sx={{ my: '2rem' }}>
         <Link href="/test">
           <Button>Dieses Gerät testen</Button>
         </Link>
