@@ -2,66 +2,46 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Button, Text, Heading, Box } from 'theme-ui';
-import { createStyles, makeStyles, Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import IconButton from '@material-ui/core/IconButton';
+import { jsx, Button, Text, Heading, Box, IconButton } from 'theme-ui';
 import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
 
-const styles = (theme: Theme) =>
-  createStyles({
-    root: {
-      margin: 0,
-      padding: theme.spacing(2),
-      backgroundColor: '#fff',
-    },
-    closeButton: {
-      position: 'absolute',
-      right: theme.spacing(1),
-      top: theme.spacing(1),
-      color: theme.palette.grey[500],
-    },
-  });
-
-export interface DialogTitleProps extends WithStyles<typeof styles> {
+interface DialogTitleProps {
   id: string;
   children: React.ReactNode;
   onClose: () => void;
 }
 
-const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
-  const { children, classes, onClose, ...other } = props;
+const DialogTitle = (props: DialogTitleProps) => {
+  const { children, onClose, ...other } = props;
   return (
-    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+    <Box
+      sx={{
+        m: 0,
+        p: 2,
+        bg: 'text',
+      }}
+      {...other}
+    >
       <Heading as="h6">{children}</Heading>
       {onClose ? (
-        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: 0,
+            top: 0,
+            color: 'gray.3',
+          }}
+        >
           <CloseIcon />
         </IconButton>
       ) : null}
-    </MuiDialogTitle>
+    </Box>
   );
-});
-
-const DialogContent = withStyles((theme: Theme) => ({
-  root: {
-    padding: theme.spacing(3),
-    backgroundColor: '#fff',
-  },
-}))(MuiDialogContent);
-
-const useStyles = makeStyles(() => ({
-  paper: {
-    width: '400px',
-    margin: '0 auto',
-  },
-}));
+};
 
 const ResetLinkModal = ({
-  open,
   resend,
   handleClose,
   onClick,
@@ -70,40 +50,44 @@ const ResetLinkModal = ({
   resend?: boolean;
   handleClose: () => void;
   onClick: () => void;
-}): JSX.Element => {
-  const classes = useStyles();
-
-  return (
-    <React.Fragment>
-      <Box />
-      <div>
-        <Dialog
-          onClose={handleClose}
-          aria-labelledby="customized-dialog-title"
-          open={open}
-          className={classes.paper}
+}): JSX.Element => (
+  <React.Fragment>
+    <Box />
+    <div>
+      <Box
+        aria-labelledby="customized-dialog-title"
+        sx={{
+          width: '400px',
+          m: '0 auto',
+        }}
+      >
+        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+          Zurücksetzen
+        </DialogTitle>
+        <Box
+          sx={{
+            p: 3,
+            bg: '#text',
+          }}
         >
-          <DialogTitle id="customized-dialog-title" onClose={handleClose} />
-          <DialogContent>
-            <Heading as="h5">
-              {!resend
-                ? 'Password reset link has been sent'
-                : 'Password reset link has been sent again!'}
-            </Heading>
-            <Text>Click on the reset link sent to your e-mail</Text>
+          <Heading as="h5">
+            {!resend
+              ? 'Password reset link has been sent'
+              : 'Password reset link has been sent again!'}
+          </Heading>
+          <Text>Click on the reset link sent to your e-mail</Text>
 
-            <Typography variant="subtitle1" color="textSecondary">
-              {!resend
-                ? 'Use the new password to sign in. Aftewards you will be asked to create e new password'
-                : 'Your activation link has been sent to your e-mail address. If you still have not received your email check your e-mail address'}
-            </Typography>
+          <Text as="p" sx={{ color: 'gray.2' }}>
+            {!resend
+              ? 'Use the new password to sign in. Aftewards you will be asked to create e new password'
+              : 'Your activation link has been sent to your e-mail address. If you still have not received your email check your e-mail address'}
+          </Text>
 
-            {!resend && <Button onClick={onClick}>Resend reset link</Button>}
-          </DialogContent>
-        </Dialog>
-      </div>
-    </React.Fragment>
-  );
-};
+          {!resend && <Button onClick={onClick}>Resend reset link</Button>}
+        </Box>
+      </Box>
+    </div>
+  </React.Fragment>
+);
 
 export default ResetLinkModal;
