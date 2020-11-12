@@ -13,6 +13,8 @@ import { Stage } from '../../../common/model.server';
 import { CustomAudioProducer, CustomOvTrack, Device, StageMember, User } from '../../model';
 
 export enum AdditionalReducerTypes {
+  NEXT_INIT = '@@INIT',
+
   RESET = 'reset',
 
   ADD_AUDIO_CONSUMER = 'add-audio-consumer',
@@ -757,8 +759,11 @@ const stageReducer: Reducer<NormalizedState, ReducerAction> = (
           allIds: _.filter(state.videoConsumers.allIds, (id) => id !== action.payload),
         },
       };
+      break;
+    case AdditionalReducerTypes.NEXT_INIT:
+      return state;
     default:
-      console.error(`NOT HANDLED: ${action.type}`);
+      console.warn(`NOT HANDLED: ${action.type}`);
       return state;
   }
 };
