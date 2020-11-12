@@ -95,11 +95,11 @@ const ForgetPasswordForm = (): JSX.Element => {
               error={errors.repeatEmail && touched.repeatEmail}
             />
             <Flex sx={{ justifyContent: 'center', my: 3 }}>
-                <Link href="/account/login">
-                  <Button as="a" variant="white">
+              <Link href="/account/login">
+                <Button as="a" variant="white">
                   Cancel
-                  </Button>
-                </Link>
+                </Button>
+              </Link>
               <Button type="submit">Send</Button>
             </Flex>
           </Form>
