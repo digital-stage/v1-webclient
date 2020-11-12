@@ -17,8 +17,7 @@
     "@material-ui/icons": "^4.9.1",
     "baseui": "9.104.0",
     "bowser": "^2.11.0",
-    "isomorphic-unfetch": "^3.1.0",
-    "formik": "^2.2.4",
+    "formik": "^2.2.6",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.20",
     "mediasoup-client": "^3.6.21",
@@ -35,7 +34,7 @@
     "standardized-audio-context": "^25.1.5",
     "styletron-engine-atomic": "^1.4.6",
     "styletron-react": "^5.2.7",
-    "teckos-client": "0.0.5",
+    "teckos-client": "0.0.7",
     "validator": "^13.1.17",
     "webrtc-adapter": "^7.7.0",
     "yup": "^0.29.3"

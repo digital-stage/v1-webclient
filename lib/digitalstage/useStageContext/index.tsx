@@ -28,6 +28,8 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
 
   const registerSocketHandlers = useCallback(
     (currSocket) => {
+      console.debug('[useStages] Registering currSocket handlers');
+
       currSocket.on(ServerGlobalEvents.READY, () => {
         dispatch(allActions.server.setReady());
       });
@@ -283,6 +285,7 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
   useEffect(() => {
     if (socket) {
       return () => {
+        console.debug('Removing socket connection');
         socket.removeAllListeners();
         socket.close();
         setSocket(undefined);

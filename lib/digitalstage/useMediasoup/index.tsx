@@ -77,10 +77,15 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (connection) {
+      console.debug('Connection available');
+
+      console.log('Emit hallo');
+      connection.emit('HALLO');
       connection.emit(
         RouterRequests.GetRTPCapabilities,
         {},
         (error: string, rtpCapabilities: mediasoupClient.types.RtpCapabilities) => {
+          console.debug('Got response');
           if (error) {
             return reportError(new Error(error));
           }
@@ -130,7 +135,9 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
         (process.env.NEXT_PUBLIC_USE_SSL === 'true' ? 'wss://' : 'ws://') + router.url
       }:${router.port}`;
 
-      const createdConnection = new TeckosClient(url);
+      const createdConnection = new TeckosClient(url, {
+        verbose: true,
+      });
 
       createdConnection.on('connect_error', (error) => {
         reportError(error);
@@ -142,9 +149,13 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
 
       createdConnection.connect();
 
+      createdConnection.emit('HALLO', {});
+      createdConnection.emit('HALLO');
+      console.debug('Set connection');
       setConnection(createdConnection);
       return () => {
-        connection.close();
+        console.debug('Close connection');
+        createdConnection.close();
       };
     }
     return null;
