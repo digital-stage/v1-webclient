@@ -249,27 +249,22 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
           inputVideoDeviceId = devices.inputVideoDevices[0].id;
         }
 
-        const createdSocket = new TeckosClientWithJWT(
-          process.env.NEXT_PUBLIC_API_URL,
-          {},
-          token,
-          {
-            // secure: process.env.NODE_ENV !== "development",
-            device: JSON.stringify({
-              name: `${browser} (${os})`,
-              canAudio: devices.inputAudioDevices.length > 0,
-              canVideo: devices.inputVideoDevices.length > 0,
-              receiveVideo: true,
-              receiveAudio: true,
-              inputAudioDevices: devices.inputAudioDevices,
-              inputVideoDevices: devices.inputVideoDevices,
-              outputAudioDevices: devices.outputAudioDevices,
-              inputAudioDeviceId,
-              inputVideoDeviceId,
-              outputAudioDeviceId,
-            } as Device),
-          }
-        );
+        const createdSocket = new TeckosClientWithJWT(process.env.NEXT_PUBLIC_API_URL, {}, token, {
+          // secure: process.env.NODE_ENV !== "development",
+          device: JSON.stringify({
+            name: `${browser} (${os})`,
+            canAudio: devices.inputAudioDevices.length > 0,
+            canVideo: devices.inputVideoDevices.length > 0,
+            receiveVideo: true,
+            receiveAudio: true,
+            inputAudioDevices: devices.inputAudioDevices,
+            inputVideoDevices: devices.inputVideoDevices,
+            outputAudioDevices: devices.outputAudioDevices,
+            inputAudioDeviceId,
+            inputVideoDeviceId,
+            outputAudioDeviceId,
+          } as Device),
+        });
 
         registerSocketHandlers(createdSocket);
 
