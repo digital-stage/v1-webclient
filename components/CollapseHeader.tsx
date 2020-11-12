@@ -4,10 +4,16 @@ import React from 'react';
 import { jsx, Flex, Box, IconButton } from 'theme-ui';
 import { FaChevronDown, FaChevronLeft } from 'react-icons/fa'
 
-const CollapseHeader = (props: {
-    children: React.ReactNode, isOpen: boolean, onClick?(): void,
-}) => {
-    const { children, onClick, isOpen } = props;
+interface Props {
+    children: React.ReactNode,
+    isOpen: boolean,
+    onClick?(): void,
+    id: string;
+    collapseId: string
+}
+
+const CollapseHeader = (props: Props) => {
+    const { children, onClick, isOpen, id, collapseId } = props;
 
     return (
         <Flex
@@ -19,8 +25,8 @@ const CollapseHeader = (props: {
                 px: 3
             }}
         >
-            <Box sx={{width:"100%"}}>{children}</Box>
-            <IconButton onClick={onClick}>{isOpen ? <FaChevronDown /> : <FaChevronLeft />}</IconButton>
+            <Box sx={{ width: "100%" }}>{children}</Box>
+            <IconButton onClick={onClick} sx={{ color: 'secondary' }}>{(isOpen && id === collapseId) ? <FaChevronDown /> : <FaChevronLeft />}</IconButton>
         </Flex>
     );
 };

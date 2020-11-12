@@ -26,7 +26,7 @@ const Card = (props: {
         maxWidth: size === 'auth' ? 'container.tiny' : maxWidth,
         borderRadius: 'card',
         py: 3,
-        px: [3, 4],
+        px: size === 'auth' ? [3, 4] : [3, 3],
         my: 4,
         mt: mt && mt,
         mx: 'auto',

@@ -18,7 +18,7 @@ interface Values {
 const CreateGroupModal = (props: {
   stage: Client.Stage;
   isOpen?: boolean;
-  onClose?: () => never;
+  onClose?: () => void;
 }): JSX.Element => {
   const { stage, isOpen, onClose } = props;
   const { createGroup } = useStageActions();

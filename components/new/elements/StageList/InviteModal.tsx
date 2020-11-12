@@ -12,7 +12,7 @@ const InviteModal = (props: {
   stage: Client.Stage;
   group: Client.Group;
   isOpen?: boolean;
-  onClose?: () => any;
+  onClose?: () => void;
   usePassword?: boolean;
 }): JSX.Element => {
   const { stage, group, usePassword, isOpen, onClose } = props;

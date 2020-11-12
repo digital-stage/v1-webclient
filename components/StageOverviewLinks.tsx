@@ -4,9 +4,11 @@ import * as React from 'react';
 import { jsx, Box, Flex, Button } from 'theme-ui';
 import { FaPlus, FaArrowRight } from 'react-icons/fa';
 import CreateStageModal from './new/elements/StageList/CreateStageModal';
+import JoinStageModal from './new/elements/StageList/JoinStageModal';
 
 const StageOverviewLinks = (): JSX.Element => {
   const [isCreateStageOpen, setCreateStageIsOpen] = React.useState<boolean>(false);
+  const [isJoinStageOpen, setJoinStageOpen] = React.useState<boolean>(false);
 
   return (
     <React.Fragment>
@@ -55,7 +57,7 @@ const StageOverviewLinks = (): JSX.Element => {
           }}
         >
           {/** TODO: Join function is currently missing */}
-          <Button variant="text" onClick={() => setCreateStageIsOpen((prevState) => !prevState)}>
+          <Button variant="text" onClick={() => setJoinStageOpen((prevState) => !prevState)}>
             <Box
               as="span"
               sx={{
@@ -72,6 +74,7 @@ const StageOverviewLinks = (): JSX.Element => {
         </Box>
       </Flex>
       <CreateStageModal isOpen={isCreateStageOpen} onClose={() => setCreateStageIsOpen(false)} />
+      <JoinStageModal isOpen={isJoinStageOpen} onClose={() => setJoinStageOpen(false)} />
     </React.Fragment>
   );
 };

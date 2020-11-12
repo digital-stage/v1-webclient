@@ -3,11 +3,18 @@
 import React from 'react';
 import { jsx, Box } from 'theme-ui';
 
-const CollapseBody = (props: { children: React.ReactNode, isOpen: boolean }) => {
-    const { children, isOpen } = props;
+interface Props {
+    children: React.ReactNode,
+    isOpen: boolean,
+    id: string;
+    collapseId: string
+}
+
+const CollapseBody = (props: Props) => {
+    const { children, isOpen, id, collapseId } = props;
 
     return (
-        isOpen ? (<Box
+        (isOpen && id === collapseId) ? (<Box
             sx={{
                 width: "100%",
                 bg: "gray.7",

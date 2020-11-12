@@ -5,8 +5,7 @@ import React from 'react';
 import { jsx, Flex } from 'theme-ui';
 
 interface Props {
-    children: React.ReactNode,
-    id:string
+    children: React.ReactNode
 }
 
 const Collapse = (props: Props) => {
@@ -16,7 +15,6 @@ const Collapse = (props: Props) => {
                 width: '100%',
                 flexDirection:"column"
             }}
-            id={props.id}
         >
             {props.children}
         </Flex>

@@ -13,6 +13,7 @@ export default {
     success: '#24A312',
     navigation: 'hsl(333, 50%, 8%)',
     modalBg: '#000000B2',
+    online: '#00FF3C',
     gray: ['#D1D1D1', '#B3B3B3', '#828282', '#535353', '#282828', '#181818', '#101010', '#000000'],
   },
   fonts: {
@@ -36,6 +37,7 @@ export default {
   radii: {
     card: '18px',
     button: '21px',
+    round: '50%',
   },
   sizes: {
     container: {
@@ -49,6 +51,12 @@ export default {
     page: {
       default: '1280px',
     },
+    group:{
+      width: "30px",
+      height: "30px",
+      borderRadius: 'radii.round',
+      mr: 3,
+    }
   },
   shadows: {
     default: '0px 23px 17px #00000052',
@@ -72,19 +80,19 @@ export default {
       fontWeight: 'heading',
       lineHeight: 'heading',
     },
-    title:{
+    title: {
       color: 'background',
       fontFamily: 'heading',
       fontWeight: 'heading',
       lineHeight: 'heading',
     },
-    subTitle:{
+    subTitle: {
       color: 'background',
       fontSize: 0,
       fontFamily: 'body',
       fontWeight: 'body',
       lineHeight: 'body',
-    }
+    },
   },
   buttons: {
     primary: {
@@ -351,7 +359,7 @@ export default {
     avatar: {
       width: 30,
       height: 30,
-      borderRadius: 99999,
+      borderRadius: 'radii.round',
       mr: 3,
     },
   },
