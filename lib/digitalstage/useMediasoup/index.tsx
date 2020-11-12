@@ -96,7 +96,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (connection) {
-      console.debug('Connection available');
+      console.debug('Connection changed and is not available');
 
       console.log('Emit hallo');
       connection.emit('HALLO');
@@ -172,7 +172,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
       createdConnection.connect();
 
       createdConnection.emit('HALLO', {});
-      createdConnection.emit('HALLO');
+      createdConnection.send('HALLO');
       console.debug('Set connection');
       setConnection(createdConnection);
       return () => {

@@ -29,7 +29,7 @@
     "standardized-audio-context": "^25.1.5",
     "styletron-engine-atomic": "^1.4.6",
     "styletron-react": "^5.2.7",
-    "teckos-client": "0.0.7",
+    "teckos-client": "0.0.8",
     "validator": "^13.1.17",
     "webrtc-adapter": "^7.7.0",
     "yup": "^0.29.3"

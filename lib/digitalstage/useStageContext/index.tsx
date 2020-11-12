@@ -291,7 +291,9 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
           inputVideoDeviceId = devices.inputVideoDevices[0].id;
         }
 
-        const createdSocket = new TeckosClientWithJWT(process.env.NEXT_PUBLIC_API_URL, token, {
+        const createdSocket = new TeckosClientWithJWT(process.env.NEXT_PUBLIC_API_URL, {
+          verbose: false,
+        }, token, {
           // secure: process.env.NODE_ENV !== "development",
           device: JSON.stringify({
             name: `${browser} (${os})`,
@@ -317,6 +319,7 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
           console.debug(
             '[useStageContext] Disconnected from server, try to reconnect',
           );
+          createSocket();
         });
 
         createdSocket.connect();
