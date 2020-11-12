@@ -1,0 +1,84 @@
+name: Test, build and release
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+
+  main:
+    name: Test & Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v1
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
+      - uses: actions/cache@v1
+        id: cypress-cache
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            cypress-${{ runner.os }}-
+          
+      - run: yarn install --frozen-lockfile --check-files
+          
+      - run: yarn run prettier:check
+
+      # - run: yarn run test:ci
+
+      # - run: yarn run test:e2e:ci
+
+      # - run: yarn run test:e2e:ci:chrome
+
+      - run: yarn run build
+        #env:
+          #SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
+          #SANITY_TOKEN: ${{ secrets.SANITY_TOKEN }}
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: public
+          path: public
+
+      #- uses: actions/upload-artifact@v1
+      #  with:
+      #    name: cypress-videos
+      #    path: www/cypress/videos
+
+
+  release:
+    name: Release
+    needs: main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+                      
+      - run: npm install
+          
+      - if: github.ref == 'refs/heads/master'
+        run: npx -p @semantic-release/changelog -p @semantic-release/git -p semantic-release semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        
+  master-pr:
+    name: Create PR
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: repo-sync/pull-request@v2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+        
