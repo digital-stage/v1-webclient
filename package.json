@@ -11,7 +11,30 @@
     "precommit": "yarn run prettier:write",
     "lint": "eslint ./lib ./components --ext .js,.jsx,.ts,.tsx",
     "start": "next start",
-    "deploy": "vercel --prod"
+    "deploy": "vercel --prod",
+    "deploy:ci:test": "WHATEVER deploy --only hosting:test --token $FIREBASE_TOKEN",
+    "deploy:ci:prod": "WHATEVER deploy --only hosting:prod --token $FIREBASE_TOKEN"
+  },
+  "release": {
+    "branch": "master",
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/git"
+    ],
+    "debug": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": [
+      "eslint ./lib ./components --ext .js,.jsx,.ts,.tsx --fix",
+      "pretty-quick —staged"
+    ]
   },
   "dependencies": {
     "@material-ui/icons": "^4.9.1",
@@ -35,13 +58,20 @@
     "standardized-audio-context": "^25.1.5",
     "styletron-engine-atomic": "^1.4.6",
     "styletron-react": "^5.2.7",
-    "teckos-client": "0.0.8",
+    "teckos-client": "^0.0.9",
     "theme-ui": "^0.3.3",
     "validator": "^13.1.17",
     "webrtc-adapter": "^7.7.0",
     "yup": "^0.29.3"
   },
   "devDependencies": {
+    "@cypress/skip-test": "^2.5.0",
+    "@emotion/babel-preset-css-prop": "^11.0.0",
+    "@semantic-release/changelog": "^5.0.1",
+    "@semantic-release/git": "^9.0.0",
+    "@testing-library/cypress": "^7.0.1",
+    "@testing-library/jest-dom": "^5.11.5",
+    "@testing-library/react": "^11.1.2",
     "@types/lodash": "^4.14.165",
     "@types/node": "^14.14.7",
     "@types/react-copy-to-clipboard": "^4.3.0",
@@ -52,6 +82,8 @@
     "@types/theme-ui": "^0.3.7",
     "@typescript-eslint/eslint-plugin": "^4.7.0",
     "@typescript-eslint/parser": "^4.7.0",
+    "cypress": "^5.6.0",
+    "cypress-axe": "^0.10.0",
     "eslint": "^7.13.0",
     "eslint-config-airbnb-typescript": "^12.0.0",
     "eslint-plugin-import": "^2.22.1",
@@ -59,7 +91,13 @@
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^4.3.0",
+    "jest": "^26.6.3",
+    "jest-emotion": "^11.0.0",
+    "lint-staged": "^10.5.1",
     "prettier": "^2.1.2",
+    "pretty-quick": "^3.1.0",
+    "semantic-release": "^17.2.2",
+    "start-server-and-test": "^1.11.5",
     "typescript": "^4.0.5"
   }
 }
