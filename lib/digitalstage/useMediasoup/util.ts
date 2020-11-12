@@ -1,5 +1,5 @@
 import mediasoupClient from 'mediasoup-client';
-import {TeckosClient} from 'teckos-client';
+import { TeckosClient } from 'teckos-client';
 import {
   Router,
   StageMemberAudioProducer,
@@ -63,7 +63,7 @@ export const RouterPostUrls = {
 
 export const fetchGet = <T>(url: string): Promise<T> => fetch(url, {
 }).then((result) => {
-  console.log("GOT SOMETHING");
+  console.log('GOT SOMETHING');
   if (result.ok) return result.json();
   throw new Error(result.statusText);
 });
@@ -100,7 +100,7 @@ export const createWebRTCTransport = (
           : device.createRecvTransport(transportOptions);
         transport.on(
           'connect',
-          async ({dtlsParameters}, callback, errCallback) => {
+          async ({ dtlsParameters }, callback, errCallback) => {
             socket.emit(
               RouterRequests.ConnectTransport,
               {
