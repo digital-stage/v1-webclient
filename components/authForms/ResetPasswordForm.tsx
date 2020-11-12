@@ -7,7 +7,6 @@ import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import InputField from '../InputField';
 import { useAuth } from '../../lib/digitalstage/useAuth';
-import { useErrors } from '../../lib/useErrors';
 
 interface Values {
   password?: string;
@@ -15,11 +14,13 @@ interface Values {
   response?: string;
 }
 
-export default function ResetPasswordForm(props: { resetToken: string }) {
-  const { resetToken } = props;
+interface Props {
+  resetToken: string;
+}
+
+export default function ResetPasswordForm({ resetToken }: Props): JSX.Element {
   const router = useRouter();
   const { resetPassword } = useAuth();
-  const { reportError } = useErrors();
 
   const [msg, setMsg] = React.useState({
     state: false,

@@ -2,12 +2,13 @@
 /** @jsx jsx */
 import React from 'react';
 import { jsx, Flex } from 'theme-ui';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 
-const CollapseContent = (props: { children?: React.ReactNode; isOpen: boolean }) => {
-  const { children, isOpen } = props;
+interface Props {
+  children?: React.ReactNode;
+  isOpen: boolean;
+}
 
+const CollapseContent = ({ children, isOpen }: Props): JSX.Element => {
   return (
     isOpen && (
       <Flex
@@ -16,6 +17,7 @@ const CollapseContent = (props: { children?: React.ReactNode; isOpen: boolean })
         }}
       >
         <p>content</p>
+        {children}
       </Flex>
     )
   );

@@ -6,7 +6,6 @@ import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import InputField from '../InputField';
-import { useErrors } from '../../lib/useErrors';
 
 interface Values {
   email: string;
@@ -17,7 +16,6 @@ interface Values {
 
 const SignUpForm = (): JSX.Element => {
   const { createUserWithEmailAndPassword } = useAuth();
-  const { reportError } = useErrors();
 
   const [msg, setMsg] = React.useState({
     state: false,

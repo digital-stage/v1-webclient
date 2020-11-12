@@ -1,8 +1,11 @@
 import React from 'react';
 import { useErrors } from '../lib/useErrors';
 
-const ErrorHandler = (props: { children: React.ReactNode }) => {
-  const { children } = props;
+interface Props {
+  children: React.ReactNode;
+}
+
+const ErrorHandler = ({ children }: Props): JSX.Element => {
   const { errors, warnings } = useErrors();
 
   if (errors.length > 0) {
