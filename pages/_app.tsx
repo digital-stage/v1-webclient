@@ -12,6 +12,7 @@ import { MediasoupProvider } from '../lib/digitalstage/useMediasoup';
 import { wrapper } from '../lib/digitalstage/useStageContext/redux';
 import StageWebAudioProvider from '../lib/useStageWebAudio';
 import { ErrorsProvider } from '../lib/useErrors';
+import ErrorHandler from '../components/ErrorHandler';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   React.useEffect(() => {
@@ -36,8 +37,10 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                 <AudioContextProvider>
                   <ThemenProviderThemeUi theme={theme}>
                     <StageWebAudioProvider>
-                      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                      <Component {...pageProps} />
+                      <ErrorHandler>
+                        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                        <Component {...pageProps} />
+                      </ErrorHandler>
                     </StageWebAudioProvider>
                     <StageJoiner />
                   </ThemenProviderThemeUi>

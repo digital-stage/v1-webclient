@@ -29,7 +29,7 @@ const StageListView = (): JSX.Element => {
       {/**  TODO: WORK in PROGRESS */}
       <Flex sx={{ flexDirection: 'column' }}>
         {stages.map((stage) => (
-          <Collapse key={stage._id} >
+          <Collapse key={stage._id} id={stage._id}>
             <CollapseHeader isOpen={openCollapse} onClick={() => { setOpenCollapse(!openCollapse); setCollapseId(stage._id) }} id={stage._id} collapseId={collapseId}>
               <StageHeader stage={stage} />
             </CollapseHeader>

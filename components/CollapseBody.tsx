@@ -10,7 +10,7 @@ interface Props {
     collapseId: string
 }
 
-const CollapseBody = (props: Props) => {
+const CollapseBody = (props: Props) : JSX.Element => {
     const { children, isOpen, id, collapseId } = props;
 
     return (
@@ -18,8 +18,7 @@ const CollapseBody = (props: Props) => {
             sx={{
                 width: "100%",
                 bg: "gray.7",
-                px: 3,
-                transition: "all 290ms cubic-bezier(0.4, 0, 0.2, 1)"
+                px: 3
             }}
         >
             { children}

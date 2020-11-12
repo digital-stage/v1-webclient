@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import React from 'react';
 import { jsx, Flex, Box, IconButton } from 'theme-ui';
-import { FaChevronDown, FaChevronLeft } from 'react-icons/fa'
+import { FaChevronDown, FaChevronLeft } from 'react-icons/fa';
 
 interface Props {
     children: React.ReactNode,
@@ -12,7 +12,7 @@ interface Props {
     collapseId: string
 }
 
-const CollapseHeader = (props: Props) => {
+const CollapseHeader = (props: Props): JSX.Element => {
     const { children, onClick, isOpen, id, collapseId } = props;
 
     return (

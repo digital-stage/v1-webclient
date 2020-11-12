@@ -1,21 +1,23 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Button, Heading } from 'theme-ui';
-import Modal from '../components/new/elements/Modal';
 
 export interface ErrorsProps {
-  errors: string[];
-  reportError: (error: string) => any;
-  clearErrors: () => any;
+  warnings: Error[];
+  reportWarning: (warning: Error) => any;
+  errors: Error[];
+  reportError: (error: Error) => any;
+  clear: () => any;
 }
 
 const ErrorsContext = React.createContext<ErrorsProps>({
+  warnings: [],
+  reportWarning: () => {
+    // do nothing.
+  },
   errors: [],
   reportError: () => {
     // do nothing.
   },
-  clearErrors: () => {
+  clear: () => {
     // do nothing.
   },
 });
@@ -23,29 +25,21 @@ const ErrorsContext = React.createContext<ErrorsProps>({
 export const useErrors = (): ErrorsProps => React.useContext<ErrorsProps>(ErrorsContext);
 
 export const ErrorsProvider = (props: { children: React.ReactNode }) => {
-  const [errors, setErrors] = React.useState<string[]>([]);
+  const [warnings, setWarnings] = React.useState<Error[]>([]);
+  const [errors, setErrors] = React.useState<Error[]>([]);
   const { children } = props;
 
   return (
     <ErrorsContext.Provider
       value={{
+        warnings,
+        reportWarning: (warning: Error) => setWarnings((prev) => [...prev, warning]),
         errors,
-        reportError: (error: string) => setErrors((prev) => [...prev, error]),
-        clearErrors: () => setErrors([]),
+        reportError: (error: Error) => setErrors((prev) => [...prev, error]),
+        clear: () => setErrors([]),
       }}
     >
       {children}
-      <Modal isOpen={errors.length > 0} onClose={() => setErrors([])}>
-        <Heading>Fehler</Heading>
-        <Box>
-          <ul>
-            {errors.map((error, index) => (
-              <li key={index}>{error}</li>
-            ))}
-          </ul>
-        </Box>
-        <Button onClick={() => setErrors([])}>Schliessen</Button>
-      </Modal>
     </ErrorsContext.Provider>
   );
 };

@@ -1,4 +1,7 @@
-import React, { useEffect } from 'react';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Flex } from 'theme-ui';
 import { useRouter } from 'next/router';
 import { DisplayMedium } from 'baseui/typography';
 import { useRequest } from '../../../lib/useRequest';
@@ -9,11 +12,11 @@ const Join = (): JSX.Element => {
 
   const { setRequest } = useRequest();
 
-  useEffect(() => {
+  React.useEffect(() => {
     router.prefetch('/');
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (router.query) {
       const { stageId, groupId, password } = router.query;
       if (stageId && groupId && !Array.isArray(stageId) && !Array.isArray(groupId)) {

@@ -1,9 +1,10 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Flex, Button } from 'theme-ui';
 import { styled } from 'baseui';
 import { Theme } from 'baseui/theme';
-import React, { useEffect, useState } from 'react';
 import { Delete } from 'baseui/icon';
-// import Button from '../../../../uikit/Button
-import { Button } from 'theme-ui';
 
 const ModalWrapper = styled<{ $hidden?: boolean }, 'div', Theme>('div', ({ $theme, $hidden }) => ({
   position: 'absolute',
@@ -66,10 +67,10 @@ const Modal = (props: {
 }) => {
   const { children, open, onClose, size, position } = props;
   // Animation related property
-  const [hidden, setHidden] = useState<boolean>(!open);
-  const [rendered, setRendered] = useState<boolean>(open);
+  const [hidden, setHidden] = React.useState<boolean>(!open);
+  const [rendered, setRendered] = React.useState<boolean>(open);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (open) {
       setRendered(true);
       const timer = setTimeout(() => {
