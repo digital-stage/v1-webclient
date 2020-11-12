@@ -1,6 +1,6 @@
 import React from 'react';
 import { styled } from 'styletron-react';
-import MixingPanelView from '../components/layouts/MixingPanelView';
+import MixingPanelView from '../components/new/elements/MixingPanel';
 
 const Wrapper = styled('div', {
   position: 'relative',
@@ -24,7 +24,6 @@ const ScrollPane = styled('div', {
   right: 0,
   overflowX: 'scroll',
   overflowY: 'auto',
-
 });
 
 const Mixer = () => (

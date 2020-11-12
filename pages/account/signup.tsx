@@ -1,30 +1,32 @@
-import React, { useEffect } from 'react';
+import * as React from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/digitalstage/useAuth';
-import Login from '../../components/digital-stage-sign-in';
-import Loading from '../../components/complex/depreacted/theme/Loading';
-import PageWrapper from '../../components/new/PageWrapper';
+import Layout from '../../components/Layout';
+import AuthPageContainer from '../../components/AuthPageContainer';
+import AuthPageLinks from '../../components/AuthPageLinks';
+import SignUpForm from '../../components/authForms/SignUpForm';
 
-const SignUp = () => {
+const SignUp = (): JSX.Element => {
   const router = useRouter();
-  const { loading, user } = useAuth();
+  const { user } = useAuth();
 
-  useEffect(() => {
+  React.useEffect(() => {
     router.prefetch('/account/login');
+    router.prefetch('/account/forgot');
   }, []);
 
-  if (!loading) {
-    if (user) {
-      router.push('/');
-    }
-  } else {
-    return <Loading>Sign up</Loading>;
+  if (user) {
+    router.push('/');
   }
 
   return (
-    <PageWrapper>
-      <Login mode="signup" />
-    </PageWrapper>
+    <Layout auth>
+      <AuthPageContainer>
+        <AuthPageLinks />
+        <SignUpForm />
+      </AuthPageContainer>
+    </Layout>
   );
 };
+
 export default SignUp;

@@ -1,35 +1,29 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
 import { useRouter } from 'next/router';
-import React from 'react';
-import { Typography } from '@material-ui/core';
+import { jsx } from 'theme-ui';
 import { useAuth } from '../../lib/digitalstage/useAuth';
-import Loading from '../../components/complex/depreacted/theme/Loading';
-import ResetPassword from '../../components/digital-stage-sign-in/ResetPassword';
-import PageWrapper from '../../components/new/PageWrapper';
+import Layout from '../../components/Layout';
+import AuthPageContainer from '../../components/AuthPageContainer';
+import ResetPasswordForm from '../../components/authForms/ResetPasswordForm';
 
-const Reset = () => {
+const Reset = (): JSX.Element => {
   const router = useRouter();
-  const { loading, user } = useAuth();
+  const { user } = useAuth();
   const { token } = router.query;
 
-  if (!loading) {
-    if (user) {
-      router.push('/');
-    } else {
-      return (
-      // <Container>
-      //     <HeadingLarge>Passwort zurücksetzen</HeadingLarge>
-        <PageWrapper>
-          {token && !Array.isArray(token) && (
-          // <ResetForm resetToken={token}/>
-          <ResetPassword resetToken={token} targetUrl="/account/login" />
-          )}
-        </PageWrapper>
-      // </Container>
-      );
-    }
+  if (user) {
+    router.push('/');
   }
 
-  return <Loading><Typography variant="h1">Lade...</Typography></Loading>;
+  return (
+    <Layout auth>
+      <AuthPageContainer>
+        <ResetPasswordForm resetToken={token} />
+      </AuthPageContainer>
+    </Layout>
+  );
 };
 
 export default Reset;

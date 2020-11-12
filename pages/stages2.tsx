@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Typography } from '@material-ui/core';
-import Container from '../components/complex/depreacted/theme/layout/Container';
+import { Heading } from 'theme-ui';
 import { useAuth } from '../lib/digitalstage/useAuth';
-import Loading from '../components/complex/depreacted/theme/Loading';
+import Loading from '../components/new/elements/Loading';
 import Login from './account/login';
-import StageListView from '../components/layouts/StageListView';
+import StageListView from '../components/new/elements/StageList';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
+import Container from '../components/Container';
 
-const Stages2 = () => {
+const Stages2 = (): JSX.Element => {
   const router = useRouter();
   const { loading, user } = useAuth();
   const stageId = useStageSelector<string | undefined>((state) => state.stageId);
@@ -34,7 +34,7 @@ const Stages2 = () => {
     }
     return (
       <Container>
-        <Typography variant="h1">Meine Bühnen</Typography>
+        <Heading variant="h1">Meine Bühnen</Heading>
         <StageListView />
       </Container>
     );
@@ -42,7 +42,7 @@ const Stages2 = () => {
 
   return (
     <Loading>
-      <Typography variant="h1">Lade ...</Typography>
+      <Heading variant="h1">Lade ...</Heading>
     </Loading>
   );
 };

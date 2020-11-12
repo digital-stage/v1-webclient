@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Typography } from '@material-ui/core';
 import { useAuth } from '../lib/digitalstage/useAuth';
-import Loading from '../components/complex/depreacted/theme/Loading';
 import Login from './account/login';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
 import StageDetails from '../components/stage/StageDetails';
 
-const Stages = () => {
+const Stages = (): JSX.Element => {
   const router = useRouter();
-  const { loading, user } = useAuth();
+  const { user } = useAuth();
   const stageId = useStageSelector<string | undefined>((state) => state.stageId);
   const [initialized, setInitialized] = useState<boolean>();
 
@@ -27,25 +25,10 @@ const Stages = () => {
     }
   }, [router.pathname]);
 
-  if (!loading) {
-    if (!user) {
-      return <Login />;
-    }
-    return (
-      <>
-        <StageDetails />
-        {/* <Container>
-                    <Typography variant="h1">Meine Bühnen</Typography>
-                    <StageListView />
-                </Container> */}
-      </>
-    );
+  if (!user) {
+    return <Login />;
   }
-
-  return (
-    <Loading>
-      <Typography variant="h1">Lade ...</Typography>
-    </Loading>
-  );
+  return <StageDetails />;
 };
+
 export default Stages;

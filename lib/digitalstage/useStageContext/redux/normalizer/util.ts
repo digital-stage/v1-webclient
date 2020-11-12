@@ -1,6 +1,6 @@
-import merge from "lodash/merge";
-import { NormalizedState } from "../../schema";
-import { upsert } from "../utils";
+import merge from 'lodash/merge';
+import { NormalizedState } from '../../schema';
+import { upsert } from '../utils';
 import {
   CustomGroup,
   CustomStageMember,
@@ -13,7 +13,7 @@ import {
   AudioProducer,
   VideoProducer,
   OvTrack,
-} from "../../model";
+} from '../../model';
 
 function normalize(
   prevState: Readonly<NormalizedState>,
@@ -64,9 +64,7 @@ function normalize(
             ...state.stages.byId,
             [stage._id]: {
               ...stage,
-              isAdmin: state.user
-                ? stage.admins.indexOf(state.user._id) !== -1
-                : false,
+              isAdmin: state.user ? stage.admins.indexOf(state.user._id) !== -1 : false,
             },
           },
           allIds: [...state.stages.allIds, stage._id],
@@ -87,10 +85,7 @@ function normalize(
           },
           byStage: {
             ...state.groups.byStage,
-            [group.stageId]: upsert<string>(
-              state.groups.byStage[group.stageId],
-              group._id
-            ),
+            [group.stageId]: upsert<string>(state.groups.byStage[group.stageId], group._id),
           },
           allIds: [...state.groups.allIds, group._id],
         },
@@ -240,13 +235,9 @@ function normalize(
           },
           byAudioProducer: {
             ...state.customAudioProducers.byAudioProducer,
-            [customAudioProducer.stageMemberAudioProducerId]:
-              customAudioProducer._id,
+            [customAudioProducer.stageMemberAudioProducerId]: customAudioProducer._id,
           },
-          allIds: [
-            ...state.customAudioProducers.allIds,
-            customAudioProducer._id,
-          ],
+          allIds: [...state.customAudioProducers.allIds, customAudioProducer._id],
         },
       };
     });

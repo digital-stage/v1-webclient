@@ -1,6 +1,5 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 import {
-  CustomGroupId,
   CustomStageMemberAudioProducerId,
   CustomStageMemberId,
   CustomStageMemberOvTrackId,
@@ -11,12 +10,10 @@ import {
   StageMemberAudioProducerId,
   StageMemberId,
   StageMemberOvTrackId,
-} from "./common/model.server";
-import * as Server from "./common/model.server";
-import { ThreeDimensionAudioProperties } from "./common/model.utils";
+} from './common/model.server';
+import * as Server from './common/model.server';
+import { ThreeDimensionAudioProperties } from './common/model.utils';
 import {
-  AddCustomGroupPayload,
-  AddCustomStageMemberPayload,
   AddGroupPayload,
   AddStagePayload,
   ChangeGroupPayload,
@@ -33,18 +30,12 @@ import {
   SetCustomStageMemberAudioPayload,
   SetCustomStageMemberOvPayload,
   SetCustomStageMemberPayload,
-  UpdateCustomGroupPayload,
-  UpdateCustomStageMemberPayload,
-} from "./common/payloads";
-import {
-  ClientDeviceEvents,
-  ClientStageEvents,
-  ClientUserEvents,
-} from "./common/events";
-import { useRequest } from "../useRequest";
-import { useSocket } from "./useStageContext";
-import { NormalizedState } from "./useStageContext/schema";
-import { useSelector } from "./useStageContext/redux";
+} from './common/payloads';
+import { ClientDeviceEvents, ClientStageEvents, ClientUserEvents } from './common/events';
+import { useRequest } from '../useRequest';
+import { useSocket } from './useStageContext';
+import { NormalizedState } from './useStageContext/schema';
+import { useSelector } from './useStageContext/redux';
 
 export interface StageActionsProps {
   updateDevice(id: DeviceId, device: Partial<Device>);
@@ -62,11 +53,7 @@ export interface StageActionsProps {
     absorption?: number
   );
 
-  joinStage(
-    stageId: StageId,
-    groupId: GroupId,
-    password: string | null
-  ): Promise<void>;
+  joinStage(stageId: StageId, groupId: GroupId, password: string | null): Promise<void>;
 
   leaveStage();
 
@@ -89,9 +76,7 @@ export interface StageActionsProps {
     update: Partial<ThreeDimensionAudioProperties>
   );
 
-  removeCustomStageMemberAudio(
-    customStageMemberAudioId: CustomStageMemberAudioProducerId
-  );
+  removeCustomStageMemberAudio(customStageMemberAudioId: CustomStageMemberAudioProducerId);
 
   setCustomStageMemberOv(
     stageMemberOvId: StageMemberOvTrackId,
@@ -125,21 +110,16 @@ export interface StageActionsProps {
     update: Partial<ThreeDimensionAudioProperties>
   );
 
-  updateStageMemberOv(
-    id: StageMemberOvTrackId,
-    update: Partial<ThreeDimensionAudioProperties>
-  );
+  updateStageMemberOv(id: StageMemberOvTrackId, update: Partial<ThreeDimensionAudioProperties>);
 }
 
 const useStageActions = (): StageActionsProps => {
   const socket = useSocket();
-  const stageId = useSelector<NormalizedState, string | undefined>(
-    (state) => state.stageId
-  );
+  const stageId = useSelector<NormalizedState, string | undefined>((state) => state.stageId);
   const { setRequest } = useRequest();
 
   const updateDevice = useCallback(
-    (deviceId: string, device: Partial<Omit<Device, "_id">>) => {
+    (deviceId: string, device: Partial<Omit<Device, '_id'>>) => {
       if (socket) {
         socket.emit(ClientDeviceEvents.UPDATE_DEVICE, {
           ...device,
@@ -206,11 +186,11 @@ const useStageActions = (): StageActionsProps => {
   );
 
   const joinStage = useCallback(
-    (stageId: StageId, groupId: GroupId, password: string): Promise<void> => {
+    (reqStageId: StageId, reqGroupId: GroupId, password: string): Promise<void> => {
       if (socket) {
         const payload: JoinStagePayload = {
-          stageId,
-          groupId,
+          stageId: reqStageId,
+          groupId: reqGroupId,
           password: password || undefined,
         };
         return new Promise<void>((resolve, reject) => {
@@ -220,6 +200,7 @@ const useStageActions = (): StageActionsProps => {
           });
         });
       }
+      return null;
     },
     [socket]
   );
@@ -253,10 +234,10 @@ const useStageActions = (): StageActionsProps => {
   );
 
   const createGroup = useCallback(
-    (stageId: StageId, name: string) => {
+    (createStageId: StageId, name: string) => {
       if (socket) {
         const payload: AddGroupPayload = {
-          stageId,
+          stageId: createStageId,
           name,
         };
         socket.emit(ClientStageEvents.ADD_GROUP, payload);
@@ -308,10 +289,7 @@ const useStageActions = (): StageActionsProps => {
   );
 
   const updateStageMemberOv = useCallback(
-    (
-      id: StageMemberOvTrackId,
-      update: Partial<ThreeDimensionAudioProperties>
-    ) => {
+    (id: StageMemberOvTrackId, update: Partial<ThreeDimensionAudioProperties>) => {
       if (socket) {
         const payload: ChangeStageMemberOvTrackPayload = {
           id,
@@ -324,10 +302,7 @@ const useStageActions = (): StageActionsProps => {
   );
 
   const updateStageMemberAudio = useCallback(
-    (
-      id: StageMemberAudioProducerId,
-      update: Partial<ThreeDimensionAudioProperties>
-    ) => {
+    (id: StageMemberAudioProducerId, update: Partial<ThreeDimensionAudioProperties>) => {
       if (socket) {
         const payload: ChangeStageMemberAudioProducerPayload = {
           id,
@@ -364,10 +339,7 @@ const useStageActions = (): StageActionsProps => {
   );
 
   const setCustomStageMember = useCallback(
-    (
-      stageMemberId: StageMemberId,
-      update: Partial<ThreeDimensionAudioProperties>
-    ) => {
+    (stageMemberId: StageMemberId, update: Partial<ThreeDimensionAudioProperties>) => {
       if (socket) {
         const payload: SetCustomStageMemberPayload = {
           stageMemberId,
@@ -409,10 +381,7 @@ const useStageActions = (): StageActionsProps => {
     (id: GroupId) => {
       if (socket) {
         const payload: RemoveCustomStageMemberAudioPayload = id;
-        socket.emit(
-          ClientStageEvents.REMOVE_CUSTOM_STAGE_MEMBER_AUDIO,
-          payload
-        );
+        socket.emit(ClientStageEvents.REMOVE_CUSTOM_STAGE_MEMBER_AUDIO, payload);
       }
     },
     [socket]

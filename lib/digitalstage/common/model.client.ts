@@ -1,5 +1,5 @@
-import mediasoupClient from "mediasoup-client";
-import * as Server from "./model.server";
+import mediasoupClient from 'mediasoup-client';
+import * as Server from './model.server';
 
 export namespace Client {
   /**

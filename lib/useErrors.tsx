@@ -1,51 +1,45 @@
-import React, { useState } from 'react';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from '@material-ui/core';
+import * as React from 'react';
 
 export interface ErrorsProps {
-  errors: string[];
-  reportError: (error: string) => any;
-  clearErrors: () => any;
+  warnings: Error[];
+  reportWarning: (warning: Error) => any;
+  errors: Error[];
+  reportError: (error: Error) => any;
+  clear: () => any;
 }
 
 const ErrorsContext = React.createContext<ErrorsProps>({
+  warnings: [],
+  reportWarning: () => {
+    // do nothing.
+  },
   errors: [],
-  reportError: () => {},
-  clearErrors: () => {},
+  reportError: () => {
+    // do nothing.
+  },
+  clear: () => {
+    // do nothing.
+  },
 });
 
 export const useErrors = (): ErrorsProps => React.useContext<ErrorsProps>(ErrorsContext);
 
 export const ErrorsProvider = (props: { children: React.ReactNode }) => {
-  const [errors, setErrors] = useState<string[]>([]);
+  const [warnings, setWarnings] = React.useState<Error[]>([]);
+  const [errors, setErrors] = React.useState<Error[]>([]);
   const { children } = props;
 
   return (
-    <ErrorsContext.Provider value={{
-      errors,
-      reportError: (error: string) => setErrors((prev) => [...prev, error]),
-      clearErrors: () => setErrors([]),
-    }}
+    <ErrorsContext.Provider
+      value={{
+        warnings,
+        reportWarning: (warning: Error) => setWarnings((prev) => [...prev, warning]),
+        errors,
+        reportError: (error: Error) => setErrors((prev) => [...prev, error]),
+        clear: () => setErrors([]),
+      }}
     >
       {children}
-      <Dialog open={errors.length > 0} onClose={() => setErrors([])}>
-        <DialogTitle>Fehler</DialogTitle>
-        <DialogContent>
-          <ul>
-            {errors.map((error) => <li>{error}</li>)}
-          </ul>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setErrors([])} autoFocus>
-            Ignorieren
-          </Button>
-        </DialogActions>
-      </Dialog>
     </ErrorsContext.Provider>
   );
 };

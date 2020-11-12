@@ -1,39 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { DisplayMedium, HeadingLarge } from 'baseui/typography';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Heading } from 'theme-ui';
 import { useRouter } from 'next/router';
-import Container from '../../components/complex/depreacted/theme/layout/Container';
 import { useAuth } from '../../lib/digitalstage/useAuth';
-import Loading from '../../components/complex/depreacted/theme/Loading';
-import PageWrapper from '../../components/new/PageWrapper';
+import Layout from '../../components/Layout';
+import Container from '../../components/Container';
 
-const Logout = () => {
+const Logout = (): JSX.Element => {
   const router = useRouter();
-  const [loggedOut, setLoggedOut] = useState<boolean>(false);
-  const { logout, loading } = useAuth();
+  const [loggedOut, setLoggedOut] = React.useState<boolean>(false);
+  const { logout } = useAuth();
 
-  useEffect(() => {
-    logout()
-      .then(() => {
-        setLoggedOut(true);
-        router.push('/account/login');
-      });
+  React.useEffect(() => {
+    logout().then(() => {
+      setLoggedOut(true);
+      router.push('/account/login');
+    });
   }, []);
 
-  if (!loading) {
-    if (loggedOut) {
-      return (
-        <PageWrapper>
-          <Container>
-            <HeadingLarge>Abgemeldet!</HeadingLarge>
-          </Container>
-        </PageWrapper>
-      );
-    }
-  }
   return (
-    <Loading>
-      <DisplayMedium>Melde ab...</DisplayMedium>
-    </Loading>
+    loggedOut && (
+      <Layout auth>
+        <Container>
+          <Heading>Abgemeldet!</Heading>
+        </Container>
+      </Layout>
+    )
   );
 };
+
 export default Logout;

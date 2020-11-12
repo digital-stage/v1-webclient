@@ -1,54 +1,56 @@
-import React from 'react';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
 import { useRouter } from 'next/router';
-import { H1 } from 'baseui/typography';
+import { jsx, Heading } from 'theme-ui';
 import { useAuth } from '../lib/digitalstage/useAuth';
-import Loading from '../components/complex/depreacted/theme/Loading';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
-import PageWrapperWithStage from '../components/new/PageWrapperWithStage';
-import StagePane from '../components/panes/StagePane';
-import StagesListPane from '../components/panes/StagesListPane';
-import LocalDeviceControl from '../components/layouts/LocalDeviceControl';
-import AudioPlaybackStarter from '../components/new/Menu/AudioPlaybackStarter';
-import FixedLeaveButton from '../components/new/Menu/FixedLeaveButton';
-import PageWrapper from '../components/new/PageWrapper';
-import Container from '../components/new/Container';
+import StagePane from '../components/new/panes/StagePane';
+import StageListView from '../components/new/elements/StageList';
+import StageDeviceController from '../components/StageDeviceController';
+import StageLeaver from '../components/StageLeaver';
+import Layout from '../components/Layout';
+import Container from '../components/Container';
+import PageSpinner from '../components/PageSpinner';
+import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/FixedAudioPlaybackStarterButton';
 
-const Layout = () => {
+const Index = (): JSX.Element => {
   const router = useRouter();
   const { loading, user } = useAuth();
   const stageId = useStageSelector<string | undefined>((state) => state.stageId);
 
   if (!loading) {
     if (!user) {
-      // Forward to welcome page (with PageWrapper instead of PageWrapperWithStage)<
       router.push('/account/welcome');
     } else {
-      // On stage related pages (all except sign in handling) wrap with PagWrapperWithStage
       return (
-        <>
+        <Layout sidebar={!!stageId}>
           {stageId ? (
-            <PageWrapperWithStage>
+            <React.Fragment>
               <StagePane />
-            </PageWrapperWithStage>
+
+              <FixedAudioPlaybackStarterButton />
+              <StageDeviceController />
+              <StageLeaver />
+            </React.Fragment>
           ) : (
-            <PageWrapper>
-              <Container>
-                <StagesListPane />
-              </Container>
-            </PageWrapper>
+            <Container size="stage">
+              <Heading as="h1" sx={{ ml: 3, mt: [4, 5] }}>
+                Meine Bühnen
+              </Heading>
+              <StageListView />
+            </Container>
           )}
-          <LocalDeviceControl />
-          <AudioPlaybackStarter />
-          <FixedLeaveButton />
-        </>
+        </Layout>
       );
     }
   }
 
   return (
-    <Loading>
-      <H1>Neues Layout im Anmarsch!</H1>
-    </Loading>
+    <Layout>
+      <PageSpinner />
+    </Layout>
   );
 };
-export default Layout;
+
+export default Index;

@@ -1,28 +1,28 @@
-import { HeadingLarge } from 'baseui/typography';
-import React from 'react';
-import Container from '../../components/complex/depreacted/theme/layout/Container';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Heading } from 'theme-ui';
 import { useAuth } from '../../lib/digitalstage/useAuth';
 import useStageSelector from '../../lib/digitalstage/useStageSelector';
-import PageWrapper from '../../components/new/PageWrapper';
+import Layout from '../../components/Layout';
+import Container from '../../components/Container';
 
-const Profile = () => {
+const Profile = (): JSX.Element => {
   const { user: authUser } = useAuth();
-  const { user } = useStageSelector((state) => ({
-    user: state.user,
-  }));
+  const { user } = useStageSelector((state) => ({ user: state.user }));
 
   return (
-    <PageWrapper>
+    <Layout auth>
       <Container>
         {user && (
-        <>
-          <HeadingLarge>{user.name}</HeadingLarge>
-          <HeadingLarge>{authUser.email}</HeadingLarge>
-          <HeadingLarge>{user.avatarUrl}</HeadingLarge>
-        </>
+          <React.Fragment>
+            <Heading>{user.name}</Heading>
+            <Heading>{authUser.email}</Heading>
+            {user.avatarUrl && <Heading>{user.avatarUrl}</Heading>}
+          </React.Fragment>
         )}
       </Container>
-    </PageWrapper>
+    </Layout>
   );
 };
 

@@ -1,5 +1,5 @@
-import { Device } from "../../../common/model.server";
-import { ServerDeviceEvents } from "../../../common/events";
+import { Device } from '../../../common/model.server';
+import { ServerDeviceEvents } from '../../../common/events';
 
 const handleLocalDeviceReady = (device: Device) => {
   return {
