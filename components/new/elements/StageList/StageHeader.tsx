@@ -3,13 +3,13 @@
 import * as React from 'react';
 import { jsx, Box, Flex, IconButton, Heading, Avatar, Text } from 'theme-ui';
 import { FaPen, FaTrash } from 'react-icons/fa';
-import { Client } from '../../../../lib/digitalstage/common/model.client';
+import { Stage } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import ModifyStageModal from './ModifyStageModal';
 
-const StageHeader = (props: { stage: Client.Stage }): JSX.Element => {
+const StageHeader = (props: { stage: Stage }): JSX.Element => {
   const { removeStage, leaveStageForGood } = useStageActions();
-  const [currentStage, setCurrentStage] = React.useState<Client.Stage>();
+  const [currentStage, setCurrentStage] = React.useState<Stage>();
   const [isModifyStageOpen, setModifyStageIsOpen] = React.useState<boolean>(false);
 
   const { stage } = props;

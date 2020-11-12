@@ -5,7 +5,7 @@ import { jsx, Flex, Button, Text } from 'theme-ui';
 
 import { Field, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Client } from '../../../../lib/digitalstage/common/model.client';
+import { Group } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import Modal from '../Modal';
 import InputField from '../../../InputField';
@@ -15,7 +15,7 @@ const Schema = Yup.object().shape({
 });
 
 const ModifyGroupModal = (props: {
-  group: Client.Group;
+  group: Group;
   isOpen?: boolean;
   onClose?: () => any;
 }): JSX.Element => {

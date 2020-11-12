@@ -23,7 +23,7 @@ import InputOutlinedIcon from '@material-ui/icons/InputOutlined';
 import useStageActions from '../../lib/digitalstage/useStageActions';
 import CreateGroupModal from '../digital-stage-create-stage/CreateGroupModal';
 import EditGroupModal from '../digital-stage-create-stage/EditGroupModal';
-import { Client } from '../../lib/digitalstage/common/model.client';
+import { Group } from '../../lib/digitalstage/common/model.client';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -107,7 +107,7 @@ const StageDetails = (): JSX.Element => {
   const [openCreateGroupModal, setOpenCreateGroupModal] = React.useState(false);
   const [openEditGroupModal, setOpenEditGroupModal] = React.useState(false);
   const { removeStage, removeGroup, leaveStageForGood } = useStageActions();
-  const [currentGroup, setCurrentGroup] = useState<Client.Group>();
+  const [currentGroup, setCurrentGroup] = useState<Group>();
 
   const copyLink = (groupId: string) => {
     if (stage && groupId) {

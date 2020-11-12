@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Flex, Button, Text, Message } from 'theme-ui';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { Checkbox } from 'baseui/checkbox';
-import { Client } from '../../../../lib/digitalstage/common/model.client';
+import { Stage, Group } from '../../../../lib/digitalstage/common/model.client';
 import Modal from '../Modal';
 import InputField from '../../../InputField';
 
 const InviteModal = (props: {
-  stage: Client.Stage;
-  group: Client.Group;
+  stage: Stage;
+  group: Group;
   isOpen?: boolean;
   onClose?: () => void;
   usePassword?: boolean;

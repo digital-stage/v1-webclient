@@ -9,7 +9,7 @@ import CreateStageModal from '../digital-stage-create-stage/CreateStageModal';
 import StageCard from './StageCard';
 import { useSelector } from '../../lib/digitalstage/useStageContext/redux';
 import { Groups, NormalizedState, Stages } from '../../lib/digitalstage/useStageContext/schema';
-import { Client } from '../../lib/digitalstage/common/model.client';
+import { Stage } from '../../lib/digitalstage/common/model.client';
 import { useStage } from './useStage';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -60,7 +60,7 @@ const StagesList = (): JSX.Element => {
   const [list, setList] = React.useState(stages);
   const [checkedMyStage, setCheckedMyStage] = React.useState(true);
   const [checkedJoindedStages, setCheckedJoinedStages] = React.useState(true);
-  const [currentStage, setCurrentStage] = React.useState<Client.Stage>();
+  const [currentStage, setCurrentStage] = React.useState<Stage>();
   const [openCreateStageModal, setOpenCreateStageModal] = React.useState(false);
   const { handleSetStage, handleSetContext } = useStage();
 

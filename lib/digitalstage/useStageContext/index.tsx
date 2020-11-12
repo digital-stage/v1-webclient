@@ -251,9 +251,7 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
 
         const createdSocket = new TeckosClientWithJWT(
           process.env.NEXT_PUBLIC_API_URL,
-          {
-            verbose: false,
-          },
+          {},
           token,
           {
             // secure: process.env.NODE_ENV !== "development",

@@ -4,7 +4,7 @@ import * as React from 'react';
 import { jsx, Button, Flex, Text } from 'theme-ui';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { Client } from '../../../../lib/digitalstage/common/model.client';
+import { Stage } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import InputField from '../../../InputField';
 import Modal from '../Modal';
@@ -14,7 +14,7 @@ interface Values {
 }
 
 const CreateGroupModal = (props: {
-  stage: Client.Stage;
+  stage: Stage;
   isOpen?: boolean;
   onClose?: () => void;
 }): JSX.Element => {
