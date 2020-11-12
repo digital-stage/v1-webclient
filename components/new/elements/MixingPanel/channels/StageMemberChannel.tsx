@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Button, Flex } from 'theme-ui';
+import { jsx, Box, IconButton, Flex } from 'theme-ui';
 import { styled } from 'styletron-react';
 import { ChevronLeft, ChevronRight } from 'baseui/icon';
 import { Caption1 } from 'baseui/typography';
@@ -88,18 +88,16 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
           addHeader={
             <Header>
               {audioProducers.length > 0 ? (
-                <Button
+                <IconButton
                   style={{
                     width: '100%',
                     height: '100%',
                   }}
-                  variant="circle"
-                  kind="minimal"
-                  endEnhancer={() => (expanded ? <ChevronLeft /> : <ChevronRight />)}
+                  variant="outline"
                   onClick={() => setExpanded((prev) => !prev)}
                 >
-                  <Caption1>{user.name}</Caption1>
-                </Button>
+                  <Caption1>{user.name}</Caption1> {(expanded ? <ChevronLeft /> : <ChevronRight />)}
+                </IconButton>
               ) : (
                 <Caption1>{user.name}</Caption1>
               )}

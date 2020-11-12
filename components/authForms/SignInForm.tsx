@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Button, Flex, Label, Text, Message } from 'theme-ui';
+import { jsx, Box, Button, Flex, Label, Text, Message, Link } from 'theme-ui';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../../lib/digitalstage/useAuth';
@@ -90,9 +90,11 @@ const SignInForm = (): JSX.Element => {
       </Formik>
 
       <Flex sx={{ justifyContent: 'center', mt: 4, mb: 2 }}>
-        <Button as="a" variant="text" href="/account/forgot">
-          Forgot password?
+        <Link href="/account/forgot">
+          <Button as="a" variant="text">
+            Forgot password?
         </Button>
+        </Link>
       </Flex>
     </Box>
   );

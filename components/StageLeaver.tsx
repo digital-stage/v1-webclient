@@ -18,8 +18,7 @@ const StageLeaver = (): JSX.Element => (
     <Link href="/leave">
       <Button
         variant="circle"
-        label="Bühne verlassen"
-        href="/leave"
+        title="Bühne verlassen"
         sx={{ bg: 'primary', color: 'text' }}
       >
         <BiExit size="24px" />

@@ -121,8 +121,7 @@ const Modal = (props: {
                 top: 0,
                 right: 0,
               }}
-              kind="minimal"
-              shape="circle"
+              variant="outline"
               onClick={() => onClose()}
             >
               <Delete size={32} />

@@ -47,7 +47,7 @@ const FixedAudioPlaybackStarterButton = (): JSX.Element => {
           },
         })}
       >
-        <Button kind="minimal" variant="circle" onClick={() => start()}>
+        <Button variant="outlined" onClick={() => start()}>
           <FaMicrophone sx={{ color: 'accent' }} size={64} name="Microphone Off" />
         </Button>
       </div>

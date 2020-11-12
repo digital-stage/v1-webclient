@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Button, Flex } from 'theme-ui';
+import { jsx, Box, IconButton, Flex } from 'theme-ui';
 import { styled } from 'styletron-react';
 import { ChevronLeft, ChevronRight } from 'baseui/icon';
 import { Caption1 } from 'baseui/typography';
@@ -81,15 +81,13 @@ const GroupChannel = (props: { groupId: GroupId }) => {
           addHeader={
             <Header>
               {stageMemberIds.length > 0 ? (
-                <Button
-                  variant="circle"
-                  kind="minimal"
-                  endEnhancer={() => (expanded ? <ChevronLeft /> : <ChevronRight />)}
+                <IconButton
+                  variant="outline"
                   onClick={() => setExpanded((prev) => !prev)}
                   sx={{ width: '100%', height: '100%' }}
                 >
-                  <Caption1>{group.name}</Caption1>
-                </Button>
+                  <Caption1>{group.name}</Caption1>{(expanded ? <ChevronLeft /> : <ChevronRight />)}
+                </IconButton>
               ) : (
                 <Caption1>{group.name}</Caption1>
               )}

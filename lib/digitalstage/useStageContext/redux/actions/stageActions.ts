@@ -56,7 +56,7 @@ const handleStageJoined = (payload: InitialStagePackage) => {
     payload,
   };
 };
-const handleStageLeft = (): JSX.Element => {
+const handleStageLeft = () => {
   return {
     type: ServerStageEvents.STAGE_LEFT,
   };

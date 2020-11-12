@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { IconButton } from 'theme-ui'
 import Link from 'next/link';
 import { styled } from 'styletron-react';
-import Icon from '../../../uikit/Icon';
+import { CgScreen } from "react-icons/cg";
+import { RiSoundModuleLine } from "react-icons/ri";
 import useStageSelector from '../../../lib/digitalstage/useStageSelector';
-import Button from '../../../uikit/Button';
 
 const Wrapper = styled('div', {
   position: 'fixed',
@@ -25,9 +26,9 @@ const StageOrMixerSwitcher = (props: { className?: string }) => {
     return (
       <Wrapper className={props.className}>
         <Link href={mixerShown ? '/' : '/mixer'}>
-          <Button shape="circle">
-            <Icon size={64} name={mixerShown ? 'stage' : 'mixer'} />
-          </Button>
+          <IconButton>
+            {mixerShown ? <CgScreen/> : <RiSoundModuleLine/>}
+          </IconButton>
         </Link>
       </Wrapper>
     );
