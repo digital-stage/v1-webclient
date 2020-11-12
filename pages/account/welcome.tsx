@@ -1,94 +1,64 @@
-import React, { useEffect } from 'react';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
 import { useRouter } from 'next/router';
-import { styled } from 'baseui';
-import {
-  Caption1, DisplaySmall, LabelLarge,
-} from 'baseui/typography';
 import Link from 'next/link';
+import { jsx, Button, Flex, Heading, Text } from 'theme-ui';
+import DigitalStageLogo from '../../components/DigitalStageLogo';
 import { useAuth } from '../../lib/digitalstage/useAuth';
-import PageWrapper from '../../components/new/elements/PageWrapper';
-import Container from '../../components/new/elements/Container';
-import {Button} from "baseui/button";
+import Layout from '../../components/Layout';
 
-const Wrapper = styled('div', {
-  minHeight: '100vh',
-  display: 'flex',
-  padding: '1rem',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-});
-
-const Header = styled('div', {
-  maxWidth: '400px',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-});
-const Logo = styled('img', {
-  width: '80px',
-});
-
-const Content = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  maxWidth: '400px',
-});
-
-const Footer = styled('div', {
-
-  maxWidth: '400px',
-});
-
-const WelcomeScreen = () => {
+const Welcome = (): JSX.Element => {
   const router = useRouter();
-  const { loading, user } = useAuth();
+  const { user } = useAuth();
 
-  useEffect(() => {
-    router.prefetch('/account/signup');
-    router.prefetch('/account/signin');
-    router.prefetch('/account/forgot');
-  }, []);
-
-  if (!loading) {
-    if (user) {
-      router.push('/');
-    }
+  if (user) {
+    router.push('/');
   }
 
   return (
-    <PageWrapper>
-      <Container>
-        <Wrapper>
-          <Header>
-            <Logo alt="Digital Stage" src="/static/images/white_logo.png" />
-            <LabelLarge
-              $style={{
-                textAlign: 'center',
-              }}
-              margin={0}
-              color="white"
-            >
-              Your digital stage for art, music
-              and theatre ensembles.
-            </LabelLarge>
-          </Header>
-          <Content>
-            <DisplaySmall paddingBottom="2rem" paddingTop="1rem" color="white">Willkommen zurück</DisplaySmall>
-            <Link href="/account/login">
-              <Button kind="secondary">
-                Anmelden
-              </Button>
-            </Link>
-            <Caption1 color="white">Melde Dich an oder erstelle einen neuen Account</Caption1>
-          </Content>
-          <Footer>
-            <Caption1 color="white">Version 0.0001</Caption1>
-          </Footer>
-        </Wrapper>
-      </Container>
-    </PageWrapper>
+    <Layout auth>
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          minHeight: '100vh',
+          px: 10,
+          py: 4,
+        }}
+      >
+        <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+          <DigitalStageLogo single icon width={80} />
+
+          <Heading as="h4" m={3}>
+            Your digital stage for art, music
+            <br />
+            and theatre ensembles.
+          </Heading>
+        </Flex>
+        <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+          <Heading as="h1" my={3}>
+            Welcome back
+          </Heading>
+
+          <Link href="/account/login">
+            <Button as="a" variant="white" href="/account/login">
+              Sign In
+            </Button>
+          </Link>
+
+          <Text sx={{ my: 2, textAlign: 'center' }}>
+            Sign into account or
+            <br />
+            create a new one
+          </Text>
+        </Flex>
+
+        <Text variant="hint">Version 0.00001</Text>
+      </Flex>
+    </Layout>
   );
 };
-export default WelcomeScreen;
+
+export default Welcome;

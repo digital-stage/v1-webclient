@@ -1,119 +1,90 @@
-import { useStyletron } from 'baseui';
-import React from 'react';
-import { Avatar } from 'baseui/avatar';
-import { H5, HeadingSmall } from 'baseui/typography';
-import { Hide, Show } from 'baseui/icon';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Flex, Box, Heading, IconButton } from 'theme-ui';
+import { FaVideo, FaVideoSlash } from 'react-icons/fa';
 import OnlineStatus from '../OnlineStatus';
-import { ExtendedStageMember, useIsStageAdmin } from '../../../../lib/digitalstage/useStageSelector';
+import {
+  ExtendedStageMember,
+  useIsStageAdmin,
+} from '../../../../lib/digitalstage/useStageSelector';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import VideoPlayer from '../VideoPlayer';
 
-const StageMemberTitle = (props: {
-  stageMember: ExtendedStageMember
-}) => {
+const StageMemberTitle = (props: { stageMember: ExtendedStageMember }) => {
   const { stageMember } = props;
-  const [css] = useStyletron();
+
   const { updateStageMember } = useStageActions();
   const isAdmin = useIsStageAdmin();
 
   return (
-    <>
-      <div className={css({
-        display: 'flex',
-        width: 'calc(100% - 2rem)',
+    <Box
+      sx={{
+        minWidth: '100%',
+        flexDirection: 'column',
         alignItems: 'center',
-      })}
-      >
-        <div className={css({
-          margin: '.5rem',
-          flexGrow: 0,
-        })}
-        >
-          <Avatar name={stageMember.name} />
-        </div>
-        <div className={css({
-          display: 'flex',
-          flexGrow: 1,
-        })}
-        >
-          <H5>{stageMember.name}</H5>
-        </div>
+        p: 3,
+      }}
+    >
+      {/** <Avatar name={stageMember.name} /> */}
 
-        {isAdmin && (
-        <div
-          role="presentation"
-          className={css({
-            display: 'flex',
-            flexGrow: 0,
-            cursor: 'pointer',
-          })}
-          onClick={() => updateStageMember(stageMember._id, {
-            isDirector: !props.stageMember.isDirector,
-          })}
+      <Heading as="h5">
+        <OnlineStatus online={stageMember.online} /> {stageMember.name}{' '}
+      </Heading>
+
+      {isAdmin && (
+        <IconButton
+          onClick={() =>
+            updateStageMember(stageMember._id, {
+              isDirector: !props.stageMember.isDirector,
+            })
+          }
         >
-          {stageMember.isDirector ? <Show /> : <Hide />}
-        </div>
-        )}
-        <OnlineStatus
-          overrides={{
-            display: 'flex',
-            flexGrow: 0,
-          }}
-          online={stageMember.online}
-        />
-      </div>
-    </>
+          {stageMember.isDirector ? <FaVideo /> : <FaVideoSlash />}
+        </IconButton>
+      )}
+    </Box>
   );
 };
 
-const StageMemberView = (props: {
-  stageMember: ExtendedStageMember
-}) => {
-  const { stageMember } = props;
-  const [css] = useStyletron();
-
+const StageMemberView = ({ stageMember }: { stageMember: ExtendedStageMember }): JSX.Element => {
   return (
-    <div className={css({
-      position: 'relative',
-      display: 'flex',
-      width: '50vw',
-      backgroundImage: 'url("/images/white_logo.png")',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      backgroundSize: '20%',
-      '@media screen and (min-width: 800px)': {
-        width: '25vw',
-      },
-    })}
+    <Flex
+      sx={{
+        position: 'relative',
+        backgroundImage: 'url("/images/white_logo.png")',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: '20%',
+        bg: 'lightblue',
+      }}
     >
-      <div className={css({
-        paddingTop: '100%',
-      })}
-      />
-      {stageMember.videoConsumers.length > 0
-            && (
-            <VideoPlayer
-              className={css({
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-              })}
-              consumers={stageMember.videoConsumers}
-            />
-            )}
-      <div className={css({
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-      })}
+      <Box sx={{ pt: '100%' }} />
+      {stageMember.videoConsumers.length > 0 && (
+        <VideoPlayer
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+          }}
+          consumers={stageMember.videoConsumers}
+        />
+      )}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+        }}
       >
         <StageMemberTitle stageMember={stageMember} />
-      </div>
-    </div>
+      </Box>
+    </Flex>
   );
 };
+
 export default StageMemberView;

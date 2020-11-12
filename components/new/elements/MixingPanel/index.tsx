@@ -21,14 +21,16 @@ const Wrapper = styled('div', {
  * The mixing panel shows all available volume controls for an active stage
  * @constructor
  */
-const MixingPanelView = () => {
-  const groupIds = useStageSelector<string[]>(
-    (state) => (state.stageId ? state.groups.byStage[state.stageId] : []),
+const MixingPanelView = (): JSX.Element => {
+  const groupIds = useStageSelector<string[]>((state) =>
+    state.stageId ? state.groups.byStage[state.stageId] : []
   );
 
   return (
     <Wrapper>
-      {groupIds.map((id) => <GroupChannel key={id} groupId={id} />)}
+      {groupIds.map((id) => (
+        <GroupChannel key={id} groupId={id} />
+      ))}
     </Wrapper>
   );
 };

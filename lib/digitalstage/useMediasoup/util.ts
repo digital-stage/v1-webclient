@@ -1,10 +1,6 @@
 import mediasoupClient from 'mediasoup-client';
 import { TeckosClient } from 'teckos-client';
-import {
-  Router,
-  StageMemberAudioProducer,
-  StageMemberVideoProducer,
-} from '../common/model.server';
+import { Router, StageMemberAudioProducer, StageMemberVideoProducer } from '../common/model.server';
 
 export enum RouterEvents {
   TransportCloses = 'transport-closed',
@@ -61,59 +57,67 @@ export const RouterPostUrls = {
   CloseConsumer: '/consumer/close',
 };
 
-export const fetchGet = <T>(url: string): Promise<T> => fetch(url, {
-}).then((result) => {
-  console.log('GOT SOMETHING');
-  if (result.ok) return result.json();
-  throw new Error(result.statusText);
-});
-
-export const getFastestRouter = (): Promise<Router> => fetchGet<Router[]>(`${process.env.NEXT_PUBLIC_ROUTERS_URL}/routers`)
-  .then((routers) => {
-    if (routers && routers.length > 0) {
-      return routers[0];
-    }
-    throw new Error('No routers available');
-  })
-  .catch(() => {
-    throw new Error('Routingservice not available');
+export const fetchGet = <T>(url: string): Promise<T> =>
+  fetch(url, {}).then((result) => {
+    console.log('GOT SOMETHING');
+    if (result.ok) return result.json();
+    throw new Error(result.statusText);
   });
+
+export const getFastestRouter = (): Promise<Router> =>
+  fetchGet<Router[]>(`${process.env.NEXT_PUBLIC_ROUTERS_URL}/routers`)
+    .then((routers) => {
+      if (routers && routers.length > 0) {
+        return routers[0];
+      }
+      throw new Error('No routers available');
+    })
+    .catch(() => {
+      throw new Error('Routingservice not available');
+    });
+
+export const getFastestRouter = (): Promise<Router> =>
+  fetchGet<Router[]>(`${process.env.NEXT_PUBLIC_ROUTERS_URL}/routers`)
+    .then((routers) => {
+      if (routers && routers.length > 0) {
+        return routers[0];
+      }
+      throw new Error('No routers available');
+    })
+    .catch(() => {
+      throw new Error('Routingservice not available');
+    });
 
 export const createWebRTCTransport = (
   socket: TeckosClient,
   device: mediasoupClient.Device,
-  direction: 'send' | 'receive',
-): Promise<mediasoupClient.types.Transport> => new Promise<mediasoupClient.types.Transport>(
-  (resolve, reject) => {
+  direction: 'send' | 'receive'
+): Promise<mediasoupClient.types.Transport> =>
+  new Promise<mediasoupClient.types.Transport>((resolve, reject) => {
     socket.emit(
       RouterRequests.CreateTransport,
       {},
-      (
-        error: string,
-        transportOptions: mediasoupClient.types.TransportOptions,
-      ) => {
+      (error: string, transportOptions: mediasoupClient.types.TransportOptions) => {
         if (error) {
           return reject(error);
         }
-        const transport: mediasoupClient.types.Transport = direction === 'send'
-          ? device.createSendTransport(transportOptions)
-          : device.createRecvTransport(transportOptions);
-        transport.on(
-          'connect',
-          async ({ dtlsParameters }, callback, errCallback) => {
-            socket.emit(
-              RouterRequests.ConnectTransport,
-              {
-                transportId: transport.id,
-                dtlsParameters,
-              },
-              (transportError: string) => {
-                if (transportError) return errCallback(error);
-                return callback();
-              },
-            );
-          },
-        );
+        const transport: mediasoupClient.types.Transport =
+          direction === 'send'
+            ? device.createSendTransport(transportOptions)
+            : device.createRecvTransport(transportOptions);
+        transport.on('connect', async ({ dtlsParameters }, callback, errCallback) => {
+          socket.emit(
+            RouterRequests.ConnectTransport,
+            {
+              transportId: transport.id,
+              dtlsParameters,
+            },
+            (transportError: string) => {
+              if (transportError) return errCallback(error);
+              return callback();
+            }
+          );
+        });
         if (direction === 'send') {
           transport.on('produce', async (producer, callback, errCallback) => {
             socket.emit(
@@ -130,71 +134,69 @@ export const createWebRTCTransport = (
                   ...producer,
                   id: payload.id,
                 });
-              },
+              }
             );
           });
         }
         return resolve(transport);
-      },
+      }
     );
-  },
-);
+  });
 
 export const createProducer = (
   transport: mediasoupClient.types.Transport,
-  track: MediaStreamTrack,
-): Promise<mediasoupClient.types.Producer> => transport.produce({
-  // TODO: Fix this, TypeError: Cannot read property 'produce' of undefined
-  track,
-  appData: {
-    trackId: track.id,
-  },
-});
+  track: MediaStreamTrack
+): Promise<mediasoupClient.types.Producer> =>
+  transport.produce({
+    // TODO: Fix this, TypeError: Cannot read property 'produce' of undefined
+    track,
+    appData: {
+      trackId: track.id,
+    },
+  });
 export const pauseProducer = (
   socket: TeckosClient,
-  producer: mediasoupClient.types.Producer,
-): Promise<mediasoupClient.types.Producer> => new Promise<mediasoupClient.types.Producer>(
-  (resolve, reject) => socket
-    .emit(RouterRequests.PauseProducer, producer.id, (error?: string) => {
+  producer: mediasoupClient.types.Producer
+): Promise<mediasoupClient.types.Producer> =>
+  new Promise<mediasoupClient.types.Producer>((resolve, reject) =>
+    socket.emit(RouterRequests.PauseProducer, producer.id, (error?: string) => {
       if (error) return reject(error);
       producer.pause();
       return resolve(producer);
-    }),
-);
+    })
+  );
 
 export const resumeProducer = (
   socket: TeckosClient,
-  producer: mediasoupClient.types.Producer,
-): Promise<mediasoupClient.types.Producer> => new Promise<mediasoupClient.types.Producer>(
-  (resolve, reject) => socket.emit(
-    RouterRequests.ResumeProducer,
-    producer.id,
-    (error?: string) => {
+  producer: mediasoupClient.types.Producer
+): Promise<mediasoupClient.types.Producer> =>
+  new Promise<mediasoupClient.types.Producer>((resolve, reject) =>
+    socket.emit(RouterRequests.ResumeProducer, producer.id, (error?: string) => {
       if (error) return reject(error);
       producer.resume();
       return resolve(producer);
-    },
-  ),
-);
+    })
+  );
 
 export const stopProducer = (
   socket: TeckosClient,
-  producer: mediasoupClient.types.Producer,
-): Promise<mediasoupClient.types.Producer> => new Promise<mediasoupClient.types.Producer>(
-  (resolve, reject) => socket.emit(RouterRequests.CloseProducer, producer.id, (error?: string) => {
-    producer.close();
-    if (error) return reject(error);
-    return resolve(producer);
-  }),
-);
+  producer: mediasoupClient.types.Producer
+): Promise<mediasoupClient.types.Producer> =>
+  new Promise<mediasoupClient.types.Producer>((resolve, reject) =>
+    socket.emit(RouterRequests.CloseProducer, producer.id, (error?: string) => {
+      producer.close();
+      if (error) return reject(error);
+      return resolve(producer);
+    })
+  );
 
 export const createConsumer = (
   socket: TeckosClient,
   device: mediasoupClient.Device,
   transport: mediasoupClient.types.Transport,
-  remoteProducer: StageMemberAudioProducer | StageMemberVideoProducer,
-): Promise<mediasoupClient.types.Consumer> => new Promise<mediasoupClient.types.Consumer>(
-  (resolve, reject) => {
+  remoteProducer: StageMemberAudioProducer | StageMemberVideoProducer
+): Promise<mediasoupClient.types.Consumer> =>
+  new Promise<mediasoupClient.types.Consumer>((resolve, reject) => {
     socket.emit(
       RouterRequests.CreateConsumer,
       {
@@ -211,7 +213,7 @@ export const createConsumer = (
           rtpParameters: mediasoupClient.types.RtpParameters;
           paused: boolean;
           type: 'simple' | 'simulcast' | 'svc' | 'pipe';
-        },
+        }
       ) => {
         if (error) {
           return reject(error);
@@ -220,58 +222,50 @@ export const createConsumer = (
           if (data.paused) consumer.pause();
           resolve(consumer);
         });
-      },
+      }
     );
-  },
-);
+  });
 
 export const resumeConsumer = (
   socket: TeckosClient,
-  consumer: mediasoupClient.types.Consumer,
+  consumer: mediasoupClient.types.Consumer
 ): Promise<mediasoupClient.types.Consumer> => {
   if (consumer.paused) {
-    return new Promise<mediasoupClient.types.Consumer>((resolve, reject) => socket.emit(
-      RouterRequests.ResumeConsumer,
-      consumer.id,
-      (error?: string) => {
+    return new Promise<mediasoupClient.types.Consumer>((resolve, reject) =>
+      socket.emit(RouterRequests.ResumeConsumer, consumer.id, (error?: string) => {
         if (error) return reject(error);
         consumer.resume();
         return resolve(consumer);
-      },
-    ));
+      })
+    );
   }
   return null;
 };
 
 export const pauseConsumer = (
   socket: TeckosClient,
-  consumer: mediasoupClient.types.Consumer,
+  consumer: mediasoupClient.types.Consumer
 ): Promise<mediasoupClient.types.Consumer> => {
   if (!consumer.paused) {
-    return new Promise<mediasoupClient.types.Consumer>((resolve, reject) => socket.emit(
-      RouterRequests.PauseConsumer,
-      consumer.id,
-      (error?: string) => {
+    return new Promise<mediasoupClient.types.Consumer>((resolve, reject) =>
+      socket.emit(RouterRequests.PauseConsumer, consumer.id, (error?: string) => {
         if (error) return reject(error);
         consumer.pause();
         return resolve(consumer);
-      },
-    ));
+      })
+    );
   }
   return null;
 };
 
 export const closeConsumer = (
   socket: TeckosClient,
-  consumer: mediasoupClient.types.Consumer,
-): Promise<mediasoupClient.types.Consumer> => new Promise<mediasoupClient.types.Consumer>(
-  (resolve, reject) => socket.emit(
-    RouterRequests.CloseConsumer,
-    consumer.id,
-    (error?: string) => {
+  consumer: mediasoupClient.types.Consumer
+): Promise<mediasoupClient.types.Consumer> =>
+  new Promise<mediasoupClient.types.Consumer>((resolve, reject) =>
+    socket.emit(RouterRequests.CloseConsumer, consumer.id, (error?: string) => {
       if (error) return reject(error);
       consumer.close();
       return resolve(consumer);
-    },
-  ),
-);
+    })
+  );

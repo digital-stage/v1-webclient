@@ -1,35 +1,29 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
 import { useRouter } from 'next/router';
-import React from 'react';
-import { Display, H1, HeadingLarge } from 'baseui/typography';
+import { jsx } from 'theme-ui';
 import { useAuth } from '../../lib/digitalstage/useAuth';
-import Loading from '../../components/new/elements/Loading';
-import PageWrapper from '../../components/new/elements/PageWrapper';
-import ResetPasswordForm from '../../components/new/forms/ResetPasswordForm';
-import Container from '../../components/new/elements/Container';
+import Layout from '../../components/Layout';
+import AuthPageContainer from '../../components/AuthPageContainer';
+import ResetPasswordForm from '../../components/authForms/ResetPasswordForm';
 
-const Reset = () => {
+const Reset = (): JSX.Element => {
   const router = useRouter();
-  const { loading, user } = useAuth();
+  const { user } = useAuth();
   const { token } = router.query;
 
-  if (!loading) {
-    if (user) {
-      router.push('/');
-    } else {
-      return (
-        <PageWrapper>
-          <Container>
-            <H1>Passwort zurücksetzen</H1>
-            {token && !Array.isArray(token) && (
-            <ResetPasswordForm resetToken={token} targetUrl="/account/login" />
-            )}
-          </Container>
-        </PageWrapper>
-      );
-    }
+  if (user) {
+    router.push('/');
   }
 
-  return <Loading><Display>Lade...</Display></Loading>;
+  return (
+    <Layout auth>
+      <AuthPageContainer>
+        <ResetPasswordForm resetToken={token} />
+      </AuthPageContainer>
+    </Layout>
+  );
 };
 
 export default Reset;

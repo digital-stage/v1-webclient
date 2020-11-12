@@ -1,53 +1,49 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { styled } from 'styletron-react';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Box, Button, Flex } from 'theme-ui';
 import LogSlider, { RGBColor } from '../LogSlider';
-import Button from '../../../../uikit/Button';
 
-const Wrapper = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-});
+const LevelControlFader = (props: {
+  muted: boolean;
+  volume: number;
+  color?: RGBColor;
+  onChanged: (volume: number, muted: boolean) => any;
+  alignLabel?: 'left' | 'right';
+}) => {
+  const { volume, onChanged, muted, color, alignLabel } = props;
+  const [value, setValue] = React.useState<number>(volume);
 
-const VolumeAction = styled('div', {
-  display: 'block',
-  paddingBottom: '.6rem',
-});
-
-const LevelControlFader = (
-  props: {
-    muted: boolean;
-    volume: number;
-    color?: RGBColor;
-    onChanged: (volume: number, muted: boolean) => any;
-    className?: string;
-    alignLabel?: 'left' | 'right'
-  },
-) => {
-  const {
-    volume, onChanged, muted, className, color, alignLabel,
-  } = props;
-  const [value, setValue] = useState<number>(volume);
-
-  useEffect(() => {
+  React.useEffect(() => {
     setValue(volume);
   }, [volume]);
 
-  const handleMuteClicked = useCallback(() => {
+  const handleMuteClicked = React.useCallback(() => {
     onChanged(value, !muted);
   }, [value, muted]);
 
-  const handleEnd = useCallback((updatedVolume: number) => {
-    setValue(updatedVolume);
-    onChanged(updatedVolume, muted);
-  }, [muted]);
+  const handleEnd = React.useCallback(
+    (updatedVolume: number) => {
+      setValue(updatedVolume);
+      onChanged(updatedVolume, muted);
+    },
+    [muted]
+  );
 
   return (
-    <Wrapper
-      className={className}
+    <Flex
+      sx={{
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
-      <VolumeAction>
+      <Box
+        sx={{
+          display: 'block',
+          paddingBottom: '.6rem',
+        }}
+      >
         <Button
           kind={muted ? 'primary' : 'minimal'}
           shape="circle"
@@ -56,7 +52,7 @@ const LevelControlFader = (
         >
           M
         </Button>
-      </VolumeAction>
+      </Box>
       <LogSlider
         min={0}
         middle={1}
@@ -68,7 +64,7 @@ const LevelControlFader = (
         onEnd={handleEnd}
         alignLabel={alignLabel}
       />
-    </Wrapper>
+    </Flex>
   );
 };
 export default LevelControlFader;

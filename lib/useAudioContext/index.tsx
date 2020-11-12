@@ -1,15 +1,5 @@
-import React, {
-  Context,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import {
-  AudioContext as RealAudioContext,
-  IAudioContext,
-} from 'standardized-audio-context';
+import React, { Context, createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { AudioContext as RealAudioContext, IAudioContext } from 'standardized-audio-context';
 import webAudioTouchUnlock from './webAudioTouchUnlock';
 import { useErrors } from '../useErrors';
 
@@ -19,11 +9,9 @@ interface AudioContextProps {
   createAudioContext(): Promise<IAudioContext>;
 }
 
-const AudioContext: Context<AudioContextProps> = createContext<
-AudioContextProps
->(undefined);
+const AudioContext: Context<AudioContextProps> = createContext<AudioContextProps>(undefined);
 
-export const AudioContextProvider = (props: { children: React.ReactNode }) => {
+export const AudioContextProvider = (props: { children: React.ReactNode }): JSX.Element => {
   const { children } = props;
   const [context, setContext] = useState<IAudioContext>(undefined);
   const { reportError } = useErrors();
@@ -33,11 +21,6 @@ export const AudioContextProvider = (props: { children: React.ReactNode }) => {
       return context;
     }
     const audioContext: IAudioContext = new RealAudioContext();
-    console.log(
-      `Base latency with sample rate ${audioContext.sampleRate}: ${Math.round(
-        1000 * audioContext.baseLatency,
-      )}ms`,
-    );
 
     return webAudioTouchUnlock(audioContext)
       .then(() => audioContext)

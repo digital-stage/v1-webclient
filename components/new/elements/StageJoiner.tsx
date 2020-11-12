@@ -1,9 +1,5 @@
-import React, {
-  useCallback, useEffect, useRef, useState,
-} from 'react';
-import {
-  Modal, ModalBody, ModalButton, ModalFooter, ModalHeader,
-} from 'baseui/modal';
+import React, { useCallback, useRef, useState } from 'react';
+import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal';
 import { Input } from 'baseui/input';
 import { useRequest } from '../../../lib/useRequest';
 import { Errors } from '../../../lib/digitalstage/common/errors';
@@ -17,13 +13,11 @@ import useStageSelector from '../../../lib/digitalstage/useStageSelector';
  * //TODO: Replace modal with own digital stage components
  * @constructor
  */
-const StageJoiner = () => {
+const StageJoiner = (): JSX.Element => {
   const { ready } = useStageSelector((state) => ({
     ready: state.ready,
   }));
-  const {
-    stageId, groupId, password, setRequest,
-  } = useRequest();
+  const { stageId, groupId, password, setRequest } = useRequest();
   const { joinStage } = useStageActions();
   const [retries, setRetries] = useState<number>(0);
   const [wrongPassword, setWrongPassword] = useState<boolean>();
@@ -32,11 +26,9 @@ const StageJoiner = () => {
 
   const retryJoiningStage = useCallback(() => {
     // Try to connect
-    console.log(`Joining stage${stageId}`);
     joinStage(stageId, groupId, password)
       .catch((error) => {
-        console.log('Could not join stage');
-        console.log(error);
+        console.error(error);
         if (error === Errors.INVALID_PASSWORD) {
           setWrongPassword(true);
         } else {
@@ -44,16 +36,15 @@ const StageJoiner = () => {
         }
       })
       .then(() => {
-        console.log('Joined');
+        // do nothing.
       });
   }, [joinStage, stageId, groupId, password]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (ready) {
       if (stageId && groupId) {
         setNotFound(false);
         setWrongPassword(false);
-        console.log('Connecting');
         retryJoiningStage();
       }
     }
@@ -61,14 +52,12 @@ const StageJoiner = () => {
 
   return (
     <>
-      <Modal
-        isOpen={notFound}
-        onClose={() => setNotFound(false)}
-        unstable_ModalBackdropScroll
-      >
+      <Modal isOpen={notFound} onClose={() => setNotFound(false)} unstable_ModalBackdropScroll>
         <ModalHeader>Bühne nicht gefunden</ModalHeader>
         <ModalFooter>
-          <ModalButton isSelected onClick={() => setNotFound(false)}>Verstanden</ModalButton>
+          <ModalButton isSelected onClick={() => setNotFound(false)}>
+            Verstanden
+          </ModalButton>
         </ModalFooter>
       </Modal>
       <Modal

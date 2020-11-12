@@ -1,4 +1,4 @@
-import { shallowEqual } from "react-redux";
+import { shallowEqual } from 'react-redux';
 import {
   AudioConsumers,
   Groups,
@@ -8,8 +8,8 @@ import {
   Stages,
   Users,
   VideoConsumers,
-} from "./useStageContext/schema";
-import { useSelector } from "./useStageContext/redux";
+} from './useStageContext/schema';
+import { useSelector } from './useStageContext/redux';
 import {
   AudioConsumer,
   Group,
@@ -17,7 +17,7 @@ import {
   Stage,
   StageMember,
   VideoConsumer,
-} from "./useStageContext/model";
+} from './useStageContext/model';
 
 export interface ExtendedStageMember extends StageMember {
   name: string;
@@ -32,18 +32,12 @@ function useStageSelector<T>(callback: (state: NormalizedState) => T): T {
 }
 
 export function useStages(): Stage[] {
-  const stages = useSelector<NormalizedState, Stages>(
-    (state) => state.stages,
-    shallowEqual
-  );
+  const stages = useSelector<NormalizedState, Stages>((state) => state.stages, shallowEqual);
   return stages.allIds.map((id) => stages.byId[id]);
 }
 
 export function useCurrentStage(): Stage {
-  const stageId = useSelector<NormalizedState, string>(
-    (state) => state.stageId,
-    shallowEqual
-  );
+  const stageId = useSelector<NormalizedState, string>((state) => state.stageId, shallowEqual);
   const stage = useSelector<NormalizedState, Stage>(
     (state) => (stageId ? state.stages.byId[stageId] : undefined),
     shallowEqual
@@ -52,10 +46,7 @@ export function useCurrentStage(): Stage {
 }
 
 export function useCurrentGroup(): Group {
-  const groupId = useSelector<NormalizedState, string>(
-    (state) => state.groupId,
-    shallowEqual
-  );
+  const groupId = useSelector<NormalizedState, string>((state) => state.groupId, shallowEqual);
   return useSelector<NormalizedState, Group>(
     (state) => (groupId ? state.groups.byId[groupId] : undefined),
     shallowEqual
@@ -63,10 +54,7 @@ export function useCurrentGroup(): Group {
 }
 
 export function useGroups(): Group[] {
-  const groups = useSelector<NormalizedState, Groups>(
-    (state) => state.groups,
-    shallowEqual
-  );
+  const groups = useSelector<NormalizedState, Groups>((state) => state.groups, shallowEqual);
   return groups.allIds.map((id) => groups.byId[id]);
 }
 
@@ -93,10 +81,7 @@ export function useStageMembers(): ExtendedStageMember[] {
     (state) => state.stageMembers,
     shallowEqual
   );
-  const users = useSelector<NormalizedState, Users>(
-    (state) => state.users,
-    shallowEqual
-  );
+  const users = useSelector<NormalizedState, Users>((state) => state.users, shallowEqual);
   const videoConsumers = useSelector<NormalizedState, VideoConsumers>(
     (state) => state.videoConsumers,
     shallowEqual
@@ -105,35 +90,22 @@ export function useStageMembers(): ExtendedStageMember[] {
     (state) => state.audioConsumers,
     shallowEqual
   );
-  const ovTracks = useSelector<NormalizedState, OvTracks>(
-    (state) => state.ovTracks,
-    shallowEqual
-  );
+  const ovTracks = useSelector<NormalizedState, OvTracks>((state) => state.ovTracks, shallowEqual);
   return stageMembers.allIds
     .map((id) => stageMembers.byId[id])
     .map((stageMember) => {
       return {
         ...stageMember,
-        name: users.byId[stageMember.userId]
-          ? users.byId[stageMember.userId].name
-          : "",
-        avatarUrl: users.byId[stageMember.userId]
-          ? users.byId[stageMember.userId].avatarUrl
-          : "",
+        name: users.byId[stageMember.userId] ? users.byId[stageMember.userId].name : '',
+        avatarUrl: users.byId[stageMember.userId] ? users.byId[stageMember.userId].avatarUrl : '',
         videoConsumers: videoConsumers.byStageMember[stageMember._id]
-          ? videoConsumers.byStageMember[stageMember._id].map(
-              (id) => videoConsumers.byId[id]
-            )
+          ? videoConsumers.byStageMember[stageMember._id].map((id) => videoConsumers.byId[id])
           : [],
         audioConsumers: audioConsumers.byStageMember[stageMember._id]
-          ? audioConsumers.byStageMember[stageMember._id].map(
-              (id) => audioConsumers.byId[id]
-            )
+          ? audioConsumers.byStageMember[stageMember._id].map((id) => audioConsumers.byId[id])
           : [],
         ovTracks: ovTracks.byStageMember[stageMember._id]
-          ? ovTracks.byStageMember[stageMember._id].map(
-              (id) => ovTracks.byId[id]
-            )
+          ? ovTracks.byStageMember[stageMember._id].map((id) => ovTracks.byId[id])
           : [],
       };
     });

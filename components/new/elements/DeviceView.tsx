@@ -15,9 +15,7 @@ const CardTitle = styled('div', {
   alignItems: 'center',
 });
 
-const DeviceView = (props: {
-  device?: Device
-}) => {
+const DeviceView = (props: { device?: Device }) => {
   const { device } = props;
   const { updateDevice } = useStageActions();
   const [css] = useStyletron();
@@ -26,37 +24,26 @@ const DeviceView = (props: {
 
   return (
     <Card
-      title={(
+      title={
         <CardTitle>
-          {device.name}
-          {' '}
-          (
-          {device._id}
-          )
-          {device.online ? <Check size={32} />
-            : <Delete size={32} />}
+          {device.name} ({device._id}){device.online ? <Check size={32} /> : <Delete size={32} />}
         </CardTitle>
-)}
+      }
     >
       <StyledBody>
-        <Checkbox
-          checked={device.canVideo}
-          disabled
-        >
+        <Checkbox checked={device.canVideo} disabled>
           canVideo
         </Checkbox>
-        <Checkbox
-          checked={device.canAudio}
-          disabled
-        >
+        <Checkbox checked={device.canAudio} disabled>
           canAudio
         </Checkbox>
       </StyledBody>
       <StyledAction>
-        <div className={css({
-          width: '100%',
-          display: 'flex',
-        })}
+        <div
+          className={css({
+            width: '100%',
+            display: 'flex',
+          })}
         >
           <Button
             size={SIZE.compact}
@@ -104,11 +91,12 @@ const DeviceView = (props: {
             Receive Audio
           </Button>
         </div>
-        <div className={css({
-          width: '100%',
-          display: 'flex',
-          flexWrap: 'wrap',
-        })}
+        <div
+          className={css({
+            width: '100%',
+            display: 'flex',
+            flexWrap: 'wrap',
+          })}
         >
           <SingleSelect
             className={css({
@@ -118,9 +106,11 @@ const DeviceView = (props: {
             })}
             options={device.inputAudioDevices || []}
             id={device.inputAudioDeviceId}
-            onSelect={(id) => updateDevice(device._id, {
-              inputAudioDeviceId: id,
-            })}
+            onSelect={(id) =>
+              updateDevice(device._id, {
+                inputAudioDeviceId: id,
+              })
+            }
           />
           <SingleSelect
             className={css({
@@ -130,9 +120,11 @@ const DeviceView = (props: {
             })}
             options={device.outputAudioDevices || []}
             id={device.outputAudioDeviceId}
-            onSelect={(id) => updateDevice(device._id, {
-              outputAudioDeviceId: id,
-            })}
+            onSelect={(id) =>
+              updateDevice(device._id, {
+                outputAudioDeviceId: id,
+              })
+            }
           />
           <SingleSelect
             className={css({
@@ -142,9 +134,11 @@ const DeviceView = (props: {
             })}
             options={device.inputVideoDevices || []}
             id={device.inputVideoDeviceId}
-            onSelect={(id) => updateDevice(device._id, {
-              inputVideoDeviceId: id,
-            })}
+            onSelect={(id) =>
+              updateDevice(device._id, {
+                inputVideoDeviceId: id,
+              })
+            }
           />
         </div>
       </StyledAction>

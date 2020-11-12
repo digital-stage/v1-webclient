@@ -24,7 +24,6 @@ const ScrollPane = styled('div', {
   right: 0,
   overflowX: 'scroll',
   overflowY: 'auto',
-
 });
 
 const Mixer = () => (

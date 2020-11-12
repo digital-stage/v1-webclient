@@ -1,32 +1,23 @@
-import React from 'react';
-import { styled } from 'baseui';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Box } from 'theme-ui';
 import { VideoConsumer } from '../../../../lib/digitalstage/useStageContext/model';
 
 interface CanvasElement extends HTMLCanvasElement {
   captureStream(): MediaStream;
 }
-
-const Canvas = styled('canvas', {
-  width: '100%',
-  height: '100%',
-  stroke: 'red',
-});
-const HiddenContainer = styled('div', {
-  display: 'none',
-});
-
 interface AnimationFrame {
-  id: string, // Id from videoTrack
-  src: CanvasImageSource,
-  x: number,
-  y: number,
-  width: number,
-  height: number
+  id: string; // Id from videoTrack
+  src: CanvasImageSource;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
 interface Props {
   consumers: VideoConsumer[];
-  className?: string;
 }
 
 interface States {
@@ -68,8 +59,7 @@ class VideoPlayer extends React.Component<Props, States> {
   componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<States>): void {
     const { consumers } = this.props;
     const { size, animationFrames, drawing } = this.state;
-    if (prevProps.consumers !== consumers
-        || prevState.size !== size) {
+    if (prevProps.consumers !== consumers || prevState.size !== size) {
       // Video producers or size of wrapper has changed
       if (size) {
         const videoTracks: MediaStreamTrack[] = consumers
@@ -79,13 +69,10 @@ class VideoPlayer extends React.Component<Props, States> {
         const numRows = Math.ceil(Math.sqrt(videoTracks.length));
 
         // Get and directly clean up
-        const currentAnimationFrames: AnimationFrame[] = animationFrames
-          .filter(
-            (animationFrame: AnimationFrame) => videoTracks
-              .find(
-                (track) => track.id === animationFrame.id,
-              ),
-          );
+        const currentAnimationFrames: AnimationFrame[] = animationFrames.filter(
+          (animationFrame: AnimationFrame) =>
+            videoTracks.find((track) => track.id === animationFrame.id)
+        );
 
         if (numRows > 0) {
           const numColsMax = Math.ceil(videoTracks.length / numRows);
@@ -98,12 +85,14 @@ class VideoPlayer extends React.Component<Props, States> {
 
             // Current row:
             const row = Math.ceil((i + 1) / numColsMax) - 1;
-            const col = i % (numColsMax);
+            const col = i % numColsMax;
 
             const x = col * elementWidth;
             const y = row * elementHeight;
 
-            let videoElement: HTMLVideoElement | null = document.getElementById(`video-${track.id}`) as HTMLVideoElement | null;
+            let videoElement: HTMLVideoElement | null = document.getElementById(
+              `video-${track.id}`
+            ) as HTMLVideoElement | null;
             if (!videoElement) {
               videoElement = document.createElement('video');
               videoElement.id = `video-${track.id}`;
@@ -118,8 +107,9 @@ class VideoPlayer extends React.Component<Props, States> {
               this.videoContainerRef.current.append(videoElement);
             }
 
-            const animationFrame = currentAnimationFrames
-              .find((currAnimationFrame: AnimationFrame) => currAnimationFrame.id === track.id);
+            const animationFrame = currentAnimationFrames.find(
+              (currAnimationFrame: AnimationFrame) => currAnimationFrame.id === track.id
+            );
             if (!animationFrame) {
               currentAnimationFrames.push({
                 id: track.id,
@@ -173,45 +163,45 @@ class VideoPlayer extends React.Component<Props, States> {
       this.canvasRef.current.width = this.canvasRef.current.width + 0;
       const context = this.canvasRef.current.getContext('2d');
       context.fillStyle = 'black';
-      // context.strokeStyle = 'red';
       context.fillRect(0, 0, size.width, size.height);
-      this.state.animationFrames.forEach(
-        (animationFrame: AnimationFrame) => {
-          const videoWidth: number = (animationFrame.src as HTMLVideoElement).videoWidth as number;
-          const videoHeight: number = (animationFrame.src as HTMLVideoElement).videoHeight as number;
-          const scale = Math.min(animationFrame.width / videoWidth, animationFrame.height / videoHeight);
-          const x = animationFrame.x + ((animationFrame.width / 2) - (videoWidth / 2) * scale);
-          const y = animationFrame.y + ((animationFrame.height / 2) - (videoHeight / 2) * scale);
+      this.state.animationFrames.forEach((animationFrame: AnimationFrame) => {
+        const videoWidth: number = (animationFrame.src as HTMLVideoElement).videoWidth as number;
+        const videoHeight: number = (animationFrame.src as HTMLVideoElement).videoHeight as number;
+        const scale = Math.min(
+          animationFrame.width / videoWidth,
+          animationFrame.height / videoHeight
+        );
+        const x = animationFrame.x + (animationFrame.width / 2 - (videoWidth / 2) * scale);
+        const y = animationFrame.y + (animationFrame.height / 2 - (videoHeight / 2) * scale);
 
-          // context.strokeRect(animationFrame.x, animationFrame.y, animationFrame.width, animationFrame.height);
-          // context.fillRect(animationFrame.x, animationFrame.y, animationFrame.width, animationFrame.height);
-
-          context.drawImage(animationFrame.src,
-            0,
-            0,
-            videoWidth,
-            videoHeight,
-            x,
-            y,
-            videoWidth * scale,
-            videoHeight * scale);
-        },
-      );
+        context.drawImage(
+          animationFrame.src,
+          0,
+          0,
+          videoWidth,
+          videoHeight,
+          x,
+          y,
+          videoWidth * scale,
+          videoHeight * scale
+        );
+      });
       this.animationFrameId = window.requestAnimationFrame(this.drawAnimationFrames);
     }
   };
 
   render() {
-    const { className } = this.props;
     const { size } = this.state;
     return (
-      <div className={className} ref={this.wrapperRef}>
-        <Canvas
+      <div ref={this.wrapperRef}>
+        <Box
+          as="canvas"
+          sx={{ width: '100%', height: '100%', stroke: 'red' }}
           ref={this.canvasRef}
           width={size && size.width}
           height={size && size.height}
         />
-        <HiddenContainer ref={this.videoContainerRef} />
+        <Box sx={{ display: 'none' }} ref={this.videoContainerRef} />
       </div>
     );
   }

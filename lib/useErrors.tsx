@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 
 export interface ErrorsProps {
   warnings: Error[];
@@ -10,27 +10,34 @@ export interface ErrorsProps {
 
 const ErrorsContext = React.createContext<ErrorsProps>({
   warnings: [],
-  reportWarning: () => {},
+  reportWarning: () => {
+    // do nothing.
+  },
   errors: [],
-  reportError: () => {},
-  clear: () => {},
+  reportError: () => {
+    // do nothing.
+  },
+  clear: () => {
+    // do nothing.
+  },
 });
 
 export const useErrors = (): ErrorsProps => React.useContext<ErrorsProps>(ErrorsContext);
 
 export const ErrorsProvider = (props: { children: React.ReactNode }) => {
-  const [warnings, setWarnings] = useState<Error[]>([]);
-  const [errors, setErrors] = useState<Error[]>([]);
+  const [warnings, setWarnings] = React.useState<Error[]>([]);
+  const [errors, setErrors] = React.useState<Error[]>([]);
   const { children } = props;
 
   return (
-    <ErrorsContext.Provider value={{
-      warnings,
-      reportWarning: (warning: Error) => setWarnings((prev) => [...prev, warning]),
-      errors,
-      reportError: (error: Error) => setErrors((prev) => [...prev, error]),
-      clear: () => setErrors([]),
-    }}
+    <ErrorsContext.Provider
+      value={{
+        warnings,
+        reportWarning: (warning: Error) => setWarnings((prev) => [...prev, warning]),
+        errors,
+        reportError: (error: Error) => setErrors((prev) => [...prev, error]),
+        clear: () => setErrors([]),
+      }}
     >
       {children}
     </ErrorsContext.Provider>

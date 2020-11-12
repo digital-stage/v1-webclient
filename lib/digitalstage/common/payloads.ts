@@ -145,9 +145,9 @@ export type RemoveGroupPayload = string;
 export interface ChangeStageMemberPayload {
   id: string;
   update: Partial<
-  {
-    isDirector: boolean;
-  } & ThreeDimensionAudioProperties
+    {
+      isDirector: boolean;
+    } & ThreeDimensionAudioProperties
   >;
 }
 
@@ -187,8 +187,7 @@ export interface UpdateCustomGroupPayload {
 export type RemoveCustomGroupPayload = string;
 
 // CUSTOM STAGE MEMBER
-export interface AddCustomStageMemberPayload
-  extends Partial<ThreeDimensionAudioProperties> {
+export interface AddCustomStageMemberPayload extends Partial<ThreeDimensionAudioProperties> {
   stageMemberId: string;
 }
 
@@ -205,8 +204,7 @@ export interface UpdateCustomStageMemberPayload {
 export type RemoveCustomStageMemberPayload = string;
 
 // CUSTOM STAGE MEMBER AUDIO
-export interface AddCustomStageMemberAudioPayload
-  extends Partial<ThreeDimensionAudioProperties> {
+export interface AddCustomStageMemberAudioPayload extends Partial<ThreeDimensionAudioProperties> {
   stageMemberAudioId: string;
 }
 
@@ -223,8 +221,7 @@ export interface UpdateCustomStageMemberAudioPayload {
 export type RemoveCustomStageMemberAudioPayload = string;
 
 // CUSTOM STAGE MEMBER OV
-export interface AddCustomStageMemberOvPayload
-  extends Partial<ThreeDimensionAudioProperties> {
+export interface AddCustomStageMemberOvPayload extends Partial<ThreeDimensionAudioProperties> {
   stageMemberOvTrackId: string;
   gain: number;
   directivity: 'omni' | 'cardioid';
@@ -249,6 +246,7 @@ export interface JoinStagePayload {
   password?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface LeaveStagePayload {}
 
 export type LeaveStageForGoodPayload = string;

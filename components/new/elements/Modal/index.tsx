@@ -1,8 +1,10 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Flex, Button } from 'theme-ui';
 import { styled } from 'baseui';
 import { Theme } from 'baseui/theme';
-import React, { useEffect, useState } from 'react';
 import { Delete } from 'baseui/icon';
-import Button from '../../../../uikit/Button';
 
 const ModalWrapper = styled<{ $hidden?: boolean }, 'div', Theme>('div', ({ $theme, $hidden }) => ({
   position: 'absolute',
@@ -18,22 +20,23 @@ const ModalWrapper = styled<{ $hidden?: boolean }, 'div', Theme>('div', ({ $them
   transitionFunction: $theme.animation.easeInCurve,
   display: 'flex',
 }));
-const ModalContent = styled<{ $width: string, $maxWidth: string, $hidden?: boolean }, 'div', Theme>('div', ({
-  $theme, $hidden, $width, $maxWidth,
-}) => ({
-  position: 'relative',
-  width: '100%',
-  height: '100%',
-  backgroundColor: $theme.colors.backgroundPrimary,
-  transitionDuration: $theme.animation.timing200,
-  transitionProperty: 'transform,width,max-width',
-  transitionFunction: $theme.animation.easeInCurve,
-  transform: $hidden ? 'translate(-100%)' : 'translateX(0)',
-  [$theme.mediaQuery.medium]: {
-    width: $width,
-    maxWidth: $maxWidth,
-  },
-}));
+const ModalContent = styled<{ $width: string; $maxWidth: string; $hidden?: boolean }, 'div', Theme>(
+  'div',
+  ({ $theme, $hidden, $width, $maxWidth }) => ({
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    backgroundColor: $theme.colors.backgroundPrimary,
+    transitionDuration: $theme.animation.timing200,
+    transitionProperty: 'transform,width,max-width',
+    transitionFunction: $theme.animation.easeInCurve,
+    transform: $hidden ? 'translate(-100%)' : 'translateX(0)',
+    [$theme.mediaQuery.medium]: {
+      width: $width,
+      maxWidth: $maxWidth,
+    },
+  })
+);
 const ModalCloseAction = styled('div', {
   width: '100%',
   display: 'flex',
@@ -60,16 +63,14 @@ const Modal = (props: {
   open: boolean;
   size?: SIZE[keyof SIZE];
   onClose: () => void;
-  position?: 'absolute' | 'bottom'
+  position?: 'absolute' | 'bottom';
 }) => {
-  const {
-    children, open, onClose, size, position,
-  } = props;
+  const { children, open, onClose, size, position } = props;
   // Animation related property
-  const [hidden, setHidden] = useState<boolean>(!open);
-  const [rendered, setRendered] = useState<boolean>(open);
+  const [hidden, setHidden] = React.useState<boolean>(!open);
+  const [rendered, setRendered] = React.useState<boolean>(open);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (open) {
       setRendered(true);
       const timer = setTimeout(() => {

@@ -21,13 +21,11 @@ function getAverageVolume(array: Uint8Array): number {
   return values / length;
 }
 
-const LevelMeter = (
-  props: {
-    analyser: IAnalyserNode<IAudioContext>,
-    vertical?: boolean,
-    className?: string
-  },
-) => {
+const LevelMeter = (props: {
+  analyser: IAnalyserNode<IAudioContext>;
+  vertical?: boolean;
+  className?: string;
+}) => {
   const { className } = props;
   const canvasRef = useRef<HTMLCanvasElement>();
 
@@ -61,8 +59,6 @@ const LevelMeter = (
     }
   });
 
-  return (
-    <Canvas className={className} ref={canvasRef} />
-  );
+  return <Canvas className={className} ref={canvasRef} />;
 };
 export default LevelMeter;

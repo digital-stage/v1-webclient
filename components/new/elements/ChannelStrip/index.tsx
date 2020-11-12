@@ -58,7 +58,7 @@ const VolumeMeter = styled(LevelMeter, {
 });
 
 const ChannelStrip = (props: {
-  addHeader?: React.ReactNode,
+  addHeader?: React.ReactNode;
 
   analyser?: IAnalyserNode<IAudioContext>;
 
@@ -83,16 +83,15 @@ const ChannelStrip = (props: {
 
       <ChannelActions>
         {props.customVolume ? (
-          <Button onClick={() => {
-            if (props.onCustomVolumeReset) props.onCustomVolumeReset();
-          }}
+          <Button
+            onClick={() => {
+              if (props.onCustomVolumeReset) props.onCustomVolumeReset();
+            }}
           >
             Reset
           </Button>
-        ) : props.isAdmin && (
-        <Button onClick={addCustom}>
-          Custom
-        </Button>
+        ) : (
+          props.isAdmin && <Button onClick={addCustom}>Custom</Button>
         )}
       </ChannelActions>
 

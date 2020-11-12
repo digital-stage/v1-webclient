@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Box, Button, Flex } from 'theme-ui';
 import { styled } from 'styletron-react';
 import { ChevronLeft, ChevronRight } from 'baseui/icon';
 import { Caption1 } from 'baseui/typography';
 import { GroupId } from '../../../../../lib/digitalstage/common/model.server';
-import useStageSelector, { useIsStageAdmin } from '../../../../../lib/digitalstage/useStageSelector';
+import useStageSelector, {
+  useIsStageAdmin,
+} from '../../../../../lib/digitalstage/useStageSelector';
 import { CustomGroup, Group } from '../../../../../lib/digitalstage/useStageContext/model';
 import useStageActions from '../../../../../lib/digitalstage/useStageActions';
 import StageMemberChannel from './StageMemberChannel';
 import { useStageWebAudio } from '../../../../../lib/useStageWebAudio';
 import ChannelStrip from '../../ChannelStrip';
-import Button from '../../../../../uikit/Button';
-import Panel from '../../../../../uikit/Panel';
+import { Panel } from 'baseui/accordion';
 
 const PanelRow = styled(Panel, {
   display: 'flex',
@@ -52,49 +56,37 @@ const Header = styled('div', {
   alignItems: 'center',
 });
 
-const GroupChannel = (props: {
-  groupId: GroupId;
-  className?: string;
-}) => {
-  const { className, groupId } = props;
+const GroupChannel = (props: { groupId: GroupId }) => {
+  const { groupId } = props;
   const isAdmin: boolean = useIsStageAdmin();
   const group = useStageSelector<Group>((state) => state.groups.byId[groupId]);
-  const customGroup = useStageSelector<CustomGroup>(
-    (state) => (
-      state.customGroups.byGroup[groupId]
-        ? state.customGroups.byId[state.customGroups.byGroup[groupId]]
-        : undefined
-    ),
+  const customGroup = useStageSelector<CustomGroup>((state) =>
+    state.customGroups.byGroup[groupId]
+      ? state.customGroups.byId[state.customGroups.byGroup[groupId]]
+      : undefined
   );
-  const stageMemberIds = useStageSelector<string[]>(
-    (state) => (
-      state.stageMembers.byGroup[groupId]
-        ? state.stageMembers.byGroup[groupId]
-        : []
-    ),
+  const stageMemberIds = useStageSelector<string[]>((state) =>
+    state.stageMembers.byGroup[groupId] ? state.stageMembers.byGroup[groupId] : []
   );
 
   const { updateGroup, setCustomGroup, removeCustomGroup } = useStageActions();
   const { byGroup } = useStageWebAudio();
 
-  const [expanded, setExpanded] = useState<boolean>();
+  const [expanded, setExpanded] = React.useState<boolean>();
 
   return (
-    <PanelRow className={className}>
+    <PanelRow>
       <Column>
         <ChannelStrip
-          addHeader={(
+          addHeader={
             <Header>
               {stageMemberIds.length > 0 ? (
                 <Button
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                  }}
-                  shape="pill"
+                  variant="circle"
                   kind="minimal"
                   endEnhancer={() => (expanded ? <ChevronLeft /> : <ChevronRight />)}
                   onClick={() => setExpanded((prev) => !prev)}
+                  sx={{ width: '100%', height: '100%' }}
                 >
                   <Caption1>{group.name}</Caption1>
                 </Button>
@@ -102,19 +94,20 @@ const GroupChannel = (props: {
                 <Caption1>{group.name}</Caption1>
               )}
             </Header>
-                      )}
+          }
           analyser={byGroup[groupId] ? byGroup[groupId].analyserNode : undefined}
           volume={group.volume}
           muted={group.muted}
           customVolume={customGroup ? customGroup.volume : undefined}
           customMuted={customGroup ? customGroup.muted : undefined}
           onVolumeChanged={
-              isAdmin
-                ? (volume, muted) => updateGroup(group._id, {
-                  volume,
-                  muted,
-                })
-                : undefined
+            isAdmin
+              ? (volume, muted) =>
+                  updateGroup(group._id, {
+                    volume,
+                    muted,
+                  })
+              : undefined
           }
           onCustomVolumeChanged={(volume, muted) => setCustomGroup(group._id, volume, muted)}
           onCustomVolumeReset={() => {
@@ -128,14 +121,11 @@ const GroupChannel = (props: {
       {expanded && (
         <Row>
           <InnerRow>
-            {stageMemberIds
-              .map(
-                (id) => (
-                  <ColumnWithChildren>
-                    <StageMemberChannel key={id} stageMemberId={id} />
-                  </ColumnWithChildren>
-                ),
-              )}
+            {stageMemberIds.map((id, index) => (
+              <ColumnWithChildren key={index}>
+                <StageMemberChannel key={id} stageMemberId={id} />
+              </ColumnWithChildren>
+            ))}
           </InnerRow>
         </Row>
       )}

@@ -1,17 +1,19 @@
-import React, { useEffect } from 'react';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Heading } from 'theme-ui';
 import { useRouter } from 'next/router';
-import { Display } from 'baseui/typography';
 import Loading from '../components/new/elements/Loading';
 import useStageActions from '../lib/digitalstage/useStageActions';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
 
-const Leave = () => {
+const Leave = (): JSX.Element => {
   const router = useRouter();
   const ready = useStageSelector<boolean>((state) => state.ready);
   const stageId = useStageSelector<string | undefined>((state) => state.stageId);
   const { leaveStage } = useStageActions();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (ready) {
       if (stageId) leaveStage();
       else router.push('/');
@@ -20,7 +22,7 @@ const Leave = () => {
 
   return (
     <Loading>
-      <Display>Verlasse Bühne...</Display>
+      <Heading as="h1">Verlasse Bühne...</Heading>
     </Loading>
   );
 };

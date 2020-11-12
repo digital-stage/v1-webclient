@@ -12,16 +12,9 @@ import {
   RouterRequests,
   stopProducer,
 } from './util';
-import {
-  GlobalAudioProducer,
-  GlobalVideoProducer,
-  Router,
-} from '../common/model.server';
+import { GlobalAudioProducer, GlobalVideoProducer, Router } from '../common/model.server';
 import { ClientDeviceEvents } from '../common/events';
-import {
-  AddAudioProducerPayload,
-  AddVideoProducerPayload,
-} from '../common/payloads';
+import { AddAudioProducerPayload, AddVideoProducerPayload } from '../common/payloads';
 import { useSocket } from '../useStageContext';
 import { Device } from '../useStageContext/model';
 import { useDispatch, useSelector } from '../useStageContext/redux';
@@ -50,29 +43,17 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
     if (state.devices.local) return state.devices.byId[state.devices.local];
     return undefined;
   });
-  const audioConsumers = useStageSelector<AudioConsumers>(
-    (state) => state.audioConsumers,
-  );
-  const videoConsumers = useStageSelector<VideoConsumers>(
-    (state) => state.videoConsumers,
-  );
-  const videoProducers = useStageSelector<VideoProducers>(
-    (state) => state.videoProducers,
-  );
-  const audioProducers = useStageSelector<AudioProducers>(
-    (state) => state.audioProducers,
-  );
+  const audioConsumers = useStageSelector<AudioConsumers>((state) => state.audioConsumers);
+  const videoConsumers = useStageSelector<VideoConsumers>((state) => state.videoConsumers);
+  const videoProducers = useStageSelector<VideoProducers>((state) => state.videoProducers);
+  const audioProducers = useStageSelector<AudioProducers>((state) => state.audioProducers);
 
   const [working, setWorking] = useState<boolean>(false);
   const [router, setRouter] = useState<Router>();
   const [connection, setConnection] = useState<TeckosClient>();
   const [device, setDevice] = useState<mediasoupClient.types.Device>();
-  const [sendTransport, setSendTransport] = useState<
-  mediasoupClient.types.Transport
-  >();
-  const [receiveTransport, setReceiveTransport] = useState<
-  mediasoupClient.types.Transport
-  >();
+  const [sendTransport, setSendTransport] = useState<mediasoupClient.types.Transport>();
+  const [receiveTransport, setReceiveTransport] = useState<mediasoupClient.types.Transport>();
   const [sendVideo, setSendVideo] = useState<boolean>(false);
   const [sendAudio, setSendAudio] = useState<boolean>(false);
   const [receiveVideo, setReceiveVideo] = useState<boolean>(false);
@@ -82,16 +63,16 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
   const [outputAudioDeviceId, setOutputAudioDeviceId] = useState<string>();
 
   const [localAudioProducers, setLocalAudioProducers] = useState<
-  {
-    audioProducerId: string;
-    msProducer: mediasoupClient.types.Producer;
-  }[]
+    {
+      audioProducerId: string;
+      msProducer: mediasoupClient.types.Producer;
+    }[]
   >([]);
   const [localVideoProducers, setLocalVideoProducers] = useState<
-  {
-    videoProducerId: string;
-    msProducer: mediasoupClient.types.Producer;
-  }[]
+    {
+      videoProducerId: string;
+      msProducer: mediasoupClient.types.Producer;
+    }[]
   >([]);
 
   useEffect(() => {
@@ -103,10 +84,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
       connection.emit(
         RouterRequests.GetRTPCapabilities,
         {},
-        (
-          error: string,
-          rtpCapabilities: mediasoupClient.types.RtpCapabilities,
-        ) => {
+        (error: string, rtpCapabilities: mediasoupClient.types.RtpCapabilities) => {
           console.debug('Got response');
           if (error) {
             return reportError(new Error(error));
@@ -115,20 +93,18 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
           const createdDevice = new MediasoupDevice();
           return createdDevice
             .load({ routerRtpCapabilities: rtpCapabilities })
-            .then(() => Promise.all([
-              createWebRTCTransport(
-                connection,
-                createdDevice,
-                'send',
-              ).then((transport) => setSendTransport(transport)),
-              createWebRTCTransport(
-                connection,
-                createdDevice,
-                'receive',
-              ).then((transport) => setReceiveTransport(transport)),
-            ]))
+            .then(() =>
+              Promise.all([
+                createWebRTCTransport(connection, createdDevice, 'send').then((transport) =>
+                  setSendTransport(transport)
+                ),
+                createWebRTCTransport(connection, createdDevice, 'receive').then((transport) =>
+                  setReceiveTransport(transport)
+                ),
+              ])
+            )
             .then(() => setDevice(createdDevice));
-        },
+        }
       );
       return () => connection.removeAllListeners();
     }
@@ -155,7 +131,9 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (router) {
-      const url = `${(process.env.NEXT_PUBLIC_USE_SSL === 'true' ? 'wss://' : 'ws://') + router.url}:${router.port}`;
+      const url = `${
+        (process.env.NEXT_PUBLIC_USE_SSL === 'true' ? 'wss://' : 'ws://') + router.url
+      }:${router.port}`;
 
       const createdConnection = new TeckosClient(url, {
         verbose: true,
@@ -206,37 +184,36 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
             if (consumer.paused) return resumeConsumer(connection, consumer);
             return consumer;
           })
-          .then((consumer) => dispatch(
-            allActions.stageActions.client.addVideoConsumer({
-              _id: consumer.id,
-              stage: producer.stageId,
-              stageMember: producer.stageMemberId,
-              videoProducer: producer._id,
-              msConsumer: consumer,
-            }),
-          ));
+          .then((consumer) =>
+            dispatch(
+              allActions.stageActions.client.addVideoConsumer({
+                _id: consumer.id,
+                stage: producer.stageId,
+                stageMember: producer.stageMemberId,
+                videoProducer: producer._id,
+                msConsumer: consumer,
+              })
+            )
+          );
       }
       reportError(new Error(`Could not find producer=${producerId}`));
       return null;
     },
-    [connection, device, receiveTransport, videoProducers, videoConsumers],
+    [connection, device, receiveTransport, videoProducers, videoConsumers]
   );
 
   const stopConsumingVideoProducer = useCallback(
     (producerId: string) => {
       const consumerId = videoConsumers.byProducer[producerId];
       if (consumerId && videoConsumers.byId[consumerId]) {
-        return closeConsumer(
-          connection,
-          videoConsumers.byId[consumerId].msConsumer,
-        ).then(() => dispatch(
-          allActions.stageActions.client.removeVideoConsumer(consumerId),
-        ));
+        return closeConsumer(connection, videoConsumers.byId[consumerId].msConsumer).then(() =>
+          dispatch(allActions.stageActions.client.removeVideoConsumer(consumerId))
+        );
       }
       reportError(new Error(`Could not find consumer for producer ${producerId}`));
       return null;
     },
-    [connection, videoConsumers],
+    [connection, videoConsumers]
   );
 
   const consumeAudioProducer = useCallback(
@@ -248,37 +225,36 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
             if (consumer.paused) return resumeConsumer(connection, consumer);
             return consumer;
           })
-          .then((consumer) => dispatch(
-            allActions.stageActions.client.addAudioConsumer({
-              _id: consumer.id,
-              stage: producer.stageId,
-              stageMember: producer.stageMemberId,
-              audioProducer: producer._id,
-              msConsumer: consumer,
-            }),
-          ));
+          .then((consumer) =>
+            dispatch(
+              allActions.stageActions.client.addAudioConsumer({
+                _id: consumer.id,
+                stage: producer.stageId,
+                stageMember: producer.stageMemberId,
+                audioProducer: producer._id,
+                msConsumer: consumer,
+              })
+            )
+          );
       }
       reportError(new Error(`Could not find producer=${producerId}`));
       return null;
     },
-    [connection, device, receiveTransport, audioProducers, audioConsumers],
+    [connection, device, receiveTransport, audioProducers, audioConsumers]
   );
 
   const stopConsumingAudioProducer = useCallback(
     (producerId: string) => {
       const consumerId = audioConsumers.byProducer[producerId];
       if (consumerId && audioConsumers.byId[consumerId]) {
-        return closeConsumer(
-          connection,
-          audioConsumers.byId[consumerId].msConsumer,
-        ).then(() => dispatch(
-          allActions.stageActions.client.removeAudioConsumer(consumerId),
-        ));
+        return closeConsumer(connection, audioConsumers.byId[consumerId].msConsumer).then(() =>
+          dispatch(allActions.stageActions.client.removeAudioConsumer(consumerId))
+        );
       }
       reportError(new Error(`Could not find consumer for producer ${producerId}`));
       return null;
     },
-    [connection, audioConsumers],
+    [connection, audioConsumers]
   );
 
   const startStreamAudio = useCallback(() => {
@@ -295,42 +271,43 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
           },
         })
         .then((stream) => stream.getAudioTracks())
-        .then((tracks) => Promise.all(
-          tracks.map((track) => createProducer(sendTransport, track)
-            .then((producer) => new Promise((resolve, reject) => {
-              socket.emit(
-                ClientDeviceEvents.ADD_AUDIO_PRODUCER,
-                {
-                  routerId: router._id,
-                  routerProducerId: producer.id,
-                } as AddAudioProducerPayload,
-                (
-                  error: string | null,
-                  globalProducer: GlobalAudioProducer,
-                ) => {
-                  if (error) {
-                    reportWarning(new Error(error));
-                    return stopProducer(socket, producer).then(() => reject(new Error(error)));
-                  }
-                  setLocalAudioProducers((prevState) => [
-                    ...prevState,
-                    {
-                      audioProducerId: globalProducer._id,
-                      msProducer: producer,
-                    },
-                  ]);
-                  return resolve();
-                },
-              );
-              setTimeout(() => {
-                reject(
-                  new Error(
-                    `Timed out: ${ClientDeviceEvents.ADD_AUDIO_PRODUCER}`,
-                  ),
-                );
-              }, TIMEOUT_MS);
-            }))),
-        ))
+        .then((tracks) =>
+          Promise.all(
+            tracks.map((track) =>
+              createProducer(sendTransport, track).then(
+                (producer) =>
+                  new Promise((resolve, reject) => {
+                    socket.emit(
+                      ClientDeviceEvents.ADD_AUDIO_PRODUCER,
+                      {
+                        routerId: router._id,
+                        routerProducerId: producer.id,
+                      } as AddAudioProducerPayload,
+                      (error: string | null, globalProducer: GlobalAudioProducer) => {
+                        if (error) {
+                          reportWarning(new Error(error));
+                          return stopProducer(socket, producer).then(() =>
+                            reject(new Error(error))
+                          );
+                        }
+                        setLocalAudioProducers((prevState) => [
+                          ...prevState,
+                          {
+                            audioProducerId: globalProducer._id,
+                            msProducer: producer,
+                          },
+                        ]);
+                        return resolve();
+                      }
+                    );
+                    setTimeout(() => {
+                      reject(new Error(`Timed out: ${ClientDeviceEvents.ADD_AUDIO_PRODUCER}`));
+                    }, TIMEOUT_MS);
+                  })
+              )
+            )
+          )
+        )
         .finally(() => setWorking(false));
     }
     reportError(new Error('FIXME: Send transport is still undefined ...'));
@@ -341,33 +318,32 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
     setWorking(true);
     // Assure, that we stop streaming all local audio producers
     return Promise.all(
-      localAudioProducers
-        .map((localAudioProducer) => stopProducer(
-          connection,
-          localAudioProducer.msProducer,
-        )
-          .then(() => new Promise((resolve, reject) => {
-            socket.emit(
-              ClientDeviceEvents.REMOVE_AUDIO_PRODUCER,
-              localAudioProducer.audioProducerId,
-              (error?: string) => {
-                if (error) {
-                  reject(new Error(error));
-                }
-                resolve();
-              },
-            );
-            setTimeout(() => {
-              reject(
-                new Error(
-                  `Timed out: ${ClientDeviceEvents.REMOVE_AUDIO_PRODUCER}`,
-                ),
-              );
-            }, TIMEOUT_MS);
-          }))
-          .finally(() => setLocalAudioProducers((prevState) => prevState.filter(
-            (p) => p.audioProducerId !== localAudioProducer.audioProducerId,
-          )))),
+      localAudioProducers.map((localAudioProducer) =>
+        stopProducer(connection, localAudioProducer.msProducer)
+          .then(
+            () =>
+              new Promise((resolve, reject) => {
+                socket.emit(
+                  ClientDeviceEvents.REMOVE_AUDIO_PRODUCER,
+                  localAudioProducer.audioProducerId,
+                  (error?: string) => {
+                    if (error) {
+                      reject(new Error(error));
+                    }
+                    resolve();
+                  }
+                );
+                setTimeout(() => {
+                  reject(new Error(`Timed out: ${ClientDeviceEvents.REMOVE_AUDIO_PRODUCER}`));
+                }, TIMEOUT_MS);
+              })
+          )
+          .finally(() =>
+            setLocalAudioProducers((prevState) =>
+              prevState.filter((p) => p.audioProducerId !== localAudioProducer.audioProducerId)
+            )
+          )
+      )
     )
       .catch((error) => reportError(error.message))
       .finally(() => setWorking(false));
@@ -382,48 +358,48 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
           video:
             localDevice && localDevice.inputVideoDeviceId
               ? {
-                deviceId: localDevice.inputVideoDeviceId,
-              }
+                  deviceId: localDevice.inputVideoDeviceId,
+                }
               : true,
         })
         .then((stream) => stream.getVideoTracks())
-        .then((tracks) => Promise.all(
-          tracks
-            .map((track) => createProducer(sendTransport, track)
-              .then((producer) => new Promise((resolve, reject) => {
-                socket.emit(
-                  ClientDeviceEvents.ADD_VIDEO_PRODUCER,
-                  {
-                    routerId: router._id,
-                    routerProducerId: producer.id,
-                  } as AddVideoProducerPayload,
-                  (
-                    error: string | null,
-                    globalProducer: GlobalVideoProducer,
-                  ) => {
-                    if (error) {
-                      reportWarning(new Error(error));
-                      return stopProducer(socket, producer).then(() => reject(new Error(error)));
-                    }
-                    setLocalVideoProducers((prevState) => [
-                      ...prevState,
+        .then((tracks) =>
+          Promise.all(
+            tracks.map((track) =>
+              createProducer(sendTransport, track).then(
+                (producer) =>
+                  new Promise((resolve, reject) => {
+                    socket.emit(
+                      ClientDeviceEvents.ADD_VIDEO_PRODUCER,
                       {
-                        videoProducerId: globalProducer._id,
-                        msProducer: producer,
-                      },
-                    ]);
-                    return resolve();
-                  },
-                );
-                setTimeout(() => {
-                  reject(
-                    new Error(
-                      `Timed out: ${ClientDeviceEvents.ADD_VIDEO_PRODUCER}`,
-                    ),
-                  );
-                }, TIMEOUT_MS);
-              }))),
-        ))
+                        routerId: router._id,
+                        routerProducerId: producer.id,
+                      } as AddVideoProducerPayload,
+                      (error: string | null, globalProducer: GlobalVideoProducer) => {
+                        if (error) {
+                          reportWarning(new Error(error));
+                          return stopProducer(socket, producer).then(() =>
+                            reject(new Error(error))
+                          );
+                        }
+                        setLocalVideoProducers((prevState) => [
+                          ...prevState,
+                          {
+                            videoProducerId: globalProducer._id,
+                            msProducer: producer,
+                          },
+                        ]);
+                        return resolve();
+                      }
+                    );
+                    setTimeout(() => {
+                      reject(new Error(`Timed out: ${ClientDeviceEvents.ADD_VIDEO_PRODUCER}`));
+                    }, TIMEOUT_MS);
+                  })
+              )
+            )
+          )
+        )
         .catch((error) => reportError(error.message))
         .finally(() => {
           setWorking(false);
@@ -437,31 +413,29 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
     setWorking(true);
     // Assure, that we stop streaming all local audio producers
     return Promise.all(
-      localVideoProducers
-        .map((localVideoProducer) => stopProducer(connection, localVideoProducer.msProducer)
-          .then(
-            () => new Promise((resolve, reject) => {
-              socket.emit(
-                ClientDeviceEvents.REMOVE_VIDEO_PRODUCER,
-                localVideoProducer.videoProducerId,
-                (error?: string) => {
-                  if (error) {
-                    reject(new Error(error));
-                  }
-                  resolve();
-                },
-              );
-              setTimeout(() => {
-                reject(
-                  new Error(
-                    `Timed out: ${ClientDeviceEvents.REMOVE_VIDEO_PRODUCER}`,
-                  ),
-                );
-              }, TIMEOUT_MS);
-            }).finally(() => setLocalVideoProducers((prevState) => prevState.filter(
-              (p) => p.videoProducerId !== localVideoProducer.videoProducerId,
-            ))),
-          )),
+      localVideoProducers.map((localVideoProducer) =>
+        stopProducer(connection, localVideoProducer.msProducer).then(() =>
+          new Promise((resolve, reject) => {
+            socket.emit(
+              ClientDeviceEvents.REMOVE_VIDEO_PRODUCER,
+              localVideoProducer.videoProducerId,
+              (error?: string) => {
+                if (error) {
+                  reject(new Error(error));
+                }
+                resolve();
+              }
+            );
+            setTimeout(() => {
+              reject(new Error(`Timed out: ${ClientDeviceEvents.REMOVE_VIDEO_PRODUCER}`));
+            }, TIMEOUT_MS);
+          }).finally(() =>
+            setLocalVideoProducers((prevState) =>
+              prevState.filter((p) => p.videoProducerId !== localVideoProducer.videoProducerId)
+            )
+          )
+        )
+      )
     )
       .catch((error) => reportError(error.message))
       .finally(() => {
@@ -512,29 +486,19 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
     }
   }, [working, localDevice]);
 
-  const [handledVideoProducerIds, setHandledVideoProducerIds] = useState<
-  string[]
-  >([]);
-  const [consumingVideoProducerIds, setConsumingVideoProducerIds] = useState<
-  string[]
-  >([]);
-  const [handledAudioProducerIds, setHandledAudioProducerIds] = useState<
-  string[]
-  >([]);
-  const [consumingAudioProducerIds, setConsumingAudioProducerIds] = useState<
-  string[]
-  >([]);
+  const [handledVideoProducerIds, setHandledVideoProducerIds] = useState<string[]>([]);
+  const [consumingVideoProducerIds, setConsumingVideoProducerIds] = useState<string[]>([]);
+  const [handledAudioProducerIds, setHandledAudioProducerIds] = useState<string[]>([]);
+  const [consumingAudioProducerIds, setConsumingAudioProducerIds] = useState<string[]>([]);
 
   const syncVideoProducers = useCallback(() => {
     setConsumingVideoProducerIds((prev) => {
-      const addedVideoProducerIds = handledVideoProducerIds.filter(
-        (id) => prev.indexOf(id) === -1,
-      );
+      const addedVideoProducerIds = handledVideoProducerIds.filter((id) => prev.indexOf(id) === -1);
       const existingVideoProducerIds = handledVideoProducerIds.filter(
-        (id) => prev.indexOf(id) !== -1,
+        (id) => prev.indexOf(id) !== -1
       );
       const removedVideoProducerIds = prev.filter(
-        (id) => handledVideoProducerIds.indexOf(id) === -1,
+        (id) => handledVideoProducerIds.indexOf(id) === -1
       );
 
       addedVideoProducerIds.map((producerId) => consumeVideoProducer(producerId));
@@ -546,14 +510,12 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
 
   const syncAudioProducers = useCallback(() => {
     setConsumingAudioProducerIds((prev) => {
-      const addedAudioProducerIds = handledAudioProducerIds.filter(
-        (id) => prev.indexOf(id) === -1,
-      );
+      const addedAudioProducerIds = handledAudioProducerIds.filter((id) => prev.indexOf(id) === -1);
       const existingAudioProducerIds = handledAudioProducerIds.filter(
-        (id) => prev.indexOf(id) !== -1,
+        (id) => prev.indexOf(id) !== -1
       );
       const removedAudioProducerIds = prev.filter(
-        (id) => handledAudioProducerIds.indexOf(id) === -1,
+        (id) => handledAudioProducerIds.indexOf(id) === -1
       );
 
       addedAudioProducerIds.map((producerId) => consumeAudioProducer(producerId));
@@ -587,11 +549,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
     }
   }, [receiveAudio, audioProducers]);
 
-  return (
-    <MediasoupContext.Provider value={undefined}>
-      {children}
-    </MediasoupContext.Provider>
-  );
+  return <MediasoupContext.Provider value={undefined}>{children}</MediasoupContext.Provider>;
 };
 
 export default MediasoupProvider;

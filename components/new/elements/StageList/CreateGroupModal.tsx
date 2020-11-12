@@ -1,78 +1,66 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import { jsx, Button, Flex, Text } from 'theme-ui';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { useFormik } from 'formik';
-import React from 'react';
-import {
-  Modal, ModalBody, ModalButton, ModalFooter, ModalHeader,
-} from 'baseui/modal';
-import { Input } from 'baseui/input';
-import { FormControl } from 'baseui/form-control';
-import { KIND } from 'baseui/button';
 import { Client } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
+import InputField from '../../../InputField';
+import Modal from '../Modal';
 
-const Schema = Yup.object().shape({
-  name: Yup.string()
-    .min(2, 'Zu kurz')
-    .max(100, 'Zu lang')
-    .required('Wird benötigt'),
-});
+interface Values {
+  name: string;
+}
 
 const CreateGroupModal = (props: {
   stage: Client.Stage;
   isOpen?: boolean;
-  onClose?: () => any;
-
-}) => {
+  onClose?: () => void;
+}): JSX.Element => {
   const { stage, isOpen, onClose } = props;
   const { createGroup } = useStageActions();
-  const formik = useFormik({
-    validateOnMount: true,
-    initialValues: {
-      name: '',
-    },
-    validationSchema: Schema,
-    onSubmit: (values) => {
-      createGroup(stage._id, values.name);
-      // Close modal
-      props.onClose();
-    },
+
+  const CreateGroupSchema = Yup.object().shape({
+    name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
   });
 
   return (
-    <Modal
-      closeable
-      isOpen={isOpen}
-      onClose={onClose}
-      unstable_ModalBackdropScroll
-    >
-      <form onSubmit={formik.handleSubmit}>
-        <ModalHeader>Neue Gruppe erstellen</ModalHeader>
-        <ModalBody>
-          <FormControl
-            label={() => 'Name'}
-            caption={() => 'Gib der Gruppe einen aussagekräftigen Namen'}
-            error={formik.errors.name}
-          >
-            <Input
-              required
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <Text variant="title">Neue Gruppe erstellen</Text>
+      <Text variant="subTitle">
+        After creating the group you can copy the link and invite people
+      </Text>
+      <Formik
+        initialValues={{
+          name: '',
+        }}
+        validationSchema={CreateGroupSchema}
+        onSubmit={(values: Values) => {
+          createGroup(stage._id, values.name);
+          props.onClose();
+        }}
+      >
+        {({ errors, touched }) => (
+          <Form>
+            <Field
+              as={InputField}
               type="text"
               name="name"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+              id="name"
+              label="Group name"
+              version="dark"
+              error={errors.name && touched.name}
             />
-          </FormControl>
-        </ModalBody>
-        <ModalFooter>
-          <ModalButton type="button" kind={KIND.tertiary} onClick={onClose}>Abbrechen</ModalButton>
-          <ModalButton
-            disabled={!formik.isValid}
-            type="submit"
-          >
-            Gruppe erstellen
-          </ModalButton>
-        </ModalFooter>
-      </form>
+            <Flex sx={{ justifyContent: 'space-between', py: 3 }}>
+              <Button variant="black" onClick={onClose}>
+                Abbrechen
+              </Button>
+              <Button type="submit">Gruppe erstellen</Button>
+            </Flex>
+          </Form>
+        )}
+      </Formik>
     </Modal>
   );
 };
