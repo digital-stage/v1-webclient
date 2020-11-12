@@ -273,6 +273,8 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
           console.debug('[useStageContext] Disconnected from server, try to reconnect');
         });
 
+        createdSocket.connect();
+
         setSocket(createdSocket);
       })
       .catch((error) => reportError(error));

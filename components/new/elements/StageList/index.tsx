@@ -19,9 +19,9 @@ const StageListView = (): JSX.Element => {
   const [collapseId, setCollapseId] = React.useState<string>();
 
   React.useEffect(() => {
-    setOpenCollapse(true)
-    setCollapseId(collapseId)
-  }, [collapseId])
+    setOpenCollapse(true);
+    setCollapseId(collapseId);
+  }, [collapseId]);
 
   return (
     <Card mt={3}>
@@ -30,7 +30,15 @@ const StageListView = (): JSX.Element => {
       <Flex sx={{ flexDirection: 'column' }}>
         {stages.map((stage) => (
           <Collapse key={stage._id} id={stage._id}>
-            <CollapseHeader isOpen={openCollapse} onClick={() => { setOpenCollapse(!openCollapse); setCollapseId(stage._id) }} id={stage._id} collapseId={collapseId}>
+            <CollapseHeader
+              isOpen={openCollapse}
+              onClick={() => {
+                setOpenCollapse(!openCollapse);
+                setCollapseId(stage._id);
+              }}
+              id={stage._id}
+              collapseId={collapseId}
+            >
               <StageHeader stage={stage} />
             </CollapseHeader>
             <CollapseBody isOpen={openCollapse} id={stage._id} collapseId={collapseId}>

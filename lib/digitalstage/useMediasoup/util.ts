@@ -58,18 +58,11 @@ export const RouterPostUrls = {
 };
 
 export const fetchGet = <T>(url: string): Promise<T> =>
-  fetch(url, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  }).then((result) => {
+  fetch(url, {}).then((result) => {
+    console.log('GOT SOMETHING');
     if (result.ok) return result.json();
     throw new Error(result.statusText);
   });
-
-export const getUrl = (router: Router, path?: string): string => {
-  const protocol: string = process.env.NEXT_PUBLIC_USE_SSL === 'true' ? 'https://' : 'http://';
-  return `${protocol + router.url}:${router.port}${path || ''}`;
-};
 
 export const getFastestRouter = (): Promise<Router> =>
   fetchGet<Router[]>(`${process.env.NEXT_PUBLIC_ROUTERS_URL}/routers`)

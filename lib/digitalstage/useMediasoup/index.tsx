@@ -126,16 +126,11 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (router) {
-      const connectionSettings = {
-        protocol: process.env.NEXT_PUBLIC_USE_SSL === 'true' ? 'wss://' : 'http://',
-        secure: process.env.NEXT_PUBLIC_USE_SSL === 'true',
-      };
+      const url = `${
+        (process.env.NEXT_PUBLIC_USE_SSL === 'true' ? 'wss://' : 'ws://') + router.url
+      }:${router.port}`;
 
-      console.debug(`connecting to ${connectionSettings.protocol + router.url}:${router.port}`);
-
-      const createdConnection = new TeckosClient(
-        `${connectionSettings.protocol + router.url}:${router.port}`
-      );
+      const createdConnection = new TeckosClient(url);
 
       createdConnection.on('connect_error', (error) => {
         reportError(error);
@@ -144,6 +139,8 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
       createdConnection.on('connect_timeout', (error) => {
         reportError(error);
       });
+
+      createdConnection.connect();
 
       setConnection(createdConnection);
       return () => {
