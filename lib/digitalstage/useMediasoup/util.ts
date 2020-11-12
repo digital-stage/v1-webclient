@@ -76,18 +76,6 @@ export const getFastestRouter = (): Promise<Router> =>
       throw new Error('Routingservice not available');
     });
 
-export const getFastestRouter = (): Promise<Router> =>
-  fetchGet<Router[]>(`${process.env.NEXT_PUBLIC_ROUTERS_URL}/routers`)
-    .then((routers) => {
-      if (routers && routers.length > 0) {
-        return routers[0];
-      }
-      throw new Error('No routers available');
-    })
-    .catch(() => {
-      throw new Error('Routingservice not available');
-    });
-
 export const createWebRTCTransport = (
   socket: TeckosClient,
   device: mediasoupClient.Device,

@@ -6,6 +6,7 @@ import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import InputField from '../InputField';
 import { useAuth } from '../../lib/digitalstage/useAuth';
+import Link from 'next/link';
 
 interface Values {
   email: string;
@@ -94,9 +95,11 @@ const ForgetPasswordForm = (): JSX.Element => {
               error={errors.repeatEmail && touched.repeatEmail}
             />
             <Flex sx={{ justifyContent: 'center', my: 3 }}>
-              <Button as="a" variant="white" href="/account/login">
-                Cancel
-              </Button>
+                <Link href="/account/login">
+                  <Button as="a" variant="white">
+                  Cancel
+                  </Button>
+                </Link>
               <Button type="submit">Send</Button>
             </Flex>
           </Form>
