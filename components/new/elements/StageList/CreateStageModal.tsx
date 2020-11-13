@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Button, Flex, Text } from 'theme-ui';
+import { jsx, Button, Flex, Heading } from 'theme-ui';
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
@@ -19,8 +19,11 @@ interface Values {
 }
 
 const CreateStageSchema = Yup.object().shape({
-  name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
-  password: Yup.string().min(5, 'Zu kurz').max(50, 'Zu lang'),
+  name: Yup.string()
+    .min(2, 'Der Name ist zu kurz')
+    .max(100, 'Der Name ist zu lang')
+    .required('Ein Bühnenname wird benötigt'),
+  password: Yup.string().min(5, 'Das Passwort ist zu kurz').max(50, 'Das Passwort ist zu lang'),
   width: Yup.number().min(0.1).max(1000),
   length: Yup.number().min(0.1).max(1000),
   height: Yup.number().min(0.1).max(1000),
@@ -34,7 +37,7 @@ const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }): JSX
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Text variant="title">Neue Bühne erstellen</Text>
+      <Heading variant="title">Neue Bühne erstellen</Heading>
       <Formik
         initialValues={{
           name: '',
@@ -66,7 +69,7 @@ const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }): JSX
               type="text"
               name="name"
               id="name"
-              label="Stage name"
+              label="Name der Bühne"
               version="dark"
               error={errors.name && touched.name}
             />
@@ -76,7 +79,7 @@ const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }): JSX
               type="text"
               name="password"
               id="password"
-              label="Password"
+              label="Passwort"
               version="dark"
               error={errors.password && touched.password}
             />

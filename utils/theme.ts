@@ -33,7 +33,7 @@ const theme: Theme = {
     body: '1.5',
     heading: '1.125',
   },
-  fontSizes: [13, 16, 18, 20, 24, 32, 48, 64, 72, 96],
+  fontSizes: [14, 16, 18, 20, 24, 32, 48, 64, 72, 96],
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   breakpoints: [600, 900, 1200, 1500].map((n) => `${n}px`),
   radii: {
@@ -78,22 +78,14 @@ const theme: Theme = {
     },
     heading: {
       color: 'text',
-      fontFamily: 'heading',
-      fontWeight: 'heading',
-      lineHeight: 'heading',
     },
     title: {
       color: 'background',
-      fontFamily: 'heading',
-      fontWeight: 'heading',
-      lineHeight: 'heading',
     },
     subTitle: {
       color: 'background',
       fontSize: 0,
-      fontFamily: 'body',
-      fontWeight: 'body',
-      lineHeight: 'body',
+      mt: 2,
     },
   },
   buttons: {

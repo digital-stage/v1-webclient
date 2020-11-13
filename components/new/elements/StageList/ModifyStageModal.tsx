@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Flex, Button, Text } from 'theme-ui';
+import { jsx, Flex, Button, Heading } from 'theme-ui';
 import { useFormik, FormikProvider, Field } from 'formik';
 import * as Yup from 'yup';
 import { Stage } from '../../../../lib/digitalstage/common/model.client';
@@ -10,8 +10,11 @@ import Modal from '../Modal';
 import InputField from '../../../InputField';
 
 const Schema = Yup.object().shape({
-  name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
-  password: Yup.string().min(5, 'Zu kurz').max(50, 'Zu lang'),
+  name: Yup.string()
+    .min(2, 'Der Name ist zu kurz')
+    .max(100, 'Der Name ist zu lang')
+    .required('Ein Bühnenname wird benötigt'),
+  password: Yup.string().min(5, 'Das Passwort ist zu kurz').max(50, 'Das Passwort ist zu lang'),
   width: Yup.number().min(0.1).max(1000),
   length: Yup.number().min(0.1).max(1000),
   height: Yup.number().min(0.1).max(1000),
@@ -77,7 +80,7 @@ const ModifyStageModal = (props: {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Text variant="title">Bühne ändern</Text>
+      <Heading variant="title">Bühne bearbeiten</Heading>
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
           <Field
@@ -85,7 +88,7 @@ const ModifyStageModal = (props: {
             type="text"
             name="name"
             id="name"
-            label="Group name"
+            label="Name der Bühne"
             version="dark"
             error={formik.errors.name && formik.touched.name}
           />
@@ -94,7 +97,7 @@ const ModifyStageModal = (props: {
             type="text"
             name="password"
             id="password"
-            label="Password"
+            label="Passwort"
             version="dark"
             error={formik.errors.password && formik.touched.password}
           />
@@ -102,7 +105,7 @@ const ModifyStageModal = (props: {
             <Button variant="black" type="button" onClick={onClose}>
               Abbrechen
             </Button>
-            <Button type="submit">Bühne ändern</Button>
+            <Button type="submit">Speichern</Button>
           </Flex>
         </form>
       </FormikProvider>

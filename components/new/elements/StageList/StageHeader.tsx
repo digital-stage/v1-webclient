@@ -23,19 +23,8 @@ const StageHeader = (props: { stage: Stage }): JSX.Element => {
               {stage.name}
             </Heading>
             <Flex>
-              {/* <Text variant="subTitle" sx={{ color: 'gray.1', mr: 3 }}>
-                                <Flex sx={{ alignItems: "center" }}>
-                                    <Box bg="online" sx={{
-                                        width: "10px",
-                                        height: "10px",
-                                        borderRadius: "50%",
-                                        mr: 1
-                                    }}></Box>
-                                6/13 online
-                                </Flex>
-                            </Text> */}
               <Text variant="subTitle" sx={{ color: 'text' }}>
-                {stage.isAdmin ? 'Stage owner: You' : null}
+                {stage.isAdmin && 'Du verwaltest diese Bühne'}
               </Text>
             </Flex>
           </Flex>

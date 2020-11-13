@@ -1,8 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Flex, Button, Text } from 'theme-ui';
-
+import { jsx, Flex, Button, Text, Heading } from 'theme-ui';
 import { Field, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Group } from '../../../../lib/digitalstage/common/model.client';
@@ -11,7 +10,10 @@ import Modal from '../Modal';
 import InputField from '../../../InputField';
 
 const Schema = Yup.object().shape({
-  name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
+  name: Yup.string()
+    .min(2, 'Der Name ist zu kurz')
+    .max(100, 'Der Name ist zu lang')
+    .required('Ein Gruppenname wird benötigt'),
 });
 
 const ModifyGroupModal = (props: {
@@ -40,8 +42,7 @@ const ModifyGroupModal = (props: {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Text variant="title">Gruppe ändern</Text>
-      <Text variant="subTitle">Change your group name into a clearer name message</Text>
+      <Heading variant="title">Gruppenname ändern</Heading>
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
           <Field
@@ -49,7 +50,7 @@ const ModifyGroupModal = (props: {
             type="text"
             name="name"
             id="name"
-            label="Group name"
+            label="Gruppenname"
             version="dark"
             error={formik.errors.name && formik.touched.name}
             value={formik.values.name}
@@ -61,7 +62,7 @@ const ModifyGroupModal = (props: {
               Abbrechen
             </Button>
             <Button disabled={!formik.isValid} type="submit">
-              Gruppe erstellen
+              Speichern
             </Button>
           </Flex>
         </form>

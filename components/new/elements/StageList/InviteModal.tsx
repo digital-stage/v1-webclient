@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Button, Text, Message } from 'theme-ui';
+import { Flex, Button, Heading, Message, Checkbox, Label } from 'theme-ui';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { Checkbox } from 'baseui/checkbox';
-import { Stage, Group } from '../../../../lib/digitalstage/common/model.client';
+import { Stage, Group } from '../../../../lib/digitalstage/common/model.server';
 import Modal from '../Modal';
 import InputField from '../../../InputField';
 
@@ -11,9 +10,8 @@ const InviteModal = (props: {
   group: Group;
   isOpen?: boolean;
   onClose?: () => void;
-  usePassword?: boolean;
 }): JSX.Element => {
-  const { stage, group, usePassword, isOpen, onClose } = props;
+  const { stage, group, isOpen, onClose } = props;
   const [includePassword, setIncludePassword] = useState<boolean>(false);
   const [link, setLink] = useState<string>();
   const [isCopied, setCopied] = useState<boolean>(false);
@@ -23,12 +21,12 @@ const InviteModal = (props: {
     if (stage && group) {
       const port: string = window.location.port ? `:${window.location.port}` : '';
       let generatedLink = `${window.location.protocol}/${window.location.hostname}${port}/join/${stage._id}/${group._id}`;
-      if (usePassword && stage.password && includePassword) {
+      if (stage.password && includePassword) {
         generatedLink += `?password=${stage.password}`;
       }
       setLink(generatedLink);
     }
-  }, [stage, group, usePassword, includePassword]);
+  }, [stage, group, includePassword]);
 
   if (!stage || !group) {
     return null;
@@ -36,18 +34,20 @@ const InviteModal = (props: {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Text variant="title">Leute einladen</Text>
-      {isCopied && <Message variant="success">Link in der Zwischenablage!</Message>}
-      {usePassword && stage.password && (
-        <Checkbox
-          checked={includePassword}
-          onChange={(event) => setIncludePassword(event.currentTarget.checked)}
-        >
-          Füge Passwort mit an
-        </Checkbox>
-      )}
+      <Heading variant="title">Teilnehmer einladen</Heading>
+      {isCopied && <Message variant="success">Link in die Zwischenablage kopiert!</Message>}
+
       <InputField type="text" id="link" name="link" label="Link" value={link} version="dark" />
-      <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
+      {stage.password && (
+        <Label sx={{ color: 'background', mt: 3 }}>
+          <Checkbox
+            checked={includePassword}
+            onChange={(e) => setIncludePassword(e.currentTarget.checked)}
+          />
+          Link mit einem Passwort versehen
+        </Label>
+      )}
+      <Flex sx={{ justifyContent: 'space-between', py: 3 }}>
         <Button variant="black" onClick={onClose}>
           Schließen
         </Button>
@@ -57,7 +57,7 @@ const InviteModal = (props: {
             setCopied(true);
           }}
         >
-          <Button autoFocus>Kopiere Link</Button>
+          <Button autoFocus>Link kopieren</Button>
         </CopyToClipboard>
       </Flex>
     </Modal>

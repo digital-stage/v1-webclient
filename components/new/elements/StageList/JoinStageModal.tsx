@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Button, Text } from 'theme-ui';
+import { Flex, Button, Heading, Text } from 'theme-ui';
 import Modal from '../Modal';
 import InputField from '../../../InputField';
 import { useRouter } from 'next/router';
@@ -13,6 +13,7 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
     setLink(e.target.value);
   };
 
+  // TODO: Misses error handling
   const joinStage = () => {
     if (link) {
       const port: string = window.location.port ? `:${window.location.port}` : '';
@@ -26,8 +27,10 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Text variant="title">Join stage via link</Text>
-      <Text variant="subTitle">Enter the link of a group in a stage you want to enter</Text>
+      <Heading variant="title">Bühne mit einem Link beitreten</Heading>
+      <Text variant="subTitle">
+        Gib den Link ein, mit welchem Du einer Bühne beitreten möchtest
+      </Text>
       <InputField
         type="text"
         id="link"
@@ -42,7 +45,7 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
           Schließen
         </Button>
         <Button onClick={joinStage} autoFocus>
-          Join stage
+          Beitreten
         </Button>
       </Flex>
     </Modal>

@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Button, Flex, Text } from 'theme-ui';
+import { jsx, Button, Flex, Text, Heading } from 'theme-ui';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { Stage } from '../../../../lib/digitalstage/common/model.client';
@@ -22,14 +22,18 @@ const CreateGroupModal = (props: {
   const { createGroup } = useStageActions();
 
   const CreateGroupSchema = Yup.object().shape({
-    name: Yup.string().min(2, 'Zu kurz').max(100, 'Zu lang').required('Wird benötigt'),
+    name: Yup.string()
+      .min(2, 'Der Name ist zu kurz')
+      .max(100, 'Der Name ist zu lang')
+      .required('Ein Gruppenname wird benötigt'),
   });
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Text variant="title">Neue Gruppe erstellen</Text>
+      <Heading variant="title">Neue Gruppe erstellen</Heading>
       <Text variant="subTitle">
-        After creating the group you can copy the link and invite people
+        Nachdem Du die Gruppe erstellt hast kannst Du über den Button &apos;Einladen&apos;
+        Teilnehmer hinzufügen
       </Text>
       <Formik
         initialValues={{
@@ -48,7 +52,7 @@ const CreateGroupModal = (props: {
               type="text"
               name="name"
               id="name"
-              label="Group name"
+              label="Gruppenname"
               version="dark"
               error={errors.name && touched.name}
             />
@@ -56,7 +60,7 @@ const CreateGroupModal = (props: {
               <Button variant="black" onClick={onClose}>
                 Abbrechen
               </Button>
-              <Button type="submit">Gruppe erstellen</Button>
+              <Button type="submit">Erstellen</Button>
             </Flex>
           </Form>
         )}
