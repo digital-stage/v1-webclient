@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../lib/digitalstage/useAuth';
 import Login from './account/login';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
-import StageDetails from '../components/stage/StageDetails';
 
 const Stages = (): JSX.Element => {
   const router = useRouter();
@@ -28,7 +27,12 @@ const Stages = (): JSX.Element => {
   if (!user) {
     return <Login />;
   }
-  return <StageDetails />;
+
+  return (
+    <div>
+      TODO: WAS STAGE DETAILS BEFORE, PLEASE ADD RESPONDING COMPONENT HERE
+    </div>
+  )
 };
 
 export default Stages;

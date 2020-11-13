@@ -1,6 +1,6 @@
 import { IAudioContext } from 'standardized-audio-context';
 
-export default function webAudioTouchUnlock(context: IAudioContext) {
+export default function webAudioTouchUnlock(context: IAudioContext): Promise<boolean> {
   return new Promise<boolean>((resolve, reject) => {
     /* if (!context || !(context instanceof ((<any>window).AudioContext ||  || (<any>window).webkitAudioContext))) {
             reject('WebAudioTouchUnlock: You need to pass an instance of AudioContext to this method call');
@@ -8,7 +8,7 @@ export default function webAudioTouchUnlock(context: IAudioContext) {
         } */
 
     if (context.state === 'suspended' && 'ontouchstart' in window) {
-      const unlock = (): JSX.Element => {
+      const unlock = (): void => {
         context.resume().then(
           () => {
             document.body.removeEventListener('touchstart', unlock);

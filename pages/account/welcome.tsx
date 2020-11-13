@@ -43,7 +43,7 @@ const Welcome = (): JSX.Element => {
           </Heading>
 
           <Link href="/account/login">
-            <Button as="a" variant="white" href="/account/login">
+            <Button as="a" variant="white">
               Sign In
             </Button>
           </Link>

@@ -10,7 +10,7 @@ import StageListView from '../components/new/elements/StageList';
 import StageDeviceController from '../components/StageDeviceController';
 import StageLeaver from '../components/StageLeaver';
 import Layout from '../components/Layout';
-import Container from '../components/Container';
+import Container, {Size} from '../components/Container';
 import PageSpinner from '../components/PageSpinner';
 import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/FixedAudioPlaybackStarterButton';
 
@@ -34,7 +34,7 @@ const Index = (): JSX.Element => {
               <StageLeaver />
             </React.Fragment>
           ) : (
-            <Container size="stage">
+            <Container size={Size.stage}>
               <Heading as="h1" sx={{ ml: 3, mt: [4, 5] }}>
                 Meine Bühnen
               </Heading>

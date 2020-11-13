@@ -1,4 +1,6 @@
-export default {
+import { Theme } from "@theme-ui/css";
+
+const theme: Theme = {
   colors: {
     text: '#fff',
     background: '#1c1c1c',
@@ -27,7 +29,7 @@ export default {
     heading: 600,
     bold: 600,
   },
-  lineHeight: {
+  lineHeights: {
     body: '1.5',
     heading: '1.125',
   },
@@ -364,3 +366,4 @@ export default {
     },
   },
 };
+export default theme;

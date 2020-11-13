@@ -194,8 +194,7 @@ class VideoPlayer extends React.Component<Props, States> {
     const { size } = this.state;
     return (
       <div ref={this.wrapperRef}>
-        <Box
-          as="canvas"
+        <canvas
           sx={{ width: '100%', height: '100%', stroke: 'red' }}
           ref={this.canvasRef}
           width={size && size.width}

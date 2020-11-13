@@ -4,6 +4,6 @@ const adapter = dynamic(() => import('webrtc-adapter/dist/adapter_core5'), {
   ssr: false,
 });
 
-export const fixWebRTC = (): JSX.Element => {
+export const fixWebRTC = (): void => {
   adapter;
 };

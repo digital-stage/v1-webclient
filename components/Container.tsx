@@ -4,7 +4,7 @@
 import React from 'react';
 import { jsx, Flex } from 'theme-ui';
 
-enum Size {
+export enum Size {
   default = 'default',
   flex = 'flex',
   stage = 'stage',
