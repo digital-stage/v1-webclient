@@ -8,7 +8,6 @@ import useStageSelector from '../lib/digitalstage/useStageSelector';
 import StagePane from '../components/new/panes/StagePane';
 import StageListView from '../components/new/elements/StageList';
 import StageDeviceController from '../components/StageDeviceController';
-import StageLeaver from '../components/StageLeaver';
 import Layout from '../components/Layout';
 import Container, { Size } from '../components/Container';
 import PageSpinner from '../components/PageSpinner';
@@ -31,7 +30,6 @@ const Index = (): JSX.Element => {
 
               <FixedAudioPlaybackStarterButton />
               <StageDeviceController />
-              <StageLeaver />
             </React.Fragment>
           ) : (
             <Container size={Size.stage}>
