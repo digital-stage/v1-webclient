@@ -15,7 +15,7 @@ interface Values {
 }
 
 interface Props {
-  resetToken: string | string[];
+  resetToken: string;
 }
 
 export default function ResetPasswordForm({ resetToken }: Props): JSX.Element {
