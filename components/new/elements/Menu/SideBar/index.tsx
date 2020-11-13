@@ -16,18 +16,10 @@ const SideBar = ({
   selected?: NavItem;
   onSelected: (navItem: NavItem) => void;
 }): JSX.Element => {
-  const SideBarItem = ({
-    item,
-    index,
-    selected2,
-  }: {
-    item: any;
-    index: number;
-    selected2: boolean;
-  }) => {
+  const SideBarItem = ({ item, index }: { item: any; index: number }) => {
+    /** TODO: instead of selected find a new way to markthe item active */
     return (
       <Box
-        selected={selected2 && item.label === selected2.label}
         tabIndex={index}
         role="presentation"
         onClick={() => onSelected(item)}
@@ -46,19 +38,14 @@ const SideBar = ({
 
   return (
     <Flex role="menu" sx={{ flexDirection: 'column', bg: 'teal', minHeight: '100vh' }}>
-      BERT
       {UpperNavItems &&
-        UpperNavItems.map((item, index) => {
-          return <SideBarItem item={item} key={index} index={index} selected2={selected} />;
-        })}
+        UpperNavItems.map((item, index) => <SideBarItem item={item} key={index} index={index} />)}
       {CenteredNavItems &&
         CenteredNavItems.map((item, index) => (
-          <SideBarItem item={item} key={index} index={index} selected2={selected} />
+          <SideBarItem item={item} key={index} index={index} />
         ))}
       {LowerNavItems &&
-        LowerNavItems.map((item, index) => (
-          <SideBarItem item={item} key={index} index={index} selected2={selected} />
-        ))}
+        LowerNavItems.map((item, index) => <SideBarItem item={item} key={index} index={index} />)}
     </Flex>
   );
 };

@@ -46,9 +46,9 @@ class VideoPlayer extends React.Component<Props, States> {
       drawing: false,
       animationFrames: [],
     };
-    this.wrapperRef = React.createRef<HTMLDivElement>();
+    this.wrapperRef = React.createRef();
     this.canvasRef = React.createRef<CanvasElement>();
-    this.videoContainerRef = React.createRef<HTMLDivElement>();
+    this.videoContainerRef = React.createRef();
   }
 
   componentDidMount(): void {
