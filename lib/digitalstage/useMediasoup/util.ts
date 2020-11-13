@@ -59,7 +59,6 @@ export const RouterPostUrls = {
 
 export const fetchGet = <T>(url: string): Promise<T> =>
   fetch(url, {}).then((result) => {
-    console.log('GOT SOMETHING');
     if (result.ok) return result.json();
     throw new Error(result.statusText);
   });
