@@ -1,3 +1,10 @@
+## [0.2.1](https://github.com/digital-stage/webclient/compare/v0.2.0...v0.2.1) (2020-11-13)
+
+
+### Bug Fixes
+
+* revert to string to amend the parameter type ([f097983](https://github.com/digital-stage/webclient/commit/f097983daf457449c151245e6c35ae98dccbf5c6))
+
 # [0.2.0](https://github.com/digital-stage/webclient/compare/v0.1.0...v0.2.0) (2020-11-13)
 
 
