@@ -1,6 +1,6 @@
 import mediasoupClient from 'mediasoup-client';
-import { TeckosClient } from 'teckos-client';
-import { Router, StageMemberAudioProducer, StageMemberVideoProducer } from '../common/model.server';
+import {TeckosClient} from 'teckos-client';
+import {Router, StageMemberAudioProducer, StageMemberVideoProducer} from '../common/model.server';
 
 export enum RouterEvents {
   TransportCloses = 'transport-closed',
@@ -66,15 +66,77 @@ export const fetchGet = <T>(url: string): Promise<T> =>
 
 export const getFastestRouter = (): Promise<Router> =>
   fetchGet<Router[]>(`${process.env.NEXT_PUBLIC_ROUTERS_URL}/routers`)
-    .then((routers) => {
-      if (routers && routers.length > 0) {
-        return routers[0];
+    .then(async (routers) => {
+      if (routers.length === 0) {
+        throw new Error("No router available");
       }
-      throw new Error('No routers available');
+      // First get latencies for all routers
+      const routerWithLatencies: { router: Router; latency: number }[] = await Promise.all(
+        routers.map((router) => {
+          const url =
+            `${router.restPrefix}://${router.url}:${router.port}${router.path ? '/' + router.path + '/' : ''}/ping`;
+          return ping(url)
+            .then((latency) => ({
+              router: router,
+              latency: latency,
+            }))
+            .catch((error) => {
+              console.error(error);
+              return {
+                router: router,
+                latency: 9999,
+              };
+            })
+            .then((routerWithLatency) => {
+              //TODO: Remove
+              console.debug(`[useMediasoup] Latency of ${url}: ${routerWithLatency.latency}`);
+              return routerWithLatency;
+            })
+        })
+      );
+      const fastestRouterWithLatency = routerWithLatencies.reduce((prev, curr) => {
+        if (prev.latency > curr.latency) {
+          return curr;
+        }
+        return prev;
+      });
+      return fastestRouterWithLatency.router;
     })
     .catch(() => {
       throw new Error('Routingservice not available');
     });
+
+function requestImage(url: string) {
+  return new Promise(function(resolve, reject) {
+    const img = new Image();
+    img.onload = function() {
+      resolve(img);
+    };
+    img.onerror = function() {
+      reject(url);
+    };
+    img.src = url + '?random-no-cache=' + Math.floor((1 + Math.random()) * 0x10000).toString(16);
+  });
+}
+
+function ping(url: string, multiplier?: number): Promise<number> {
+  return new Promise<number>(function(resolve, reject) {
+    const start: number = new Date().getTime();
+    const response = function() {
+      let delta: number = new Date().getTime() - start;
+      delta *= multiplier || 1;
+      resolve(delta);
+    };
+    requestImage(url)
+      .then(response)
+      .catch(() => reject(Error('Error')));
+
+    // Set a timeout for max-pings, 300ms.
+    setTimeout(function() {
+      reject(Error('Timeout'));
+    }, 300);
+  });
+}
 
 export const createWebRTCTransport = (
   socket: TeckosClient,
@@ -93,7 +155,7 @@ export const createWebRTCTransport = (
           direction === 'send'
             ? device.createSendTransport(transportOptions)
             : device.createRecvTransport(transportOptions);
-        transport.on('connect', async ({ dtlsParameters }, callback, errCallback) => {
+        transport.on('connect', async ({dtlsParameters}, callback, errCallback) => {
           socket.emit(
             RouterRequests.ConnectTransport,
             {
