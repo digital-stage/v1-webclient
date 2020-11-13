@@ -12,6 +12,9 @@ const Reset = (): JSX.Element => {
   const router = useRouter();
   const { user } = useAuth();
   const { token } = router.query;
+  // router.query requires this step because we need to ensure a string and not an array for further handling!
+  const singleToken = Array.isArray(token) ? token[0] : token;
+
   const [msg, setMsg] = React.useState({ state: false, type: null, kids: null });
 
   if (user) {
@@ -33,7 +36,7 @@ const Reset = (): JSX.Element => {
     <Layout auth>
       <AuthPageContainer>
         {msg.state && <Message variant={msg.type}>{msg.kids}</Message>}
-        <ResetPasswordForm resetToken={token} />
+        <ResetPasswordForm resetToken={singleToken} />
       </AuthPageContainer>
     </Layout>
   );

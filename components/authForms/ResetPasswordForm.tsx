@@ -14,11 +14,8 @@ interface Values {
   response?: string;
 }
 
-interface Props {
-  resetToken: string;
-}
-
-export default function ResetPasswordForm({ resetToken }: Props): JSX.Element {
+/** TODO: props validation because router.query delivers token with string | string[] (in reset.tsx) but this does not work in here */
+export default function ResetPasswordForm({ resetToken }): JSX.Element {
   const router = useRouter();
   const { resetPassword } = useAuth();
 
