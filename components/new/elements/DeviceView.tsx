@@ -1,10 +1,13 @@
-import React from 'react';
+/** @jsxRuntime classic */
+/** @jsx jsx */
+import * as React from 'react';
+import Link from 'next/link';
+import { jsx, Box, Button, Flex, Label, Text, Message } from 'theme-ui';
 import { useStyletron } from 'styletron-react';
 import { styled } from 'baseui';
 import { Card, StyledAction, StyledBody } from 'baseui/card/index';
 import { Checkbox } from 'baseui/checkbox/index';
 import { Check, Delete } from 'baseui/icon/index';
-import { Button, KIND, SIZE } from 'baseui/button/index';
 import SingleSelect from './SingleSelect';
 import { Device } from '../../../lib/digitalstage/common/model.server';
 import useStageActions from '../../../lib/digitalstage/useStageActions';
@@ -46,8 +49,7 @@ const DeviceView = (props: { device?: Device }) => {
           })}
         >
           <Button
-            size={SIZE.compact}
-            kind={device.sendVideo ? KIND.primary : KIND.secondary}
+            variant={device.sendVideo ? 'primary' : 'secondary'}
             onClick={() => {
               updateDevice(props.device._id, {
                 sendVideo: !props.device.sendVideo,
@@ -57,9 +59,7 @@ const DeviceView = (props: { device?: Device }) => {
             Send video
           </Button>
           <Button
-            size={SIZE.compact}
-            isSelected={device.sendAudio}
-            kind={device.sendAudio ? KIND.primary : KIND.secondary}
+            variant={device.sendAudio ? 'primary' : 'secondary'}
             onClick={() => {
               updateDevice(props.device._id, {
                 sendAudio: !props.device.sendAudio,
@@ -69,8 +69,7 @@ const DeviceView = (props: { device?: Device }) => {
             Send Audio
           </Button>
           <Button
-            size={SIZE.compact}
-            kind={device.receiveVideo ? KIND.primary : KIND.secondary}
+            variant={device.receiveVideo ? 'primary' : 'secondary'}
             onClick={() => {
               updateDevice(props.device._id, {
                 receiveVideo: !props.device.receiveVideo,
@@ -80,8 +79,7 @@ const DeviceView = (props: { device?: Device }) => {
             Receive Video
           </Button>
           <Button
-            size={SIZE.compact}
-            kind={device.receiveAudio ? KIND.primary : KIND.secondary}
+            variant={device.receiveAudio ? 'primary' : 'secondary'}
             onClick={() => {
               updateDevice(device._id, {
                 receiveAudio: !device.receiveAudio,

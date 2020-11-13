@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Flex, Button } from 'theme-ui';
+import { jsx, Button } from 'theme-ui';
 import { styled } from 'baseui';
 import { Theme } from 'baseui/theme';
 import { Delete } from 'baseui/icon';

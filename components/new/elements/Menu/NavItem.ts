@@ -1,5 +1,5 @@
 import React from 'react';
-import { SIZE } from '../Modal';
+import { SIZE } from '../Modal/';
 
 interface NavItem {
   label: string;
