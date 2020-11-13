@@ -1,6 +1,5 @@
 import React from 'react';
-import { OnChangeParams, Option, Select } from 'baseui/select/index';
-import { SIZE } from 'baseui/input/index';
+import { Select } from 'theme-ui'
 
 const SingleSelect = (props: {
   options?: {
@@ -8,28 +7,23 @@ const SingleSelect = (props: {
     label: string;
   }[];
   id?: string;
-  onSelect: (id?: string) => any;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   className?: string;
-}) => {
-  const value: Option =
-    props.options && props.id && props.options.find((option) => option.id === props.id);
+}): JSX.Element => {
   return (
     <div className={props.className}>
       <Select
-        size={SIZE.compact}
-        options={props.options}
-        onChange={(params: OnChangeParams) => {
-          if (params.value.length > 0) {
-            const id = params.value[0].id as string;
-            props.onSelect(id);
-          } else {
-            props.onSelect(undefined);
-          }
-        }}
-        value={value && [value]}
-      />
+        onChange={props.onChange}
+      >
+        {props.options.length > 0 ? props.options.map(option => {
+          return (
+            <option key={option.id} id={option.id}>{option.label}</option>
+          )
+        }) : "No options"}
+      </Select>
     </div>
   );
 };
 
 export default SingleSelect;
+

@@ -1,27 +1,38 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Button, Flex } from 'theme-ui';
+import Link from 'next/link';
+import { jsx, Box, Button, Flex, Label, Text, Message } from 'theme-ui';
 import { useStyletron } from 'styletron-react';
-import { StyledAction, StyledBody } from 'baseui/card/index';
+import { styled } from 'baseui';
+import { Card, StyledAction, StyledBody } from 'baseui/card/index';
 import { Checkbox } from 'baseui/checkbox/index';
 import { Check, Delete } from 'baseui/icon/index';
 import SingleSelect from './SingleSelect';
-import Card from '../../Card';
 import { Device } from '../../../lib/digitalstage/common/model.server';
 import useStageActions from '../../../lib/digitalstage/useStageActions';
 
-const DeviceView = ({ device }: { device?: Device }): JSX.Element => {
+const CardTitle = styled('div', {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+});
+
+const DeviceView = (props: { device?: Device }) => {
+  const { device } = props;
   const { updateDevice } = useStageActions();
   const [css] = useStyletron();
 
   if (!device) return null;
 
   return (
-    <Card>
-      <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-        {device.name} ({device._id}){device.online ? <Check size={32} /> : <Delete size={32} />}
-      </Flex>
+    <Card
+      title={
+        <CardTitle>
+          {device.name} ({device._id}){device.online ? <Check size={32} /> : <Delete size={32} />}
+        </CardTitle>
+      }
+    >
       <StyledBody>
         <Checkbox checked={device.canVideo} disabled>
           canVideo
@@ -31,12 +42,17 @@ const DeviceView = ({ device }: { device?: Device }): JSX.Element => {
         </Checkbox>
       </StyledBody>
       <StyledAction>
-        <Flex sx={{ width: '100%' }}>
+        <div
+          className={css({
+            width: '100%',
+            display: 'flex',
+          })}
+        >
           <Button
             variant={device.sendVideo ? 'primary' : 'secondary'}
             onClick={() => {
-              updateDevice(device._id, {
-                sendVideo: !device.sendVideo,
+              updateDevice(props.device._id, {
+                sendVideo: !props.device.sendVideo,
               });
             }}
           >
@@ -45,8 +61,8 @@ const DeviceView = ({ device }: { device?: Device }): JSX.Element => {
           <Button
             variant={device.sendAudio ? 'primary' : 'secondary'}
             onClick={() => {
-              updateDevice(device._id, {
-                sendAudio: !device.sendAudio,
+              updateDevice(props.device._id, {
+                sendAudio: !props.device.sendAudio,
               });
             }}
           >
@@ -55,8 +71,8 @@ const DeviceView = ({ device }: { device?: Device }): JSX.Element => {
           <Button
             variant={device.receiveVideo ? 'primary' : 'secondary'}
             onClick={() => {
-              updateDevice(device._id, {
-                receiveVideo: !device.receiveVideo,
+              updateDevice(props.device._id, {
+                receiveVideo: !props.device.receiveVideo,
               });
             }}
           >
@@ -72,8 +88,14 @@ const DeviceView = ({ device }: { device?: Device }): JSX.Element => {
           >
             Receive Audio
           </Button>
-        </Flex>
-        <Flex sx={{ flexWrap: 'wrap', width: '100%' }}>
+        </div>
+        <div
+          className={css({
+            width: '100%',
+            display: 'flex',
+            flexWrap: 'wrap',
+          })}
+        >
           <SingleSelect
             className={css({
               flexBasis: 0,
@@ -82,9 +104,9 @@ const DeviceView = ({ device }: { device?: Device }): JSX.Element => {
             })}
             options={device.inputAudioDevices || []}
             id={device.inputAudioDeviceId}
-            onSelect={(id) =>
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
               updateDevice(device._id, {
-                inputAudioDeviceId: id,
+                inputAudioDeviceId: e.target.id,
               })
             }
           />
@@ -96,9 +118,9 @@ const DeviceView = ({ device }: { device?: Device }): JSX.Element => {
             })}
             options={device.outputAudioDevices || []}
             id={device.outputAudioDeviceId}
-            onSelect={(id) =>
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
               updateDevice(device._id, {
-                outputAudioDeviceId: id,
+                inputAudioDeviceId: e.target.id,
               })
             }
           />
@@ -110,13 +132,18 @@ const DeviceView = ({ device }: { device?: Device }): JSX.Element => {
             })}
             options={device.inputVideoDevices || []}
             id={device.inputVideoDeviceId}
-            onSelect={(id) =>
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
               updateDevice(device._id, {
-                inputVideoDeviceId: id,
+                inputAudioDeviceId: e.target.id,
               })
             }
+            // onSelect={(id) =>
+            //   updateDevice(device._id, {
+            //     inputVideoDeviceId: id,
+            //   })
+            // }
           />
-        </Flex>
+        </div>
       </StyledAction>
     </Card>
   );
