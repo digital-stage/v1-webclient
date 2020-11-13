@@ -87,22 +87,24 @@ jobs:
         with:
           node-version: "12.x"
 
-      - uses: actions/download-artifact@master
-        with:
-          name: public
-          path: public
+      #- uses: actions/download-artifact@master
+      #  with:
+      #    name: public
+      #    path: public
 
-      - run: npm install --no-package-lock firebase-tools
+      #- run: npm install --no-package-lock firebase-tools
 
-      - uses: actions/vercel-deployment@0.5.1
+      - uses: amondnet/vercel-action@v19
         # if: github.ref == 'refs/heads/master'
         with:
-          vercelToken: ${{ secrets.VERCEL_TOKEN }}
-          vercelOrgId: ${{ secrets.VERCEL_ORG_ID }}
-          vercelProjectId: ${{ secrets.VERCEL_PROJECT_ID }}
-          githubToken: ${{ secrets.PAT }}
-          sourceDirectory: "./"
-          # assignDomain: "preview.example.com"
-        
+          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+          github-token: ${{ secrets.PAT }} #Optional 
+          vercel-args: '--prod' #Optional
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}  #Required
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}} #Required 
+          working-directory: ./ #Your Working Directory, Optional
+          #alias-domains: | #Optional
+          #  staging.angular.vercel-action.amond.dev
+          #  pr-{{PR_NUMBER}}.angular.vercel-action.amond.dev
         
       
