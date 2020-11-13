@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/digital-stage/webclient/compare/v1.0.0...v1.0.1) (2020-11-13)
+
+
+### Bug Fixes
+
+* Updated development env to use cloud infrastructure, so that webclients runs without other local servers ([3ac0b58](https://github.com/digital-stage/webclient/commit/3ac0b587fc9919aea371c96021da5ce7278e5541))
+
 # 1.0.0 (2020-11-13)
 
 
