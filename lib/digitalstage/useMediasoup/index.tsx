@@ -77,35 +77,6 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (connection) {
-      console.debug('Connection changed and is not available');
-
-      console.log('Emit hallo');
-      connection.emit('HALLO');
-      connection.emit(
-        RouterRequests.GetRTPCapabilities,
-        {},
-        (error: string, rtpCapabilities: mediasoupClient.types.RtpCapabilities) => {
-          console.debug('Got response');
-          if (error) {
-            return reportError(new Error(error));
-          }
-          // Create device
-          const createdDevice = new MediasoupDevice();
-          return createdDevice
-            .load({ routerRtpCapabilities: rtpCapabilities })
-            .then(() =>
-              Promise.all([
-                createWebRTCTransport(connection, createdDevice, 'send').then((transport) =>
-                  setSendTransport(transport)
-                ),
-                createWebRTCTransport(connection, createdDevice, 'receive').then((transport) =>
-                  setReceiveTransport(transport)
-                ),
-              ])
-            )
-            .then(() => setDevice(createdDevice));
-        }
-      );
       return () => connection.removeAllListeners();
     }
     return null;
@@ -147,9 +118,38 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
 
       createdConnection.connect();
 
-      createdConnection.emit('HALLO', {});
-      createdConnection.send('HALLO');
-      console.debug('Set connection');
+      createdConnection.on('connect', () => {
+        createdConnection.emit(
+          RouterRequests.GetRTPCapabilities,
+          {},
+          (error: string, rtpCapabilities: mediasoupClient.types.RtpCapabilities) => {
+            if (error) {
+              return reportError(new Error(error));
+            }
+            console.debug(rtpCapabilities);
+            // Create device
+            const createdDevice = new MediasoupDevice();
+            return createdDevice
+              .load({ routerRtpCapabilities: rtpCapabilities })
+              .then(() =>
+                Promise.all([
+                  createWebRTCTransport(
+                    createdConnection,
+                    createdDevice,
+                    'send'
+                  ).then((transport) => setSendTransport(transport)),
+                  createWebRTCTransport(
+                    createdConnection,
+                    createdDevice,
+                    'receive'
+                  ).then((transport) => setReceiveTransport(transport)),
+                ])
+              )
+              .then(() => setDevice(createdDevice));
+          }
+        );
+      });
+
       setConnection(createdConnection);
       return () => {
         console.debug('Close connection');

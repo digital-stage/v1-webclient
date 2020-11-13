@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=development next dev",
+    "dev": "DEBUG=router:*,teckos:* NODE_ENV=development next dev",
     "build": "NODE_ENV=production next build",
     "prettier:base": "prettier --parser typescript --single-quote",
     "prettier:check": "npm run prettier:base -- --list-different \"**/*.{ts,tsx}\"",
