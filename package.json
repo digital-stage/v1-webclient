@@ -13,7 +13,16 @@
     "start": "next start",
     "deploy": "vercel --prod",
     "deploy:ci:test": "WHATEVER deploy --only hosting:test --token $FIREBASE_TOKEN",
-    "deploy:ci:prod": "WHATEVER deploy --only hosting:prod --token $FIREBASE_TOKEN"
+    "deploy:ci:prod": "WHATEVER deploy --only hosting:prod --token $FIREBASE_TOKEN",
+    "test": "jest --verbose",
+    "test:watch": "yarn run test --watch",
+    "test:ci": "jest",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:chrome": "cypress run --headless --browser chrome",
+    "test:e2e": "start-server-and-test develop http://localhost:3000 cy:open",
+    "test:e2e:ci": "start-server-and-test develop http://localhost:3000 cy:run",
+    "test:e2e:ci:chrome": "start-server-and-test develop http://localhost:3000 cy:run:chrome"
   },
   "release": {
     "branch": "master",

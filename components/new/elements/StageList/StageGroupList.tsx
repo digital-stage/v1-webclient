@@ -39,9 +39,9 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                   <Box
                     bg="primary"
                     sx={{
-                      //   minWidth: "group.width",
-                      //   minHeight: "group.height",
-                      //   borderRadius: "group.borderRadius",
+                      minWidth: 'group.width',
+                      minHeight: 'group.height',
+                      borderRadius: '50%',
                       mr: 3,
                     }}
                   ></Box>

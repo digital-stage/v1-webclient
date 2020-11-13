@@ -1,10 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui/modal';
-import { Input } from 'baseui/input';
+import { Heading, Button, Flex } from 'theme-ui';
 import { useRequest } from '../../../lib/useRequest';
 import { Errors } from '../../../lib/digitalstage/common/errors';
 import useStageActions from '../../../lib/digitalstage/useStageActions';
 import useStageSelector from '../../../lib/digitalstage/useStageSelector';
+import Modal from './Modal';
+import InputField from '../../InputField';
 
 /**
  * The StageJoiner is a usually hidden component,
@@ -52,27 +53,26 @@ const StageJoiner = (): JSX.Element => {
 
   return (
     <>
-      <Modal isOpen={notFound} onClose={() => setNotFound(false)} unstable_ModalBackdropScroll>
-        <ModalHeader>Bühne nicht gefunden</ModalHeader>
-        <ModalFooter>
-          <ModalButton isSelected onClick={() => setNotFound(false)}>
-            Verstanden
-          </ModalButton>
-        </ModalFooter>
+      <Modal isOpen={notFound} onClose={() => setNotFound(false)}>
+        <Heading variant="title">Bühne nicht gefunden</Heading>
+        <Flex sx={{ justifyContent: 'flex-end', py: 2 }}>
+          <Button onClick={() => setNotFound(false)}>Verstanden</Button>
+        </Flex>
       </Modal>
-      <Modal
-        isOpen={wrongPassword}
-        onClose={() => setWrongPassword(false)}
-        unstable_ModalBackdropScroll
-      >
-        <ModalHeader>{retries === 0 ? 'Passwort notwendig' : 'Falsches Passwort'}</ModalHeader>
-        <ModalBody>
-          <Input inputRef={passwordRef} type="password" />
-        </ModalBody>
-        <ModalFooter>
-          <ModalButton onClick={() => setWrongPassword(false)}>Abbrechen</ModalButton>
-          <ModalButton
-            isSelected
+      <Modal isOpen={wrongPassword} onClose={() => setWrongPassword(false)}>
+        <Heading variant="title">
+          {retries === 0 ? 'Passwort notwendig' : 'Falsches Passwort'}
+        </Heading>
+        <InputField
+          id="password"
+          label="Password"
+          name="password"
+          inputRef={passwordRef}
+          type="password"
+        />
+        <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
+          <Button onClick={() => setWrongPassword(false)}>Abbrechen</Button>
+          <Button
             onClick={() => {
               const updatePassword = passwordRef.current.value;
               setRetries((prevState) => prevState + 1);
@@ -80,8 +80,8 @@ const StageJoiner = (): JSX.Element => {
             }}
           >
             Erneut versuchen
-          </ModalButton>
-        </ModalFooter>
+          </Button>
+        </Flex>
       </Modal>
     </>
   );
