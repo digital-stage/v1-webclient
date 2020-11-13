@@ -12,10 +12,10 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLink(e.target.value);
-    setMsg("")
+    setMsg('');
   };
 
-  // TODO: Misses error handling
+  // TODO: Misses error handling - I am not sure if the change is sufficient
   const joinStage = () => {
     if (link) {
       const port: string = window.location.port ? `:${window.location.port}` : '';
@@ -24,10 +24,8 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
         ''
       );
       router.push(path);
-    }
-    else {
-      // TODO: Translate to German
-      setMsg("Please enter link!")
+    } else {
+      setMsg('Bitte gib einen Link ein!');
     }
   };
 
@@ -48,7 +46,13 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
         version="dark"
       />
       <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
-        <Button variant="black" onClick={() => { onClose(); setMsg("") }}>
+        <Button
+          variant="black"
+          onClick={() => {
+            onClose();
+            setMsg('');
+          }}
+        >
           Schließen
         </Button>
         <Button onClick={joinStage} autoFocus>

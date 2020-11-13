@@ -55,7 +55,7 @@ const theme: Theme = {
     },
     group: {
       width: '30px',
-      height: '30px'
+      height: '30px',
     },
   },
   shadows: {

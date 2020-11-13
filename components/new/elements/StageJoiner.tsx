@@ -56,16 +56,13 @@ const StageJoiner = (): JSX.Element => {
       <Modal isOpen={notFound} onClose={() => setNotFound(false)}>
         <Heading variant="title">Bühne nicht gefunden</Heading>
         <Flex sx={{ justifyContent: 'flex-end', py: 2 }}>
-          <Button onClick={() => setNotFound(false)}>
-            Verstanden
-          </Button>
+          <Button onClick={() => setNotFound(false)}>Verstanden</Button>
         </Flex>
       </Modal>
-      <Modal
-        isOpen={wrongPassword}
-        onClose={() => setWrongPassword(false)}
-      >
-        <Heading variant="title">{retries === 0 ? 'Passwort notwendig' : 'Falsches Passwort'}</Heading>
+      <Modal isOpen={wrongPassword} onClose={() => setWrongPassword(false)}>
+        <Heading variant="title">
+          {retries === 0 ? 'Passwort notwendig' : 'Falsches Passwort'}
+        </Heading>
         <InputField
           id="password"
           label="Password"

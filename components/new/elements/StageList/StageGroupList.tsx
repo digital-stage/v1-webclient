@@ -39,10 +39,10 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                   <Box
                     bg="primary"
                     sx={{
-                        minWidth: "group.width",
-                        minHeight: "group.height",
-                        borderRadius: "50%",
-                        mr: 3,
+                      minWidth: 'group.width',
+                      minHeight: 'group.height',
+                      borderRadius: '50%',
+                      mr: 3,
                     }}
                   ></Box>
                   <Heading as="h3" sx={{ color: 'gray.0', flexBasis: 'max-content' }}>
