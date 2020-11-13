@@ -1,38 +1,27 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import Link from 'next/link';
-import { jsx, Box, Button, Flex, Label, Text, Message } from 'theme-ui';
+import { jsx, Button, Flex } from 'theme-ui';
 import { useStyletron } from 'styletron-react';
-import { styled } from 'baseui';
-import { Card, StyledAction, StyledBody } from 'baseui/card/index';
+import { StyledAction, StyledBody } from 'baseui/card/index';
 import { Checkbox } from 'baseui/checkbox/index';
 import { Check, Delete } from 'baseui/icon/index';
 import SingleSelect from './SingleSelect';
+import Card from '../../Card';
 import { Device } from '../../../lib/digitalstage/common/model.server';
 import useStageActions from '../../../lib/digitalstage/useStageActions';
 
-const CardTitle = styled('div', {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-});
-
-const DeviceView = (props: { device?: Device }) => {
-  const { device } = props;
+const DeviceView = ({ device }: { device?: Device }): JSX.Element => {
   const { updateDevice } = useStageActions();
   const [css] = useStyletron();
 
   if (!device) return null;
 
   return (
-    <Card
-      title={
-        <CardTitle>
-          {device.name} ({device._id}){device.online ? <Check size={32} /> : <Delete size={32} />}
-        </CardTitle>
-      }
-    >
+    <Card>
+      <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
+        {device.name} ({device._id}){device.online ? <Check size={32} /> : <Delete size={32} />}
+      </Flex>
       <StyledBody>
         <Checkbox checked={device.canVideo} disabled>
           canVideo
@@ -42,17 +31,12 @@ const DeviceView = (props: { device?: Device }) => {
         </Checkbox>
       </StyledBody>
       <StyledAction>
-        <div
-          className={css({
-            width: '100%',
-            display: 'flex',
-          })}
-        >
+        <Flex sx={{ width: '100%' }}>
           <Button
             variant={device.sendVideo ? 'primary' : 'secondary'}
             onClick={() => {
-              updateDevice(props.device._id, {
-                sendVideo: !props.device.sendVideo,
+              updateDevice(device._id, {
+                sendVideo: !device.sendVideo,
               });
             }}
           >
@@ -61,8 +45,8 @@ const DeviceView = (props: { device?: Device }) => {
           <Button
             variant={device.sendAudio ? 'primary' : 'secondary'}
             onClick={() => {
-              updateDevice(props.device._id, {
-                sendAudio: !props.device.sendAudio,
+              updateDevice(device._id, {
+                sendAudio: !device.sendAudio,
               });
             }}
           >
@@ -71,8 +55,8 @@ const DeviceView = (props: { device?: Device }) => {
           <Button
             variant={device.receiveVideo ? 'primary' : 'secondary'}
             onClick={() => {
-              updateDevice(props.device._id, {
-                receiveVideo: !props.device.receiveVideo,
+              updateDevice(device._id, {
+                receiveVideo: !device.receiveVideo,
               });
             }}
           >
@@ -88,14 +72,8 @@ const DeviceView = (props: { device?: Device }) => {
           >
             Receive Audio
           </Button>
-        </div>
-        <div
-          className={css({
-            width: '100%',
-            display: 'flex',
-            flexWrap: 'wrap',
-          })}
-        >
+        </Flex>
+        <Flex sx={{ flexWrap: 'wrap', width: '100%' }}>
           <SingleSelect
             className={css({
               flexBasis: 0,
@@ -138,7 +116,7 @@ const DeviceView = (props: { device?: Device }) => {
               })
             }
           />
-        </div>
+        </Flex>
       </StyledAction>
     </Card>
   );
