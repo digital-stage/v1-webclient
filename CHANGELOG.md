@@ -1,3 +1,17 @@
+# [0.1.0](https://github.com/digital-stage/webclient/compare/v0.0.2...v0.1.0) (2020-11-13)
+
+
+### Bug Fixes
+
+* add array cutter to ensure that TS props are happy and tighten control ([3dd41dc](https://github.com/digital-stage/webclient/commit/3dd41dce38cd19420733bb61b828e7d16a544c50))
+* start translation to German ([d0a730c](https://github.com/digital-stage/webclient/commit/d0a730c266faa9f00cf49f020f54c31f0d9e4b9f))
+
+
+### Features
+
+* change labels and error messages to German - stage and related modals ([205cbca](https://github.com/digital-stage/webclient/commit/205cbcaedda3b38052ed0fca808e5e41d08e43b5))
+* combine device controls and leaver button ([5d081d0](https://github.com/digital-stage/webclient/commit/5d081d03e7089f4caf4a6b409be5cede4706a4f3))
+
 ## [0.0.2](https://github.com/digital-stage/webclient/compare/v0.0.1...v0.0.2) (2020-11-13)
 
 
