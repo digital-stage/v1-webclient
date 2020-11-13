@@ -6,21 +6,21 @@ import { FaPlus, FaPen, FaTrash } from 'react-icons/fa';
 import { Groups, NormalizedState } from '../../../../lib/digitalstage/useStageContext/schema';
 import { useSelector } from '../../../../lib/digitalstage/useStageContext/redux';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
-import { Client } from '../../../../lib/digitalstage/common/model.client';
+import { Stage, Group } from '../../../../lib/digitalstage/common/model.client';
 import { useRequest } from '../../../../lib/useRequest';
 import InviteModal from './InviteModal';
 import ModifyGroupModal from './ModifyGroupModal';
 import CreateGroupModal from './CreateGroupModal';
 import useStageSelector from '../../../../lib/digitalstage/useStageSelector';
 
-const StageGroupList = (props: { stage: Client.Stage }): JSX.Element => {
+const StageGroupList = (props: { stage: Stage }): JSX.Element => {
   const groups = useStageSelector<Groups>((state) => state.groups);
   const currentStageId = useSelector<NormalizedState, string | undefined>((state) => state.stageId);
   const currentGroupId = useSelector<NormalizedState, string | undefined>((state) => state.groupId);
   const { removeGroup, leaveStage } = useStageActions();
   const { setRequest } = useRequest();
-  const [currentStage, setCurrentStage] = React.useState<Client.Stage>();
-  const [currentGroup, setCurrentGroup] = React.useState<Client.Group>();
+  const [currentStage, setCurrentStage] = React.useState<Stage>();
+  const [currentGroup, setCurrentGroup] = React.useState<Group>();
   const [isCreateGroupOpen, setCreateGroupIsOpen] = React.useState<boolean>(false);
   const [isModifyGroupOpen, setModifyGroupIsOpen] = React.useState<boolean>(false);
   const [isCopyLinkOpen, setCopyLinkOpen] = React.useState<boolean>();

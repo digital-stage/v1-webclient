@@ -4,7 +4,7 @@ import * as React from 'react';
 import { jsx, Flex, Button, Text } from 'theme-ui';
 import { useFormik, FormikProvider, Field } from 'formik';
 import * as Yup from 'yup';
-import { Client } from '../../../../lib/digitalstage/common/model.client';
+import { Stage } from '../../../../lib/digitalstage/common/model.client';
 import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import Modal from '../Modal';
 import InputField from '../../../InputField';
@@ -20,7 +20,7 @@ const Schema = Yup.object().shape({
 });
 
 const ModifyStageModal = (props: {
-  stage: Client.Stage;
+  stage: Stage;
   isOpen?: boolean;
   onClose?: () => any;
 }): JSX.Element => {

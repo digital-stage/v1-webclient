@@ -135,9 +135,7 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
         (process.env.NEXT_PUBLIC_USE_SSL === 'true' ? 'wss://' : 'ws://') + router.url
       }:${router.port}`;
 
-      const createdConnection = new TeckosClient(url, {
-        verbose: true,
-      });
+      const createdConnection = new TeckosClient(url);
 
       createdConnection.on('connect_error', (error) => {
         reportError(error);
