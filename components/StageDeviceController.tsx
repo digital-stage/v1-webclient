@@ -2,7 +2,14 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx, Flex, Button } from 'theme-ui';
-import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash } from 'react-icons/fa';
+import Link from 'next/link';
+import {
+  FaMicrophone,
+  FaMicrophoneSlash,
+  FaVideo,
+  FaVideoSlash,
+  FaPhoneSlash,
+} from 'react-icons/fa';
 import useStageActions from '../lib/digitalstage/useStageActions';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
 
@@ -23,7 +30,7 @@ const StageDeviceController = (): JSX.Element => {
         bottom: 0,
         left: '50%',
         transform: 'translate(-50%, 0)',
-        width: '152px',
+        width: '228px',
         justifyContent: 'space-between',
         pb: '1rem',
         zIndex: 100,
@@ -55,6 +62,11 @@ const StageDeviceController = (): JSX.Element => {
           {localDevice.sendAudio ? <FaMicrophone size="24px" /> : <FaMicrophoneSlash size="24px" />}
         </Button>
       )}
+      <Link href="/leave">
+        <Button variant="circle" title="Bühne verlassen" sx={{ bg: 'primary', color: 'text' }}>
+          <FaPhoneSlash size="24px" />
+        </Button>
+      </Link>
     </Flex>
   );
 };
