@@ -103,6 +103,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}  #Required
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}} #Required 
           working-directory: ./ #Your Working Directory, Optional
+          vercel-project-name: react-hooks #your project na
           #alias-domains: | #Optional
           #  staging.angular.vercel-action.amond.dev
           #  pr-{{PR_NUMBER}}.angular.vercel-action.amond.dev
