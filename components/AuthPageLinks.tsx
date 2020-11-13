@@ -7,11 +7,11 @@ import { useRouter } from 'next/router';
 
 const navItems = [
   {
-    label: 'Sign In',
+    label: 'Login',
     uri: '/account/login',
   },
   {
-    label: 'Sign Up',
+    label: 'Registrierung',
     uri: '/account/signup',
   },
 ];

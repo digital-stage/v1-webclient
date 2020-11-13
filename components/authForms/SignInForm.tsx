@@ -29,8 +29,10 @@ const SignInForm = (): JSX.Element => {
   });
 
   const SignInSchema = Yup.object().shape({
-    email: Yup.string().email('Enter a valid email').required('Email is required'),
-    password: Yup.string().required('Password is required'),
+    email: Yup.string()
+      .email('Bitte eine valide E-Mail-Adresse eingeben')
+      .required('E-Mail-Adresse wird benötigt'),
+    password: Yup.string().required('Das Passwort ist notwendig'),
   });
 
   return (
@@ -64,7 +66,7 @@ const SignInForm = (): JSX.Element => {
             <Field
               as={InputField}
               id="email"
-              label="Email"
+              label="E-Mail-Adresse"
               type="text"
               name="email"
               autocomplete="email"
@@ -73,7 +75,7 @@ const SignInForm = (): JSX.Element => {
             <Field
               as={InputField}
               id="password"
-              label="Password"
+              label="Passwort"
               name="password"
               type="password"
               autocomplete="current-password"
@@ -81,10 +83,10 @@ const SignInForm = (): JSX.Element => {
             />
             <Label sx={{ mt: 3 }}>
               <Field type="checkbox" name="staySignedIn" />
-              <Text sx={{ fontSize: 14, ml: 2 }}>Remember me</Text>
+              <Text sx={{ fontSize: 14, ml: 2 }}>Angemeldet bleiben</Text>
             </Label>
             <Flex sx={{ justifyContent: 'center', my: 3 }}>
-              <Button type="submit">Sign In</Button>
+              <Button type="submit">Einloggen</Button>
             </Flex>
           </Form>
         )}
@@ -93,7 +95,7 @@ const SignInForm = (): JSX.Element => {
       <Flex sx={{ justifyContent: 'center', mt: 4, mb: 2 }}>
         <Link href="/account/forgot">
           <Button as="a" variant="text">
-            Forgot password?
+            Passwort vergessen?
           </Button>
         </Link>
       </Flex>

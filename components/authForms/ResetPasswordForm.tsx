@@ -30,15 +30,15 @@ export default function ResetPasswordForm({ resetToken }: Props): JSX.Element {
 
   const ResetPasswordSchema = Yup.object().shape({
     password: Yup.string()
-      .min(8, 'Too Short!')
+      .min(8, 'Das Passwort muss eine Mindestlänge von 8 Zeichen haben')
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
-        'Password must contain: at least one number, one uppercase and one lowercase letters and at least 8 chars'
+        'Das Passwort muss folgendes beinhalten: mindestens eine Zahl, ein kleiner und ein großer Buchstabe sowie insgesamt eine Länge von 8 Zeichen haben'
       )
-      .required('Password is required'),
+      .required('Passwort wird benötigt'),
     passwordRepeat: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .required('Repeat password is required'),
+      .oneOf([Yup.ref('password'), null], 'Die Passwörter müssen identisch sein')
+      .required('Die Passwortwiederholung wird benötigt'),
   });
 
   return (
@@ -68,10 +68,11 @@ export default function ResetPasswordForm({ resetToken }: Props): JSX.Element {
           <Form>
             <Box sx={{ textAlign: 'left' }}>
               <Heading as="h3" sx={{ my: 3, fontSize: 3 }}>
-                Set new password
+                Setze eine neues Passwort
               </Heading>
               <Text>
-                Set a new password with 8 characters including 1 number and 1 uppercase letter
+                Das Passwort muss folgendes beinhalten: mindestens eine Zahl, ein kleiner und ein
+                großer Buchstabe sowie insgesamt eine Länge von 8 Zeichen haben
               </Text>
             </Box>
 
@@ -94,7 +95,7 @@ export default function ResetPasswordForm({ resetToken }: Props): JSX.Element {
               error={errors.repeatPassword && touched.repeatPassword}
             />
             <Flex sx={{ justifyContent: 'center', my: 3 }}>
-              <Button type="submit">Set password</Button>
+              <Button type="submit">Passwort setzen</Button>
             </Flex>
           </Form>
         )}

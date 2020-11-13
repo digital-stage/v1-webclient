@@ -24,18 +24,23 @@ const SignUpForm = (): JSX.Element => {
   });
 
   const SignUpSchema = Yup.object().shape({
-    email: Yup.string().email('Enter a valid email').required('Email is required'),
-    name: Yup.string().min(2, 'Too Short!').max(70, 'Too Long!').required('Username is required'),
+    email: Yup.string()
+      .email('Bitte eine valide E-Mail-Adresse eingeben.')
+      .required('E-Mail-Adresse wird benötigt'),
+    name: Yup.string()
+      .min(2, 'Der Name ist kurz')
+      .max(70, 'Der Name ist zu lang')
+      .required('Der Name ist notwendig'),
     password: Yup.string()
-      .min(8, 'Too Short!')
+      .min(8, 'Das Passwort muss eine Mindestlänge von 8 Zeichen haben')
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
-        'Password must contain: at least one number, one uppercase and one lowercase letters and at least 8 chars'
+        'Das Passwort muss folgendes beinhalten: mindestens eine Zahl, ein kleiner und ein großer Buchstabe sowie insgesamt eine Länge von 8 Zeichen haben'
       )
-      .required('Password is required'),
+      .required('Passwort wird benötigt'),
     passwordRepeat: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .required('Repeat password is required'),
+      .oneOf([Yup.ref('password'), null], 'Die Passwörter müssen identisch sein')
+      .required('Die Passwortwiederholung wird benötigt'),
   });
 
   return (
@@ -55,14 +60,14 @@ const SignUpForm = (): JSX.Element => {
                 setMsg({
                   state: true,
                   type: 'success',
-                  kids: 'Please log in to your new account',
+                  kids: 'Jetzt kannst Du Dich mit Deinem neuen Account anmelden',
                 });
                 resetForm(null);
               } else {
                 setMsg({
                   state: true,
                   type: 'warning',
-                  kids: 'Oops - please try again',
+                  kids: 'Oops - versuche es noch einmal',
                 });
               }
             })
@@ -83,7 +88,7 @@ const SignUpForm = (): JSX.Element => {
               as={InputField}
               id="email"
               type="text"
-              label="Email"
+              label="E-Mail-Adresse"
               name="email"
               error={errors.email && touched.email}
             />
@@ -91,7 +96,7 @@ const SignUpForm = (): JSX.Element => {
             <Field
               as={InputField}
               id="name"
-              label="Username"
+              label="Name"
               name="name"
               type="text"
               error={errors.name && touched.name}
@@ -99,7 +104,7 @@ const SignUpForm = (): JSX.Element => {
             <Field
               as={InputField}
               id="password"
-              label="Password"
+              label="Passwort"
               name="password"
               type="password"
               error={errors.password && touched.password}
@@ -107,14 +112,13 @@ const SignUpForm = (): JSX.Element => {
             <Field
               as={InputField}
               id="passwordRepeat"
-              label="Repeat password"
+              label="Passwort Wiederholung"
               type="password"
               name="passwordRepeat"
               error={errors.passwordRepeat && touched.passwordRepeat}
             />
-
             <Flex sx={{ justifyContent: 'center', my: 3 }}>
-              <Button type="submit">Sign Up</Button>
+              <Button type="submit">Registrierung</Button>
             </Flex>
           </Form>
         )}

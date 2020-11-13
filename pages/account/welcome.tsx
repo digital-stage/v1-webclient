@@ -31,31 +31,30 @@ const Welcome = (): JSX.Element => {
         <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
           <DigitalStageLogo single icon width={80} />
 
-          <Heading as="h4" m={3}>
-            Your digital stage for art, music
-            <br />
-            and theatre ensembles.
+          <Heading as="h3" m={3}>
+            Deine digitale Bühne für Kunst-, <br />
+            Musik- und Theaterensembles
           </Heading>
         </Flex>
         <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
           <Heading as="h1" my={3}>
-            Welcome back
+            Herzlich willkommen
           </Heading>
 
           <Link href="/account/login">
-            <Button as="a" variant="white">
-              Sign In
+            <Button as="a" variant="white" sx={{ cursor: 'pointer' }}>
+              Starten
             </Button>
           </Link>
 
           <Text sx={{ my: 2, textAlign: 'center' }}>
-            Sign into account or
+            Melde Dich mit Deinem Account an
             <br />
-            create a new one
+            oder erstelle einen neuen
           </Text>
         </Flex>
 
-        <Text variant="hint">Version 0.00001</Text>
+        <Text variant="hint">Version 0.1</Text>
       </Flex>
     </Layout>
   );

@@ -24,11 +24,11 @@ const ForgetPasswordForm = (): JSX.Element => {
 
   const ForgetPasswordSchema = Yup.object().shape({
     email: Yup.string()
-      .email('Bitte eine valide E-Mail Adresse eingeben.')
-      .required('E-Mail Adresse wird benötigt'),
+      .email('Bitte eine valide E-Mail-Adresse eingeben.')
+      .required('E-Mail-Adresse wird benötigt'),
     repeatEmail: Yup.string()
-      .oneOf([Yup.ref('email'), null], 'Email must match')
-      .required('Repeat email is required'),
+      .oneOf([Yup.ref('email'), null], 'E-Mail-Adressen müssen gleich sein')
+      .required('Die Wiederholung ist notwendig'),
   });
 
   return (
@@ -37,7 +37,7 @@ const ForgetPasswordForm = (): JSX.Element => {
         <Heading as="h3" sx={{ my: 3, fontSize: 3 }}>
           Passwort zurücksetzen
         </Heading>
-        <Text>Enter your email address to restore your password</Text>
+        <Text>Gibt Deine E-Mail-Adresse ein, um Dein Passwort zurückzusetzen</Text>
       </Box>
       <Formik
         initialValues={{ email: '', repeatEmail: '' }}
@@ -50,20 +50,20 @@ const ForgetPasswordForm = (): JSX.Element => {
                 setMsg({
                   state: true,
                   type: 'success',
-                  kids: 'Link sent - check your mails',
+                  kids: 'Link gesendet - prüfe Deine E-Mails',
                 });
                 resetForm(null);
               } else if (res === 404) {
                 setMsg({
                   state: true,
                   type: 'danger',
-                  kids: 'Unknown email address',
+                  kids: 'Unbekannte E-Mail-Adresse',
                 });
               } else {
                 setMsg({
                   state: true,
                   type: 'warning',
-                  kids: 'Oops - please try again',
+                  kids: 'Oops - versuche es noch einmal',
                 });
               }
             })
@@ -83,7 +83,7 @@ const ForgetPasswordForm = (): JSX.Element => {
             <Field
               as={InputField}
               id="email"
-              label="E-mail"
+              label="E-Mail-Adresse"
               name="email"
               type="text"
               error={errors.email && touched.email}
@@ -91,18 +91,18 @@ const ForgetPasswordForm = (): JSX.Element => {
             <Field
               as={InputField}
               id="repeatEmail"
-              label="Repeat Email"
+              label="Wiederholung E-Mail-Adresse"
               name="repeatEmail"
               type="text"
               error={errors.repeatEmail && touched.repeatEmail}
             />
             <Flex sx={{ justifyContent: 'center', my: 3 }}>
               <Link href="/account/login">
-                <Button as="a" variant="white">
-                  Cancel
+                <Button as="a" variant="white" sx={{ cursor: 'pointer' }}>
+                  Abbrechen
                 </Button>
               </Link>
-              <Button type="submit">Send</Button>
+              <Button type="submit">Senden</Button>
             </Flex>
           </Form>
         )}
