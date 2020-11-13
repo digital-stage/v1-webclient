@@ -1,5 +1,10 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import React from 'react';
+import { jsx, Heading, Link } from 'theme-ui';
 import { useErrors } from '../lib/useErrors';
+import Layout from './Layout';
+import Card from './Card';
 
 interface Props {
   children: React.ReactNode;
@@ -11,28 +16,35 @@ const ErrorHandler = ({ children }: Props): JSX.Element => {
   if (errors.length > 0) {
     errors.forEach((error) => console.error(error));
     return (
-      <div>
-        SERVICE NOT AVAILABLE
-        {errors.map((error) => error.message)}
-      </div>
+      <Layout>
+        <Card size="auth">
+          Es tut uns leid, aber der
+          <Heading sx={{ my: 4 }}> Service steht derzeit nicht zur Verfügung.</Heading> Aktuelle
+          Neuigkeiten erfahren Sie auf unserer {` `}
+          <Link sx={{ color: 'text' }} href="https://www.digital-stage.org">
+            Website
+          </Link>
+          {errors.map((error) => error.message)}
+        </Card>
+      </Layout>
     );
   }
 
   if (warnings.length > 0) {
     warnings.forEach((warning) => console.warn(warning));
     return (
-      <>
+      <React.Fragment>
         {children}
         {warnings.length > 0 ? (
           <div>
-            WARNING:
+            Warnung:
             <p>{warnings.map((warning) => warning.message)}</p>
           </div>
         ) : undefined}
-      </>
+      </React.Fragment>
     );
   }
 
-  return <>{children}</>;
+  return <React.Fragment>{children}</React.Fragment>;
 };
 export default ErrorHandler;

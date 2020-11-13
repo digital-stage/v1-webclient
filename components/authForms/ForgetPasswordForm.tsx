@@ -23,7 +23,9 @@ const ForgetPasswordForm = (): JSX.Element => {
   });
 
   const ForgetPasswordSchema = Yup.object().shape({
-    email: Yup.string().email('Enter a valid email').required('Email is required'),
+    email: Yup.string()
+      .email('Bitte eine valide E-Mail Adresse eingeben.')
+      .required('E-Mail Adresse wird benötigt'),
     repeatEmail: Yup.string()
       .oneOf([Yup.ref('email'), null], 'Email must match')
       .required('Repeat email is required'),
@@ -33,7 +35,7 @@ const ForgetPasswordForm = (): JSX.Element => {
     <Box>
       <Box sx={{ textAlign: 'left' }}>
         <Heading as="h3" sx={{ my: 3, fontSize: 3 }}>
-          Reset your password
+          Passwort zurücksetzen
         </Heading>
         <Text>Enter your email address to restore your password</Text>
       </Box>
