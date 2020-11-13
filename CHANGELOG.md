@@ -1,3 +1,11 @@
+# [0.2.0](https://github.com/digital-stage/webclient/compare/v0.1.0...v0.2.0) (2020-11-13)
+
+
+### Features
+
+* Routers are selected by ping now ([a94713b](https://github.com/digital-stage/webclient/commit/a94713b493e6020e6f82b05da62f941438c0f350))
+* Routers are selected by ping now ([7f135d5](https://github.com/digital-stage/webclient/commit/7f135d5593aad80e58db5b7ad024ea20c39d4625))
+
 # [0.1.0](https://github.com/digital-stage/webclient/compare/v0.0.2...v0.1.0) (2020-11-13)
 
 
