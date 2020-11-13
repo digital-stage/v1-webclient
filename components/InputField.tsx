@@ -14,6 +14,7 @@ interface Props {
   type: string;
   value?: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  inputRef?: React.MutableRefObject<HTMLInputElement>; 
 }
 const InputField = ({ id, label, name, error, version, ...rest }: Props): JSX.Element => (
   <Box sx={{ mt: 4 }}>

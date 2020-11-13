@@ -55,9 +55,7 @@ const theme: Theme = {
     },
     group: {
       width: '30px',
-      height: '30px',
-      borderRadius: 'radii.round',
-      mr: 3,
+      height: '30px'
     },
   },
   shadows: {
