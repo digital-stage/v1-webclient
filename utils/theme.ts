@@ -1,4 +1,4 @@
-import { Theme } from "@theme-ui/css";
+import { Theme } from '@theme-ui/css';
 
 const theme: Theme = {
   colors: {
@@ -53,12 +53,12 @@ const theme: Theme = {
     page: {
       default: '1280px',
     },
-    group:{
-      width: "30px",
-      height: "30px",
+    group: {
+      width: '30px',
+      height: '30px',
       borderRadius: 'radii.round',
       mr: 3,
-    }
+    },
   },
   shadows: {
     default: '0px 23px 17px #00000052',

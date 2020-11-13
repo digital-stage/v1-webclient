@@ -10,7 +10,7 @@ import StageListView from '../components/new/elements/StageList';
 import StageDeviceController from '../components/StageDeviceController';
 import StageLeaver from '../components/StageLeaver';
 import Layout from '../components/Layout';
-import Container, {Size} from '../components/Container';
+import Container, { Size } from '../components/Container';
 import PageSpinner from '../components/PageSpinner';
 import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/FixedAudioPlaybackStarterButton';
 

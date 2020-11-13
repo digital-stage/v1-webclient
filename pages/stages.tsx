@@ -28,11 +28,7 @@ const Stages = (): JSX.Element => {
     return <Login />;
   }
 
-  return (
-    <div>
-      TODO: WAS STAGE DETAILS BEFORE, PLEASE ADD RESPONDING COMPONENT HERE
-    </div>
-  )
+  return <div>TODO: WAS STAGE DETAILS BEFORE, PLEASE ADD RESPONDING COMPONENT HERE</div>;
 };
 
 export default Stages;
