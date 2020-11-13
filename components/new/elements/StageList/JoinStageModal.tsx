@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Button, Heading, Text } from 'theme-ui';
+import { Flex, Button, Heading, Text, Message } from 'theme-ui';
 import Modal from '../Modal';
 import InputField from '../../../InputField';
 import { useRouter } from 'next/router';
@@ -8,9 +8,11 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
   const { isOpen, onClose } = props;
   const router = useRouter();
   const [link, setLink] = React.useState<string>();
+  const [msg, setMsg] = React.useState<string>();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLink(e.target.value);
+    setMsg("")
   };
 
   // TODO: Misses error handling
@@ -23,6 +25,10 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
       );
       router.push(path);
     }
+    else {
+      // TODO: Translate to German
+      setMsg("Please enter link!")
+    }
   };
 
   return (
@@ -31,6 +37,7 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
       <Text variant="subTitle">
         Gib den Link ein, mit welchem Du einer Bühne beitreten möchtest
       </Text>
+      {msg && <Message variant="danger">{msg}</Message>}
       <InputField
         type="text"
         id="link"
@@ -41,7 +48,7 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
         version="dark"
       />
       <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
-        <Button variant="black" onClick={onClose}>
+        <Button variant="black" onClick={() => { onClose(); setMsg("") }}>
           Schließen
         </Button>
         <Button onClick={joinStage} autoFocus>
