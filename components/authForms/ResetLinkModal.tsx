@@ -7,7 +7,7 @@ import CloseIcon from '@material-ui/icons/Close';
 
 interface DialogTitleProps {
   id: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   onClose: () => void;
 }
 

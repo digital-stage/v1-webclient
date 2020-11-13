@@ -45,8 +45,7 @@ const LevelControlFader = (props: {
         }}
       >
         <Button
-          kind={muted ? 'primary' : 'minimal'}
-          shape="circle"
+          variant={muted ? 'primary' : 'outline'}
           aria-label="mute"
           onClick={handleMuteClicked}
         >

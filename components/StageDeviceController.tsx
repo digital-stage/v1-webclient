@@ -32,7 +32,7 @@ const StageDeviceController = (): JSX.Element => {
       {localDevice.canVideo && (
         <Button
           variant="circle"
-          label={localDevice.sendVideo ? 'Kamera deaktivieren' : 'Kamera aktivieren'}
+          title={localDevice.sendVideo ? 'Kamera deaktivieren' : 'Kamera aktivieren'}
           onClick={() =>
             updateDevice(localDevice._id, {
               sendVideo: !localDevice.sendVideo,
@@ -45,7 +45,7 @@ const StageDeviceController = (): JSX.Element => {
       {localDevice.canAudio && (
         <Button
           variant="circle"
-          label={localDevice.sendAudio ? 'Mikrofon deaktivieren' : 'Mikrofon aktivieren'}
+          title={localDevice.sendAudio ? 'Mikrofon deaktivieren' : 'Mikrofon aktivieren'}
           onClick={() =>
             updateDevice(localDevice._id, {
               sendAudio: !localDevice.sendAudio,
