@@ -1,6 +1,6 @@
 import mediasoupClient from 'mediasoup-client';
-import {TeckosClient} from 'teckos-client';
-import {Router, StageMemberAudioProducer, StageMemberVideoProducer} from '../common/model.server';
+import { TeckosClient } from 'teckos-client';
+import { Router, StageMemberAudioProducer, StageMemberVideoProducer } from '../common/model.server';
 
 export enum RouterEvents {
   TransportCloses = 'transport-closed',
@@ -68,13 +68,14 @@ export const getFastestRouter = (): Promise<Router> =>
   fetchGet<Router[]>(`${process.env.NEXT_PUBLIC_ROUTERS_URL}/routers`)
     .then(async (routers) => {
       if (routers.length === 0) {
-        throw new Error("No router available");
+        throw new Error('No router available');
       }
       // First get latencies for all routers
       const routerWithLatencies: { router: Router; latency: number }[] = await Promise.all(
         routers.map((router) => {
-          const url =
-            `${router.restPrefix}://${router.url}:${router.port}${router.path ? '/' + router.path + '/' : ''}/ping`;
+          const url = `${router.restPrefix}://${router.url}:${router.port}${
+            router.path ? '/' + router.path + '/' : ''
+          }/ping`;
           return ping(url)
             .then((latency) => ({
               router: router,
@@ -91,7 +92,7 @@ export const getFastestRouter = (): Promise<Router> =>
               //TODO: Remove
               console.debug(`[useMediasoup] Latency of ${url}: ${routerWithLatency.latency}`);
               return routerWithLatency;
-            })
+            });
         })
       );
       const fastestRouterWithLatency = routerWithLatencies.reduce((prev, curr) => {
@@ -107,12 +108,12 @@ export const getFastestRouter = (): Promise<Router> =>
     });
 
 function requestImage(url: string) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     const img = new Image();
-    img.onload = function() {
+    img.onload = function () {
       resolve(img);
     };
-    img.onerror = function() {
+    img.onerror = function () {
       reject(url);
     };
     img.src = url + '?random-no-cache=' + Math.floor((1 + Math.random()) * 0x10000).toString(16);
@@ -120,9 +121,9 @@ function requestImage(url: string) {
 }
 
 function ping(url: string, multiplier?: number): Promise<number> {
-  return new Promise<number>(function(resolve, reject) {
+  return new Promise<number>(function (resolve, reject) {
     const start: number = new Date().getTime();
-    const response = function() {
+    const response = function () {
       let delta: number = new Date().getTime() - start;
       delta *= multiplier || 1;
       resolve(delta);
@@ -132,7 +133,7 @@ function ping(url: string, multiplier?: number): Promise<number> {
       .catch(() => reject(Error('Error')));
 
     // Set a timeout for max-pings, 300ms.
-    setTimeout(function() {
+    setTimeout(function () {
       reject(Error('Timeout'));
     }, 300);
   });
@@ -155,7 +156,7 @@ export const createWebRTCTransport = (
           direction === 'send'
             ? device.createSendTransport(transportOptions)
             : device.createRecvTransport(transportOptions);
-        transport.on('connect', async ({dtlsParameters}, callback, errCallback) => {
+        transport.on('connect', async ({ dtlsParameters }, callback, errCallback) => {
           socket.emit(
             RouterRequests.ConnectTransport,
             {
