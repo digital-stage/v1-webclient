@@ -3,15 +3,9 @@
 import * as React from 'react';
 import { jsx, Box, Button } from 'theme-ui';
 import { FaUser } from 'react-icons/fa';
-import Modal from '../../Modal';
-import NavItem from '../NavItem';
-import { CenteredNavItems, LowerNavItems } from '../../PageWrapperWithStage/MenuItems';
+import DropdownMenu from './DropdownMenu';
 
-const combinedMenu = [...CenteredNavItems, ...LowerNavItems];
-
-const AppBar = (props: { onSelected: (navItem: NavItem) => void }): JSX.Element => {
-  const { onSelected } = props;
-
+const AppBar = (): JSX.Element => {
   const [open, setOpen] = React.useState<boolean>(false);
 
   return (
@@ -30,25 +24,7 @@ const AppBar = (props: { onSelected: (navItem: NavItem) => void }): JSX.Element 
           <FaUser />
         </Button>
       </Box>
-      <Modal isOpen={open} onClose={() => setOpen(false)}>
-        {combinedMenu &&
-          combinedMenu.map((item, index) => {
-            return (
-              <Box
-                key={index}
-                tabIndex={index}
-                role="presentation"
-                onClick={() => {
-                  setOpen(false);
-                  onSelected(item);
-                }}
-                sx={{ color: 'background' }}
-              >
-                {item.label}
-              </Box>
-            );
-          })}
-      </Modal>
+      <DropdownMenu isOpen={open} onClose={() => setOpen(false)} />
     </React.Fragment>
   );
 };

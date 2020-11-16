@@ -2,7 +2,8 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx } from 'theme-ui';
-import { FaVideo, FaVolumeUp, FaBug } from 'react-icons/fa';
+import { FaVideo, FaVolumeUp, FaBug, FaUserAlt, FaCog } from 'react-icons/fa';
+import { MdFeedback } from 'react-icons/md';
 import { GoSettings } from 'react-icons/go';
 import NavItem from '../Menu/NavItem';
 import AudioSettingsPane from '../../panes/AudioSettingsPane';
@@ -42,6 +43,27 @@ export const LowerNavItems: NavItem[] = [
     icon: <FaBug name="bug" />,
     href: '#',
     content: <SettingsPane />,
+    size: 'large',
+  },
+];
+
+export const AppBarItems: NavItem[] = [
+  {
+    label: 'Edit profile',
+    icon: <FaUserAlt name="edit" />,
+    href: '#',
+    size: 'large',
+  },
+  {
+    label: 'Settings',
+    icon: <FaCog name="settings" />,
+    href: '#',
+    size: 'large',
+  },
+  {
+    label: 'Give feedback',
+    icon: <MdFeedback name="feedback" />,
+    href: '#',
     size: 'large',
   },
 ];
