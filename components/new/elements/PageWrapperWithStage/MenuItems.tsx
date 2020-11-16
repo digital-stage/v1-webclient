@@ -2,34 +2,34 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx } from 'theme-ui';
-import { FaVideo, FaMicrophone, FaMusic, FaCog } from 'react-icons/fa';
+import { FaVideo, FaVolumeUp, FaBug } from 'react-icons/fa';
+import { GoSettings } from 'react-icons/go';
 import NavItem from '../Menu/NavItem';
 import AudioSettingsPane from '../../panes/AudioSettingsPane';
 import VideoSettingsPane from '../../panes/VideoSettingsPane';
 import MixerPane from '../../panes/MixerPane';
 import SettingsPane from '../../panes/SettingsPane';
 
-export const UpperNavItems: NavItem[] = [
+// TODO translate to German
+// TODO content and href
+export const CenteredNavItems: NavItem[] = [
   {
-    label: 'Audio settings',
-    icon: <FaMicrophone name="settings" />,
-    href: 'audio',
-    content: <AudioSettingsPane />,
-    size: 'small',
-  },
-  {
-    label: 'Video settings',
+    label: 'Video',
     icon: <FaVideo name="settings" />,
     href: 'video',
     content: <VideoSettingsPane />,
     size: 'small',
   },
-];
-
-export const CenteredNavItems: NavItem[] = [
+  {
+    label: 'Audio',
+    icon: <FaVolumeUp name="settings" />,
+    href: 'audio',
+    content: <AudioSettingsPane />,
+    size: 'small',
+  },
   {
     label: 'Mixer',
-    icon: <FaMusic name="mixer" />,
+    icon: <GoSettings name="Mixer" />,
     href: 'video',
     content: <MixerPane />,
     size: 'large',
@@ -38,9 +38,9 @@ export const CenteredNavItems: NavItem[] = [
 
 export const LowerNavItems: NavItem[] = [
   {
-    label: 'Settings',
-    icon: <FaCog name="settings" />,
-    href: 'settings',
+    label: 'Report Bug',
+    icon: <FaBug name="bug" />,
+    href: '#',
     content: <SettingsPane />,
     size: 'large',
   },

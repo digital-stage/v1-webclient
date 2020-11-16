@@ -5,13 +5,9 @@ import { jsx, Box, Button } from 'theme-ui';
 import { FaUser } from 'react-icons/fa';
 import Modal from '../../Modal';
 import NavItem from '../NavItem';
-import {
-  CenteredNavItems,
-  LowerNavItems,
-  UpperNavItems,
-} from '../../PageWrapperWithStage/MenuItems';
+import { CenteredNavItems, LowerNavItems } from '../../PageWrapperWithStage/MenuItems';
 
-const combinedMenu = [...UpperNavItems, ...CenteredNavItems, ...LowerNavItems];
+const combinedMenu = [...CenteredNavItems, ...LowerNavItems];
 
 const AppBar = (props: { onSelected: (navItem: NavItem) => void }): JSX.Element => {
   const { onSelected } = props;
