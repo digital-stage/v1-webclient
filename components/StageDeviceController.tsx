@@ -33,7 +33,7 @@ const StageDeviceController = (): JSX.Element => {
         zIndex: 100,
       }}
     >
-      {localDevice.canVideo && (
+      {localDevice?.canVideo && (
         <Button
           variant="circle"
           title={localDevice.sendVideo ? 'Kamera deaktivieren' : 'Kamera aktivieren'}
@@ -46,7 +46,7 @@ const StageDeviceController = (): JSX.Element => {
           {localDevice.sendVideo ? <FaVideo size="24px" /> : <FaVideoSlash size="24px" />}
         </Button>
       )}
-      {localDevice.canAudio && (
+      {localDevice?.canAudio && (
         <Button
           variant="circle"
           title={localDevice.sendAudio ? 'Mikrofon deaktivieren' : 'Mikrofon aktivieren'}
