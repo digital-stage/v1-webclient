@@ -12,7 +12,7 @@ const Profile = () => {
 
   return (
     <Box>
-      <Heading>Profile</Heading>
+      <Heading mb={3}>Profile settings</Heading>
       <Text variant="title" sx={{ color: 'text' }} mb={3}>
         {user.name}
       </Text>

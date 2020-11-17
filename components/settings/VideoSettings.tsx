@@ -7,7 +7,7 @@ import { jsx, Box, Heading } from 'theme-ui';
 const VideoSettings = () => {
   return (
     <Box>
-      <Heading>Video settings</Heading>
+      <Heading mb={3}>Video settings</Heading>
     </Box>
   );
 };

@@ -10,6 +10,7 @@ import { AppBarItems } from '../../PageWrapperWithStage/MenuItems';
 interface Props {
   onClose(): void;
   isOpen: boolean;
+  onSelect(selected: string): any;
 }
 
 // TODO add German translation
@@ -29,6 +30,7 @@ const DropdownMenu = (props: Props) => {
         right: '22px',
         p: 4,
         boxShadow: '0px 3px 6px #000000BC',
+        zIndex: 999,
       }}
     >
       <Text variant="title" sx={{ color: 'text' }} mb={3}>
@@ -40,7 +42,12 @@ const DropdownMenu = (props: Props) => {
       <Divider sx={{ color: 'text' }} />
       {AppBarItems.map((item, i) => {
         return (
-          <Flex key={i} py={2} sx={{ alignItems: 'center', cursor: 'pointer' }}>
+          <Flex
+            key={i}
+            py={2}
+            sx={{ alignItems: 'center', cursor: 'pointer' }}
+            onClick={() => props.onSelect(item.href)}
+          >
             {item.icon}
             <Text variant="title" sx={{ color: 'text' }} ml={2}>
               {item.label}

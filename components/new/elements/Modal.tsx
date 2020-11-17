@@ -33,7 +33,10 @@ const Modal = (props: Props) =>
           bg: props.variant === 'dark' ? 'gray.4' : 'text',
           padding: 3,
           pl: props.type === 'settings' ? 0 : 3,
-          width: props.type === 'settings' ? 'container.default' : 'container.tiny',
+          width:
+            props.type === 'settings'
+              ? ['container.small', 'container.stage', 'container.default']
+              : 'container.tiny',
           height: 'auto',
           top: '50%',
           left: '50%',

@@ -6,12 +6,25 @@ import { jsx, Box, Flex, Text, Heading } from 'theme-ui';
 import Modal from '../new/elements/Modal';
 import { SettingsModalItems } from '../new/elements/PageWrapperWithStage/MenuItems';
 
-const Settings = (props: { isOpen: boolean; onClose(): void }) => {
+const SettingsModal = (props: { isOpen: boolean; onClose(): void; selected: string }) => {
+  const [selected, setSelected] = React.useState(props.selected);
+  console.log(selected);
+
+  React.useEffect(() => {
+    setSelected(props.selected);
+  }, [props.selected]);
+
+  React.useEffect(() => {
+    setSelected(selected);
+  }, [selected]);
+
   return (
     <Modal isOpen={props.isOpen} onClose={props.onClose} variant="dark" type="settings">
       <Flex>
-        <Box sx={{ width: '30%', textAlign: 'center' }}>
-          <Heading>Settings</Heading>
+        <Box sx={{ width: '30%' }}>
+          <Heading ml={3} mb={3}>
+            Settings
+          </Heading>
           {SettingsModalItems.map((item, i) => {
             return (
               <Flex
@@ -20,13 +33,17 @@ const Settings = (props: { isOpen: boolean; onClose(): void }) => {
                 sx={{
                   alignItems: 'center',
                   cursor: 'pointer',
-                  padding: 3,
+                  mr: 3,
+                  padding: 2,
                   pl: 3,
+                  bg: selected === item.href && 'gray.3',
+                  borderRadius: selected === item.href && '0px 24px 24px 0px',
                   ':hover': {
-                    bg: 'gray.3',
-                    borderRadius: '0 18px 18px 0',
+                    bg: 'gray.2',
+                    borderRadius: '0px 24px 24px 0px',
                   },
                 }}
+                onClick={() => setSelected(item.href)}
               >
                 {item.icon}
                 <Text variant="title" sx={{ color: 'text' }} ml={2}>
@@ -36,10 +53,14 @@ const Settings = (props: { isOpen: boolean; onClose(): void }) => {
             );
           })}
         </Box>
-        <Box sx={{ width: '70%' }}>Content</Box>
+        <Box sx={{ width: '70%' }}>
+          {SettingsModalItems.map((item) => {
+            return item.href === selected ? item.content : null;
+          })}
+        </Box>
       </Flex>
     </Modal>
   );
 };
 
-export default Settings;
+export default SettingsModal;

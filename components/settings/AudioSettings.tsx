@@ -7,7 +7,7 @@ import { jsx, Box, Heading } from 'theme-ui';
 const AudioSettings = () => {
   return (
     <Box>
-      <Heading>Audio settings</Heading>
+      <Heading mb={3}>Audio settings</Heading>
     </Box>
   );
 };

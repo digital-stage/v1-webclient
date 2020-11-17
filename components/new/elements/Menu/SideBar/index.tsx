@@ -5,25 +5,27 @@ import { jsx, Box, Flex } from 'theme-ui';
 import NavItem from '../NavItem';
 import { CenteredNavItems, LowerNavItems } from '../../PageWrapperWithStage/MenuItems';
 import DigitalStageLogo from '../../../../DigitalStageLogo';
+import SettingsModal from '../../../../settings';
 
-const SideBar = ({
-  selected,
-  onSelected,
-}: {
-  selected?: NavItem;
-  onSelected: (navItem: NavItem) => void;
-}): JSX.Element => {
-  const SideBarItem = ({ item, index }: { item: any; index: number }) => {
+const SideBar = (): JSX.Element => {
+  const [selected, setSelected] = React.useState<string>();
+  const [openSettings, setOpenSettings] = React.useState<boolean>(false);
+
+  const SideBarItem = ({ item, index }: { item: NavItem; index: number }) => {
     /** TODO: instead of selected find a new way to markthe item active */
+    console.log(item);
     return (
       <Box
         tabIndex={index}
         role="presentation"
-        onClick={() => onSelected(item)}
+        onClick={() => {
+          if (item.href !== 'mixer') {
+            setSelected(item.href);
+            setOpenSettings(true);
+          }
+        }}
         sx={{
-          //width: '100%',
           color: 'text',
-          //bg: 'accent',
           px: '1rem',
           outline: 'none',
           textAlign: 'center',
@@ -41,6 +43,7 @@ const SideBar = ({
       py={3}
       sx={{
         flexDirection: 'column',
+        cursor: 'pointer',
         bg: 'gray.6',
         minHeight: '100vh',
         justifyContent: 'space-between',
@@ -60,6 +63,11 @@ const SideBar = ({
         {LowerNavItems &&
           LowerNavItems.map((item, index) => <SideBarItem item={item} key={index} index={index} />)}
       </Box>
+      <SettingsModal
+        isOpen={openSettings}
+        onClose={() => setOpenSettings(!openSettings)}
+        selected={selected}
+      />
     </Flex>
   );
 };

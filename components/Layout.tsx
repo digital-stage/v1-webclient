@@ -17,9 +17,6 @@ interface Props {
 const Layout = ({ children, sidebar, auth }: Props): JSX.Element => {
   const { loading } = useAuth();
 
-  const [currentItem, setCurrentItem] = React.useState(null);
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-
   return (
     <Box
       sx={{
@@ -53,18 +50,7 @@ const Layout = ({ children, sidebar, auth }: Props): JSX.Element => {
                 zIndex: 100,
               }}
             >
-              <SideNavigation
-                selected={currentItem}
-                onSelected={(item) => {
-                  if (currentItem && modalOpen && currentItem.label === item.label) {
-                    setModalOpen(false);
-                    setCurrentItem(item);
-                  } else {
-                    setCurrentItem(item);
-                    setModalOpen(true);
-                  }
-                }}
-              />
+              <SideNavigation />
             </Box>
           )}
           <Box
@@ -83,18 +69,7 @@ const Layout = ({ children, sidebar, auth }: Props): JSX.Element => {
                 <DigitalStageLogo single />
               </Box>
             )}
-            <TopNavigation
-            /*
-                //TODO: @Timonela, I uncommented this in favor to build
-              onSelected={(item) => {
-                if (currentItem && modalOpen && currentItem.label === item.label) {
-                  setModalOpen(false);
-                } else {
-                  setCurrentItem(item);
-                  setModalOpen(true);
-                }
-              }}*/
-            />
+            <TopNavigation />
           </Box>
 
           <Box
