@@ -1,13 +1,12 @@
 /* eslint-disable react/destructuring-assignment */
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React from 'react';
-import { jsx, Box, Heading } from 'theme-ui';
+import { Box, Heading, jsx } from 'theme-ui';
 
-const VideoSettings = () => {
+const VideoSettings = (): JSX.Element => {
   return (
     <Box>
-      <Heading mb={3}>Video settings</Heading>
+      <Heading mb={3}>Kameraeinstellungen</Heading>
     </Box>
   );
 };

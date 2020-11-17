@@ -1,8 +1,9 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import * as React from 'react';
-import { jsx, Heading } from 'theme-ui';
 import { useRouter } from 'next/router';
+import * as React from 'react';
+import { Heading, jsx } from 'theme-ui';
+import Layout from '../components/Layout';
 import Loading from '../components/new/elements/Loading';
 import useStageActions from '../lib/digitalstage/useStageActions';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
@@ -21,9 +22,11 @@ const Leave = (): JSX.Element => {
   }, [ready, stageId]);
 
   return (
-    <Loading>
-      <Heading as="h1">Verlasse Bühne...</Heading>
-    </Loading>
+    <Layout>
+      <Loading>
+        <Heading as="h1">Bühne verlassen ...</Heading>
+      </Loading>
+    </Layout>
   );
 };
 export default Leave;
