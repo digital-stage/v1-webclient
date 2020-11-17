@@ -1,27 +1,24 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import * as React from 'react';
-import { jsx, Flex, Button } from 'theme-ui';
 import Link from 'next/link';
 import {
   FaMicrophone,
   FaMicrophoneSlash,
+  FaPhoneSlash,
   FaVideo,
   FaVideoSlash,
-  FaPhoneSlash,
 } from 'react-icons/fa';
+import { Button, Flex, jsx } from 'theme-ui';
 import useStageActions from '../lib/digitalstage/useStageActions';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
+import FixedAudioPlaybackStarterButton from './new/elements/Menu/FixedAudioPlaybackStarterButton';
 
 const StageDeviceController = (): JSX.Element => {
+  // TODO: @delude88 - please have a look - state does not contain data anymore - FixedAudioButton (is this a duplicate)
   const { localDevice } = useStageSelector((state) => ({
     localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
   }));
   const { updateDevice } = useStageActions();
-
-  if (!localDevice) {
-    return null;
-  }
 
   return (
     <Flex
@@ -62,6 +59,7 @@ const StageDeviceController = (): JSX.Element => {
           {localDevice.sendAudio ? <FaMicrophone size="24px" /> : <FaMicrophoneSlash size="24px" />}
         </Button>
       )}
+      <FixedAudioPlaybackStarterButton />
       <Link href="/leave">
         <Button variant="circle" title="Bühne verlassen" sx={{ bg: 'primary', color: 'text' }}>
           <FaPhoneSlash size="24px" />

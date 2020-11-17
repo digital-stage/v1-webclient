@@ -1,17 +1,16 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import * as React from 'react';
 import { useRouter } from 'next/router';
-import { jsx, Heading } from 'theme-ui';
+import * as React from 'react';
+import { Heading, jsx } from 'theme-ui';
+import Container, { Size } from '../components/Container';
+import Layout from '../components/Layout';
+import StageListView from '../components/new/elements/StageList';
+import StagePane from '../components/new/panes/StagePane';
+import PageSpinner from '../components/PageSpinner';
+import StageDeviceController from '../components/StageDeviceController';
 import { useAuth } from '../lib/digitalstage/useAuth';
 import useStageSelector from '../lib/digitalstage/useStageSelector';
-import StagePane from '../components/new/panes/StagePane';
-import StageListView from '../components/new/elements/StageList';
-import StageDeviceController from '../components/StageDeviceController';
-import Layout from '../components/Layout';
-import Container, { Size } from '../components/Container';
-import PageSpinner from '../components/PageSpinner';
-import FixedAudioPlaybackStarterButton from '../components/new/elements/Menu/FixedAudioPlaybackStarterButton';
 
 const Index = (): JSX.Element => {
   const router = useRouter();
@@ -27,8 +26,6 @@ const Index = (): JSX.Element => {
           {stageId ? (
             <React.Fragment>
               <StagePane />
-
-              <FixedAudioPlaybackStarterButton />
               <StageDeviceController />
             </React.Fragment>
           ) : (
