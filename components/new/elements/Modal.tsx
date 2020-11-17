@@ -6,9 +6,11 @@ import { jsx, Box, IconButton } from 'theme-ui';
 import { MdClose } from 'react-icons/md';
 
 interface Props {
-  onClose(): any;
+  onClose(): void;
   isOpen: boolean;
   children: React.ReactNode;
+  variant?: 'light' | 'dark';
+  type?: 'default' | 'settings'
 }
 
 const Modal = (props: Props) =>
@@ -22,14 +24,16 @@ const Modal = (props: Props) =>
         height: '100vh',
         bg: 'modalBg',
         transition: 'background 6s ease-in-out',
+        zIndex: 99999
       }}
     >
       <Box
         sx={{
           position: 'fixed',
-          background: 'white',
+          bg: props.variant === 'dark' ? 'gray.4' : 'text',
           padding: 3,
-          width: 'container.tiny',
+          pl: props.type === 'settings' ? 0 : 3,
+          width: props.type === 'settings' ? 'container.default' : 'container.tiny',
           height: 'auto',
           top: '50%',
           left: '50%',
@@ -47,7 +51,7 @@ const Modal = (props: Props) =>
           }}
         >
           <IconButton onClick={props.onClose} style={{ cursor: 'pointer' }}>
-            <MdClose />
+            <MdClose sx={{ color: props.variant === 'dark' && 'text' }} />
           </IconButton>
         </Box>
         <main>{props.children}</main>

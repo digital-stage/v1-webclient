@@ -30,7 +30,7 @@ export const CenteredNavItems: NavItem[] = [
   },
   {
     label: 'Mixer',
-    icon: <GoSettings name="Mixer" />,
+    icon: <GoSettings name="mixer" />,
     href: 'video',
     content: <MixerPane />,
     size: 'large',
@@ -64,6 +64,30 @@ export const AppBarItems: NavItem[] = [
     label: 'Give feedback',
     icon: <MdFeedback name="feedback" />,
     href: '#',
+    size: 'large',
+  },
+];
+
+export const SettingsModalItems: NavItem[] = [
+  {
+    label: 'Video',
+    icon: <FaVideo name="settings" />,
+    href: 'video',
+    content: <VideoSettingsPane />,
+    size: 'small',
+  },
+  {
+    label: 'Audio',
+    icon: <FaVolumeUp name="settings" />,
+    href: 'audio',
+    content: <AudioSettingsPane />,
+    size: 'small',
+  },
+  {
+    label: 'Profile',
+    icon: <FaUserAlt name="profile" />,
+    href: 'profile',
+    content: '',
     size: 'large',
   },
 ];
