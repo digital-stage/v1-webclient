@@ -1,3 +1,10 @@
+## [0.5.1](https://github.com/digital-stage/webclient/compare/v0.5.0...v0.5.1) (2020-11-17)
+
+
+### Bug Fixes
+
+* mitigate my arrogant f...up ([bd7a113](https://github.com/digital-stage/webclient/commit/bd7a113d9d3fded05b1fc06e0786f6f7e1b72ce0))
+
 # [0.5.0](https://github.com/digital-stage/webclient/compare/v0.4.0...v0.5.0) (2020-11-17)
 
 
