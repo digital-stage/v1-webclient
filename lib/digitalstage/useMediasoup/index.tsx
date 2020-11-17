@@ -102,9 +102,9 @@ export const MediasoupProvider = (props: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (router) {
-      const url = `${
-        (process.env.NEXT_PUBLIC_USE_SSL === 'true' ? 'wss://' : 'ws://') + router.url
-      }:${router.port}`;
+      const url = `${router.wsPrefix}://${router.url}:${router.port}${
+        router.path ? '/' + router.path : ''
+      }`;
 
       const createdConnection = new TeckosClient(url);
 

@@ -84,6 +84,8 @@ const Layout = ({ children, sidebar, auth }: Props): JSX.Element => {
               </Box>
             )}
             <TopNavigation
+            /*
+                //TODO: @Timonela, I uncommented this in favor to build
               onSelected={(item) => {
                 if (currentItem && modalOpen && currentItem.label === item.label) {
                   setModalOpen(false);
@@ -91,7 +93,7 @@ const Layout = ({ children, sidebar, auth }: Props): JSX.Element => {
                   setCurrentItem(item);
                   setModalOpen(true);
                 }
-              }}
+              }}*/
             />
           </Box>
 

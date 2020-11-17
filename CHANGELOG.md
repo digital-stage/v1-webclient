@@ -1,3 +1,16 @@
+# [0.3.0](https://github.com/digital-stage/webclient/compare/v0.2.1...v0.3.0) (2020-11-17)
+
+
+### Bug Fixes
+
+* applied pettier to Layout.tsx ([058b177](https://github.com/digital-stage/webclient/commit/058b177811d6738b41bb20dae03da56bca1d9835))
+* uncommented invalid TopNavigation prop in favor to build ([846a7b4](https://github.com/digital-stage/webclient/commit/846a7b4d85717bdab0f874d50977a4aec949ca57))
+
+
+### Features
+
+* add dropdown menu ([92ae026](https://github.com/digital-stage/webclient/commit/92ae026a3378e91986fec40774b76952b4565bd8))
+
 ## [0.2.1](https://github.com/digital-stage/webclient/compare/v0.2.0...v0.2.1) (2020-11-13)
 
 
