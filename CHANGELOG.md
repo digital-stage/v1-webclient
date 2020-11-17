@@ -1,3 +1,15 @@
+# [0.4.0](https://github.com/digital-stage/webclient/compare/v0.3.0...v0.4.0) (2020-11-17)
+
+
+### Bug Fixes
+
+*  run prettier ([f3ebbcd](https://github.com/digital-stage/webclient/commit/f3ebbcd5372d3291526e517b4f79a5f74e227e93))
+
+
+### Features
+
+* add settings modal layout ([ebc1108](https://github.com/digital-stage/webclient/commit/ebc1108c0c75adbb37a6c7dbe4974994b08f5db9))
+
 # [0.3.0](https://github.com/digital-stage/webclient/compare/v0.2.1...v0.3.0) (2020-11-17)
 
 
