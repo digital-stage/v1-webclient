@@ -1,3 +1,10 @@
+# [0.5.0](https://github.com/digital-stage/webclient/compare/v0.4.0...v0.5.0) (2020-11-17)
+
+
+### Features
+
+*  add components to settings modal ([e8fd351](https://github.com/digital-stage/webclient/commit/e8fd351cc6e588dc0f734186a9975099dd8aa007))
+
 # [0.4.0](https://github.com/digital-stage/webclient/compare/v0.3.0...v0.4.0) (2020-11-17)
 
 
