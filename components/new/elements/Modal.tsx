@@ -10,7 +10,7 @@ interface Props {
   isOpen: boolean;
   children: React.ReactNode;
   variant?: 'light' | 'dark';
-  type?: 'default' | 'settings'
+  type?: 'default' | 'settings';
 }
 
 const Modal = (props: Props) =>
@@ -24,7 +24,7 @@ const Modal = (props: Props) =>
         height: '100vh',
         bg: 'modalBg',
         transition: 'background 6s ease-in-out',
-        zIndex: 99999
+        zIndex: 99999,
       }}
     >
       <Box
