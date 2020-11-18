@@ -37,7 +37,7 @@ const Modal = (props: Props) =>
             props.type === 'settings'
               ? ['container.small', 'container.stage', 'container.default']
               : 'container.tiny',
-          height: 'auto',
+          height: props.type === 'settings' ? 'calc(100vh - 150px)' : 'auto',
           top: '50%',
           left: '50%',
           boxShadow: '0px 3px 6px #000000BC',

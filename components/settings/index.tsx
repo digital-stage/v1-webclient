@@ -53,7 +53,7 @@ const SettingsModal = (props: { isOpen: boolean; onClose(): void; selected: stri
             );
           })}
         </Box>
-        <Box sx={{ width: '70%' }}>
+        <Box sx={{ width: '70%', ml: 3, mr: 4 }}>
           {SettingsModalItems.map((item) => {
             return item.href === selected ? item.content : null;
           })}
