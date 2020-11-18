@@ -9,6 +9,7 @@ import { AppBarItems } from '../../PageWrapperWithStage/MenuItems';
 interface Props {
   isOpen: boolean;
   onSelect(selected: string);
+  onClose(selected: string);
 }
 
 const DropdownMenu = ({ isOpen, onSelect }: Props): JSX.Element => {
