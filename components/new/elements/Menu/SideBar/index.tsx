@@ -13,7 +13,6 @@ const SideBar = (): JSX.Element => {
 
   const SideBarItem = ({ item, index }: { item: NavItem; index: number }) => {
     /** TODO: instead of selected find a new way to markthe item active */
-    console.log(item);
     return (
       <Box
         tabIndex={index}

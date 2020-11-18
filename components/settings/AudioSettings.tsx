@@ -18,6 +18,7 @@ const AudioSettings = (): JSX.Element => {
       <Text mb={3}>Microphone</Text>
       <SingleSelect
         options={localDevice.inputAudioDevices || []}
+        defaultValue={localDevice.inputAudioDeviceId}
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
           updateDevice(localDevice._id, {
             inputAudioDeviceId: localDevice.inputAudioDevices[e.target.selectedIndex].id,
@@ -27,6 +28,7 @@ const AudioSettings = (): JSX.Element => {
       <Text my={3}>Speaker</Text>
       <SingleSelect
         options={localDevice.outputAudioDevices || []}
+        defaultValue={localDevice.outputAudioDeviceId}
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
           updateDevice(localDevice._id, {
             outputAudioDeviceId: localDevice.outputAudioDevices[e.target.selectedIndex].id,

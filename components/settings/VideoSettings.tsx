@@ -19,6 +19,7 @@ const VideoSettings = (): JSX.Element => {
       <Text mb={3}>Video device</Text>
       <SingleSelect
         options={localDevice.inputVideoDevices || []}
+        defaultValue={localDevice.inputVideoDeviceId}
         onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
           updateDevice(localDevice._id, {
             inputVideoDeviceId: localDevice.inputVideoDevices[e.target.selectedIndex].id,

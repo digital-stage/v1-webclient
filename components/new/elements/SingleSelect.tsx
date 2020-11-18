@@ -6,12 +6,16 @@ const SingleSelect = (props: {
     id: string;
     label: string;
   }[];
+  defaultValue?: string;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }): JSX.Element => {
+  const selected = props.options.filter((option) => option.id === props.defaultValue);
+  const selectedValue = selected.length > 0 ? selected[0].label : null;
   return (
     <div>
       <Select
         onChange={props.onChange}
+        defaultValue={selectedValue}
         sx={{
           border: 0,
           borderBottom: '1px solid white',

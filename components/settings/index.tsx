@@ -8,7 +8,6 @@ import { SettingsModalItems } from '../new/elements/PageWrapperWithStage/MenuIte
 
 const SettingsModal = (props: { isOpen: boolean; onClose(): void; selected: string }) => {
   const [selected, setSelected] = React.useState(props.selected);
-  console.log(selected);
 
   React.useEffect(() => {
     setSelected(props.selected);
