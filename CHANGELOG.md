@@ -1,3 +1,11 @@
+## [0.5.3](https://github.com/digital-stage/webclient/compare/v0.5.2...v0.5.3) (2020-11-18)
+
+
+### Bug Fixes
+
+* devices has not been encoded correctly ([1b0b041](https://github.com/digital-stage/webclient/commit/1b0b041040bbe0a15a0a86f31546a8bf47cf2238))
+* devices has not been encoded correctly ([6ea9a68](https://github.com/digital-stage/webclient/commit/6ea9a685fd89174c35e51359a72798d5508e73bd))
+
 ## [0.5.2](https://github.com/digital-stage/webclient/compare/v0.5.1...v0.5.2) (2020-11-18)
 
 
