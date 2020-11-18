@@ -35,7 +35,7 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
       });
 
       currSocket.on(ServerDeviceEvents.LOCAL_DEVICE_READY, (payload: Server.Device) => {
-          console.log(payload);
+        console.log(payload);
         dispatch(allActions.deviceActions.server.handleLocalDeviceReady(payload));
       });
 
