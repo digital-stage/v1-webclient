@@ -1,3 +1,15 @@
+# [0.6.0](https://github.com/digital-stage/webclient/compare/v0.5.3...v0.6.0) (2020-11-18)
+
+
+### Bug Fixes
+
+* device view single select error ([1144609](https://github.com/digital-stage/webclient/commit/1144609d5137c00eb3786fcffd0bffbce846aa8d))
+
+
+### Features
+
+* add video and audio selection ([523828f](https://github.com/digital-stage/webclient/commit/523828ffa55c8370bcb270251f70b7c245751fb4))
+
 ## [0.5.3](https://github.com/digital-stage/webclient/compare/v0.5.2...v0.5.3) (2020-11-18)
 
 
