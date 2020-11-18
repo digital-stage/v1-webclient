@@ -1,3 +1,12 @@
+## [0.5.2](https://github.com/digital-stage/webclient/compare/v0.5.1...v0.5.2) (2020-11-18)
+
+
+### Bug Fixes
+
+* add missing index for map ([326a7cb](https://github.com/digital-stage/webclient/commit/326a7cb1056ad58056849d8203b25e9ef8b14ab1))
+* add prop types and translate UI elements ([8f01e6b](https://github.com/digital-stage/webclient/commit/8f01e6b2ab32a9f025d0a379a1d3e550496525bc))
+* re-add missing prop type ([a1b7978](https://github.com/digital-stage/webclient/commit/a1b7978caa48553a80316950069e53922a3df4c2))
+
 ## [0.5.1](https://github.com/digital-stage/webclient/compare/v0.5.0...v0.5.1) (2020-11-17)
 
 
