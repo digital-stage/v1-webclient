@@ -6,7 +6,11 @@ import { jsx, Box, Flex, Text, Heading } from 'theme-ui';
 import Modal from '../new/elements/Modal';
 import { SettingsModalItems } from '../new/elements/PageWrapperWithStage/MenuItems';
 
-const SettingsModal = (props: { isOpen: boolean; onClose(): void; selected: string }) => {
+const SettingsModal = (props: {
+  isOpen: boolean;
+  onClose(): void;
+  selected: string;
+}): JSX.Element => {
   const [selected, setSelected] = React.useState(props.selected);
 
   React.useEffect(() => {
@@ -52,7 +56,9 @@ const SettingsModal = (props: { isOpen: boolean; onClose(): void; selected: stri
             );
           })}
         </Box>
-        <Box sx={{ width: '70%', ml: 3, mr: 4 }}>
+        <Box
+          sx={{ width: '70%', ml: 3, mr: 4, maxHeight: 'calc(100vh - 230px)', overflowY: 'auto' }}
+        >
           {SettingsModalItems.map((item) => {
             return item.href === selected ? item.content : null;
           })}
