@@ -88,8 +88,6 @@ export const getFastestRouter = (): Promise<Router> =>
               };
             })
             .then((routerWithLatency) => {
-              //TODO: Remove
-              console.debug(`[useMediasoup] Latency of ${url}: ${routerWithLatency.latency}`);
               return routerWithLatency;
             });
         })
