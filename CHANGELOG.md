@@ -1,3 +1,10 @@
+# [0.7.0](https://github.com/digital-stage/webclient/compare/v0.6.0...v0.7.0) (2020-11-18)
+
+
+### Features
+
+* add default value to select ([d5addec](https://github.com/digital-stage/webclient/commit/d5addecaff6f5d87f2a167378c75507a19fdaf44))
+
 # [0.6.0](https://github.com/digital-stage/webclient/compare/v0.5.3...v0.6.0) (2020-11-18)
 
 
