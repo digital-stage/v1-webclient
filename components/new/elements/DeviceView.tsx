@@ -97,13 +97,7 @@ const DeviceView = (props: { device?: Device }) => {
           })}
         >
           <SingleSelect
-            className={css({
-              flexBasis: 0,
-              maxWidth: '100%',
-              flexGrow: 1,
-            })}
             options={device.inputAudioDevices || []}
-            id={device.inputAudioDeviceId}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
               updateDevice(device._id, {
                 inputAudioDeviceId: e.target.id,
@@ -111,13 +105,7 @@ const DeviceView = (props: { device?: Device }) => {
             }
           />
           <SingleSelect
-            className={css({
-              flexBasis: 0,
-              maxWidth: '100%',
-              flexGrow: 1,
-            })}
             options={device.outputAudioDevices || []}
-            id={device.outputAudioDeviceId}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
               updateDevice(device._id, {
                 inputAudioDeviceId: e.target.id,
@@ -125,13 +113,7 @@ const DeviceView = (props: { device?: Device }) => {
             }
           />
           <SingleSelect
-            className={css({
-              flexBasis: 0,
-              maxWidth: '100%',
-              flexGrow: 1,
-            })}
             options={device.inputVideoDevices || []}
-            id={device.inputVideoDeviceId}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
               updateDevice(device._id, {
                 inputAudioDeviceId: e.target.id,
