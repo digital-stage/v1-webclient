@@ -1,11 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { Heading, Button, Flex } from 'theme-ui';
-import { useRequest } from '../../../lib/useRequest';
+import { Button, Flex, Heading } from 'theme-ui';
 import { Errors } from '../../../lib/digitalstage/common/errors';
 import useStageActions from '../../../lib/digitalstage/useStageActions';
 import useStageSelector from '../../../lib/digitalstage/useStageSelector';
-import Modal from './Modal';
+import { useRequest } from '../../../lib/useRequest';
 import InputField from '../../InputField';
+import Modal from './Modal';
 
 /**
  * The StageJoiner is a usually hidden component,
@@ -23,7 +23,7 @@ const StageJoiner = (): JSX.Element => {
   const [retries, setRetries] = useState<number>(0);
   const [wrongPassword, setWrongPassword] = useState<boolean>();
   const [notFound, setNotFound] = useState<boolean>();
-  const passwordRef = useRef<HTMLInputElement>();
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   const retryJoiningStage = useCallback(() => {
     // Try to connect
@@ -56,7 +56,7 @@ const StageJoiner = (): JSX.Element => {
       <Modal isOpen={notFound} onClose={() => setNotFound(false)}>
         <Heading variant="title">Bühne nicht gefunden</Heading>
         <Flex sx={{ justifyContent: 'flex-end', py: 2 }}>
-          <Button onClick={() => setNotFound(false)}>Verstanden</Button>
+          <Button onClick={() => setNotFound(false)}>Ok</Button>
         </Flex>
       </Modal>
       <Modal isOpen={wrongPassword} onClose={() => setWrongPassword(false)}>
@@ -67,7 +67,7 @@ const StageJoiner = (): JSX.Element => {
           id="password"
           label="Password"
           name="password"
-          inputRef={passwordRef}
+          ref={passwordRef}
           type="password"
         />
         <Flex sx={{ justifyContent: 'space-between', py: 2 }}>

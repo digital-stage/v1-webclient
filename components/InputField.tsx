@@ -1,20 +1,18 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import * as React from 'react';
-import { jsx, Input, Label, Box, Text } from 'theme-ui';
 import { ErrorMessage } from 'formik';
+import { Box, Input, jsx, Label, Text } from 'theme-ui';
 
-// TODO: add TS interface / type
 interface Props {
   id: string;
   label: string;
   name: string;
+  type: string;
   error?: string;
   version?: string;
-  type: string;
-  value?: any;
+  value?: string;
+  ref?: React.MutableRefObject<HTMLInputElement>;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  inputRef?: React.MutableRefObject<HTMLInputElement>;
 }
 const InputField = ({ id, label, name, error, version, ...rest }: Props): JSX.Element => (
   <Box sx={{ mt: 4 }}>
@@ -32,7 +30,6 @@ const InputField = ({ id, label, name, error, version, ...rest }: Props): JSX.El
     <Input
       id={id}
       name={name}
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
       sx={{
         bg: error ? 'dangerBg' : 'transparent',

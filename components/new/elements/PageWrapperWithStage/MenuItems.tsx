@@ -1,15 +1,14 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import * as React from 'react';
-import { jsx } from 'theme-ui';
-import { FaVideo, FaVolumeUp, FaBug, FaUserAlt, FaCog } from 'react-icons/fa';
-import { MdFeedback } from 'react-icons/md';
+import { FaBug, FaCog, FaUserAlt, FaVideo, FaVolumeUp } from 'react-icons/fa';
 import { GoSettings } from 'react-icons/go';
-import NavItem from '../Menu/NavItem';
-import MixerPane from '../../panes/MixerPane';
+import { MdFeedback } from 'react-icons/md';
+import { jsx } from 'theme-ui';
 import AudioSettings from '../../../settings/AudioSettings';
-import VideoSettings from '../../../settings/VideoSettings';
 import Profile from '../../../settings/Profile';
+import VideoSettings from '../../../settings/VideoSettings';
+import MixerPane from '../../panes/MixerPane';
+import NavItem from '../Menu/NavItem';
 
 // TODO translate to German
 // TODO content and href
@@ -39,7 +38,7 @@ export const CenteredNavItems: NavItem[] = [
 
 export const LowerNavItems: NavItem[] = [
   {
-    label: 'Report Bug',
+    label: 'Fehler melden',
     icon: <FaBug name="bug" />,
     href: 'bug',
     size: 'large',
@@ -48,21 +47,21 @@ export const LowerNavItems: NavItem[] = [
 
 export const AppBarItems: NavItem[] = [
   {
-    label: 'Edit profile',
+    label: 'Profil bearbeiten',
     icon: <FaUserAlt name="edit" />,
     href: 'profile',
     content: <Profile />,
     size: 'large',
   },
   {
-    label: 'Settings',
+    label: 'Einstellungen ändern',
     icon: <FaCog name="settings" />,
     href: 'video',
     content: <VideoSettings />,
     size: 'large',
   },
   {
-    label: 'Give feedback',
+    label: 'Feedback geben',
     icon: <MdFeedback name="feedback" />,
     href: 'feedback',
     size: 'large',
@@ -85,7 +84,7 @@ export const SettingsModalItems: NavItem[] = [
     size: 'small',
   },
   {
-    label: 'Profile',
+    label: 'Profil',
     icon: <FaUserAlt name="profile" />,
     href: 'profile',
     content: <Profile />,

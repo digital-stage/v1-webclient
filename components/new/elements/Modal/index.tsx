@@ -1,10 +1,10 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import * as React from 'react';
-import { jsx, Button } from 'theme-ui';
 import { styled } from 'baseui';
-import { Theme } from 'baseui/theme';
 import { Delete } from 'baseui/icon';
+import { Theme } from 'baseui/theme';
+import * as React from 'react';
+import { Button, jsx } from 'theme-ui';
 
 const ModalWrapper = styled<{ $hidden?: boolean }, 'div', Theme>('div', ({ $theme, $hidden }) => ({
   position: 'absolute',
@@ -64,7 +64,7 @@ const Modal = (props: {
   size?: SIZE[keyof SIZE];
   onClose: () => void;
   position?: 'absolute' | 'bottom';
-}) => {
+}): JSX.Element => {
   const { children, open, onClose, size, position } = props;
   // Animation related property
   const [hidden, setHidden] = React.useState<boolean>(!open);
