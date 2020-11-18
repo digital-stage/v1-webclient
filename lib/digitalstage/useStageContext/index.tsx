@@ -35,6 +35,7 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
       });
 
       currSocket.on(ServerDeviceEvents.LOCAL_DEVICE_READY, (payload: Server.Device) => {
+          console.log(payload);
         dispatch(allActions.deviceActions.server.handleLocalDeviceReady(payload));
       });
 
@@ -251,7 +252,7 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
 
         const createdSocket = new TeckosClientWithJWT(process.env.NEXT_PUBLIC_API_URL, {}, token, {
           // secure: process.env.NODE_ENV !== "development",
-          device: JSON.stringify({
+          device: {
             name: `${browser} (${os})`,
             canAudio: devices.inputAudioDevices.length > 0,
             canVideo: devices.inputVideoDevices.length > 0,
@@ -263,7 +264,7 @@ export const SocketContextProvider = (props: { children: React.ReactNode }) => {
             inputAudioDeviceId,
             inputVideoDeviceId,
             outputAudioDeviceId,
-          } as Device),
+          } as Device,
         });
 
         registerSocketHandlers(createdSocket);
