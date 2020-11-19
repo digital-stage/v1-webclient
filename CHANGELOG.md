@@ -1,3 +1,10 @@
+# [0.10.0](https://github.com/digital-stage/webclient/compare/v0.9.0...v0.10.0) (2020-11-19)
+
+
+### Features
+
+* add profile edit ([cee4e2d](https://github.com/digital-stage/webclient/commit/cee4e2d90acf583b53c0fe9473df3055fef9ac3a))
+
 # [0.9.0](https://github.com/digital-stage/webclient/compare/v0.8.0...v0.9.0) (2020-11-19)
 
 
