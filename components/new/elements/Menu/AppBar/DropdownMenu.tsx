@@ -24,11 +24,11 @@ const DropdownMenu = ({ isOpen, onSelect }: Props): JSX.Element => {
         width: 'auto',
         height: 'auto',
         top: '58px',
-        right: '22px',
+        right: '20px',
         p: 4,
         boxShadow: '0px 3px 6px #000000BC',
         borderRadius: 'card',
-        zIndex: 999,
+        zIndex: 99,
       }}
     >
       <Text variant="title" sx={{ color: 'text', mb: 3 }}>

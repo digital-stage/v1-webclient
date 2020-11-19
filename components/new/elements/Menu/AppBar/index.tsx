@@ -10,6 +10,22 @@ const AppBar = (): JSX.Element => {
   const [open, setOpen] = React.useState<boolean>(false);
   const [openSettings, setOpenSettings] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState<string>('');
+  const node = React.useRef(null);
+
+  const handleClick = (e) => {
+    if (node && node.current.contains(e.target)) {
+      setOpen(true);
+      return;
+    }
+    setOpen(false);
+  };
+
+  React.useEffect(() => {
+    document.addEventListener('mousedown', handleClick);
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+    };
+  }, []);
 
   return (
     <React.Fragment>
@@ -27,16 +43,19 @@ const AppBar = (): JSX.Element => {
           <FaUser />
         </Button>
       </Box>
-      <DropdownMenu
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        onSelect={(selected) => {
-          if (selected !== 'feedback') {
-            setSelected(selected);
-            setOpenSettings(true);
-          }
-        }}
-      />
+      <div ref={node}>
+        <DropdownMenu
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          onSelect={(selected) => {
+            if (selected !== 'feedback') {
+              setSelected(selected);
+              setOpenSettings(true);
+              setOpen(false);
+            }
+          }}
+        />
+      </div>
       <SettingsModal
         isOpen={openSettings}
         onClose={() => setOpenSettings(false)}
