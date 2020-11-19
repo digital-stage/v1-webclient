@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Flex } from 'theme-ui';
+import { jsx, Box, Flex, Link } from 'theme-ui';
 import NavItem from '../NavItem';
 import { CenteredNavItems, LowerNavItems } from '../../PageWrapperWithStage/MenuItems';
 import DigitalStageLogo from '../../../../DigitalStageLogo';
@@ -18,13 +18,14 @@ const SideBar = (): JSX.Element => {
         tabIndex={index}
         role="presentation"
         onClick={() => {
-          if (item.href !== 'mixer') {
+          if (item.href !== 'mixer' && item.href !== 'bug') {
             setSelected(item.href);
             setOpenSettings(true);
           }
         }}
         sx={{
-          color: 'text',
+          color: 'gray.1',
+          ':hover': { color: 'text' },
           px: '1rem',
           outline: 'none',
           textAlign: 'center',
@@ -50,7 +51,9 @@ const SideBar = (): JSX.Element => {
       }}
     >
       <Box>
-        <DigitalStageLogo single icon width={30} />
+        <Link sx={{ color: 'text' }} href="https://www.digital-stage.org" target="_blank">
+          <DigitalStageLogo single icon width={30} />
+        </Link>
       </Box>
       <Box>
         {CenteredNavItems &&

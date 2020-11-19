@@ -42,11 +42,17 @@ const DropdownMenu = ({ isOpen, onSelect }: Props): JSX.Element => {
         return (
           <Flex
             key={i}
-            sx={{ py: 2, alignItems: 'center', cursor: 'pointer' }}
+            sx={{
+              py: 2,
+              alignItems: 'center',
+              cursor: 'pointer',
+              color: 'gray.1',
+              ':hover': { color: 'text' },
+            }}
             onClick={() => onSelect(item.href)}
           >
             {item.icon}
-            <Text variant="title" sx={{ color: 'text' }} ml={2}>
+            <Text variant="title" sx={{ color: 'gray.1', ':hover': { color: 'text' } }} ml={2}>
               {item.label}
             </Text>
           </Flex>
