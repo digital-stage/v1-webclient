@@ -1,3 +1,10 @@
+# [0.8.0](https://github.com/digital-stage/webclient/compare/v0.7.0...v0.8.0) (2020-11-18)
+
+
+### Features
+
+* add settings for remote devices ([1f07a85](https://github.com/digital-stage/webclient/commit/1f07a85c576a5f170727993f236f8d7c1707f4a3))
+
 # [0.7.0](https://github.com/digital-stage/webclient/compare/v0.6.0...v0.7.0) (2020-11-18)
 
 
