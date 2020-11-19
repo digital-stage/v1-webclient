@@ -1,3 +1,10 @@
+# [0.9.0](https://github.com/digital-stage/webclient/compare/v0.8.0...v0.9.0) (2020-11-19)
+
+
+### Features
+
+* add close dropdown when clicking outisde ([b82b5f9](https://github.com/digital-stage/webclient/commit/b82b5f9f956a6841395c1b461428e5096b3b8655))
+
 # [0.8.0](https://github.com/digital-stage/webclient/compare/v0.7.0...v0.8.0) (2020-11-18)
 
 
