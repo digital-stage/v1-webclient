@@ -1,3 +1,10 @@
+# [0.11.0](https://github.com/digital-stage/webclient/compare/v0.10.0...v0.11.0) (2020-11-20)
+
+
+### Features
+
+* add links to side and top menu ([1d7b770](https://github.com/digital-stage/webclient/commit/1d7b770b01d413554d4d03b4dba1c2c5c4e1f2a5))
+
 # [0.10.0](https://github.com/digital-stage/webclient/compare/v0.9.0...v0.10.0) (2020-11-19)
 
 
