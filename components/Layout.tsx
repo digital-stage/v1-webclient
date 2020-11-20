@@ -64,12 +64,16 @@ const Layout = ({ children, sidebar, auth }: Props): JSX.Element => {
               //bg: ['red', 'blue'],
             }}
           >
-            {sidebar || (
-              <Box>
-                <DigitalStageLogo single />
-              </Box>
-            )}
-            <TopNavigation />
+            <div>
+              {sidebar || (
+                <Box>
+                  <DigitalStageLogo single />
+                </Box>
+              )}
+            </div>
+            <div>
+              <TopNavigation />
+            </div>
           </Box>
 
           <Box

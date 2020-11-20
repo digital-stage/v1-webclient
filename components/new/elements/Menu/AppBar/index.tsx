@@ -52,6 +52,8 @@ const AppBar = (): JSX.Element => {
               setSelected(selected);
               setOpenSettings(true);
               setOpen(false);
+            } else if (selected === 'feedback') {
+              window.open('https://forum.digital-stage.org/', '_target');
             }
           }}
         />

@@ -12,7 +12,6 @@ const SideBar = (): JSX.Element => {
   const [openSettings, setOpenSettings] = React.useState<boolean>(false);
 
   const SideBarItem = ({ item, index }: { item: NavItem; index: number }) => {
-    /** TODO: instead of selected find a new way to markthe item active */
     return (
       <Box
         tabIndex={index}
@@ -21,6 +20,8 @@ const SideBar = (): JSX.Element => {
           if (item.href !== 'mixer' && item.href !== 'bug') {
             setSelected(item.href);
             setOpenSettings(true);
+          } else if (item.href === 'bug') {
+            window.open('https://forum.digital-stage.org/', '_target');
           }
         }}
         sx={{
