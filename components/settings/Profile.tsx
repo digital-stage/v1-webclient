@@ -1,12 +1,12 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { Box, Flex, Heading, jsx, Text, Button } from 'theme-ui';
-import { Formik, Form, Field } from 'formik';
+import { Field, Form, Formik } from 'formik';
+import { Box, Button, Flex, Heading, jsx, Text } from 'theme-ui';
 import * as Yup from 'yup';
 import { useAuth } from '../../lib/digitalstage/useAuth';
+import useStageActions from '../../lib/digitalstage/useStageActions';
 import useStageSelector from '../../lib/digitalstage/useStageSelector';
 import InputField from '../InputField';
-import useStageActions from '../../lib/digitalstage/useStageActions';
 interface Values {
   name: string;
 }
@@ -50,7 +50,7 @@ const Profile = (): JSX.Element => {
             />
             <Flex sx={{ justifyContent: 'flex-end', my: 3 }}>
               <Button variant="secondary" type="submit">
-                Update name
+                Name aktualisieren
               </Button>
             </Flex>
           </Form>

@@ -20,8 +20,8 @@ const VideoSettings = (): JSX.Element => {
 
   return (
     <Box>
-      <Heading mb={3}>Kameraeinstellungen</Heading>
-      <Text mb={3}>Video device</Text>
+      <Heading mb={3}>Videogeräte</Heading>
+      <Text mb={3}>Lokale Geräte</Text>
       <SingleSelect
         options={localDevice.inputVideoDevices || []}
         defaultValue={localDevice.inputVideoDeviceId}
@@ -33,10 +33,10 @@ const VideoSettings = (): JSX.Element => {
       />
       {remoteDevices && remoteDevices.length > 0 && (
         <>
-          <Text>Remote video devices</Text>
+          <Text>Remote Geräte</Text>
           {remoteDevices.map((remoteDevice, index) => (
             <div key={index}>
-              <Text mb={3}>Video device</Text>
+              <Text mb={3}>Videogerät</Text>
               <SingleSelect
                 options={remoteDevice.inputVideoDevices || []}
                 defaultValue={remoteDevice.inputVideoDeviceId}

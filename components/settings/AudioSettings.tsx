@@ -19,8 +19,8 @@ const AudioSettings = (): JSX.Element => {
 
   return (
     <Box>
-      <Heading mb={3}>Lautstärkeregler</Heading>
-      <Text mb={3}>Microphone</Text>
+      <Heading mb={3}>Audiogeräte</Heading>
+      <Text mb={3}>Mikrofon</Text>
       <SingleSelect
         options={localDevice.inputAudioDevices || []}
         defaultValue={localDevice.inputAudioDeviceId}
@@ -30,7 +30,7 @@ const AudioSettings = (): JSX.Element => {
           })
         }
       />
-      <Text my={3}>Speaker</Text>
+      <Text my={3}>Lautsprecher</Text>
       <SingleSelect
         options={localDevice.outputAudioDevices || []}
         defaultValue={localDevice.outputAudioDeviceId}
@@ -42,10 +42,10 @@ const AudioSettings = (): JSX.Element => {
       />
       {remoteDevices && remoteDevices.length > 0 && (
         <>
-          <Text>Remote audio devices</Text>
+          <Text>Remote Audiogeräte</Text>
           {remoteDevices.map((remoteDevice, index) => (
             <div key={index}>
-              <Text mb={3}>Microphone</Text>
+              <Text mb={3}>Mikrofon</Text>
               <SingleSelect
                 options={remoteDevice.inputAudioDevices || []}
                 defaultValue={remoteDevice.inputAudioDeviceId}
@@ -55,7 +55,7 @@ const AudioSettings = (): JSX.Element => {
                   })
                 }
               />
-              <Text my={3}>Speaker</Text>
+              <Text my={3}>Lautsprecher</Text>
               <SingleSelect
                 options={remoteDevice.outputAudioDevices || []}
                 defaultValue={remoteDevice.outputAudioDeviceId}
