@@ -110,6 +110,7 @@ const useMediasoup = (routerDistUrl: string): TMediasoupContext => {
         setRouterConnection(undefined);
       };
     }
+    return undefined;
   }, [router]);
 
   useEffect(() => {
@@ -130,6 +131,7 @@ const useMediasoup = (routerDistUrl: string): TMediasoupContext => {
         setRtpCapabilities(undefined);
       };
     }
+    return undefined;
   }, [routerConnection]);
 
   useEffect(() => {
@@ -156,6 +158,7 @@ const useMediasoup = (routerDistUrl: string): TMediasoupContext => {
         if (createdTransport) createdTransport.close();
       };
     }
+    return undefined;
   }, [routerConnection, mediasoupDevice]);
 
   useEffect(() => {
@@ -172,6 +175,7 @@ const useMediasoup = (routerDistUrl: string): TMediasoupContext => {
         if (createdTransport) createdTransport.close();
       };
     }
+    return undefined;
   }, [routerConnection, mediasoupDevice]);
 
   const consume = useCallback(
