@@ -120,7 +120,6 @@ const SocketProvider = (props: { children: React.ReactNode; apiUrl: string }) =>
     return () => {
       cleanupConnection();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

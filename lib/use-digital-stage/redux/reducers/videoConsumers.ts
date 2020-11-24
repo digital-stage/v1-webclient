@@ -26,10 +26,9 @@ function videoConsumers(
         },
         byStageMember: {
           ...state.byStageMember,
-          [videoConsumer.stageMemberId]: [
-            ...state.byStageMember[videoConsumer.stageMemberId],
-            videoConsumer._id,
-          ],
+          [videoConsumer.stageMemberId]: state.byStageMember[videoConsumer.stageMemberId]
+            ? [...state.byStageMember[videoConsumer.stageMemberId], videoConsumer._id]
+            : [videoConsumer._id],
         },
         byProducer: {
           ...state.byProducer,
@@ -40,6 +39,9 @@ function videoConsumers(
     }
     case AdditionalReducerTypes.REMOVE_VIDEO_CONSUMER: {
       const id = action.payload as string;
+      if (!state.byId[id]) {
+        return state;
+      }
       const { stageMemberId } = state.byId[id];
       const { producerId } = state.byId[id];
       return {

@@ -26,14 +26,15 @@ function videoProducers(
         },
         byStageMember: {
           ...state.byStageMember,
-          [videoProducer.stageMemberId]: [
-            ...state.byStageMember[videoProducer.stageMemberId],
-            videoProducer._id,
-          ],
+          [videoProducer.stageMemberId]: state.byStageMember[videoProducer.stageMemberId]
+            ? [...state.byStageMember[videoProducer.stageMemberId], videoProducer._id]
+            : [videoProducer._id],
         },
         byStage: {
           ...state.byStage,
-          [videoProducer.stageId]: [...state.byStage[videoProducer.stageId], videoProducer._id],
+          [videoProducer.stageId]: state.byStage[videoProducer.stageId]
+            ? [...state.byStage[videoProducer.stageId], videoProducer._id]
+            : [videoProducer._id],
         },
         allIds: [...state.allIds, videoProducer._id],
       };
@@ -52,6 +53,9 @@ function videoProducers(
     }
     case ServerStageEvents.STAGE_MEMBER_VIDEO_REMOVED: {
       const id = action.payload as string;
+      if (!state.byId[id]) {
+        return state;
+      }
       const { stageId, stageMemberId } = state.byId[id];
       return {
         ...state,

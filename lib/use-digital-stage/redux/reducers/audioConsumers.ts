@@ -26,10 +26,9 @@ function audioConsumers(
         },
         byStageMember: {
           ...state.byStageMember,
-          [audioConsumer.stageMemberId]: [
-            ...state.byStageMember[audioConsumer.stageMemberId],
-            audioConsumer._id,
-          ],
+          [audioConsumer.stageMemberId]: state.byStageMember[audioConsumer.stageMemberId]
+            ? [...state.byStageMember[audioConsumer.stageMemberId], audioConsumer._id]
+            : [audioConsumer._id],
         },
         byProducer: {
           ...state.byProducer,
@@ -40,6 +39,9 @@ function audioConsumers(
     }
     case AdditionalReducerTypes.REMOVE_AUDIO_CONSUMER: {
       const id = action.payload as string;
+      if (!state.byId[id]) {
+        return state;
+      }
       const { stageMemberId } = state.byId[id];
       const { producerId } = state.byId[id];
       return {

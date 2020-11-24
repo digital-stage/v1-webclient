@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useCallback, useEffect, useState } from 'react';
 import debug from 'debug';
 import { ITeckosClient, TeckosClient } from 'teckos-client';

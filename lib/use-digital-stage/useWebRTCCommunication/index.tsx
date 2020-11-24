@@ -43,8 +43,6 @@ export const WebRTCCommunicationProvider = (props: {
 
   // Automated Device handling
   const localDevice = useLocalDevice();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // @ts-ignore
   const [working, setWorking] = useState<boolean>(false);
   const remoteVideoProducers = useVideoProducers();
   const remoteAudioProducers = useAudioProducers();

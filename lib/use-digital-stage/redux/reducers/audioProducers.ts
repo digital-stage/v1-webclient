@@ -26,14 +26,15 @@ function audioProducers(
         },
         byStageMember: {
           ...state.byStageMember,
-          [audioProducer.stageMemberId]: [
-            ...state.byStageMember[audioProducer.stageMemberId],
-            audioProducer._id,
-          ],
+          [audioProducer.stageMemberId]: state.byStageMember[audioProducer.stageMemberId]
+            ? [...state.byStageMember[audioProducer.stageMemberId], audioProducer._id]
+            : [audioProducer._id],
         },
         byStage: {
           ...state.byStage,
-          [audioProducer.stageId]: [...state.byStage[audioProducer.stageId], audioProducer._id],
+          [audioProducer.stageId]: state.byStage[audioProducer.stageId]
+            ? [...state.byStage[audioProducer.stageId], audioProducer._id]
+            : [audioProducer._id],
         },
         allIds: [...state.allIds, audioProducer._id],
       };
@@ -52,6 +53,9 @@ function audioProducers(
     }
     case ServerStageEvents.STAGE_MEMBER_AUDIO_REMOVED: {
       const id = action.payload as string;
+      if (!state.byId[id]) {
+        return state;
+      }
       const { stageId, stageMemberId } = state.byId[id];
       return {
         ...state,
