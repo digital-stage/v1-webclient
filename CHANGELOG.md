@@ -1,3 +1,11 @@
+## [0.11.1](https://github.com/digital-stage/webclient/compare/v0.11.0...v0.11.1) (2020-11-24)
+
+
+### Bug Fixes
+
+* removes ts-ignore to enable a successful linting ([37c923a](https://github.com/digital-stage/webclient/commit/37c923ad04ef8e904d190a9c03a18f405b283b7f))
+* typeerror inside reducer ([95f5361](https://github.com/digital-stage/webclient/commit/95f5361ad7341719ec73aed070d49458dde76530))
+
 # [0.11.0](https://github.com/digital-stage/webclient/compare/v0.10.0...v0.11.0) (2020-11-20)
 
 
