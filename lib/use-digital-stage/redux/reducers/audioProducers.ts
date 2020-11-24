@@ -14,7 +14,7 @@ function audioProducers(
     type: string;
     payload: any;
   }
-) {
+): RemoteAudioProducersCollection {
   switch (action.type) {
     case ServerStageEvents.STAGE_MEMBER_AUDIO_ADDED: {
       const audioProducer = action.payload as RemoteAudioProducer;
@@ -26,11 +26,14 @@ function audioProducers(
         },
         byStageMember: {
           ...state.byStageMember,
-          [audioProducer.stageMemberId]: audioProducer._id,
+          [audioProducer.stageMemberId]: [
+            ...state.byStageMember[audioProducer.stageMemberId],
+            audioProducer._id,
+          ],
         },
         byStage: {
           ...state.byStage,
-          [audioProducer.stageId]: audioProducer._id,
+          [audioProducer.stageId]: [...state.byStage[audioProducer.stageId], audioProducer._id],
         },
         allIds: [...state.allIds, audioProducer._id],
       };
@@ -55,11 +58,11 @@ function audioProducers(
         byId: omit(state.byId, id),
         byStageMember: {
           ...state.byStageMember,
-          [stageMemberId]: omit(state.byStageMember[stageMemberId], id),
+          [stageMemberId]: without(state.byStageMember[stageMemberId], id),
         },
         byStage: {
           ...state.byStage,
-          [stageId]: omit(state.byStage[stageId], id),
+          [stageId]: without(state.byStage[stageId], id),
         },
         allIds: without<string>(state.allIds, id),
       };

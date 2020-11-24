@@ -14,7 +14,7 @@ function videoProducers(
     type: string;
     payload: any;
   }
-) {
+): RemoteVideoProducersCollection {
   switch (action.type) {
     case ServerStageEvents.STAGE_MEMBER_VIDEO_ADDED: {
       const videoProducer = action.payload as RemoteVideoProducer;
@@ -26,11 +26,14 @@ function videoProducers(
         },
         byStageMember: {
           ...state.byStageMember,
-          [videoProducer.stageMemberId]: videoProducer._id,
+          [videoProducer.stageMemberId]: [
+            ...state.byStageMember[videoProducer.stageMemberId],
+            videoProducer._id,
+          ],
         },
         byStage: {
           ...state.byStage,
-          [videoProducer.stageId]: videoProducer._id,
+          [videoProducer.stageId]: [...state.byStage[videoProducer.stageId], videoProducer._id],
         },
         allIds: [...state.allIds, videoProducer._id],
       };
@@ -55,11 +58,11 @@ function videoProducers(
         byId: omit(state.byId, id),
         byStageMember: {
           ...state.byStageMember,
-          [stageMemberId]: omit(state.byStageMember[stageMemberId], id),
+          [stageMemberId]: without(state.byStageMember[stageMemberId], id),
         },
         byStage: {
           ...state.byStage,
-          [stageId]: omit(state.byStage[stageId], id),
+          [stageId]: without(state.byStage[stageId], id),
         },
         allIds: without<string>(state.allIds, id),
       };
