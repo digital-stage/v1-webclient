@@ -2,9 +2,9 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { Box, Button, Divider, Flex, jsx, Text } from 'theme-ui';
-import { useAuth } from '../../../../../lib/digitalstage/useAuth';
-import useStageSelector from '../../../../../lib/digitalstage/useStageSelector';
+import { useAuth } from '../../../../../lib/useAuth';
 import { AppBarItems } from '../../PageWrapperWithStage/MenuItems';
+import { useCurrentUser } from '../../../../../lib/use-digital-stage/hooks';
 
 interface Props {
   isOpen: boolean;
@@ -14,7 +14,7 @@ interface Props {
 
 const DropdownMenu = ({ isOpen, onSelect }: Props): JSX.Element => {
   const { user: authUser, logout } = useAuth();
-  const { user } = useStageSelector((state) => ({ user: state.user }));
+  const user = useCurrentUser();
 
   return isOpen ? (
     <Box

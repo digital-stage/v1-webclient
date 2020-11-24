@@ -2,11 +2,12 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx, Box } from 'theme-ui';
-import { useConductors } from '../../../../lib/digitalstage/useStageSelector';
 import StageMemberView from './StageMemberView';
+import { useConductorsByStage, useCurrentStageId } from '../../../../lib/use-digital-stage/hooks';
 
 const ConductorsView = (): JSX.Element => {
-  const conductors = useConductors();
+  const stageId = useCurrentStageId();
+  const conductors = useConductorsByStage(stageId);
 
   if (conductors.length > 0) {
     return (

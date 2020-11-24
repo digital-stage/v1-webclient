@@ -4,19 +4,14 @@ import Link from 'next/link';
 import { useStyletron } from 'baseui';
 import _ from 'lodash';
 import DeviceView from '../../components/new/elements/DeviceView';
-import useStageSelector from '../../lib/digitalstage/useStageSelector';
-import { Device } from '../../lib/digitalstage/common/model.server';
-import enumerateDevices from '../../lib/digitalstage/useStageContext/utils';
-import useStageActions from '../../lib/digitalstage/useStageActions';
 import Container from '../../components/Container';
+import { useLocalDevice, useRemoteDevices } from '../../lib/use-digital-stage/hooks';
+import useStageActions from '../../lib/use-digital-stage/useStageActions';
+import enumerateDevices from '../../lib/use-digital-stage/utils/enumerateDevices';
 
 const Index = (): JSX.Element => {
-  const localDevice = useStageSelector<Device>((state) =>
-    state.devices.local ? state.devices.byId[state.devices.local] : undefined
-  );
-  const remoteDevices = useStageSelector<Device[]>((state) =>
-    state.devices.remote.map((id) => state.devices.byId[id])
-  );
+  const localDevice = useLocalDevice();
+  const remoteDevices = useRemoteDevices();
   const [css] = useStyletron();
 
   const { updateDevice } = useStageActions();

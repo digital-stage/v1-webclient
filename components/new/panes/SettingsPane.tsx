@@ -3,20 +3,15 @@ import React, { useCallback, useEffect } from 'react';
 import _ from 'lodash';
 import { Button } from 'baseui/button';
 import Link from 'next/link';
-import useStageSelector from '../../../lib/digitalstage/useStageSelector';
-import { Device } from '../../../lib/digitalstage/common/model.server';
-import useStageActions from '../../../lib/digitalstage/useStageActions';
-import enumerateDevices from '../../../lib/digitalstage/useStageContext/utils';
 import DeviceView from '../elements/DeviceView';
 import Container from '../../Container';
+import { useLocalDevice, useRemoteDevices } from '../../../lib/use-digital-stage/hooks';
+import useStageActions from '../../../lib/use-digital-stage/useStageActions';
+import enumerateDevices from '../../../lib/use-digital-stage/utils/enumerateDevices';
 
 const SettingsPane = (): JSX.Element => {
-  const localDevice = useStageSelector<Device>((state) =>
-    state.devices.local ? state.devices.byId[state.devices.local] : undefined
-  );
-  const remoteDevices = useStageSelector<Device[]>((state) =>
-    state.devices.remote.map((id) => state.devices.byId[id])
-  );
+  const localDevice = useLocalDevice();
+  const remoteDevices = useRemoteDevices();
   const [css] = useStyletron();
 
   const { updateDevice } = useStageActions();

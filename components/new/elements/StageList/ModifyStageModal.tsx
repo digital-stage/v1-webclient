@@ -4,10 +4,10 @@ import * as React from 'react';
 import { jsx, Flex, Button, Heading } from 'theme-ui';
 import { useFormik, FormikProvider, Field } from 'formik';
 import * as Yup from 'yup';
-import { Stage } from '../../../../lib/digitalstage/common/model.client';
-import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import Modal from '../Modal';
 import InputField from '../../../InputField';
+import { Stage } from '../../../../lib/use-digital-stage/types';
+import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
 
 const Schema = Yup.object().shape({
   name: Yup.string()

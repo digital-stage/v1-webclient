@@ -2,17 +2,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import { IAnalyserNode, IAudioContext, IAudioNode, IGainNode } from 'standardized-audio-context';
 
 import { IMediaStreamAudioSourceNode } from 'standardized-audio-context/src/interfaces/media-stream-audio-source-node';
-import useStageSelector from './digitalstage/useStageSelector';
+
 import { useAudioContext } from './useAudioContext';
 import {
-  AudioConsumers,
-  AudioProducers,
-  CustomAudioProducers,
-  CustomGroups,
-  CustomStageMembers,
-  Groups,
-  StageMembers,
-} from './digitalstage/useStageContext/schema';
+  useAudioConsumers,
+  useAudioProducers,
+  useCurrentStageId,
+  useCustomAudioProducers,
+  useCustomGroups,
+  useCustomStageMembers,
+  useGroups,
+  useStageMembers,
+} from './use-digital-stage/hooks';
 
 export interface StageWebAudioNodes {
   [id: string]: {
@@ -52,18 +53,14 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
   const [audioProducerNodes, setAudioProducerNodes] = useState<StageWebAudioConsumerNodes>({});
 
   // Incoming states from stage
-  const stageId = useStageSelector<string>((state) => state.stageId);
-  const groups = useStageSelector<Groups>((state) => state.groups);
-  const customGroups = useStageSelector<CustomGroups>((state) => state.customGroups);
-  const stageMembers = useStageSelector<StageMembers>((state) => state.stageMembers);
-  const customStageMembers = useStageSelector<CustomStageMembers>(
-    (state) => state.customStageMembers
-  );
-  const audioProducers = useStageSelector<AudioProducers>((state) => state.audioProducers);
-  const customAudioProducers = useStageSelector<CustomAudioProducers>(
-    (state) => state.customAudioProducers
-  );
-  const audioConsumers = useStageSelector<AudioConsumers>((state) => state.audioConsumers);
+  const stageId = useCurrentStageId();
+  const groups = useGroups();
+  const customGroups = useCustomGroups();
+  const stageMembers = useStageMembers();
+  const customStageMembers = useCustomStageMembers();
+  const audioProducers = useAudioProducers();
+  const customAudioProducers = useCustomAudioProducers();
+  const audioConsumers = useAudioConsumers();
 
   useEffect(() => {
     if (audioContext && audioPlayerRef && !rootNode) {
@@ -298,7 +295,7 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
               ) {
                 // See, if there is a consumer
                 const audioConsumer = audioConsumers.byId[audioConsumers.byProducer[item._id]];
-                const stream = new MediaStream([audioConsumer.msConsumer.track]);
+                const stream = new MediaStream([audioConsumer.consumer.track]);
 
                 element = new Audio();
                 element.srcObject = stream;

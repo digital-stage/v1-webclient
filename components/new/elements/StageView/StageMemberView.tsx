@@ -4,14 +4,13 @@ import * as React from 'react';
 import { jsx, Flex, Box, Heading, IconButton } from 'theme-ui';
 import { FaVideo, FaVideoSlash } from 'react-icons/fa';
 import OnlineStatus from '../OnlineStatus';
-import {
-  ExtendedStageMember,
-  useIsStageAdmin,
-} from '../../../../lib/digitalstage/useStageSelector';
-import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import VideoPlayer from '../VideoPlayer';
+import { StageMemberWithUserData } from '../../../../lib/use-digital-stage/types';
+import { useIsStageAdmin } from '../../../../lib/use-digital-stage/hooks';
+import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
+import useVideoConsumersByStageMember from '../../../../lib/use-digital-stage/hooks/useVideoConsumersByStageMember';
 
-const StageMemberTitle = (props: { stageMember: ExtendedStageMember }) => {
+const StageMemberTitle = (props: { stageMember: StageMemberWithUserData }) => {
   const { stageMember } = props;
 
   const { updateStageMember } = useStageActions();
@@ -47,7 +46,12 @@ const StageMemberTitle = (props: { stageMember: ExtendedStageMember }) => {
   );
 };
 
-const StageMemberView = ({ stageMember }: { stageMember: ExtendedStageMember }): JSX.Element => {
+const StageMemberView = ({
+  stageMember,
+}: {
+  stageMember: StageMemberWithUserData;
+}): JSX.Element => {
+  const videoConsumers = useVideoConsumersByStageMember(stageMember._id);
   return (
     <Flex
       sx={{
@@ -60,7 +64,7 @@ const StageMemberView = ({ stageMember }: { stageMember: ExtendedStageMember }):
       }}
     >
       <Box sx={{ pt: '100%' }} />
-      {stageMember.videoConsumers.length > 0 && (
+      {videoConsumers.length > 0 && (
         <VideoPlayer
           sx={{
             position: 'absolute',
@@ -69,7 +73,7 @@ const StageMemberView = ({ stageMember }: { stageMember: ExtendedStageMember }):
             width: '100%',
             height: '100%',
           }}
-          consumers={stageMember.videoConsumers}
+          consumers={videoConsumers}
         />
       )}
       <Box

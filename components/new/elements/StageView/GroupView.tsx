@@ -3,8 +3,8 @@
 import React from 'react';
 import { jsx, Heading, Box } from 'theme-ui';
 import StageMemberView from './StageMemberView';
-import { Group } from '../../../../lib/digitalstage/useStageContext/model';
-import { useStageMembersByGroup } from '../../../../lib/digitalstage/useStageSelector';
+import { Group } from '../../../../lib/use-digital-stage/types';
+import { useStageMembersByGroup } from '../../../../lib/use-digital-stage/hooks';
 
 const GroupView = ({ group }: { group: Group }): JSX.Element => {
   const stageMembers = useStageMembersByGroup(group._id);

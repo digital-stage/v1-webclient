@@ -4,7 +4,7 @@ import * as React from 'react';
 import { jsx, Box, Button, Flex, Message } from 'theme-ui';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { useAuth } from '../../lib/digitalstage/useAuth';
+import { useAuth } from '../../lib/useAuth';
 import InputField from '../InputField';
 
 interface Values {

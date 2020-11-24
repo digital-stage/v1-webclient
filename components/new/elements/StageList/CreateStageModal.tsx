@@ -4,9 +4,9 @@ import * as React from 'react';
 import { jsx, Button, Flex, Heading } from 'theme-ui';
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';
-import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import Modal from '../Modal';
 import InputField from '../../../InputField';
+import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
 
 interface Values {
   name: string;

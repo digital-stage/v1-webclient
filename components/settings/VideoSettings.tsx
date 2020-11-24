@@ -4,18 +4,13 @@
 /** @jsxFrag React.Fragmen **/
 import React from 'react';
 import { Box, Heading, jsx, Text } from 'theme-ui';
-import { Device } from '../../lib/digitalstage/common/model.server';
-import useStageActions from '../../lib/digitalstage/useStageActions';
-import useStageSelector from '../../lib/digitalstage/useStageSelector';
 import SingleSelect from '../new/elements/SingleSelect';
+import { useLocalDevice, useRemoteDevices } from '../../lib/use-digital-stage/hooks';
+import useStageActions from '../../lib/use-digital-stage/useStageActions';
 
 const VideoSettings = (): JSX.Element => {
-  const { localDevice } = useStageSelector((state) => ({
-    localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
-  }));
-  const remoteDevices = useStageSelector<Device[]>((state) =>
-    state.devices.remote.map((id) => state.devices.byId[id])
-  );
+  const localDevice = useLocalDevice();
+  const remoteDevices = useRemoteDevices();
   const { updateDevice } = useStageActions();
 
   return (

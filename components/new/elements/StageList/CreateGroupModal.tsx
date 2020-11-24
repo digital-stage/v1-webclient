@@ -4,10 +4,10 @@ import * as React from 'react';
 import { jsx, Button, Flex, Text, Heading } from 'theme-ui';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { Stage } from '../../../../lib/digitalstage/common/model.client';
-import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import InputField from '../../../InputField';
 import Modal from '../Modal';
+import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
+import { Stage } from '../../../../lib/use-digital-stage/types';
 
 interface Values {
   name: string;

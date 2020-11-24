@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx, Box } from 'theme-ui';
-import { VideoConsumer } from '../../../../lib/digitalstage/useStageContext/model';
+import { LocalConsumer } from '../../../../lib/use-digital-stage/types';
 
 interface CanvasElement extends HTMLCanvasElement {
   captureStream(): MediaStream;
@@ -17,7 +17,7 @@ interface AnimationFrame {
 }
 
 interface Props {
-  consumers: VideoConsumer[];
+  consumers: LocalConsumer[];
 }
 
 interface States {
@@ -63,8 +63,8 @@ class VideoPlayer extends React.Component<Props, States> {
       // Video producers or size of wrapper has changed
       if (size) {
         const videoTracks: MediaStreamTrack[] = consumers
-          .filter((vp) => vp.msConsumer && vp.msConsumer.track)
-          .map((vp) => vp.msConsumer.track);
+          .filter((vp) => vp.consumer && vp.consumer.track)
+          .map((vp) => vp.consumer.track);
 
         const numRows = Math.ceil(Math.sqrt(videoTracks.length));
 

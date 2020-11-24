@@ -4,13 +4,13 @@ import * as React from 'react';
 import { jsx, Flex } from 'theme-ui';
 import { useRouter } from 'next/router';
 import { DisplayMedium } from 'baseui/typography';
-import { useRequest } from '../../../lib/useRequest';
 import Loading from '../../../components/new/elements/Loading';
+import useStageHandling from '../../../lib/use-digital-stage/useStageHandling';
 
 const Join = (): JSX.Element => {
   const router = useRouter();
 
-  const { setRequest } = useRequest();
+  const { requestJoin } = useStageHandling();
 
   React.useEffect(() => {
     router.prefetch('/');
@@ -21,9 +21,9 @@ const Join = (): JSX.Element => {
       const { stageId, groupId, password } = router.query;
       if (stageId && groupId && !Array.isArray(stageId) && !Array.isArray(groupId)) {
         if (password && !Array.isArray(password)) {
-          setRequest(stageId, groupId, password);
+          requestJoin(stageId, groupId, password);
         } else {
-          setRequest(stageId, groupId);
+          requestJoin(stageId, groupId);
         }
         router.push('/');
       }

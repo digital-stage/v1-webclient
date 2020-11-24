@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { jsx, Box, Button, Flex, Label, Text, Message } from 'theme-ui';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { useAuth } from '../../lib/digitalstage/useAuth';
+import { useAuth } from '../../lib/useAuth';
 import InputField from '../InputField';
 
 export interface Values {

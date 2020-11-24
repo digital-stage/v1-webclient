@@ -5,18 +5,16 @@ import { jsx, Box, IconButton, Flex } from 'theme-ui';
 import { styled } from 'styletron-react';
 import { ChevronLeft, ChevronRight } from 'baseui/icon';
 import { Caption1 } from 'baseui/typography';
-import useStageSelector, {
-  useIsStageAdmin,
-} from '../../../../../lib/digitalstage/useStageSelector';
-import {
-  CustomStageMember,
-  StageMember,
-  User,
-} from '../../../../../lib/digitalstage/common/model.server';
 import ChannelStrip from '../../ChannelStrip';
-import useStageActions from '../../../../../lib/digitalstage/useStageActions';
 import AudioProducerChannel from './AudioProducerChannel';
 import { useStageWebAudio } from '../../../../../lib/useStageWebAudio';
+import {
+  useIsStageAdmin,
+  useSelector,
+  useStageMember,
+} from '../../../../../lib/use-digital-stage/hooks';
+import { CustomStageMember, RemoteAudioProducer } from '../../../../../lib/use-digital-stage/types';
+import useStageActions from '../../../../../lib/use-digital-stage/useStageActions';
 
 const Panel = styled('div', {
   display: 'flex',
@@ -60,16 +58,13 @@ const Header = styled('div', {
 const StageMemberChannel = (props: { stageMemberId: string }) => {
   const { stageMemberId } = props;
   const isAdmin: boolean = useIsStageAdmin();
-  const stageMember = useStageSelector<StageMember>(
-    (state) => state.stageMembers.byId[props.stageMemberId]
-  );
-  const customStageMember = useStageSelector<CustomStageMember>((state) =>
+  const stageMember = useStageMember(props.stageMemberId);
+  const customStageMember = useSelector<CustomStageMember>((state) =>
     state.customStageMembers.byStageMember[props.stageMemberId]
       ? state.customStageMembers.byId[state.customStageMembers.byStageMember[props.stageMemberId]]
       : undefined
   );
-  const user = useStageSelector<User>((state) => state.users.byId[stageMember.userId]);
-  const audioProducers = useStageSelector<string[]>((state) =>
+  const audioProducers = useSelector<string[]>((state) =>
     state.audioProducers.byStageMember[props.stageMemberId]
       ? state.audioProducers.byStageMember[props.stageMemberId]
       : []
@@ -96,10 +91,11 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
                   variant="outline"
                   onClick={() => setExpanded((prev) => !prev)}
                 >
-                  <Caption1>{user.name}</Caption1> {expanded ? <ChevronLeft /> : <ChevronRight />}
+                  <Caption1>{stageMember.name}</Caption1>{' '}
+                  {expanded ? <ChevronLeft /> : <ChevronRight />}
                 </IconButton>
               ) : (
-                <Caption1>{user.name}</Caption1>
+                <Caption1>{stageMember.name}</Caption1>
               )}
             </Header>
           }

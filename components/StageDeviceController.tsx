@@ -9,15 +9,13 @@ import {
   FaVideoSlash,
 } from 'react-icons/fa';
 import { Button, Flex, jsx } from 'theme-ui';
-import useStageActions from '../lib/digitalstage/useStageActions';
-import useStageSelector from '../lib/digitalstage/useStageSelector';
 import FixedAudioPlaybackStarterButton from './new/elements/Menu/FixedAudioPlaybackStarterButton';
+import { useLocalDevice } from '../lib/use-digital-stage/hooks';
+import useStageActions from '../lib/use-digital-stage/useStageActions';
 
 const StageDeviceController = (): JSX.Element => {
-  // TODO: @delude88 - please have a look - state does not contain data anymore - FixedAudioButton (is this a duplicate)
-  const { localDevice } = useStageSelector((state) => ({
-    localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
-  }));
+  // TODO: @delude88 - please check
+  const localDevice = useLocalDevice();
   const { updateDevice } = useStageActions();
 
   return (

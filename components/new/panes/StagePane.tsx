@@ -4,10 +4,10 @@ import * as React from 'react';
 import { jsx, Box } from 'theme-ui';
 import GroupView from '../elements/StageView/GroupView';
 import ConductorsView from '../elements/StageView/ConductorsView';
-import useStageSelector, { useGroupsByStage } from '../../../lib/digitalstage/useStageSelector';
+import { useCurrentStageId, useGroupsByStage } from '../../../lib/use-digital-stage/hooks';
 
 const StagePane = (): JSX.Element => {
-  const stageId = useStageSelector<string | undefined>((state) => state.stageId);
+  const stageId = useCurrentStageId();
   const groups = useGroupsByStage(stageId);
 
   return (

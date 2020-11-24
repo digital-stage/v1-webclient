@@ -2,14 +2,14 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx, Heading } from 'theme-ui';
-import { useAuth } from '../../lib/digitalstage/useAuth';
-import useStageSelector from '../../lib/digitalstage/useStageSelector';
+import { useAuth } from '../../lib/useAuth';
 import Layout from '../../components/Layout';
 import Container from '../../components/Container';
+import { useCurrentUser } from '../../lib/use-digital-stage/hooks';
 
 const Profile = (): JSX.Element => {
   const { user: authUser } = useAuth();
-  const { user } = useStageSelector((state) => ({ user: state.user }));
+  const user = useCurrentUser();
 
   return (
     <Layout auth>

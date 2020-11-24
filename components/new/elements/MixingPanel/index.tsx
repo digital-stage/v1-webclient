@@ -1,7 +1,7 @@
 import { styled } from 'styletron-react';
 import React from 'react';
-import useStageSelector from '../../../../lib/digitalstage/useStageSelector';
 import GroupChannel from './channels/GroupChannel';
+import { useGroups } from '../../../../lib/use-digital-stage/hooks';
 
 const Wrapper = styled('div', {
   width: '100%',
@@ -22,13 +22,11 @@ const Wrapper = styled('div', {
  * @constructor
  */
 const MixingPanelView = (): JSX.Element => {
-  const groupIds = useStageSelector<string[]>((state) =>
-    state.stageId ? state.groups.byStage[state.stageId] : []
-  );
+  const groups = useGroups();
 
   return (
     <Wrapper>
-      {groupIds.map((id) => (
+      {groups.allIds.map((id) => (
         <GroupChannel key={id} groupId={id} />
       ))}
     </Wrapper>

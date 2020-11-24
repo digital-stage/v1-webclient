@@ -3,17 +3,17 @@
 import { Field, Form, Formik } from 'formik';
 import { Box, Button, Flex, Heading, jsx, Text } from 'theme-ui';
 import * as Yup from 'yup';
-import { useAuth } from '../../lib/digitalstage/useAuth';
-import useStageActions from '../../lib/digitalstage/useStageActions';
-import useStageSelector from '../../lib/digitalstage/useStageSelector';
+import useStageActions from '../../lib/use-digital-stage/useStageActions';
+import { useAuth } from '../../lib/useAuth';
 import InputField from '../InputField';
+import { useCurrentUser } from '../../lib/use-digital-stage/hooks';
 interface Values {
   name: string;
 }
 
 const Profile = (): JSX.Element => {
   const { user: authUser } = useAuth();
-  const { user } = useStageSelector((state) => ({ user: state.user }));
+  const user = useCurrentUser();
   const { updateUser } = useStageActions();
 
   const UpdateProfileSchema = Yup.object().shape({
