@@ -1,3 +1,10 @@
+## [0.11.2](https://github.com/digital-stage/webclient/compare/v0.11.1...v0.11.2) (2020-11-25)
+
+
+### Bug Fixes
+
+* socket connection has been established twice ([f42e77d](https://github.com/digital-stage/webclient/commit/f42e77d5c46c8b25ae817650a2306887ea7b4e7e))
+
 ## [0.11.1](https://github.com/digital-stage/webclient/compare/v0.11.0...v0.11.1) (2020-11-24)
 
 
