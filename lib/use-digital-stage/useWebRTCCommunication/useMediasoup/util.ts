@@ -77,25 +77,23 @@ export const getFastestRouter = (routerDistUrl: string): Promise<Router> =>
         router: Router;
         latency: number;
       }[] = await Promise.all(
-        routers.map((router) => {
+        routers.map(async (router) => {
           const url = `${router.restPrefix}://${router.url}:${router.port}${
             router.path ? `/${router.path}/` : ''
           }/ping`;
-          return ping(url)
-            .then((latency) => ({
+          try {
+            const latency = await ping(url);
+            return {
               router,
               latency,
-            }))
-            .catch((error) => {
-              reportError(error);
-              return {
-                router,
-                latency: 9999,
-              };
-            })
-            .then((routerWithLatency) => {
-              return routerWithLatency;
-            });
+            };
+          } catch (error) {
+            reportError(error);
+            return {
+              router,
+              latency: 9999,
+            };
+          }
         })
       );
       const fastestRouterWithLatency = routerWithLatencies.reduce((prev, curr) => {
@@ -257,7 +255,7 @@ export const createConsumer = (
         transportId: transport.id,
         rtpCapabilities: device.rtpCapabilities, // TODO: Necessary?
       },
-      (
+      async (
         error: string | null,
         data: {
           id: string;
@@ -271,10 +269,15 @@ export const createConsumer = (
         if (error) {
           return reject(error);
         }
-        return transport.consume(data).then((consumer) => {
-          if (data.paused) consumer.pause();
-          resolve(consumer);
-        });
+        try {
+          const consumer = await transport.consume(data);
+          if (data.paused) {
+            consumer.pause();
+          }
+          return resolve(consumer);
+        } catch (consumingError) {
+          return reject(consumingError);
+        }
       }
     );
   });

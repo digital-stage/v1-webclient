@@ -24,10 +24,15 @@ import allActions from './actions';
 import { InitialStagePackage } from './actions/stageActions';
 import { TeckosClient } from 'teckos-client';
 
-const useSocketToDispatch = () => {
+const useSocketToDispatch = (): ((socket: TeckosClient) => void) => {
   const dispatch = useDispatch();
   return useCallback(
     (socket: TeckosClient) => {
+      socket.on('disconnect', () => {
+        // Cleanup
+        dispatch(allActions.client.reset());
+      });
+
       socket.on(ServerGlobalEvents.READY, () => {
         dispatch(allActions.server.setReady());
       });

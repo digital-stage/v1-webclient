@@ -2,6 +2,7 @@ import omit from 'lodash/omit';
 import without from 'lodash/without';
 import { DevicesCollection } from '../../types';
 import { ServerDeviceEvents } from '../../global/SocketEvents';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 
 function devices(
   state: DevicesCollection = {
@@ -12,8 +13,14 @@ function devices(
     type: string;
     payload: any;
   }
-) {
+): DevicesCollection {
   switch (action.type) {
+    case AdditionalReducerTypes.RESET: {
+      return {
+        byId: {},
+        allIds: [],
+      };
+    }
     case ServerDeviceEvents.LOCAL_DEVICE_READY:
     case ServerDeviceEvents.DEVICE_ADDED:
       return {

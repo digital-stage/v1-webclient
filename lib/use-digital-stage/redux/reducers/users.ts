@@ -2,6 +2,7 @@ import omit from 'lodash/omit';
 import without from 'lodash/without';
 import { ServerStageEvents, ServerUserEvents } from '../../global/SocketEvents';
 import { UsersCollection } from '../../types';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 
 function users(
   state: UsersCollection = {
@@ -12,8 +13,14 @@ function users(
     type: string;
     payload: any;
   }
-) {
+): UsersCollection {
   switch (action.type) {
+    case AdditionalReducerTypes.RESET: {
+      return {
+        byId: {},
+        allIds: [],
+      };
+    }
     case ServerStageEvents.REMOTE_USER_ADDED:
       return {
         ...state,

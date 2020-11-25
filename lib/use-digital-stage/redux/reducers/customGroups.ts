@@ -2,6 +2,7 @@ import omit from 'lodash/omit';
 import without from 'lodash/without';
 import { ServerStageEvents } from '../../global/SocketEvents';
 import { CustomGroup, CustomGroupsCollection } from '../../types';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 
 function customGroups(
   state: CustomGroupsCollection = {
@@ -13,8 +14,15 @@ function customGroups(
     type: string;
     payload: any;
   }
-) {
+): CustomGroupsCollection {
   switch (action.type) {
+    case AdditionalReducerTypes.RESET: {
+      return {
+        byId: {},
+        byGroup: {},
+        allIds: [],
+      };
+    }
     case ServerStageEvents.CUSTOM_GROUP_ADDED: {
       const customGroup = action.payload as CustomGroup;
       return {

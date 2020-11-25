@@ -2,6 +2,7 @@ import omit from 'lodash/omit';
 import without from 'lodash/without';
 import { ServerStageEvents } from '../../global/SocketEvents';
 import { CustomStageMember, CustomStageMembersCollection } from '../../types';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 
 function customStageMembers(
   state: CustomStageMembersCollection = {
@@ -13,8 +14,15 @@ function customStageMembers(
     type: string;
     payload: any;
   }
-) {
+): CustomStageMembersCollection {
   switch (action.type) {
+    case AdditionalReducerTypes.RESET: {
+      return {
+        byId: {},
+        byStageMember: {},
+        allIds: [],
+      };
+    }
     case ServerStageEvents.CUSTOM_STAGE_MEMBER_ADDED: {
       const customStageMember = action.payload as CustomStageMember;
       return {

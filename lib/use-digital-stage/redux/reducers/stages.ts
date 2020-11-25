@@ -2,6 +2,7 @@ import omit from 'lodash/omit';
 import without from 'lodash/without';
 import { ServerStageEvents } from '../../global/SocketEvents';
 import { StagesCollection } from '../../types';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 
 function stages(
   state: StagesCollection = {
@@ -12,8 +13,14 @@ function stages(
     type: string;
     payload: any;
   }
-) {
+): StagesCollection {
   switch (action.type) {
+    case AdditionalReducerTypes.RESET: {
+      return {
+        byId: {},
+        allIds: [],
+      };
+    }
     case ServerStageEvents.STAGE_ADDED:
       return {
         ...state,

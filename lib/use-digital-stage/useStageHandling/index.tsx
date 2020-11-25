@@ -21,7 +21,7 @@ const StageHandlingContext = React.createContext<TStageHandlingContext>({
 const useStageHandling = (): TStageHandlingContext =>
   React.useContext<TStageHandlingContext>(StageHandlingContext);
 
-export const StageHandlingProvider = (props: { children: React.ReactNode }) => {
+export const StageHandlingProvider = (props: { children: React.ReactNode }): JSX.Element => {
   const { children } = props;
   const [stageId, setStageId] = React.useState<string>();
   const [groupId, setGroupId] = React.useState<string>();

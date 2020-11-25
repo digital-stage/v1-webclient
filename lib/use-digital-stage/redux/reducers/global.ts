@@ -4,6 +4,7 @@ import {
   ServerUserEvents,
 } from '../../global/SocketEvents';
 import { GlobalStore } from '../../types';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 
 function global(
   state: GlobalStore = {
@@ -18,6 +19,14 @@ function global(
   }
 ): GlobalStore {
   switch (action.type) {
+    case AdditionalReducerTypes.RESET: {
+      return {
+        ready: false,
+        stageId: undefined,
+        localDeviceId: undefined,
+        groupId: undefined,
+      };
+    }
     case ServerGlobalEvents.READY:
       return {
         ...state,

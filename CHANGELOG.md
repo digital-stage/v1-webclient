@@ -1,3 +1,24 @@
+## [0.11.4](https://github.com/digital-stage/webclient/compare/v0.11.3...v0.11.4) (2020-11-25)
+
+
+### Bug Fixes
+
+* missing promise catched resulted in missing error reporting ([d79fb81](https://github.com/digital-stage/webclient/commit/d79fb8193ebb1df917c21cc1c0d96eae96d4be36))
+
+## [0.11.3](https://github.com/digital-stage/webclient/compare/v0.11.2...v0.11.3) (2020-11-25)
+
+
+### Bug Fixes
+
+* data has been duplicated when reconnecting to API server ([2bc8afb](https://github.com/digital-stage/webclient/commit/2bc8afbbfbf023f3526d8c2444de5d4db994f0b8))
+
+## [0.11.2](https://github.com/digital-stage/webclient/compare/v0.11.1...v0.11.2) (2020-11-25)
+
+
+### Bug Fixes
+
+* socket connection has been established twice ([f42e77d](https://github.com/digital-stage/webclient/commit/f42e77d5c46c8b25ae817650a2306887ea7b4e7e))
+
 ## [0.11.1](https://github.com/digital-stage/webclient/compare/v0.11.0...v0.11.1) (2020-11-24)
 
 

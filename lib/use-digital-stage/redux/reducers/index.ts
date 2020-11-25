@@ -12,36 +12,7 @@ import audioProducers from './audioProducers';
 import customAudioProducers from './customAudioProducers';
 import videoConsumers from './videoConsumers';
 import audioConsumers from './audioConsumers';
-import {
-  CustomGroupsCollection,
-  CustomRemoteAudioProducersCollection,
-  CustomStageMembersCollection,
-  DevicesCollection,
-  GlobalStore,
-  GroupsCollection,
-  LocalConsumersCollection,
-  RemoteAudioProducersCollection,
-  RemoteVideoProducersCollection,
-  StageMembersCollection,
-  StagesCollection,
-  UsersCollection,
-} from '../../types';
-
-interface RootReducer {
-  global: GlobalStore;
-  devices: DevicesCollection;
-  users: UsersCollection;
-  stages: StagesCollection;
-  groups: GroupsCollection;
-  customGroups: CustomGroupsCollection;
-  stageMembers: StageMembersCollection;
-  customStageMembers: CustomStageMembersCollection;
-  videoProducers: RemoteVideoProducersCollection;
-  audioProducers: RemoteAudioProducersCollection;
-  customAudioProducers: CustomRemoteAudioProducersCollection;
-  videoConsumers: LocalConsumersCollection;
-  audioConsumers: LocalConsumersCollection;
-}
+import { RootReducer } from '../../types';
 
 export default combineReducers<RootReducer>({
   global,

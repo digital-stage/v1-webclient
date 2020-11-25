@@ -49,7 +49,10 @@ export interface TMediasoupContext {
   stopProducing: (trackId: string) => Promise<LocalProducer>;
 }
 
-const useMediasoup = (routerDistUrl: string): TMediasoupContext => {
+const useMediasoup = (
+  routerDistUrl: string,
+  handleError: (error: Error) => void
+): TMediasoupContext => {
   const [connected, setConnected] = useState<boolean>(false);
 
   const { socket } = useSocket();
@@ -76,7 +79,7 @@ const useMediasoup = (routerDistUrl: string): TMediasoupContext => {
       getFastestRouter(routerDistUrl)
         .then((fastestRouter) => {
           d(`Using the fastest available router: ${fastestRouter.url}`);
-          setRouter(fastestRouter);
+          return setRouter(fastestRouter);
         })
         .catch((error) => err(error));
     }
@@ -138,20 +141,25 @@ const useMediasoup = (routerDistUrl: string): TMediasoupContext => {
     if (rtpCapabilities) {
       // Create mediasoup device
       const createdDevice = new MediasoupDevice();
-      createdDevice.load({ routerRtpCapabilities: rtpCapabilities }).then(() => {
-        setMediasoupDevice(createdDevice);
-      });
+      createdDevice
+        .load({ routerRtpCapabilities: rtpCapabilities })
+        .then(() => {
+          return setMediasoupDevice(createdDevice);
+        })
+        .catch((error) => handleError(error));
     }
-  }, [rtpCapabilities]);
+  }, [rtpCapabilities, handleError]);
 
   useEffect(() => {
     if (routerConnection && mediasoupDevice) {
       let createdTransport: mediasoupClient.types.Transport;
       // Create send transport
-      createWebRTCTransport(routerConnection, mediasoupDevice, 'send').then((transport) => {
-        createdTransport = transport;
-        setSendTransport(createdTransport);
-      });
+      createWebRTCTransport(routerConnection, mediasoupDevice, 'send')
+        .then((transport) => {
+          createdTransport = transport;
+          return setSendTransport(createdTransport);
+        })
+        .catch((error) => handleError(error));
 
       return () => {
         cu('Closing send transport');
@@ -159,16 +167,18 @@ const useMediasoup = (routerDistUrl: string): TMediasoupContext => {
       };
     }
     return undefined;
-  }, [routerConnection, mediasoupDevice]);
+  }, [routerConnection, mediasoupDevice, handleError]);
 
   useEffect(() => {
     if (routerConnection && mediasoupDevice) {
       let createdTransport: mediasoupClient.types.Transport;
       // Create receive transport
-      createWebRTCTransport(routerConnection, mediasoupDevice, 'receive').then((transport) => {
-        createdTransport = transport;
-        setReceiveTransport(createdTransport);
-      });
+      createWebRTCTransport(routerConnection, mediasoupDevice, 'receive')
+        .then((transport) => {
+          createdTransport = transport;
+          return setReceiveTransport(createdTransport);
+        })
+        .catch((error) => handleError(error));
 
       return () => {
         cu('Closing receive transport');
@@ -176,7 +186,7 @@ const useMediasoup = (routerDistUrl: string): TMediasoupContext => {
       };
     }
     return undefined;
-  }, [routerConnection, mediasoupDevice]);
+  }, [routerConnection, mediasoupDevice, handleError]);
 
   const consume = useCallback(
     (producer: RemoteVideoProducer | RemoteAudioProducer): Promise<LocalConsumer> => {

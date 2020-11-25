@@ -46,7 +46,7 @@ const enumerateDevices = (): Promise<{
             break;
         }
       });
-      resolve({
+      return resolve({
         inputAudioDevices,
         inputVideoDevices,
         outputAudioDevices,
