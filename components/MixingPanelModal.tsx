@@ -1,8 +1,8 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { jsx } from 'theme-ui';
-import Modal from '../new/elements/Modal';
-import AllGroupsMixers from './AllGroupsMixers';
+import MixingPanelView from './new/elements/MixingPanel';
+import Modal from './new/elements/Modal';
 
 interface Props {
   isOpen: boolean;
@@ -12,7 +12,7 @@ interface Props {
 const MixingPanelModal = ({ isOpen, onClose }: Props): JSX.Element => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} variant="dark" type="settings">
-      <AllGroupsMixers />
+      <MixingPanelView />
     </Modal>
   );
 };

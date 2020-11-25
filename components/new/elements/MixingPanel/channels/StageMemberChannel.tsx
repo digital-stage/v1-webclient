@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, IconButton, Flex } from 'theme-ui';
+import { jsx, IconButton } from 'theme-ui';
 import { styled } from 'styletron-react';
 import { ChevronLeft, ChevronRight } from 'baseui/icon';
 import { Caption1 } from 'baseui/typography';

@@ -6,7 +6,7 @@ import NavItem from '../NavItem';
 import { CenteredNavItems, LowerNavItems } from '../../PageWrapperWithStage/MenuItems';
 import DigitalStageLogo from '../../../../DigitalStageLogo';
 import SettingsModal from '../../../../settings';
-import MixingPanelModal from '../../../../mixingPanel';
+import MixingPanelModal from '../../../../MixingPanelModal';
 
 const SideBar = (): JSX.Element => {
   const [selected, setSelected] = React.useState<string>();

@@ -34,11 +34,13 @@ const LogSlider = (props: {
   middle: number;
   max: number;
   color: RGBColor;
-  onChange?: (volume: number) => any;
-  onEnd?: (volume: number) => any;
+  onChange?: (volume: number) => void;
+  onEnd?: (volume: number) => void;
   width: number;
   className?: string;
   alignLabel?: 'left' | 'right';
+  backgroundColor: string;
+  trackColor?: string;
 }): JSX.Element => {
   const [value, setValue] = useState<number>();
   const [dbValue, setDbValue] = useState<number>(props.volume);
@@ -108,6 +110,8 @@ const LogSlider = (props: {
       width={props.width}
       text={formatDbMeasure(dbValue, true)}
       alignLabel={props.alignLabel}
+      backgroundColor={props.backgroundColor}
+      trackColor={props.trackColor}
       showMarks
       renderMarks={(index) => {
         const value = MAX - index * STEP;

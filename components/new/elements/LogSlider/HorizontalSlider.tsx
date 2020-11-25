@@ -1,6 +1,5 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React from 'react';
 import { jsx, Box } from 'theme-ui';
 import { getTrackBackground, Range } from 'react-range';
 import { RGBColor } from './index';
@@ -10,8 +9,8 @@ const HorizontalSlider = (props: {
   max: number;
   step: number;
   value: number;
-  onChange: (value: number) => any;
-  onFinalChange?: (value: number) => any;
+  onChange: (value: number) => void;
+  onFinalChange?: (value: number) => void;
   color: RGBColor;
   width: number;
   text?: string;
@@ -19,8 +18,6 @@ const HorizontalSlider = (props: {
   convertMark?: (value: number) => string;
   className?: string;
 }): JSX.Element => {
-  // const [css] = useStyletron();
-
   const solidColor = `rgba(${props.color[0]},${props.color[1]},${props.color[2]},0.6)`;
   return (
     <Box sx={{ width: '100%' }} className={props.className}>

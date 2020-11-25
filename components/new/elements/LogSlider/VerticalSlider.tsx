@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import React, { useCallback } from 'react';
-import { jsx, Flex, Box } from 'theme-ui';
+import { jsx, Flex, Box, Text } from 'theme-ui';
 import { Direction, getTrackBackground, Range } from 'react-range';
 import { RGBColor } from './index';
 
@@ -19,6 +19,8 @@ const VerticalSlider = (props: {
   renderMarks?: (index: number) => React.ReactNode;
   className?: string;
   alignLabel?: 'left' | 'right';
+  backgroundColor: string;
+  trackColor?: string;
 }): JSX.Element => {
   const renderSingleMark = useCallback(
     (index: number) => {
@@ -29,7 +31,7 @@ const VerticalSlider = (props: {
             sx={{
               position: 'absolute',
               top: '-400%',
-              left: props.alignLabel && props.alignLabel === 'left' ? '-250%' : undefined,
+              left: props.alignLabel && props.alignLabel === 'left' ? '-800%' : undefined,
               right: !props.alignLabel || props.alignLabel === 'right' ? '140%' : undefined,
             }}
           >
@@ -85,7 +87,7 @@ const VerticalSlider = (props: {
                         : 'rgba(255,255,255,0.2)',
                   }}
                 >
-                  {renderSingleMark(index)}
+                  <Text variant="subTitle">{renderSingleMark(index)}</Text>
                 </div>
               )
             : undefined
@@ -107,9 +109,8 @@ const VerticalSlider = (props: {
                 // width: `${props.width}px`,
                 height: '100%',
                 width: '10px',
-                borderRadius: '18px',
-                background:
-                  'linear-gradient(180deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%)',
+                borderRadius: '24px',
+                backgroundImage: props.backgroundColor,
                 // borderWidth: '1px',
                 // borderStyle: 'solid',
                 // borderColor: solidColor,
@@ -120,18 +121,18 @@ const VerticalSlider = (props: {
                 //   max: props.max,
                 //   direction: Direction.Up,
                 // }),
-                // ':hover': {
-                //   background: getTrackBackground({
-                //     values: [props.value],
-                //     colors: [
-                //       `rgba(${props.color[0]},${props.color[1]},${props.color[2]},0.6)`,
-                //       'transparent',
-                //     ],
-                //     min: props.min,
-                //     max: props.max,
-                //     direction: Direction.Up,
-                //   }),
-                // },
+                ':hover': {
+                  background: getTrackBackground({
+                    values: [props.value],
+                    colors: [
+                      `rgba(${props.color[0]},${props.color[1]},${props.color[2]},0.5)`,
+                      'transparent',
+                    ],
+                    min: props.min,
+                    max: props.max,
+                    direction: Direction.Up,
+                  }),
+                },
                 alignSelf: 'center',
               }}
             >
@@ -146,10 +147,10 @@ const VerticalSlider = (props: {
               ...thumbProps.style,
               // height: `${props.width}px`,
               // width: `${props.width}px`,
-              width: '23px',
+              width: '20px',
               height: '40px',
-              borderRadius: '10px',
-              backgroundColor: 'secondary',
+              borderRadius: '18px',
+              backgroundColor: props.trackColor ? props.trackColor : '#2452CE',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',

@@ -8,7 +8,7 @@ import { IoMdSync } from 'react-icons/io';
 import { IAnalyserNode, IAudioContext } from 'standardized-audio-context';
 import LevelControlFader from './LevelControlFader';
 import LevelMeter from './LevelMeter';
-import { Group } from '../../../../lib/digitalstage/common/model.server';
+import { Group } from '../../../../lib/use-digital-stage';
 
 const ChannelStrip = (props: {
   addHeader?: React.ReactNode;
@@ -71,8 +71,6 @@ const ChannelStrip = (props: {
           flexGrow: 0,
           flexDirection: 'column',
           alignItems: 'center',
-          // height: '60px',
-          // marginBottom: '70px',
         }}
       >
         <Box
@@ -102,46 +100,43 @@ const ChannelStrip = (props: {
         {props.isAdmin ? (
           <React.Fragment>
             <LevelControlFader
-              sx={{
-                paddingLeft: '1rem',
-                paddingRight: '1rem',
-              }}
               volume={props.volume}
               muted={props.muted}
               onChanged={(value, muted) => {
                 if (props.onVolumeChanged) props.onVolumeChanged(value, muted);
               }}
               color={[255, 255, 255]}
+              backgroundColor="linear-gradient(180deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%)"
               alignLabel="left"
+              trackColor="#2452CE"
             />
             {props.customVolume ? (
               <LevelControlFader
-                sx={{
-                  paddingLeft: '1rem',
-                  paddingRight: '1rem',
-                }}
                 volume={props.customVolume || props.volume}
                 muted={props.customMuted}
                 onChanged={(value, muted) => {
                   if (props.onCustomVolumeChanged) props.onCustomVolumeChanged(value, muted);
                 }}
                 color={[255, 0, 0]}
+                backgroundColor="linear-gradient(180deg,  #FE8080 0%, #FE8080 2%, #FE8080 2%, #FE8080 10%,  #2452CE 90%, #2452CE 100%)"
                 alignLabel="right"
+                trackColor="#fff"
               />
             ) : undefined}
           </React.Fragment>
         ) : (
           <LevelControlFader
-            sx={{
-              paddingLeft: '1rem',
-              paddingRight: '1rem',
-            }}
             volume={props.customVolume || props.volume}
             muted={props.muted || props.customMuted}
             onChanged={(value, muted) => {
               if (props.onCustomVolumeChanged) props.onCustomVolumeChanged(value, muted);
             }}
             color={props.customVolume ? [255, 0, 0] : [255, 255, 255]}
+            backgroundColor={
+              props.customVolume
+                ? 'linear-gradient(180deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%)'
+                : 'linear-gradient(180deg,  #FE8080 0%, #FE8080 2%, #FE8080 2%, #FE8080 10%,  #FE8080 50%, #012340 100%)'
+            }
           />
         )}
         {props.analyser ? (
@@ -175,9 +170,9 @@ const ChannelStrip = (props: {
                 if (props.onCustomVolumeReset) props.onCustomVolumeReset();
               }}
             >
-              <IoMdSync />
+              <FaHeadphonesAlt />
             </Button>
-            <Text>Sync</Text>
+            <Text>Monitor</Text>
           </Flex>
         ) : (
           props.isAdmin && (
@@ -187,9 +182,9 @@ const ChannelStrip = (props: {
                 sx={{ width: '33px', height: '33px' }}
                 onClick={addCustom}
               >
-                <FaHeadphonesAlt />{' '}
+                <IoMdSync />
               </Button>
-              <Text>Monitor</Text>
+              <Text>Sync</Text>
             </Flex>
           )
         )}

@@ -1,21 +1,14 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import * as React from 'react';
-import { jsx, Box, IconButton, Flex } from 'theme-ui';
-import { styled } from 'styletron-react';
-import { ChevronLeft, ChevronRight } from 'baseui/icon';
-import { Caption1 } from 'baseui/typography';
-import StageMemberChannel from './StageMemberChannel';
+import { jsx, Box } from 'theme-ui';
+// import StageMemberChannel from './StageMemberChannel';
 import { useStageWebAudio } from '../../../../../lib/useStageWebAudio';
 import ChannelStrip from '../../ChannelStrip';
-import { Panel } from 'baseui/accordion';
 import { useGroup, useIsStageAdmin, useSelector } from '../../../../../lib/use-digital-stage/hooks';
 import { CustomGroup } from '../../../../../lib/use-digital-stage/types';
 import useStageActions from '../../../../../lib/use-digital-stage/useStageActions';
 
-//TODO remove comments
-
-const GroupChannel = (props: { groupId: string }) => {
+const GroupChannel = (props: { groupId: string }): JSX.Element => {
   const { groupId } = props;
   const isAdmin: boolean = useIsStageAdmin();
   const group = useGroup(groupId);
@@ -24,24 +17,14 @@ const GroupChannel = (props: { groupId: string }) => {
       ? state.customGroups.byId[state.customGroups.byGroup[groupId]]
       : undefined
   );
-  const stageMemberIds = useSelector<string[]>((state) =>
-    state.stageMembers.byGroup[groupId] ? state.stageMembers.byGroup[groupId] : []
-  );
+  // const stageMemberIds = useSelector<string[]>((state) =>
+  //   state.stageMembers.byGroup[groupId] ? state.stageMembers.byGroup[groupId] : []
+  // );
 
   const { updateGroup, setCustomGroup, removeCustomGroup } = useStageActions();
   const { byGroup } = useStageWebAudio();
 
-  // const [expanded, setExpanded] = React.useState<boolean>();
-
   return (
-    // <Panel
-    // style={{
-    //   display: 'flex',
-    //   flexDirection: 'row',
-    //   borderRadius: '20px',
-    //   marginRight: '1rem',
-    // }}
-    // >
     <Box
       sx={{
         paddingLeft: '1rem',
@@ -125,7 +108,6 @@ const GroupChannel = (props: { groupId: string }) => {
     //     </Flex>
     //   </Flex>
     // )}
-    // </Panel>
   );
 };
 export default GroupChannel;
