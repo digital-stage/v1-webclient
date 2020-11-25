@@ -1,3 +1,10 @@
+## [0.11.3](https://github.com/digital-stage/webclient/compare/v0.11.2...v0.11.3) (2020-11-25)
+
+
+### Bug Fixes
+
+* data has been duplicated when reconnecting to API server ([2bc8afb](https://github.com/digital-stage/webclient/commit/2bc8afbbfbf023f3526d8c2444de5d4db994f0b8))
+
 ## [0.11.2](https://github.com/digital-stage/webclient/compare/v0.11.1...v0.11.2) (2020-11-25)
 
 
