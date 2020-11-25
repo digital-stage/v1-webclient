@@ -1,3 +1,10 @@
+## [0.11.4](https://github.com/digital-stage/webclient/compare/v0.11.3...v0.11.4) (2020-11-25)
+
+
+### Bug Fixes
+
+* missing promise catched resulted in missing error reporting ([d79fb81](https://github.com/digital-stage/webclient/commit/d79fb8193ebb1df917c21cc1c0d96eae96d4be36))
+
 ## [0.11.3](https://github.com/digital-stage/webclient/compare/v0.11.2...v0.11.3) (2020-11-25)
 
 
