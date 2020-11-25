@@ -1,5 +1,7 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import React, { useCallback, useEffect, useState } from 'react';
-import { Caption1 } from 'baseui/typography';
+import { jsx, Text } from 'theme-ui';
 import VerticalSlider from './VerticalSlider';
 import { convertRangeToDbMeasure, formatDbMeasure } from './utils';
 
@@ -37,7 +39,7 @@ const LogSlider = (props: {
   width: number;
   className?: string;
   alignLabel?: 'left' | 'right';
-}) => {
+}): JSX.Element => {
   const [value, setValue] = useState<number>();
   const [dbValue, setDbValue] = useState<number>(props.volume);
 
@@ -111,11 +113,7 @@ const LogSlider = (props: {
         const value = MAX - index * STEP;
         const large: boolean = value === MIN || value === MAX || value === NULL_VALUE;
         if (large) {
-          return (
-            <Caption1>
-              {formatDbMeasure(convertRangeToDbMeasure(convertLinearToLog(value)))}
-            </Caption1>
-          );
+          return <Text>{formatDbMeasure(convertRangeToDbMeasure(convertLinearToLog(value)))}</Text>;
         }
       }}
     />

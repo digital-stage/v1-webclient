@@ -160,6 +160,26 @@ const theme: Theme = {
       color: 'text',
       borderRadius: '32px',
     },
+    circleWhite: {
+      border: 'none',
+      m: 0,
+      p: 0,
+      bg: 'text',
+      width: '48px',
+      height: '48px',
+      color: 'background',
+      borderRadius: '32px',
+    },
+    circleOutlined: {
+      border: '1px solid white',
+      m: 0,
+      p: 0,
+      bg: 'transparent',
+      width: '48px',
+      height: '48px',
+      color: 'text',
+      borderRadius: '32px',
+    },
   },
   links: {
     auth: {

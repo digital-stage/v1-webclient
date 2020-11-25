@@ -1,16 +1,16 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Button, Flex } from 'theme-ui';
+import { jsx, Flex, Box, Button } from 'theme-ui';
 import LogSlider, { RGBColor } from '../LogSlider';
 
 const LevelControlFader = (props: {
   muted: boolean;
   volume: number;
   color?: RGBColor;
-  onChanged: (volume: number, muted: boolean) => any;
+  onChanged: (volume: number, muted: boolean) => void;
   alignLabel?: 'left' | 'right';
-}) => {
+}): JSX.Element => {
   const { volume, onChanged, muted, color, alignLabel } = props;
   const [value, setValue] = React.useState<number>(volume);
 
@@ -18,9 +18,9 @@ const LevelControlFader = (props: {
     setValue(volume);
   }, [volume]);
 
-  const handleMuteClicked = React.useCallback(() => {
-    onChanged(value, !muted);
-  }, [value, muted]);
+  // const handleMuteClicked = React.useCallback(() => {
+  //   onChanged(value, !muted);
+  // }, [value, muted]);
 
   const handleEnd = React.useCallback(
     (updatedVolume: number) => {
@@ -36,9 +36,11 @@ const LevelControlFader = (props: {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        paddingLeft: '1.5rem',
+        paddingRight: '1.5rem',
       }}
     >
-      <Box
+      {/* <Box
         sx={{
           display: 'block',
           paddingBottom: '.6rem',
@@ -51,7 +53,7 @@ const LevelControlFader = (props: {
         >
           M
         </Button>
-      </Box>
+      </Box> */}
       <LogSlider
         min={0}
         middle={1}

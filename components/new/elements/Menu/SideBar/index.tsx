@@ -6,10 +6,12 @@ import NavItem from '../NavItem';
 import { CenteredNavItems, LowerNavItems } from '../../PageWrapperWithStage/MenuItems';
 import DigitalStageLogo from '../../../../DigitalStageLogo';
 import SettingsModal from '../../../../settings';
+import MixingPanelModal from '../../../../mixingPanel';
 
 const SideBar = (): JSX.Element => {
   const [selected, setSelected] = React.useState<string>();
   const [openSettings, setOpenSettings] = React.useState<boolean>(false);
+  const [openMixer, setOpenMixer] = React.useState<boolean>(false);
 
   const SideBarItem = ({ item, index }: { item: NavItem; index: number }) => {
     return (
@@ -22,6 +24,8 @@ const SideBar = (): JSX.Element => {
             setOpenSettings(true);
           } else if (item.href === 'bug') {
             window.open('https://forum.digital-stage.org/', '_target');
+          } else if (item.href === 'mixer') {
+            setOpenMixer(true);
           }
         }}
         sx={{
@@ -71,6 +75,7 @@ const SideBar = (): JSX.Element => {
         onClose={() => setOpenSettings(!openSettings)}
         selected={selected}
       />
+      <MixingPanelModal isOpen={openMixer} onClose={() => setOpenMixer(!openMixer)} />
     </Flex>
   );
 };
