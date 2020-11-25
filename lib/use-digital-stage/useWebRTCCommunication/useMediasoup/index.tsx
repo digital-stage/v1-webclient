@@ -3,7 +3,6 @@ import debug from 'debug';
 import { ITeckosClient, TeckosClient } from 'teckos-client';
 import mediasoupClient from 'mediasoup-client';
 import { Device as MediasoupDevice } from 'mediasoup-client/lib/Device';
-import omit from 'lodash/omit';
 import {
   closeConsumer,
   createConsumer,
@@ -37,16 +36,10 @@ const err = d.extend('warn');
 export interface TMediasoupContext {
   connected?: boolean;
   router?: Router;
-  producers: {
-    [trackId: string]: LocalProducer;
-  };
-  consumers: {
-    [globalProducerId: string]: LocalConsumer;
-  };
   consume: (producer: RemoteVideoProducer | RemoteAudioProducer) => Promise<LocalConsumer>;
-  stopConsuming: (producerId: string) => Promise<LocalConsumer>;
+  stopConsuming: (consumer: LocalConsumer) => Promise<LocalConsumer>;
   produce: (track: MediaStreamTrack) => Promise<LocalProducer>;
-  stopProducing: (trackId: string) => Promise<LocalProducer>;
+  stopProducing: (producer: LocalProducer) => Promise<LocalProducer>;
 }
 
 const useMediasoup = (
@@ -54,19 +47,11 @@ const useMediasoup = (
   handleError: (error: Error) => void
 ): TMediasoupContext => {
   const [connected, setConnected] = useState<boolean>(false);
-
   const { socket } = useSocket();
 
   // Router specific
   const [router, setRouter] = useState<Router>();
   const [routerConnection, setRouterConnection] = useState<ITeckosClient>();
-
-  const [producers, setProducers] = useState<{
-    [id: string]: LocalProducer;
-  }>({});
-  const [consumers, setConsumers] = useState<{
-    [globalProducerId: string]: LocalConsumer;
-  }>({});
 
   // Mediasoup specific
   const [rtpCapabilities, setRtpCapabilities] = useState<mediasoupClient.types.RtpCapabilities>();
@@ -75,15 +60,20 @@ const useMediasoup = (
   const [receiveTransport, setReceiveTransport] = useState<mediasoupClient.types.Transport>();
 
   useEffect(() => {
-    if (routerDistUrl && !router) {
+    if (routerDistUrl) {
       getFastestRouter(routerDistUrl)
         .then((fastestRouter) => {
           d(`Using the fastest available router: ${fastestRouter.url}`);
           return setRouter(fastestRouter);
         })
         .catch((error) => err(error));
+      return () => {
+        cu('Cleanup: Unset router');
+        setRouter(undefined);
+      };
     }
-  }, [routerDistUrl, router]);
+    return undefined;
+  }, [routerDistUrl]);
 
   useEffect(() => {
     if (router) {
@@ -107,8 +97,9 @@ const useMediasoup = (
 
       createdConnection.connect();
 
+      d('Attaching connection cleanup handler');
       return () => {
-        cu('Closing socket connection to router');
+        d('Cleaning up connection');
         createdConnection.close();
         setRouterConnection(undefined);
       };
@@ -144,10 +135,16 @@ const useMediasoup = (
       createdDevice
         .load({ routerRtpCapabilities: rtpCapabilities })
         .then(() => {
+          d('Created mediasoup device');
           return setMediasoupDevice(createdDevice);
         })
         .catch((error) => handleError(error));
+      return () => {
+        cu('Cleaning up mediasoup device');
+        setMediasoupDevice(undefined);
+      };
     }
+    return undefined;
   }, [rtpCapabilities, handleError]);
 
   useEffect(() => {
@@ -157,13 +154,16 @@ const useMediasoup = (
       createWebRTCTransport(routerConnection, mediasoupDevice, 'send')
         .then((transport) => {
           createdTransport = transport;
+          d('Created send transport');
           return setSendTransport(createdTransport);
         })
         .catch((error) => handleError(error));
 
       return () => {
-        cu('Closing send transport');
-        if (createdTransport) createdTransport.close();
+        cu('Cleaning up send transport');
+        if (createdTransport) {
+          createdTransport.close();
+        }
       };
     }
     return undefined;
@@ -176,6 +176,7 @@ const useMediasoup = (
       createWebRTCTransport(routerConnection, mediasoupDevice, 'receive')
         .then((transport) => {
           createdTransport = transport;
+          d('Created receive transport');
           return setReceiveTransport(createdTransport);
         })
         .catch((error) => handleError(error));
@@ -188,179 +189,158 @@ const useMediasoup = (
     return undefined;
   }, [routerConnection, mediasoupDevice, handleError]);
 
+  useEffect(() => {
+    if (routerConnection && router && mediasoupDevice && sendTransport && receiveTransport) {
+      d('Connected');
+      setConnected(true);
+
+      return () => {
+        cu('Cleaning up connection state');
+        setConnected(false);
+      };
+    }
+    return undefined;
+  }, [routerConnection, router, mediasoupDevice, sendTransport, receiveTransport]);
+
   const consume = useCallback(
     (producer: RemoteVideoProducer | RemoteAudioProducer): Promise<LocalConsumer> => {
       if (routerConnection && mediasoupDevice && receiveTransport) {
-        if (!consumers[producer._id]) {
-          return createConsumer(
-            routerConnection,
-            mediasoupDevice,
-            receiveTransport,
-            producer.globalProducerId
-          )
-            .then((consumer) => {
-              const localConsumer: LocalConsumer = {
-                _id: consumer.id,
-                consumer,
-                stageId: producer.stageId,
-                stageMemberId: producer.stageMemberId,
-                producerId: producer._id,
-              };
-              setConsumers((prev) => ({
-                ...prev,
-                [producer._id]: localConsumer,
-              }));
-              return localConsumer;
-            })
-            .then(async (localConsumer) => {
-              if (localConsumer.consumer.paused) {
-                await resumeConsumer(routerConnection, localConsumer.consumer);
-              }
-              return localConsumer;
-            });
-        }
-        throw new Error(`Already consuming ${producer._id}`);
+        return createConsumer(
+          routerConnection,
+          mediasoupDevice,
+          receiveTransport,
+          producer.globalProducerId
+        )
+          .then((consumer) => {
+            const localConsumer: LocalConsumer = {
+              _id: consumer.id,
+              consumer,
+              stageId: producer.stageId,
+              stageMemberId: producer.stageMemberId,
+              producerId: producer._id,
+            };
+            return localConsumer;
+          })
+          .then(async (localConsumer) => {
+            if (localConsumer.consumer.paused) {
+              d('Consumer is paused, try to resume it');
+              await resumeConsumer(routerConnection, localConsumer.consumer);
+            }
+            return localConsumer;
+          });
       }
-      throw new Error(`Connection is not ready`);
+      throw new Error('Not connected');
     },
-    [routerConnection, mediasoupDevice, receiveTransport, consumers]
+    [routerConnection, mediasoupDevice, receiveTransport]
   );
 
   const stopConsuming = useCallback(
-    (producerId: string): Promise<LocalConsumer> => {
+    async (consumer: LocalConsumer): Promise<LocalConsumer> => {
       if (routerConnection) {
-        const consumer = consumers[producerId];
-        if (consumer) {
-          return closeConsumer(routerConnection, consumer.consumer).then(
-            (): LocalConsumer => {
-              setConsumers((prev) => omit(prev, producerId));
-              return consumer;
-            }
-          );
-        }
-        throw new Error(`Could not find consumer for producer ${producerId}`);
+        d(`Closing consumer ${consumer._id}`);
+        await closeConsumer(routerConnection, consumer.consumer).then(
+          (): LocalConsumer => {
+            return consumer;
+          }
+        );
+      } else {
+        err('Stopped consumer when not connected to router');
       }
-      throw new Error(`Connection is not ready`);
+
+      d(`Removing consumer ${consumer._id}`);
+      return consumer;
     },
-    [routerConnection, consumers]
+    [routerConnection]
   );
 
   const produce = useCallback(
     (track: MediaStreamTrack): Promise<LocalProducer> => {
       if (routerConnection && mediasoupDevice && sendTransport && socket && router) {
-        if (!producers[track.id]) {
-          return createProducer(sendTransport, track)
-            .then(
-              (producer) =>
-                new Promise<LocalProducer>((resolve, reject) => {
-                  d(`Publishing mediasoup producer ${producer.id} globally`);
-                  const timeout = setTimeout(() => {
+        return createProducer(sendTransport, track).then(
+          (producer) =>
+            new Promise<LocalProducer>((resolve, reject) => {
+              const timeout = setTimeout(() => {
+                // TODO: Stop producing track first?
+                reject(new Error(`Timed out when publishing mediasoup producer ${producer.id}`));
+              }, TIMEOUT_MS);
+              socket.emit(
+                track.kind === 'video'
+                  ? ClientDeviceEvents.ADD_VIDEO_PRODUCER
+                  : ClientDeviceEvents.ADD_AUDIO_PRODUCER,
+                {
+                  routerId: router._id,
+                  routerProducerId: producer.id,
+                } as AddAudioProducerPayload,
+                (error: string | null, globalProducer: GlobalProducer) => {
+                  clearTimeout(timeout);
+                  if (error) {
                     // TODO: Stop producing track first?
-                    d(`Timed out when publishing mediasoup producer ${producer.id}`);
-                    reject(
-                      new Error(`Timed out when publishing mediasoup producer ${producer.id}`)
-                    );
-                  }, TIMEOUT_MS);
-                  socket.emit(
-                    track.kind === 'video'
-                      ? ClientDeviceEvents.ADD_VIDEO_PRODUCER
-                      : ClientDeviceEvents.ADD_AUDIO_PRODUCER,
-                    {
-                      routerId: router._id,
-                      routerProducerId: producer.id,
-                    } as AddAudioProducerPayload,
-                    (error: string | null, globalProducer: GlobalProducer) => {
-                      clearTimeout(timeout);
-                      if (error) {
-                        // TODO: Stop producing track first?
-                        reject(new Error(error));
-                      }
-                      d(
-                        `Published mediasoup producer ${producer.id} globally: ${globalProducer._id}`
-                      );
-                      resolve({
-                        global: globalProducer,
-                        local: producer,
-                      });
-                    }
-                  );
-                })
-            )
-            .then((localProducer) => {
-              setProducers((prev) => ({
-                ...prev,
-                [track.id]: localProducer,
-              }));
-              return localProducer;
-            });
-        }
-        throw new Error(`Already consuming ${track.id}`);
+                    reject(new Error(error));
+                  }
+                  d(`Published producer ${globalProducer._id}`);
+                  resolve({
+                    global: globalProducer,
+                    local: producer,
+                  });
+                }
+              );
+            })
+        );
       }
       throw new Error(`Connection is not ready`);
     },
-    [routerConnection, router, mediasoupDevice, sendTransport, producers, socket]
+    [routerConnection, router, mediasoupDevice, sendTransport, socket]
   );
 
   const stopProducing = useCallback(
-    (trackId: string): Promise<LocalProducer> => {
-      if (routerConnection && socket) {
-        const localProducer = producers[trackId];
-        if (localProducer) {
-          return stopProducer(routerConnection, localProducer.local).then(
-            () =>
-              new Promise<LocalProducer>((resolve, reject) => {
-                d(`Unpublishing mediasoup producer ${localProducer.local.id} globally`);
-                const timeout = setTimeout(() => {
-                  d(`Timed out when unpublishing mediasoup producer ${localProducer.global._id}`);
-                  reject(
-                    new Error(
-                      `Timed out when unpublishing mediasoup producer ${localProducer.global._id}`
-                    )
-                  );
-                }, TIMEOUT_MS);
-                socket.emit(
-                  localProducer.local.kind === 'video'
-                    ? ClientDeviceEvents.REMOVE_VIDEO_PRODUCER
-                    : ClientDeviceEvents.REMOVE_AUDIO_PRODUCER,
-                  localProducer.global._id,
-                  (error?: string) => {
-                    d(
-                      `Unpublished mediasoup track ${localProducer.local.id} globally: ${localProducer.global._id}`
-                    );
-                    clearTimeout(timeout);
-                    if (error) {
-                      reject(new Error(error));
-                    }
-                    resolve(localProducer);
-                  }
-                );
-              })
-          );
-        }
-        throw new Error(`Could not find producer for track ${trackId}`);
+    async (localProducer: LocalProducer): Promise<LocalProducer> => {
+      if (routerConnection) {
+        d(`Stopping producer ${localProducer.global._id}`);
+        await stopProducer(routerConnection, localProducer.local);
+      } else {
+        err('Stopped producer when not connected to router');
       }
-      throw new Error(`Connection is not ready`);
-    },
-    [routerConnection, producers, socket]
-  );
 
-  useEffect(() => {
-    if (routerConnection && router && mediasoupDevice && sendTransport && receiveTransport) {
-      setConnected(true);
-    } else {
-      setConnected(false);
-    }
-  }, [routerConnection, router, mediasoupDevice, sendTransport, receiveTransport]);
+      if (socket) {
+        d(`Unpublishing producer ${localProducer.global._id}`);
+        await new Promise<LocalProducer>((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            reject(
+              new Error(`Timed out when unpublishing global producer ${localProducer.global._id}`)
+            );
+          }, TIMEOUT_MS);
+          if (socket) {
+            socket.emit(
+              localProducer.local.kind === 'video'
+                ? ClientDeviceEvents.REMOVE_VIDEO_PRODUCER
+                : ClientDeviceEvents.REMOVE_AUDIO_PRODUCER,
+              localProducer.global._id,
+              (error?: string) => {
+                clearTimeout(timeout);
+                if (error) {
+                  reject(new Error(error));
+                }
+                resolve(localProducer);
+              }
+            );
+          } else {
+            err('Stopped consumer when not connected to stage server');
+          }
+        });
+      }
+      return localProducer;
+    },
+    [routerConnection, socket]
+  );
 
   return {
     connected,
     router,
-    producers,
-    consumers,
     consume,
     stopConsuming,
     produce,
     stopProducing,
   };
 };
+
 export default useMediasoup;

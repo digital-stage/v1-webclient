@@ -1,6 +1,5 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { useStyletron } from 'baseui';
 import * as React from 'react';
 import { FaMicrophone } from 'react-icons/fa';
 import { Box, Button, jsx } from 'theme-ui';
@@ -8,7 +7,6 @@ import { useAudioContext } from '../../../../lib/useAudioContext';
 
 // TODO: @delude88 please check as well
 const FixedAudioPlaybackStarterButton = (): JSX.Element => {
-  const [css, theme] = useStyletron();
   const { audioContext, createAudioContext } = useAudioContext();
   const [valid, setValid] = React.useState<boolean>(
     audioContext && audioContext.state === 'running'

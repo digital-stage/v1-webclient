@@ -38,11 +38,17 @@ export const ErrorsProvider = (props: { children: React.ReactNode }): JSX.Elemen
   const { children } = props;
 
   useEffect(() => {
-    errors.forEach((error) => printError(error));
+    errors.forEach((error) => {
+      console.error(error);
+      printError(error);
+    });
   }, [errors]);
 
   useEffect(() => {
-    warnings.forEach((warning) => printWarning(warning));
+    warnings.forEach((warning) => {
+      console.warn(warning);
+      printWarning(warning);
+    });
   }, [warnings]);
 
   const reportWarning = useCallback((warning: Error) => {
