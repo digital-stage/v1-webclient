@@ -14,7 +14,7 @@ function groups(
     type: string;
     payload: any;
   }
-) {
+): GroupsCollection {
   switch (action.type) {
     case ServerStageEvents.GROUP_ADDED:
       return {

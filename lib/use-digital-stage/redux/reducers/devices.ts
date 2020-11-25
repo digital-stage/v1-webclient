@@ -12,7 +12,7 @@ function devices(
     type: string;
     payload: any;
   }
-) {
+): DevicesCollection {
   switch (action.type) {
     case ServerDeviceEvents.LOCAL_DEVICE_READY:
     case ServerDeviceEvents.DEVICE_ADDED:

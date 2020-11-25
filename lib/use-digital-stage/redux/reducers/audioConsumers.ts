@@ -14,7 +14,7 @@ function audioConsumers(
     type: string;
     payload: any;
   }
-) {
+): LocalConsumersCollection {
   switch (action.type) {
     case AdditionalReducerTypes.ADD_AUDIO_CONSUMER: {
       const audioConsumer = action.payload as LocalConsumer;

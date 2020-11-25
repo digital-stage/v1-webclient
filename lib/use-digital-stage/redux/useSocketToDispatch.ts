@@ -24,7 +24,7 @@ import allActions from './actions';
 import { InitialStagePackage } from './actions/stageActions';
 import { TeckosClient } from 'teckos-client';
 
-const useSocketToDispatch = () => {
+const useSocketToDispatch = (): ((socket: TeckosClient) => void) => {
   const dispatch = useDispatch();
   return useCallback(
     (socket: TeckosClient) => {

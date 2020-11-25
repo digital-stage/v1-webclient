@@ -13,7 +13,7 @@ function customStageMembers(
     type: string;
     payload: any;
   }
-) {
+): CustomStageMembersCollection {
   switch (action.type) {
     case ServerStageEvents.CUSTOM_STAGE_MEMBER_ADDED: {
       const customStageMember = action.payload as CustomStageMember;

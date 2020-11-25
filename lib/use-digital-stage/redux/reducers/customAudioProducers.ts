@@ -13,7 +13,7 @@ function customAudioProducers(
     type: string;
     payload: any;
   }
-) {
+): CustomRemoteAudioProducersCollection {
   switch (action.type) {
     case ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_ADDED: {
       const customAudioProducer = action.payload as CustomRemoteAudioProducer;

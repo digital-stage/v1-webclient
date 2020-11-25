@@ -25,8 +25,8 @@ function isAudioProducer(
 export const WebRTCCommunicationProvider = (props: {
   children: React.ReactNode;
   routerDistUrl: string;
-  handleError: (error: Error) => any;
-}) => {
+  handleError: (error: Error) => void;
+}): JSX.Element => {
   const { children, routerDistUrl, handleError } = props;
   const {
     router,

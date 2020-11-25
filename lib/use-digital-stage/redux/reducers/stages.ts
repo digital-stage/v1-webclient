@@ -12,7 +12,7 @@ function stages(
     type: string;
     payload: any;
   }
-) {
+): StagesCollection {
   switch (action.type) {
     case ServerStageEvents.STAGE_ADDED:
       return {

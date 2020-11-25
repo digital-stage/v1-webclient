@@ -13,7 +13,7 @@ function customGroups(
     type: string;
     payload: any;
   }
-) {
+): CustomGroupsCollection {
   switch (action.type) {
     case ServerStageEvents.CUSTOM_GROUP_ADDED: {
       const customGroup = action.payload as CustomGroup;

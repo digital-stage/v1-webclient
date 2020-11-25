@@ -16,7 +16,7 @@ function stageMembers(
     type: string;
     payload: any;
   }
-) {
+): StageMembersCollection {
   switch (action.type) {
     case ServerStageEvents.STAGE_MEMBER_ADDED:
       return {

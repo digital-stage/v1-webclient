@@ -14,7 +14,7 @@ function videoConsumers(
     type: string;
     payload: any;
   }
-) {
+): LocalConsumersCollection {
   switch (action.type) {
     case AdditionalReducerTypes.ADD_VIDEO_CONSUMER: {
       const videoConsumer = action.payload as LocalConsumer;

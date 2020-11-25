@@ -12,7 +12,7 @@ function users(
     type: string;
     payload: any;
   }
-) {
+): UsersCollection {
   switch (action.type) {
     case ServerStageEvents.REMOTE_USER_ADDED:
       return {
