@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { styled } from 'styletron-react';
 import { CgScreen } from 'react-icons/cg';
 import { RiSoundModuleLine } from 'react-icons/ri';
-import useStageSelector from '../../../lib/digitalstage/useStageSelector';
+import { useCurrentStageId } from '../../../lib/use-digital-stage/hooks';
 
 const Wrapper = styled('div', {
   position: 'fixed',
@@ -14,7 +14,7 @@ const Wrapper = styled('div', {
 });
 
 const StageOrMixerSwitcher = (props: { className?: string }) => {
-  const currentStageId = useStageSelector<string>((state) => state.stageId);
+  const currentStageId = useCurrentStageId();
   const { pathname } = useRouter();
   const [mixerShown, setMixerShown] = useState<boolean>(false);
 

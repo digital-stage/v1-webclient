@@ -3,16 +3,19 @@
 import * as React from 'react';
 import { jsx, Box, Flex, IconButton, Heading, Avatar, Text } from 'theme-ui';
 import { FaPen, FaTrash } from 'react-icons/fa';
-import { Stage } from '../../../../lib/digitalstage/common/model.client';
-import useStageActions from '../../../../lib/digitalstage/useStageActions';
 import ModifyStageModal from './ModifyStageModal';
+import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
+import { Stage } from '../../../../lib/use-digital-stage/types';
+import { useCurrentUser } from '../../../../lib/use-digital-stage/hooks';
 
 const StageHeader = (props: { stage: Stage }): JSX.Element => {
   const { removeStage, leaveStageForGood } = useStageActions();
   const [currentStage, setCurrentStage] = React.useState<Stage>();
+  const { _id: userId } = useCurrentUser();
   const [isModifyStageOpen, setModifyStageIsOpen] = React.useState<boolean>(false);
 
   const { stage } = props;
+  const isAdmin = stage.admins.indexOf(userId) !== -1;
   return (
     <Box sx={{ width: '100%', py: '24px' }}>
       <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
@@ -24,7 +27,7 @@ const StageHeader = (props: { stage: Stage }): JSX.Element => {
             </Heading>
             <Flex>
               <Text variant="subTitle" sx={{ color: 'text' }}>
-                {stage.isAdmin && 'Du verwaltest diese Bühne'}
+                {isAdmin && 'Du verwaltest diese Bühne'}
               </Text>
             </Flex>
           </Flex>
@@ -40,9 +43,9 @@ const StageHeader = (props: { stage: Stage }): JSX.Element => {
             <FaPen />
           </IconButton>
           <IconButton
-            aria-label={stage.isAdmin ? 'Bühne entfernen' : 'Bühne verlassen'}
+            aria-label={isAdmin ? 'Bühne entfernen' : 'Bühne verlassen'}
             onClick={() => {
-              if (stage.isAdmin) removeStage(stage._id);
+              if (isAdmin) removeStage(stage._id);
               else leaveStageForGood(stage._id);
             }}
           >

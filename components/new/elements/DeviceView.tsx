@@ -1,16 +1,15 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import Link from 'next/link';
-import { jsx, Box, Button, Flex, Label, Text, Message } from 'theme-ui';
+import { jsx, Button } from 'theme-ui';
 import { useStyletron } from 'styletron-react';
 import { styled } from 'baseui';
 import { Card, StyledAction, StyledBody } from 'baseui/card/index';
 import { Checkbox } from 'baseui/checkbox/index';
 import { Check, Delete } from 'baseui/icon/index';
 import SingleSelect from './SingleSelect';
-import { Device } from '../../../lib/digitalstage/common/model.server';
-import useStageActions from '../../../lib/digitalstage/useStageActions';
+import { Device } from '../../../lib/use-digital-stage';
+import useStageActions from '../../../lib/use-digital-stage/useStageActions';
 
 const CardTitle = styled('div', {
   display: 'flex',

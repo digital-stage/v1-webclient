@@ -3,22 +3,26 @@
 import * as React from 'react';
 import { jsx, Box, Flex, Button, IconButton, Heading } from 'theme-ui';
 import { FaPlus, FaPen, FaTrash } from 'react-icons/fa';
-import { Groups, NormalizedState } from '../../../../lib/digitalstage/useStageContext/schema';
-import { useSelector } from '../../../../lib/digitalstage/useStageContext/redux';
-import useStageActions from '../../../../lib/digitalstage/useStageActions';
-import { Stage, Group } from '../../../../lib/digitalstage/common/model.client';
-import { useRequest } from '../../../../lib/useRequest';
 import InviteModal from './InviteModal';
 import ModifyGroupModal from './ModifyGroupModal';
 import CreateGroupModal from './CreateGroupModal';
-import useStageSelector from '../../../../lib/digitalstage/useStageSelector';
+import {
+  useCurrentGroupId,
+  useCurrentStageId,
+  useCurrentUser,
+  useGroups,
+} from '../../../../lib/use-digital-stage/hooks';
+import { Group, Stage } from '../../../../lib/use-digital-stage/types';
+import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
+import useStageHandling from '../../../../lib/use-digital-stage/useStageHandling';
 
 const StageGroupList = (props: { stage: Stage }): JSX.Element => {
-  const groups = useStageSelector<Groups>((state) => state.groups);
-  const currentStageId = useSelector<NormalizedState, string | undefined>((state) => state.stageId);
-  const currentGroupId = useSelector<NormalizedState, string | undefined>((state) => state.groupId);
+  const groups = useGroups();
+  const currentStageId = useCurrentStageId();
+  const currentGroupId = useCurrentGroupId();
+  const { _id: userId } = useCurrentUser();
   const { removeGroup, leaveStage } = useStageActions();
-  const { setRequest } = useRequest();
+  const { requestJoin } = useStageHandling();
   const [currentStage, setCurrentStage] = React.useState<Stage>();
   const [currentGroup, setCurrentGroup] = React.useState<Group>();
   const [isCreateGroupOpen, setCreateGroupIsOpen] = React.useState<boolean>(false);
@@ -26,6 +30,9 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
   const [isCopyLinkOpen, setCopyLinkOpen] = React.useState<boolean>();
 
   const { stage } = props;
+
+  const isAdmin = stage.admins.indexOf(userId) !== -1;
+
   return (
     <Box sx={{ bg: 'gray.5', mx: '-32px', px: '38px', py: 3 }}>
       {groups.byStage[stage._id] &&
@@ -50,7 +57,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                   </Heading>
                 </Flex>
 
-                {stage.isAdmin && (
+                {isAdmin && (
                   <Flex sx={{ alignItems: 'center' }}>
                     <Box>
                       <IconButton
@@ -94,7 +101,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                           ) {
                             leaveStage();
                           } else {
-                            setRequest(stage._id, group._id, stage.password);
+                            requestJoin(stage._id, group._id, stage.password);
                           }
                         }}
                       >
@@ -112,7 +119,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
           );
         })}
 
-      {stage.isAdmin && (
+      {isAdmin && (
         <Flex my={2}>
           <Button
             variant="text"

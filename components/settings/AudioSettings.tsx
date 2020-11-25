@@ -3,24 +3,25 @@
 /** @jsx jsx */
 /** @jsxFrag React.Fragmen **/
 import { Box, Heading, jsx, Text } from 'theme-ui';
-import { Device } from '../../lib/digitalstage/common/model.server';
-import useStageActions from '../../lib/digitalstage/useStageActions';
-import useStageSelector from '../../lib/digitalstage/useStageSelector';
 import SingleSelect from '../new/elements/SingleSelect';
+import { Device } from '../../lib/use-digital-stage/types';
+import { useSelector } from '../../lib/use-digital-stage/hooks';
+import useStageActions from '../../lib/use-digital-stage/useStageActions';
 
 const AudioSettings = (): JSX.Element => {
-  const { localDevice } = useStageSelector((state) => ({
-    localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
-  }));
-  const remoteDevices = useStageSelector<Device[]>((state) =>
-    state.devices.remote.map((id) => state.devices.byId[id])
+  const localDevice = useSelector((state) =>
+    state.global.localDeviceId ? state.devices.byId[state.global.localDeviceId] : undefined
   );
+  const devices = useSelector<Device[]>((state) =>
+    state.devices.allIds.map((id) => state.devices.byId[id])
+  );
+  const remoteDevices = devices.filter((device) => device._id !== localDevice._id);
   const { updateDevice } = useStageActions();
 
   return (
     <Box>
-      <Heading mb={3}>Lautstärkeregler</Heading>
-      <Text mb={3}>Microphone</Text>
+      <Heading mb={3}>Audiogeräte</Heading>
+      <Text mb={3}>Mikrofon</Text>
       <SingleSelect
         options={localDevice.inputAudioDevices || []}
         defaultValue={localDevice.inputAudioDeviceId}
@@ -30,7 +31,7 @@ const AudioSettings = (): JSX.Element => {
           })
         }
       />
-      <Text my={3}>Speaker</Text>
+      <Text my={3}>Lautsprecher</Text>
       <SingleSelect
         options={localDevice.outputAudioDevices || []}
         defaultValue={localDevice.outputAudioDeviceId}
@@ -42,10 +43,10 @@ const AudioSettings = (): JSX.Element => {
       />
       {remoteDevices && remoteDevices.length > 0 && (
         <>
-          <Text>Remote audio devices</Text>
+          <Text>Remote Audiogeräte</Text>
           {remoteDevices.map((remoteDevice, index) => (
             <div key={index}>
-              <Text mb={3}>Microphone</Text>
+              <Text mb={3}>Mikrofon</Text>
               <SingleSelect
                 options={remoteDevice.inputAudioDevices || []}
                 defaultValue={remoteDevice.inputAudioDeviceId}
@@ -55,7 +56,7 @@ const AudioSettings = (): JSX.Element => {
                   })
                 }
               />
-              <Text my={3}>Speaker</Text>
+              <Text my={3}>Lautsprecher</Text>
               <SingleSelect
                 options={remoteDevice.outputAudioDevices || []}
                 defaultValue={remoteDevice.outputAudioDeviceId}

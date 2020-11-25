@@ -1,16 +1,14 @@
 import React from 'react';
 import { styled } from 'styletron-react';
 import { Caption1 } from 'baseui/typography';
-import useStageSelector, {
-  useIsStageAdmin,
-} from '../../../../../lib/digitalstage/useStageSelector';
-import {
-  AudioProducer,
-  CustomAudioProducer,
-} from '../../../../../lib/digitalstage/useStageContext/model';
 import { useStageWebAudio } from '../../../../../lib/useStageWebAudio';
-import useStageActions from '../../../../../lib/digitalstage/useStageActions';
 import ChannelStrip from '../../ChannelStrip';
+import { useSelector, useIsStageAdmin } from '../../../../../lib/use-digital-stage/hooks';
+import {
+  CustomRemoteAudioProducer,
+  RemoteAudioProducer,
+} from '../../../../../lib/use-digital-stage/types';
+import useStageActions from '../../../../../lib/use-digital-stage/useStageActions';
 
 const Panel = styled('div', {
   display: 'flex',
@@ -40,10 +38,10 @@ const Header = styled('div', {
 const AudioProducerChannel = (props: { audioProducerId: string }) => {
   const { audioProducerId } = props;
   const isAdmin: boolean = useIsStageAdmin();
-  const audioProducer = useStageSelector<AudioProducer>(
+  const audioProducer = useSelector<RemoteAudioProducer>(
     (state) => state.audioProducers.byId[props.audioProducerId]
   );
-  const customAudioProducer = useStageSelector<CustomAudioProducer>((state) =>
+  const customAudioProducer = useSelector<CustomRemoteAudioProducer>((state) =>
     state.customAudioProducers.byAudioProducer[props.audioProducerId]
       ? state.customAudioProducers.byId[
           state.customAudioProducers.byAudioProducer[props.audioProducerId]

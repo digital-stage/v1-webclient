@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../lib/digitalstage/useAuth';
+import { useAuth } from '../../lib/useAuth';
 import Layout from '../../components/Layout';
 import AuthPageContainer from '../../components/AuthPageContainer';
 import AuthPageLinks from '../../components/AuthPageLinks';

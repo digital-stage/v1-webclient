@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { jsx, Heading } from 'theme-ui';
 import { useRouter } from 'next/router';
-import { useAuth } from '../../lib/digitalstage/useAuth';
+import { useAuth } from '../../lib/useAuth';
 import Layout from '../../components/Layout';
 import Container from '../../components/Container';
 

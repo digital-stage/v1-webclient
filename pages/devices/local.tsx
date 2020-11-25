@@ -4,13 +4,11 @@ import * as React from 'react';
 import { jsx, Box, Button, Heading } from 'theme-ui';
 import Link from 'next/link';
 import DeviceView from '../../components/new/elements/DeviceView';
-import useStageSelector from '../../lib/digitalstage/useStageSelector';
 import Container from '../../components/Container';
+import { useLocalDevice } from '../../lib/use-digital-stage/hooks';
 
 const Local = (): JSX.Element => {
-  const { localDevice } = useStageSelector((state) => ({
-    localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
-  }));
+  const localDevice = useLocalDevice();
 
   return (
     <Container>

@@ -1,32 +1,32 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box } from 'theme-ui';
-import { GroupId } from '../../../../../lib/digitalstage/common/model.server';
-import useStageSelector, {
-  useIsStageAdmin,
-} from '../../../../../lib/digitalstage/useStageSelector';
-import { CustomGroup, Group } from '../../../../../lib/digitalstage/useStageContext/model';
-import useStageActions from '../../../../../lib/digitalstage/useStageActions';
-// import StageMemberChannel from './StageMemberChannel';
+import { jsx, Box, IconButton, Flex } from 'theme-ui';
+import { styled } from 'styletron-react';
+import { ChevronLeft, ChevronRight } from 'baseui/icon';
+import { Caption1 } from 'baseui/typography';
+import StageMemberChannel from './StageMemberChannel';
 import { useStageWebAudio } from '../../../../../lib/useStageWebAudio';
 import ChannelStrip from '../../ChannelStrip';
-// import { Panel } from 'baseui/accordion';
+import { Panel } from 'baseui/accordion';
+import { useGroup, useIsStageAdmin, useSelector } from '../../../../../lib/use-digital-stage/hooks';
+import { CustomGroup } from '../../../../../lib/use-digital-stage/types';
+import useStageActions from '../../../../../lib/use-digital-stage/useStageActions';
 
 //TODO remove comments
 
-const GroupChannel = (props: { groupId: GroupId }) => {
+const GroupChannel = (props: { groupId: string }) => {
   const { groupId } = props;
   const isAdmin: boolean = useIsStageAdmin();
-  const group = useStageSelector<Group>((state) => state.groups.byId[groupId]);
-  const customGroup = useStageSelector<CustomGroup>((state) =>
+  const group = useGroup(groupId);
+  const customGroup = useSelector<CustomGroup>((state) =>
     state.customGroups.byGroup[groupId]
       ? state.customGroups.byId[state.customGroups.byGroup[groupId]]
       : undefined
   );
-  // const stageMemberIds = useStageSelector<string[]>((state) =>
-  //   state.stageMembers.byGroup[groupId] ? state.stageMembers.byGroup[groupId] : []
-  // );
+  const stageMemberIds = useSelector<string[]>((state) =>
+    state.stageMembers.byGroup[groupId] ? state.stageMembers.byGroup[groupId] : []
+  );
 
   const { updateGroup, setCustomGroup, removeCustomGroup } = useStageActions();
   const { byGroup } = useStageWebAudio();

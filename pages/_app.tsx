@@ -3,16 +3,13 @@ import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { ThemeProvider as ThemenProviderThemeUi } from 'theme-ui';
 import theme from '../utils/theme';
-import { AuthContextProvider } from '../lib/digitalstage/useAuth';
-import { SocketContextProvider } from '../lib/digitalstage/useStageContext';
-import { RequestContextProvider } from '../lib/useRequest';
+import { AuthContextConsumer, AuthContextProvider } from '../lib/useAuth';
 import StageJoiner from '../components/new/elements/StageJoiner';
 import { AudioContextProvider } from '../lib/useAudioContext';
-import { MediasoupProvider } from '../lib/digitalstage/useMediasoup';
-import { wrapper } from '../lib/digitalstage/useStageContext/redux';
 import StageWebAudioProvider from '../lib/useStageWebAudio';
-import { ErrorsProvider } from '../lib/useErrors';
+import { ErrorsConsumer } from '../lib/useErrors';
 import ErrorHandler from '../components/ErrorHandler';
+import { DigitalStageProvider } from '../lib/use-digital-stage';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   React.useEffect(() => {
@@ -29,28 +26,35 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
 
-      <ErrorsProvider>
-        <RequestContextProvider>
+      <ErrorsConsumer>
+        {({ reportError }) => (
           <AuthContextProvider>
-            <SocketContextProvider>
-              <MediasoupProvider>
-                <AudioContextProvider>
-                  <ThemenProviderThemeUi theme={theme}>
-                    <StageWebAudioProvider>
-                      <ErrorHandler>
-                        {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                        <Component {...pageProps} />
-                      </ErrorHandler>
-                    </StageWebAudioProvider>
-                    <StageJoiner />
-                  </ThemenProviderThemeUi>
-                </AudioContextProvider>
-              </MediasoupProvider>
-            </SocketContextProvider>
+            <AuthContextConsumer>
+              {({ token }) => (
+                <DigitalStageProvider
+                  apiUrl={process.env.NEXT_PUBLIC_API_URL}
+                  routerDistUrl={process.env.NEXT_PUBLIC_ROUTERS_URL}
+                  token={token}
+                  addErrorHandler={reportError}
+                >
+                  <AudioContextProvider>
+                    <ThemenProviderThemeUi theme={theme}>
+                      <StageWebAudioProvider>
+                        <ErrorHandler>
+                          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                          <Component {...pageProps} />
+                        </ErrorHandler>
+                      </StageWebAudioProvider>
+                      <StageJoiner />
+                    </ThemenProviderThemeUi>
+                  </AudioContextProvider>
+                </DigitalStageProvider>
+              )}
+            </AuthContextConsumer>
           </AuthContextProvider>
-        </RequestContextProvider>
-      </ErrorsProvider>
+        )}
+      </ErrorsConsumer>
     </>
   );
 };
-export default wrapper.withRedux(MyApp);
+export default MyApp;

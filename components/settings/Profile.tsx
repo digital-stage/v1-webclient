@@ -1,19 +1,19 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { Box, Flex, Heading, jsx, Text, Button } from 'theme-ui';
-import { Formik, Form, Field } from 'formik';
+import { Field, Form, Formik } from 'formik';
+import { Box, Button, Flex, Heading, jsx, Text } from 'theme-ui';
 import * as Yup from 'yup';
-import { useAuth } from '../../lib/digitalstage/useAuth';
-import useStageSelector from '../../lib/digitalstage/useStageSelector';
+import useStageActions from '../../lib/use-digital-stage/useStageActions';
+import { useAuth } from '../../lib/useAuth';
 import InputField from '../InputField';
-import useStageActions from '../../lib/digitalstage/useStageActions';
+import { useCurrentUser } from '../../lib/use-digital-stage/hooks';
 interface Values {
   name: string;
 }
 
 const Profile = (): JSX.Element => {
   const { user: authUser } = useAuth();
-  const { user } = useStageSelector((state) => ({ user: state.user }));
+  const user = useCurrentUser();
   const { updateUser } = useStageActions();
 
   const UpdateProfileSchema = Yup.object().shape({
@@ -50,7 +50,7 @@ const Profile = (): JSX.Element => {
             />
             <Flex sx={{ justifyContent: 'flex-end', my: 3 }}>
               <Button variant="secondary" type="submit">
-                Update name
+                Name aktualisieren
               </Button>
             </Flex>
           </Form>

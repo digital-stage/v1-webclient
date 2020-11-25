@@ -16,21 +16,19 @@ export const AudioContextProvider = (props: { children: React.ReactNode }): JSX.
   const [context, setContext] = useState<IAudioContext>(undefined);
   const { reportError } = useErrors();
 
-  const createAudioContext = useCallback(async () => {
+  const createAudioContext = useCallback(async (): Promise<IAudioContext> => {
     if (context) {
       return context;
     }
     const audioContext: IAudioContext = new RealAudioContext();
 
-    return webAudioTouchUnlock(audioContext)
-      .then(() => audioContext)
-      .catch((error) => reportError(error.message));
+    return webAudioTouchUnlock(audioContext).then(() => audioContext);
   }, []);
 
   useEffect(() => {
     createAudioContext()
       .then((audioContext) => {
-        setContext(audioContext);
+        if (audioContext) setContext(audioContext);
       })
       .catch((error) => reportError(error.message));
   }, []);

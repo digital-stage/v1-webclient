@@ -5,13 +5,11 @@ import { Check, Delete } from 'baseui/icon';
 import { DisplayMedium } from 'baseui/typography';
 import { Notification } from 'baseui/notification';
 import { KIND } from 'baseui/toast';
-import useStageSelector from '../lib/digitalstage/useStageSelector';
 import Container from '../components/Container';
+import { useLocalDevice } from '../lib/use-digital-stage/hooks';
 
 const Test = (): JSX.Element => {
-  const { localDevice } = useStageSelector((state) => ({
-    localDevice: state.devices.local ? state.devices.byId[state.devices.local] : undefined,
-  }));
+  const localDevice = useLocalDevice();
   const [error, setError] = useState<string>();
   const [videoTested, setVideoTested] = useState<boolean>();
   const [audioTested, setAudioTested] = useState<boolean>();

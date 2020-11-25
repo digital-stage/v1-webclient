@@ -1,8 +1,8 @@
 import React from 'react';
 import GroupView from './GroupView';
-import { useGroupsByStage } from '../../../../lib/digitalstage/useStageSelector';
-import { Stage } from '../../../../lib/digitalstage/useStageContext/model';
 import ConductorsView from './ConductorsView';
+import { useGroupsByStage } from '../../../../lib/use-digital-stage/hooks';
+import { Stage } from '../../../../lib/use-digital-stage/types';
 
 const StageView = (props: { stage: Stage }) => {
   const { stage } = props;

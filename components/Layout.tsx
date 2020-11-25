@@ -4,7 +4,7 @@ import * as React from 'react';
 import { jsx, Box } from 'theme-ui';
 import DigitalStageLogo from './DigitalStageLogo';
 import PageSpinner from './PageSpinner';
-import { useAuth } from '../lib/digitalstage/useAuth';
+import { useAuth } from '../lib/useAuth';
 import SideNavigation from './new/elements/Menu/SideBar';
 import TopNavigation from './new/elements/Menu/AppBar';
 

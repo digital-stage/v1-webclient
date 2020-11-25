@@ -1,11 +1,11 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Button, Flex, Heading } from 'theme-ui';
-import { Errors } from '../../../lib/digitalstage/common/errors';
-import useStageActions from '../../../lib/digitalstage/useStageActions';
-import useStageSelector from '../../../lib/digitalstage/useStageSelector';
-import { useRequest } from '../../../lib/useRequest';
 import InputField from '../../InputField';
 import Modal from './Modal';
+import useStageActions from '../../../lib/use-digital-stage/useStageActions';
+import { useSelector } from '../../../lib/use-digital-stage/hooks';
+import { Errors } from '../../../lib/useAuth';
+import useStageHandling from '../../../lib/use-digital-stage/useStageHandling';
 
 /**
  * The StageJoiner is a usually hidden component,
@@ -15,10 +15,8 @@ import Modal from './Modal';
  * @constructor
  */
 const StageJoiner = (): JSX.Element => {
-  const { ready } = useStageSelector((state) => ({
-    ready: state.ready,
-  }));
-  const { stageId, groupId, password, setRequest } = useRequest();
+  const ready = useSelector((state) => state.global.ready);
+  const { stageId, groupId, password, requestJoin } = useStageHandling();
   const { joinStage } = useStageActions();
   const [retries, setRetries] = useState<number>(0);
   const [wrongPassword, setWrongPassword] = useState<boolean>();
@@ -76,7 +74,7 @@ const StageJoiner = (): JSX.Element => {
             onClick={() => {
               const updatePassword = passwordRef.current.value;
               setRetries((prevState) => prevState + 1);
-              setRequest(stageId, groupId, updatePassword);
+              requestJoin(stageId, groupId, updatePassword);
             }}
           >
             Erneut versuchen

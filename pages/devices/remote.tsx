@@ -1,12 +1,10 @@
 import React from 'react';
 import Container from '../../components/Container';
 import DeviceView from '../../components/new/elements/DeviceView';
-import useStageSelector from '../../lib/digitalstage/useStageSelector';
+import { useRemoteDevices } from '../../lib/use-digital-stage/hooks';
 
 const Remote = (): JSX.Element => {
-  const { remoteDevices } = useStageSelector((state) => ({
-    remoteDevices: state.devices.remote.map((id) => state.devices.byId[id]),
-  }));
+  const remoteDevices = useRemoteDevices();
 
   return (
     <Container>

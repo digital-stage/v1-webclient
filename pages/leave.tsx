@@ -5,13 +5,13 @@ import * as React from 'react';
 import { Heading, jsx } from 'theme-ui';
 import Layout from '../components/Layout';
 import Loading from '../components/new/elements/Loading';
-import useStageActions from '../lib/digitalstage/useStageActions';
-import useStageSelector from '../lib/digitalstage/useStageSelector';
+import useStageActions from '../lib/use-digital-stage/useStageActions';
+import { useCurrentStageId, useSelector } from '../lib/use-digital-stage/hooks';
 
 const Leave = (): JSX.Element => {
   const router = useRouter();
-  const ready = useStageSelector<boolean>((state) => state.ready);
-  const stageId = useStageSelector<string | undefined>((state) => state.stageId);
+  const ready = useSelector<boolean>((state) => state.global.ready);
+  const stageId = useCurrentStageId();
   const { leaveStage } = useStageActions();
 
   React.useEffect(() => {

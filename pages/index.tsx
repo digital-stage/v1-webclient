@@ -9,13 +9,13 @@ import StageListView from '../components/new/elements/StageList';
 import StagePane from '../components/new/panes/StagePane';
 import PageSpinner from '../components/PageSpinner';
 import StageDeviceController from '../components/StageDeviceController';
-import { useAuth } from '../lib/digitalstage/useAuth';
-import useStageSelector from '../lib/digitalstage/useStageSelector';
+import { useAuth } from '../lib/useAuth';
+import { useCurrentStageId } from '../lib/use-digital-stage/hooks';
 
 const Index = (): JSX.Element => {
   const router = useRouter();
   const { loading, user } = useAuth();
-  const stageId = useStageSelector<string | undefined>((state) => state.stageId);
+  const stageId = useCurrentStageId();
 
   if (!loading) {
     if (!user) {
