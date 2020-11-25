@@ -42,15 +42,12 @@ const ChannelStrip = (props: {
   return (
     <Flex
       sx={{
-        position: 'relative',
         height: '100%',
         width: '150px',
+        minWidth: '150px',
         flexDirection: 'column',
-        flexGrow: 1,
-        flexShrink: 0,
         justifyContent: 'center',
         mx: 3,
-        p: 2,
         bg: 'gray.7',
         borderRadius: 'card',
         minHeight: 'calc(100vh - 220px)',
@@ -71,6 +68,7 @@ const ChannelStrip = (props: {
           flexGrow: 0,
           flexDirection: 'column',
           alignItems: 'center',
+          pt: 2,
         }}
       >
         <Box
@@ -150,7 +148,7 @@ const ChannelStrip = (props: {
           />
         ) : undefined}
       </Flex>
-      <Flex sx={{ mt: 3 }}>
+      <Flex sx={{ my: 3 }}>
         <Flex sx={{ flexDirection: 'column', mr: 3, alignItems: 'center' }}>
           <Button
             variant={props.muted ? 'circle' : 'circleOutlined'}
