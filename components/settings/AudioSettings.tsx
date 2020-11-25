@@ -2,6 +2,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 /** @jsxFrag React.Fragmen **/
+import React from 'react';
 import { Box, Heading, jsx, Text } from 'theme-ui';
 import SingleSelect from '../new/elements/SingleSelect';
 import { Device } from '../../lib/use-digital-stage/types';
@@ -42,8 +43,8 @@ const AudioSettings = (): JSX.Element => {
         }}
       />
       {remoteDevices && remoteDevices.length > 0 && (
-        <>
-          <Text>Remote Audiogeräte</Text>
+        <React.Fragment>
+          <Text sx={{ my: 3 }}>Remote Audiogeräte</Text>
           {remoteDevices.map((remoteDevice, index) => (
             <div key={index}>
               <Text mb={3}>Mikrofon</Text>
@@ -68,7 +69,7 @@ const AudioSettings = (): JSX.Element => {
               />
             </div>
           ))}
-        </>
+        </React.Fragment>
       )}
     </Box>
   );

@@ -27,8 +27,8 @@ const VideoSettings = (): JSX.Element => {
         }
       />
       {remoteDevices && remoteDevices.length > 0 && (
-        <>
-          <Text>Remote Geräte</Text>
+        <React.Fragment>
+          <Text sx={{ my: 3 }}>Remote Geräte</Text>
           {remoteDevices.map((remoteDevice, index) => (
             <div key={index}>
               <Text mb={3}>Videogerät</Text>
@@ -43,7 +43,7 @@ const VideoSettings = (): JSX.Element => {
               />
             </div>
           ))}
-        </>
+        </React.Fragment>
       )}
     </Box>
   );

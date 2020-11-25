@@ -1,6 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import React from 'react';
+import { Heading, jsx, Text } from 'theme-ui';
 // import StageMemberChannel from './StageMemberChannel';
 import { useStageWebAudio } from '../../../../../lib/useStageWebAudio';
 import ChannelStrip from '../../ChannelStrip';
@@ -71,35 +72,35 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
       }}
       isAdmin={isAdmin}
     />
-  );
 
-  // {expanded && (
-  //   <Flex
-  //     sx={{
-  //       paddingTop: '1rem',
-  //       paddingBottom: '1rem',
-  //       paddingLeft: '1rem',
-  //       paddingRight: '1rem',
-  //       flexDirection: 'row',
-  //       height: '100%',
-  //     }}
-  //   >
-  //     <Flex
-  //       sx={{
-  //         flexDirection: 'row',
-  //         backgroundColor: 'rgba(130,100,130,1)',
-  //         borderRadius: '20px',
-  //         height: '100%',
-  //       }}
-  //     >
-  //       {stageMemberIds.map((id, index) => (
-  //         <Box key={index} sx={{ width: "100%" }}>
-  //           <StageMemberChannel key={id} stageMemberId={id} />
-  //         </Box>
-  //       ))}
-  //     </Flex>
-  //   </Flex>
-  // )}
-  // );
+    //     {/* {expanded && (
+    //   <Flex
+    //     sx={{
+    //       paddingTop: '1rem',
+    //       paddingBottom: '1rem',
+    //       paddingLeft: '1rem',
+    //       paddingRight: '1rem',
+    //       flexDirection: 'row',
+    //       height: '100%',
+    //     }}
+    //   >
+    //     <Flex
+    //       sx={{
+    //         flexDirection: 'row',
+    //         backgroundColor: 'rgba(130,100,130,1)',
+    //         borderRadius: '20px',
+    //         height: '100%',
+    //       }}
+    //     >
+    //       {stageMemberIds.map((id, index) => (
+    //         <Box key={index} sx={{ width: "100%" }}>
+    //           <StageMemberChannel key={id} stageMemberId={id} />
+    //         </Box>
+    //       ))}
+    //     </Flex>
+    //   </Flex>
+    // )}
+    // ); */}
+  );
 };
 export default GroupChannel;

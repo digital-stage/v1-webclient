@@ -50,7 +50,7 @@ const ChannelStrip = (props: {
         mx: 3,
         bg: 'gray.7',
         borderRadius: 'card',
-        minHeight: 'calc(100vh - 220px)',
+        minHeight: 'calc(100vh - 280px)',
         alignItems: 'center',
       }}
       className={props.className}

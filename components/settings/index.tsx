@@ -57,7 +57,25 @@ const SettingsModal = (props: {
           })}
         </Box>
         <Box
-          sx={{ width: '70%', ml: 3, mr: 4, maxHeight: 'calc(100vh - 230px)', overflowY: 'auto' }}
+          sx={{
+            width: '70%',
+            ml: 3,
+            mr: 4,
+            maxHeight: 'calc(100vh - 230px)',
+            overflowY: 'auto',
+            '::-webkit-scrollbar': {
+              width: '15px',
+              bg: 'transparent',
+            },
+            '::-webkit-scrollbar-track': {
+              bg: 'transparent',
+            },
+            '::-webkit-scrollbar-thumb': {
+              bg: 'gray.3',
+              borderRadius: 'card',
+              border: 'solid 3px #282828',
+            },
+          }}
         >
           {SettingsModalItems.map((item) => {
             return item.href === selected ? item.content : null;

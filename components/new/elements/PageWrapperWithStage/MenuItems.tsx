@@ -10,8 +10,6 @@ import VideoSettings from '../../../settings/VideoSettings';
 import MixerPane from '../../panes/MixerPane';
 import NavItem from '../Menu/NavItem';
 
-// TODO translate to German
-// TODO content and href
 export const CenteredNavItems: NavItem[] = [
   {
     label: 'Video',
