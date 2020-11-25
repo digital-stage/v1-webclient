@@ -16,6 +16,14 @@ function videoConsumers(
   }
 ): LocalConsumersCollection {
   switch (action.type) {
+    case AdditionalReducerTypes.RESET: {
+      return {
+        byId: {},
+        byStageMember: {},
+        byProducer: {},
+        allIds: [],
+      };
+    }
     case AdditionalReducerTypes.ADD_VIDEO_CONSUMER: {
       const videoConsumer = action.payload as LocalConsumer;
       return {

@@ -3,6 +3,7 @@ import without from 'lodash/without';
 import { ServerStageEvents } from '../../global/SocketEvents';
 import upsert from '../utils/upsert';
 import { GroupsCollection } from '../../types';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 
 function groups(
   state: GroupsCollection = {
@@ -16,6 +17,13 @@ function groups(
   }
 ): GroupsCollection {
   switch (action.type) {
+    case AdditionalReducerTypes.RESET: {
+      return {
+        byId: {},
+        byStage: {},
+        allIds: [],
+      };
+    }
     case ServerStageEvents.GROUP_ADDED:
       return {
         ...state,

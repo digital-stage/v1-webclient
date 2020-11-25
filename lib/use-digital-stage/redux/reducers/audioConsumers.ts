@@ -16,6 +16,14 @@ function audioConsumers(
   }
 ): LocalConsumersCollection {
   switch (action.type) {
+    case AdditionalReducerTypes.RESET: {
+      return {
+        byId: {},
+        byStageMember: {},
+        byProducer: {},
+        allIds: [],
+      };
+    }
     case AdditionalReducerTypes.ADD_AUDIO_CONSUMER: {
       const audioConsumer = action.payload as LocalConsumer;
       return {

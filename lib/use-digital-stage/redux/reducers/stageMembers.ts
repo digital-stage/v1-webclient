@@ -4,6 +4,7 @@ import without from 'lodash/without';
 import { ServerStageEvents } from '../../global/SocketEvents';
 import upsert from '../utils/upsert';
 import { StageMembersCollection } from '../../types';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 
 function stageMembers(
   state: StageMembersCollection = {
@@ -18,6 +19,14 @@ function stageMembers(
   }
 ): StageMembersCollection {
   switch (action.type) {
+    case AdditionalReducerTypes.RESET: {
+      return {
+        byId: {},
+        byStage: {},
+        byGroup: {},
+        allIds: [],
+      };
+    }
     case ServerStageEvents.STAGE_MEMBER_ADDED:
       return {
         ...state,

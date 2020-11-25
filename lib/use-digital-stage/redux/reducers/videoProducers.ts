@@ -2,6 +2,7 @@ import omit from 'lodash/omit';
 import without from 'lodash/without';
 import { ServerStageEvents } from '../../global/SocketEvents';
 import { RemoteVideoProducer, RemoteVideoProducersCollection } from '../../types';
+import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 
 function videoProducers(
   state: RemoteVideoProducersCollection = {
@@ -16,6 +17,14 @@ function videoProducers(
   }
 ): RemoteVideoProducersCollection {
   switch (action.type) {
+    case AdditionalReducerTypes.RESET: {
+      return {
+        byId: {},
+        byStageMember: {},
+        byStage: {},
+        allIds: [],
+      };
+    }
     case ServerStageEvents.STAGE_MEMBER_VIDEO_ADDED: {
       const videoProducer = action.payload as RemoteVideoProducer;
       return {
