@@ -1,3 +1,25 @@
+## [0.12.1](https://github.com/digital-stage/webclient/compare/v0.12.0...v0.12.1) (2020-11-25)
+
+
+### Bug Fixes
+
+* add resposivnes to mixing panel ([3ba573b](https://github.com/digital-stage/webclient/commit/3ba573b07bbfdcd28b6b1a020e95f953478169c6))
+
+# [0.12.0](https://github.com/digital-stage/webclient/compare/v0.11.4...v0.12.0) (2020-11-25)
+
+
+### Features
+
+* add mixing panel ([b323109](https://github.com/digital-stage/webclient/commit/b323109640432b23f615db0f8f04f3ecb4f94f64))
+* mixer modal draft ([75194c6](https://github.com/digital-stage/webclient/commit/75194c63ec790eac8031128b992d80c1154e8210))
+
+## [0.11.4](https://github.com/digital-stage/webclient/compare/v0.11.3...v0.11.4) (2020-11-25)
+
+
+### Bug Fixes
+
+* missing promise catched resulted in missing error reporting ([d79fb81](https://github.com/digital-stage/webclient/commit/d79fb8193ebb1df917c21cc1c0d96eae96d4be36))
+
 ## [0.11.3](https://github.com/digital-stage/webclient/compare/v0.11.2...v0.11.3) (2020-11-25)
 
 

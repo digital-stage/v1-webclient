@@ -1,12 +1,9 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import React, { useRef } from 'react';
+import { jsx } from 'theme-ui';
 import { IAnalyserNode, IAudioContext } from 'standardized-audio-context';
-import { styled } from 'baseui';
 import useAnimationFrame from '../../../../lib/useAnimationFrame';
-
-const Canvas = styled('canvas', {
-  width: '100%',
-  height: '100%',
-});
 
 function getAverageVolume(array: Uint8Array): number {
   let values = 0;
@@ -25,7 +22,7 @@ const LevelMeter = (props: {
   analyser: IAnalyserNode<IAudioContext>;
   vertical?: boolean;
   className?: string;
-}) => {
+}): JSX.Element => {
   const { className } = props;
   const canvasRef = useRef<HTMLCanvasElement>();
 
@@ -59,6 +56,15 @@ const LevelMeter = (props: {
     }
   });
 
-  return <Canvas className={className} ref={canvasRef} />;
+  return (
+    <canvas
+      className={className}
+      ref={canvasRef}
+      sx={{
+        width: '100%',
+        height: '100%',
+      }}
+    />
+  );
 };
 export default LevelMeter;

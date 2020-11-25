@@ -1,5 +1,7 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import React, { useCallback, useEffect, useState } from 'react';
-import { Caption1 } from 'baseui/typography';
+import { jsx, Text } from 'theme-ui';
 import VerticalSlider from './VerticalSlider';
 import { convertRangeToDbMeasure, formatDbMeasure } from './utils';
 
@@ -32,12 +34,14 @@ const LogSlider = (props: {
   middle: number;
   max: number;
   color: RGBColor;
-  onChange?: (volume: number) => any;
-  onEnd?: (volume: number) => any;
+  onChange?: (volume: number) => void;
+  onEnd?: (volume: number) => void;
   width: number;
   className?: string;
   alignLabel?: 'left' | 'right';
-}) => {
+  backgroundColor: string;
+  trackColor?: string;
+}): JSX.Element => {
   const [value, setValue] = useState<number>();
   const [dbValue, setDbValue] = useState<number>(props.volume);
 
@@ -106,16 +110,14 @@ const LogSlider = (props: {
       width={props.width}
       text={formatDbMeasure(dbValue, true)}
       alignLabel={props.alignLabel}
+      backgroundColor={props.backgroundColor}
+      trackColor={props.trackColor}
       showMarks
       renderMarks={(index) => {
         const value = MAX - index * STEP;
         const large: boolean = value === MIN || value === MAX || value === NULL_VALUE;
         if (large) {
-          return (
-            <Caption1>
-              {formatDbMeasure(convertRangeToDbMeasure(convertLinearToLog(value)))}
-            </Caption1>
-          );
+          return <Text>{formatDbMeasure(convertRangeToDbMeasure(convertLinearToLog(value)))}</Text>;
         }
       }}
     />

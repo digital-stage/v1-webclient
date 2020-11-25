@@ -28,7 +28,7 @@ const StageDeviceController = (): JSX.Element => {
         width: '228px',
         justifyContent: 'space-between',
         pb: '1rem',
-        zIndex: 100,
+        zIndex: 10,
       }}
     >
       {localDevice?.canVideo && (
