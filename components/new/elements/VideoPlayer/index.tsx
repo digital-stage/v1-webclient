@@ -94,17 +94,25 @@ class VideoPlayer extends React.Component<Props, States> {
               `video-${track.id}`
             ) as HTMLVideoElement | null;
             if (!videoElement) {
+              console.debug('CREATING VIDEO ELEMENT');
+              console.debug(videoTracks[i]);
               videoElement = document.createElement('video');
               videoElement.id = `video-${track.id}`;
               videoElement.style.display = 'none';
               videoElement.width = elementWidth;
               videoElement.height = elementHeight;
+              //videoElement.setAttribute("preload", 'none');
               videoElement.setAttribute('muted', 'true');
               videoElement.setAttribute('playsinline', 'true');
               videoElement.setAttribute('autoplay', 'true');
               videoElement.srcObject = new MediaStream([videoTracks[i]]);
-              videoElement.play();
               this.videoContainerRef.current.append(videoElement);
+              /*console.debug("TRY TO PLAY");
+              videoElement.play()
+                  .then(() => {
+                    console.debug("PLAYING VIDEO");
+                  })
+                  .catch((err) => console.error(err));*/
             }
 
             const animationFrame = currentAnimationFrames.find(

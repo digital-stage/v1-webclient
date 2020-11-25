@@ -52,6 +52,7 @@ const StageMemberView = ({
   stageMember: StageMemberWithUserData;
 }): JSX.Element => {
   const videoConsumers = useVideoConsumersByStageMember(stageMember._id);
+
   return (
     <Flex
       sx={{

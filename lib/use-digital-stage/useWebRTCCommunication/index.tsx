@@ -1,18 +1,27 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import debug from 'debug';
 import { useDispatch } from 'react-redux';
-import { Device, Router, RemoteAudioProducer, RemoteVideoProducer, LocalProducer } from '../types';
+import {
+  Router,
+  RemoteAudioProducer,
+  RemoteVideoProducer,
+  LocalProducer,
+  LocalConsumer,
+} from '../types';
 import useLocalDevice from '../hooks/useLocalDevice';
 import useMediasoup from './useMediasoup';
 import useAudioProducers from '../hooks/useAudioProducers';
 import useVideoProducers from '../hooks/useVideoProducers';
 import allActions from '../redux/actions';
+import { omit } from 'lodash';
 
 interface TWebRTCCommunicationContext {
   router?: Router;
 }
 
 const d = debug('useWebRTCCommunication');
+
+const cu = d.extend('cleanup');
 
 const WebRTCCommunicationContext = createContext<TWebRTCCommunicationContext>({});
 
@@ -28,16 +37,10 @@ export const WebRTCCommunicationProvider = (props: {
   handleError: (error: Error) => void;
 }): JSX.Element => {
   const { children, routerDistUrl, handleError } = props;
-  const {
-    router,
-    producers,
-    connected,
-    consumers,
-    consume,
-    stopConsuming,
-    produce,
-    stopProducing,
-  } = useMediasoup(routerDistUrl, handleError);
+  const { router, connected, consume, stopConsuming, produce, stopProducing } = useMediasoup(
+    routerDistUrl,
+    handleError
+  );
 
   const dispatch = useDispatch();
 
@@ -46,13 +49,116 @@ export const WebRTCCommunicationProvider = (props: {
   const [working, setWorking] = useState<boolean>(false);
   const remoteVideoProducers = useVideoProducers();
   const remoteAudioProducers = useAudioProducers();
+  const [producers, setProducers] = useState<{
+    [trackId: string]: LocalProducer;
+  }>({});
+  const [consumers, setConsumers] = useState<{
+    [globalProducerId: string]: LocalConsumer;
+  }>({});
   const [sendAudio, setSendAudio] = useState<boolean>(false);
   const [sendVideo, setSendVideo] = useState<boolean>(false);
   const [receiveVideo, setReceiveVideo] = useState<boolean>(false);
   const [receiveAudio, setReceiveAudio] = useState<boolean>(false);
+  const [inputVideoDeviceId, setInputVideoDeviceId] = useState<string>();
+  const [inputAudioDeviceId, setInputAudioDeviceId] = useState<string>();
+
+  const getVideoTracks = useCallback(() => {
+    return navigator.mediaDevices
+      .getUserMedia({
+        audio: false,
+        video: inputVideoDeviceId
+          ? {
+              deviceId: inputVideoDeviceId,
+            }
+          : true,
+      })
+      .then((stream) => stream.getVideoTracks());
+  }, [inputVideoDeviceId]);
+
+  const getAudioTracks = useCallback(() => {
+    return navigator.mediaDevices
+      .getUserMedia({
+        video: false,
+        audio: {
+          deviceId: inputAudioDeviceId || undefined,
+          autoGainControl: false,
+          echoCancellation: false,
+          noiseSuppression: false,
+        },
+      })
+      .then((stream) => stream.getAudioTracks());
+  }, [inputAudioDeviceId]);
+
+  const startSendingVideo = useCallback(() => {
+    d('Start sending video');
+    setWorking(true);
+    return getVideoTracks()
+      .then((tracks) =>
+        Promise.all(
+          tracks.map((track) =>
+            produce(track)
+              .then((localProducer) =>
+                setProducers((prev) => ({
+                  ...prev,
+                  [track.id]: localProducer,
+                }))
+              )
+              .catch((error) => handleError(error))
+          )
+        )
+      )
+      .finally(() => setWorking(false));
+  }, [setWorking, getVideoTracks, produce, handleError]);
+
+  const stopSendingVideo = useCallback(() => {
+    d('Stop sending video');
+    setWorking(true);
+    return Promise.all(
+      Object.entries(producers)
+        .filter((entry) => entry[1].local.kind === 'video')
+        .map(([trackId, localProducer]) => {
+          d(`Stop producing ${trackId}`);
+          stopProducing(localProducer).catch((error) => handleError(error));
+        })
+    ).finally(() => setWorking(false));
+  }, [setWorking, producers, stopProducing, handleError]);
+
+  const startSendingAudio = useCallback(() => {
+    d('Start sending audio');
+    setWorking(true);
+    return getAudioTracks()
+      .then((tracks) =>
+        Promise.all(
+          tracks.map((track) =>
+            produce(track)
+              .then((localProducer) =>
+                setProducers((prev) => ({
+                  ...prev,
+                  [track.id]: localProducer,
+                }))
+              )
+              .catch((error) => handleError(error))
+          )
+        )
+      )
+      .finally(() => setWorking(false));
+  }, [setWorking, getAudioTracks, produce, handleError]);
+
+  const stopSendingAudio = useCallback(() => {
+    d('Stop sending audio');
+    setWorking(true);
+    return Promise.all(
+      Object.entries(producers)
+        .filter((entry) => entry[1].local.kind === 'audio')
+        .map(([trackId, localProducer]) => {
+          d(`Stop producing ${trackId}`);
+          stopProducing(localProducer).catch((error) => handleError(error));
+        })
+    ).finally(() => setWorking(false));
+  }, [setWorking, producers, stopProducing, handleError]);
 
   const consumeRemoteProducer = useCallback(
-    (remoteProducer: RemoteVideoProducer | RemoteAudioProducer) => {
+    (remoteProducer: RemoteVideoProducer | RemoteAudioProducer): Promise<LocalConsumer> => {
       return consume(remoteProducer)
         .then((localConsumer) => {
           d(`Consuming now remote producer ${remoteProducer._id}`);
@@ -62,229 +168,143 @@ export const WebRTCCommunicationProvider = (props: {
           dispatch(action);
           return localConsumer;
         })
-        .catch((error) => handleError(error));
+        .then((localConsumer) => {
+          setConsumers((prev) => ({
+            ...prev,
+            [remoteProducer._id]: localConsumer,
+          }));
+          return localConsumer;
+        });
     },
-    [consume, dispatch, handleError]
+    [consume, dispatch]
   );
 
   const stopConsumingRemoteProducer = useCallback(
-    (producerId: string) => {
-      d(`Stop consuming remote producer ${producerId}`);
-      return stopConsuming(producerId)
-        .then((localConsumer) => {
-          d(`Stopped consuming remote producer ${producerId}`);
-          const action =
-            localConsumer.consumer.kind === 'audio'
-              ? allActions.stageActions.client.removeAudioConsumer(localConsumer._id)
-              : allActions.stageActions.client.removeVideoConsumer(localConsumer._id);
-          dispatch(action);
-          return localConsumer;
-        })
-        .catch((error) => handleError(error));
+    (consumer: LocalConsumer): Promise<LocalConsumer> => {
+      d(`Stop consuming remote producer ${consumer.producerId}`);
+      return stopConsuming(consumer).then((localConsumer) => {
+        d(`Stopped consuming remote producer ${consumer.producerId}`);
+        const action =
+          localConsumer.consumer.kind === 'audio'
+            ? allActions.stageActions.client.removeAudioConsumer(localConsumer._id)
+            : allActions.stageActions.client.removeVideoConsumer(localConsumer._id);
+        dispatch(action);
+        setConsumers((prev) => omit(prev, consumer.producerId));
+        return localConsumer;
+      });
     },
-    [stopConsuming, dispatch, handleError]
+    [stopConsuming, dispatch]
   );
 
   useEffect(() => {
-    if (connected && consumeRemoteProducer && stopConsumingRemoteProducer) {
-      d('Check for and removing consumers of obsolete producers');
-      // Clean up deprecated consumers
-      const obsoleteProducerIds = Object.keys(consumers).filter(
-        (producerId) =>
-          !remoteVideoProducers.byId[producerId] && !remoteAudioProducers.byId[producerId]
-      );
-
-      d(`Have ${obsoleteProducerIds.length} deprecated producers`);
-      obsoleteProducerIds.forEach((obsoleteProducerId) => {
-        stopConsumingRemoteProducer(obsoleteProducerId);
-      });
-
-      if (receiveAudio) {
-        remoteAudioProducers.allIds.forEach((producerId) => {
-          if (!consumers[producerId]) {
-            d(`Consuming audio producer ${producerId}`);
-            const producer = remoteAudioProducers.byId[producerId];
-            consumeRemoteProducer(producer);
-          }
-        });
-      } else {
-        remoteAudioProducers.allIds.forEach((producerId) => {
-          if (consumers[producerId]) {
-            d(`Stop consuming audio producer ${producerId}`);
-            stopConsumingRemoteProducer(producerId);
-          }
-        });
+    if (connected && localDevice && !working) {
+      d('Device changed');
+      d(localDevice);
+      if (localDevice.sendVideo !== sendVideo) {
+        d('Send video changed');
+        setSendVideo(localDevice.sendVideo);
+        if (localDevice.sendVideo) {
+          startSendingVideo().catch((err) => handleError(err));
+        } else {
+          stopSendingVideo().catch((err) => handleError(err));
+        }
       }
-      if (receiveVideo) {
-        // Clean up all video consumers
-        remoteVideoProducers.allIds.forEach((producerId) => {
-          if (!consumers[producerId]) {
-            d(`Consuming video producer ${producerId}`);
-            const producer = remoteVideoProducers.byId[producerId];
-            consumeRemoteProducer(producer);
-          }
-        });
-      } else {
-        remoteVideoProducers.allIds.forEach((producerId) => {
-          if (consumers[producerId]) {
-            d(`Stop consuming video producer ${producerId}`);
-            stopConsumingRemoteProducer(producerId);
-          }
-        });
+      if (localDevice.sendAudio !== sendAudio) {
+        d('Send audio changed');
+        if (localDevice.sendAudio) {
+          startSendingAudio().catch((err) => handleError(err));
+        } else {
+          stopSendingAudio().catch((err) => handleError(err));
+        }
+        setSendAudio(localDevice.sendAudio);
+      }
+      if (localDevice.receiveAudio !== receiveAudio) {
+        d('Receive audio changed');
+        setReceiveAudio(localDevice.receiveAudio);
+      }
+      if (localDevice.receiveVideo !== receiveVideo) {
+        d('Receive video changed');
+        setReceiveVideo(localDevice.receiveVideo);
+      }
+      if (localDevice.inputVideoDeviceId !== inputVideoDeviceId) {
+        d('Input audio device ID changed');
+        setInputVideoDeviceId(localDevice.inputVideoDeviceId);
+        if (localDevice.sendVideo) {
+          stopSendingVideo()
+            .then(() => startSendingVideo())
+            .catch((err) => handleError(err));
+        }
+      }
+      if (localDevice.inputAudioDeviceId !== inputAudioDeviceId) {
+        d('Input video device ID changed');
+        setInputAudioDeviceId(localDevice.inputAudioDeviceId);
+        if (localDevice.sendAudio) {
+          stopSendingAudio()
+            .then(() => startSendingAudio())
+            .catch((err) => handleError(err));
+        }
       }
     }
   }, [
     connected,
-    receiveAudio,
-    receiveVideo,
-    remoteVideoProducers,
-    remoteAudioProducers,
-    consumers,
-    consumeRemoteProducer,
-    stopConsumingRemoteProducer,
-    dispatch,
-  ]);
-
-  const startSendingVideo = useCallback(
-    (dev: Device): Promise<LocalProducer[]> => {
-      d('Start sending video');
-      setWorking(true);
-      return navigator.mediaDevices
-        .getUserMedia({
-          audio: false,
-          video:
-            dev && dev.inputVideoDeviceId
-              ? {
-                  deviceId: dev.inputVideoDeviceId,
-                }
-              : true,
-        })
-        .then((stream) => stream.getVideoTracks())
-        .then((tracks) => {
-          d(`Producing now ${tracks.length} video tracks`);
-          return tracks;
-        })
-        .then((tracks) => Promise.all(tracks.map((track) => produce(track))))
-        .finally(() => setWorking(false));
-    },
-    [setWorking, produce]
-  );
-
-  const stopSendingVideo = useCallback((): Promise<LocalProducer[]> => {
-    d('Stop sending video');
-    setWorking(true);
-    const videoProducerIds = Object.keys(producers).filter(
-      (id) => producers[id].local.kind === 'video'
-    );
-    return Promise.all(
-      videoProducerIds.map((videoProducerId) => stopProducing(videoProducerId))
-    ).finally(() => setWorking(false));
-  }, [setWorking, producers, stopProducing]);
-
-  const startSendingAudio = useCallback(
-    (dev: Device): Promise<LocalProducer[]> => {
-      d('Start sending audio');
-      setWorking(true);
-      return navigator.mediaDevices
-        .getUserMedia({
-          video: false,
-          audio: {
-            deviceId: dev ? dev.inputAudioDeviceId : undefined,
-            autoGainControl: false,
-            echoCancellation: false,
-            noiseSuppression: false,
-          },
-        })
-        .then((stream) => stream.getAudioTracks())
-        .then((tracks) => {
-          d(`Producing now ${tracks.length} audio tracks`);
-          return tracks;
-        })
-        .then((tracks) => Promise.all(tracks.map((track) => produce(track))))
-        .finally(() => setWorking(false));
-    },
-    [setWorking, produce]
-  );
-
-  const stopSendingAudio = useCallback((): Promise<LocalProducer[]> => {
-    d('Stop sending audio');
-    setWorking(true);
-    const audioProducerIds = Object.keys(producers).filter(
-      (id) => producers[id].local.kind === 'audio'
-    );
-    return Promise.all(
-      audioProducerIds.map((audioProducerId) => stopProducing(audioProducerId))
-    ).finally(() => setWorking(false));
-  }, [setWorking, producers, stopProducing]);
-
-  const sync = useCallback(() => {
-    if (localDevice) {
-      if (localDevice.sendVideo !== sendVideo) {
-        if (localDevice.sendVideo) {
-          d('Send video on');
-          startSendingVideo(localDevice).catch((error) => handleError(error));
-        } else {
-          d('Send video off');
-          stopSendingVideo().catch((error) => handleError(error));
-        }
-        setSendVideo(localDevice.sendVideo);
-      }
-      if (localDevice.sendAudio !== sendAudio) {
-        if (localDevice.sendAudio) {
-          d('Send audio on');
-          startSendingAudio(localDevice).catch((error) => handleError(error));
-        } else {
-          d('Send audio off');
-          stopSendingAudio().catch((error) => handleError(error));
-        }
-        setSendAudio(localDevice.sendAudio);
-      }
-      if (localDevice.receiveVideo !== receiveVideo) {
-        if (localDevice.receiveVideo) {
-          d('Receive video on');
-        } else {
-          d('Receive video off');
-        }
-        setReceiveVideo(localDevice.receiveVideo);
-      }
-      if (localDevice.receiveAudio !== receiveAudio) {
-        if (localDevice.receiveAudio) {
-          d('Receive audio on');
-        } else {
-          d('Receive audio off');
-        }
-        setReceiveAudio(localDevice.receiveAudio);
-      }
-    } else {
-      setSendVideo(false);
-      setSendAudio(false);
-      setReceiveVideo(false);
-      setReceiveAudio(false);
-    }
-  }, [
     localDevice,
+    working,
     sendVideo,
     sendAudio,
-    receiveVideo,
     receiveAudio,
-    startSendingVideo,
-    startSendingAudio,
-    stopSendingAudio,
-    stopSendingVideo,
-    handleError,
+    receiveVideo,
+    inputVideoDeviceId,
+    inputAudioDeviceId,
   ]);
 
   useEffect(() => {
-    if (connected && !working) {
-      if (!working) {
-        sync();
-      }
-    }
-  }, [connected, working, sync]);
+    // Clean up deprecated consumers
+    const obsoleteProducers = Object.keys(consumers)
+      .filter(
+        (producerId) =>
+          !remoteVideoProducers.byId[producerId] && !remoteAudioProducers.byId[producerId]
+      )
+      .map((producerId) => consumers[producerId]);
+
+    d(`Have ${obsoleteProducers.length} deprecated producers`);
+    obsoleteProducers.forEach((obsoleteProducer) =>
+      stopConsumingRemoteProducer(obsoleteProducer).catch((err) => handleError(err))
+    );
+  }, [consumers, handleError, remoteVideoProducers, remoteAudioProducers]);
 
   useEffect(() => {
-    d('Connected changed');
-  }, [connected]);
+    if (connected && receiveVideo) {
+      remoteVideoProducers.allIds.forEach((producerId) => {
+        if (!consumers[producerId]) {
+          d(`Consuming video producer ${producerId}`);
+          const producer = remoteVideoProducers.byId[producerId];
+          consumeRemoteProducer(producer).catch((err) => handleError(err));
+        }
+      });
+    }
+  }, [connected, receiveVideo, remoteVideoProducers, consumers]);
+
+  useEffect(() => {
+    if (connected && receiveAudio) {
+      remoteAudioProducers.allIds.forEach((producerId) => {
+        if (!consumers[producerId]) {
+          d(`Consuming audio producer ${producerId}`);
+          const producer = remoteAudioProducers.byId[producerId];
+          consumeRemoteProducer(producer).catch((err) => handleError(err));
+        }
+      });
+    }
+  }, [connected, receiveAudio, remoteAudioProducers, consumers, handleError]);
+
+  useEffect(() => {
+    if (connected) {
+      return () => {
+        cu('Clean up local producer and consumers');
+        Promise.all([stopSendingAudio(), stopSendingVideo()]).catch((err) => handleError(err));
+      };
+    }
+    return undefined;
+  }, [connected, handleError]);
 
   return (
     <WebRTCCommunicationContext.Provider value={{ router }}>

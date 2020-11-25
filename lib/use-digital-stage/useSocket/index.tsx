@@ -105,22 +105,16 @@ const SocketProvider = (props: { children: React.ReactNode; apiUrl: string }): J
     throw new Error('Not connected');
   }, [socket, status]);
 
-  const cleanupConnection = useCallback(() => {
-    d('Cleaning up socket connection');
-    if (socket) {
-      if (status === Status.connected) {
-        socket.close();
-      }
-      setStatus(Status.disconnected);
-      setSocket(undefined);
+  useEffect(() => {
+    if (socket && status === Status.connected) {
+      d('Attaching connection cleanup handler');
+      return () => {
+        d('Cleaning up connection');
+        setStatus(Status.disconnected);
+        setSocket(undefined);
+      };
     }
   }, [socket, status]);
-
-  useEffect(() => {
-    return () => {
-      cleanupConnection();
-    };
-  }, []);
 
   return (
     <SocketContext.Provider

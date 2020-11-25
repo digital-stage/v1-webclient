@@ -1,3 +1,17 @@
+## [0.12.2](https://github.com/digital-stage/webclient/compare/v0.12.1...v0.12.2) (2020-11-25)
+
+
+### Bug Fixes
+
+* moved local consumer and producer handling out of useMediasoup ([10ea30c](https://github.com/digital-stage/webclient/commit/10ea30c338f487b132de6dd8901c799b65ef35b6))
+
+## [0.12.1](https://github.com/digital-stage/webclient/compare/v0.12.0...v0.12.1) (2020-11-25)
+
+
+### Bug Fixes
+
+* add resposivnes to mixing panel ([3ba573b](https://github.com/digital-stage/webclient/commit/3ba573b07bbfdcd28b6b1a020e95f953478169c6))
+
 # [0.12.0](https://github.com/digital-stage/webclient/compare/v0.11.4...v0.12.0) (2020-11-25)
 
 
