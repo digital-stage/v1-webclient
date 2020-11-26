@@ -160,6 +160,16 @@ const theme: Theme = {
       color: 'text',
       borderRadius: '32px',
     },
+    circleGray: {
+      border: 'none',
+      m: 0,
+      p: 0,
+      bg: 'gray.2',
+      width: '48px',
+      height: '48px',
+      color: 'text',
+      borderRadius: '32px',
+    },
     circleWhite: {
       border: 'none',
       m: 0,

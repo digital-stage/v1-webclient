@@ -57,11 +57,10 @@ const StageMemberView = ({
     <Flex
       sx={{
         position: 'relative',
-        backgroundImage: 'url("/images/white_logo.png")',
+        backgroundImage: 'url("/images/user_background.svg")',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        backgroundSize: '20%',
-        bg: 'lightblue',
+        backgroundSize: '100%',
       }}
     >
       <Box sx={{ pt: '100%' }} />

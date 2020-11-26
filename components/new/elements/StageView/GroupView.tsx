@@ -11,7 +11,7 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
 
   if (stageMembers.length > 0) {
     return (
-      <Box>
+      <Box sx={{ bg: 'gray.7', borderRadius: 'card', m: 3 }}>
         <Heading as="h2" sx={{ color: 'gray.1', ml: 3, py: 3 }}>
           {group.name}
         </Heading>

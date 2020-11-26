@@ -1,20 +1,22 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box } from 'theme-ui';
+import { jsx, Box, Link, Heading } from 'theme-ui';
 import DigitalStageLogo from './DigitalStageLogo';
 import PageSpinner from './PageSpinner';
 import { useAuth } from '../lib/useAuth';
 import SideNavigation from './new/elements/Menu/SideBar';
 import TopNavigation from './new/elements/Menu/AppBar';
+import { Stage } from '../lib/use-digital-stage';
 
 interface Props {
   children: React.ReactNode;
   sidebar?: boolean;
   auth?: boolean;
+  stage?: Stage;
 }
 
-const Layout = ({ children, sidebar, auth }: Props): JSX.Element => {
+const Layout = ({ children, sidebar, auth, stage }: Props): JSX.Element => {
   const { loading } = useAuth();
 
   return (
@@ -57,20 +59,30 @@ const Layout = ({ children, sidebar, auth }: Props): JSX.Element => {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: sidebar ? 'flex-end' : 'space-between',
+              justifyContent: 'space-between',
               height: '72px',
               py: 2,
               px: [3, 4],
-              //bg: ['red', 'blue'],
+              bg: !sidebar ? 'transparent' : 'background',
             }}
           >
-            <div>
-              {sidebar || (
-                <Box>
-                  <DigitalStageLogo single />
-                </Box>
-              )}
-            </div>
+            {sidebar || (
+              <Box>
+                <DigitalStageLogo single />
+              </Box>
+            )}
+            {sidebar && (
+              <Box sx={{ display: ['block', 'none'] }}>
+                <Link sx={{ color: 'text' }} href="https://www.digital-stage.org" target="_blank">
+                  <DigitalStageLogo single icon width={30} />
+                </Link>
+              </Box>
+            )}
+            {sidebar && stage && (
+              <Box>
+                <Heading>{stage.name}</Heading>
+              </Box>
+            )}
             <div>
               <TopNavigation />
             </div>

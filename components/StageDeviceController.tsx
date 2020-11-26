@@ -1,14 +1,10 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import Link from 'next/link';
-import {
-  FaMicrophone,
-  FaMicrophoneSlash,
-  FaPhoneSlash,
-  FaVideo,
-  FaVideoSlash,
-} from 'react-icons/fa';
-import { Button, Flex, jsx } from 'theme-ui';
+import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash } from 'react-icons/fa';
+import { ImPhoneHangUp } from 'react-icons/im';
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import { Button, Flex, jsx, Box } from 'theme-ui';
 import FixedAudioPlaybackStarterButton from './new/elements/Menu/FixedAudioPlaybackStarterButton';
 import { useLocalDevice } from '../lib/use-digital-stage/hooks';
 import useStageActions from '../lib/use-digital-stage/useStageActions';
@@ -33,7 +29,7 @@ const StageDeviceController = (): JSX.Element => {
     >
       {localDevice?.canVideo && (
         <Button
-          variant="circle"
+          variant={!localDevice.sendVideo ? 'circleGray' : 'circle'}
           title={localDevice.sendVideo ? 'Kamera deaktivieren' : 'Kamera aktivieren'}
           onClick={() =>
             updateDevice(localDevice._id, {
@@ -46,7 +42,7 @@ const StageDeviceController = (): JSX.Element => {
       )}
       {localDevice?.canAudio && (
         <Button
-          variant="circle"
+          variant={!localDevice.sendAudio ? 'circleGray' : 'circle'}
           title={localDevice.sendAudio ? 'Mikrofon deaktivieren' : 'Mikrofon aktivieren'}
           onClick={() =>
             updateDevice(localDevice._id, {
@@ -60,9 +56,14 @@ const StageDeviceController = (): JSX.Element => {
       <FixedAudioPlaybackStarterButton />
       <Link href="/leave">
         <Button variant="circle" title="Bühne verlassen" sx={{ bg: 'primary', color: 'text' }}>
-          <FaPhoneSlash size="24px" />
+          <ImPhoneHangUp size="24px" />
         </Button>
       </Link>
+      <Box sx={{ display: ['block', 'none'] }}>
+        <Button variant="circleGray" title="Settings">
+          <BsThreeDotsVertical size="24px" />
+        </Button>
+      </Box>
     </Flex>
   );
 };
