@@ -1,3 +1,10 @@
+## [0.13.1](https://github.com/digital-stage/webclient/compare/v0.13.0...v0.13.1) (2020-11-26)
+
+
+### Bug Fixes
+
+* socket communication may be not established when calling actions ([9bf51c2](https://github.com/digital-stage/webclient/commit/9bf51c22b473f4d98b1ab156ed75a980d4976189))
+
 # [0.13.0](https://github.com/digital-stage/webclient/compare/v0.12.3...v0.13.0) (2020-11-26)
 
 
