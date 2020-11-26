@@ -3,7 +3,10 @@ import { ITeckosClient } from 'teckos-client';
 import debug from 'debug';
 import { Router } from '../../types';
 
-const reportError = debug('useMediasoup:err');
+const d = debug('useMediasoup:utils');
+
+const trace = d.extend('trace');
+const err = d.extend('err');
 
 export enum RouterEvents {
   TransportCloses = 'transport-closed',
@@ -88,7 +91,7 @@ export const getFastestRouter = (routerDistUrl: string): Promise<Router> =>
               latency,
             };
           } catch (error) {
-            reportError(error);
+            err(error);
             return {
               router,
               latency: 9999,
@@ -141,38 +144,54 @@ function ping(url: string, multiplier?: number): Promise<number> {
 }
 
 export const createWebRTCTransport = (
-  socket: ITeckosClient,
+  routerConnection: ITeckosClient,
   device: mediasoupClient.Device,
   direction: 'send' | 'receive'
 ): Promise<mediasoupClient.types.Transport> =>
   new Promise<mediasoupClient.types.Transport>((resolve, reject) => {
-    socket.emit(
+    routerConnection.emit(
       RouterRequests.CreateTransport,
       {},
       (error: string, transportOptions: mediasoupClient.types.TransportOptions) => {
         if (error) {
           return reject(error);
         }
+        trace('createWebRTCTransport');
+        trace(transportOptions);
         const transport: mediasoupClient.types.Transport =
           direction === 'send'
             ? device.createSendTransport(transportOptions)
             : device.createRecvTransport(transportOptions);
         transport.on('connect', async ({ dtlsParameters }, callback, errCallback) => {
-          socket.emit(
+          trace('createWebRTCTransport:transport:' + direction + ':connect');
+          routerConnection.emit(
             RouterRequests.ConnectTransport,
             {
               transportId: transport.id,
               dtlsParameters,
             },
             (transportError: string) => {
-              if (transportError) return errCallback(error);
+              if (transportError) {
+                err(error);
+                return errCallback(error);
+              }
               return callback();
             }
           );
         });
+        transport.on('connectionstatechange', async (state) => {
+          if (state === 'closed' || state === 'failed' || state === 'disconnected') {
+            err(
+              'createWebRTCTransport:transport:' +
+                direction +
+                ':connectionstatechange - Disconnect by server side'
+            );
+          }
+        });
         if (direction === 'send') {
           transport.on('produce', async (producer, callback, errCallback) => {
-            socket.emit(
+            trace('createWebRTCTransport:transport:' + direction + ':produce');
+            routerConnection.emit(
               RouterRequests.CreateProducer,
               {
                 transportId: transport.id,
@@ -181,7 +200,10 @@ export const createWebRTCTransport = (
                 appData: producer.appData,
               },
               (produceError: string | undefined, payload: any) => {
-                if (produceError) return errCallback(produceError);
+                if (produceError) {
+                  err(produceError);
+                  return errCallback(produceError);
+                }
                 return callback({
                   ...producer,
                   id: payload.id,
@@ -211,8 +233,12 @@ export const pauseProducer = (
 ): Promise<mediasoupClient.types.Producer> =>
   new Promise<mediasoupClient.types.Producer>((resolve, reject) =>
     socket.emit(RouterRequests.PauseProducer, producer.id, (error?: string) => {
-      if (error) return reject(error);
+      if (error) {
+        err(error);
+        return reject(error);
+      }
       producer.pause();
+      trace('Paused producer ' + producer.id);
       return resolve(producer);
     })
   );
@@ -223,8 +249,12 @@ export const resumeProducer = (
 ): Promise<mediasoupClient.types.Producer> =>
   new Promise<mediasoupClient.types.Producer>((resolve, reject) =>
     socket.emit(RouterRequests.ResumeProducer, producer.id, (error?: string) => {
-      if (error) return reject(error);
+      if (error) {
+        err(error);
+        return reject(error);
+      }
       producer.resume();
+      trace('Resumed producer ' + producer.id);
       return resolve(producer);
     })
   );
@@ -235,8 +265,12 @@ export const stopProducer = (
 ): Promise<mediasoupClient.types.Producer> =>
   new Promise<mediasoupClient.types.Producer>((resolve, reject) =>
     socket.emit(RouterRequests.CloseProducer, producer.id, (error?: string) => {
+      if (error) {
+        err(error);
+        return reject(error);
+      }
       producer.close();
-      if (error) return reject(error);
+      trace('Stopped producer ' + producer.id);
       return resolve(producer);
     })
   );
@@ -267,30 +301,37 @@ export const createConsumer = (
         }
       ) => {
         if (error) {
+          err(error);
           return reject(error);
         }
-        try {
-          const consumer = await transport.consume(data);
+        trace(
+          'Server created consumer ' +
+            data.id +
+            ' for producer ' +
+            data.producerId +
+            ', consuming now'
+        );
+        return transport.consume(data).then((consumer) => {
           if (data.paused) {
+            trace('Pausing consumer, since it is paused server-side too');
             consumer.pause();
           }
-          return resolve(consumer);
-        } catch (consumingError) {
-          return reject(consumingError);
-        }
+          resolve(consumer);
+        });
       }
     );
   });
 
 export const resumeConsumer = (
-  socket: ITeckosClient,
+  routerConnection: ITeckosClient,
   consumer: mediasoupClient.types.Consumer
 ): Promise<mediasoupClient.types.Consumer> => {
   if (consumer.paused) {
     return new Promise<mediasoupClient.types.Consumer>((resolve, reject) =>
-      socket.emit(RouterRequests.ResumeConsumer, consumer.id, (error?: string) => {
+      routerConnection.emit(RouterRequests.ResumeConsumer, consumer.id, (error?: string) => {
         if (error) return reject(error);
         consumer.resume();
+        trace('Resumed consumer ' + consumer.id);
         return resolve(consumer);
       })
     );
@@ -305,8 +346,12 @@ export const pauseConsumer = (
   if (!consumer.paused) {
     return new Promise<mediasoupClient.types.Consumer>((resolve, reject) =>
       socket.emit(RouterRequests.PauseConsumer, consumer.id, (error?: string) => {
-        if (error) return reject(error);
+        if (error) {
+          err(error);
+          return reject(error);
+        }
         consumer.pause();
+        trace('Paused consumer ' + consumer.id);
         return resolve(consumer);
       })
     );
@@ -320,8 +365,12 @@ export const closeConsumer = (
 ): Promise<mediasoupClient.types.Consumer> =>
   new Promise<mediasoupClient.types.Consumer>((resolve, reject) =>
     socket.emit(RouterRequests.CloseConsumer, consumer.id, (error?: string) => {
-      if (error) return reject(error);
+      if (error) {
+        err(error);
+        return reject(error);
+      }
       consumer.close();
+      trace('Closed consumer ' + consumer.id);
       return resolve(consumer);
     })
   );

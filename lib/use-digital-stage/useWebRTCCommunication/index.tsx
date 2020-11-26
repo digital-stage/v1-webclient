@@ -199,7 +199,6 @@ export const WebRTCCommunicationProvider = (props: {
   useEffect(() => {
     if (connected && localDevice && !working) {
       d('Device changed');
-      d(localDevice);
       if (localDevice.sendVideo !== sendVideo) {
         d('Send video changed');
         setSendVideo(localDevice.sendVideo);
@@ -305,6 +304,10 @@ export const WebRTCCommunicationProvider = (props: {
     }
     return undefined;
   }, [connected, handleError]);
+
+  useEffect(() => {
+    d(producers);
+  }, [producers]);
 
   return (
     <WebRTCCommunicationContext.Provider value={{ router }}>

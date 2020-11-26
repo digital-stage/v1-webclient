@@ -176,7 +176,6 @@ const useMediasoup = (
       createWebRTCTransport(routerConnection, mediasoupDevice, 'receive')
         .then((transport) => {
           createdTransport = transport;
-          d('Created receive transport');
           return setReceiveTransport(createdTransport);
         })
         .catch((error) => handleError(error));
@@ -226,6 +225,9 @@ const useMediasoup = (
               d('Consumer is paused, try to resume it');
               await resumeConsumer(routerConnection, localConsumer.consumer);
             }
+            if (localConsumer.consumer.paused) {
+              err('Still paused?');
+            }
             return localConsumer;
           });
       }
@@ -256,36 +258,44 @@ const useMediasoup = (
   const produce = useCallback(
     (track: MediaStreamTrack): Promise<LocalProducer> => {
       if (routerConnection && mediasoupDevice && sendTransport && socket && router) {
-        return createProducer(sendTransport, track).then(
-          (producer) =>
-            new Promise<LocalProducer>((resolve, reject) => {
-              const timeout = setTimeout(() => {
-                // TODO: Stop producing track first?
-                reject(new Error(`Timed out when publishing mediasoup producer ${producer.id}`));
-              }, TIMEOUT_MS);
-              socket.emit(
-                track.kind === 'video'
-                  ? ClientDeviceEvents.ADD_VIDEO_PRODUCER
-                  : ClientDeviceEvents.ADD_AUDIO_PRODUCER,
-                {
-                  routerId: router._id,
-                  routerProducerId: producer.id,
-                } as AddAudioProducerPayload,
-                (error: string | null, globalProducer: GlobalProducer) => {
-                  clearTimeout(timeout);
-                  if (error) {
-                    // TODO: Stop producing track first?
-                    reject(new Error(error));
+        return createProducer(sendTransport, track)
+          .then((producer) => {
+            if (producer.paused) {
+              d('producer is paused');
+            }
+            return producer;
+          })
+          .then(
+            (producer) =>
+              new Promise<LocalProducer>((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                  // TODO: Stop producing track first?
+                  reject(new Error(`Timed out when publishing mediasoup producer ${producer.id}`));
+                }, TIMEOUT_MS);
+                socket.emit(
+                  track.kind === 'video'
+                    ? ClientDeviceEvents.ADD_VIDEO_PRODUCER
+                    : ClientDeviceEvents.ADD_AUDIO_PRODUCER,
+                  {
+                    routerId: router._id,
+                    routerProducerId: producer.id,
+                  } as AddAudioProducerPayload,
+                  (error: string | null, globalProducer: GlobalProducer) => {
+                    clearTimeout(timeout);
+                    if (error) {
+                      // TODO: Stop producing track first?
+                      err(error);
+                      reject(new Error(error));
+                    }
+                    d(`Published producer ${globalProducer._id}`);
+                    resolve({
+                      global: globalProducer,
+                      local: producer,
+                    });
                   }
-                  d(`Published producer ${globalProducer._id}`);
-                  resolve({
-                    global: globalProducer,
-                    local: producer,
-                  });
-                }
-              );
-            })
-        );
+                );
+              })
+          );
       }
       throw new Error(`Connection is not ready`);
     },

@@ -107,12 +107,12 @@ class VideoPlayer extends React.Component<Props, States> {
               videoElement.setAttribute('autoplay', 'true');
               videoElement.srcObject = new MediaStream([videoTracks[i]]);
               this.videoContainerRef.current.append(videoElement);
-              /*console.debug("TRY TO PLAY");
-              videoElement.play()
-                  .then(() => {
-                    console.debug("PLAYING VIDEO");
-                  })
-                  .catch((err) => console.error(err));*/
+              videoElement
+                .play()
+                .then(() => {
+                  console.debug('PLAYING VIDEO');
+                })
+                .catch((err) => console.error(err));
             }
 
             const animationFrame = currentAnimationFrames.find(
