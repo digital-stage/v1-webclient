@@ -163,7 +163,7 @@ export const createWebRTCTransport = (
             ? device.createSendTransport(transportOptions)
             : device.createRecvTransport(transportOptions);
         transport.on('connect', async ({ dtlsParameters }, callback, errCallback) => {
-          trace('createWebRTCTransport:transport:' + direction + ':connect');
+          trace(`createWebRTCTransport:transport:${direction}:connect`);
           routerConnection.emit(
             RouterRequests.ConnectTransport,
             {
@@ -182,15 +182,13 @@ export const createWebRTCTransport = (
         transport.on('connectionstatechange', async (state) => {
           if (state === 'closed' || state === 'failed' || state === 'disconnected') {
             err(
-              'createWebRTCTransport:transport:' +
-                direction +
-                ':connectionstatechange - Disconnect by server side'
+              `createWebRTCTransport:transport:${direction}:connectionstatechange - Disconnect by server side`
             );
           }
         });
         if (direction === 'send') {
           transport.on('produce', async (producer, callback, errCallback) => {
-            trace('createWebRTCTransport:transport:' + direction + ':produce');
+            trace(`createWebRTCTransport:transport:${direction}:produce`);
             routerConnection.emit(
               RouterRequests.CreateProducer,
               {
@@ -238,7 +236,7 @@ export const pauseProducer = (
         return reject(error);
       }
       producer.pause();
-      trace('Paused producer ' + producer.id);
+      trace(`Paused producer ${producer.id}`);
       return resolve(producer);
     })
   );
@@ -254,7 +252,7 @@ export const resumeProducer = (
         return reject(error);
       }
       producer.resume();
-      trace('Resumed producer ' + producer.id);
+      trace(`Resumed producer ${producer.id}`);
       return resolve(producer);
     })
   );
@@ -270,7 +268,7 @@ export const stopProducer = (
         return reject(error);
       }
       producer.close();
-      trace('Stopped producer ' + producer.id);
+      trace(`Stopped producer ${producer.id}`);
       return resolve(producer);
     })
   );
@@ -304,19 +302,13 @@ export const createConsumer = (
           err(error);
           return reject(error);
         }
-        trace(
-          'Server created consumer ' +
-            data.id +
-            ' for producer ' +
-            data.producerId +
-            ', consuming now'
-        );
-        return transport.consume(data).then((consumer) => {
+        trace(`Server created consumer ${data.id} for producer ${data.producerId}, consuming now`);
+        return transport.consume(data).then(async (consumer) => {
           if (data.paused) {
             trace('Pausing consumer, since it is paused server-side too');
-            consumer.pause();
+            await consumer.pause();
           }
-          resolve(consumer);
+          return resolve(consumer);
         });
       }
     );
@@ -331,7 +323,7 @@ export const resumeConsumer = (
       routerConnection.emit(RouterRequests.ResumeConsumer, consumer.id, (error?: string) => {
         if (error) return reject(error);
         consumer.resume();
-        trace('Resumed consumer ' + consumer.id);
+        trace(`Resumed consumer ${consumer.id}`);
         return resolve(consumer);
       })
     );
@@ -351,7 +343,7 @@ export const pauseConsumer = (
           return reject(error);
         }
         consumer.pause();
-        trace('Paused consumer ' + consumer.id);
+        trace(`Paused consumer ${consumer.id}`);
         return resolve(consumer);
       })
     );
@@ -370,7 +362,7 @@ export const closeConsumer = (
         return reject(error);
       }
       consumer.close();
-      trace('Closed consumer ' + consumer.id);
+      trace(`Closed consumer ${consumer.id}`);
       return resolve(consumer);
     })
   );

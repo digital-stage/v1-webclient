@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import debug from 'debug';
 import { useDispatch } from 'react-redux';
+import { omit } from 'lodash';
 import {
   Router,
   RemoteAudioProducer,
@@ -13,7 +14,6 @@ import useMediasoup from './useMediasoup';
 import useAudioProducers from '../hooks/useAudioProducers';
 import useVideoProducers from '../hooks/useVideoProducers';
 import allActions from '../redux/actions';
-import { omit } from 'lodash';
 
 interface TWebRTCCommunicationContext {
   router?: Router;
@@ -201,12 +201,12 @@ export const WebRTCCommunicationProvider = (props: {
       d('Device changed');
       if (localDevice.sendVideo !== sendVideo) {
         d('Send video changed');
-        setSendVideo(localDevice.sendVideo);
         if (localDevice.sendVideo) {
           startSendingVideo().catch((err) => handleError(err));
         } else {
           stopSendingVideo().catch((err) => handleError(err));
         }
+        setSendVideo(localDevice.sendVideo);
       }
       if (localDevice.sendAudio !== sendAudio) {
         d('Send audio changed');
