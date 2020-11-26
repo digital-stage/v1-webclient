@@ -1,3 +1,10 @@
+## [0.13.3](https://github.com/digital-stage/webclient/compare/v0.13.2...v0.13.3) (2020-11-26)
+
+
+### Bug Fixes
+
+* removal of customStageMember resulted in typeerror ([90ba339](https://github.com/digital-stage/webclient/commit/90ba339a3f18b7f9d5679b089391e7e3c659ad9c))
+
 ## [0.13.2](https://github.com/digital-stage/webclient/compare/v0.13.1...v0.13.2) (2020-11-26)
 
 
