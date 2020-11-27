@@ -1,16 +1,16 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Flex } from 'theme-ui';
+import { jsx } from 'theme-ui';
 import { useRouter } from 'next/router';
 import { DisplayMedium } from 'baseui/typography';
 import Loading from '../../../components/new/elements/Loading';
-import useStageHandling from '../../../lib/use-digital-stage/useStageHandling';
+import useStageJoiner from '../../../lib/useStageJoiner';
 
 const Join = (): JSX.Element => {
   const router = useRouter();
 
-  const { requestJoin } = useStageHandling();
+  const { requestJoin } = useStageJoiner();
 
   React.useEffect(() => {
     router.prefetch('/');

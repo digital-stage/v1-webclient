@@ -16,7 +16,7 @@ import useStageJoiner from '../../../lib/useStageJoiner';
  */
 const StageJoiner = (): JSX.Element => {
   const ready = useSelector((state) => state.global.ready);
-  const { stageId, groupId, password, requestJoin } = useStageJoiner();
+  const { stageId, groupId, password, requestJoin, reset } = useStageJoiner();
   const { joinStage } = useStageActions();
   const [retries, setRetries] = useState<number>(0);
   const [wrongPassword, setWrongPassword] = useState<boolean>();
@@ -35,7 +35,7 @@ const StageJoiner = (): JSX.Element => {
         }
       })
       .then(() => {
-        // do nothing.
+        reset();
       });
   }, [joinStage, stageId, groupId, password]);
 

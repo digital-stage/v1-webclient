@@ -12,6 +12,8 @@ export interface TStageJoinerContext {
   password?: string;
 
   requestJoin(stageId: string, groupId: string, password?: string): void;
+
+  reset(): void;
 }
 
 const throwAddProviderError = () => {
@@ -20,6 +22,7 @@ const throwAddProviderError = () => {
 
 const StageHandlingContext = React.createContext<TStageJoinerContext>({
   requestJoin: throwAddProviderError,
+  reset: throwAddProviderError,
 });
 
 const useStageJoiner = (): TStageJoinerContext =>
@@ -41,6 +44,11 @@ const StageJoinerProvider = (props: { children: React.ReactNode }): JSX.Element 
           setStageId(reqStageId);
           setGroupId(reqGroupId);
           setPassword(reqPassword);
+        },
+        reset: () => {
+          setStageId(undefined);
+          setGroupId(undefined);
+          setPassword(undefined);
         },
       }}
     >

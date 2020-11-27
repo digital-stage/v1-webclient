@@ -3,12 +3,7 @@
 import * as React from 'react';
 import { jsx, Box } from 'theme-ui';
 import { LocalConsumer } from '../../../../lib/use-digital-stage/types';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import useAnimationFrame from '../../../../lib/useAnimationFrame';
-
-interface CanvasElement extends HTMLCanvasElement {
-  captureStream(): MediaStream;
-}
+import { useEffect, useRef, useState } from 'react';
 
 interface AnimationFrame {
   id: string; // Id from videoTrack
@@ -119,7 +114,7 @@ const VideoPlayer2 = (props: { consumers: LocalConsumer[] }): React.ReactNode =>
     <div ref={wrapperRef}>
       <canvas
         sx={{ width: '100%', height: '100%', stroke: 'red' }}
-        ref={this.canvasRef}
+        ref={canvasRef}
         width={width}
         height={height}
       />
