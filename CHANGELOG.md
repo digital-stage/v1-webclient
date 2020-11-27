@@ -1,3 +1,10 @@
+## [0.14.2](https://github.com/digital-stage/webclient/compare/v0.14.1...v0.14.2) (2020-11-27)
+
+
+### Bug Fixes
+
+* retry of joining password protected stage not possible ([8b5f277](https://github.com/digital-stage/webclient/commit/8b5f277a238a6a560f4730a887ad5f6c0ec9b8ed))
+
 ## [0.14.1](https://github.com/digital-stage/webclient/compare/v0.14.0...v0.14.1) (2020-11-27)
 
 
