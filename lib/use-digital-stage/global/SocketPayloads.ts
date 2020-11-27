@@ -32,8 +32,8 @@ export interface AddSoundCardPayload {
     numInputChannels?: number;
     numOutputChannels?: number;
     trackPresetId?: string;
-    sampleRate?: number;
-    periodSize?: number;
+    sampleRate?: number; // defaults to 48000
+    periodSize?: number; // default to 96
     numPeriods?: number; // default to 2
   };
 }

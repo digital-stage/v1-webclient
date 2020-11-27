@@ -10,6 +10,7 @@ import StageWebAudioProvider from '../lib/useStageWebAudio';
 import { ErrorsConsumer } from '../lib/useErrors';
 import ErrorHandler from '../components/ErrorHandler';
 import { DigitalStageProvider } from '../lib/use-digital-stage';
+import { StageJoinerProvider } from '../lib/useStageJoiner';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   React.useEffect(() => {
@@ -40,12 +41,14 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                   <AudioContextProvider>
                     <ThemenProviderThemeUi theme={theme}>
                       <StageWebAudioProvider>
-                        <ErrorHandler>
-                          {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                          <Component {...pageProps} />
-                        </ErrorHandler>
+                        <StageJoinerProvider>
+                          <ErrorHandler>
+                            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                            <Component {...pageProps} />
+                            <StageJoiner />
+                          </ErrorHandler>
+                        </StageJoinerProvider>
                       </StageWebAudioProvider>
-                      <StageJoiner />
                     </ThemenProviderThemeUi>
                   </AudioContextProvider>
                 </DigitalStageProvider>

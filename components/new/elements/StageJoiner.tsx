@@ -5,7 +5,7 @@ import Modal from './Modal';
 import useStageActions from '../../../lib/use-digital-stage/useStageActions';
 import { useSelector } from '../../../lib/use-digital-stage/hooks';
 import { Errors } from '../../../lib/useAuth';
-import useStageHandling from '../../../lib/use-digital-stage/useStageHandling';
+import useStageJoiner from '../../../lib/useStageJoiner';
 
 /**
  * The StageJoiner is a usually hidden component,
@@ -16,7 +16,7 @@ import useStageHandling from '../../../lib/use-digital-stage/useStageHandling';
  */
 const StageJoiner = (): JSX.Element => {
   const ready = useSelector((state) => state.global.ready);
-  const { stageId, groupId, password, requestJoin } = useStageHandling();
+  const { stageId, groupId, password, requestJoin } = useStageJoiner();
   const { joinStage } = useStageActions();
   const [retries, setRetries] = useState<number>(0);
   const [wrongPassword, setWrongPassword] = useState<boolean>();
