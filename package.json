@@ -1,5 +1,5 @@
 {
-  "name": "@digitalstage/react-hooks",
+  "name": "@digitalstage/webclient",
   "version": "0.1.0",
   "private": true,
   "scripts": {
