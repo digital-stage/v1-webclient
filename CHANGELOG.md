@@ -1,3 +1,10 @@
+## [0.13.4](https://github.com/digital-stage/webclient/compare/v0.13.3...v0.13.4) (2020-11-27)
+
+
+### Bug Fixes
+
+* enlarged width to show all buttons merged components ([408222e](https://github.com/digital-stage/webclient/commit/408222eacdc8d9db96d55fb72e630125d28245a3))
+
 ## [0.13.3](https://github.com/digital-stage/webclient/compare/v0.13.2...v0.13.3) (2020-11-26)
 
 
