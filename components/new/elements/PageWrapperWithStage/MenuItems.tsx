@@ -7,7 +7,6 @@ import { jsx } from 'theme-ui';
 import AudioSettings from '../../../settings/AudioSettings';
 import Profile from '../../../settings/Profile';
 import VideoSettings from '../../../settings/VideoSettings';
-import MixerPane from '../../panes/MixerPane';
 import NavItem from '../Menu/NavItem';
 
 export const CenteredNavItems: NavItem[] = [
@@ -29,7 +28,7 @@ export const CenteredNavItems: NavItem[] = [
     label: 'Mixer',
     icon: <GoSettings name="mixer" />,
     href: 'mixer',
-    content: <MixerPane />,
+    content: null,
     size: 'large',
   },
 ];

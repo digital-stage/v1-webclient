@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { jsx, Flex, Box, Heading, IconButton } from 'theme-ui';
 import { FaVideo, FaVideoSlash } from 'react-icons/fa';
+import { HiUserCircle } from 'react-icons/hi';
 import OnlineStatus from '../OnlineStatus';
 import VideoPlayer from '../VideoPlayer';
 import { StageMemberWithUserData } from '../../../../lib/use-digital-stage/types';
@@ -10,8 +11,8 @@ import { useIsStageAdmin } from '../../../../lib/use-digital-stage/hooks';
 import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
 import useVideoConsumersByStageMember from '../../../../lib/use-digital-stage/hooks/useVideoConsumersByStageMember';
 
-const StageMemberTitle = (props: { stageMember: StageMemberWithUserData }) => {
-  const { stageMember } = props;
+const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIcon?: boolean }) => {
+  const { stageMember, withIcon } = props;
 
   const { updateStageMember } = useStageActions();
   const isAdmin = useIsStageAdmin();
@@ -22,12 +23,12 @@ const StageMemberTitle = (props: { stageMember: StageMemberWithUserData }) => {
         minWidth: '100%',
         flexDirection: 'column',
         alignItems: 'center',
-        p: 3,
+        pt: 3,
       }}
     >
-      {/** <Avatar name={stageMember.name} /> */}
+      {withIcon && <HiUserCircle size={70} />}
 
-      <Heading as="h5">
+      <Heading as="h5" sx={{ display: withIcon ? 'block' : 'inline-block' }}>
         <OnlineStatus online={stageMember.online} /> {stageMember.name}{' '}
       </Heading>
 
@@ -79,13 +80,13 @@ const StageMemberView = ({
       <Box
         sx={{
           position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
+          bottom: 0,
+          textAlign: videoConsumers.length <= 0 ? 'center' : 'left',
+          width: videoConsumers.length <= 0 && '100%',
+          height: videoConsumers.length <= 0 && '100%',
         }}
       >
-        <StageMemberTitle stageMember={stageMember} />
+        <StageMemberTitle stageMember={stageMember} withIcon={videoConsumers.length <= 0} />
       </Box>
     </Flex>
   );

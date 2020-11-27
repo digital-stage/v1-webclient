@@ -24,7 +24,7 @@ const SettingsModal = (props: {
   return (
     <Modal isOpen={props.isOpen} onClose={props.onClose} variant="dark" type="settings">
       <Flex>
-        <Box sx={{ width: '30%' }}>
+        <Box sx={{ width: '30%', display: ['none', 'block'] }}>
           <Heading ml={3} mb={3}>
             Settings
           </Heading>
@@ -58,7 +58,7 @@ const SettingsModal = (props: {
         </Box>
         <Box
           sx={{
-            width: '70%',
+            width: ['100%', '70%'],
             ml: 3,
             mr: 4,
             maxHeight: 'calc(100vh - 230px)',
