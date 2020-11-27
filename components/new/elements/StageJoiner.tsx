@@ -16,35 +16,43 @@ import useStageJoiner from '../../../lib/useStageJoiner';
  */
 const StageJoiner = (): JSX.Element => {
   const ready = useSelector((state) => state.global.ready);
-  const { stageId, groupId, password, requestJoin, reset } = useStageJoiner();
+  const { stageId, groupId, password, reset } = useStageJoiner();
   const { joinStage } = useStageActions();
   const [retries, setRetries] = useState<number>(0);
   const [wrongPassword, setWrongPassword] = useState<boolean>();
   const [notFound, setNotFound] = useState<boolean>();
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const retryJoiningStage = useCallback(() => {
-    // Try to connect
-    joinStage(stageId, groupId, password)
-      .catch((error) => {
-        console.error(error);
-        if (error === Errors.INVALID_PASSWORD) {
-          setWrongPassword(true);
-        } else {
-          setNotFound(true);
-        }
-      })
-      .then(() => {
-        reset();
-      });
-  }, [joinStage, stageId, groupId, password]);
+  const clear = useCallback(() => {
+    setNotFound(false);
+    setWrongPassword(false);
+    reset();
+  }, [reset]);
+
+  const retryJoiningStage = useCallback(
+    (stageId: string, groupId: string, password?: string) => {
+      // Try to connect
+      joinStage(stageId, groupId, password)
+        .then(() => {
+          clear();
+        })
+        .catch((error) => {
+          if (error === Errors.INVALID_PASSWORD) {
+            setWrongPassword(true);
+          } else {
+            setNotFound(true);
+          }
+        });
+    },
+    [joinStage, clear]
+  );
 
   React.useEffect(() => {
     if (ready) {
       if (stageId && groupId) {
         setNotFound(false);
         setWrongPassword(false);
-        retryJoiningStage();
+        retryJoiningStage(stageId, groupId, password);
       }
     }
   }, [ready, stageId, groupId, password]);
@@ -57,7 +65,7 @@ const StageJoiner = (): JSX.Element => {
           <Button onClick={() => setNotFound(false)}>Ok</Button>
         </Flex>
       </Modal>
-      <Modal isOpen={wrongPassword} onClose={() => setWrongPassword(false)}>
+      <Modal isOpen={wrongPassword} onClose={() => clear()}>
         <Heading variant="title">
           {retries === 0 ? 'Passwort notwendig' : 'Falsches Passwort'}
         </Heading>
@@ -69,12 +77,12 @@ const StageJoiner = (): JSX.Element => {
           type="password"
         />
         <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
-          <Button onClick={() => setWrongPassword(false)}>Abbrechen</Button>
+          <Button onClick={() => clear()}>Abbrechen</Button>
           <Button
             onClick={() => {
               const updatePassword = passwordRef.current.value;
               setRetries((prevState) => prevState + 1);
-              requestJoin(stageId, groupId, updatePassword);
+              retryJoiningStage(stageId, groupId, updatePassword);
             }}
           >
             Erneut versuchen
