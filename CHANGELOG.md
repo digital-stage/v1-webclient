@@ -1,3 +1,11 @@
+## [0.14.1](https://github.com/digital-stage/webclient/compare/v0.14.0...v0.14.1) (2020-11-27)
+
+
+### Bug Fixes
+
+* stage not joined when using invite link ([f24da00](https://github.com/digital-stage/webclient/commit/f24da00404fe12147684a3a4e13b75d52d2a98a1))
+* stage not joined when using invite link ([f6f3ed9](https://github.com/digital-stage/webclient/commit/f6f3ed909ca68d32e41fe03c5373d8f071725faa))
+
 # [0.14.0](https://github.com/digital-stage/webclient/compare/v0.13.4...v0.14.0) (2020-11-27)
 
 
