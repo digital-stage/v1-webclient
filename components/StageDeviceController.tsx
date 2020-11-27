@@ -2,21 +2,24 @@
 /** @jsx jsx */
 import React from 'react';
 import Link from 'next/link';
-import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash } from 'react-icons/fa';
-import { ImPhoneHangUp } from 'react-icons/im';
+import { useCallback, useEffect, useState } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { Button, Flex, jsx, Box } from 'theme-ui';
-import FixedAudioPlaybackStarterButton from './new/elements/Menu/FixedAudioPlaybackStarterButton';
+import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash } from 'react-icons/fa';
+import { GiSpeaker, GiSpeakerOff } from 'react-icons/gi';
+import { ImPhoneHangUp } from 'react-icons/im';
+import { Box, Button, Flex, jsx } from 'theme-ui';
 import { useLocalDevice } from '../lib/use-digital-stage/hooks';
 import useStageActions from '../lib/use-digital-stage/useStageActions';
 import MobileSideBar from './new/elements/Menu/SideBar/MobileSideBar';
 import SettingsModal from './settings';
 import MixingPanelModal from './MixingPanelModal';
+import { useAudioContext } from '../lib/useAudioContext';
 
 const StageDeviceController = (): JSX.Element => {
-  // TODO: @delude88 - please check
   const localDevice = useLocalDevice();
   const { updateDevice } = useStageActions();
+  const { audioContext, createAudioContext } = useAudioContext();
+  const [valid, setValid] = useState<boolean>(audioContext && audioContext.state === 'running');
   const [openMobileSideBar, setMobileSideBarOpen] = React.useState<boolean>(false);
   const [openSettings, setOpenSettings] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState<string>();
@@ -31,22 +34,43 @@ const StageDeviceController = (): JSX.Element => {
     setMobileSideBarOpen(false);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.addEventListener('mousedown', handleClick);
     return () => {
       document.removeEventListener('mousedown', handleClick);
     };
   }, []);
 
+  useEffect(() => {
+    setValid(audioContext && audioContext.state === 'running');
+  }, [audioContext]);
+
+  // TODO: [DS-71] @delude88 please check business logic
+  const start = useCallback(() => {
+    if (!audioContext) {
+      return createAudioContext().then((createdAudioContext) => {
+        if (createdAudioContext.state === 'suspended') {
+          return createdAudioContext.resume().then(() => {
+            if (createdAudioContext.state === 'running') setValid(true);
+          });
+        }
+        return null;
+      });
+    }
+    return audioContext.resume().then(() => {
+      if (audioContext.state === 'running') setValid(true);
+    });
+  }, [audioContext]);
+
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box>
       <Flex
         sx={{
           position: 'fixed',
           bottom: 0,
           left: '50%',
           transform: 'translate(-50%, 0)',
-          width: '228px',
+          width: '280px',
           justifyContent: 'space-between',
           pb: '1rem',
           zIndex: 10,
@@ -75,14 +99,18 @@ const StageDeviceController = (): JSX.Element => {
               })
             }
           >
-            {localDevice.sendAudio ? (
-              <FaMicrophone size="24px" />
-            ) : (
-              <FaMicrophoneSlash size="24px" />
-            )}
+            {localDevice.sendAudio ? <FaMicrophone size="24px" /> : <FaMicrophoneSlash size="24px" />}
           </Button>
         )}
-        <FixedAudioPlaybackStarterButton />
+
+        <Button variant={valid ? 'circleGray' : 'circle'} onClick={() => start()}>
+          {valid ? (
+            <GiSpeakerOff size={24} name="Speaker off" />
+          ) : (
+              <GiSpeaker size={24} name="Speaker on" />
+            )}
+        </Button>
+
         <Link href="/leave">
           <Button variant="circle" title="Bühne verlassen" sx={{ bg: 'primary', color: 'text' }}>
             <ImPhoneHangUp size="24px" />
