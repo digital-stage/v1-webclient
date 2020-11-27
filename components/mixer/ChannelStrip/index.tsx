@@ -8,7 +8,6 @@ import { IoMdSync } from 'react-icons/io';
 import { IAnalyserNode, IAudioContext } from 'standardized-audio-context';
 import LevelControlFader from './LevelControlFader';
 import LevelMeter from './LevelMeter';
-import { Group } from '../../../../lib/use-digital-stage';
 
 const ChannelStrip = (props: {
   addHeader?: React.ReactNode;
@@ -18,11 +17,10 @@ const ChannelStrip = (props: {
   muted: boolean;
   customVolume?: number;
   customMuted?: boolean;
-  onVolumeChanged?: (volume: number, muted: boolean) => void;
-  onCustomVolumeChanged?: (volume: number, muted: boolean) => void;
-  onCustomVolumeReset?: () => void;
+  onVolumeChanged: (volume: number, muted: boolean) => void;
+  onCustomVolumeChanged: (volume: number, muted: boolean) => void;
+  onCustomVolumeReset: () => void;
   className?: string;
-  group?: Group;
 }): JSX.Element => {
   const addCustom = useCallback(() => {
     if (props.onCustomVolumeChanged) props.onCustomVolumeChanged(props.volume, props.muted);
@@ -81,7 +79,6 @@ const ChannelStrip = (props: {
             borderRadius: '50%',
           }}
         ></Box>
-        <Text mb={3}>{props.group.name}</Text>
       </Flex>
 
       <Flex

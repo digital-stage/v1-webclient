@@ -1,14 +1,17 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { Box, Heading, jsx, Text } from 'theme-ui';
-import MixingPanelView from './new/elements/MixingPanel';
 import Modal from './new/elements/Modal';
+import { useIsStageAdmin } from '../lib/use-digital-stage/hooks';
+import MixingPanel from './mixer/MixingPanel';
 interface Props {
   isOpen: boolean;
   onClose(): void;
 }
 
 const MixingPanelModal = ({ isOpen, onClose }: Props): JSX.Element => {
+  const isAdmin = useIsStageAdmin();
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} variant="dark" type="settings">
       <Box
@@ -30,9 +33,13 @@ const MixingPanelModal = ({ isOpen, onClose }: Props): JSX.Element => {
       >
         <Box sx={{ my: 3, ml: 3 }}>
           <Heading>Master audio mixer</Heading>
-          {/* <Text>As admin you mixer settings will be send and synchronised with all users in your stage</Text> */}
+          {isAdmin ? (
+            <Text>
+              As admin you mixer settings will be send and synchronised with all users in your stage
+            </Text>
+          ) : undefined}
         </Box>
-        <MixingPanelView />
+        <MixingPanel />
       </Box>
     </Modal>
   );

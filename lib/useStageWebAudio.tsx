@@ -47,7 +47,6 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }): JSX.Elemen
   const { children } = props;
   const { audioContext } = useAudioContext();
   const audioPlayerRef = useRef<HTMLAudioElement>();
-  const [, setRootGainNode] = useState<IGainNode<IAudioContext>>();
   const [rootNode, setRootNode] = useState<IAudioNode<IAudioContext>>();
   const [groupNodes, setGroupNodes] = useState<StageWebAudioNodes>({});
   const [stageMemberNodes, setStageMemberNodes] = useState<StageWebAudioNodes>({});
@@ -66,15 +65,17 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }): JSX.Elemen
   useEffect(() => {
     if (audioContext && audioPlayerRef && !rootNode) {
       // Create root node
+      const splitter = audioContext.createChannelSplitter();
+      const merger = audioContext.createChannelMerger();
 
-      const createdRootGainNode = audioContext.createGain();
-      createdRootGainNode.gain.value = 1;
-      createdRootGainNode.connect(audioContext.destination);
+      merger.connect(audioContext.destination);
+      splitter.connect(merger, 0, 0);
+      splitter.connect(merger, 0, 1);
 
-      const createdRootNode = audioContext.createChannelMerger();
-      createdRootNode.connect(createdRootGainNode);
+      const createdRootNode = audioContext.createGain();
+      createdRootNode.gain.value = 1;
+      createdRootNode.connect(splitter);
 
-      setRootGainNode(createdRootGainNode);
       setRootNode(createdRootNode);
 
       // const dest = audioContext.createMediaStreamDestination();
@@ -308,6 +309,8 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }): JSX.Elemen
                 // sourceNode.connect(gainNode);
 
                 sourceNode = audioContext.createMediaStreamSource(stream);
+                sourceNode.channelInterpretation = 'speaker';
+
                 sourceNode.connect(gainNode);
               }
               return {
