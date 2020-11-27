@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import React from 'react';
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash } from 'react-icons/fa';
 import { GiSpeaker, GiSpeakerOff } from 'react-icons/gi';
@@ -18,8 +18,7 @@ import { useAudioContext } from '../lib/useAudioContext';
 const StageDeviceController = (): JSX.Element => {
   const localDevice = useLocalDevice();
   const { updateDevice } = useStageActions();
-  const { audioContext, createAudioContext } = useAudioContext();
-  const [valid, setValid] = useState<boolean>(audioContext && audioContext.state === 'running');
+  const { audioContext, started } = useAudioContext();
   const [openMobileSideBar, setMobileSideBarOpen] = React.useState<boolean>(false);
   const [openSettings, setOpenSettings] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState<string>();
@@ -40,27 +39,6 @@ const StageDeviceController = (): JSX.Element => {
       document.removeEventListener('mousedown', handleClick);
     };
   }, []);
-
-  useEffect(() => {
-    setValid(audioContext && audioContext.state === 'running');
-  }, [audioContext]);
-
-  // TODO: [DS-71] @delude88 please check business logic
-  const start = useCallback(() => {
-    if (!audioContext) {
-      return createAudioContext().then((createdAudioContext) => {
-        if (createdAudioContext.state === 'suspended') {
-          return createdAudioContext.resume().then(() => {
-            if (createdAudioContext.state === 'running') setValid(true);
-          });
-        }
-        return null;
-      });
-    }
-    return audioContext.resume().then(() => {
-      if (audioContext.state === 'running') setValid(true);
-    });
-  }, [audioContext]);
 
   return (
     <Box>
@@ -107,8 +85,13 @@ const StageDeviceController = (): JSX.Element => {
           </Button>
         )}
 
-        <Button variant={valid ? 'circleGray' : 'circle'} onClick={() => start()}>
-          {valid ? (
+        <Button
+          variant={started ? 'circleGray' : 'circle'}
+          onClick={() => {
+            if (audioContext) audioContext.resume();
+          }}
+        >
+          {started ? (
             <GiSpeakerOff size={24} name="Speaker off" />
           ) : (
             <GiSpeaker size={24} name="Speaker on" />

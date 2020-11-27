@@ -27,19 +27,19 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
 
-      <ErrorsConsumer>
-        {({ reportError }) => (
-          <AuthContextProvider>
-            <AuthContextConsumer>
-              {({ token }) => (
-                <DigitalStageProvider
-                  apiUrl={process.env.NEXT_PUBLIC_API_URL}
-                  routerDistUrl={process.env.NEXT_PUBLIC_ROUTERS_URL}
-                  token={token}
-                  addErrorHandler={reportError}
-                >
-                  <AudioContextProvider>
-                    <ThemenProviderThemeUi theme={theme}>
+      <ThemenProviderThemeUi theme={theme}>
+        <ErrorsConsumer>
+          {({ reportError }) => (
+            <AuthContextProvider>
+              <AuthContextConsumer>
+                {({ token }) => (
+                  <DigitalStageProvider
+                    apiUrl={process.env.NEXT_PUBLIC_API_URL}
+                    routerDistUrl={process.env.NEXT_PUBLIC_ROUTERS_URL}
+                    token={token}
+                    addErrorHandler={reportError}
+                  >
+                    <AudioContextProvider>
                       <StageWebAudioProvider>
                         <StageJoinerProvider>
                           <ErrorHandler>
@@ -49,14 +49,14 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                           </ErrorHandler>
                         </StageJoinerProvider>
                       </StageWebAudioProvider>
-                    </ThemenProviderThemeUi>
-                  </AudioContextProvider>
-                </DigitalStageProvider>
-              )}
-            </AuthContextConsumer>
-          </AuthContextProvider>
-        )}
-      </ErrorsConsumer>
+                    </AudioContextProvider>
+                  </DigitalStageProvider>
+                )}
+              </AuthContextConsumer>
+            </AuthContextProvider>
+          )}
+        </ErrorsConsumer>
+      </ThemenProviderThemeUi>
     </>
   );
 };

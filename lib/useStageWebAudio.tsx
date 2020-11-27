@@ -12,7 +12,7 @@ import {
   useCustomGroups,
   useCustomStageMembers,
   useGroups,
-  useStageMembers,
+  useStageMembersRaw,
 } from './use-digital-stage/hooks';
 
 export interface StageWebAudioNodes {
@@ -32,17 +32,18 @@ export interface StageWebAudioConsumerNodes {
   };
 }
 
-export interface StageWebAudioProps {
+export interface IStateWebAudioContext {
   byGroup: StageWebAudioNodes;
   byStageMember: StageWebAudioNodes;
   byAudioProducer: StageWebAudioConsumerNodes;
 }
 
-const StageWebAudioContext = React.createContext<StageWebAudioProps>(undefined);
+const StageWebAudioContext = React.createContext<IStateWebAudioContext>(undefined);
 
-export const useStageWebAudio = () => React.useContext(StageWebAudioContext);
+export const useStageWebAudio = (): IStateWebAudioContext =>
+  React.useContext<IStateWebAudioContext>(StageWebAudioContext);
 
-const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
+const StageWebAudioProvider = (props: { children: React.ReactNode }): JSX.Element => {
   const { children } = props;
   const { audioContext } = useAudioContext();
   const audioPlayerRef = useRef<HTMLAudioElement>();
@@ -56,7 +57,7 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
   const stageId = useCurrentStageId();
   const groups = useGroups();
   const customGroups = useCustomGroups();
-  const stageMembers = useStageMembers();
+  const stageMembers = useStageMembersRaw();
   const customStageMembers = useCustomStageMembers();
   const audioProducers = useAudioProducers();
   const customAudioProducers = useCustomAudioProducers();
@@ -80,7 +81,7 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
       // rootNode.connect(dest);
       // audioPlayerRef.current.srcObject = dest.stream;
     }
-  }, [audioContext, audioPlayerRef]);
+  }, [audioPlayerRef]);
 
   useEffect(() => {
     if (audioContext && rootNode) {
@@ -157,7 +158,7 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
         });
       }
     }
-  }, [audioContext, rootNode, stageId, groups, customGroups]);
+  }, [rootNode, stageId, groups, customGroups]);
 
   useEffect(() => {
     if (audioContext) {
@@ -238,7 +239,7 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
         });
       }
     }
-  }, [audioContext, stageId, groupNodes, stageMembers, customStageMembers]);
+  }, [stageId, groupNodes, stageMembers, customStageMembers]);
 
   useEffect(() => {
     if (audioContext) {
@@ -333,13 +334,7 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
         });
       }
     }
-  }, [
-    audioContext,
-    stageMemberNodes,
-    audioProducers,
-    audioConsumers.byProducer,
-    customAudioProducers,
-  ]);
+  }, [stageMemberNodes, audioProducers, audioConsumers, customAudioProducers]);
 
   return (
     <StageWebAudioContext.Provider

@@ -1,43 +1,61 @@
-import React, { Context, createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { AudioContext as RealAudioContext, IAudioContext } from 'standardized-audio-context';
-import webAudioTouchUnlock from './webAudioTouchUnlock';
-import { useErrors } from '../useErrors';
+import React, { Context, createContext, useContext, useEffect, useState } from 'react';
+import {
+  AudioContext as StandardizedAudioContext,
+  IAudioContext,
+} from 'standardized-audio-context';
+import debug from 'debug';
 
-interface AudioContextProps {
+const d = debug('useAudioContext');
+
+export interface TAudioContext {
   audioContext?: IAudioContext;
-
-  createAudioContext(): Promise<IAudioContext>;
+  started: boolean;
 }
 
-const AudioContext: Context<AudioContextProps> = createContext<AudioContextProps>(undefined);
+const AudioContext: Context<TAudioContext> = createContext<TAudioContext>(undefined);
 
 export const AudioContextProvider = (props: { children: React.ReactNode }): JSX.Element => {
   const { children } = props;
-  const [context, setContext] = useState<IAudioContext>(undefined);
-  const { reportError } = useErrors();
+  const [audioContext, setAudioContext] = useState<IAudioContext>(undefined);
+  const [started, setStarted] = useState<boolean>(false);
 
-  const createAudioContext = useCallback(async (): Promise<IAudioContext> => {
-    if (context) {
-      return context;
-    }
-    const audioContext: IAudioContext = new RealAudioContext();
+  useEffect(() => {
+    const standardizedAudioContext = new StandardizedAudioContext();
+    standardizedAudioContext.addEventListener('statechanged', () => {
+      setStarted(standardizedAudioContext.state === 'running');
+    });
+    setAudioContext(standardizedAudioContext);
+    standardizedAudioContext.resume().then(() => {
+      d('Audio context running and ready!');
+      setStarted(true);
+    });
 
-    return webAudioTouchUnlock(audioContext).then(() => audioContext);
+    return () => {
+      d('Closing audio context');
+      standardizedAudioContext.close();
+    };
   }, []);
 
   useEffect(() => {
-    createAudioContext()
-      .then((audioContext) => {
-        if (audioContext) setContext(audioContext);
-      })
-      .catch((error) => reportError(error.message));
-  }, []);
+    if (audioContext && audioContext.state === 'suspended' && 'ontouchstart' in window) {
+      d('Add method to start audio context to touchstart and touchend of body');
+      const resume = () => {
+        audioContext.resume();
+      };
+      document.body.addEventListener('touchstart', resume, false);
+      document.body.addEventListener('touchend', resume, false);
+      return () => {
+        document.body.removeEventListener('touchstart', resume);
+        document.body.removeEventListener('touchend', resume);
+      };
+    }
+  }, [audioContext]);
 
   return (
     <AudioContext.Provider
       value={{
-        audioContext: context,
-        createAudioContext,
+        audioContext,
+        started,
       }}
     >
       {children}
@@ -45,4 +63,4 @@ export const AudioContextProvider = (props: { children: React.ReactNode }): JSX.
   );
 };
 
-export const useAudioContext = () => useContext<AudioContextProps>(AudioContext);
+export const useAudioContext = (): TAudioContext => useContext<TAudioContext>(AudioContext);
