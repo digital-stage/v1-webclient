@@ -1,3 +1,16 @@
+# [0.14.0](https://github.com/digital-stage/webclient/compare/v0.13.4...v0.14.0) (2020-11-27)
+
+
+### Bug Fixes
+
+* position left of mobile sidebar ([6db9215](https://github.com/digital-stage/webclient/commit/6db92153b4f1210d0e5c93030ef56a1d075f09ab))
+* run prettier ([81bd89a](https://github.com/digital-stage/webclient/commit/81bd89a8564668792ede5fd52cbb78e0866f03f8))
+
+
+### Features
+
+* mobile side menu and user without image view ([0323fd9](https://github.com/digital-stage/webclient/commit/0323fd9657a2fd8b05229321eabeb26d1b12a7cf))
+
 ## [0.13.4](https://github.com/digital-stage/webclient/compare/v0.13.3...v0.13.4) (2020-11-27)
 
 
