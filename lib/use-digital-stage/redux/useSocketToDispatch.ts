@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { TeckosClient } from 'teckos-client';
 import {
   ServerDeviceEvents,
   ServerGlobalEvents,
@@ -22,7 +23,6 @@ import {
 import useDispatch from './useDispatch';
 import allActions from './actions';
 import { InitialStagePackage } from './actions/stageActions';
-import { TeckosClient } from 'teckos-client';
 
 const useSocketToDispatch = (): ((socket: TeckosClient) => void) => {
   const dispatch = useDispatch();

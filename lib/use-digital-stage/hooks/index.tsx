@@ -11,7 +11,8 @@ import useGroups from './useGroups';
 import useLocalDevice from './useLocalDevice';
 import useSelector from './useSelector';
 import useStageMember from './useStageMember';
-import useStageMembers from './useStageMembersRaw';
+import useStageMembers from './useStageMembers';
+import useStageMembersRaw from './useStageMembersRaw';
 import useVideoConsumers from './useVideoConsumers';
 import useStages from './useStages';
 import useAudioConsumers from './useAudioConsumers';
@@ -45,6 +46,7 @@ export {
   useGroups,
   useGroup,
   useGroupsByStage,
+  useStageMembersRaw,
   useStageMembers,
   useStageMember,
   useStageMembersByStage,

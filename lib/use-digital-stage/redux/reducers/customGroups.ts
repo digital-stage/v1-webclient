@@ -52,13 +52,17 @@ function customGroups(
     }
     case ServerStageEvents.CUSTOM_GROUP_REMOVED: {
       const id = action.payload as string;
-      const { groupId } = state.byId[id];
-      return {
-        ...state,
-        byId: omit(state.byId, id),
-        byGroup: omit(state.byGroup, groupId),
-        allIds: without<string>(state.allIds, id),
-      };
+      if (state.byId[id]) {
+        // TODO: Why is the line above necessary?
+        const { groupId } = state.byId[id];
+        return {
+          ...state,
+          byId: omit(state.byId, id),
+          byGroup: omit(state.byGroup, groupId),
+          allIds: without<string>(state.allIds, id),
+        };
+      }
+      return state;
     }
     default:
       return state;

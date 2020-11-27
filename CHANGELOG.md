@@ -1,3 +1,31 @@
+## [0.13.3](https://github.com/digital-stage/webclient/compare/v0.13.2...v0.13.3) (2020-11-26)
+
+
+### Bug Fixes
+
+* removal of customStageMember resulted in typeerror ([90ba339](https://github.com/digital-stage/webclient/commit/90ba339a3f18b7f9d5679b089391e7e3c659ad9c))
+
+## [0.13.2](https://github.com/digital-stage/webclient/compare/v0.13.1...v0.13.2) (2020-11-26)
+
+
+### Bug Fixes
+
+* group assigment inside mixer is wrong ([c04354a](https://github.com/digital-stage/webclient/commit/c04354a5d12c912d2535eb02db3c9346b76e0bc1))
+
+## [0.13.1](https://github.com/digital-stage/webclient/compare/v0.13.0...v0.13.1) (2020-11-26)
+
+
+### Bug Fixes
+
+* socket communication may be not established when calling actions ([9bf51c2](https://github.com/digital-stage/webclient/commit/9bf51c22b473f4d98b1ab156ed75a980d4976189))
+
+# [0.13.0](https://github.com/digital-stage/webclient/compare/v0.12.3...v0.13.0) (2020-11-26)
+
+
+### Features
+
+* add top menu change ([d8150d7](https://github.com/digital-stage/webclient/commit/d8150d708c23168021e2baf3a56c8d0d92979272))
+
 ## [0.12.3](https://github.com/digital-stage/webclient/compare/v0.12.2...v0.12.3) (2020-11-25)
 
 

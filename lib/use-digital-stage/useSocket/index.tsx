@@ -114,6 +114,7 @@ const SocketProvider = (props: { children: React.ReactNode; apiUrl: string }): J
         setSocket(undefined);
       };
     }
+    return undefined;
   }, [socket, status]);
 
   return (

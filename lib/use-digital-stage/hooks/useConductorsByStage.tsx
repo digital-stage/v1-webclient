@@ -1,5 +1,5 @@
-import { RootReducer, StageMemberWithUserData } from '../types';
 import { useSelector } from 'react-redux';
+import { RootReducer, StageMemberWithUserData } from '../types';
 
 const useConductorsByStage = (stageId: string): StageMemberWithUserData[] =>
   useSelector<RootReducer, StageMemberWithUserData[]>((state) =>
