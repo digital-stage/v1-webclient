@@ -99,7 +99,11 @@ const StageDeviceController = (): JSX.Element => {
               })
             }
           >
-            {localDevice.sendAudio ? <FaMicrophone size="24px" /> : <FaMicrophoneSlash size="24px" />}
+            {localDevice.sendAudio ? (
+              <FaMicrophone size="24px" />
+            ) : (
+              <FaMicrophoneSlash size="24px" />
+            )}
           </Button>
         )}
 
@@ -107,8 +111,8 @@ const StageDeviceController = (): JSX.Element => {
           {valid ? (
             <GiSpeakerOff size={24} name="Speaker off" />
           ) : (
-              <GiSpeaker size={24} name="Speaker on" />
-            )}
+            <GiSpeaker size={24} name="Speaker on" />
+          )}
         </Button>
 
         <Link href="/leave">
