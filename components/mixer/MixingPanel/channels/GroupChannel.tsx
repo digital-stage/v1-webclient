@@ -43,7 +43,7 @@ const GroupChannel = (props: { groupId: string }) => {
 
   const handleCustomVolumeChange = useCallback(
     (volume: number, muted: boolean) => {
-      setCustomGroup(group._id, volume, muted);
+      setCustomGroup(group._id, { volume, muted });
     },
     [group, setCustomGroup]
   );

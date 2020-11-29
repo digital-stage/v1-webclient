@@ -38,7 +38,12 @@ const GroupOnlyChannel = (props: { groupId: string }): JSX.Element => {
               })
           : undefined
       }
-      onCustomVolumeChanged={(volume, muted) => setCustomGroup(group._id, volume, muted)}
+      onCustomVolumeChanged={(volume, muted) =>
+        setCustomGroup(group._id, {
+          volume,
+          muted,
+        })
+      }
       onCustomVolumeReset={() => {
         if (removeCustomGroup) return removeCustomGroup(customGroup._id);
         return null;

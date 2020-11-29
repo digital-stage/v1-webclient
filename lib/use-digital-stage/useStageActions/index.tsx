@@ -48,7 +48,7 @@ export interface TStageActionContext {
   leaveStageForGood(id: string): void;
 
   // Customized group
-  setCustomGroup(groupId: string, volume: number, muted: boolean): void;
+  setCustomGroup(groupId: string, update: Partial<ThreeDimensionAudioProperties>): void;
 
   removeCustomGroup(customGroupId: string): void;
 
@@ -374,13 +374,12 @@ const StageActionsProvider = (props: {
   );
 
   const setCustomGroup = useCallback(
-    (groupId: string, volume: number, muted: boolean) => {
+    (groupId: string, update: Partial<ThreeDimensionAudioProperties>) => {
       if (socket) {
         d(`setCustomGroup(${groupId}, ...)`);
         const payload: SetCustomGroupPayload = {
           groupId,
-          volume,
-          muted,
+          update,
         };
         socket.emit(ClientStageEvents.SET_CUSTOM_GROUP, payload);
       } else {
