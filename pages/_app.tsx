@@ -6,7 +6,7 @@ import theme from '../utils/theme';
 import { AuthContextConsumer, AuthContextProvider } from '../lib/useAuth';
 import StageJoiner from '../components/new/elements/StageJoiner';
 import { AudioContextProvider } from '../lib/useAudioContext';
-import StageWebAudioProvider from '../lib/useStageWebAudio';
+import { StageWebAudioProvider } from '../lib/useStageWebAudio';
 import { ErrorsConsumer } from '../lib/useErrors';
 import ErrorHandler from '../components/ErrorHandler';
 import { DigitalStageProvider } from '../lib/use-digital-stage';

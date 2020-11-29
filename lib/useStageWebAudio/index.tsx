@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { IAnalyserNode, IAudioContext, IAudioNode, IGainNode } from 'standardized-audio-context';
 
 import { IMediaStreamAudioSourceNode } from 'standardized-audio-context/src/interfaces/media-stream-audio-source-node';
-import useAudioContext from './useAudioContext';
 import {
   useAudioConsumers,
   useAudioProducers,
@@ -12,7 +11,8 @@ import {
   useCustomStageMembers,
   useGroups,
   useStageMembersRaw,
-} from './use-digital-stage/hooks';
+} from './../use-digital-stage/hooks';
+import useAudioContext from './../useAudioContext';
 
 export interface StageWebAudioNodes {
   [id: string]: {
@@ -65,9 +65,19 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
     if (audioContext && audioPlayerRef && !rootNode) {
       // Create root node
 
+      const splitter = audioContext.createChannelSplitter(2);
+      const merger = audioContext.createChannelMerger(2);
+
+      merger.connect(audioContext.destination);
+
+      splitter.connect(merger, 0, 0);
+      splitter.connect(merger, 0, 1);
+
       const createdRootGainNode = audioContext.createGain();
       createdRootGainNode.gain.value = 1;
-      createdRootGainNode.connect(audioContext.destination);
+      //createdRootGainNode.connect(audioContext.destination);
+
+      createdRootGainNode.connect(splitter, 0);
 
       const createdRootNode = audioContext.createChannelMerger();
       createdRootNode.connect(createdRootGainNode);
@@ -352,4 +362,5 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
     </StageWebAudioContext.Provider>
   );
 };
-export default StageWebAudioProvider;
+export { StageWebAudioProvider };
+export default useStageWebAudio;
