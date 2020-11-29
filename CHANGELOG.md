@@ -1,3 +1,10 @@
+## [0.14.5](https://github.com/digital-stage/webclient/compare/v0.14.4...v0.14.5) (2020-11-29)
+
+
+### Bug Fixes
+
+* audio playback on left channel only ([9588e23](https://github.com/digital-stage/webclient/commit/9588e23405c77d1cc70aec375dace2e7e011635a))
+
 ## [0.14.4](https://github.com/digital-stage/webclient/compare/v0.14.3...v0.14.4) (2020-11-29)
 
 
