@@ -7,12 +7,12 @@ import debug from 'debug';
 
 const d = debug('useAudioContext');
 
-export interface TAudioContext {
+interface AudioContextProps {
   audioContext?: IAudioContext;
-  started: boolean;
+  started?: boolean;
 }
 
-const AudioContext: Context<TAudioContext> = createContext<TAudioContext>(undefined);
+const AudioContext: Context<AudioContextProps> = createContext<AudioContextProps>(undefined);
 
 export const AudioContextProvider = (props: { children: React.ReactNode }): JSX.Element => {
   const { children } = props;
@@ -63,4 +63,6 @@ export const AudioContextProvider = (props: { children: React.ReactNode }): JSX.
   );
 };
 
-export const useAudioContext = (): TAudioContext => useContext<TAudioContext>(AudioContext);
+const useAudioContext = () => useContext<AudioContextProps>(AudioContext);
+
+export default useAudioContext;

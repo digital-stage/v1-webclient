@@ -13,7 +13,7 @@ import useStageActions from '../lib/use-digital-stage/useStageActions';
 import MobileSideBar from './new/elements/Menu/SideBar/MobileSideBar';
 import SettingsModal from './settings';
 import MixingPanelModal from './MixingPanelModal';
-import { useAudioContext } from '../lib/useAudioContext';
+import useAudioContext from '../lib/useAudioContext';
 
 const StageDeviceController = (): JSX.Element => {
   const localDevice = useLocalDevice();

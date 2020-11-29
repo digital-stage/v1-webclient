@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { IAnalyserNode, IAudioContext, IAudioNode, IGainNode } from 'standardized-audio-context';
 
 import { IMediaStreamAudioSourceNode } from 'standardized-audio-context/src/interfaces/media-stream-audio-source-node';
-
-import { useAudioContext } from './useAudioContext';
+import useAudioContext from './useAudioContext';
 import {
   useAudioConsumers,
   useAudioProducers,
@@ -32,21 +31,21 @@ export interface StageWebAudioConsumerNodes {
   };
 }
 
-export interface IStateWebAudioContext {
+export interface StageWebAudioProps {
   byGroup: StageWebAudioNodes;
   byStageMember: StageWebAudioNodes;
   byAudioProducer: StageWebAudioConsumerNodes;
 }
 
-const StageWebAudioContext = React.createContext<IStateWebAudioContext>(undefined);
+const StageWebAudioContext = React.createContext<StageWebAudioProps>(undefined);
 
-export const useStageWebAudio = (): IStateWebAudioContext =>
-  React.useContext<IStateWebAudioContext>(StageWebAudioContext);
+export const useStageWebAudio = () => React.useContext(StageWebAudioContext);
 
-const StageWebAudioProvider = (props: { children: React.ReactNode }): JSX.Element => {
+const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
   const { children } = props;
   const { audioContext } = useAudioContext();
   const audioPlayerRef = useRef<HTMLAudioElement>();
+  const [, setRootGainNode] = useState<IGainNode<IAudioContext>>();
   const [rootNode, setRootNode] = useState<IAudioNode<IAudioContext>>();
   const [groupNodes, setGroupNodes] = useState<StageWebAudioNodes>({});
   const [stageMemberNodes, setStageMemberNodes] = useState<StageWebAudioNodes>({});
@@ -65,24 +64,22 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }): JSX.Elemen
   useEffect(() => {
     if (audioContext && audioPlayerRef && !rootNode) {
       // Create root node
-      const splitter = audioContext.createChannelSplitter();
-      const merger = audioContext.createChannelMerger();
 
-      merger.connect(audioContext.destination);
-      splitter.connect(merger, 0, 0);
-      splitter.connect(merger, 0, 1);
+      const createdRootGainNode = audioContext.createGain();
+      createdRootGainNode.gain.value = 1;
+      createdRootGainNode.connect(audioContext.destination);
 
-      const createdRootNode = audioContext.createGain();
-      createdRootNode.gain.value = 1;
-      createdRootNode.connect(splitter);
+      const createdRootNode = audioContext.createChannelMerger();
+      createdRootNode.connect(createdRootGainNode);
 
+      setRootGainNode(createdRootGainNode);
       setRootNode(createdRootNode);
 
       // const dest = audioContext.createMediaStreamDestination();
       // rootNode.connect(dest);
       // audioPlayerRef.current.srcObject = dest.stream;
     }
-  }, [audioPlayerRef]);
+  }, [audioContext, audioPlayerRef]);
 
   useEffect(() => {
     if (audioContext && rootNode) {
@@ -159,7 +156,7 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }): JSX.Elemen
         });
       }
     }
-  }, [rootNode, stageId, groups, customGroups]);
+  }, [audioContext, rootNode, stageId, groups, customGroups]);
 
   useEffect(() => {
     if (audioContext) {
@@ -240,7 +237,7 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }): JSX.Elemen
         });
       }
     }
-  }, [stageId, groupNodes, stageMembers, customStageMembers]);
+  }, [audioContext, stageId, groupNodes, stageMembers, customStageMembers]);
 
   useEffect(() => {
     if (audioContext) {
@@ -309,8 +306,6 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }): JSX.Elemen
                 // sourceNode.connect(gainNode);
 
                 sourceNode = audioContext.createMediaStreamSource(stream);
-                sourceNode.channelInterpretation = 'speaker';
-
                 sourceNode.connect(gainNode);
               }
               return {
@@ -337,7 +332,13 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }): JSX.Elemen
         });
       }
     }
-  }, [stageMemberNodes, audioProducers, audioConsumers, customAudioProducers]);
+  }, [
+    audioContext,
+    stageMemberNodes,
+    audioProducers,
+    audioConsumers.byProducer,
+    customAudioProducers,
+  ]);
 
   return (
     <StageWebAudioContext.Provider
