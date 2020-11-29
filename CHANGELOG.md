@@ -1,3 +1,13 @@
+## [0.14.3](https://github.com/digital-stage/webclient/compare/v0.14.2...v0.14.3) (2020-11-27)
+
+
+### Bug Fixes
+
+* audio items has been created inside inf loop ([d88507a](https://github.com/digital-stage/webclient/commit/d88507a9c8eeae1912db15b1d094a183a7abe02d))
+* missing package-lock and updated package project name ([e74bebe](https://github.com/digital-stage/webclient/commit/e74bebe2ab77e24bd662ef45d78fa8fac0fd1d96))
+* mixer panel was not working properly ([b98bc5d](https://github.com/digital-stage/webclient/commit/b98bc5de2a79ff00af09caf41a16e72ec0843e41))
+* removed packge lock in favor of yarn ([e73763b](https://github.com/digital-stage/webclient/commit/e73763b106c7d7e519a4d2fc4422ff57ac20881a))
+
 ## [0.14.2](https://github.com/digital-stage/webclient/compare/v0.14.1...v0.14.2) (2020-11-27)
 
 
