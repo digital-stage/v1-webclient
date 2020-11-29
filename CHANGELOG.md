@@ -1,3 +1,10 @@
+## [0.14.4](https://github.com/digital-stage/webclient/compare/v0.14.3...v0.14.4) (2020-11-29)
+
+
+### Bug Fixes
+
+* added working audio configuration from example ([73e771d](https://github.com/digital-stage/webclient/commit/73e771d76cb47147e06c7362a152d3c0acf1317d))
+
 ## [0.14.3](https://github.com/digital-stage/webclient/compare/v0.14.2...v0.14.3) (2020-11-27)
 
 
