@@ -1,3 +1,12 @@
+## [0.14.6](https://github.com/digital-stage/webclient/compare/v0.14.5...v0.14.6) (2020-11-30)
+
+
+### Bug Fixes
+
+* automatically audio and video device using event handling ([1c49e1d](https://github.com/digital-stage/webclient/commit/1c49e1daf33c1292dcf7444d0573ab31496f2063))
+* sign up and in was not possible ([f7fc01a](https://github.com/digital-stage/webclient/commit/f7fc01a73992ead0493610fc405dd0b47badfbc4))
+* spinner unloads components, this is unexpected behavior ([2d78e78](https://github.com/digital-stage/webclient/commit/2d78e787c1dbe7afbc82ef441b51e4e17b623d6d))
+
 ## [0.14.5](https://github.com/digital-stage/webclient/compare/v0.14.4...v0.14.5) (2020-11-29)
 
 
