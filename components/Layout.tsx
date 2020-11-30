@@ -16,6 +16,8 @@ interface Props {
   stage?: Stage;
 }
 
+const LOADER_DEACTIVATED = true;
+
 const Layout = ({ children, sidebar, auth, stage }: Props): JSX.Element => {
   const { loading } = useAuth();
 
@@ -27,7 +29,7 @@ const Layout = ({ children, sidebar, auth, stage }: Props): JSX.Element => {
         minHeight: '100vh',
       }}
     >
-      {loading ? (
+      {!LOADER_DEACTIVATED && loading ? (
         <PageSpinner />
       ) : auth ? (
         <Box>{children}</Box>
