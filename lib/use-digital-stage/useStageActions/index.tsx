@@ -1,5 +1,5 @@
 import debug from 'debug';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Device, Stage, Group, ThreeDimensionAudioProperties } from '../types';
 import useSocket from '../useSocket';
 import useCurrentStageId from '../hooks/useCurrentStageId';
@@ -129,9 +129,13 @@ const StageActionsProvider = (props: {
   handleError: (error: Error) => void;
 }): JSX.Element => {
   const { children, handleError } = props;
-  const socketAPI = useSocket();
-  const { socket } = socketAPI;
+  const { socket } = useSocket();
   const stageId = useCurrentStageId();
+
+  useEffect(() => {
+    console.debug('SOCKET IS NOW:');
+    console.debug(socket);
+  }, [socket]);
 
   const updateDevice = useCallback(
     (deviceId: string, device: Partial<Omit<Device, '_id'>>) => {

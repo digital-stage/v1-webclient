@@ -1,10 +1,11 @@
 /* eslint-disable react/destructuring-assignment */
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React from 'react';
-import { jsx, Box, Flex, Text, Heading } from 'theme-ui';
+import React, { useCallback } from 'react';
+import { jsx, Box, Flex, Text, Heading, Button } from 'theme-ui';
 import Modal from '../new/elements/Modal';
 import { SettingsModalItems } from '../new/elements/PageWrapperWithStage/MenuItems';
+import useDigitalStage from '../../lib/use-digital-stage';
 
 const SettingsModal = (props: {
   isOpen: boolean;
@@ -12,6 +13,7 @@ const SettingsModal = (props: {
   selected: string;
 }): JSX.Element => {
   const [selected, setSelected] = React.useState(props.selected);
+  const { refreshLocalDevice: refreshLocalDeviceInt } = useDigitalStage();
 
   React.useEffect(() => {
     setSelected(props.selected);
@@ -21,6 +23,10 @@ const SettingsModal = (props: {
     setSelected(selected);
   }, [selected]);
 
+  const refreshLocalDevice = useCallback(() => {
+    if (refreshLocalDeviceInt) refreshLocalDeviceInt();
+  }, [refreshLocalDeviceInt]);
+
   return (
     <Modal isOpen={props.isOpen} onClose={props.onClose} variant="dark" type="settings">
       <Flex>
@@ -28,6 +34,7 @@ const SettingsModal = (props: {
           <Heading ml={3} mb={3}>
             Settings
           </Heading>
+          <Button onClick={refreshLocalDevice}>Refresh</Button>
           {SettingsModalItems.map((item, i) => {
             return (
               <Flex
