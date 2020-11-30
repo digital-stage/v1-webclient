@@ -13,6 +13,7 @@ export interface Values {
   password: string;
   staySignedIn: boolean;
 }
+
 export interface IError {
   email?: string;
   password?: string;
@@ -22,11 +23,10 @@ export interface IError {
 const SignInForm = (): JSX.Element => {
   const { signInWithEmailAndPassword } = useAuth();
 
-  const [msg, setMsg] = React.useState({
-    state: false,
-    type: null,
-    kids: null,
-  });
+  const [message, setMessage] = React.useState<{
+    type: 'danger' | 'warning' | 'info' | 'sucess';
+    content: string;
+  }>();
 
   const SignInSchema = Yup.object().shape({
     email: Yup.string()
@@ -45,23 +45,23 @@ const SignInForm = (): JSX.Element => {
         }}
         validationSchema={SignInSchema}
         // eslint-disable-next-line max-len
-        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) =>
-          signInWithEmailAndPassword(values.email, values.password, values.staySignedIn)
+        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) => {
+          setMessage(undefined);
+          return signInWithEmailAndPassword(values.email, values.password, values.staySignedIn)
             .then(() => {
               resetForm(null);
             })
-            .catch((err) =>
-              setMsg({
-                state: true,
+            .catch((err) => {
+              setMessage({
                 type: 'danger',
-                kids: { err },
-              })
-            )
-        }
+                content: err.message,
+              });
+            });
+        }}
       >
         {({ errors, touched }) => (
           <Form>
-            {msg.state && <Message variant={msg.type}>{msg.kids}</Message>}
+            {message && <Message variant={message.type}>{message.content}</Message>}
 
             <Field
               as={InputField}

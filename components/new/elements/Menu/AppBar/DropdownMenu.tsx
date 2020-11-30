@@ -8,7 +8,9 @@ import { useCurrentUser } from '../../../../../lib/use-digital-stage/hooks';
 
 interface Props {
   isOpen: boolean;
+
   onSelect(selected: string);
+
   onClose(selected: string);
 }
 
@@ -34,9 +36,11 @@ const DropdownMenu = ({ isOpen, onSelect }: Props): JSX.Element => {
       <Text variant="title" sx={{ color: 'text', mb: 3 }}>
         {user.name}
       </Text>
-      <Text variant="subTitle" sx={{ color: 'text', mb: 3 }}>
-        {authUser.email}
-      </Text>
+      {authUser ? (
+        <Text variant="subTitle" sx={{ color: 'text', mb: 3 }}>
+          {authUser.email}
+        </Text>
+      ) : undefined}
       <Divider sx={{ color: 'text' }} />
       {AppBarItems.map((item, i) => {
         return (
