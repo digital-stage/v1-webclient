@@ -28,7 +28,7 @@ const Index = (): JSX.Element => {
           {stageId ? (
             <React.Fragment>
               {/* <StagePane /> */}
-              {/* TODO: test new arrangment of groups */}
+              {/* test new arrangment of groups */}
               <StageViewTest />
               <StageDeviceController />
             </React.Fragment>
