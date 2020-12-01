@@ -17,7 +17,7 @@ import useStageJoiner from '../../../lib/useStageJoiner';
 const StageJoiner = (): JSX.Element => {
   const ready = useSelector((state) => state.global.ready);
   const { stageId, groupId, password, reset } = useStageJoiner();
-  const { joinStage } = useStageActions();
+  const stageActions = useStageActions();
   const [retries, setRetries] = useState<number>(0);
   const [wrongPassword, setWrongPassword] = useState<boolean>();
   const [notFound, setNotFound] = useState<boolean>();
@@ -32,8 +32,11 @@ const StageJoiner = (): JSX.Element => {
   const retryJoiningStage = useCallback(
     (stageId: string, groupId: string, password?: string) => {
       // Try to connect
-      joinStage(stageId, groupId, password)
+      console.log('Try to join ', stageId, groupId, password);
+      stageActions
+        .joinStage(stageId, groupId, password)
         .then(() => {
+          console.log('JOINED');
           clear();
         })
         .catch((error) => {
@@ -44,18 +47,18 @@ const StageJoiner = (): JSX.Element => {
           }
         });
     },
-    [joinStage, clear]
+    [stageActions, clear]
   );
 
   React.useEffect(() => {
-    if (ready) {
+    if (ready && stageActions) {
       if (stageId && groupId) {
         setNotFound(false);
         setWrongPassword(false);
         retryJoiningStage(stageId, groupId, password);
       }
     }
-  }, [ready, stageId, groupId, password]);
+  }, [ready, stageId, groupId, password, stageActions]);
 
   return (
     <>
