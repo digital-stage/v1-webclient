@@ -1,3 +1,10 @@
+## [0.14.7](https://github.com/digital-stage/webclient/compare/v0.14.6...v0.14.7) (2020-12-01)
+
+
+### Bug Fixes
+
+* joining of stage is not posssible due to dependency sync issues ([d6b54b2](https://github.com/digital-stage/webclient/commit/d6b54b2e71dde30280630c4f74e1c7ca08402e1e))
+
 ## [0.14.6](https://github.com/digital-stage/webclient/compare/v0.14.5...v0.14.6) (2020-11-30)
 
 
