@@ -15,6 +15,7 @@ import {
 import { Group, Stage } from '../../../../lib/use-digital-stage/types';
 import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
 import useStageJoiner from '../../../../lib/useStageJoiner';
+import useAudioContext from '../../../../lib/useAudioContext';
 
 const StageGroupList = (props: { stage: Stage }): JSX.Element => {
   const groups = useGroups();
@@ -28,6 +29,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
   const [isCreateGroupOpen, setCreateGroupIsOpen] = React.useState<boolean>(false);
   const [isModifyGroupOpen, setModifyGroupIsOpen] = React.useState<boolean>(false);
   const [isCopyLinkOpen, setCopyLinkOpen] = React.useState<boolean>();
+  const { audioContext, started } = useAudioContext();
 
   const { stage } = props;
 
@@ -94,6 +96,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                       <Button
                         variant="secondary"
                         onClick={() => {
+                          if (audioContext && !started) audioContext.resume();
                           if (
                             currentStageId &&
                             stage._id === currentStageId &&
