@@ -5,7 +5,7 @@ import { jsx, Flex, Box, Heading, IconButton } from 'theme-ui';
 import { FaVideo, FaVideoSlash } from 'react-icons/fa';
 import { HiUserCircle } from 'react-icons/hi';
 import OnlineStatus from '../OnlineStatus';
-import VideoPlayer from '../VideoPlayer';
+import VideoPlayer from '../VideoPlayer2';
 import { StageMemberWithUserData } from '../../../../lib/use-digital-stage/types';
 import { useIsStageAdmin } from '../../../../lib/use-digital-stage/hooks';
 import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
