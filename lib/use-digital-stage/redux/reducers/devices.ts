@@ -1,8 +1,9 @@
 import omit from 'lodash/omit';
 import without from 'lodash/without';
-import { DevicesCollection } from '../../types';
+import { Device, DevicesCollection } from '../../types';
 import { ServerDeviceEvents } from '../../global/SocketEvents';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import upsert from '../utils/upsert';
 
 function devices(
   state: DevicesCollection = {
@@ -23,13 +24,14 @@ function devices(
     }
     case ServerDeviceEvents.LOCAL_DEVICE_READY:
     case ServerDeviceEvents.DEVICE_ADDED:
+      const device = action.payload as Device;
       return {
         ...state,
         byId: {
           ...state.byId,
-          [action.payload._id]: action.payload,
+          [device._id]: device,
         },
-        allIds: [...state.allIds, action.payload._id],
+        allIds: upsert<string>(state.allIds, device._id),
       };
     case ServerDeviceEvents.DEVICE_CHANGED:
       return {

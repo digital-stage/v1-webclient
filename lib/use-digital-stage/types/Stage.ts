@@ -4,7 +4,7 @@ export interface Stage {
 
   // SETTINGS
   admins: string[];
-  password: string | null;
+  password?: string;
   // 3D Room specific
   width: number;
   length: number;

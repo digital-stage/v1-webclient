@@ -192,9 +192,9 @@ const StageWebAudioProvider = (props: { children: React.ReactNode }) => {
                 // Create nodes
                 const sourceNode = audioContext.createChannelMerger();
                 const gainNode = audioContext.createGain();
-                if (customItem) {
+                if (customItem && customItem.volume) {
                   gainNode.gain.value = customItem.volume;
-                } else {
+                } else if (item.volume) {
                   gainNode.gain.value = item.volume;
                 }
                 const analyserNode = audioContext.createAnalyser();

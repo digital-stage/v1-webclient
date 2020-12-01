@@ -1,8 +1,36 @@
 import omit from 'lodash/omit';
 import without from 'lodash/without';
-import { ServerStageEvents } from '../../global/SocketEvents';
+import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents';
 import { RemoteVideoProducer, RemoteVideoProducersCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import { InitialStagePackage } from '../actions/stageActions';
+import upsert from '../utils/upsert';
+
+const addVideoProducer = (
+  state: RemoteVideoProducersCollection,
+  videoProducer: RemoteVideoProducer
+): RemoteVideoProducersCollection => {
+  return {
+    ...state,
+    byId: {
+      ...state.byId,
+      [videoProducer._id]: videoProducer,
+    },
+    byStageMember: {
+      ...state.byStageMember,
+      [videoProducer.stageMemberId]: state.byStageMember[videoProducer.stageMemberId]
+        ? [...state.byStageMember[videoProducer.stageMemberId], videoProducer._id]
+        : [videoProducer._id],
+    },
+    byStage: {
+      ...state.byStage,
+      [videoProducer.stageId]: state.byStage[videoProducer.stageId]
+        ? [...state.byStage[videoProducer.stageId], videoProducer._id]
+        : [videoProducer._id],
+    },
+    allIds: upsert<string>(state.allIds, videoProducer._id),
+  };
+};
 
 function videoProducers(
   state: RemoteVideoProducersCollection = {
@@ -25,28 +53,18 @@ function videoProducers(
         allIds: [],
       };
     }
+    case ServerGlobalEvents.STAGE_JOINED: {
+      const { videoProducers } = action.payload as InitialStagePackage;
+      let updatedState = { ...state };
+      if (videoProducers)
+        videoProducers.forEach((videoProducer) => {
+          updatedState = addVideoProducer(updatedState, videoProducer);
+        });
+      return updatedState;
+    }
     case ServerStageEvents.STAGE_MEMBER_VIDEO_ADDED: {
       const videoProducer = action.payload as RemoteVideoProducer;
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          [videoProducer._id]: videoProducer,
-        },
-        byStageMember: {
-          ...state.byStageMember,
-          [videoProducer.stageMemberId]: state.byStageMember[videoProducer.stageMemberId]
-            ? [...state.byStageMember[videoProducer.stageMemberId], videoProducer._id]
-            : [videoProducer._id],
-        },
-        byStage: {
-          ...state.byStage,
-          [videoProducer.stageId]: state.byStage[videoProducer.stageId]
-            ? [...state.byStage[videoProducer.stageId], videoProducer._id]
-            : [videoProducer._id],
-        },
-        allIds: [...state.allIds, videoProducer._id],
-      };
+      return addVideoProducer(state, videoProducer);
     }
     case ServerStageEvents.STAGE_MEMBER_VIDEO_CHANGED: {
       return {

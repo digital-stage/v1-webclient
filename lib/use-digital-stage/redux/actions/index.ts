@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux';
-import stageActions from './stageActions';
+import stageActions, { InitialStagePackage } from './stageActions';
 import deviceActions from './deviceActions';
 import {
   ServerDeviceEvents,
@@ -38,7 +38,7 @@ const setReady = () => {
   };
 };
 
-const handleStageJoined = (payload: { stageId: string; groupId: string }) => {
+const handleStageJoined = (payload: InitialStagePackage) => {
   return {
     type: ServerGlobalEvents.STAGE_JOINED,
     payload,

@@ -2,6 +2,7 @@ import omit from 'lodash/omit';
 import without from 'lodash/without';
 import { LocalConsumer, LocalConsumersCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import upsert from '../utils/upsert';
 
 function audioConsumers(
   state: LocalConsumersCollection = {
@@ -42,7 +43,7 @@ function audioConsumers(
           ...state.byProducer,
           [audioConsumer.producerId]: audioConsumer._id,
         },
-        allIds: [...state.allIds, audioConsumer._id],
+        allIds: upsert<string>(state.allIds, audioConsumer._id),
       };
     }
     case AdditionalReducerTypes.REMOVE_AUDIO_CONSUMER: {

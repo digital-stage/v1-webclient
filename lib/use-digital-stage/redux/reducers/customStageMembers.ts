@@ -1,8 +1,28 @@
 import omit from 'lodash/omit';
 import without from 'lodash/without';
-import { ServerStageEvents } from '../../global/SocketEvents';
+import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents';
 import { CustomStageMember, CustomStageMembersCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import { InitialStagePackage } from '../actions/stageActions';
+import upsert from '../utils/upsert';
+
+const addCustomStageMember = (
+  state: CustomStageMembersCollection,
+  customStageMember: CustomStageMember
+): CustomStageMembersCollection => {
+  return {
+    ...state,
+    byId: {
+      ...state.byId,
+      [customStageMember._id]: customStageMember,
+    },
+    byStageMember: {
+      ...state.byStageMember,
+      [customStageMember.stageMemberId]: customStageMember._id,
+    },
+    allIds: upsert<string>(state.allIds, customStageMember._id),
+  };
+};
 
 function customStageMembers(
   state: CustomStageMembersCollection = {
@@ -23,20 +43,18 @@ function customStageMembers(
         allIds: [],
       };
     }
+    case ServerGlobalEvents.STAGE_JOINED: {
+      const { customStageMembers } = action.payload as InitialStagePackage;
+      let updatedState = { ...state };
+      if (customStageMembers)
+        customStageMembers.forEach((customStageMember) => {
+          updatedState = addCustomStageMember(updatedState, customStageMember);
+        });
+      return updatedState;
+    }
     case ServerStageEvents.CUSTOM_STAGE_MEMBER_ADDED: {
       const customStageMember = action.payload as CustomStageMember;
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          [customStageMember._id]: customStageMember,
-        },
-        byStageMember: {
-          ...state.byStageMember,
-          [customStageMember.stageMemberId]: customStageMember._id,
-        },
-        allIds: [...state.allIds, customStageMember._id],
-      };
+      return addCustomStageMember(state, customStageMember);
     }
     case ServerStageEvents.CUSTOM_STAGE_MEMBER_CHANGED: {
       return {
@@ -52,13 +70,17 @@ function customStageMembers(
     }
     case ServerStageEvents.CUSTOM_STAGE_MEMBER_REMOVED: {
       const id = action.payload as string;
-      const { stageMemberId } = state.byId[id];
-      return {
-        ...state,
-        byId: omit(state.byId, id),
-        byStageMember: omit(state.byStageMember, stageMemberId),
-        allIds: without<string>(state.allIds, id),
-      };
+      if (state.byId[id]) {
+        // TODO: Investigate the necessarity for this if
+        const { stageMemberId } = state.byId[id];
+        return {
+          ...state,
+          byId: omit(state.byId, id),
+          byStageMember: omit(state.byStageMember, stageMemberId),
+          allIds: without<string>(state.allIds, id),
+        };
+      }
+      return state;
     }
     default:
       return state;

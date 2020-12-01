@@ -24,9 +24,9 @@ export interface TDigitalStageContext {
 }
 
 interface LocalAudioAndVideoDevices {
-  inputAudioDeviceId: string;
-  inputVideoDeviceId: string;
-  outputAudioDeviceId: string;
+  inputAudioDeviceId?: string;
+  inputVideoDeviceId?: string;
+  outputAudioDeviceId?: string;
   inputAudioDevices: WebRTCDevice[];
   inputVideoDevices: WebRTCDevice[];
   outputAudioDevices: WebRTCDevice[];
@@ -58,9 +58,9 @@ const UseDigitalStageProvider = (props: {
     (currentLocalDevice?: Device): Promise<LocalAudioAndVideoDevices> => {
       return enumerateDevices().then(
         (mediaDevices): LocalAudioAndVideoDevices => {
-          let inputAudioDeviceId: string = undefined;
-          let outputAudioDeviceId: string = undefined;
-          let inputVideoDeviceId = 'default';
+          let inputAudioDeviceId: string | undefined;
+          let outputAudioDeviceId: string | undefined;
+          let inputVideoDeviceId: string | undefined;
 
           if (currentLocalDevice) {
             // Attach current ids if available
@@ -104,7 +104,11 @@ const UseDigitalStageProvider = (props: {
             outputAudioDeviceId = mediaDevices.outputAudioDevices[0].id;
           }
           if (!inputVideoDeviceId && mediaDevices.inputVideoDevices.length > 1) {
-            inputVideoDeviceId = mediaDevices.inputVideoDevices[0].id;
+            if (mediaDevices.inputVideoDevices.length > 1) {
+              inputVideoDeviceId = mediaDevices.inputVideoDevices[0].id;
+            } else {
+              inputVideoDeviceId = 'default';
+            }
           }
           return {
             inputAudioDeviceId,
@@ -136,18 +140,22 @@ const UseDigitalStageProvider = (props: {
         };
       }
     );
-  }, []);
+  }, [getLocalAudioAndVideoDevices]);
 
   const refreshLocalDevice = useCallback(() => {
     if (localDevice) {
       console.debug('DEVICE REFRESHED');
-      getLocalAudioAndVideoDevices(localDevice).then((mediaDevices) => {
-        actions.updateDevice(localDevice._id, {
-          ...mediaDevices,
+      getLocalAudioAndVideoDevices(localDevice)
+        .then((mediaDevices) => {
+          return actions.updateDevice(localDevice._id, {
+            ...mediaDevices,
+          });
+        })
+        .catch((error) => {
+          handleError(error);
         });
-      });
     }
-  }, [localDevice, getLocalAudioAndVideoDevices, actions]);
+  }, [localDevice, getLocalAudioAndVideoDevices, actions, handleError]);
 
   const startSocketConnection = useCallback(() => {
     if (token && socketAPI) {
@@ -159,7 +167,7 @@ const UseDigitalStageProvider = (props: {
           .catch((connError) => handleError(connError));
       }
     }
-  }, [token, handleError, socketAPI.status]);
+  }, [token, handleError, createInitialDevice, socketAPI.status]);
 
   useEffect(() => {
     if (ready) {
@@ -168,6 +176,7 @@ const UseDigitalStageProvider = (props: {
         navigator.mediaDevices.removeEventListener('devicechange', refreshLocalDevice);
       };
     }
+    return undefined;
   }, [ready]);
 
   useEffect(() => {

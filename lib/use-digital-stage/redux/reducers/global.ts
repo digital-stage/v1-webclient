@@ -5,6 +5,7 @@ import {
 } from '../../global/SocketEvents';
 import { GlobalStore } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import { InitialStagePackage } from '../actions/stageActions';
 
 function global(
   state: GlobalStore = {
@@ -33,10 +34,8 @@ function global(
         ready: true,
       };
     case ServerGlobalEvents.STAGE_JOINED: {
-      const { stageId, groupId } = action.payload as {
-        stageId: string;
-        groupId: string;
-      };
+      const { stageId, groupId } = action.payload as InitialStagePackage;
+      console.debug('GLOBAL');
       return {
         ...state,
         stageId,

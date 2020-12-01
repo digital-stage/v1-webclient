@@ -1,8 +1,36 @@
 import omit from 'lodash/omit';
 import without from 'lodash/without';
-import { ServerStageEvents } from '../../global/SocketEvents';
+import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents';
 import { RemoteAudioProducer, RemoteAudioProducersCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import { InitialStagePackage } from '../actions/stageActions';
+import upsert from '../utils/upsert';
+
+const addAudioProducer = (
+  state: RemoteAudioProducersCollection,
+  audioProducer: RemoteAudioProducer
+): RemoteAudioProducersCollection => {
+  return {
+    ...state,
+    byId: {
+      ...state.byId,
+      [audioProducer._id]: audioProducer,
+    },
+    byStageMember: {
+      ...state.byStageMember,
+      [audioProducer.stageMemberId]: state.byStageMember[audioProducer.stageMemberId]
+        ? [...state.byStageMember[audioProducer.stageMemberId], audioProducer._id]
+        : [audioProducer._id],
+    },
+    byStage: {
+      ...state.byStage,
+      [audioProducer.stageId]: state.byStage[audioProducer.stageId]
+        ? [...state.byStage[audioProducer.stageId], audioProducer._id]
+        : [audioProducer._id],
+    },
+    allIds: upsert<string>(state.allIds, audioProducer._id),
+  };
+};
 
 function audioProducers(
   state: RemoteAudioProducersCollection = {
@@ -25,28 +53,18 @@ function audioProducers(
         allIds: [],
       };
     }
+    case ServerGlobalEvents.STAGE_JOINED: {
+      const { audioProducers } = action.payload as InitialStagePackage;
+      let updatedState = { ...state };
+      if (audioProducers)
+        audioProducers.forEach((audioProducer) => {
+          updatedState = addAudioProducer(updatedState, audioProducer);
+        });
+      return updatedState;
+    }
     case ServerStageEvents.STAGE_MEMBER_AUDIO_ADDED: {
       const audioProducer = action.payload as RemoteAudioProducer;
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          [audioProducer._id]: audioProducer,
-        },
-        byStageMember: {
-          ...state.byStageMember,
-          [audioProducer.stageMemberId]: state.byStageMember[audioProducer.stageMemberId]
-            ? [...state.byStageMember[audioProducer.stageMemberId], audioProducer._id]
-            : [audioProducer._id],
-        },
-        byStage: {
-          ...state.byStage,
-          [audioProducer.stageId]: state.byStage[audioProducer.stageId]
-            ? [...state.byStage[audioProducer.stageId], audioProducer._id]
-            : [audioProducer._id],
-        },
-        allIds: [...state.allIds, audioProducer._id],
-      };
+      return addAudioProducer(state, audioProducer);
     }
     case ServerStageEvents.STAGE_MEMBER_AUDIO_CHANGED: {
       return {

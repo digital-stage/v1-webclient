@@ -1,8 +1,28 @@
 import omit from 'lodash/omit';
 import without from 'lodash/without';
-import { ServerStageEvents } from '../../global/SocketEvents';
+import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents';
 import { CustomRemoteAudioProducer, CustomRemoteAudioProducersCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import { InitialStagePackage } from '../actions/stageActions';
+import upsert from '../utils/upsert';
+
+const addCustomAudioProducer = (
+  state: CustomRemoteAudioProducersCollection,
+  customAudioProducer: CustomRemoteAudioProducer
+): CustomRemoteAudioProducersCollection => {
+  return {
+    ...state,
+    byId: {
+      ...state.byId,
+      [customAudioProducer._id]: customAudioProducer,
+    },
+    byAudioProducer: {
+      ...state.byAudioProducer,
+      [customAudioProducer.stageMemberAudioProducerId]: customAudioProducer._id,
+    },
+    allIds: upsert<string>(state.allIds, customAudioProducer._id),
+  };
+};
 
 function customAudioProducers(
   state: CustomRemoteAudioProducersCollection = {
@@ -23,20 +43,18 @@ function customAudioProducers(
         allIds: [],
       };
     }
+    case ServerGlobalEvents.STAGE_JOINED: {
+      const { customAudioProducers } = action.payload as InitialStagePackage;
+      let updatedState = { ...state };
+      if (customAudioProducers)
+        customAudioProducers.forEach((customAudioProducer) => {
+          updatedState = addCustomAudioProducer(updatedState, customAudioProducer);
+        });
+      return updatedState;
+    }
     case ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_ADDED: {
       const customAudioProducer = action.payload as CustomRemoteAudioProducer;
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          [customAudioProducer._id]: customAudioProducer,
-        },
-        byAudioProducer: {
-          ...state.byAudioProducer,
-          [customAudioProducer.stageMemberAudioProducerId]: customAudioProducer._id,
-        },
-        allIds: [...state.allIds, customAudioProducer._id],
-      };
+      return addCustomAudioProducer(state, customAudioProducer);
     }
     case ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_CHANGED: {
       return {

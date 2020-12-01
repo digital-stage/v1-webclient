@@ -1,12 +1,28 @@
 import omit from 'lodash/omit';
 import without from 'lodash/without';
-import { ServerStageEvents } from '../../global/SocketEvents';
+import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents';
 import upsert from '../utils/upsert';
-import { GroupsCollection } from '../../types';
+import { Group, GroupsCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import { InitialStagePackage } from '../actions/stageActions';
+
+const addGroup = (state: GroupsCollection, group: Group): GroupsCollection => {
+  return {
+    ...state,
+    byId: {
+      ...state.byId,
+      [group._id]: group,
+    },
+    byStage: {
+      ...state.byStage,
+      [group.stageId]: upsert<string>(state.byStage[group.stageId], group._id),
+    },
+    allIds: upsert<string>(state.allIds, group._id),
+  };
+};
 
 function groups(
-  state: GroupsCollection = {
+  prev: GroupsCollection = {
     byId: {},
     byStage: {},
     allIds: [],
@@ -24,48 +40,44 @@ function groups(
         allIds: [],
       };
     }
+    case ServerGlobalEvents.STAGE_JOINED: {
+      const { groups } = action.payload as InitialStagePackage;
+      let state = { ...prev };
+      if (groups)
+        groups.forEach((group) => {
+          state = addGroup(state, group);
+        });
+      return state;
+    }
     case ServerStageEvents.GROUP_ADDED:
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          [action.payload._id]: action.payload,
-        },
-        byStage: {
-          ...state.byStage,
-          [action.payload.stageId]: upsert<string>(
-            state.byStage[action.payload.stageId],
-            action.payload._id
-          ),
-        },
-        allIds: [...state.allIds, action.payload._id],
-      };
+      const group = action.payload as Group;
+      return addGroup(prev, group);
     case ServerStageEvents.GROUP_CHANGED:
       return {
-        ...state,
+        ...prev,
         byId: {
-          ...state.byId,
+          ...prev.byId,
           [action.payload._id]: {
-            ...state.byId[action.payload._id],
+            ...prev.byId[action.payload._id],
             ...action.payload,
           },
         },
       };
     case ServerStageEvents.GROUP_REMOVED: {
       const id = action.payload as string;
-      const { stageId } = state.byId[id];
+      const { stageId } = prev.byId[id];
       return {
-        ...state,
-        byId: omit(state.byId, action.payload),
+        ...prev,
+        byId: omit(prev.byId, action.payload),
         byStage: {
-          ...state.byStage,
-          [stageId]: without<string>(state.byStage[stageId], id),
+          ...prev.byStage,
+          [stageId]: without<string>(prev.byStage[stageId], id),
         },
-        allIds: without<string>(state.allIds, action.payload),
+        allIds: without<string>(prev.allIds, action.payload),
       };
     }
     default:
-      return state;
+      return prev;
   }
 }
 

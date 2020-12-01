@@ -1,5 +1,5 @@
 import debug from 'debug';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { Device, Stage, Group, ThreeDimensionAudioProperties } from '../types';
 import useSocket from '../useSocket';
 import useCurrentStageId from '../hooks/useCurrentStageId';
@@ -129,13 +129,9 @@ const StageActionsProvider = (props: {
   handleError: (error: Error) => void;
 }): JSX.Element => {
   const { children, handleError } = props;
-  const { socket } = useSocket();
+  const socketAPI = useSocket();
+  const { socket } = socketAPI;
   const stageId = useCurrentStageId();
-
-  useEffect(() => {
-    console.debug('SOCKET IS NOW:');
-    console.debug(socket);
-  }, [socket]);
 
   const updateDevice = useCallback(
     (deviceId: string, device: Partial<Omit<Device, '_id'>>) => {
@@ -300,7 +296,7 @@ const StageActionsProvider = (props: {
         socket.emit(ClientStageEvents.CHANGE_GROUP, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
-        throw new Error("Socket connection wasn't ready");
+        //throw new Error("Socket connection wasn't ready");
       }
     },
     [socket, handleError]
@@ -337,7 +333,7 @@ const StageActionsProvider = (props: {
         socket.emit(ClientStageEvents.CHANGE_STAGE_MEMBER, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
-        throw new Error("Socket connection wasn't ready");
+        // throw new Error("Socket connection wasn't ready");
       }
     },
     [socket, handleError]
@@ -388,7 +384,7 @@ const StageActionsProvider = (props: {
         socket.emit(ClientStageEvents.SET_CUSTOM_GROUP, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
-        throw new Error("Socket connection wasn't ready");
+        //throw new Error("Socket connection wasn't ready");
       }
     },
     [socket, handleError]
@@ -419,7 +415,7 @@ const StageActionsProvider = (props: {
         socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
-        throw new Error("Socket connection wasn't ready");
+        // throw new Error("Socket connection wasn't ready");
       }
     },
     [socket, handleError]

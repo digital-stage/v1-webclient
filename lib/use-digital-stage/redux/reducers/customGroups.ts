@@ -1,8 +1,28 @@
 import omit from 'lodash/omit';
 import without from 'lodash/without';
-import { ServerStageEvents } from '../../global/SocketEvents';
+import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents';
 import { CustomGroup, CustomGroupsCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
+import { InitialStagePackage } from '../actions/stageActions';
+import upsert from '../utils/upsert';
+
+const addCustomGroup = (
+  state: CustomGroupsCollection,
+  customGroup: CustomGroup
+): CustomGroupsCollection => {
+  return {
+    ...state,
+    byId: {
+      ...state.byId,
+      [customGroup._id]: customGroup,
+    },
+    byGroup: {
+      ...state.byGroup,
+      [customGroup.groupId]: customGroup._id,
+    },
+    allIds: upsert<string>(state.allIds, customGroup._id),
+  };
+};
 
 function customGroups(
   state: CustomGroupsCollection = {
@@ -23,20 +43,18 @@ function customGroups(
         allIds: [],
       };
     }
+    case ServerGlobalEvents.STAGE_JOINED: {
+      const { customGroups } = action.payload as InitialStagePackage;
+      let updatedState = { ...state };
+      if (customGroups)
+        customGroups.forEach((customGroup) => {
+          updatedState = addCustomGroup(updatedState, customGroup);
+        });
+      return updatedState;
+    }
     case ServerStageEvents.CUSTOM_GROUP_ADDED: {
       const customGroup = action.payload as CustomGroup;
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          [customGroup._id]: customGroup,
-        },
-        byGroup: {
-          ...state.byGroup,
-          [customGroup.groupId]: customGroup._id,
-        },
-        allIds: [...state.allIds, customGroup._id],
-      };
+      return addCustomGroup(state, customGroup);
     }
     case ServerStageEvents.CUSTOM_GROUP_CHANGED: {
       return {
