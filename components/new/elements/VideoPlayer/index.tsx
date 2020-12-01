@@ -7,6 +7,7 @@ import { LocalConsumer } from '../../../../lib/use-digital-stage/types';
 interface CanvasElement extends HTMLCanvasElement {
   captureStream(): MediaStream;
 }
+
 interface AnimationFrame {
   id: string; // Id from videoTrack
   src: CanvasImageSource;
@@ -193,6 +194,9 @@ class VideoPlayer extends React.Component<Props, States> {
           videoWidth * scale,
           videoHeight * scale
         );
+
+        //context.fillStyle = 'red';
+        //context.fillRect(videoWidth + x, videoHeight + y, -videoWidth, -videoHeight);
       });
       this.animationFrameId = window.requestAnimationFrame(this.drawAnimationFrames);
     }
@@ -203,7 +207,7 @@ class VideoPlayer extends React.Component<Props, States> {
     return (
       <div ref={this.wrapperRef}>
         <canvas
-          sx={{ width: '100%', height: '100%', stroke: 'red' }}
+          sx={{ width: '100%', height: '100%', stroke: 'red', transform: 'scale(-1, 1)' }}
           ref={this.canvasRef}
           width={size && size.width}
           height={size && size.height}
@@ -213,4 +217,5 @@ class VideoPlayer extends React.Component<Props, States> {
     );
   }
 }
+
 export default VideoPlayer;
