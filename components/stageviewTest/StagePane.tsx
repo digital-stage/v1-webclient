@@ -13,7 +13,7 @@ const StagePane = (): JSX.Element => {
   return (
     <Box>
       {groups && groups.map((group) => <GroupView key={group._id} group={group} />)}
-      <ConductorsView  />
+      <ConductorsView />
     </Box>
   );
 };

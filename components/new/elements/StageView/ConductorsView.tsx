@@ -16,9 +16,9 @@ const ConductorsView = (): JSX.Element => {
           position: 'fixed',
           top: '10vh',
           left: '10vw',
-          width: '80vw',
-          height: '80vh',
-          backgroundColor: 'black',
+          width: ['container.tiny', 'container.small', 'container.stage', 'container.default'],
+          height: 'auto',
+          backgroundColor: 'gray.7',
         }}
       >
         {conductors.map((conductor) => (

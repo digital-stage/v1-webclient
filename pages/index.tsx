@@ -27,19 +27,19 @@ const Index = (): JSX.Element => {
         <Layout sidebar={!!stageId} stage={stage}>
           {stageId ? (
             <React.Fragment>
-              <StagePane />
+              {/* <StagePane /> */}
               {/* TODO: test new arrangment of groups */}
-              {/* <StageViewTest /> */}
+              <StageViewTest />
               <StageDeviceController />
             </React.Fragment>
           ) : (
-              <Container size={Size.stage}>
-                <Heading as="h1" sx={{ ml: 3, mt: [4, 5] }}>
-                  Meine Bühnen
+            <Container size={Size.stage}>
+              <Heading as="h1" sx={{ ml: 3, mt: [4, 5] }}>
+                Meine Bühnen
               </Heading>
-                <StageListView />
-              </Container>
-            )}
+              <StageListView />
+            </Container>
+          )}
         </Layout>
       );
     }

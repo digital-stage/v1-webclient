@@ -4,7 +4,11 @@ import * as React from 'react';
 import { jsx, Flex, Box, Heading, IconButton } from 'theme-ui';
 import { FaVideo, FaVideoSlash } from 'react-icons/fa';
 import { HiUserCircle } from 'react-icons/hi';
-import { StageMemberWithUserData, useIsStageAdmin, useStageActions } from '../../lib/use-digital-stage';
+import {
+  StageMemberWithUserData,
+  useIsStageAdmin,
+  useStageActions,
+} from '../../lib/use-digital-stage';
 import OnlineStatus from '../new/elements/OnlineStatus';
 import useVideoConsumersByStageMember from '../../lib/use-digital-stage/hooks/useVideoConsumersByStageMember';
 import VideoPlayer from '../new/elements/VideoPlayer';
@@ -19,31 +23,30 @@ const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIco
     <Flex
       sx={{
         flexDirection: withIcon ? 'column' : 'row',
-        textAlign:'center',
-        alignItems:'center',
+        textAlign: 'center',
+        alignItems: 'center',
         height: withIcon ? '100%' : 'auto',
-        justifyContent:'center',
-        // position:'absolute',
-        // bottom:'0'
+        justifyContent: 'center',
       }}
     >
-      {withIcon && <HiUserCircle size={80}  sx={{color:'gray.3'}}/>}
+      {withIcon && <HiUserCircle size={80} sx={{ color: 'gray.3' }} />}
+      <Box sx={{ position: !withIcon ? 'absolute' : 'static', bottom: '0px', left: '50px' }}>
+        <Heading as="h5" sx={{ display: withIcon ? 'block' : 'inline-block' }}>
+          <OnlineStatus online={stageMember.online} /> {stageMember.name}
+        </Heading>
 
-      <Heading as="h5">
-        <OnlineStatus online={stageMember.online} /> {stageMember.name}
-      </Heading>
-
-      {isAdmin && (
-        <IconButton
-          onClick={() =>
-            updateStageMember(stageMember._id, {
-              isDirector: !props.stageMember.isDirector,
-            })
-          }
-        >
-          {stageMember.isDirector ? <FaVideo /> : <FaVideoSlash />}
-        </IconButton>
-      )}
+        {isAdmin && (
+          <IconButton
+            onClick={() =>
+              updateStageMember(stageMember._id, {
+                isDirector: !props.stageMember.isDirector,
+              })
+            }
+          >
+            {stageMember.isDirector ? <FaVideo /> : <FaVideoSlash />}
+          </IconButton>
+        )}
+      </Box>
     </Flex>
   );
 };
@@ -58,57 +61,17 @@ const StageMemberView = ({
   return (
     <Box
       sx={{
-        position:'relative',
-        backgroundImage: 'url("/images/user_background.svg")',
+        position: 'relative',
+        backgroundImage: videoConsumers.length <= 0 && 'url("/images/user_background.svg")',
         width: '100%',
-        height: "100%"
+        height: '100%',
       }}
     >
       {videoConsumers.length > 0 && (
-        <VideoPlayer
-          // sx={{
-          //   width: '100%',
-          //   height: '100%',
-          // }}
-          consumers={videoConsumers}
-        />
+        <VideoPlayer sx={{ position: 'relative' }} consumers={videoConsumers} />
       )}
       <StageMemberTitle stageMember={stageMember} withIcon={videoConsumers.length <= 0} />
-    </Box >
-    // <Flex
-    //   sx={{
-    //     position: 'relative',
-    //     backgroundImage: 'url("/images/user_background.svg")',
-    //     backgroundPosition: 'center',
-    //     backgroundRepeat: 'no-repeat',
-    //     backgroundSize: '100%',
-    //   }}
-    // >
-    //   <Box sx={{ pt: '100%' }} />
-    //   {videoConsumers.length > 0 && (
-    //     <VideoPlayer
-    //       sx={{
-    //         position: 'absolute',
-    //         top: 0,
-    //         left: 0,
-    //         width: '100%',
-    //         height: '100%',
-    //       }}
-    //       consumers={videoConsumers}
-    //     />
-    //   )}
-    //   <Box
-    //     sx={{
-    //       position: 'absolute',
-    //       bottom: 0,
-    //       textAlign: videoConsumers.length <= 0 ? 'center' : 'left',
-    //       width: videoConsumers.length <= 0 && '100%',
-    //       height: videoConsumers.length <= 0 && '100%',
-    //     }}
-    //   >
-    //     <StageMemberTitle stageMember={stageMember} withIcon={videoConsumers.length <= 0} />
-    //   </Box>
-    // </Flex>
+    </Box>
   );
 };
 
