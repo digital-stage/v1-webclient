@@ -35,7 +35,7 @@ const Modal = (props: Props) =>
           pl: props.type === 'settings' ? 0 : 3,
           width:
             props.type === 'settings'
-              ? ['container.small', 'container.stage', 'container.default']
+              ? ['container.tiny', 'container.small', 'container.stage', 'container.default']
               : 'container.tiny',
           height: props.type === 'settings' ? 'calc(100vh - 150px)' : 'auto',
           top: '50%',

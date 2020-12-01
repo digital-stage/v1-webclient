@@ -16,7 +16,7 @@ const MobileSideBar = ({ isOpen, onSelect }: Props): JSX.Element => {
       sx={{
         position: 'fixed',
         top: '-150px',
-        left: '-5px',
+        left: '0px',
         width: 'auto',
         height: 'auto',
         bg: 'gray.3',
