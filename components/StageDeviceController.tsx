@@ -1,19 +1,17 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React from 'react';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash } from 'react-icons/fa';
-import { GiSpeaker, GiSpeakerOff } from 'react-icons/gi';
+import { FaMicrophone, FaMicrophoneSlash, FaPlay, FaVideo, FaVideoSlash } from 'react-icons/fa';
 import { ImPhoneHangUp } from 'react-icons/im';
 import { Box, Button, Flex, jsx } from 'theme-ui';
 import { useLocalDevice } from '../lib/use-digital-stage/hooks';
 import useStageActions from '../lib/use-digital-stage/useStageActions';
+import useAudioContext from '../lib/useAudioContext';
+import MixingPanelModal from './MixingPanelModal';
 import MobileSideBar from './new/elements/Menu/SideBar/MobileSideBar';
 import SettingsModal from './settings';
-import MixingPanelModal from './MixingPanelModal';
-import useAudioContext from '../lib/useAudioContext';
 
 const StageDeviceController = (): JSX.Element => {
   const localDevice = useLocalDevice();
@@ -48,12 +46,22 @@ const StageDeviceController = (): JSX.Element => {
           bottom: 0,
           left: '50%',
           transform: 'translate(-50%, 0)',
-          width: '280px',
           justifyContent: 'space-between',
           pb: '1rem',
           zIndex: 10,
         }}
       >
+        {started || (
+          <Button
+            variant="circle"
+            onClick={() => {
+              if (audioContext) audioContext.resume();
+            }}
+            sx={{ mr: 3 }}
+          >
+            <FaPlay size="16px" name="Start" />
+          </Button>
+        )}
         {localDevice?.canVideo && (
           <Button
             variant={!localDevice.sendVideo ? 'circleGray' : 'circle'}
@@ -63,6 +71,7 @@ const StageDeviceController = (): JSX.Element => {
                 sendVideo: !localDevice.sendVideo,
               })
             }
+            sx={{ mr: 3 }}
           >
             {localDevice.sendVideo ? <FaVideo size="24px" /> : <FaVideoSlash size="24px" />}
           </Button>
@@ -76,6 +85,7 @@ const StageDeviceController = (): JSX.Element => {
                 sendAudio: !localDevice.sendAudio,
               })
             }
+            sx={{ mr: 3 }}
           >
             {localDevice.sendAudio ? (
               <FaMicrophone size="24px" />
@@ -84,22 +94,12 @@ const StageDeviceController = (): JSX.Element => {
             )}
           </Button>
         )}
-
-        <Button
-          variant={started ? 'circleGray' : 'circle'}
-          onClick={() => {
-            if (audioContext) audioContext.resume();
-          }}
-        >
-          {started ? (
-            <GiSpeakerOff size={24} name="Speaker off" />
-          ) : (
-            <GiSpeaker size={24} name="Speaker on" />
-          )}
-        </Button>
-
         <Link href="/leave">
-          <Button variant="circle" title="Bühne verlassen" sx={{ bg: 'primary', color: 'text' }}>
+          <Button
+            variant="circle"
+            title="Bühne verlassen"
+            sx={{ bg: 'primary', color: 'text', mr: [3, 0] }}
+          >
             <ImPhoneHangUp size="24px" />
           </Button>
         </Link>
