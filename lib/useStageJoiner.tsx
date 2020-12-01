@@ -1,27 +1,34 @@
 import * as React from 'react';
 
-export interface TStageHandlingContext {
+export enum Errors {
+  NOT_FOUND = 'not-found',
+  INVALID_PASSWORD = 'invalid-password',
+  INTERNAL_ERROR = 'internal-error',
+}
+
+export interface TStageJoinerContext {
   stageId?: string;
   groupId?: string;
   password?: string;
 
   requestJoin(stageId: string, groupId: string, password?: string): void;
-  requestLeave(): void;
+
+  reset(): void;
 }
 
-const StageHandlingContext = React.createContext<TStageHandlingContext>({
-  requestJoin: () => {
-    throw new Error('Not ready');
-  },
-  requestLeave: () => {
-    throw new Error('Not ready');
-  },
+const throwAddProviderError = () => {
+  throw new Error('Please wrap around your DOM tree with the StageJoinerProvider');
+};
+
+const StageHandlingContext = React.createContext<TStageJoinerContext>({
+  requestJoin: throwAddProviderError,
+  reset: throwAddProviderError,
 });
 
-const useStageHandling = (): TStageHandlingContext =>
-  React.useContext<TStageHandlingContext>(StageHandlingContext);
+const useStageJoiner = (): TStageJoinerContext =>
+  React.useContext<TStageJoinerContext>(StageHandlingContext);
 
-export const StageHandlingProvider = (props: { children: React.ReactNode }): JSX.Element => {
+const StageJoinerProvider = (props: { children: React.ReactNode }): JSX.Element => {
   const { children } = props;
   const [stageId, setStageId] = React.useState<string>();
   const [groupId, setGroupId] = React.useState<string>();
@@ -38,7 +45,7 @@ export const StageHandlingProvider = (props: { children: React.ReactNode }): JSX
           setGroupId(reqGroupId);
           setPassword(reqPassword);
         },
-        requestLeave: () => {
+        reset: () => {
           setStageId(undefined);
           setGroupId(undefined);
           setPassword(undefined);
@@ -49,4 +56,5 @@ export const StageHandlingProvider = (props: { children: React.ReactNode }): JSX
     </StageHandlingContext.Provider>
   );
 };
-export default useStageHandling;
+export { StageJoinerProvider };
+export default useStageJoiner;

@@ -1,3 +1,64 @@
+## [0.14.6](https://github.com/digital-stage/webclient/compare/v0.14.5...v0.14.6) (2020-11-30)
+
+
+### Bug Fixes
+
+* automatically audio and video device using event handling ([1c49e1d](https://github.com/digital-stage/webclient/commit/1c49e1daf33c1292dcf7444d0573ab31496f2063))
+* sign up and in was not possible ([f7fc01a](https://github.com/digital-stage/webclient/commit/f7fc01a73992ead0493610fc405dd0b47badfbc4))
+* spinner unloads components, this is unexpected behavior ([2d78e78](https://github.com/digital-stage/webclient/commit/2d78e787c1dbe7afbc82ef441b51e4e17b623d6d))
+
+## [0.14.5](https://github.com/digital-stage/webclient/compare/v0.14.4...v0.14.5) (2020-11-29)
+
+
+### Bug Fixes
+
+* audio playback on left channel only ([9588e23](https://github.com/digital-stage/webclient/commit/9588e23405c77d1cc70aec375dace2e7e011635a))
+
+## [0.14.4](https://github.com/digital-stage/webclient/compare/v0.14.3...v0.14.4) (2020-11-29)
+
+
+### Bug Fixes
+
+* added working audio configuration from example ([73e771d](https://github.com/digital-stage/webclient/commit/73e771d76cb47147e06c7362a152d3c0acf1317d))
+
+## [0.14.3](https://github.com/digital-stage/webclient/compare/v0.14.2...v0.14.3) (2020-11-27)
+
+
+### Bug Fixes
+
+* audio items has been created inside inf loop ([d88507a](https://github.com/digital-stage/webclient/commit/d88507a9c8eeae1912db15b1d094a183a7abe02d))
+* missing package-lock and updated package project name ([e74bebe](https://github.com/digital-stage/webclient/commit/e74bebe2ab77e24bd662ef45d78fa8fac0fd1d96))
+* mixer panel was not working properly ([b98bc5d](https://github.com/digital-stage/webclient/commit/b98bc5de2a79ff00af09caf41a16e72ec0843e41))
+* removed packge lock in favor of yarn ([e73763b](https://github.com/digital-stage/webclient/commit/e73763b106c7d7e519a4d2fc4422ff57ac20881a))
+
+## [0.14.2](https://github.com/digital-stage/webclient/compare/v0.14.1...v0.14.2) (2020-11-27)
+
+
+### Bug Fixes
+
+* retry of joining password protected stage not possible ([8b5f277](https://github.com/digital-stage/webclient/commit/8b5f277a238a6a560f4730a887ad5f6c0ec9b8ed))
+
+## [0.14.1](https://github.com/digital-stage/webclient/compare/v0.14.0...v0.14.1) (2020-11-27)
+
+
+### Bug Fixes
+
+* stage not joined when using invite link ([f24da00](https://github.com/digital-stage/webclient/commit/f24da00404fe12147684a3a4e13b75d52d2a98a1))
+* stage not joined when using invite link ([f6f3ed9](https://github.com/digital-stage/webclient/commit/f6f3ed909ca68d32e41fe03c5373d8f071725faa))
+
+# [0.14.0](https://github.com/digital-stage/webclient/compare/v0.13.4...v0.14.0) (2020-11-27)
+
+
+### Bug Fixes
+
+* position left of mobile sidebar ([6db9215](https://github.com/digital-stage/webclient/commit/6db92153b4f1210d0e5c93030ef56a1d075f09ab))
+* run prettier ([81bd89a](https://github.com/digital-stage/webclient/commit/81bd89a8564668792ede5fd52cbb78e0866f03f8))
+
+
+### Features
+
+* mobile side menu and user without image view ([0323fd9](https://github.com/digital-stage/webclient/commit/0323fd9657a2fd8b05229321eabeb26d1b12a7cf))
+
 ## [0.13.4](https://github.com/digital-stage/webclient/compare/v0.13.3...v0.13.4) (2020-11-27)
 
 

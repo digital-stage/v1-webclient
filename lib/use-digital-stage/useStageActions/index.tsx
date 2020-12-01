@@ -1,5 +1,5 @@
 import debug from 'debug';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Device, Stage, Group, ThreeDimensionAudioProperties } from '../types';
 import useSocket from '../useSocket';
 import useCurrentStageId from '../hooks/useCurrentStageId';
@@ -22,7 +22,6 @@ import {
   SetCustomStageMemberOvPayload,
   SetCustomStageMemberPayload,
 } from '../global/SocketPayloads';
-import useStageHandling from '../useStageHandling';
 
 const d = debug('useStageActions');
 
@@ -49,7 +48,7 @@ export interface TStageActionContext {
   leaveStageForGood(id: string): void;
 
   // Customized group
-  setCustomGroup(groupId: string, volume: number, muted: boolean): void;
+  setCustomGroup(groupId: string, update: Partial<ThreeDimensionAudioProperties>): void;
 
   removeCustomGroup(customGroupId: string): void;
 
@@ -130,10 +129,13 @@ const StageActionsProvider = (props: {
   handleError: (error: Error) => void;
 }): JSX.Element => {
   const { children, handleError } = props;
-  const socketAPI = useSocket();
-  const { socket } = socketAPI;
-  const { requestLeave } = useStageHandling();
+  const { socket } = useSocket();
   const stageId = useCurrentStageId();
+
+  useEffect(() => {
+    console.debug('SOCKET IS NOW:');
+    console.debug(socket);
+  }, [socket]);
 
   const updateDevice = useCallback(
     (deviceId: string, device: Partial<Omit<Device, '_id'>>) => {
@@ -242,10 +244,7 @@ const StageActionsProvider = (props: {
       handleError(new Error("Socket connection wasn't ready"));
       throw new Error("Socket connection wasn't ready");
     }
-
-    // Also update request handler
-    requestLeave();
-  }, [socket, requestLeave, handleError]);
+  }, [socket, handleError]);
 
   const leaveStageForGood = useCallback(
     (id: string) => {
@@ -256,12 +255,8 @@ const StageActionsProvider = (props: {
         handleError(new Error("Socket connection wasn't ready"));
         throw new Error("Socket connection wasn't ready");
       }
-      if (stageId && stageId === id) {
-        // Also update request handler
-        requestLeave();
-      }
     },
-    [socket, requestLeave, stageId, handleError]
+    [socket, stageId, handleError]
   );
 
   const removeStage = useCallback(
@@ -383,13 +378,12 @@ const StageActionsProvider = (props: {
   );
 
   const setCustomGroup = useCallback(
-    (groupId: string, volume: number, muted: boolean) => {
+    (groupId: string, update: Partial<ThreeDimensionAudioProperties>) => {
       if (socket) {
         d(`setCustomGroup(${groupId}, ...)`);
         const payload: SetCustomGroupPayload = {
           groupId,
-          volume,
-          muted,
+          update,
         };
         socket.emit(ClientStageEvents.SET_CUSTOM_GROUP, payload);
       } else {

@@ -1,6 +1,6 @@
 import { styled } from 'styletron-react';
 import React from 'react';
-import MixingPanelView from '../elements/MixingPanel';
+import MixingPanel from '../../mixer/MixingPanel';
 
 const Wrapper = styled('div', {
   position: 'relative',
@@ -29,7 +29,7 @@ const ScrollPane = styled('div', {
 const MixerPane = () => (
   <Wrapper>
     <ScrollPane>
-      <MixingPanelView />
+      <MixingPanel />
     </ScrollPane>
   </Wrapper>
 );

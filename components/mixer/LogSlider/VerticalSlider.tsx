@@ -79,8 +79,6 @@ const VerticalSlider = (props: {
                     width: '4px',
                     marginLeft: '0',
                     borderRadius: '50%',
-                    // height: index % 2 ? '1px' : '2px',
-                    // width: index % 2 ? `${props.width / 2}px` : `${props.width}px`,
                     backgroundColor:
                       index * props.step > props.max - props.value
                         ? solidColor
@@ -106,21 +104,10 @@ const VerticalSlider = (props: {
             <Box
               ref={trackProps.ref}
               sx={{
-                // width: `${props.width}px`,
                 height: '100%',
                 width: '10px',
                 borderRadius: '24px',
                 backgroundImage: props.backgroundColor,
-                // borderWidth: '1px',
-                // borderStyle: 'solid',
-                // borderColor: solidColor,
-                // background: getTrackBackground({
-                //   values: [props.value],
-                //   colors: ['rgba(255,255,255,0.2)', 'transparent'],
-                //   min: props.min,
-                //   max: props.max,
-                //   direction: Direction.Up,
-                // }),
                 ':hover': {
                   background: getTrackBackground({
                     values: [props.value],
@@ -145,8 +132,6 @@ const VerticalSlider = (props: {
             {...thumbProps}
             style={{
               ...thumbProps.style,
-              // height: `${props.width}px`,
-              // width: `${props.width}px`,
               width: '20px',
               height: '40px',
               borderRadius: '18px',
@@ -158,30 +143,6 @@ const VerticalSlider = (props: {
               boxShadow: '0px 1px 6px #AAA',
             }}
           >
-            {/* {props.text && (
-              <Box
-                sx={{
-                  position: 'absolute',
-                  top: '0px',
-                  right:
-                    props.alignLabel && props.alignLabel === 'left'
-                      ? `${props.width + 6}px`
-                      : undefined,
-                  left:
-                    !props.alignLabel || props.alignLabel === 'right'
-                      ? `${props.width + 6}px`
-                      : undefined,
-                  color: '#000',
-                  fontWeight: 'bold',
-                  padding: '4px',
-                  borderRadius: '4px',
-                  backgroundColor: solidColor,
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {props.text}
-              </Box>
-            )} */}
             <Box
               sx={{
                 width: '16px',

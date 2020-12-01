@@ -14,7 +14,7 @@ import {
 } from '../../../../lib/use-digital-stage/hooks';
 import { Group, Stage } from '../../../../lib/use-digital-stage/types';
 import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
-import useStageHandling from '../../../../lib/use-digital-stage/useStageHandling';
+import useStageJoiner from '../../../../lib/useStageJoiner';
 
 const StageGroupList = (props: { stage: Stage }): JSX.Element => {
   const groups = useGroups();
@@ -22,7 +22,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
   const currentGroupId = useCurrentGroupId();
   const { _id: userId } = useCurrentUser();
   const { removeGroup, leaveStage } = useStageActions();
-  const { requestJoin } = useStageHandling();
+  const { requestJoin } = useStageJoiner();
   const [currentStage, setCurrentStage] = React.useState<Stage>();
   const [currentGroup, setCurrentGroup] = React.useState<Group>();
   const [isCreateGroupOpen, setCreateGroupIsOpen] = React.useState<boolean>(false);
@@ -51,7 +51,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                       borderRadius: '50%',
                       mr: 3,
                     }}
-                  ></Box>
+                  />
                   <Heading as="h3" sx={{ color: 'gray.0', flexBasis: 'max-content' }}>
                     {group.name}
                   </Heading>

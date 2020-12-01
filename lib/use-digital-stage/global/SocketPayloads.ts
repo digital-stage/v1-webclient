@@ -1,12 +1,11 @@
 // DEVICE
 import { ThreeDimensionAudioProperties } from '../types/ThreeDimensionAudioProperty';
-import { Stage } from '../types';
 
+// DEVICE
 export interface AddAudioProducerPayload {
   routerId: string;
   routerProducerId: string;
 }
-
 export type RemoveAudioProducerPayload = string;
 
 export interface AddVideoProducerPayload {
@@ -110,24 +109,29 @@ export type AddStagePayload = Partial<{
 
 export interface ChangeStagePayload {
   id: string;
-  update: Partial<Stage>;
+  update: Partial<{
+    name: string;
+    password: string;
+    width: number;
+    length: number;
+    height: number;
+    absorption: number;
+    damping: number;
+    // admins: string[];
+  }>;
 }
 
 export type RemoveStagePayload = string;
 
 // GROUP
-export interface AddGroupPayload {
+export interface AddGroupPayload extends Partial<ThreeDimensionAudioProperties> {
   stageId: string;
   name: string;
-  volume?: number;
 }
 
 export interface ChangeGroupPayload {
   id: string;
-  update: Partial<{
-    name: string;
-    volume: number;
-  }>;
+  update: Partial<ThreeDimensionAudioProperties>;
 }
 
 export type RemoveGroupPayload = string;
@@ -157,16 +161,13 @@ export interface ChangeStageMemberOvTrackPayload {
 }
 
 // CUSTOM GROUP
-export interface AddCustomGroupPayload {
+export interface AddCustomGroupPayload extends Partial<ThreeDimensionAudioProperties> {
   groupId: string;
-  volume: number;
-  muted: boolean;
 }
 
 export interface SetCustomGroupPayload {
   groupId: string;
-  volume: number;
-  muted: boolean;
+  update: Partial<ThreeDimensionAudioProperties>;
 }
 
 export interface UpdateCustomGroupPayload {
@@ -241,3 +242,9 @@ export interface JoinStagePayload {
 export interface LeaveStagePayload {}
 
 export type LeaveStageForGoodPayload = string;
+
+// User
+export interface ChangeUserPayload {
+  name: string;
+  avatarUrl?: string;
+}

@@ -1,4 +1,4 @@
-FROM node:12.19.0-alpine AS build
+FROM node:14.15.0-buster AS build
 ENV NEXT_PUBLIC_USE_SSL=false
 ENV PORT=3000
 

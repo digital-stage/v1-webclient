@@ -17,11 +17,10 @@ interface Values {
 const SignUpForm = (): JSX.Element => {
   const { createUserWithEmailAndPassword } = useAuth();
 
-  const [msg, setMsg] = React.useState({
-    state: false,
-    type: null,
-    kids: null,
-  });
+  const [message, setMessage] = React.useState<{
+    type: 'danger' | 'warning' | 'info' | 'success';
+    content: string;
+  }>();
 
   const SignUpSchema = Yup.object().shape({
     email: Yup.string()
@@ -53,36 +52,34 @@ const SignUpForm = (): JSX.Element => {
           passwordRepeat: '',
         }}
         validationSchema={SignUpSchema}
-        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) =>
-          createUserWithEmailAndPassword(values.email, values.password, values.name)
+        onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) => {
+          setMessage(undefined);
+          return createUserWithEmailAndPassword(values.email, values.password, values.name)
             .then((res) => {
               if (res === 201) {
-                setMsg({
-                  state: true,
+                setMessage({
                   type: 'success',
-                  kids: 'Jetzt kannst Du Dich mit Deinem neuen Account anmelden',
+                  content: 'Jetzt kannst Du Dich mit Deinem neuen Account anmelden',
                 });
                 resetForm(null);
               } else {
-                setMsg({
-                  state: true,
+                setMessage({
                   type: 'warning',
-                  kids: 'Oops - versuche es noch einmal',
+                  content: 'Oops - versuche es noch einmal',
                 });
               }
             })
             .catch((err) =>
-              setMsg({
-                state: true,
+              setMessage({
                 type: 'danger',
-                kids: { err },
+                content: err.message,
               })
-            )
-        }
+            );
+        }}
       >
         {({ errors, touched }) => (
           <Form>
-            {msg.state && <Message variant={msg.type}>{msg.kids}</Message>}
+            {message && <Message variant={message.type}>{message.content}</Message>}
 
             <Field
               as={InputField}

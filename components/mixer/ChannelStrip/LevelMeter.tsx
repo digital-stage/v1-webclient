@@ -3,7 +3,7 @@
 import React, { useRef } from 'react';
 import { jsx } from 'theme-ui';
 import { IAnalyserNode, IAudioContext } from 'standardized-audio-context';
-import useAnimationFrame from '../../../../lib/useAnimationFrame';
+import useAnimationFrame from '../../../lib/useAnimationFrame';
 
 function getAverageVolume(array: Uint8Array): number {
   let values = 0;

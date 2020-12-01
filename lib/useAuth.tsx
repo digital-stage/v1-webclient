@@ -1,7 +1,6 @@
 import * as React from 'react';
 import cookie from 'js-cookie';
 import fetch from 'isomorphic-unfetch';
-import { useErrors } from './useErrors';
 
 export enum Errors {
   NOT_FOUND = 'not-found',
@@ -55,22 +54,15 @@ export const AuthContextConsumer = AuthContext.Consumer;
 
 export const AuthContextProvider = (props: { children: React.ReactNode }): JSX.Element => {
   const { children } = props;
-  const { reportError } = useErrors();
 
   const [token, setToken] = React.useState<string>();
   const [user, setUser] = React.useState<AuthUser>();
   const [loading, setLoading] = React.useState<boolean>(true);
 
-  const chainError = (err) => Promise.reject(err);
-  const rejectHandler = (err) => {
-    // errorsOutput.textContent = errorsOutput.textContent + ' : ' + err.message
-    throw new Error('handled');
-  };
-
   const createUserWithEmailAndPassword = React.useCallback(
     (email: string, password: string, name: string, avatarUrl?: string) => {
       setLoading(true);
-      return fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/signup2`, {
+      return fetch(`${process.env.NEXT_PUBLIC_AUTH_URL}/signup`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -82,29 +74,20 @@ export const AuthContextProvider = (props: { children: React.ReactNode }): JSX.E
           avatarUrl: avatarUrl || '',
         }),
       })
-        .then(
-          (res) => {
-            if (res.ok) {
-              return res.json();
-            }
-            return res.status;
-          },
-          (err) => {
-            throw err;
-          }
-        )
-        .then((resToken) =>
-          getUserByToken(resToken).then((resUser) => {
-            setUser(resUser);
-            setToken(resToken);
-            cookie.set('token', resToken, { expires: 1 });
-          })
-        )
-        .catch((err) => {
-          throw err;
+        .then((res) => {
+          if (res.ok) return res.json();
+          throw new Error(res.statusText);
         })
-        .finally(() => {
-          setLoading(false);
+        .then((res) => {
+          return getUserByToken(res)
+            .then((resUser) => {
+              setUser(resUser);
+              setToken(res);
+              cookie.set('token', res, { expires: 1 });
+            })
+            .finally(() => {
+              setLoading(false);
+            });
         });
     },
     []
@@ -134,9 +117,6 @@ export const AuthContextProvider = (props: { children: React.ReactNode }): JSX.E
             cookie.set('token', resToken, { expires: staySignedIn ? 7 : 1 });
           })
         )
-        .catch((err) => {
-          throw err;
-        })
         .finally(() => {
           setLoading(false);
         });
@@ -173,13 +153,11 @@ export const AuthContextProvider = (props: { children: React.ReactNode }): JSX.E
           token: resetToken,
           password,
         }),
-      })
-        .then((result) => {
-          if (!result.ok) {
-            throw new Error('Abgelaufener Link');
-          }
-        })
-        .catch((error) => reportError(error.message)),
+      }).then((result) => {
+        if (!result.ok) {
+          throw new Error('Abgelaufener Link');
+        }
+      }),
     []
   );
 
@@ -199,7 +177,6 @@ export const AuthContextProvider = (props: { children: React.ReactNode }): JSX.E
           setUser(undefined);
         }
       })
-      .catch((error) => reportError(error.message))
       .finally(() => {
         setLoading(false);
       });

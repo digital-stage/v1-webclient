@@ -5,13 +5,13 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import { devToolsEnhancer } from 'redux-devtools-extension';
 import useSocket, { SocketProvider } from './useSocket';
-import { Device, Router } from './types';
+import { Device, Router, WebRTCDevice } from './types';
 import enumerateDevices from './utils/enumerateDevices';
 import reducer from './redux/reducers/index';
-import { StageHandlingProvider } from './useStageHandling';
 import useStageActions, { StageActionsProvider, TStageActionContext } from './useStageActions';
 import Status, { IStatus } from './useSocket/Status';
 import useWebRTCCommunication, { WebRTCCommunicationProvider } from './useWebRTCCommunication';
+import { useLocalDevice } from './hooks';
 
 const dbg = debug('useDigitalStage:provider');
 
@@ -20,11 +20,26 @@ export interface TDigitalStageContext {
   ready: boolean;
   actions?: TStageActionContext;
   status: IStatus[keyof IStatus];
+  refreshLocalDevice: () => void;
 }
+
+interface LocalAudioAndVideoDevices {
+  inputAudioDeviceId: string;
+  inputVideoDeviceId: string;
+  outputAudioDeviceId: string;
+  inputAudioDevices: WebRTCDevice[];
+  inputVideoDevices: WebRTCDevice[];
+  outputAudioDevices: WebRTCDevice[];
+}
+
+const throwAddProviderError = () => {
+  throw new Error('Please wrap the DOM tree with the StageActionProvider');
+};
 
 const DigitalStageContext = createContext<TDigitalStageContext>({
   ready: false,
   status: Status.disconnected,
+  refreshLocalDevice: throwAddProviderError,
 });
 
 const UseDigitalStageProvider = (props: {
@@ -37,45 +52,102 @@ const UseDigitalStageProvider = (props: {
   const socketAPI = useSocket();
   const actions = useStageActions();
   const { router } = useWebRTCCommunication();
+  const localDevice = useLocalDevice();
+
+  const getLocalAudioAndVideoDevices = useCallback(
+    (currentLocalDevice?: Device): Promise<LocalAudioAndVideoDevices> => {
+      return enumerateDevices().then(
+        (mediaDevices): LocalAudioAndVideoDevices => {
+          let inputAudioDeviceId: string = undefined;
+          let outputAudioDeviceId: string = undefined;
+          let inputVideoDeviceId = 'default';
+
+          if (currentLocalDevice) {
+            // Attach current ids if available
+            if (
+              currentLocalDevice.inputAudioDeviceId &&
+              mediaDevices.inputAudioDevices.find(
+                (d) => d.id === currentLocalDevice.inputAudioDeviceId
+              )
+            ) {
+              inputAudioDeviceId = currentLocalDevice.inputAudioDeviceId;
+            }
+            if (
+              currentLocalDevice.outputAudioDeviceId &&
+              mediaDevices.outputAudioDevices.find(
+                (d) => d.id === currentLocalDevice.outputAudioDeviceId
+              )
+            ) {
+              outputAudioDeviceId = currentLocalDevice.outputAudioDeviceId;
+            }
+            if (
+              currentLocalDevice.inputVideoDeviceId &&
+              mediaDevices.inputVideoDevices.find(
+                (d) => d.id === currentLocalDevice.inputVideoDeviceId
+              )
+            ) {
+              inputVideoDeviceId = currentLocalDevice.inputVideoDeviceId;
+            }
+          }
+
+          if (!inputAudioDeviceId && mediaDevices.inputAudioDevices.find((d) => d.id === 'label')) {
+            inputAudioDeviceId = 'default';
+          } else if (mediaDevices.inputAudioDevices.length > 0) {
+            inputAudioDeviceId = mediaDevices.inputAudioDevices[0].id;
+          }
+          if (
+            !outputAudioDeviceId &&
+            mediaDevices.outputAudioDevices.find((d) => d.id === 'label')
+          ) {
+            outputAudioDeviceId = 'default';
+          } else if (mediaDevices.outputAudioDevices.length > 0) {
+            outputAudioDeviceId = mediaDevices.outputAudioDevices[0].id;
+          }
+          if (!inputVideoDeviceId && mediaDevices.inputVideoDevices.length > 1) {
+            inputVideoDeviceId = mediaDevices.inputVideoDevices[0].id;
+          }
+          return {
+            inputAudioDeviceId,
+            inputVideoDeviceId,
+            outputAudioDeviceId,
+            inputVideoDevices: mediaDevices.inputVideoDevices,
+            inputAudioDevices: mediaDevices.inputAudioDevices,
+            outputAudioDevices: mediaDevices.outputAudioDevices,
+          };
+        }
+      );
+    },
+    []
+  );
 
   const createInitialDevice = useCallback((): Promise<Partial<Device>> => {
-    return enumerateDevices().then(
+    return getLocalAudioAndVideoDevices().then(
       (mediaDevices): Partial<Device> => {
         const bowser = Bowser.getParser(window.navigator.userAgent);
         const os = bowser.getOSName();
         const browser = bowser.getBrowserName();
-        let inputAudioDeviceId;
-        let outputAudioDeviceId;
-        let inputVideoDeviceId = 'default';
-        if (mediaDevices.inputAudioDevices.find((d) => d.id === 'label')) {
-          inputAudioDeviceId = 'default';
-        } else if (mediaDevices.inputAudioDevices.length > 0) {
-          inputAudioDeviceId = mediaDevices.inputAudioDevices[0].id;
-        }
-        if (mediaDevices.outputAudioDevices.find((d) => d.id === 'label')) {
-          outputAudioDeviceId = 'default';
-        } else if (mediaDevices.outputAudioDevices.length > 0) {
-          outputAudioDeviceId = mediaDevices.outputAudioDevices[0].id;
-        }
-        if (mediaDevices.inputVideoDevices.length === 1) {
-          inputVideoDeviceId = mediaDevices.inputVideoDevices[0].id;
-        }
         return {
+          ...mediaDevices,
           name: `${browser} (${os})`,
           canAudio: mediaDevices.inputAudioDevices.length > 0,
           canVideo: mediaDevices.inputVideoDevices.length > 0,
           receiveVideo: true,
           receiveAudio: true,
-          inputAudioDevices: mediaDevices.inputAudioDevices,
-          inputVideoDevices: mediaDevices.inputVideoDevices,
-          outputAudioDevices: mediaDevices.outputAudioDevices,
-          inputAudioDeviceId,
-          inputVideoDeviceId,
-          outputAudioDeviceId,
         };
       }
     );
   }, []);
+
+  const refreshLocalDevice = useCallback(() => {
+    if (localDevice) {
+      console.debug('DEVICE REFRESHED');
+      getLocalAudioAndVideoDevices(localDevice).then((mediaDevices) => {
+        actions.updateDevice(localDevice._id, {
+          ...mediaDevices,
+        });
+      });
+    }
+  }, [localDevice, getLocalAudioAndVideoDevices, actions]);
 
   const startSocketConnection = useCallback(() => {
     if (token && socketAPI) {
@@ -90,6 +162,15 @@ const UseDigitalStageProvider = (props: {
   }, [token, handleError, socketAPI.status]);
 
   useEffect(() => {
+    if (ready) {
+      navigator.mediaDevices.addEventListener('devicechange', refreshLocalDevice);
+      return () => {
+        navigator.mediaDevices.removeEventListener('devicechange', refreshLocalDevice);
+      };
+    }
+  }, [ready]);
+
+  useEffect(() => {
     if (token) {
       startSocketConnection();
     }
@@ -102,6 +183,7 @@ const UseDigitalStageProvider = (props: {
         ready,
         actions,
         status: socketAPI ? socketAPI.status : Status.disconnected,
+        refreshLocalDevice,
       }}
     >
       {children}
@@ -138,15 +220,13 @@ const DigitalStageProvider = (props: {
   return (
     <Provider store={store}>
       <SocketProvider apiUrl={apiUrl}>
-        <StageHandlingProvider>
-          <StageActionsProvider handleError={handleError}>
-            <WebRTCCommunicationProvider handleError={handleError} routerDistUrl={routerDistUrl}>
-              <UseDigitalStageProvider handleError={handleError} token={token}>
-                {children}
-              </UseDigitalStageProvider>
-            </WebRTCCommunicationProvider>
-          </StageActionsProvider>
-        </StageHandlingProvider>
+        <StageActionsProvider handleError={handleError}>
+          <WebRTCCommunicationProvider handleError={handleError} routerDistUrl={routerDistUrl}>
+            <UseDigitalStageProvider handleError={handleError} token={token}>
+              {children}
+            </UseDigitalStageProvider>
+          </WebRTCCommunicationProvider>
+        </StageActionsProvider>
       </SocketProvider>
     </Provider>
   );
