@@ -30,9 +30,21 @@ const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIco
       }}
     >
       {withIcon && <HiUserCircle size={60} sx={{ color: 'gray.3' }} />}
-      <Box sx={{ position: !withIcon ? 'absolute' : 'static', bottom: '0px', left: '0px' }}>
-        <Heading as="h5" sx={{ display: withIcon ? 'block' : 'inline-block' }}>
-          <OnlineStatus online={stageMember.online} /> {stageMember.name}
+      <Box
+        sx={{
+          position: !withIcon ? 'absolute' : 'static',
+          display: !withIcon ? 'flex' : 'block',
+          alignItems: 'center',
+          bottom: '0px',
+          left: '0px',
+        }}
+      >
+        <OnlineStatus online={stageMember.online} />
+        <Heading
+          as="h5"
+          sx={{ display: withIcon ? 'block' : 'inline-block', ml: withIcon ? 0 : 2 }}
+        >
+          {stageMember.name}
         </Heading>
 
         {isAdmin && (
