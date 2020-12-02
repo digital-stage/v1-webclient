@@ -11,7 +11,7 @@ import {
 } from '../../lib/use-digital-stage';
 import OnlineStatus from '../new/elements/OnlineStatus';
 import useVideoConsumersByStageMember from '../../lib/use-digital-stage/hooks/useVideoConsumersByStageMember';
-import VideoPlayer from '../new/elements/VideoPlayer3';
+import VideoPlayer from '../VideoPlayer';
 
 const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIcon?: boolean }) => {
   const { stageMember, withIcon } = props;
