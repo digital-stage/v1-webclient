@@ -40,7 +40,7 @@ const ChannelStrip = (props: {
   return (
     <Flex
       sx={{
-          height: '100%',
+        height: '100%',
         width: '150px',
         minWidth: '150px',
         flexDirection: 'column',
@@ -52,11 +52,17 @@ const ChannelStrip = (props: {
       }}
       className={props.className}
     >
-      {props.addHeader && <Box sx={{
-        width: '100%',
-        flexShrink: 0,
-        flexGrow: 0,
-      }}>{props.addHeader}</Box>}
+      {props.addHeader && (
+        <Box
+          sx={{
+            width: '100%',
+            flexShrink: 0,
+            flexGrow: 0,
+          }}
+        >
+          {props.addHeader}
+        </Box>
+      )}
 
       <Flex
         sx={{

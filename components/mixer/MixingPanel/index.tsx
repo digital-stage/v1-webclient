@@ -19,7 +19,7 @@ const MixingPanel = (): JSX.Element => {
       sx={{
         position: 'relative',
         maxHeight: '700px',
-          minHeight: '600px',
+        minHeight: '600px',
       }}
     >
       {groupIds.map((id) => (

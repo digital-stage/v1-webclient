@@ -41,9 +41,9 @@ const MixingPanelModal = ({ isOpen, onClose }: IProps): JSX.Element => {
             </Text>
           ) : undefined}
         </Box>
-          <Box sx={{ px: '1rem' }}>
-              <MixingPanel />
-          </Box>
+        <Box sx={{ px: '1rem' }}>
+          <MixingPanel />
+        </Box>
       </Box>
     </Modal>
   );

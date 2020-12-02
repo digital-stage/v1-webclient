@@ -37,7 +37,7 @@ const Modal = (props: Props) =>
             props.type === 'settings'
               ? ['container.tiny', 'container.small', 'container.stage', 'container.default']
               : 'container.tiny',
-            // TODO: @htw @timonela discuss if a fixed height is necessary here
+          // TODO: @htw @timonela discuss if a fixed height is necessary here
           //height: props.type === 'settings' ? 'calc(100vh - 150px)' : 'auto',
           top: '50%',
           left: '50%',

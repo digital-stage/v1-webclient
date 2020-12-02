@@ -80,33 +80,33 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
           addHeader={
             <Flex
               sx={{
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  padding: '1rem'
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '1rem',
               }}
             >
               {audioProducers.length > 0 ? (
                 <Box
-                sx={{
+                  sx={{
                     width: '100%',
                     display: 'flex',
                     flexDirection: 'column',
-                    alignItems: 'center'
-                }}
-
-                    onClick={() => setExpanded((prev) => !prev)}>
+                    alignItems: 'center',
+                  }}
+                  onClick={() => setExpanded((prev) => !prev)}
+                >
                   <h5>{stageMember.name}</h5>
-                    <Button
-                        sx={{
-                            width: '100%'
-                        }}
-                    >
-                      {expanded ? (
-                          <img src="/static/icons/chevron_left-white-18dp.svg" />
-                      ) : (
-                          <img src="/static/icons/chevron_right-white-18dp.svg" />
-                      )}
+                  <Button
+                    sx={{
+                      width: '100%',
+                    }}
+                  >
+                    {expanded ? (
+                      <img src="/static/icons/chevron_left-white-18dp.svg" />
+                    ) : (
+                      <img src="/static/icons/chevron_right-white-18dp.svg" />
+                    )}
                   </Button>
                 </Box>
               ) : (
