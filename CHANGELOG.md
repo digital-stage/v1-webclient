@@ -1,3 +1,10 @@
+## [0.19.1](https://github.com/digital-stage/webclient/compare/v0.19.0...v0.19.1) (2020-12-02)
+
+
+### Bug Fixes
+
+* mediasoup handling simplified, added more debug output and easier hooks handling ([e17513c](https://github.com/digital-stage/webclient/commit/e17513ce71515302bd53030b47155f49542e03f0))
+
 # [0.19.0](https://github.com/digital-stage/webclient/compare/v0.18.0...v0.19.0) (2020-12-02)
 
 
