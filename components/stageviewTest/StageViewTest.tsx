@@ -35,7 +35,7 @@ const StageViewTest = (): JSX.Element => {
         },
       }}
     >
-      <Flex sx={{ flexWrap: 'wrap'}}>
+      <Flex sx={{ flexWrap: 'wrap' }}>
         {groups &&
           groups.map((group) => {
             return <GroupView key={group._id} group={group} />;

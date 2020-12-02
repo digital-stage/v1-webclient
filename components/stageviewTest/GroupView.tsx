@@ -33,10 +33,11 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
         }}
       >
         {stageMembers.map((stageMember) => (
-          <Flex key={stageMember._id}
+          <Flex
+            key={stageMember._id}
             sx={{
               maxWidth: '50%',
-              minWidth: '50%'
+              minWidth: '50%',
             }}
           >
             <StageMemberView stageMember={stageMember} />
