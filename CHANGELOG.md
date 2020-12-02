@@ -1,3 +1,10 @@
+# [0.19.0](https://github.com/digital-stage/webclient/compare/v0.18.0...v0.19.0) (2020-12-02)
+
+
+### Features
+
+* arrange name and status at stage member view ([d787155](https://github.com/digital-stage/webclient/commit/d78715534795e01fba4f6d17c72ba407a9c1616d))
+
 # [0.18.0](https://github.com/digital-stage/webclient/compare/v0.17.0...v0.18.0) (2020-12-02)
 
 
