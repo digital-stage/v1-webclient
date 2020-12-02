@@ -8,7 +8,7 @@ import StageMemberView from './StageMemberView';
 
 const GroupView = ({ group }: { group: Group }): JSX.Element => {
   const stageMembers = useStageMembersByGroup(group._id);
-  console.log('stage memebers', stageMembers)
+  console.log('stage memebers', stageMembers);
 
   return stageMembers.length > 0 ? (
     <Flex
@@ -16,7 +16,7 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
         flexDirection: 'column',
         maxWidth: ['100%', '46%'],
         flexWrap: 'wrap',
-        m:2
+        m: 2,
       }}
     >
       <Text variant="subTitle" sx={{ pl: 3, color: 'text' }}>
@@ -34,9 +34,7 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
         }}
       >
         {stageMembers.map((stageMember) => (
-          <Flex
-            key={stageMember._id}
-          >
+          <Flex key={stageMember._id}>
             <StageMemberView stageMember={stageMember} />
           </Flex>
         ))}

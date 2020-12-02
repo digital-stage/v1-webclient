@@ -67,7 +67,7 @@ const StageMemberView = ({
         // height: '100%',
         height: '240px',
         width: '240px',
-        m:1
+        m: 1,
       }}
     >
       {videoConsumers.length > 0 && (
