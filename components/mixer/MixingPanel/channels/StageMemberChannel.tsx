@@ -81,20 +81,34 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
             <Flex
               sx={{
                 width: '100%',
-                height: '64px',
                 justifyContent: 'center',
                 alignItems: 'center',
+                padding: '1rem',
               }}
             >
               {audioProducers.length > 0 ? (
-                <Button onClick={() => setExpanded((prev) => !prev)}>
-                  <h3>{stageMember.name}</h3>{' '}
-                  {expanded ? (
-                    <img src="/static/chevron_left-white-18dp.svg" />
-                  ) : (
-                    <img src="/static/chevron_right-white-18dp.svg" />
-                  )}
-                </Button>
+                <Box
+                  sx={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                  onClick={() => setExpanded((prev) => !prev)}
+                >
+                  <h5>{stageMember.name}</h5>
+                  <Button
+                    sx={{
+                      width: '100%',
+                    }}
+                  >
+                    {expanded ? (
+                      <img src="/static/icons/chevron_left-white-18dp.svg" />
+                    ) : (
+                      <img src="/static/icons/chevron_right-white-18dp.svg" />
+                    )}
+                  </Button>
+                </Box>
               ) : (
                 <h3>{stageMember.name}</h3>
               )}

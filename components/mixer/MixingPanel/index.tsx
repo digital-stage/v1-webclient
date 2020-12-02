@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from '../../../lib/use-digital-stage/hooks';
-import GroupOnlyChannel from './channels/GroupOnlyChannel';
 import { Flex } from 'theme-ui';
+import GroupChannel from './channels/GroupChannel';
 
 /** *
  * The mixing panel shows all available volume controls for an active stage
@@ -15,9 +15,15 @@ const MixingPanel = (): JSX.Element => {
   );
 
   return (
-    <Flex>
+    <Flex
+      sx={{
+        position: 'relative',
+        maxHeight: '700px',
+        minHeight: '600px',
+      }}
+    >
       {groupIds.map((id) => (
-        <GroupOnlyChannel key={id} groupId={id} />
+        <GroupChannel key={id} groupId={id} />
       ))}
     </Flex>
   );
