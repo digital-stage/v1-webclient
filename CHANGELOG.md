@@ -1,3 +1,17 @@
+# [0.18.0](https://github.com/digital-stage/webclient/compare/v0.17.0...v0.18.0) (2020-12-02)
+
+
+### Bug Fixes
+
+* video player dimensions ([5b56fba](https://github.com/digital-stage/webclient/commit/5b56fba72d9393410c16f748847fea27167e3473))
+* videoPalyer import at StageMemberView ([7ceeb0a](https://github.com/digital-stage/webclient/commit/7ceeb0a9d8f87654c6d1ada9d05840c8e18f9b33))
+
+
+### Features
+
+* add confirmation modal to leave stage and delete group ([b18a81d](https://github.com/digital-stage/webclient/commit/b18a81d00e2ed64ccd9567edeca4b1313b08d373))
+* change video width on conductor view ([73ca383](https://github.com/digital-stage/webclient/commit/73ca383dbf7fd61a5996f0f7d31e732105988ecd))
+
 # [0.17.0](https://github.com/digital-stage/webclient/compare/v0.16.1...v0.17.0) (2020-12-02)
 
 
