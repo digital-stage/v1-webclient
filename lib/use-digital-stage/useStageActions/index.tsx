@@ -296,7 +296,7 @@ const StageActionsProvider = (props: {
         socket.emit(ClientStageEvents.CHANGE_GROUP, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
-        //throw new Error("Socket connection wasn't ready");
+        // throw new Error("Socket connection wasn't ready");
       }
     },
     [socket, handleError]
@@ -384,7 +384,7 @@ const StageActionsProvider = (props: {
         socket.emit(ClientStageEvents.SET_CUSTOM_GROUP, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
-        //throw new Error("Socket connection wasn't ready");
+        // throw new Error("Socket connection wasn't ready");
       }
     },
     [socket, handleError]

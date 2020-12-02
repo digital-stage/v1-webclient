@@ -29,7 +29,7 @@ const addStageMember = (
   };
 };
 
-function stageMembers(
+function reduceStageMembers(
   prev: StageMembersCollection = {
     byId: {},
     byStage: {},
@@ -42,6 +42,7 @@ function stageMembers(
   }
 ): StageMembersCollection {
   switch (action.type) {
+    case ServerGlobalEvents.STAGE_LEFT:
     case AdditionalReducerTypes.RESET: {
       return {
         byId: {},
@@ -59,9 +60,10 @@ function stageMembers(
         });
       return state;
     }
-    case ServerStageEvents.STAGE_MEMBER_ADDED:
+    case ServerStageEvents.STAGE_MEMBER_ADDED: {
       const stageMember = action.payload as StageMember;
       return addStageMember(prev, stageMember);
+    }
     case ServerStageEvents.STAGE_MEMBER_CHANGED: {
       const modifiedprev = { ...prev };
       if (action.payload.groupId) {
@@ -109,4 +111,4 @@ function stageMembers(
   }
 }
 
-export default stageMembers;
+export default reduceStageMembers;

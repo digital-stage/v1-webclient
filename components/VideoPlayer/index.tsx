@@ -21,6 +21,7 @@ const SingleVideoPlayer = (props: { track: MediaStreamTrack; width: string; heig
         width: width,
         height: height,
         objectFit: 'cover',
+        transform: 'scale(-1, 1)',
       }}
       muted={true}
       playsInline={true}

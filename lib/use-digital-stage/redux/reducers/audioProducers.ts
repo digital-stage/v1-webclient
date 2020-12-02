@@ -32,7 +32,7 @@ const addAudioProducer = (
   };
 };
 
-function audioProducers(
+function reduceAudioProducer(
   state: RemoteAudioProducersCollection = {
     byId: {},
     byStageMember: {},
@@ -45,6 +45,7 @@ function audioProducers(
   }
 ): RemoteAudioProducersCollection {
   switch (action.type) {
+    case ServerGlobalEvents.STAGE_LEFT:
     case AdditionalReducerTypes.RESET: {
       return {
         byId: {},
@@ -103,4 +104,4 @@ function audioProducers(
   }
 }
 
-export default audioProducers;
+export default reduceAudioProducer;

@@ -1,7 +1,7 @@
 import mediasoupClient from 'mediasoup-client';
 import { ITeckosClient } from 'teckos-client';
 import debug from 'debug';
-import { Router } from '../../types';
+import { Router } from '../types';
 
 const d = debug('useMediasoup:utils');
 
@@ -157,7 +157,6 @@ export const createWebRTCTransport = (
           return reject(error);
         }
         trace('createWebRTCTransport');
-        trace(transportOptions);
         const transport: mediasoupClient.types.Transport =
           direction === 'send'
             ? device.createSendTransport(transportOptions)
