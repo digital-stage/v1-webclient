@@ -7,11 +7,11 @@ import GroupView from './GroupView';
 import { useCurrentStageId, useGroupsByStage } from '../../lib/use-digital-stage/hooks';
 import ConductorsView from '../new/elements/StageView/ConductorsView';
 
-const StageViewTest = (): JSX.Element => {
+const StageView = (): JSX.Element => {
   const stageId = useCurrentStageId();
   const groups = useGroupsByStage(stageId);
 
-  console.log(groups);
+  console.log(groups.length);
 
   return (
     <Box
@@ -46,4 +46,4 @@ const StageViewTest = (): JSX.Element => {
   );
 };
 
-export default StageViewTest;
+export default StageView;

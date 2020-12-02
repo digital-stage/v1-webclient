@@ -29,7 +29,7 @@ const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIco
         justifyContent: 'center',
       }}
     >
-      {withIcon && <HiUserCircle size={80} sx={{ color: 'gray.3' }} />}
+      {withIcon && <HiUserCircle size={60} sx={{ color: 'gray.3' }} />}
       <Box sx={{ position: !withIcon ? 'absolute' : 'static', bottom: '0px', left: '0px' }}>
         <Heading as="h5" sx={{ display: withIcon ? 'block' : 'inline-block' }}>
           <OnlineStatus online={stageMember.online} /> {stageMember.name}
@@ -63,8 +63,11 @@ const StageMemberView = ({
       sx={{
         position: 'relative',
         backgroundImage: videoConsumers.length <= 0 && 'url("/images/user_background.svg")',
-        width: '100%',
-        height: '100%',
+        // width: '100%',
+        // height: '100%',
+        height: '240px',
+        width: '240px',
+        m:1
       }}
     >
       {videoConsumers.length > 0 && (

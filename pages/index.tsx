@@ -11,7 +11,7 @@ import PageSpinner from '../components/PageSpinner';
 import StageDeviceController from '../components/StageDeviceController';
 import { useAuth } from '../lib/useAuth';
 import { useCurrentStageId, useStage } from '../lib/use-digital-stage/hooks';
-import StageViewTest from '../components/stageviewTest/StageViewTest';
+import StageView from '../components/StageView';
 
 const Index = (): JSX.Element => {
   const router = useRouter();
@@ -29,7 +29,7 @@ const Index = (): JSX.Element => {
             <React.Fragment>
               {/* <StagePane /> */}
               {/* test new arrangment of groups */}
-              <StageViewTest />
+              <StageView />
               <StageDeviceController />
             </React.Fragment>
           ) : (
