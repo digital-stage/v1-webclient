@@ -37,13 +37,14 @@ const Modal = (props: Props) =>
             props.type === 'settings'
               ? ['container.tiny', 'container.small', 'container.stage', 'container.default']
               : 'container.tiny',
-          height: props.type === 'settings' ? 'calc(100vh - 150px)' : 'auto',
+          // TODO: @htw @timonela discuss if a fixed height is necessary here
+          //height: props.type === 'settings' ? 'calc(100vh - 150px)' : 'auto',
           top: '50%',
           left: '50%',
           boxShadow: '0px 3px 6px #000000BC',
           borderRadius: '18px',
           transform: 'translate(-50%,-50%)',
-          transition: 'all 6s ease-in-out',
+          transition: 'all .6s ease-in-out',
         }}
       >
         <Box

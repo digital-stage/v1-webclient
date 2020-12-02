@@ -30,7 +30,6 @@ Currently a dockerization of all services is planned and on it's way.
 
 - [Next.js documentation](https://nextjs.org/docs) -  learn about Next.js
 - [Next.js and Redux](https://github.com/vercel/next.js/tree/canary/examples/with-redux) - reference implementation using redux inside the Next.js environment
-- [Styletron documentation](https://www.styletron.org/react) - learn about styletron, one of the most performing CSS-in-JS technology
 - [Mediasoup client documentation](https://mediasoup.org/documentation/v3/mediasoup-client/api/) - learn about the WebRTC / SFU implementation
 
 #### For later

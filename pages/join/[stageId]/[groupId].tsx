@@ -1,10 +1,8 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import * as React from 'react';
-import { jsx } from 'theme-ui';
 import { useRouter } from 'next/router';
-import { DisplayMedium } from 'baseui/typography';
-import Loading from '../../../components/new/elements/Loading';
+import { Fragment, useEffect } from 'react';
+import { Heading, jsx } from 'theme-ui';
 import useStageJoiner from '../../../lib/useStageJoiner';
 
 const Join = (): JSX.Element => {
@@ -12,11 +10,11 @@ const Join = (): JSX.Element => {
 
   const { requestJoin } = useStageJoiner();
 
-  React.useEffect(() => {
+  useEffect(() => {
     router.prefetch('/');
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (router.query) {
       const { stageId, groupId, password } = router.query;
       if (stageId && groupId && !Array.isArray(stageId) && !Array.isArray(groupId)) {
@@ -31,9 +29,9 @@ const Join = (): JSX.Element => {
   }, [router.query]);
 
   return (
-    <Loading>
-      <DisplayMedium>Lade...</DisplayMedium>
-    </Loading>
+    <Fragment>
+      <Heading>Lade ...</Heading>
+    </Fragment>
   );
 };
 

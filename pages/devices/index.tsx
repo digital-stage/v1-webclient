@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect } from 'react';
-import { Button } from 'baseui/button';
-import Link from 'next/link';
-import { useStyletron } from 'baseui';
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import _ from 'lodash';
-import DeviceView from '../../components/new/elements/DeviceView';
+import Link from 'next/link';
+import { Fragment, useCallback, useEffect } from 'react';
+import { Box, Button, Heading, jsx } from 'theme-ui';
 import Container from '../../components/Container';
+import DeviceView from '../../components/new/elements/DeviceView';
 import { useLocalDevice, useRemoteDevices } from '../../lib/use-digital-stage/hooks';
 import useStageActions from '../../lib/use-digital-stage/useStageActions';
 import enumerateDevices from '../../lib/use-digital-stage/utils/enumerateDevices';
@@ -12,7 +13,6 @@ import enumerateDevices from '../../lib/use-digital-stage/utils/enumerateDevices
 const Index = (): JSX.Element => {
   const localDevice = useLocalDevice();
   const remoteDevices = useRemoteDevices();
-  const [css] = useStyletron();
 
   const { updateDevice } = useStageActions();
 
@@ -83,26 +83,21 @@ const Index = (): JSX.Element => {
 
   return (
     <Container>
-      <h2>Dieses Gerät</h2>
+      <Heading>Dieses Gerät</Heading>
       {localDevice && <DeviceView device={localDevice} />}
-      <div
-        className={css({
-          marginTop: '2rem',
-          marginBottom: '2rem',
-        })}
-      >
+      <Box sx={{ my: '2rem' }}>
         <Button onClick={() => refreshDevices()}>Dieses Gerät aktualisieren</Button>
         <Link href="/test">
           <Button>Dieses Gerät testen</Button>
         </Link>
-      </div>
+      </Box>
       {remoteDevices && remoteDevices.length > 0 && (
-        <>
-          <h2>Meine anderen Geräte</h2>
+        <Fragment>
+          <Heading>Meine anderen Geräte</Heading>
           {remoteDevices.map((remoteDevice, index) => (
             <DeviceView key={index} device={remoteDevice} />
           ))}
-        </>
+        </Fragment>
       )}
     </Container>
   );

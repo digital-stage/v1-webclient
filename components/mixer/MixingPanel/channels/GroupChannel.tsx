@@ -5,8 +5,7 @@ import { useCallback } from 'react';
 import { useGroup, useIsStageAdmin, useSelector } from '../../../../lib/use-digital-stage/hooks';
 import { CustomGroup } from '../../../../lib/use-digital-stage/types';
 import { useStageActions } from '../../../../lib/use-digital-stage';
-import { Button } from 'theme-ui';
-import { Flex, Box } from 'theme-ui';
+import { Flex, Box, Button } from 'theme-ui';
 import ChannelStrip from '../../ChannelStrip';
 
 const GroupChannel = (props: { groupId: string }) => {
@@ -55,6 +54,8 @@ const GroupChannel = (props: { groupId: string }) => {
   return (
     <Flex
       sx={{
+        position: 'relative',
+        backgroundColor: '#1c1c1c',
         flexDirection: 'row',
         borderRadius: '20px',
         marginRight: '1rem',
@@ -71,28 +72,41 @@ const GroupChannel = (props: { groupId: string }) => {
       >
         <ChannelStrip
           addHeader={
-            <Box
+            <Flex
               sx={{
                 width: '100%',
-                height: '64px',
-                display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
+                padding: '1rem',
               }}
             >
               {stageMemberIds.length > 0 ? (
-                <Button onClick={() => setExpanded((prev) => !prev)}>
-                  <h3>{group.name}</h3>
-                  {expanded ? (
-                    <img src="/static/chevron_left-white-18dp.svg" alt="collapse" />
-                  ) : (
-                    <img src="/static/chevron_right-white-18dp.svg" alt="expand" />
-                  )}
-                </Button>
+                <Box
+                  sx={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                  onClick={() => setExpanded((prev) => !prev)}
+                >
+                  <h4>{group.name}</h4>
+                  <Button
+                    sx={{
+                      width: '100%',
+                    }}
+                  >
+                    {expanded ? (
+                      <img src="/static/icons/chevron_left-white-18dp.svg" alt="collapse" />
+                    ) : (
+                      <img src="/static/icons/chevron_right-white-18dp.svg" alt="expand" />
+                    )}
+                  </Button>
+                </Box>
               ) : (
                 <h3>{group.name}</h3>
               )}
-            </Box>
+            </Flex>
           }
           analyser={byGroup[groupId] ? byGroup[groupId].analyserNode : undefined}
           volume={group.volume}
