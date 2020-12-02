@@ -158,7 +158,7 @@ const theme: Theme = {
       width: '48px',
       height: '48px',
       color: 'text',
-      borderRadius: '32px',
+      borderRadius: '50%',
     },
     circleGray: {
       border: 'none',
