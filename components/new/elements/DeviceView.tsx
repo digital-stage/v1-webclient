@@ -1,15 +1,14 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import * as React from 'react';
-import { jsx, Button } from 'theme-ui';
-import { useStyletron } from 'styletron-react';
 import { styled } from 'baseui';
 import { Card, StyledAction, StyledBody } from 'baseui/card/index';
 import { Checkbox } from 'baseui/checkbox/index';
 import { Check, Delete } from 'baseui/icon/index';
-import SingleSelect from './SingleSelect';
+import * as React from 'react';
+import { Button, Flex, jsx } from 'theme-ui';
 import { Device } from '../../../lib/use-digital-stage';
 import useStageActions from '../../../lib/use-digital-stage/useStageActions';
+import SingleSelect from './SingleSelect';
 
 const CardTitle = styled('div', {
   display: 'flex',
@@ -20,7 +19,6 @@ const CardTitle = styled('div', {
 const DeviceView = (props: { device?: Device }) => {
   const { device } = props;
   const { updateDevice } = useStageActions();
-  const [css] = useStyletron();
 
   if (!device) return null;
 
@@ -41,12 +39,7 @@ const DeviceView = (props: { device?: Device }) => {
         </Checkbox>
       </StyledBody>
       <StyledAction>
-        <div
-          className={css({
-            width: '100%',
-            display: 'flex',
-          })}
-        >
+        <Flex sx={{ width: '100%' }}>
           <Button
             variant={device.sendVideo ? 'primary' : 'secondary'}
             onClick={() => {
@@ -87,14 +80,8 @@ const DeviceView = (props: { device?: Device }) => {
           >
             Receive Audio
           </Button>
-        </div>
-        <div
-          className={css({
-            width: '100%',
-            display: 'flex',
-            flexWrap: 'wrap',
-          })}
-        >
+        </Flex>
+        <Flex sx={{ width: '100%', flexWrap: 'wrap' }}>
           <SingleSelect
             options={device.inputAudioDevices || []}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
@@ -118,13 +105,8 @@ const DeviceView = (props: { device?: Device }) => {
                 inputAudioDeviceId: e.target.id,
               })
             }
-            // onSelect={(id) =>
-            //   updateDevice(device._id, {
-            //     inputVideoDeviceId: id,
-            //   })
-            // }
           />
-        </div>
+        </Flex>
       </StyledAction>
     </Card>
   );
