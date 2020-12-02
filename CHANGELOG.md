@@ -1,3 +1,15 @@
+# [0.16.0](https://github.com/digital-stage/webclient/compare/v0.15.1...v0.16.0) (2020-12-02)
+
+
+### Bug Fixes
+
+* run prettier ([6c4d157](https://github.com/digital-stage/webclient/commit/6c4d1574da7a0e6d17e2e47f05ecc4de6fe77589))
+
+
+### Features
+
+* add stage view group and users arrangment ([c93bee0](https://github.com/digital-stage/webclient/commit/c93bee0acb9e4d2934d9198c3e2b5744295eda64))
+
 ## [0.15.1](https://github.com/digital-stage/webclient/compare/v0.15.0...v0.15.1) (2020-12-01)
 
 
