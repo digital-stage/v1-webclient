@@ -1,6 +1,6 @@
 import * as React from 'react';
 import StageMemberChannel from './StageMemberChannel';
-import { useStageWebAudio } from '../../../../lib/useStageWebAudio';
+import useStageWebAudio from '../../../../lib/useStageWebAudio';
 import { useCallback } from 'react';
 import { useGroup, useIsStageAdmin, useSelector } from '../../../../lib/use-digital-stage/hooks';
 import { CustomGroup } from '../../../../lib/use-digital-stage/types';
@@ -108,7 +108,7 @@ const GroupChannel = (props: { groupId: string }) => {
               )}
             </Flex>
           }
-          analyser={byGroup[groupId] ? byGroup[groupId].analyserNode : undefined}
+          analyser={byGroup[groupId] ? byGroup[groupId].analyserNodeL : undefined}
           volume={group.volume}
           muted={group.muted}
           customVolume={customGroup ? customGroup.volume : undefined}

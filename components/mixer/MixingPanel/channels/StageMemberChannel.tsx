@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useStageWebAudio } from '../../../../lib/useStageWebAudio';
+import useStageWebAudio from '../../../../lib/useStageWebAudio';
 import AudioProducerChannel from './AudioProducerChannel';
 import { useCallback } from 'react';
 import { Flex, Box } from 'theme-ui';
@@ -119,7 +119,7 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
           customVolume={customStageMember ? customStageMember.volume : undefined}
           customMuted={customStageMember ? customStageMember.muted : undefined}
           analyser={
-            byStageMember[stageMemberId] ? byStageMember[stageMemberId].analyserNode : undefined
+            byStageMember[stageMemberId] ? byStageMember[stageMemberId].analyserNodeL : undefined
           }
           onVolumeChanged={handleVolumeChange}
           onCustomVolumeChanged={handleCustomVolumeChange}

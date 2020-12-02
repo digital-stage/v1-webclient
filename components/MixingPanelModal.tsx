@@ -17,6 +17,7 @@ const MixingPanelModal = ({ isOpen, onClose }: IProps): JSX.Element => {
     <Modal isOpen={isOpen} onClose={onClose} variant="dark" type="settings">
       <Box
         sx={{
+            height: '80vh',
           overflowX: 'auto',
           '::-webkit-scrollbar': {
             height: '16px',
@@ -41,7 +42,12 @@ const MixingPanelModal = ({ isOpen, onClose }: IProps): JSX.Element => {
             </Text>
           ) : undefined}
         </Box>
-        <Box sx={{ px: '1rem' }}>
+        <Box sx={{
+            position: 'relative',
+            height: '100%',
+            minHeight: '400px',
+            maxHeight: '800px'
+        }}>
           <MixingPanel />
         </Box>
       </Box>

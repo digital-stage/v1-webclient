@@ -5,7 +5,7 @@ import { jsx, Text } from 'theme-ui';
 import { useGroup, useIsStageAdmin, useSelector } from '../../../../lib/use-digital-stage/hooks';
 import { CustomGroup } from '../../../../lib/use-digital-stage/types';
 import { useStageActions } from '../../../../lib/use-digital-stage';
-import { useStageWebAudio } from '../../../../lib/useStageWebAudio';
+import useStageWebAudio from '../../../../lib/useStageWebAudio';
 import ChannelStrip from '../../ChannelStrip';
 
 const GroupOnlyChannel = (props: { groupId: string }): JSX.Element => {
@@ -24,7 +24,7 @@ const GroupOnlyChannel = (props: { groupId: string }): JSX.Element => {
   return (
     <ChannelStrip
       addHeader={<Text mb={3}>{group.name}</Text>}
-      analyser={byGroup[groupId] ? byGroup[groupId].analyserNode : undefined}
+      analyser={byGroup[groupId] ? byGroup[groupId].analyserNodeL : undefined}
       volume={group.volume}
       muted={group.muted}
       customVolume={customGroup ? customGroup.volume : undefined}

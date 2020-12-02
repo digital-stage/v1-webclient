@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { useStageWebAudio } from '../../../../lib/useStageWebAudio';
+import useStageWebAudio from '../../../../lib/useStageWebAudio';
 import {
   CustomRemoteAudioProducer,
   RemoteAudioProducer,
