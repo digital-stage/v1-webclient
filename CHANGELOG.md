@@ -1,3 +1,10 @@
+## [0.16.1](https://github.com/digital-stage/webclient/compare/v0.16.0...v0.16.1) (2020-12-02)
+
+
+### Bug Fixes
+
+* remove the event handler addition when modal is closed ([ea86aba](https://github.com/digital-stage/webclient/commit/ea86aba4658ea499e220609b0c681ce332e08c75))
+
 # [0.16.0](https://github.com/digital-stage/webclient/compare/v0.15.1...v0.16.0) (2020-12-02)
 
 
