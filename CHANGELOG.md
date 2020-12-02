@@ -1,3 +1,34 @@
+# [0.17.0](https://github.com/digital-stage/webclient/compare/v0.16.1...v0.17.0) (2020-12-02)
+
+
+### Bug Fixes
+
+* run prettier ([7e2d5ff](https://github.com/digital-stage/webclient/commit/7e2d5ff86392f9f62e634021cad09517e185c34b))
+
+
+### Features
+
+* add new arrangament of groups in stage view ([44bdb95](https://github.com/digital-stage/webclient/commit/44bdb95fcb481f40a2e8407f7d7be318ac50b286))
+
+## [0.16.1](https://github.com/digital-stage/webclient/compare/v0.16.0...v0.16.1) (2020-12-02)
+
+
+### Bug Fixes
+
+* remove the event handler addition when modal is closed ([ea86aba](https://github.com/digital-stage/webclient/commit/ea86aba4658ea499e220609b0c681ce332e08c75))
+
+# [0.16.0](https://github.com/digital-stage/webclient/compare/v0.15.1...v0.16.0) (2020-12-02)
+
+
+### Bug Fixes
+
+* run prettier ([6c4d157](https://github.com/digital-stage/webclient/commit/6c4d1574da7a0e6d17e2e47f05ecc4de6fe77589))
+
+
+### Features
+
+* add stage view group and users arrangment ([c93bee0](https://github.com/digital-stage/webclient/commit/c93bee0acb9e4d2934d9198c3e2b5744295eda64))
+
 ## [0.15.1](https://github.com/digital-stage/webclient/compare/v0.15.0...v0.15.1) (2020-12-01)
 
 

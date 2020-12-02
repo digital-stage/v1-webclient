@@ -1,12 +1,12 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Flex, Link } from 'theme-ui';
-import NavItem from '../NavItem';
-import { CenteredNavItems, LowerNavItems } from '../../PageWrapperWithStage/MenuItems';
+import { Box, Flex, jsx, Link } from 'theme-ui';
 import DigitalStageLogo from '../../../../DigitalStageLogo';
-import SettingsModal from '../../../../settings';
 import MixingPanelModal from '../../../../MixingPanelModal';
+import SettingsModal from '../../../../settings';
+import { CenteredNavItems, LowerNavItems } from '../../PageWrapperWithStage/MenuItems';
+import NavItem from '../NavItem';
 
 const SideBar = (): JSX.Element => {
   const [selected, setSelected] = React.useState<string>();
@@ -23,7 +23,7 @@ const SideBar = (): JSX.Element => {
             setSelected(item.href);
             setOpenSettings(true);
           } else if (item.href === 'bug') {
-            window.open('https://forum.digital-stage.org/', '_target');
+            window.open('https://forum.digital-stage.org/c/deutsch/ds-web/30', '_target');
           } else if (item.href === 'mixer') {
             setOpenMixer(true);
           }

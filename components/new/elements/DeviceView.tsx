@@ -1,6 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { styled } from 'baseui';
+
 import { Card, StyledAction, StyledBody } from 'baseui/card/index';
 import { Checkbox } from 'baseui/checkbox/index';
 import { Check, Delete } from 'baseui/icon/index';
@@ -9,12 +9,6 @@ import { Button, Flex, jsx } from 'theme-ui';
 import { Device } from '../../../lib/use-digital-stage';
 import useStageActions from '../../../lib/use-digital-stage/useStageActions';
 import SingleSelect from './SingleSelect';
-
-const CardTitle = styled('div', {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-});
 
 const DeviceView = (props: { device?: Device }) => {
   const { device } = props;
@@ -25,9 +19,9 @@ const DeviceView = (props: { device?: Device }) => {
   return (
     <Card
       title={
-        <CardTitle>
+        <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
           {device.name} ({device._id}){device.online ? <Check size={32} /> : <Delete size={32} />}
-        </CardTitle>
+        </Flex>
       }
     >
       <StyledBody>

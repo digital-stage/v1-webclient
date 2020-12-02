@@ -8,37 +8,37 @@ import StageMemberView from './StageMemberView';
 
 const GroupView = ({ group }: { group: Group }): JSX.Element => {
   const stageMembers = useStageMembersByGroup(group._id);
+  console.log('stage memebers', stageMembers);
 
   return stageMembers.length > 0 ? (
     <Flex
-      key={group._id}
       sx={{
         flexDirection: 'column',
-        minWidth: ['100%', '50%'],
-        minHeight: ['80%', '50%'],
-        height: ['80%', '50%'],
+        maxWidth: ['100%', '46%'],
+        flexWrap: 'wrap',
+        m: 2,
       }}
     >
       <Text variant="subTitle" sx={{ pl: 3, color: 'text' }}>
         {group.name}
       </Text>
       <Box sx={{ bg: 'primary', height: '2px', ml: 3, mr: 3 }}></Box>
-      <Box
+      <Flex
         sx={{
+          maxWidth: '100%',
+          minWidth: '100%',
+          flexWrap: 'wrap',
           bg: 'gray.7',
           borderRadius: 'card',
           p: 2,
-          height: '100%',
         }}
       >
-        <Flex sx={{ height: '100%', width: '100%', flexWrap: 'wrap' }}>
-          <Box sx={{ minWidth: '50%', minHeight: 'auto' }}>
-            {stageMembers.map((stageMember) => (
-              <StageMemberView key={stageMember._id} stageMember={stageMember} />
-            ))}
-          </Box>
-        </Flex>
-      </Box>
+        {stageMembers.map((stageMember) => (
+          <Flex key={stageMember._id}>
+            <StageMemberView stageMember={stageMember} />
+          </Flex>
+        ))}
+      </Flex>
     </Flex>
   ) : null;
 };
