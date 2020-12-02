@@ -1,10 +1,9 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { Button } from 'baseui/button';
 import _ from 'lodash';
 import Link from 'next/link';
 import { Fragment, useCallback, useEffect } from 'react';
-import { Box, Heading, jsx } from 'theme-ui';
+import { Box, Button, Heading, jsx } from 'theme-ui';
 import Container from '../../components/Container';
 import DeviceView from '../../components/new/elements/DeviceView';
 import { useLocalDevice, useRemoteDevices } from '../../lib/use-digital-stage/hooks';

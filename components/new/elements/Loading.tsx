@@ -1,33 +1,30 @@
-import { styled } from 'baseui';
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import React from 'react';
+import { Box, Flex, jsx } from 'theme-ui';
 
-const Wrapper = styled('div', {
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  width: '100vw',
-  height: '100vh',
-  backgroundColor: '#FFFFFF',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 100,
-});
-const Text = styled('div', {
-  animationDuration: '1s',
-  animationIterationCount: 'infinite',
-  animationName: 'bounce',
-});
+const Loading = ({ children }: { children: React.ReactNode }): JSX.Element => (
+  <Flex
+    sx={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      backgroundColor: '#FFFFFF',
 
-const Loading = (props: { children: React.ReactNode }) => {
-  const { children } = props;
-
-  return (
-    <Wrapper>
-      <Text>{children}</Text>
-    </Wrapper>
-  );
-};
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 100,
+    }}
+  >
+    <Box
+      sx={{ animationDuration: '1s', animationIterationCount: 'infinite', animationName: 'bounce' }}
+    >
+      {children}
+    </Box>
+  </Flex>
+);
 
 export default Loading;
