@@ -5,7 +5,7 @@ import React from 'react';
 import { Box, Flex, jsx } from 'theme-ui';
 import GroupView from './GroupView';
 import { useCurrentStageId, useGroupsByStage } from '../../lib/use-digital-stage/hooks';
-import ConductorsView from '../new/elements/StageView/ConductorsView';
+import ConductorsView from './ConductorsView';
 
 const StageView = (): JSX.Element => {
   const stageId = useCurrentStageId();

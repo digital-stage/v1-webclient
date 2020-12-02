@@ -53,8 +53,10 @@ const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIco
 
 const StageMemberView = ({
   stageMember,
+  variant,
 }: {
   stageMember: StageMemberWithUserData;
+  variant?: 'default' | 'conductor';
 }): JSX.Element => {
   const videoConsumers = useVideoConsumersByStageMember(stageMember._id);
 
@@ -63,10 +65,8 @@ const StageMemberView = ({
       sx={{
         position: 'relative',
         backgroundImage: videoConsumers.length <= 0 && 'url("/images/user_background.svg")',
-        // width: '100%',
-        // height: '100%',
-        height: '240px',
-        width: '240px',
+        height: variant === 'conductor' ? '100%' : '240px',
+        width: variant === 'conductor' ? '100%' : '240px',
         m: 1,
       }}
     >
