@@ -40,7 +40,7 @@ const ChannelStrip = (props: {
   return (
     <Flex
       sx={{
-        height: '100%',
+          height: '100%',
         width: '150px',
         minWidth: '150px',
         flexDirection: 'column',
@@ -48,38 +48,15 @@ const ChannelStrip = (props: {
         mx: 3,
         bg: 'gray.7',
         borderRadius: 'card',
-        minHeight: 'calc(100vh - 280px)',
         alignItems: 'center',
       }}
       className={props.className}
     >
-      {/* {props.addHeader && <Box sx={{
+      {props.addHeader && <Box sx={{
         width: '100%',
         flexShrink: 0,
         flexGrow: 0,
-      }}>{props.addHeader}</Box>} */}
-
-      <Flex
-        sx={{
-          width: '100%',
-          flexShrink: 0,
-          flexGrow: 0,
-          flexDirection: 'column',
-          alignItems: 'center',
-          pt: 2,
-        }}
-      >
-        <Box
-          bg="primary"
-          sx={{
-            width: 'group.width',
-            height: 'group.height',
-            minWidth: 'group.width',
-            minHeight: 'group.height',
-            borderRadius: '50%',
-          }}
-        ></Box>
-      </Flex>
+      }}>{props.addHeader}</Box>}
 
       <Flex
         sx={{

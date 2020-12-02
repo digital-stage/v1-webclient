@@ -85,13 +85,13 @@ const AudioProducerChannel = (props: { audioProducerId: string }) => {
             addHeader={
               <Flex
                 sx={{
-                  width: '100%',
-                  height: '64px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                    width: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: '1rem'
                 }}
               >
-                <h4>Track</h4>
+                <h5>Track</h5>
               </Flex>
             }
             analyser={
