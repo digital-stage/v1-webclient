@@ -37,7 +37,7 @@ const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIco
           alignItems: 'center',
           bottom: '0px',
           left: '0px',
-          bg: !withIcon ? 'transparentGray' : 'transparent'
+          bg: !withIcon ? 'transparentGray' : 'transparent',
         }}
       >
         <OnlineStatus online={stageMember.online} />
