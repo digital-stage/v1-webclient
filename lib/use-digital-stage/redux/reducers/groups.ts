@@ -21,7 +21,7 @@ const addGroup = (state: GroupsCollection, group: Group): GroupsCollection => {
   };
 };
 
-function groups(
+function reduceGroups(
   prev: GroupsCollection = {
     byId: {},
     byStage: {},
@@ -49,9 +49,10 @@ function groups(
         });
       return state;
     }
-    case ServerStageEvents.GROUP_ADDED:
+    case ServerStageEvents.GROUP_ADDED: {
       const group = action.payload as Group;
       return addGroup(prev, group);
+    }
     case ServerStageEvents.GROUP_CHANGED:
       return {
         ...prev,
@@ -81,4 +82,4 @@ function groups(
   }
 }
 
-export default groups;
+export default reduceGroups;

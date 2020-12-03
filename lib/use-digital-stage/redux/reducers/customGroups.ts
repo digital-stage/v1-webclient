@@ -24,7 +24,7 @@ const addCustomGroup = (
   };
 };
 
-function customGroups(
+function reduceCustomGroups(
   state: CustomGroupsCollection = {
     byId: {},
     byGroup: {},
@@ -36,6 +36,7 @@ function customGroups(
   }
 ): CustomGroupsCollection {
   switch (action.type) {
+    case ServerGlobalEvents.STAGE_LEFT:
     case AdditionalReducerTypes.RESET: {
       return {
         byId: {},
@@ -87,4 +88,4 @@ function customGroups(
   }
 }
 
-export default customGroups;
+export default reduceCustomGroups;

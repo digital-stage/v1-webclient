@@ -23,7 +23,7 @@ function devices(
       };
     }
     case ServerDeviceEvents.LOCAL_DEVICE_READY:
-    case ServerDeviceEvents.DEVICE_ADDED:
+    case ServerDeviceEvents.DEVICE_ADDED: {
       const device = action.payload as Device;
       return {
         ...state,
@@ -33,7 +33,8 @@ function devices(
         },
         allIds: upsert<string>(state.allIds, device._id),
       };
-    case ServerDeviceEvents.DEVICE_CHANGED:
+    }
+    case ServerDeviceEvents.DEVICE_CHANGED: {
       return {
         ...state,
         byId: {
@@ -44,12 +45,14 @@ function devices(
           },
         },
       };
-    case ServerDeviceEvents.DEVICE_REMOVED:
+    }
+    case ServerDeviceEvents.DEVICE_REMOVED: {
       return {
         ...state,
         byId: omit(state.byId, action.payload),
         allIds: without<string>(state.allIds, action.payload),
       };
+    }
     default:
       return state;
   }

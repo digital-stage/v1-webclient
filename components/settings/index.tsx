@@ -3,9 +3,9 @@
 /** @jsx jsx */
 import React, { useCallback } from 'react';
 import { jsx, Box, Flex, Text, Heading, Button } from 'theme-ui';
-import Modal from '../new/elements/Modal';
 import { SettingsModalItems } from '../new/elements/PageWrapperWithStage/MenuItems';
 import useDigitalStage from '../../lib/use-digital-stage';
+import Modal from '../ui/Modal';
 
 const SettingsModal = (props: {
   isOpen: boolean;
@@ -28,8 +28,16 @@ const SettingsModal = (props: {
   }, [refreshLocalDeviceInt]);
 
   return (
-    <Modal isOpen={props.isOpen} onClose={props.onClose} variant="dark" type="settings">
-      <Flex>
+    <Modal open={props.isOpen} onClose={props.onClose} closeOnBackdropClicked={true}>
+      <Flex
+        sx={{
+          position: 'relative',
+          paddingTop: '2rem',
+          paddingBottom: '2rem',
+          width: '100%',
+          height: '100%',
+        }}
+      >
         <Box sx={{ width: '30%', display: ['none', 'block'] }}>
           <Heading ml={3} mb={3}>
             Settings
@@ -66,10 +74,11 @@ const SettingsModal = (props: {
         <Box
           sx={{
             width: ['100%', '70%'],
+            height: '100%',
             ml: 3,
             mr: 4,
-            maxHeight: 'calc(100vh - 230px)',
-            overflowY: 'auto',
+            position: 'relative',
+            overflowY: 'scroll',
             '::-webkit-scrollbar': {
               width: '15px',
               bg: 'transparent',
@@ -84,9 +93,18 @@ const SettingsModal = (props: {
             },
           }}
         >
-          {SettingsModalItems.map((item) => {
-            return item.href === selected ? item.content : null;
-          })}
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+            }}
+          >
+            {SettingsModalItems.map((item) => {
+              return item.href === selected ? item.content : null;
+            })}
+          </Box>
         </Box>
       </Flex>
     </Modal>

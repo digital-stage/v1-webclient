@@ -17,7 +17,7 @@ const addUser = (state: UsersCollection, user: User): UsersCollection => {
   };
 };
 
-function users(
+function reduceUsers(
   state: UsersCollection = {
     byId: {},
     allIds: [],
@@ -75,7 +75,7 @@ function users(
         byId: omit(state.byId, action.payload),
         allIds: without<string>(state.allIds, action.payload),
       };
-    case ServerUserEvents.USER_READY:
+    case ServerUserEvents.USER_READY: {
       const user = action.payload as User;
       return {
         ...state,
@@ -85,9 +85,10 @@ function users(
         },
         allIds: upsert<string>(state.allIds, user._id),
       };
+    }
     default:
       return state;
   }
 }
 
-export default users;
+export default reduceUsers;

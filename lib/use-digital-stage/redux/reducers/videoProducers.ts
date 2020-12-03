@@ -32,7 +32,7 @@ const addVideoProducer = (
   };
 };
 
-function videoProducers(
+function reduceVideoProducers(
   state: RemoteVideoProducersCollection = {
     byId: {},
     byStageMember: {},
@@ -45,6 +45,7 @@ function videoProducers(
   }
 ): RemoteVideoProducersCollection {
   switch (action.type) {
+    case ServerGlobalEvents.STAGE_LEFT:
     case AdditionalReducerTypes.RESET: {
       return {
         byId: {},
@@ -103,4 +104,4 @@ function videoProducers(
   }
 }
 
-export default videoProducers;
+export default reduceVideoProducers;

@@ -7,12 +7,15 @@ import ModifyStageModal from './ModifyStageModal';
 import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
 import { Stage } from '../../../../lib/use-digital-stage/types';
 import { useCurrentUser } from '../../../../lib/use-digital-stage/hooks';
+import ConfirmationModal from '../../../ConfirmationModal';
 
 const StageHeader = (props: { stage: Stage }): JSX.Element => {
   const { removeStage, leaveStageForGood } = useStageActions();
   const [currentStage, setCurrentStage] = React.useState<Stage>();
   const { _id: userId } = useCurrentUser();
   const [isModifyStageOpen, setModifyStageIsOpen] = React.useState<boolean>(false);
+  const [openConfirmationModal, setCloseConfirmationModal] = React.useState<boolean>(false);
+  const [stageId, setStageId] = React.useState<string>();
 
   const { stage } = props;
   const isAdmin = stage.admins.indexOf(userId) !== -1;
@@ -45,8 +48,8 @@ const StageHeader = (props: { stage: Stage }): JSX.Element => {
           <IconButton
             aria-label={isAdmin ? 'Bühne entfernen' : 'Bühne verlassen'}
             onClick={() => {
-              if (isAdmin) removeStage(stage._id);
-              else leaveStageForGood(stage._id);
+              setStageId(stage._id);
+              setCloseConfirmationModal(true);
             }}
           >
             <FaTrash />
@@ -57,6 +60,15 @@ const StageHeader = (props: { stage: Stage }): JSX.Element => {
         stage={currentStage}
         isOpen={isModifyStageOpen}
         onClose={() => setModifyStageIsOpen(false)}
+      />
+      <ConfirmationModal
+        isOpen={openConfirmationModal}
+        onClose={() => setCloseConfirmationModal(false)}
+        onConfirm={() => {
+          if (isAdmin) removeStage(stageId);
+          else leaveStageForGood(stageId);
+          setCloseConfirmationModal(false);
+        }}
       />
     </Box>
   );

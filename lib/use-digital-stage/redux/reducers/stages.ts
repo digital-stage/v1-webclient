@@ -17,7 +17,7 @@ const addStage = (state: StagesCollection, stage: Stage): StagesCollection => {
   };
 };
 
-function stages(
+function reduceStages(
   state: StagesCollection = {
     byId: {},
     allIds: [],
@@ -39,9 +39,10 @@ function stages(
       if (stage) return addStage(state, stage);
       return state;
     }
-    case ServerStageEvents.STAGE_ADDED:
+    case ServerStageEvents.STAGE_ADDED: {
       const stage = action.payload as Stage;
       return addStage(state, stage);
+    }
     case ServerStageEvents.STAGE_CHANGED:
       return {
         ...state,
@@ -64,4 +65,4 @@ function stages(
   }
 }
 
-export default stages;
+export default reduceStages;

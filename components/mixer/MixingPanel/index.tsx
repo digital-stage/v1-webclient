@@ -17,9 +17,28 @@ const MixingPanel = (): JSX.Element => {
   return (
     <Flex
       sx={{
-        position: 'relative',
-        maxHeight: '700px',
-        minHeight: '600px',
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        minHeight: '500px',
+        maxHeight: '800px',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        overflowX: 'scroll',
+        overflowY: 'auto',
+        '::-webkit-scrollbar': {
+          width: '5px',
+          bg: 'transparent',
+        },
+        '::-webkit-scrollbar-track': {
+          bg: 'transparent',
+        },
+        '::-webkit-scrollbar-thumb': {
+          bg: 'gray.3',
+          borderRadius: 'card',
+        },
       }}
     >
       {groupIds.map((id) => (

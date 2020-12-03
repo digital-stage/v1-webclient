@@ -11,7 +11,7 @@ import {
 } from '../../lib/use-digital-stage';
 import OnlineStatus from '../new/elements/OnlineStatus';
 import useVideoConsumersByStageMember from '../../lib/use-digital-stage/hooks/useVideoConsumersByStageMember';
-import VideoPlayer from '../new/elements/VideoPlayer3';
+import VideoPlayer from '../VideoPlayer';
 
 const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIcon?: boolean }) => {
   const { stageMember, withIcon } = props;
@@ -29,10 +29,23 @@ const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIco
         justifyContent: 'center',
       }}
     >
-      {withIcon && <HiUserCircle size={80} sx={{ color: 'gray.3' }} />}
-      <Box sx={{ position: !withIcon ? 'absolute' : 'static', bottom: '0px', left: '0px' }}>
-        <Heading as="h5" sx={{ display: withIcon ? 'block' : 'inline-block' }}>
-          <OnlineStatus online={stageMember.online} /> {stageMember.name}
+      {withIcon && <HiUserCircle size={60} sx={{ color: 'gray.3' }} />}
+      <Box
+        sx={{
+          position: !withIcon ? 'absolute' : 'static',
+          display: !withIcon ? 'flex' : 'block',
+          alignItems: 'center',
+          bottom: '0px',
+          left: '0px',
+          bg: !withIcon ? 'transparentGray' : 'transparent',
+        }}
+      >
+        <OnlineStatus online={stageMember.online} />
+        <Heading
+          as="h5"
+          sx={{ display: withIcon ? 'block' : 'inline-block', ml: withIcon ? 0 : 2 }}
+        >
+          {stageMember.name}
         </Heading>
 
         {isAdmin && (
@@ -53,8 +66,10 @@ const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIco
 
 const StageMemberView = ({
   stageMember,
+  variant,
 }: {
   stageMember: StageMemberWithUserData;
+  variant?: 'default' | 'conductor';
 }): JSX.Element => {
   const videoConsumers = useVideoConsumersByStageMember(stageMember._id);
 
@@ -63,8 +78,9 @@ const StageMemberView = ({
       sx={{
         position: 'relative',
         backgroundImage: videoConsumers.length <= 0 && 'url("/images/user_background.svg")',
-        width: '100%',
-        height: '100%',
+        height: variant === 'conductor' ? '100%' : '240px',
+        width: variant === 'conductor' ? '100%' : '240px',
+        m: 1,
       }}
     >
       {videoConsumers.length > 0 && (

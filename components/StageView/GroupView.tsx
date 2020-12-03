@@ -13,9 +13,9 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
     <Flex
       sx={{
         flexDirection: 'column',
-        maxWidth: ['100%', '50%'],
-        minWidth: ['100%', '50%'],
+        maxWidth: ['100%', '46%'],
         flexWrap: 'wrap',
+        m: 2,
       }}
     >
       <Text variant="subTitle" sx={{ pl: 3, color: 'text' }}>
@@ -33,13 +33,7 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
         }}
       >
         {stageMembers.map((stageMember) => (
-          <Flex
-            key={stageMember._id}
-            sx={{
-              maxWidth: '50%',
-              minWidth: '50%',
-            }}
-          >
+          <Flex key={stageMember._id}>
             <StageMemberView stageMember={stageMember} />
           </Flex>
         ))}

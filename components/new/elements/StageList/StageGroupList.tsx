@@ -16,6 +16,7 @@ import { Group, Stage } from '../../../../lib/use-digital-stage/types';
 import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
 import useStageJoiner from '../../../../lib/useStageJoiner';
 import useAudioContext from '../../../../lib/useAudioContext';
+import ConfirmationModal from '../../../ConfirmationModal';
 
 const StageGroupList = (props: { stage: Stage }): JSX.Element => {
   const groups = useGroups();
@@ -30,6 +31,8 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
   const [isModifyGroupOpen, setModifyGroupIsOpen] = React.useState<boolean>(false);
   const [isCopyLinkOpen, setCopyLinkOpen] = React.useState<boolean>();
   const { audioContext, started } = useAudioContext();
+  const [openConfirmationModal, setConfirmationModalOpen] = React.useState<boolean>(false);
+  const [groupId, setGroupId] = React.useState<string>();
 
   const { stage } = props;
 
@@ -59,8 +62,8 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                   </Heading>
                 </Flex>
 
-                {isAdmin && (
-                  <Flex sx={{ alignItems: 'center' }}>
+                <Flex sx={{ alignItems: 'center' }}>
+                  {isAdmin && (
                     <Box>
                       <IconButton
                         aria-label="Gruppe bearbeiten"
@@ -75,14 +78,17 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                       <IconButton
                         aria-label="Gruppe entfernen"
                         onClick={() => {
-                          removeGroup(group._id);
+                          setGroupId(group._id);
+                          setConfirmationModalOpen(true);
                         }}
                       >
                         <FaTrash />
                       </IconButton>
                     </Box>
+                  )}
 
-                    <Box>
+                  <Box>
+                    {isAdmin && (
                       <Button
                         variant="outline"
                         onClick={() => {
@@ -93,30 +99,30 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                       >
                         Einladen
                       </Button>
-                      <Button
-                        variant="secondary"
-                        onClick={() => {
-                          if (audioContext && !started) audioContext.resume();
-                          if (
-                            currentStageId &&
-                            stage._id === currentStageId &&
-                            group._id === currentGroupId
-                          ) {
-                            leaveStage();
-                          } else {
-                            requestJoin(stage._id, group._id, stage.password);
-                          }
-                        }}
-                      >
-                        {currentStageId &&
-                        stage._id === currentStageId &&
-                        group._id === currentGroupId
-                          ? 'Verlassen'
-                          : 'Betreten'}
-                      </Button>
-                    </Box>
-                  </Flex>
-                )}
+                    )}
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        if (audioContext && !started) audioContext.resume();
+                        if (
+                          currentStageId &&
+                          stage._id === currentStageId &&
+                          group._id === currentGroupId
+                        ) {
+                          leaveStage();
+                        } else {
+                          requestJoin(stage._id, group._id, stage.password);
+                        }
+                      }}
+                    >
+                      {currentStageId &&
+                      stage._id === currentStageId &&
+                      group._id === currentGroupId
+                        ? 'Verlassen'
+                        : 'Betreten'}
+                    </Button>
+                  </Box>
+                </Flex>
               </Flex>
             </React.Fragment>
           );
@@ -161,6 +167,14 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
         group={currentGroup}
         onClose={() => setCopyLinkOpen(false)}
         isOpen={isCopyLinkOpen}
+      />
+      <ConfirmationModal
+        isOpen={openConfirmationModal}
+        onClose={() => setConfirmationModalOpen(false)}
+        onConfirm={() => {
+          removeGroup(groupId);
+          setConfirmationModalOpen(false);
+        }}
       />
     </Box>
   );

@@ -7,6 +7,7 @@ import MixingPanelModal from '../../../../MixingPanelModal';
 import SettingsModal from '../../../../settings';
 import { CenteredNavItems, LowerNavItems } from '../../PageWrapperWithStage/MenuItems';
 import NavItem from '../NavItem';
+import { FaVolumeUp } from 'react-icons/fa';
 
 const SideBar = (): JSX.Element => {
   const [selected, setSelected] = React.useState<string>();
@@ -35,6 +36,7 @@ const SideBar = (): JSX.Element => {
           outline: 'none',
           textAlign: 'center',
           py: 2,
+          cursor: 'pointer',
         }}
       >
         {item.icon ? item.icon : item.label} {item.label}
@@ -48,7 +50,9 @@ const SideBar = (): JSX.Element => {
       py={3}
       sx={{
         flexDirection: 'column',
-        cursor: 'pointer',
+        //TODO: @htw please check, settings a pointer cursor to the hole element leads to
+        // bad UX, so I commented it out and gave the single elements a pointer cursor
+        //cursor: 'pointer',
         bg: 'gray.6',
         minHeight: '100vh',
         justifyContent: 'space-between',
@@ -56,7 +60,13 @@ const SideBar = (): JSX.Element => {
       }}
     >
       <Box>
-        <Link sx={{ color: 'text' }} href="https://www.digital-stage.org" target="_blank">
+        <Link
+          sx={{
+            color: 'text',
+          }}
+          href="https://www.digital-stage.org"
+          target="_blank"
+        >
           <DigitalStageLogo single icon width={30} />
         </Link>
       </Box>

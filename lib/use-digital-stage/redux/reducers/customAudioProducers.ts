@@ -24,7 +24,7 @@ const addCustomAudioProducer = (
   };
 };
 
-function customAudioProducers(
+function reduceCustomAudioProducers(
   state: CustomRemoteAudioProducersCollection = {
     byId: {},
     byAudioProducer: {},
@@ -36,6 +36,7 @@ function customAudioProducers(
   }
 ): CustomRemoteAudioProducersCollection {
   switch (action.type) {
+    case ServerGlobalEvents.STAGE_LEFT:
     case AdditionalReducerTypes.RESET: {
       return {
         byId: {},
@@ -83,4 +84,4 @@ function customAudioProducers(
   }
 }
 
-export default customAudioProducers;
+export default reduceCustomAudioProducers;

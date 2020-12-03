@@ -5,13 +5,11 @@ import React from 'react';
 import { Box, Flex, jsx } from 'theme-ui';
 import GroupView from './GroupView';
 import { useCurrentStageId, useGroupsByStage } from '../../lib/use-digital-stage/hooks';
-import ConductorsView from '../new/elements/StageView/ConductorsView';
+import ConductorsView from './ConductorsView';
 
-const StageViewTest = (): JSX.Element => {
+const StageView = (): JSX.Element => {
   const stageId = useCurrentStageId();
   const groups = useGroupsByStage(stageId);
-
-  console.log(groups);
 
   return (
     <Box
@@ -22,7 +20,7 @@ const StageViewTest = (): JSX.Element => {
         px: '25px',
         overflowY: 'auto',
         '::-webkit-scrollbar': {
-          width: '15px',
+          width: '5px',
           bg: 'transparent',
         },
         '::-webkit-scrollbar-track': {
@@ -31,7 +29,6 @@ const StageViewTest = (): JSX.Element => {
         '::-webkit-scrollbar-thumb': {
           bg: 'gray.3',
           borderRadius: 'card',
-          border: 'solid 3px #282828',
         },
       }}
     >
@@ -46,4 +43,4 @@ const StageViewTest = (): JSX.Element => {
   );
 };
 
-export default StageViewTest;
+export default StageView;

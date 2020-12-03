@@ -24,7 +24,7 @@ const addCustomStageMember = (
   };
 };
 
-function customStageMembers(
+function reduceCustomStageMembers(
   state: CustomStageMembersCollection = {
     byId: {},
     byStageMember: {},
@@ -36,6 +36,7 @@ function customStageMembers(
   }
 ): CustomStageMembersCollection {
   switch (action.type) {
+    case ServerGlobalEvents.STAGE_LEFT:
     case AdditionalReducerTypes.RESET: {
       return {
         byId: {},
@@ -87,4 +88,4 @@ function customStageMembers(
   }
 }
 
-export default customStageMembers;
+export default reduceCustomStageMembers;

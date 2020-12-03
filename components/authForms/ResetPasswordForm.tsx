@@ -36,7 +36,7 @@ export default function ResetPasswordForm({ resetToken }: Props): JSX.Element {
         'Das Passwort muss folgendes beinhalten: mindestens eine Zahl, ein kleiner und ein großer Buchstabe sowie insgesamt eine Länge von 8 Zeichen haben'
       )
       .required('Passwort wird benötigt'),
-    passwordRepeat: Yup.string()
+    repeatPassword: Yup.string()
       .oneOf([Yup.ref('password'), null], 'Die Passwörter müssen identisch sein')
       .required('Die Passwortwiederholung wird benötigt'),
   });
