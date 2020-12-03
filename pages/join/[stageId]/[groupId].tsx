@@ -1,8 +1,9 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { useRouter } from 'next/router';
-import { Fragment, useEffect } from 'react';
-import { Heading, jsx } from 'theme-ui';
+import { useEffect } from 'react';
+import { Flex, Heading, jsx } from 'theme-ui';
+import Layout from '../../../components/Layout';
 import useStageJoiner from '../../../lib/useStageJoiner';
 
 const Join = (): JSX.Element => {
@@ -29,9 +30,11 @@ const Join = (): JSX.Element => {
   }, [router.query]);
 
   return (
-    <Fragment>
-      <Heading>Lade ...</Heading>
-    </Fragment>
+    <Layout>
+      <Flex sx={{ width: '100%', height: '100vh', alignItems: 'center', justifyContent: 'center' }}>
+        <Heading>Lade ...</Heading>
+      </Flex>
+    </Layout>
   );
 };
 
