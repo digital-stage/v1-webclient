@@ -29,8 +29,14 @@ const Reset = (): JSX.Element => {
         kids:
           'Der genutzte Link ist nicht korrekt. Bitte prüfe Deine E-Mail für das Zurücksetzen des Passworts',
       });
+    } else {
+      setMsg({
+        state: false,
+        type: null,
+        kids: null,
+      });
     }
-  }, []);
+  }, [token]);
 
   return (
     <Layout auth>
