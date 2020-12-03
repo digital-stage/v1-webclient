@@ -38,7 +38,7 @@ const MixingPanelModal = ({ isOpen, onClose }: IProps): JSX.Element => {
             flexGrow: 1,
             overflowY: 'scroll',
             '::-webkit-scrollbar': {
-              width: '15px',
+              width: '5px',
               bg: 'transparent',
             },
             '::-webkit-scrollbar-track': {
@@ -47,7 +47,6 @@ const MixingPanelModal = ({ isOpen, onClose }: IProps): JSX.Element => {
             '::-webkit-scrollbar-thumb': {
               bg: 'gray.3',
               borderRadius: 'card',
-              border: 'solid 3px #282828',
             },
           }}
         >

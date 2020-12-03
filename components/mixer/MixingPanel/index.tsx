@@ -28,6 +28,17 @@ const MixingPanel = (): JSX.Element => {
         right: 0,
         overflowX: 'scroll',
         overflowY: 'auto',
+        '::-webkit-scrollbar': {
+          width: '5px',
+          bg: 'transparent',
+        },
+        '::-webkit-scrollbar-track': {
+          bg: 'transparent',
+        },
+        '::-webkit-scrollbar-thumb': {
+          bg: 'gray.3',
+          borderRadius: 'card',
+        },
       }}
     >
       {groupIds.map((id) => (

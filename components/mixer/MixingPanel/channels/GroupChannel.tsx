@@ -58,13 +58,11 @@ const GroupChannel = (props: { groupId: string }) => {
         backgroundColor: '#1c1c1c',
         flexDirection: 'row',
         borderRadius: '20px',
-        marginRight: '1rem',
+        minWidth: 'auto',
       }}
     >
       <Box
         sx={{
-          paddingLeft: '1rem',
-          paddingRight: '1rem',
           paddingTop: '3rem',
           paddingBottom: '3rem',
           height: '100%',
