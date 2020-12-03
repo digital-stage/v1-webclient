@@ -1,3 +1,18 @@
+# [0.20.0](https://github.com/digital-stage/webclient/compare/v0.19.1...v0.20.0) (2020-12-03)
+
+
+### Bug Fixes
+
+* prettier ([7f0d8c2](https://github.com/digital-stage/webclient/commit/7f0d8c2d56938a4d8f41d9f486cefe56c6ee040a))
+* replaced modal with theme-ui only implementation ([2b64df4](https://github.com/digital-stage/webclient/commit/2b64df4d611d10b12ca03da497ce06eeec4e3b9b))
+* replaced modal with theme-ui only implementation ([6b6b7e3](https://github.com/digital-stage/webclient/commit/6b6b7e37be4422fefb0efecedab347e44e79ed7f))
+
+
+### Features
+
+* add join stage button to non stage admins ([9c763e7](https://github.com/digital-stage/webclient/commit/9c763e7f8fc25d9bee2b8f8fc107d252be1c9d72))
+* add transparent background to member name at stage view ([31d6e39](https://github.com/digital-stage/webclient/commit/31d6e392619cbea1204206c58a740bfadee1a852))
+
 ## [0.19.1](https://github.com/digital-stage/webclient/compare/v0.19.0...v0.19.1) (2020-12-02)
 
 
