@@ -1,3 +1,12 @@
+## [0.20.1](https://github.com/digital-stage/webclient/compare/v0.20.0...v0.20.1) (2020-12-03)
+
+
+### Bug Fixes
+
+* collapsing channel strip at mixer modal ([06cb922](https://github.com/digital-stage/webclient/commit/06cb922265731578c5147e79a110b67ce4967f62))
+* removed some console logs ([4992dc8](https://github.com/digital-stage/webclient/commit/4992dc8fd490851f918df067f035fcf2c605955a))
+* run prettier ([314ba9d](https://github.com/digital-stage/webclient/commit/314ba9d2f30c8facc6ed7d64c6685498580d436d))
+
 # [0.20.0](https://github.com/digital-stage/webclient/compare/v0.19.1...v0.20.0) (2020-12-03)
 
 
