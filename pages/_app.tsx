@@ -40,7 +40,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                     addErrorHandler={reportError}
                   >
                     <AudioContextProvider>
-                      <StageWebAudioProvider>
+                      <StageWebAudioProvider handleError={reportError}>
                         <StageJoinerProvider>
                           <ErrorHandler>
                             {/* eslint-disable-next-line react/jsx-props-no-spreading */}
