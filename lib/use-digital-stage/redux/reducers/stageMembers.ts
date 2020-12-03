@@ -6,9 +6,9 @@ import upsert from '../utils/upsert';
 import { StageMember, StageMembersCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 import { InitialStagePackage } from '../actions/stageActions';
-import debug from "debug";
+import debug from 'debug';
 
-const err = debug("redux:error");
+const err = debug('redux:error');
 
 const addStageMember = (
   prev: StageMembersCollection,
@@ -68,27 +68,33 @@ function reduceStageMembers(
       return addStageMember(prev, stageMember);
     }
     case ServerStageEvents.STAGE_MEMBER_CHANGED: {
-      const stageMember = action.payload as Partial<StageMember> & {_id: string};
+      const stageMember = action.payload as Partial<StageMember> & { _id: string };
       const previousStageMember = prev.byId[stageMember._id];
-      if( !previousStageMember ) {
-        err("Could not find previous stage member " + stageMember._id);
+      if (!previousStageMember) {
+        err('Could not find previous stage member ' + stageMember._id);
         return prev;
       }
-      if( stageMember.groupId !== previousStageMember.groupId ) {
+      if (stageMember.groupId !== previousStageMember.groupId) {
         return {
           ...prev,
           byId: {
             ...prev.byId,
             [stageMember._id]: {
               ...previousStageMember,
-              ...stageMember
+              ...stageMember,
             },
           },
           byGroup: {
             ...prev.byGroup,
-            [previousStageMember.groupId]: without<string>(prev.byGroup[previousStageMember.groupId], stageMember._id),
-            [stageMember.groupId]: upsert<string>(prev.byGroup[stageMember.groupId], stageMember._id),
-          }
+            [previousStageMember.groupId]: without<string>(
+              prev.byGroup[previousStageMember.groupId],
+              stageMember._id
+            ),
+            [stageMember.groupId]: upsert<string>(
+              prev.byGroup[stageMember.groupId],
+              stageMember._id
+            ),
+          },
         };
       }
       return {
@@ -97,10 +103,10 @@ function reduceStageMembers(
           ...prev.byId,
           [stageMember._id]: {
             ...previousStageMember,
-            ...stageMember
+            ...stageMember,
           },
         },
-      }
+      };
     }
     case ServerStageEvents.STAGE_MEMBER_REMOVED: {
       const id = action.payload as string;
