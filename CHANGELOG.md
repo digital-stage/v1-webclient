@@ -1,3 +1,11 @@
+## [0.20.4](https://github.com/digital-stage/webclient/compare/v0.20.3...v0.20.4) (2020-12-03)
+
+
+### Bug Fixes
+
+* all group members are kicked when user changes group ([80506e4](https://github.com/digital-stage/webclient/commit/80506e483081869df112a8d4e9e4e6a1e055d7a6))
+* all group members are kicked when user changes group ([debd6b1](https://github.com/digital-stage/webclient/commit/debd6b150bc82e4bbef5819f9e6e2f6601023cde))
+
 ## [0.20.3](https://github.com/digital-stage/webclient/compare/v0.20.2...v0.20.3) (2020-12-03)
 
 
