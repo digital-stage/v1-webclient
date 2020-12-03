@@ -8,7 +8,6 @@ import StageMemberView from './StageMemberView';
 
 const GroupView = ({ group }: { group: Group }): JSX.Element => {
   const stageMembers = useStageMembersByGroup(group._id);
-  console.log('stage memebers', stageMembers);
 
   return stageMembers.length > 0 ? (
     <Flex

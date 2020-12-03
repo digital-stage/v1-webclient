@@ -11,8 +11,6 @@ const StageView = (): JSX.Element => {
   const stageId = useCurrentStageId();
   const groups = useGroupsByStage(stageId);
 
-  console.log(groups.length);
-
   return (
     <Box
       sx={{
@@ -22,7 +20,7 @@ const StageView = (): JSX.Element => {
         px: '25px',
         overflowY: 'auto',
         '::-webkit-scrollbar': {
-          width: '15px',
+          width: '5px',
           bg: 'transparent',
         },
         '::-webkit-scrollbar-track': {
@@ -31,7 +29,6 @@ const StageView = (): JSX.Element => {
         '::-webkit-scrollbar-thumb': {
           bg: 'gray.3',
           borderRadius: 'card',
-          border: 'solid 3px #282828',
         },
       }}
     >
