@@ -17,6 +17,7 @@ const theme: Theme = {
     modalBg: '#1c1c1c',
     backdropBg: '#000000B2',
     online: '#00FF3C',
+    transparentGray: '#b3b3b39e',
     gray: ['#D1D1D1', '#B3B3B3', '#828282', '#535353', '#282828', '#181818', '#101010', '#000000'],
   },
   fonts: {
