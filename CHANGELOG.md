@@ -1,3 +1,10 @@
+## [0.20.3](https://github.com/digital-stage/webclient/compare/v0.20.2...v0.20.3) (2020-12-03)
+
+
+### Bug Fixes
+
+* quick fix to support safari ([28bd655](https://github.com/digital-stage/webclient/commit/28bd655f094a7dbf7320fabfa6d4acaca04bdf89))
+
 ## [0.20.2](https://github.com/digital-stage/webclient/compare/v0.20.1...v0.20.2) (2020-12-03)
 
 
