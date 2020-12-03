@@ -1,3 +1,10 @@
+## [0.20.5](https://github.com/digital-stage/webclient/compare/v0.20.4...v0.20.5) (2020-12-03)
+
+
+### Bug Fixes
+
+* get query data from rerender ([590328a](https://github.com/digital-stage/webclient/commit/590328a35a0352cace893a07974fa11c28761ea3))
+
 ## [0.20.4](https://github.com/digital-stage/webclient/compare/v0.20.3...v0.20.4) (2020-12-03)
 
 
