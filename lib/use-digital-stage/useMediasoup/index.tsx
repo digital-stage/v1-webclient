@@ -67,11 +67,15 @@ const MediasoupProvider = (props: {
   }, [inputVideoDeviceId]);
 
   const getAudioTracks = useCallback((): Promise<MediaStreamTrack[]> => {
+    const sampleRate = process.env.NEXT_PUBLIC_FIXED_SAMPLERATE
+      ? parseInt(process.env.NEXT_PUBLIC_FIXED_SAMPLERATE)
+      : undefined;
     return navigator.mediaDevices
       .getUserMedia({
         video: false,
         audio: {
           deviceId: inputAudioDeviceId || undefined,
+          sampleRate: sampleRate,
           autoGainControl: false,
           echoCancellation: false,
           noiseSuppression: false,

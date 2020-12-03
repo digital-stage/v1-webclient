@@ -79,15 +79,12 @@ const StageWebAudioProvider = (props: {
 
         merger.connect(audioContext.destination);
 
-        console.debug('CONNECTING SPLITTER');
         splitter.connect(merger, 0, 0);
         splitter.connect(merger, 0, 1);
 
         const createdRootNodeL = audioContext.createGain();
-        console.debug('CONNECTING DEST');
         createdRootNodeL.connect(audioContext.destination);
         const createdRootNodeR = audioContext.createGain();
-        console.debug('CONNECTING DEST');
         createdRootNodeR.connect(audioContext.destination);
 
         setRootNodeL(createdRootNodeL);
@@ -350,13 +347,8 @@ const StageWebAudioProvider = (props: {
                   gainNode.connect(pannerNode.getNode());
                   splitterNode = audioContext.createChannelSplitter(2);
                   pannerNode.connect(splitterNode);
-                  console.debug('TRACK - CONNECTING GAINS TO SPLITTER');
-                  console.debug(splitterNode.channelCount);
-                  console.debug(stageMemberNodes[item.stageMemberId].gainNodeL.channelCount);
-                  console.debug(stageMemberNodes[item.stageMemberId].gainNodeR.channelCount);
                   splitterNode.connect(stageMemberNodes[item.stageMemberId].gainNodeL, 0, 0);
                   splitterNode.connect(stageMemberNodes[item.stageMemberId].gainNodeR, 0, 0);
-                  console.debug('TRACK - DONE?');
                 } else {
                   gainNode = prev[item._id].gainNode;
                   analyserNode = prev[item._id].analyserNode;
