@@ -1,3 +1,10 @@
+## [0.20.2](https://github.com/digital-stage/webclient/compare/v0.20.1...v0.20.2) (2020-12-03)
+
+
+### Bug Fixes
+
+* reset password validation ([6d86e9a](https://github.com/digital-stage/webclient/commit/6d86e9a96b77a5cd856d91f92b1dcf9b2da5ea18))
+
 ## [0.20.1](https://github.com/digital-stage/webclient/compare/v0.20.0...v0.20.1) (2020-12-03)
 
 
