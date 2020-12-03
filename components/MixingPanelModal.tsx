@@ -1,12 +1,13 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { Box, Heading, jsx, Text } from 'theme-ui';
+import { Box, Flex, Heading, jsx, Text } from 'theme-ui';
 import { useIsStageAdmin } from '../lib/use-digital-stage/hooks';
 import MixingPanel from './mixer/MixingPanel';
-import Modal from './new/elements/Modal';
+import Modal from './ui/Modal';
 
 interface IProps {
   isOpen: boolean;
+
   onClose(): void;
 }
 
@@ -14,45 +15,45 @@ const MixingPanelModal = ({ isOpen, onClose }: IProps): JSX.Element => {
   const isAdmin = useIsStageAdmin();
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} variant="dark" type="settings">
-      <Box
+    <Modal open={isOpen} onClose={onClose} closeOnBackdropClicked={true}>
+      <Flex
         sx={{
-          height: '80vh',
-          overflowX: 'auto',
-          '::-webkit-scrollbar': {
-            height: '16px',
-            mt: 2,
-          },
-          '::-webkit-scrollbar-track': {
-            bg: 'transparent',
-          },
-          '::-webkit-scrollbar-thumb': {
-            bg: 'gray.3',
-            borderRadius: 'card',
-            border: 'solid 3px #282828',
-          },
+          flexDirection: 'column',
+          width: '100%',
+          height: '100%',
+          padding: '2rem',
         }}
       >
-        <Box sx={{ my: 3, ml: 3 }}>
-          <Heading>Master Audiomixer</Heading>
-          {isAdmin ? (
-            <Text>
-              Deine Mixereinstellungen werden für alle Nutzer in dieser Bühne verwendet und
-              synchronisiert.
-            </Text>
-          ) : undefined}
-        </Box>
+        <Heading>Master Audiomixer</Heading>
+        {isAdmin ? (
+          <Text>
+            Deine Mixereinstellungen werden für alle Nutzer in dieser Bühne verwendet und
+            synchronisiert.
+          </Text>
+        ) : undefined}
         <Box
           sx={{
             position: 'relative',
-            height: '100%',
-            minHeight: '400px',
-            maxHeight: '800px',
+            width: '100%',
+            flexGrow: 1,
+            overflowY: 'scroll',
+            '::-webkit-scrollbar': {
+              width: '15px',
+              bg: 'transparent',
+            },
+            '::-webkit-scrollbar-track': {
+              bg: 'transparent',
+            },
+            '::-webkit-scrollbar-thumb': {
+              bg: 'gray.3',
+              borderRadius: 'card',
+              border: 'solid 3px #282828',
+            },
           }}
         >
           <MixingPanel />
         </Box>
-      </Box>
+      </Flex>
     </Modal>
   );
 };

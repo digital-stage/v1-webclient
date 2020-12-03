@@ -20,6 +20,8 @@ const MixingPanel = (): JSX.Element => {
         position: 'absolute',
         width: '100%',
         height: '100%',
+        minHeight: '500px',
+        maxHeight: '800px',
         top: 0,
         left: 0,
         bottom: 0,
