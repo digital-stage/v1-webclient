@@ -218,13 +218,11 @@ const MediasoupProvider = (props: {
         .map((consumer) => removeConsumer(consumer, 'audio'))
     );
   }, [audioConsumers, removeConsumer]);
-  const shareAudio = useCallback(
-    () =>
-      getAudioTracks()
-        .then((tracks) => Promise.all(tracks.map((track) => produce(track))))
-        .then((localProducers) => setLocalAudioProducers((prev) => [...prev, ...localProducers])),
-    [getAudioTracks, produce]
-  );
+  const shareAudio = useCallback(() => {
+    return getAudioTracks()
+      .then((tracks) => Promise.all(tracks.map((track) => produce(track))))
+      .then((localProducers) => setLocalAudioProducers((prev) => [...prev, ...localProducers]));
+  }, [getAudioTracks, produce]);
   const stopSharingAudio = useCallback(() => {
     return Promise.all(
       localAudioProducers.map((localProducer) => stopProducing(localProducer))
@@ -256,6 +254,7 @@ const MediasoupProvider = (props: {
         stopSharingAudio().catch((error) => err(error));
       }
     }
+    //TODO: Chaning device leads to duplicated streams!!!!!
   }, [ready, sendAudio, shareAudio]);
 
   /** *

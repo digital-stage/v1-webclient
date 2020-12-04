@@ -102,7 +102,7 @@ class TreeDimensionPannerNode {
     return this.node.connect(destinationNode, output, input);
   };
 
-  public disconnect = (output?: number)  => {
+  public disconnect = (output?: number) => {
     return this.node.disconnect(output);
   };
 
