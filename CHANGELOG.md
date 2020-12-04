@@ -1,3 +1,10 @@
+## [0.20.6](https://github.com/digital-stage/webclient/compare/v0.20.5...v0.20.6) (2020-12-04)
+
+
+### Bug Fixes
+
+* partly fixed duplicated audio inputs when changing device ([afdf678](https://github.com/digital-stage/webclient/commit/afdf6780c4de313e8d4eea81b78defac6f5db6a7))
+
 ## [0.20.5](https://github.com/digital-stage/webclient/compare/v0.20.4...v0.20.5) (2020-12-03)
 
 
