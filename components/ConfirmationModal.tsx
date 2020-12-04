@@ -1,25 +1,26 @@
 /* eslint-disable react/destructuring-assignment */
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React from 'react';
-import { jsx, Text, Button, Flex } from 'theme-ui';
+import { Button, Flex, jsx, Text } from 'theme-ui';
 import Modal from './new/elements/Modal';
 
-interface Props {
+interface IProps {
   onClose(): void;
   isOpen: boolean;
   onConfirm(): void;
 }
 
-const ConfirmationModal = (props: Props): JSX.Element => (
-  <Modal isOpen={props.isOpen} onClose={props.onClose}>
-    <Text sx={{ color: 'gray.7' }}>Are you sure you want to delete?</Text>
+const ConfirmationModal = ({ isOpen, onClose, onConfirm }: IProps): JSX.Element => (
+  <Modal isOpen={isOpen} onClose={onClose}>
+    <Text sx={{ color: 'gray.7' }}>
+      Bist Du sicher, dass die Daten dauerhaft gelöscht werden sollen?
+    </Text>
     <Flex sx={{ justifyContent: 'flex-end' }}>
-      <Button variant="black" onClick={props.onClose}>
-        Cancel
+      <Button variant="black" onClick={onClose}>
+        Abbrechen
       </Button>
-      <Button variant="primary" onClick={props.onConfirm}>
-        Delete
+      <Button variant="primary" onClick={onConfirm}>
+        Löschen
       </Button>
     </Flex>
   </Modal>
