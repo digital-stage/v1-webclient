@@ -1,3 +1,10 @@
+## [0.20.7](https://github.com/digital-stage/webclient/compare/v0.20.6...v0.20.7) (2020-12-04)
+
+
+### Bug Fixes
+
+* duplication of audio or video tracks when changing settings ([afb3c6b](https://github.com/digital-stage/webclient/commit/afb3c6bfea90ea2527717edcc09c68d490d5cbc0))
+
 ## [0.20.6](https://github.com/digital-stage/webclient/compare/v0.20.5...v0.20.6) (2020-12-04)
 
 
