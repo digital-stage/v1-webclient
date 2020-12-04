@@ -11,6 +11,7 @@ import useDispatch from '../redux/useDispatch';
 import useMediasoupTransport from './useMediasoupTransport';
 import allActions from '../redux/actions';
 import { LocalConsumer, LocalProducer, RemoteAudioProducer, RemoteVideoProducer } from '../types';
+import { getAudioTracks, getVideoTracks } from './util';
 
 const d = debug('useMediasoup');
 const trace = d.extend('info');
@@ -52,37 +53,6 @@ const MediasoupProvider = (props: {
 
   const [localVideoProducers, setLocalVideoProducers] = useState<LocalProducer[]>([]);
   const [localAudioProducers, setLocalAudioProducers] = useState<LocalProducer[]>([]);
-
-  const getVideoTracks = useCallback((): Promise<MediaStreamTrack[]> => {
-    return navigator.mediaDevices
-      .getUserMedia({
-        audio: false,
-        video: inputVideoDeviceId
-          ? {
-              deviceId: inputVideoDeviceId,
-            }
-          : true,
-      })
-      .then((stream) => stream.getVideoTracks());
-  }, [inputVideoDeviceId]);
-
-  const getAudioTracks = useCallback((): Promise<MediaStreamTrack[]> => {
-    const sampleRate = process.env.NEXT_PUBLIC_FIXED_SAMPLERATE
-      ? parseInt(process.env.NEXT_PUBLIC_FIXED_SAMPLERATE)
-      : undefined;
-    return navigator.mediaDevices
-      .getUserMedia({
-        video: false,
-        audio: {
-          deviceId: inputAudioDeviceId || undefined,
-          sampleRate: sampleRate,
-          autoGainControl: false,
-          echoCancellation: false,
-          noiseSuppression: false,
-        },
-      })
-      .then((stream) => stream.getAudioTracks());
-  }, [inputAudioDeviceId]);
 
   const createConsumer = useCallback(
     (producer: RemoteVideoProducer | RemoteAudioProducer): Promise<void> => {
@@ -146,16 +116,20 @@ const MediasoupProvider = (props: {
         .map((consumer) => removeConsumer(consumer, 'video'))
     );
   }, [videoConsumers, removeConsumer]);
-  const shareVideo = useCallback(() => {
-    return getVideoTracks()
-      .then((tracks) => Promise.all(tracks.map((track) => produce(track))))
-      .then((localProducers) => setLocalVideoProducers((prev) => [...prev, ...localProducers]));
-  }, [getVideoTracks, produce]);
+  const shareVideo = useCallback(
+    (tracks: MediaStreamTrack[]) => {
+      return Promise.all(tracks.map((track) => produce(track))).then((localProducers) =>
+        setLocalVideoProducers((prev) => [...prev, ...localProducers])
+      );
+    },
+    [produce]
+  );
   const stopSharingVideo = useCallback(() => {
-    return Promise.all(
-      localVideoProducers.map((localProducer) => stopProducing(localProducer))
-    ).finally(() => setLocalVideoProducers([]));
-  }, [localVideoProducers, stopProducing]);
+    setLocalVideoProducers((prev) => {
+      prev.forEach((localProducer) => stopProducing(localProducer));
+      return [];
+    });
+  }, [stopProducing]);
   useEffect(() => {
     if (ready) {
       debugEffect('ready receiveVideo');
@@ -178,12 +152,13 @@ const MediasoupProvider = (props: {
     if (ready) {
       debugEffect('ready sendVideo');
       if (sendVideo) {
-        shareVideo().catch((error) => err(error));
-      } else {
-        stopSharingVideo().catch((error) => err(error));
+        getVideoTracks(inputVideoDeviceId)
+          .then((tracks) => shareVideo(tracks))
+          .catch((error) => err(error));
+        return () => stopSharingVideo();
       }
     }
-  }, [ready, sendVideo, shareVideo]);
+  }, [ready, sendVideo, inputVideoDeviceId, shareVideo, stopSharingVideo]);
 
   /** ******************************************
    * AUDIO HANDLING
@@ -218,16 +193,21 @@ const MediasoupProvider = (props: {
         .map((consumer) => removeConsumer(consumer, 'audio'))
     );
   }, [audioConsumers, removeConsumer]);
-  const shareAudio = useCallback(() => {
-    return getAudioTracks()
-      .then((tracks) => Promise.all(tracks.map((track) => produce(track))))
-      .then((localProducers) => setLocalAudioProducers((prev) => [...prev, ...localProducers]));
-  }, [getAudioTracks, produce]);
+  const shareAudio = useCallback(
+    (tracks: MediaStreamTrack[]) => {
+      return Promise.all(tracks.map((track) => produce(track))).then((localProducers) =>
+        setLocalAudioProducers((prev) => [...prev, ...localProducers])
+      );
+    },
+    [produce]
+  );
   const stopSharingAudio = useCallback(() => {
-    return Promise.all(
-      localAudioProducers.map((localProducer) => stopProducing(localProducer))
-    ).finally(() => setLocalAudioProducers([]));
-  }, [localAudioProducers, stopProducing]);
+    d('Stop sharing audio');
+    setLocalAudioProducers((prev) => {
+      prev.forEach((localProducer) => stopProducing(localProducer));
+      return [];
+    });
+  }, [stopProducing]);
   useEffect(() => {
     if (ready) {
       if (receiveAudio) {
@@ -249,13 +229,13 @@ const MediasoupProvider = (props: {
   useEffect(() => {
     if (ready) {
       if (sendAudio) {
-        shareAudio().catch((error) => err(error));
-      } else {
-        stopSharingAudio().catch((error) => err(error));
+        getAudioTracks(inputAudioDeviceId)
+          .then((tracks) => shareAudio(tracks))
+          .catch((error) => err(error));
+        return () => stopSharingAudio();
       }
     }
-    //TODO: Chaning device leads to duplicated streams!!!!!
-  }, [ready, sendAudio, shareAudio]);
+  }, [ready, sendAudio, inputAudioDeviceId, shareAudio, stopSharingAudio]);
 
   /** *
    * SYNC DEVICE

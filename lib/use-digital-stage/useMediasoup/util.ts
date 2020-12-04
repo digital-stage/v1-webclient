@@ -2,6 +2,7 @@ import mediasoupClient from 'mediasoup-client';
 import { ITeckosClient } from 'teckos-client';
 import debug from 'debug';
 import { Router } from '../types';
+import { useCallback } from 'react';
 
 const d = debug('useMediasoup:utils');
 
@@ -142,6 +143,37 @@ function ping(url: string, multiplier?: number): Promise<number> {
     }, 300);
   });
 }
+
+export const getVideoTracks = (inputVideoDeviceId?: string): Promise<MediaStreamTrack[]> => {
+  return navigator.mediaDevices
+    .getUserMedia({
+      audio: false,
+      video: inputVideoDeviceId
+        ? {
+            deviceId: inputVideoDeviceId,
+          }
+        : true,
+    })
+    .then((stream) => stream.getVideoTracks());
+};
+
+export const getAudioTracks = (inputAudioDeviceId?: string): Promise<MediaStreamTrack[]> => {
+  const sampleRate = process.env.NEXT_PUBLIC_FIXED_SAMPLERATE
+    ? parseInt(process.env.NEXT_PUBLIC_FIXED_SAMPLERATE)
+    : undefined;
+  return navigator.mediaDevices
+    .getUserMedia({
+      video: false,
+      audio: {
+        deviceId: inputAudioDeviceId || undefined,
+        sampleRate: sampleRate,
+        autoGainControl: false,
+        echoCancellation: false,
+        noiseSuppression: false,
+      },
+    })
+    .then((stream) => stream.getAudioTracks());
+};
 
 export const createWebRTCTransport = (
   routerConnection: ITeckosClient,
