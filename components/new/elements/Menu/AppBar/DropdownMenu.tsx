@@ -2,9 +2,9 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { Box, Button, Divider, Flex, jsx, Text } from 'theme-ui';
+import { useCurrentUser } from '../../../../../lib/use-digital-stage/hooks';
 import { useAuth } from '../../../../../lib/useAuth';
 import { AppBarItems } from '../../PageWrapperWithStage/MenuItems';
-import { useCurrentUser } from '../../../../../lib/use-digital-stage/hooks';
 
 interface Props {
   isOpen: boolean;
@@ -30,7 +30,7 @@ const DropdownMenu = ({ isOpen, onSelect }: Props): JSX.Element => {
         p: 4,
         boxShadow: '0px 3px 6px #000000BC',
         borderRadius: 'card',
-        zIndex: 99,
+        zIndex: 120,
       }}
     >
       <Text variant="title" sx={{ color: 'text', mb: 3 }}>

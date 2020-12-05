@@ -16,7 +16,7 @@ const Loading = ({ children }: { children: React.ReactNode }): JSX.Element => (
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 100,
+      zIndex: 90,
     }}
   >
     <Box
