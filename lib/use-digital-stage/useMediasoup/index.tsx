@@ -12,6 +12,7 @@ import useMediasoupTransport from './useMediasoupTransport';
 import allActions from '../redux/actions';
 import { LocalConsumer, LocalProducer, RemoteAudioProducer, RemoteVideoProducer } from '../types';
 import { getAudioTracks, getVideoTracks } from './util';
+import omit from 'lodash/omit';
 
 const d = debug('useMediasoup');
 const trace = d.extend('info');
@@ -34,7 +35,6 @@ const MediasoupProvider = (props: {
 
   // Local device handling
   const localDevice = useLocalDevice();
-  // const [working, setWorking] = useState<boolean>(false);
   const [sendAudio, setSendAudio] = useState<boolean>(false);
   const [sendVideo, setSendVideo] = useState<boolean>(false);
   const [receiveVideo, setReceiveVideo] = useState<boolean>(false);
@@ -51,34 +51,54 @@ const MediasoupProvider = (props: {
   const audioConsumers = useAudioConsumers();
   const videoConsumers = useVideoConsumers();
 
-  const [localVideoProducers, setLocalVideoProducers] = useState<LocalProducer[]>([]);
-  const [localAudioProducers, setLocalAudioProducers] = useState<LocalProducer[]>([]);
+  const [, setLocalVideoProducers] = useState<LocalProducer[]>([]);
+  const [, setLocalAudioProducers] = useState<LocalProducer[]>([]);
+
+  const [, setConsumerList] = useState<{
+    [producerId: string]: boolean;
+  }>({});
 
   const createConsumer = useCallback(
-    (producer: RemoteVideoProducer | RemoteAudioProducer): Promise<void> => {
-      return consume(producer).then((consumer) => {
-        if (isAudioProducer(producer)) {
-          dispatch(allActions.stageActions.client.addAudioConsumer(consumer));
-        } else {
-          dispatch(allActions.stageActions.client.addVideoConsumer(consumer));
+    (producer: RemoteVideoProducer | RemoteAudioProducer): void => {
+      setConsumerList((prev) => {
+        if (!prev[producer._id]) {
+          // CONSUME
+          consume(producer).then((consumer) => {
+            if (isAudioProducer(producer)) {
+              dispatch(allActions.stageActions.client.addAudioConsumer(consumer));
+            } else {
+              dispatch(allActions.stageActions.client.addVideoConsumer(consumer));
+            }
+            return undefined;
+          });
+          return {
+            ...prev,
+            [producer._id]: true,
+          };
         }
-        return undefined;
+        return prev;
       });
     },
     [consume, dispatch]
   );
 
   const removeConsumer = useCallback(
-    (consumer: LocalConsumer, type: 'audio' | 'video'): Promise<void> => {
-      return stopConsuming(consumer)
-        .then(() => undefined)
-        .finally(() => {
-          if (type === 'video') {
-            dispatch(allActions.stageActions.client.removeVideoConsumer(consumer._id));
-          } else {
-            dispatch(allActions.stageActions.client.removeAudioConsumer(consumer._id));
-          }
-        });
+    (consumer: LocalConsumer, type: 'audio' | 'video'): void => {
+      setConsumerList((prev) => {
+        if (prev[consumer.producerId]) {
+          stopConsuming(consumer)
+            .then(() => undefined)
+            .finally(() => {
+              if (type === 'video') {
+                dispatch(allActions.stageActions.client.removeVideoConsumer(consumer._id));
+              } else {
+                dispatch(allActions.stageActions.client.removeAudioConsumer(consumer._id));
+              }
+            });
+          return omit(prev, consumer.producerId);
+        }
+        return prev;
+      });
     },
     [stopConsuming, dispatch]
   );
@@ -101,12 +121,8 @@ const MediasoupProvider = (props: {
       .map((id) => videoConsumers.byId[id])
       .filter((consumer) => !videoProducers.byId[consumer.producerId]);
     return Promise.all([
-      producersWithoutConsumer.map((producer) =>
-        createConsumer(producer).catch((error) => err(error))
-      ),
-      consumersWithoutProducer.map((consumer) =>
-        removeConsumer(consumer, 'video').catch((error) => err(error))
-      ),
+      producersWithoutConsumer.map((producer) => createConsumer(producer)),
+      consumersWithoutProducer.map((consumer) => removeConsumer(consumer, 'video')),
     ]);
   }, [videoProducers, videoConsumers, createConsumer, removeConsumer]);
   const removeAllVideoConsumers = useCallback(() => {
@@ -178,12 +194,8 @@ const MediasoupProvider = (props: {
       .map((id) => audioConsumers.byId[id])
       .filter((consumer) => !audioProducers.byId[consumer.producerId]);
     return Promise.all([
-      producersWithoutConsumer.map((producer) =>
-        createConsumer(producer).catch((error) => err(error))
-      ),
-      consumersWithoutProducer.map((consumer) =>
-        removeConsumer(consumer, 'audio').catch((error) => err(error))
-      ),
+      producersWithoutConsumer.map((producer) => createConsumer(producer)),
+      consumersWithoutProducer.map((consumer) => removeConsumer(consumer, 'audio')),
     ]);
   }, [audioProducers, audioConsumers, createConsumer, removeConsumer]);
   const removeAllAudioConsumers = useCallback(() => {
