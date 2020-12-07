@@ -1,3 +1,11 @@
+## [0.20.11](https://github.com/digital-stage/webclient/compare/v0.20.10...v0.20.11) (2020-12-07)
+
+
+### Bug Fixes
+
+* remove edit group icon for non admin users ([e688ce5](https://github.com/digital-stage/webclient/commit/e688ce57359d5758764550ed49741479931f01e6))
+* run prettier ([1ed9441](https://github.com/digital-stage/webclient/commit/1ed9441bd58f36c10686c5c8eefc8f5867912c38))
+
 ## [0.20.10](https://github.com/digital-stage/webclient/compare/v0.20.9...v0.20.10) (2020-12-07)
 
 
