@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx, Box, Flex, IconButton, Heading, Avatar, Text } from 'theme-ui';
-import { FaPen, FaTrash } from 'react-icons/fa';
+import { FaPen, FaTrash, FaDoorOpen } from 'react-icons/fa';
 import ModifyStageModal from './ModifyStageModal';
 import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
 import { Stage } from '../../../../lib/use-digital-stage/types';
@@ -54,7 +54,7 @@ const StageHeader = (props: { stage: Stage }): JSX.Element => {
               setCloseConfirmationModal(true);
             }}
           >
-            <FaTrash />
+            {isAdmin ? <FaTrash /> : <FaDoorOpen />}
           </IconButton>
         </Box>
       </Flex>
