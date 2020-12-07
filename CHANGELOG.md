@@ -1,3 +1,10 @@
+## [0.20.13](https://github.com/digital-stage/webclient/compare/v0.20.12...v0.20.13) (2020-12-07)
+
+
+### Bug Fixes
+
+* async consumer creation may lead to duplicates ([f21691d](https://github.com/digital-stage/webclient/commit/f21691d721eeaa158853019653855abb54232b1c))
+
 ## [0.20.12](https://github.com/digital-stage/webclient/compare/v0.20.11...v0.20.12) (2020-12-07)
 
 
