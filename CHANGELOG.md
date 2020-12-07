@@ -1,3 +1,10 @@
+## [0.20.10](https://github.com/digital-stage/webclient/compare/v0.20.9...v0.20.10) (2020-12-07)
+
+
+### Bug Fixes
+
+* online state update could remove stage members from list ([5ffaedb](https://github.com/digital-stage/webclient/commit/5ffaedb0c505b55fc491c80714f20a7c751f1ebe))
+
 ## [0.20.9](https://github.com/digital-stage/webclient/compare/v0.20.8...v0.20.9) (2020-12-07)
 
 
