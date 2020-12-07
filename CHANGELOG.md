@@ -1,3 +1,10 @@
+## [0.20.16](https://github.com/digital-stage/webclient/compare/v0.20.15...v0.20.16) (2020-12-07)
+
+
+### Bug Fixes
+
+* audio output change did not work ([5247f9e](https://github.com/digital-stage/webclient/commit/5247f9e48f2c7a7d0dbf8f6bc9146c6cc52672ad))
+
 ## [0.20.15](https://github.com/digital-stage/webclient/compare/v0.20.14...v0.20.15) (2020-12-07)
 
 
