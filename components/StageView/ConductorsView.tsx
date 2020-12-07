@@ -1,7 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import * as React from 'react';
-import { jsx, Box } from 'theme-ui';
+import { Box, jsx } from 'theme-ui';
 import { useConductorsByStage, useCurrentStageId } from '../../lib/use-digital-stage/hooks';
 import StageMemberView from './StageMemberView';
 
@@ -19,7 +18,7 @@ const ConductorsView = (): JSX.Element => {
           width: '80vw',
           height: '80vh',
           backgroundColor: 'gray.7',
-          zIndex: 999,
+          zIndex: 80,
         }}
       >
         {conductors.map((conductor) => (

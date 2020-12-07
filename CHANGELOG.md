@@ -1,3 +1,25 @@
+## [0.20.9](https://github.com/digital-stage/webclient/compare/v0.20.8...v0.20.9) (2020-12-07)
+
+
+### Bug Fixes
+
+* run prettier ([a4d46f6](https://github.com/digital-stage/webclient/commit/a4d46f6f0b019e506c438447087b49929e2534d6))
+* top nav mobile digital stage icon ([9d9c1f5](https://github.com/digital-stage/webclient/commit/9d9c1f50f994c5aa88ced392ac0ef129ecb6216a))
+
+## [0.20.8](https://github.com/digital-stage/webclient/compare/v0.20.7...v0.20.8) (2020-12-05)
+
+
+### Bug Fixes
+
+* mitigate overlay issue and align z-indices ([bdd354c](https://github.com/digital-stage/webclient/commit/bdd354c3826d49c21dc58f6f3a57c26efab17f4c))
+
+## [0.20.7](https://github.com/digital-stage/webclient/compare/v0.20.6...v0.20.7) (2020-12-04)
+
+
+### Bug Fixes
+
+* duplication of audio or video tracks when changing settings ([afb3c6b](https://github.com/digital-stage/webclient/commit/afb3c6bfea90ea2527717edcc09c68d490d5cbc0))
+
 ## [0.20.6](https://github.com/digital-stage/webclient/compare/v0.20.5...v0.20.6) (2020-12-04)
 
 

@@ -1,13 +1,13 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Link, Heading } from 'theme-ui';
-import DigitalStageLogo from './DigitalStageLogo';
-import PageSpinner from './PageSpinner';
-import { useAuth } from '../lib/useAuth';
-import SideNavigation from './new/elements/Menu/SideBar';
-import TopNavigation from './new/elements/Menu/AppBar';
+import { Box, Heading, jsx, Link } from 'theme-ui';
 import { Stage } from '../lib/use-digital-stage';
+import { useAuth } from '../lib/useAuth';
+import DigitalStageLogo from './DigitalStageLogo';
+import TopNavigation from './new/elements/Menu/AppBar';
+import SideNavigation from './new/elements/Menu/SideBar';
+import PageSpinner from './PageSpinner';
 
 interface Props {
   children: React.ReactNode;
@@ -39,7 +39,7 @@ const Layout = ({ children, sidebar, auth, stage }: Props): JSX.Element => {
             display: 'grid',
             width: '100%',
             gridTemplateColumns: sidebar ? ['1fr', '80px 1fr'] : '1fr',
-            gridTemplateRows: '72px 1fr',
+            gridTemplateRows: ['0 72px 1fr', '72px 1fr'],
           }}
         >
           {sidebar && (
@@ -49,9 +49,9 @@ const Layout = ({ children, sidebar, auth, stage }: Props): JSX.Element => {
                 gridRow: '1 / 3',
                 height: '100vh',
                 bg: 'red',
-                display: ['none', 'flex'],
+                display: ['contents', 'flex'],
                 flexGrow: 0,
-                zIndex: 100,
+                zIndex: 50,
               }}
             >
               <SideNavigation />

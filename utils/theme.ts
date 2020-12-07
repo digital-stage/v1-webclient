@@ -383,7 +383,9 @@ const theme: Theme = {
     avatar: {
       width: 30,
       height: 30,
-      borderRadius: 'radii.round',
+      borderRadius: '50%',
+      maxWidth: 30,
+      minWidth: 30,
       mr: 3,
     },
   },

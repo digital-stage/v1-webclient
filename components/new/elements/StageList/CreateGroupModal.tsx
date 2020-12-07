@@ -1,13 +1,12 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import * as React from 'react';
-import { jsx, Button, Flex, Text, Heading } from 'theme-ui';
-import { Formik, Form, Field } from 'formik';
+import { Field, Form, Formik } from 'formik';
+import { Button, Flex, Heading, jsx, Text } from 'theme-ui';
 import * as Yup from 'yup';
+import { Stage } from '../../../../lib/use-digital-stage/types';
+import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
 import InputField from '../../../InputField';
 import Modal from '../Modal';
-import useStageActions from '../../../../lib/use-digital-stage/useStageActions';
-import { Stage } from '../../../../lib/use-digital-stage/types';
 
 interface Values {
   name: string;
@@ -32,7 +31,7 @@ const CreateGroupModal = (props: {
     <Modal isOpen={isOpen} onClose={onClose}>
       <Heading variant="title">Neue Gruppe erstellen</Heading>
       <Text variant="subTitle">
-        Nachdem Du die Gruppe erstellt hast kannst Du über den Button &apos;Einladen&apos;
+        Nachdem Du die Gruppe erstellt hast, kannst Du über den Button &apos;Einladen&apos;
         Teilnehmer hinzufügen
       </Text>
       <Formik
