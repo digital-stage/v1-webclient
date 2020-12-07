@@ -46,7 +46,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
 
           return (
             <React.Fragment key={group._id}>
-              <Flex sx={{ justifyContent: 'space-between' }}>
+              <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 <Flex sx={{ alignItems: 'center', my: 2 }}>
                   <Box
                     bg="primary"
@@ -62,7 +62,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                   </Heading>
                 </Flex>
 
-                <Flex sx={{ alignItems: 'center' }}>
+                <Flex sx={{ alignItems: 'center', flexWrap: 'wrap' }}>
                   {isAdmin && (
                     <Box>
                       <IconButton
@@ -116,8 +116,8 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                       }}
                     >
                       {currentStageId &&
-                      stage._id === currentStageId &&
-                      group._id === currentGroupId
+                        stage._id === currentStageId &&
+                        group._id === currentGroupId
                         ? 'Verlassen'
                         : 'Betreten'}
                     </Button>
