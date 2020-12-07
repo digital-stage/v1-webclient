@@ -1,3 +1,10 @@
+## [0.20.14](https://github.com/digital-stage/webclient/compare/v0.20.13...v0.20.14) (2020-12-07)
+
+
+### Bug Fixes
+
+* added already actiavted message and cleaned up ([efbe831](https://github.com/digital-stage/webclient/commit/efbe83195ef513adb167e281082514e86628cec9))
+
 ## [0.20.13](https://github.com/digital-stage/webclient/compare/v0.20.12...v0.20.13) (2020-12-07)
 
 
