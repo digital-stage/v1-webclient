@@ -45,12 +45,13 @@ export interface StageWebAudioProps {
 
 const StageWebAudioContext = React.createContext<StageWebAudioProps>(undefined);
 
-const useStageWebAudio = () => React.useContext(StageWebAudioContext);
+const useStageWebAudio = (): StageWebAudioProps =>
+  React.useContext<StageWebAudioProps>(StageWebAudioContext);
 
 const StageWebAudioProvider = (props: {
   children: React.ReactNode;
   handleError: (error: Error) => void;
-}) => {
+}): JSX.Element => {
   const { children, handleError } = props;
   const { audioContext, started } = useAudioContext();
   const audioPlayerRef = useRef<HTMLAudioElement>();
