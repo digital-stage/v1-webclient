@@ -36,7 +36,7 @@ const StageHeader = (props: { stage: Stage }): JSX.Element => {
           </Flex>
         </Flex>
         <Box sx={{ color: 'secondary' }}>
-          {isAdmin &&
+          {isAdmin && (
             <IconButton
               aria-label="Bühne bearbeiten"
               onClick={() => {
@@ -46,7 +46,7 @@ const StageHeader = (props: { stage: Stage }): JSX.Element => {
             >
               <FaPen />
             </IconButton>
-          }
+          )}
           <IconButton
             aria-label={isAdmin ? 'Bühne entfernen' : 'Bühne verlassen'}
             onClick={() => {
