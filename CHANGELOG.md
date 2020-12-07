@@ -1,3 +1,10 @@
+## [0.20.15](https://github.com/digital-stage/webclient/compare/v0.20.14...v0.20.15) (2020-12-07)
+
+
+### Bug Fixes
+
+* removed console output ([e4faa7c](https://github.com/digital-stage/webclient/commit/e4faa7ce9263e1f8f4f45696eb0e0a36c17008be))
+
 ## [0.20.14](https://github.com/digital-stage/webclient/compare/v0.20.13...v0.20.14) (2020-12-07)
 
 
