@@ -36,15 +36,17 @@ const StageHeader = (props: { stage: Stage }): JSX.Element => {
           </Flex>
         </Flex>
         <Box sx={{ color: 'secondary' }}>
-          <IconButton
-            aria-label="Bühne bearbeiten"
-            onClick={() => {
-              setCurrentStage(stage);
-              setModifyStageIsOpen(true);
-            }}
-          >
-            <FaPen />
-          </IconButton>
+          {isAdmin &&
+            <IconButton
+              aria-label="Bühne bearbeiten"
+              onClick={() => {
+                setCurrentStage(stage);
+                setModifyStageIsOpen(true);
+              }}
+            >
+              <FaPen />
+            </IconButton>
+          }
           <IconButton
             aria-label={isAdmin ? 'Bühne entfernen' : 'Bühne verlassen'}
             onClick={() => {
