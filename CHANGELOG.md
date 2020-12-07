@@ -1,3 +1,10 @@
+## [0.20.12](https://github.com/digital-stage/webclient/compare/v0.20.11...v0.20.12) (2020-12-07)
+
+
+### Bug Fixes
+
+* change icon for leave stage for non admin users ([b618bdd](https://github.com/digital-stage/webclient/commit/b618bdd6b85c1af952ec4d26cec207479fe918e7))
+
 ## [0.20.11](https://github.com/digital-stage/webclient/compare/v0.20.10...v0.20.11) (2020-12-07)
 
 
