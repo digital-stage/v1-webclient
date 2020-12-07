@@ -251,8 +251,6 @@ const useMediasoupTransport = (
     (track: MediaStreamTrack): Promise<LocalProducer> => {
       if (!track) throw new Error('Track is undefined');
       if (serverConnection && routerConnection && mediasoupDevice && sendTransport && router) {
-        console.debug('sendTransport');
-        console.debug(sendTransport);
         return createProducer(sendTransport, track)
           .then((producer) => {
             if (producer.paused) {
