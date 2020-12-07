@@ -1,3 +1,24 @@
+## [0.20.8](https://github.com/digital-stage/webclient/compare/v0.20.7...v0.20.8) (2020-12-05)
+
+
+### Bug Fixes
+
+* mitigate overlay issue and align z-indices ([bdd354c](https://github.com/digital-stage/webclient/commit/bdd354c3826d49c21dc58f6f3a57c26efab17f4c))
+
+## [0.20.7](https://github.com/digital-stage/webclient/compare/v0.20.6...v0.20.7) (2020-12-04)
+
+
+### Bug Fixes
+
+* duplication of audio or video tracks when changing settings ([afb3c6b](https://github.com/digital-stage/webclient/commit/afb3c6bfea90ea2527717edcc09c68d490d5cbc0))
+
+## [0.20.6](https://github.com/digital-stage/webclient/compare/v0.20.5...v0.20.6) (2020-12-04)
+
+
+### Bug Fixes
+
+* partly fixed duplicated audio inputs when changing device ([afdf678](https://github.com/digital-stage/webclient/commit/afdf6780c4de313e8d4eea81b78defac6f5db6a7))
+
 ## [0.20.5](https://github.com/digital-stage/webclient/compare/v0.20.4...v0.20.5) (2020-12-03)
 
 

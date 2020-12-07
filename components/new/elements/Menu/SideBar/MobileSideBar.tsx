@@ -1,7 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React from 'react';
 import { Box, Flex, jsx, Text } from 'theme-ui';
 import { CenteredNavItems } from '../../PageWrapperWithStage/MenuItems';
 
@@ -24,7 +23,7 @@ const MobileSideBar = ({ isOpen, onSelect }: Props): JSX.Element => {
         p: 4,
         boxShadow: '0px 3px 6px #000000BC',
         borderRadius: 'card',
-        zIndex: 9999,
+        zIndex: 50,
       }}
     >
       <Flex sx={{ justifyContent: 'center' }}>

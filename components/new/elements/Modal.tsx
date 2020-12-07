@@ -2,8 +2,8 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import React from 'react';
-import { jsx, Box, IconButton } from 'theme-ui';
 import { MdClose } from 'react-icons/md';
+import { Box, IconButton, jsx } from 'theme-ui';
 
 interface Props {
   onClose(): void;
@@ -13,7 +13,7 @@ interface Props {
   type?: 'default' | 'settings';
 }
 
-const Modal = (props: Props) =>
+const Modal = (props: Props): JSX.Element =>
   props.isOpen ? (
     <Box
       sx={{
@@ -24,7 +24,7 @@ const Modal = (props: Props) =>
         height: '100vh',
         bg: 'modalBg',
         transition: 'background 6s ease-in-out',
-        zIndex: 99999,
+        zIndex: 100,
       }}
     >
       <Box
