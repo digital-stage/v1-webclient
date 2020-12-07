@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import InputField from '../InputField';
 import { useAuth } from '../../lib/useAuth';
 import Link from 'next/link';
+import translateError from './translateError';
 
 interface Values {
   email: string;
@@ -45,33 +46,18 @@ const ForgetPasswordForm = (): JSX.Element => {
         // eslint-disable-next-line max-len
         onSubmit={async (values: Values, { resetForm }: FormikHelpers<Values>) =>
           requestPasswordReset(values.email)
-            .then((res) => {
-              if (res === 200) {
-                setMsg({
-                  state: true,
-                  type: 'success',
-                  kids: 'Link gesendet - prüfe Deine E-Mails',
-                });
-                resetForm(null);
-              } else if (res === 404) {
-                setMsg({
-                  state: true,
-                  type: 'danger',
-                  kids: 'Unbekannte E-Mail-Adresse',
-                });
-              } else {
-                setMsg({
-                  state: true,
-                  type: 'warning',
-                  kids: 'Oops - versuche es noch einmal',
-                });
-              }
+            .then(() => {
+              setMsg({
+                state: true,
+                type: 'success',
+                kids: 'Link gesendet - prüfe Deine E-Mails',
+              });
             })
             .catch((err) => {
               setMsg({
                 state: true,
                 type: 'danger',
-                kids: { err },
+                kids: translateError(err),
               });
             })
         }

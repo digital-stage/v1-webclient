@@ -4,6 +4,7 @@
 import * as React from 'react';
 import { jsx, Button, Text, Heading, Box, IconButton } from 'theme-ui';
 import CloseIcon from '@material-ui/icons/Close';
+import { AuthError, ErrorCodes } from '../../lib/useAuth';
 
 interface DialogTitleProps {
   id: string;

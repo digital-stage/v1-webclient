@@ -4,7 +4,6 @@ import InputField from '../../InputField';
 import Modal from './Modal';
 import useStageActions from '../../../lib/use-digital-stage/useStageActions';
 import { useSelector } from '../../../lib/use-digital-stage/hooks';
-import { Errors } from '../../../lib/useAuth';
 import useStageJoiner from '../../../lib/useStageJoiner';
 
 /**
@@ -40,7 +39,7 @@ const StageJoiner = (): JSX.Element => {
           clear();
         })
         .catch((error) => {
-          if (error === Errors.INVALID_PASSWORD) {
+          if (error === 'Unauthorized') {
             setWrongPassword(true);
           } else {
             setNotFound(true);

@@ -6,6 +6,7 @@ import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../../lib/useAuth';
 import InputField from '../InputField';
+import translateError from './translateError';
 
 interface Values {
   email: string;
@@ -55,24 +56,17 @@ const SignUpForm = (): JSX.Element => {
         onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) => {
           setMessage(undefined);
           return createUserWithEmailAndPassword(values.email, values.password, values.name)
-            .then((res) => {
-              if (res === 201) {
-                setMessage({
-                  type: 'success',
-                  content: 'Jetzt kannst Du Dich mit Deinem neuen Account anmelden',
-                });
-                resetForm(null);
-              } else {
-                setMessage({
-                  type: 'warning',
-                  content: 'Oops - versuche es noch einmal',
-                });
-              }
+            .then(() => {
+              resetForm(null);
+              return setMessage({
+                type: 'success',
+                content: 'Prüfe Dein Postfach! Wir haben Dir einen Aktivierungslink gesendet.',
+              });
             })
             .catch((err) =>
               setMessage({
                 type: 'danger',
-                content: err.message,
+                content: translateError(err),
               })
             );
         }}
