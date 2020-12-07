@@ -74,7 +74,7 @@ function reduceStageMembers(
         err('Could not find previous stage member ' + stageMember._id);
         return prev;
       }
-      if (stageMember.groupId !== previousStageMember.groupId) {
+      if (stageMember.groupId && stageMember.groupId !== previousStageMember.groupId) {
         return {
           ...prev,
           byId: {
