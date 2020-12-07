@@ -116,8 +116,8 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                       }}
                     >
                       {currentStageId &&
-                        stage._id === currentStageId &&
-                        group._id === currentGroupId
+                      stage._id === currentStageId &&
+                      group._id === currentGroupId
                         ? 'Verlassen'
                         : 'Betreten'}
                     </Button>

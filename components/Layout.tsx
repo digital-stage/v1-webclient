@@ -34,72 +34,72 @@ const Layout = ({ children, sidebar, auth, stage }: Props): JSX.Element => {
       ) : auth ? (
         <Box>{children}</Box>
       ) : (
+        <Box
+          sx={{
+            display: 'grid',
+            width: '100%',
+            gridTemplateColumns: sidebar ? ['1fr', '80px 1fr'] : '1fr',
+            gridTemplateRows: ['0 72px 1fr', '72px 1fr'],
+          }}
+        >
+          {sidebar && (
             <Box
               sx={{
-                display: 'grid',
-                width: '100%',
-                gridTemplateColumns: sidebar ? ['1fr', '80px 1fr'] : '1fr',
-                gridTemplateRows: ['0 72px 1fr', '72px 1fr'],
+                gridColumn: '1 / 2',
+                gridRow: '1 / 3',
+                height: '100vh',
+                bg: 'red',
+                display: ['contents', 'flex'],
+                flexGrow: 0,
+                zIndex: 100,
               }}
             >
-              {sidebar && (
-                <Box
-                  sx={{
-                    gridColumn: '1 / 2',
-                    gridRow: '1 / 3',
-                    height: '100vh',
-                    bg: 'red',
-                    display: ['contents', 'flex'],
-                    flexGrow: 0,
-                    zIndex: 100,
-                  }}
-                >
-                  <SideNavigation />
-                </Box>
-              )}
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  height: '72px',
-                  py: 2,
-                  px: [3, 4],
-                  bg: !sidebar ? 'transparent' : 'background',
-                }}
-              >
-                {sidebar || (
-                  <Box>
-                    <DigitalStageLogo single />
-                  </Box>
-                )}
-                {sidebar && (
-                  <Box sx={{ display: ['block', 'none'] }}>
-                    <Link sx={{ color: 'text' }} href="https://www.digital-stage.org" target="_blank">
-                      <DigitalStageLogo single icon width={30} />
-                    </Link>
-                  </Box>
-                )}
-                {sidebar && stage && (
-                  <Box>
-                    <Heading>{stage.name}</Heading>
-                  </Box>
-                )}
-                <div>
-                  <TopNavigation />
-                </div>
-              </Box>
-
-              <Box
-                sx={{
-                  minHeight: 'calc(100vh - 72px)',
-                  bg: sidebar && 'background',
-                }}
-              >
-                {children}
-              </Box>
+              <SideNavigation />
             </Box>
           )}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              height: '72px',
+              py: 2,
+              px: [3, 4],
+              bg: !sidebar ? 'transparent' : 'background',
+            }}
+          >
+            {sidebar || (
+              <Box>
+                <DigitalStageLogo single />
+              </Box>
+            )}
+            {sidebar && (
+              <Box sx={{ display: ['block', 'none'] }}>
+                <Link sx={{ color: 'text' }} href="https://www.digital-stage.org" target="_blank">
+                  <DigitalStageLogo single icon width={30} />
+                </Link>
+              </Box>
+            )}
+            {sidebar && stage && (
+              <Box>
+                <Heading>{stage.name}</Heading>
+              </Box>
+            )}
+            <div>
+              <TopNavigation />
+            </div>
+          </Box>
+
+          <Box
+            sx={{
+              minHeight: 'calc(100vh - 72px)',
+              bg: sidebar && 'background',
+            }}
+          >
+            {children}
+          </Box>
+        </Box>
+      )}
     </Box>
   );
 };
