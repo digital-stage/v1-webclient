@@ -275,18 +275,27 @@ const MediasoupProvider = (props: {
       });
       setSendAudioOptions((prev) => {
         report('SEND AUDIO DEVICE CHANGED');
-        return {
-          inputAudioDeviceId: localDevice.inputAudioDeviceId || undefined,
-          autoGainControl: localDevice.autoGainControl || prev.autoGainControl,
-          echoCancellation: localDevice.echoCancellation || prev.echoCancellation,
-          noiseSuppression: localDevice.noiseSuppression || prev.noiseSuppression,
-        };
+        if (
+          (localDevice.inputAudioDeviceId !== undefined &&
+            localDevice.inputAudioDeviceId !== prev.inputAudioDeviceId) ||
+          (localDevice.echoCancellation !== undefined &&
+            localDevice.echoCancellation !== prev.echoCancellation) ||
+          (localDevice.autoGainControl !== undefined &&
+            localDevice.autoGainControl !== prev.autoGainControl) ||
+          (localDevice.noiseSuppression !== undefined &&
+            localDevice.noiseSuppression !== prev.noiseSuppression)
+        ) {
+          return {
+            inputAudioDeviceId: localDevice.inputAudioDeviceId || undefined,
+            autoGainControl: localDevice.autoGainControl || false,
+            echoCancellation: localDevice.echoCancellation || false,
+            noiseSuppression: localDevice.noiseSuppression || false,
+          };
+        }
+        return prev;
       });
     }
   }, [ready, localDevice]);
-  useEffect(() => {
-    report('MEDIASOUP CHANGED');
-  }, [ready]);
 
   return <>{children}</>;
 };

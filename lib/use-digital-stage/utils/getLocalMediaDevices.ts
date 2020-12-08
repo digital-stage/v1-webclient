@@ -59,9 +59,6 @@ const getLocalMediaDevices = (currentLocalDevice?: Device): Promise<LocalMediaDe
         }
       }
 
-      console.debug('MEDIA DEVICES');
-      console.debug(mediaDevices.outputAudioDevices);
-
       return {
         inputAudioDeviceId,
         inputVideoDeviceId,
