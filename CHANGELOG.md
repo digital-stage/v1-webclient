@@ -1,3 +1,10 @@
+## [0.20.18](https://github.com/digital-stage/webclient/compare/v0.20.17...v0.20.18) (2020-12-08)
+
+
+### Bug Fixes
+
+* output device selection ([9779013](https://github.com/digital-stage/webclient/commit/977901342b51b6dcf1eeafa3432e688ddc19fc38))
+
 ## [0.20.17](https://github.com/digital-stage/webclient/compare/v0.20.16...v0.20.17) (2020-12-08)
 
 
