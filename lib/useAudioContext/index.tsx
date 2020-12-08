@@ -1,12 +1,4 @@
-import React, {
-  Context,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { Context, createContext, useCallback, useContext, useEffect, useState } from 'react';
 import {
   AudioContext as StandardizedAudioContext,
   IAudioContext,
@@ -63,7 +55,7 @@ export const AudioContextProvider = (props: { children: React.ReactNode }): JSX.
   useEffect(() => {
     if (audio) {
       report('useEffect - sinkId | audio');
-      if (sinkId && (audio as any).sinkId !== undefined) {
+      if (sinkId && sinkId !== 'default' && (audio as any).sinkId !== undefined) {
         report('Set sink Id to ' + sinkId);
         (audio as HTMLAudioElement & {
           setSinkId(sinkId: string);

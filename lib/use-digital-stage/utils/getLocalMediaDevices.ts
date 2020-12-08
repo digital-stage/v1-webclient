@@ -58,6 +58,7 @@ const getLocalMediaDevices = (currentLocalDevice?: Device): Promise<LocalMediaDe
           inputVideoDeviceId = 'default';
         }
       }
+
       return {
         inputAudioDeviceId,
         inputVideoDeviceId,

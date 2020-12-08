@@ -54,7 +54,7 @@ const StageWebAudioProvider = (props: {
   handleError: (error: Error) => void;
 }): JSX.Element => {
   const { children, handleError } = props;
-  const { destination, audioContext } = useAudioContext();
+  const { destination } = useAudioContext();
   const [destinationNodes, setDestinationNodes] = useState<{
     left: IGainNode<IAudioContext>;
     right: IGainNode<IAudioContext>;
@@ -77,14 +77,14 @@ const StageWebAudioProvider = (props: {
    * ROOT NODES
    */
   useEffect(() => {
-    if (audioContext && handleError && destination) {
+    if (handleError && destination) {
       try {
         const audioContext = destination.context;
         report('Creating both root nodes');
         const createdRootNodeL = audioContext.createGain();
-        createdRootNodeL.connect(audioContext.destination);
+        createdRootNodeL.connect(destination);
         const createdRootNodeR = audioContext.createGain();
-        createdRootNodeR.connect(audioContext.destination);
+        createdRootNodeR.connect(destination);
 
         setDestinationNodes({
           left: createdRootNodeL,
@@ -100,7 +100,7 @@ const StageWebAudioProvider = (props: {
         handleError(error);
       }
     }
-  }, [audioContext, destination, handleError]);
+  }, [destination, handleError]);
 
   useEffect(() => {
     if (destinationNodes && handleError && stageId && groups.byStage[stageId]) {
