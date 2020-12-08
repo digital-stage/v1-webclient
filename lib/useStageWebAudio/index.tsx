@@ -10,7 +10,7 @@ import {
   useCustomStageMembers,
   useGroups,
   useStageMembersRaw,
-} from '../use-digital-stage/hooks';
+} from './../use-digital-stage/hooks';
 import useAudioContext from './../useAudioContext';
 import TreeDimensionPannerNode from './TreeDimensionPannerNode';
 import { calculate3DAudioParameters } from './utils';
@@ -430,23 +430,26 @@ const StageWebAudioProvider = (props: {
                   pannerNode.setOrientation(params.rX, params.rY, params.rZ);
                 }
               }
-              if (!element && audioConsumers.byProducer[item._id]) {
-                report('Attaching consumer to producer node ' + id);
-                // See, if there is a consumer
-                const audioConsumer = audioConsumers.byId[audioConsumers.byProducer[item._id]];
-                const stream = new MediaStream([audioConsumer.consumer.track]);
+              if (audioConsumers.byProducer[item._id]) {
+                if (!element || element.id !== audioConsumers.byProducer[item._id]) {
+                  report('Attaching consumer to producer node ' + id);
+                  // See, if there is a consumer
+                  const audioConsumer = audioConsumers.byId[audioConsumers.byProducer[item._id]];
+                  const stream = new MediaStream([audioConsumer.consumer.track]);
 
-                element = new Audio();
-                element.srcObject = stream;
-                element.autoplay = true;
-                element.muted = true;
-                element.play();
+                  element = new Audio();
+                  element.id = audioConsumer._id;
+                  element.srcObject = stream;
+                  element.autoplay = true;
+                  element.muted = true;
+                  element.play();
 
-                // sourceNode = audioContext.createMediaElementSource(element);
-                // sourceNode.connect(gainNode);
+                  // sourceNode = audioContext.createMediaElementSource(element);
+                  // sourceNode.connect(gainNode);
 
-                sourceNode = audioContext.createMediaStreamSource(stream);
-                sourceNode.connect(gainNode);
+                  sourceNode = audioContext.createMediaStreamSource(stream);
+                  sourceNode.connect(gainNode);
+                }
               }
               return {
                 ...items,

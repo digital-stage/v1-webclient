@@ -81,44 +81,13 @@ export const AudioContextProvider = (props: { children: React.ReactNode }): JSX.
     }
     const createdDestination = standardizedAudioContext.createMediaStreamDestination();
     const createdAudio = new Audio();
+    createdAudio.autoplay = true;
     createdAudio.srcObject = createdDestination.stream;
-    createdAudio.play().catch((err) => reportWarning(err));
+    //createdAudio.play().catch((err) => reportWarning(err));
     setAudio(createdAudio);
     setAudioContext(standardizedAudioContext);
     setDestination(createdDestination);
   }, []);
-  /*
-    useEffect(() => {
-        report('useEffect - sampleRate')
-        report('(Re)start audio context');
-        if (sampleRate) report('Using sample rate of ' + sampleRate);
-        const standardizedAudioContext: IAudioContext = createBuffer(sinkId, sampleRate);
-        if (standardizedAudioContext.state === 'suspended') {
-            standardizedAudioContext.resume()
-                .then(() => {
-                    report('Started audio context direct and automatically');
-                    setStarted(true);
-                })
-                .catch(err => reportWarning(err));
-        }
-        const createdDestination = standardizedAudioContext.createMediaStreamDestination();
-        const createdAudio = new Audio();
-        createdAudio.srcObject = createdDestination.stream;
-        createdAudio.play()
-            .catch(err => reportWarning(err));
-        setAudio(createdAudio);
-        setAudioContext(standardizedAudioContext);
-        setDestination(createdDestination);
-
-        return () => {
-            //createdAudio.srcObject = undefined;
-            //createdDestination.disconnect();
-            standardizedAudioContext.close().then(() => {
-                reportCleanup('Closed audio context');
-                setStarted(false);
-            });
-        };
-    }, [sampleRate]);*/
 
   const start = useCallback(() => {
     if (audioContext && audioContext.state === 'suspended') {
