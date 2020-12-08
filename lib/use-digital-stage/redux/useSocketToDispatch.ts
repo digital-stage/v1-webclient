@@ -25,13 +25,13 @@ import allActions from './actions';
 import { InitialStagePackage } from './actions/stageActions';
 
 export interface TSocketToDispatch {
-  registerHandler(socket: ITeckosClient);
+  registerHandler(socket: ITeckosClient): void;
 }
 
 const useSocketToDispatch = (): TSocketToDispatch => {
   const dispatch = useDispatch();
   const registerHandler = useCallback(
-    (socket: TeckosClient) => {
+    (socket: TeckosClient): void => {
       socket.on('disconnect', () => {
         // Cleanup
         dispatch(allActions.client.reset());

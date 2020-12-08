@@ -1,6 +1,6 @@
+import * as Bowser from 'bowser';
 import getLocalMediaDevices from './getLocalMediaDevices';
 import { Device } from '../types';
-import * as Bowser from 'bowser';
 
 const getInitialDevice = (): Promise<Partial<Device>> =>
   getLocalMediaDevices().then(

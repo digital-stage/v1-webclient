@@ -67,6 +67,7 @@ const UseDigitalStageProvider = (props: {
         navigator.mediaDevices.removeEventListener('devicechange', refreshLocalDevice);
       };
     }
+    return undefined;
   }, [refreshLocalDevice]);
 
   useEffect(() => {

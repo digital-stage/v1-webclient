@@ -1,10 +1,10 @@
-import _ from 'lodash';
+import indexOf from 'lodash/indexOf';
 
 const upsert = <T>(arr: Readonly<T[]>, value: T): T[] => {
   if (!arr) {
     return [value];
   }
-  if (_.indexOf<T>(arr, value) === -1) {
+  if (indexOf<T>(arr, value) === -1) {
     return [...arr, value];
   }
   return [...arr];

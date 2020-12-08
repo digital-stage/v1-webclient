@@ -2,7 +2,6 @@ import mediasoupClient from 'mediasoup-client';
 import { ITeckosClient } from 'teckos-client';
 import debug from 'debug';
 import { Router } from '../types';
-import { useCallback } from 'react';
 
 const d = debug('useMediasoup:utils');
 
@@ -159,14 +158,14 @@ export const getVideoTracks = (inputVideoDeviceId?: string): Promise<MediaStream
 
 export const getAudioTracks = (inputAudioDeviceId?: string): Promise<MediaStreamTrack[]> => {
   const sampleRate = process.env.NEXT_PUBLIC_FIXED_SAMPLERATE
-    ? parseInt(process.env.NEXT_PUBLIC_FIXED_SAMPLERATE)
+    ? parseInt(process.env.NEXT_PUBLIC_FIXED_SAMPLERATE, 10)
     : undefined;
   return navigator.mediaDevices
     .getUserMedia({
       video: false,
       audio: {
         deviceId: inputAudioDeviceId || undefined,
-        sampleRate: sampleRate,
+        sampleRate,
         autoGainControl: false,
         echoCancellation: false,
         noiseSuppression: false,
