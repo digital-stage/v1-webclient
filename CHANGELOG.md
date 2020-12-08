@@ -1,3 +1,10 @@
+## [0.20.19](https://github.com/digital-stage/webclient/compare/v0.20.18...v0.20.19) (2020-12-08)
+
+
+### Bug Fixes
+
+* lint errors ([7796118](https://github.com/digital-stage/webclient/commit/77961181433ee412de1ede42eb06cdc8ea332468))
+
 ## [0.20.18](https://github.com/digital-stage/webclient/compare/v0.20.17...v0.20.18) (2020-12-08)
 
 
