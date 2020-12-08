@@ -156,19 +156,22 @@ export const getVideoTracks = (inputVideoDeviceId?: string): Promise<MediaStream
     .then((stream) => stream.getVideoTracks());
 };
 
-export const getAudioTracks = (inputAudioDeviceId?: string): Promise<MediaStreamTrack[]> => {
-  const sampleRate = process.env.NEXT_PUBLIC_FIXED_SAMPLERATE
-    ? parseInt(process.env.NEXT_PUBLIC_FIXED_SAMPLERATE, 10)
-    : undefined;
+export const getAudioTracks = (options: {
+  sampleRate?: number;
+  inputAudioDeviceId?: string;
+  autoGainControl?: boolean;
+  echoCancellation?: boolean;
+  noiseSuppression?: boolean;
+}): Promise<MediaStreamTrack[]> => {
   return navigator.mediaDevices
     .getUserMedia({
       video: false,
       audio: {
-        deviceId: inputAudioDeviceId || undefined,
-        sampleRate,
-        autoGainControl: false,
-        echoCancellation: false,
-        noiseSuppression: false,
+        deviceId: options.inputAudioDeviceId || undefined,
+        sampleRate: options.sampleRate || undefined,
+        autoGainControl: options.autoGainControl || false,
+        echoCancellation: options.echoCancellation || false,
+        noiseSuppression: options.noiseSuppression || false,
       },
     })
     .then((stream) => stream.getAudioTracks());

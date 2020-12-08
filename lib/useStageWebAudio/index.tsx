@@ -10,7 +10,7 @@ import {
   useCustomStageMembers,
   useGroups,
   useStageMembersRaw,
-} from './../use-digital-stage/hooks';
+} from '../use-digital-stage';
 import useAudioContext from './../useAudioContext';
 import TreeDimensionPannerNode from './TreeDimensionPannerNode';
 import { calculate3DAudioParameters } from './utils';
@@ -54,11 +54,11 @@ const StageWebAudioProvider = (props: {
   handleError: (error: Error) => void;
 }): JSX.Element => {
   const { children, handleError } = props;
-  const { destination } = useAudioContext();
+  const { destination, started } = useAudioContext();
   const [destinationNodes, setDestinationNodes] = useState<{
     left: IGainNode<IAudioContext>;
     right: IGainNode<IAudioContext>;
-  }>();
+  }>(undefined);
   const [groupNodes, setGroupNodes] = useState<GainAudioNode>(undefined);
   const [stageMemberNodes, setStageMemberNodes] = useState<GainAudioNode>(undefined);
   const [audioProducerNodes, setAudioProducerNodes] = useState<TrackAudioNode>(undefined);
@@ -77,7 +77,7 @@ const StageWebAudioProvider = (props: {
    * ROOT NODES
    */
   useEffect(() => {
-    if (handleError && destination) {
+    if (handleError && destination && started) {
       try {
         const audioContext = destination.context;
         report('Creating both root nodes');
@@ -95,12 +95,13 @@ const StageWebAudioProvider = (props: {
           reportCleanup('Removing and disconnecting both root nodes');
           createdRootNodeL.disconnect();
           createdRootNodeR.disconnect();
+          setDestinationNodes(undefined);
         };
       } catch (error) {
         handleError(error);
       }
     }
-  }, [destination, handleError]);
+  }, [started, destination, handleError]);
 
   useEffect(() => {
     if (destinationNodes && handleError && stageId && groups.byStage[stageId]) {

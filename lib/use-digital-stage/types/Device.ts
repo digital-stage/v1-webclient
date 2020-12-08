@@ -24,6 +24,11 @@ export interface Device {
   outputAudioDevices: WebRTCDevice[];
   outputAudioDeviceId?: string;
 
+  // WebRTC options
+  echoCancellation?: boolean;
+  autoGainControl?: boolean;
+  noiseSuppression?: boolean;
+
   // OV SoundCards
   soundCardIds: string[]; // refers to all available sound devices
   soundCardId?: string; // active sound device
