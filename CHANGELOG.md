@@ -1,3 +1,10 @@
+## [0.20.17](https://github.com/digital-stage/webclient/compare/v0.20.16...v0.20.17) (2020-12-08)
+
+
+### Bug Fixes
+
+* use default output ([ccb70ce](https://github.com/digital-stage/webclient/commit/ccb70ce335e8eb0885148b93f59f544bdb4afb54))
+
 ## [0.20.16](https://github.com/digital-stage/webclient/compare/v0.20.15...v0.20.16) (2020-12-07)
 
 
