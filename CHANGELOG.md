@@ -1,3 +1,10 @@
+## [0.20.20](https://github.com/digital-stage/webclient/compare/v0.20.19...v0.20.20) (2020-12-08)
+
+
+### Bug Fixes
+
+* playback sometimes disturbed ([297ce21](https://github.com/digital-stage/webclient/commit/297ce2147769ac3e182faeffc3ab78ccd4dacb6d))
+
 ## [0.20.19](https://github.com/digital-stage/webclient/compare/v0.20.18...v0.20.19) (2020-12-08)
 
 
