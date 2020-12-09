@@ -1,3 +1,10 @@
+## [0.21.1](https://github.com/digital-stage/webclient/compare/v0.21.0...v0.21.1) (2020-12-09)
+
+
+### Bug Fixes
+
+* video is not removed when toggling video sharing ([07a6d16](https://github.com/digital-stage/webclient/commit/07a6d160d120ba562b31ac0fba93eb36c6a8aa09))
+
 # [0.21.0](https://github.com/digital-stage/webclient/compare/v0.20.20...v0.21.0) (2020-12-09)
 
 
