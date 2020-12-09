@@ -1,3 +1,10 @@
+## [0.21.2](https://github.com/digital-stage/webclient/compare/v0.21.1...v0.21.2) (2020-12-09)
+
+
+### Bug Fixes
+
+* joining a stage with password not possible ([dbf53b4](https://github.com/digital-stage/webclient/commit/dbf53b4911535c5946590b14e5aa9342c6b63e08))
+
 ## [0.21.1](https://github.com/digital-stage/webclient/compare/v0.21.0...v0.21.1) (2020-12-09)
 
 
