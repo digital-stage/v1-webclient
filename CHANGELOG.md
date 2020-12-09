@@ -1,3 +1,10 @@
+# [0.21.0](https://github.com/digital-stage/webclient/compare/v0.20.20...v0.21.0) (2020-12-09)
+
+
+### Features
+
+* add new arrangement of groups and users ([80b0fe9](https://github.com/digital-stage/webclient/commit/80b0fe9cb5060c817bcf159023fcebd9ccdde8f6))
+
 ## [0.20.20](https://github.com/digital-stage/webclient/compare/v0.20.19...v0.20.20) (2020-12-08)
 
 
