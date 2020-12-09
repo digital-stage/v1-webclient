@@ -1,11 +1,5 @@
 import { useSelector } from 'react-redux';
-import { RootReducer, StageMembersCollection, StageMemberWithUserData } from '../types';
-
-export interface StageMemberCollectionWithUserData extends StageMembersCollection {
-  byId: {
-    [id: string]: StageMemberWithUserData;
-  };
-}
+import { RootReducer, StageMemberCollectionWithUserData } from '../types';
 
 const useStageMembers = (): StageMemberCollectionWithUserData =>
   useSelector<RootReducer, StageMemberCollectionWithUserData>((state) => {

@@ -323,6 +323,7 @@ const StageActionsProvider = (props: {
       >
     ) => {
       d(`updateStageMember(${id}, ...)`);
+      d(update);
       if (socket) {
         const payload: ChangeStageMemberPayload = {
           id,
@@ -406,6 +407,7 @@ const StageActionsProvider = (props: {
     (stageMemberId: string, update: Partial<ThreeDimensionAudioProperties>) => {
       if (socket) {
         d(`setCustomStageMember(${stageMemberId}, ...)`);
+        d(update);
         const payload: SetCustomStageMemberPayload = {
           stageMemberId,
           update,
