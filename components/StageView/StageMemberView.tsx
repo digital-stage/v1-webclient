@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx, Flex, Box, Heading, IconButton } from 'theme-ui';
-import { FaVideo, FaVideoSlash } from 'react-icons/fa';
+import { BsArrowsAngleExpand, BsArrowsAngleContract } from 'react-icons/bs';
 import { HiUserCircle } from 'react-icons/hi';
 import {
   StageMemberWithUserData,
@@ -56,7 +56,7 @@ const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIco
               })
             }
           >
-            {stageMember.isDirector ? <FaVideo /> : <FaVideoSlash />}
+            {stageMember.isDirector ? <BsArrowsAngleContract /> : <BsArrowsAngleExpand />}
           </IconButton>
         )}
       </Box>
@@ -78,9 +78,11 @@ const StageMemberView = ({
       sx={{
         position: 'relative',
         backgroundImage: videoConsumers.length <= 0 && 'url("/images/user_background.svg")',
-        height: variant === 'conductor' ? '100%' : '240px',
-        width: variant === 'conductor' ? '100%' : '240px',
-        m: 1,
+        height: '100%',
+        width: '100%',
+        // height: variant === 'conductor' ? '100%' : '240px',
+        // width: variant === 'conductor' ? '100%' : '240px',
+        // m: 1,
       }}
     >
       {videoConsumers.length > 0 && (
