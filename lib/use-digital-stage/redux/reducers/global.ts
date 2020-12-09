@@ -35,7 +35,6 @@ function global(
       };
     case ServerGlobalEvents.STAGE_JOINED: {
       const { stageId, groupId } = action.payload as InitialStagePackage;
-      console.debug('GLOBAL');
       return {
         ...state,
         stageId,

@@ -1,12 +1,11 @@
 import omit from 'lodash/omit';
-import filter from 'lodash/filter';
 import without from 'lodash/without';
+import debug from 'debug';
 import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents';
 import upsert from '../utils/upsert';
 import { StageMember, StageMembersCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 import { InitialStagePackage } from '../actions/stageActions';
-import debug from 'debug';
 
 const err = debug('redux:error');
 
@@ -68,10 +67,12 @@ function reduceStageMembers(
       return addStageMember(prev, stageMember);
     }
     case ServerStageEvents.STAGE_MEMBER_CHANGED: {
-      const stageMember = action.payload as Partial<StageMember> & { _id: string };
+      const stageMember = action.payload as Partial<StageMember> & {
+        _id: string;
+      };
       const previousStageMember = prev.byId[stageMember._id];
       if (!previousStageMember) {
-        err('Could not find previous stage member ' + stageMember._id);
+        err(`Could not find previous stage member ${stageMember._id}`);
         return prev;
       }
       if (stageMember.groupId && stageMember.groupId !== previousStageMember.groupId) {

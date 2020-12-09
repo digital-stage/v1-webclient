@@ -61,10 +61,13 @@ const UseDigitalStageProvider = (props: {
 
   useEffect(() => {
     debugEffect('refreshLocalDevice');
-    navigator.mediaDevices.addEventListener('devicechange', refreshLocalDevice);
-    return () => {
-      navigator.mediaDevices.removeEventListener('devicechange', refreshLocalDevice);
-    };
+    if (navigator.mediaDevices) {
+      navigator.mediaDevices.addEventListener('devicechange', refreshLocalDevice);
+      return () => {
+        navigator.mediaDevices.removeEventListener('devicechange', refreshLocalDevice);
+      };
+    }
+    return undefined;
   }, [refreshLocalDevice]);
 
   useEffect(() => {

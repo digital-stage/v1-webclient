@@ -3,11 +3,79 @@
 /** @jsx jsx */
 /** @jsxFrag React.Fragmen **/
 import React from 'react';
-import { Box, Heading, jsx, Text } from 'theme-ui';
+import { Box, Heading, jsx, Text, Checkbox, Label } from 'theme-ui';
 import SingleSelect from '../new/elements/SingleSelect';
 import { Device } from '../../lib/use-digital-stage/types';
 import { useSelector } from '../../lib/use-digital-stage/hooks';
 import useStageActions from '../../lib/use-digital-stage/useStageActions';
+
+const SingleDeviceAudioSettings = (props: {
+  device: Device;
+  updateDevice(id: string, device: Partial<Device>): void;
+}) => {
+  const { device, updateDevice } = props;
+
+  return (
+    <React.Fragment>
+      <Text mb={3}>Mikrofon</Text>
+      <SingleSelect
+        options={device.inputAudioDevices || []}
+        defaultValue={device.inputAudioDeviceId}
+        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+          updateDevice(device._id, {
+            inputAudioDeviceId: device.inputAudioDevices[e.target.selectedIndex].id,
+          })
+        }
+      />
+      <Text my={3}>Lautsprecher</Text>
+      <SingleSelect
+        options={device.outputAudioDevices || []}
+        defaultValue={device.outputAudioDeviceId}
+        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+          updateDevice(device._id, {
+            outputAudioDeviceId: device.outputAudioDevices[e.target.selectedIndex].id,
+          });
+        }}
+      />
+      <Label>
+        <Checkbox
+          checked={device.echoCancellation || false}
+          defaultChecked={device.echoCancellation || false}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            updateDevice(device._id, {
+              echoCancellation: e.currentTarget.checked,
+            });
+          }}
+        />{' '}
+        Feedback aktiv unterdrücken
+      </Label>
+      <Label>
+        <Checkbox
+          checked={device.autoGainControl || false}
+          defaultChecked={device.autoGainControl || false}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            updateDevice(device._id, {
+              autoGainControl: e.currentTarget.checked,
+            });
+          }}
+        />{' '}
+        Eingangspegel automatisch festlegen
+      </Label>
+      <Label>
+        <Checkbox
+          checked={device.noiseSuppression || false}
+          defaultChecked={device.noiseSuppression || false}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            updateDevice(device._id, {
+              noiseSuppression: e.currentTarget.checked,
+            });
+          }}
+        />{' '}
+        Hintergrundgeräusche unterdrücken
+      </Label>
+    </React.Fragment>
+  );
+};
 
 const AudioSettings = (): JSX.Element => {
   const localDevice = useSelector((state) =>
@@ -22,55 +90,19 @@ const AudioSettings = (): JSX.Element => {
   return (
     <Box>
       <Heading mb={3}>Audiogeräte</Heading>
-      <Text mb={3}>Mikrofon</Text>
-      <SingleSelect
-        options={localDevice.inputAudioDevices || []}
-        defaultValue={localDevice.inputAudioDeviceId}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-          updateDevice(localDevice._id, {
-            inputAudioDeviceId: localDevice.inputAudioDevices[e.target.selectedIndex].id,
-          })
-        }
-      />
-      <Text my={3}>Lautsprecher</Text>
-      <SingleSelect
-        options={localDevice.outputAudioDevices || []}
-        defaultValue={localDevice.outputAudioDeviceId}
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-          updateDevice(localDevice._id, {
-            outputAudioDeviceId: localDevice.outputAudioDevices[e.target.selectedIndex].id,
-          });
-        }}
-      />
-      {remoteDevices && remoteDevices.length > 0 && (
+      <SingleDeviceAudioSettings device={localDevice} updateDevice={updateDevice} />
+      {remoteDevices && remoteDevices.length > 0 ? (
         <React.Fragment>
           <Text sx={{ my: 3 }}>Remote Audiogeräte</Text>
-          {remoteDevices.map((remoteDevice, index) => (
-            <div key={index}>
-              <Text mb={3}>Mikrofon</Text>
-              <SingleSelect
-                options={remoteDevice.inputAudioDevices || []}
-                defaultValue={remoteDevice.inputAudioDeviceId}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                  updateDevice(remoteDevice._id, {
-                    inputAudioDeviceId: remoteDevice.inputAudioDevices[e.target.selectedIndex].id,
-                  })
-                }
-              />
-              <Text my={3}>Lautsprecher</Text>
-              <SingleSelect
-                options={remoteDevice.outputAudioDevices || []}
-                defaultValue={remoteDevice.outputAudioDeviceId}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                  updateDevice(remoteDevice._id, {
-                    outputAudioDeviceId: remoteDevice.outputAudioDevices[e.target.selectedIndex].id,
-                  });
-                }}
-              />
-            </div>
+          {remoteDevices.map((device) => (
+            <SingleDeviceAudioSettings
+              key={device._id}
+              device={device}
+              updateDevice={updateDevice}
+            />
           ))}
         </React.Fragment>
-      )}
+      ) : null}
     </Box>
   );
 };

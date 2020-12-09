@@ -1,3 +1,52 @@
+## [0.20.20](https://github.com/digital-stage/webclient/compare/v0.20.19...v0.20.20) (2020-12-08)
+
+
+### Bug Fixes
+
+* playback sometimes disturbed ([297ce21](https://github.com/digital-stage/webclient/commit/297ce2147769ac3e182faeffc3ab78ccd4dacb6d))
+
+## [0.20.19](https://github.com/digital-stage/webclient/compare/v0.20.18...v0.20.19) (2020-12-08)
+
+
+### Bug Fixes
+
+* lint errors ([7796118](https://github.com/digital-stage/webclient/commit/77961181433ee412de1ede42eb06cdc8ea332468))
+
+## [0.20.18](https://github.com/digital-stage/webclient/compare/v0.20.17...v0.20.18) (2020-12-08)
+
+
+### Bug Fixes
+
+* output device selection ([9779013](https://github.com/digital-stage/webclient/commit/977901342b51b6dcf1eeafa3432e688ddc19fc38))
+
+## [0.20.17](https://github.com/digital-stage/webclient/compare/v0.20.16...v0.20.17) (2020-12-08)
+
+
+### Bug Fixes
+
+* use default output ([ccb70ce](https://github.com/digital-stage/webclient/commit/ccb70ce335e8eb0885148b93f59f544bdb4afb54))
+
+## [0.20.16](https://github.com/digital-stage/webclient/compare/v0.20.15...v0.20.16) (2020-12-07)
+
+
+### Bug Fixes
+
+* audio output change did not work ([5247f9e](https://github.com/digital-stage/webclient/commit/5247f9e48f2c7a7d0dbf8f6bc9146c6cc52672ad))
+
+## [0.20.15](https://github.com/digital-stage/webclient/compare/v0.20.14...v0.20.15) (2020-12-07)
+
+
+### Bug Fixes
+
+* removed console output ([e4faa7c](https://github.com/digital-stage/webclient/commit/e4faa7ce9263e1f8f4f45696eb0e0a36c17008be))
+
+## [0.20.14](https://github.com/digital-stage/webclient/compare/v0.20.13...v0.20.14) (2020-12-07)
+
+
+### Bug Fixes
+
+* added already actiavted message and cleaned up ([efbe831](https://github.com/digital-stage/webclient/commit/efbe83195ef513adb167e281082514e86628cec9))
+
 ## [0.20.13](https://github.com/digital-stage/webclient/compare/v0.20.12...v0.20.13) (2020-12-07)
 
 

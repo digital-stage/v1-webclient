@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IAnalyserNode, IAudioContext, IAudioNode, IGainNode } from 'standardized-audio-context';
 
 import {
@@ -10,13 +10,14 @@ import {
   useCustomStageMembers,
   useGroups,
   useStageMembersRaw,
-} from '../use-digital-stage/hooks';
+} from '../use-digital-stage';
 import useAudioContext from './../useAudioContext';
 import TreeDimensionPannerNode from './TreeDimensionPannerNode';
 import { calculate3DAudioParameters } from './utils';
 import debug from 'debug';
 
-const d = debug('useStageWebAudio');
+const report = debug('useStageWebAudio');
+const reportCleanup = report.extend('cleanup');
 
 export interface GainAudioNode {
   [id: string]: {
@@ -45,22 +46,22 @@ export interface StageWebAudioProps {
 
 const StageWebAudioContext = React.createContext<StageWebAudioProps>(undefined);
 
-const useStageWebAudio = () => React.useContext(StageWebAudioContext);
+const useStageWebAudio = (): StageWebAudioProps =>
+  React.useContext<StageWebAudioProps>(StageWebAudioContext);
 
 const StageWebAudioProvider = (props: {
   children: React.ReactNode;
   handleError: (error: Error) => void;
-}) => {
+}): JSX.Element => {
   const { children, handleError } = props;
-  const { audioContext, started } = useAudioContext();
-  const audioPlayerRef = useRef<HTMLAudioElement>();
+  const { destination, started } = useAudioContext();
   const [destinationNodes, setDestinationNodes] = useState<{
     left: IGainNode<IAudioContext>;
     right: IGainNode<IAudioContext>;
-  }>();
-  const [groupNodes, setGroupNodes] = useState<GainAudioNode>({});
-  const [stageMemberNodes, setStageMemberNodes] = useState<GainAudioNode>({});
-  const [audioProducerNodes, setAudioProducerNodes] = useState<TrackAudioNode>({});
+  }>(undefined);
+  const [groupNodes, setGroupNodes] = useState<GainAudioNode>(undefined);
+  const [stageMemberNodes, setStageMemberNodes] = useState<GainAudioNode>(undefined);
+  const [audioProducerNodes, setAudioProducerNodes] = useState<TrackAudioNode>(undefined);
 
   // Incoming states from stage
   const stageId = useCurrentStageId();
@@ -76,43 +77,31 @@ const StageWebAudioProvider = (props: {
    * ROOT NODES
    */
   useEffect(() => {
-    if (audioContext && started && handleError && audioPlayerRef) {
-      if (started) {
-        d('AUDIO CONTEXT IS STARTED');
-      }
+    if (handleError && destination && started) {
       try {
-        // Create root node
-        d('Creating both root nodes');
-        const splitter = audioContext.createChannelSplitter(2);
-        const merger = audioContext.createChannelMerger(2);
-
-        merger.connect(audioContext.destination);
-
-        splitter.connect(merger, 0, 0);
-        splitter.connect(merger, 0, 1);
-
+        const audioContext = destination.context;
+        report('Creating both root nodes');
         const createdRootNodeL = audioContext.createGain();
-        createdRootNodeL.connect(audioContext.destination);
+        createdRootNodeL.connect(destination);
         const createdRootNodeR = audioContext.createGain();
-        createdRootNodeR.connect(audioContext.destination);
+        createdRootNodeR.connect(destination);
 
         setDestinationNodes({
           left: createdRootNodeL,
           right: createdRootNodeR,
         });
+
+        return () => {
+          reportCleanup('Removing and disconnecting both root nodes');
+          createdRootNodeL.disconnect();
+          createdRootNodeR.disconnect();
+          setDestinationNodes(undefined);
+        };
       } catch (error) {
         handleError(error);
       }
-      return () => {
-        d('Removing and disconnecting both root nodes');
-        if (destinationNodes) {
-          destinationNodes.left.disconnect();
-          destinationNodes.right.disconnect();
-          setDestinationNodes(undefined);
-        }
-      };
     }
-  }, [audioContext, started, audioPlayerRef, handleError]);
+  }, [started, destination, handleError]);
 
   useEffect(() => {
     if (destinationNodes && handleError && stageId && groups.byStage[stageId]) {
@@ -123,7 +112,7 @@ const StageWebAudioProvider = (props: {
           if (previous) {
             Object.keys(previous).forEach((id) => {
               if (!groups.byId[id]) {
-                d('Removing deprecated group node ' + id);
+                reportCleanup('Removing deprecated group node ' + id);
                 previous[id].gainNodeL.disconnect();
                 previous[id].gainNodeR.disconnect();
                 previous[id].analyserNodeL.disconnect();
@@ -140,7 +129,7 @@ const StageWebAudioProvider = (props: {
               ? customGroups.byId[customGroups.byGroup[item._id]]
               : undefined;
             if (!prev[id]) {
-              d('Creating group node ' + id);
+              report('Creating group node ' + id);
               // Create nodes
               const gainNodeL = audioContext.createGain();
               const gainNodeR = audioContext.createGain();
@@ -205,7 +194,7 @@ const StageWebAudioProvider = (props: {
         handleError(error);
       }
     } else {
-      d('Removing all group nodes');
+      reportCleanup('Removing all group nodes');
       setGroupNodes((prev) => {
         if (prev) {
           Object.keys(prev).forEach((id) => {
@@ -230,7 +219,7 @@ const StageWebAudioProvider = (props: {
           if (previous) {
             Object.keys(previous).forEach((id) => {
               if (!stageMembers.byId[id]) {
-                d('Removing deprecated stage member node ' + id);
+                report('Removing deprecated stage member node ' + id);
                 previous[id].gainNodeL.disconnect();
                 previous[id].gainNodeR.disconnect();
                 previous[id].analyserNodeL.disconnect();
@@ -249,7 +238,7 @@ const StageWebAudioProvider = (props: {
             if (groupNodes[item.groupId]) {
               const audioContext = groupNodes[item.groupId].gainNodeL.context;
               if (!prev[item._id]) {
-                d('Creating stage member node ' + id);
+                report('Creating stage member node ' + id);
                 // Create nodes
                 const gainNodeL = audioContext.createGain();
                 const gainNodeR = audioContext.createGain();
@@ -322,7 +311,7 @@ const StageWebAudioProvider = (props: {
       }
     } else {
       setStageMemberNodes((prev) => {
-        d('Removing all stage member nodes ');
+        reportCleanup('Removing all stage member nodes ');
         if (prev) {
           Object.keys(prev).forEach((id) => {
             prev[id].gainNodeL.disconnect();
@@ -346,7 +335,7 @@ const StageWebAudioProvider = (props: {
           if (previous) {
             Object.keys(previous).forEach((id) => {
               if (!audioProducers.byId[id]) {
-                d('Removing deprecated producer node ' + id);
+                reportCleanup('Removing deprecated producer node ' + id);
                 previous[id].gainNode.disconnect();
                 previous[id].analyserNode.disconnect();
                 previous[id].splitterNode.disconnect();
@@ -370,7 +359,7 @@ const StageWebAudioProvider = (props: {
               let splitterNode;
               let element;
               if (!prev[item._id]) {
-                d('Creating producer node ' + id);
+                report('Creating producer node ' + id);
                 gainNode = audioContext.createGain();
                 gainNode.gain.value = 1;
                 // gainNode.gain.setValueAtTime(item.volume, audioContext.currentTime);
@@ -442,23 +431,26 @@ const StageWebAudioProvider = (props: {
                   pannerNode.setOrientation(params.rX, params.rY, params.rZ);
                 }
               }
-              if (!element && audioConsumers.byProducer[item._id]) {
-                d('Attaching consumer to producer node ' + id);
-                // See, if there is a consumer
-                const audioConsumer = audioConsumers.byId[audioConsumers.byProducer[item._id]];
-                const stream = new MediaStream([audioConsumer.consumer.track]);
+              if (audioConsumers.byProducer[item._id]) {
+                if (!element || element.id !== audioConsumers.byProducer[item._id]) {
+                  report('Attaching consumer to producer node ' + id);
+                  // See, if there is a consumer
+                  const audioConsumer = audioConsumers.byId[audioConsumers.byProducer[item._id]];
+                  const stream = new MediaStream([audioConsumer.consumer.track]);
 
-                element = new Audio();
-                element.srcObject = stream;
-                element.autoplay = true;
-                element.muted = true;
-                element.play();
+                  element = new Audio();
+                  element.id = audioConsumer._id;
+                  element.srcObject = stream;
+                  element.autoplay = true;
+                  element.muted = true;
+                  element.play();
 
-                // sourceNode = audioContext.createMediaElementSource(element);
-                // sourceNode.connect(gainNode);
+                  // sourceNode = audioContext.createMediaElementSource(element);
+                  // sourceNode.connect(gainNode);
 
-                sourceNode = audioContext.createMediaStreamSource(stream);
-                sourceNode.connect(gainNode);
+                  sourceNode = audioContext.createMediaStreamSource(stream);
+                  sourceNode.connect(gainNode);
+                }
               }
               return {
                 ...items,
@@ -479,7 +471,7 @@ const StageWebAudioProvider = (props: {
         handleError(error);
       }
     } else {
-      d('Removing all audio producers');
+      reportCleanup('Removing all audio producers');
       setAudioProducerNodes((prev) => {
         if (prev) {
           Object.keys(prev).forEach((id) => {

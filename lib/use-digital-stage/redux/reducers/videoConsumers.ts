@@ -3,7 +3,6 @@ import without from 'lodash/without';
 import { LocalConsumer, LocalConsumersCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 import upsert from '../utils/upsert';
-import { ServerGlobalEvents } from '../../global/SocketEvents';
 
 function videoConsumers(
   state: LocalConsumersCollection = {

@@ -45,7 +45,7 @@ class TreeDimensionPannerNode {
     }
   }
 
-  public setPosition = (x: number, y: number, z: number) => {
+  public setPosition = (x: number, y: number, z: number): void => {
     if (isPannerNode(this.node) && !isNaN(x) && !isNaN(y) && !isNaN(z)) {
       this.node.positionX.setValueAtTime(x, this.audioContext.currentTime);
       this.node.positionY.setValueAtTime(y, this.audioContext.currentTime);
@@ -53,23 +53,23 @@ class TreeDimensionPannerNode {
     }
   };
 
-  public setPositionX = (value: number) => {
+  public setPositionX = (value: number): void => {
     if (isPannerNode(this.node) && !isNaN(value)) {
       this.node.positionX.setValueAtTime(value, this.audioContext.currentTime);
     }
   };
-  public setPositionY = (value: number) => {
+  public setPositionY = (value: number): void => {
     if (isPannerNode(this.node) && !isNaN(value)) {
       this.node.positionY.setValueAtTime(value, this.audioContext.currentTime);
     }
   };
-  public setPositionZ = (value: number) => {
+  public setPositionZ = (value: number): void => {
     if (isPannerNode(this.node) && !isNaN(value)) {
       this.node.positionZ.setValueAtTime(value, this.audioContext.currentTime);
     }
   };
 
-  public setOrientation = (x: number, y: number, z: number) => {
+  public setOrientation = (x: number, y: number, z: number): void => {
     if (isPannerNode(this.node) && !isNaN(x) && !isNaN(y) && !isNaN(z)) {
       this.node.orientationX.setValueAtTime(x, this.audioContext.currentTime);
       this.node.orientationY.setValueAtTime(y, this.audioContext.currentTime);
@@ -77,18 +77,18 @@ class TreeDimensionPannerNode {
     }
   };
 
-  public setOrientationX = (value: number) => {
+  public setOrientationX = (value: number): void => {
     if (isPannerNode(this.node) && !isNaN(value)) {
       this.node.orientationX.setValueAtTime(value, this.audioContext.currentTime);
     }
   };
 
-  public setOrientationY = (value: number) => {
+  public setOrientationY = (value: number): void => {
     if (isPannerNode(this.node) && !isNaN(value)) {
       this.node.orientationY.setValueAtTime(value, this.audioContext.currentTime);
     }
   };
-  public setOrientationZ = (value: number) => {
+  public setOrientationZ = (value: number): void => {
     if (isPannerNode(this.node) && !isNaN(value)) {
       this.node.orientationZ.setValueAtTime(value, this.audioContext.currentTime);
     }
@@ -98,15 +98,19 @@ class TreeDimensionPannerNode {
     destinationNode: IAudioNode<IAudioContext>,
     output?: number,
     input?: number
-  ) => {
-    return this.node.connect(destinationNode, output, input);
+  ): IAudioNode<IAudioContext> => {
+    return this.node.connect<IAudioContext, IAudioNode<IAudioContext>>(
+      destinationNode,
+      output,
+      input
+    );
   };
 
-  public disconnect = (output?: number) => {
+  public disconnect = (output?: number): void => {
     return this.node.disconnect(output);
   };
 
-  public getNode = () => {
+  public getNode = (): IAudioNode<IAudioContext> => {
     return this.node;
   };
 }

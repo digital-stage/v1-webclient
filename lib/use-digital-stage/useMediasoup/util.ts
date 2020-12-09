@@ -2,12 +2,9 @@ import mediasoupClient from 'mediasoup-client';
 import { ITeckosClient } from 'teckos-client';
 import debug from 'debug';
 import { Router } from '../types';
-import { useCallback } from 'react';
 
-const d = debug('useMediasoup:utils');
-
-const trace = d.extend('trace');
-const err = d.extend('err');
+const report = debug('useMediasoup:utils');
+const reportError = report.extend('error');
 
 export enum RouterEvents {
   TransportCloses = 'transport-closed',
@@ -92,7 +89,7 @@ export const getFastestRouter = (routerDistUrl: string): Promise<Router> =>
               latency,
             };
           } catch (error) {
-            err(error);
+            reportError(error);
             return {
               router,
               latency: 9999,
@@ -157,20 +154,25 @@ export const getVideoTracks = (inputVideoDeviceId?: string): Promise<MediaStream
     .then((stream) => stream.getVideoTracks());
 };
 
-export const getAudioTracks = (inputAudioDeviceId?: string): Promise<MediaStreamTrack[]> => {
-  const sampleRate = process.env.NEXT_PUBLIC_FIXED_SAMPLERATE
-    ? parseInt(process.env.NEXT_PUBLIC_FIXED_SAMPLERATE)
-    : undefined;
+export const getAudioTracks = (options: {
+  sampleRate?: number;
+  inputAudioDeviceId?: string;
+  autoGainControl?: boolean;
+  echoCancellation?: boolean;
+  noiseSuppression?: boolean;
+}): Promise<MediaStreamTrack[]> => {
+  const audioOptions = {
+    deviceId: options.inputAudioDeviceId || undefined,
+    sampleRate: options.sampleRate || undefined,
+    autoGainControl: options.autoGainControl || false,
+    echoCancellation: options.echoCancellation || false,
+    noiseSuppression: options.noiseSuppression || false,
+  };
+  report('Using following audio options: ', options);
   return navigator.mediaDevices
     .getUserMedia({
       video: false,
-      audio: {
-        deviceId: inputAudioDeviceId || undefined,
-        sampleRate: sampleRate,
-        autoGainControl: false,
-        echoCancellation: false,
-        noiseSuppression: false,
-      },
+      audio: audioOptions,
     })
     .then((stream) => stream.getAudioTracks());
 };
@@ -188,13 +190,13 @@ export const createWebRTCTransport = (
         if (error) {
           return reject(error);
         }
-        trace('createWebRTCTransport');
+        report('createWebRTCTransport');
         const transport: mediasoupClient.types.Transport =
           direction === 'send'
             ? device.createSendTransport(transportOptions)
             : device.createRecvTransport(transportOptions);
         transport.on('connect', async ({ dtlsParameters }, callback, errCallback) => {
-          trace(`createWebRTCTransport:transport:${direction}:connect`);
+          report(`createWebRTCTransport:transport:${direction}:connect`);
           routerConnection.emit(
             RouterRequests.ConnectTransport,
             {
@@ -203,7 +205,7 @@ export const createWebRTCTransport = (
             },
             (transportError: string) => {
               if (transportError) {
-                err(error);
+                reportError(error);
                 return errCallback(error);
               }
               return callback();
@@ -212,14 +214,14 @@ export const createWebRTCTransport = (
         });
         transport.on('connectionstatechange', async (state) => {
           if (state === 'closed' || state === 'failed' || state === 'disconnected') {
-            err(
+            reportError(
               `createWebRTCTransport:transport:${direction}:connectionstatechange - Disconnect by server side`
             );
           }
         });
         if (direction === 'send') {
           transport.on('produce', async (producer, callback, errCallback) => {
-            trace(`createWebRTCTransport:transport:${direction}:produce`);
+            report(`createWebRTCTransport:transport:${direction}:produce`);
             routerConnection.emit(
               RouterRequests.CreateProducer,
               {
@@ -230,7 +232,7 @@ export const createWebRTCTransport = (
               },
               (produceError: string | undefined, payload: any) => {
                 if (produceError) {
-                  err(produceError);
+                  reportError(produceError);
                   return errCallback(produceError);
                 }
                 return callback({
@@ -263,11 +265,11 @@ export const pauseProducer = (
   new Promise<mediasoupClient.types.Producer>((resolve, reject) =>
     socket.emit(RouterRequests.PauseProducer, producer.id, (error?: string) => {
       if (error) {
-        err(error);
+        reportError(error);
         return reject(error);
       }
       producer.pause();
-      trace(`Paused producer ${producer.id}`);
+      report(`Paused producer ${producer.id}`);
       return resolve(producer);
     })
   );
@@ -279,11 +281,11 @@ export const resumeProducer = (
   new Promise<mediasoupClient.types.Producer>((resolve, reject) =>
     socket.emit(RouterRequests.ResumeProducer, producer.id, (error?: string) => {
       if (error) {
-        err(error);
+        reportError(error);
         return reject(error);
       }
       producer.resume();
-      trace(`Resumed producer ${producer.id}`);
+      report(`Resumed producer ${producer.id}`);
       return resolve(producer);
     })
   );
@@ -295,11 +297,11 @@ export const stopProducer = (
   new Promise<mediasoupClient.types.Producer>((resolve, reject) =>
     socket.emit(RouterRequests.CloseProducer, producer.id, (error?: string) => {
       if (error) {
-        err(error);
+        reportError(error);
         return reject(error);
       }
       producer.close();
-      trace(`Stopped producer ${producer.id}`);
+      report(`Stopped producer ${producer.id}`);
       return resolve(producer);
     })
   );
@@ -330,13 +332,13 @@ export const createConsumer = (
         }
       ) => {
         if (error) {
-          err(error);
+          reportError(error);
           return reject(error);
         }
-        trace(`Server created consumer ${data.id} for producer ${data.producerId}, consuming now`);
+        report(`Server created consumer ${data.id} for producer ${data.producerId}, consuming now`);
         return transport.consume(data).then(async (consumer) => {
           if (data.paused) {
-            trace('Pausing consumer, since it is paused server-side too');
+            report('Pausing consumer, since it is paused server-side too');
             await consumer.pause();
           }
           return resolve(consumer);
@@ -354,7 +356,7 @@ export const resumeConsumer = (
       routerConnection.emit(RouterRequests.ResumeConsumer, consumer.id, (error?: string) => {
         if (error) return reject(error);
         consumer.resume();
-        trace(`Resumed consumer ${consumer.id}`);
+        report(`Resumed consumer ${consumer.id}`);
         return resolve(consumer);
       })
     );
@@ -370,11 +372,11 @@ export const pauseConsumer = (
     return new Promise<mediasoupClient.types.Consumer>((resolve, reject) =>
       socket.emit(RouterRequests.PauseConsumer, consumer.id, (error?: string) => {
         if (error) {
-          err(error);
+          reportError(error);
           return reject(error);
         }
         consumer.pause();
-        trace(`Paused consumer ${consumer.id}`);
+        report(`Paused consumer ${consumer.id}`);
         return resolve(consumer);
       })
     );
@@ -389,11 +391,11 @@ export const closeConsumer = (
   new Promise<mediasoupClient.types.Consumer>((resolve, reject) =>
     socket.emit(RouterRequests.CloseConsumer, consumer.id, (error?: string) => {
       if (error) {
-        err(error);
+        reportError(error);
         return reject(error);
       }
       consumer.close();
-      trace(`Closed consumer ${consumer.id}`);
+      report(`Closed consumer ${consumer.id}`);
       return resolve(consumer);
     })
   );

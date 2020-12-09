@@ -7,6 +7,7 @@ import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import InputField from '../InputField';
 import { useAuth } from '../../lib/useAuth';
+import translateError from './translateError';
 
 interface Values {
   password?: string;
@@ -59,7 +60,7 @@ export default function ResetPasswordForm({ resetToken }: Props): JSX.Element {
               setMsg({
                 state: true,
                 type: 'danger',
-                kids: { err },
+                kids: translateError(err),
               })
             )
         }

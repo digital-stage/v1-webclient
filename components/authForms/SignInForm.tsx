@@ -7,6 +7,7 @@ import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../../lib/useAuth';
 import InputField from '../InputField';
+import translateError from './translateError';
 
 export interface Values {
   email: string;
@@ -54,7 +55,7 @@ const SignInForm = (): JSX.Element => {
             .catch((err) => {
               setMessage({
                 type: 'danger',
-                content: err.message,
+                content: translateError(err),
               });
             });
         }}
@@ -96,6 +97,14 @@ const SignInForm = (): JSX.Element => {
         <Link href="/account/forgot">
           <Button as="a" variant="text">
             Passwort vergessen?
+          </Button>
+        </Link>
+      </Flex>
+
+      <Flex sx={{ justifyContent: 'center', mt: 4, mb: 2 }}>
+        <Link href="/account/reactivate">
+          <Button as="a" variant="text">
+            Aktivierungslink erneut senden?
           </Button>
         </Link>
       </Flex>
