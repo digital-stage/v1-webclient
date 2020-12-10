@@ -20,7 +20,11 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
       sx={{
         flexDirection: 'column',
         width:
-          groups.length === 2 ? ['100%', '50%'] : groups.length >= 3 ? ['100%', '50%', '50%', '33%'] : '100%',
+          groups.length === 2
+            ? ['100%', '50%']
+            : groups.length >= 3
+            ? ['100%', '50%', '50%', '33%']
+            : '100%',
         flexWrap: 'wrap',
         p: 2,
       }}
@@ -46,8 +50,8 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
                 stageMembers.length === 2
                   ? 'calc((100vh - 190px) / 2)'
                   : stageMembers.length >= 3
-                    ? `calc((100vh - 190px) / ${Math.round(stageMembers.length / 2)})`
-                    : 'calc(100vh - 190px)',
+                  ? `calc((100vh - 190px) / ${Math.round(stageMembers.length / 2)})`
+                  : 'calc(100vh - 190px)',
               p: '1px',
             }}
           >
