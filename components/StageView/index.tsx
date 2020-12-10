@@ -15,7 +15,7 @@ const StageView = (): JSX.Element => {
     <Box
       sx={{
         width: ['calc(100vw - 10px)', 'calc(100vw - 80px)'],
-        height: 'calc(100vh - 100px)',
+        height: 'calc(100vh - 72px)',
         pb: '50px',
         px: '25px',
         overflowY: 'auto',

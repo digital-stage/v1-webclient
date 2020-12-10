@@ -19,11 +19,10 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
     <Flex
       sx={{
         flexDirection: 'column',
-        // maxWidth: ['100%', '100%'],
         width:
-          groups.length === 2 ? ['100%', '46%'] : groups.length >= 3 ? ['100%', '30%'] : '100%',
+          groups.length === 2 ? ['100%', '50%'] : groups.length >= 3 ? ['100%', '50%', '50%', '33%'] : '100%',
         flexWrap: 'wrap',
-        m: 2,
+        p: 2,
       }}
     >
       <Text variant="subTitle" sx={{ pl: 3, color: 'text' }}>
@@ -32,8 +31,6 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
       <Box sx={{ bg: 'primary', height: '2px', ml: 3, mr: 3 }}></Box>
       <Flex
         sx={{
-          // maxWidth: '100%',
-          // minWidth: '100%',
           flexWrap: 'wrap',
           bg: 'gray.7',
           borderRadius: 'card',
@@ -47,10 +44,10 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
               width: stageMembers.length === 2 ? '100%' : stageMembers.length >= 2 ? '50%' : '100%',
               height:
                 stageMembers.length === 2
-                  ? 'calc(70vh / 2)'
+                  ? 'calc((100vh - 190px) / 2)'
                   : stageMembers.length >= 3
-                  ? `calc(70vh / ${Math.round(stageMembers.length / 2)})`
-                  : '70vh',
+                    ? `calc((100vh - 190px) / ${Math.round(stageMembers.length / 2)})`
+                    : 'calc(100vh - 190px)',
               p: '1px',
             }}
           >
