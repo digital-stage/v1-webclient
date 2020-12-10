@@ -17,15 +17,24 @@ const StageListView = (): JSX.Element => {
   const stages = useStages();
   const [openCollapse, setOpenCollapse] = React.useState<boolean>(false);
   const [collapseId, setCollapseId] = React.useState<string>();
+  const [stageCreated, setStageCreated] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     setOpenCollapse(true);
     setCollapseId(collapseId);
   }, [collapseId]);
 
+  React.useEffect(() => {
+    if (stageCreated) {
+      setOpenCollapse(true);
+      setCollapseId(stages.allIds[stages.allIds.length - 1]);
+      setStageCreated(false);
+    }
+  }, [stages]);
+
   return (
     <Card mt={3}>
-      <StageOverviewLinks />
+      <StageOverviewLinks setStageCreated={(stageCreated) => setStageCreated(stageCreated)} />
       {/**  TODO: WORK in PROGRESS */}
       <Flex sx={{ flexDirection: 'column' }}>
         {stages.allIds

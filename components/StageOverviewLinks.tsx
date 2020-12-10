@@ -6,7 +6,9 @@ import { FaPlus, FaArrowRight } from 'react-icons/fa';
 import CreateStageModal from './new/elements/StageList/CreateStageModal';
 import JoinStageModal from './new/elements/StageList/JoinStageModal';
 
-const StageOverviewLinks = (): JSX.Element => {
+const StageOverviewLinks = (props: {
+  setStageCreated(stageCreated: boolean): void;
+}): JSX.Element => {
   const [isCreateStageOpen, setCreateStageIsOpen] = React.useState<boolean>(false);
   const [isJoinStageOpen, setJoinStageOpen] = React.useState<boolean>(false);
 
@@ -73,7 +75,11 @@ const StageOverviewLinks = (): JSX.Element => {
           </Button>
         </Box>
       </Flex>
-      <CreateStageModal isOpen={isCreateStageOpen} onClose={() => setCreateStageIsOpen(false)} />
+      <CreateStageModal
+        isOpen={isCreateStageOpen}
+        onClose={() => setCreateStageIsOpen(false)}
+        setStageCreated={props.setStageCreated}
+      />
       <JoinStageModal isOpen={isJoinStageOpen} onClose={() => setJoinStageOpen(false)} />
     </React.Fragment>
   );

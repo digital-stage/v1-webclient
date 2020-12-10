@@ -31,7 +31,11 @@ const CreateStageSchema = Yup.object().shape({
   reflection: Yup.number().min(0.1).max(1),
 });
 
-const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }): JSX.Element => {
+const CreateStageModal = (props: {
+  isOpen?: boolean;
+  onClose?(): void;
+  setStageCreated(stageCreated: boolean): void;
+}): JSX.Element => {
   const { isOpen, onClose } = props;
   const { createStage } = useStageActions();
 
@@ -60,6 +64,7 @@ const CreateStageModal = (props: { isOpen?: boolean; onClose?: () => any }): JSX
             values.absorption
           );
           props.onClose();
+          props.setStageCreated(true);
         }}
       >
         {({ errors, touched }) => (
