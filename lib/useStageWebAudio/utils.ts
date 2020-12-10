@@ -4,7 +4,7 @@ import {
   Group,
   StageMember,
   ThreeDimensionAudioProperties,
-} from 'use-digital-stage';
+} from '../use-digital-stage';
 
 const calculate3DAudioParameters = (
   group: Group,
@@ -35,23 +35,23 @@ const calculate3DAudioParameters = (
     rZ = customStageMember.rZ | 0;
   }
   if (customGroup) {
-    x = x + customGroup.x | 0;
-    y = y + customGroup.y | 0;
-    z = z + customGroup.z | 0;
+    x = (x + customGroup.x) | 0;
+    y = (y + customGroup.y) | 0;
+    z = (z + customGroup.z) | 0;
     rX = customGroup.rX | 0;
     rY = customGroup.rY | 0;
     rZ = customGroup.rZ | 0;
   } else {
-    x = x + group.x | 0;
-    y = y + group.y | 0;
-    z = z + group.z | 0;
+    x = (x + group.x) | 0;
+    y = (y + group.y) | 0;
+    z = (z + group.z) | 0;
     rX = group.rX | 0;
     rY = group.rY | 0;
     rZ = group.rZ | 0;
   }
-  x = x + track.x | 0;
-  y = y + track.y | 0;
-  z = z + track.z | 0;
+  x = (x + track.x) | 0;
+  y = (y + track.y) | 0;
+  z = (z + track.z) | 0;
   rX = track.rX | 0;
   rY = track.rY | 0;
   rZ = track.rZ | 0;
