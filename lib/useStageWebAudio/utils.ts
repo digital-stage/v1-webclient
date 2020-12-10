@@ -4,7 +4,7 @@ import {
   Group,
   StageMember,
   ThreeDimensionAudioProperties,
-} from '../use-digital-stage/types';
+} from '../use-digital-stage';
 
 const calculate3DAudioParameters = (
   group: Group,
@@ -20,41 +20,41 @@ const calculate3DAudioParameters = (
   rY: number;
   rZ: number;
 } => {
-  let x = stageMember.x;
-  let y = stageMember.y;
-  let z = stageMember.z;
-  let rX = stageMember.rX;
-  let rY = stageMember.rY;
-  let rZ = stageMember.rZ;
+  let x = stageMember.x | 0;
+  let y = stageMember.y | 0;
+  let z = stageMember.z | 0;
+  let rX = stageMember.rX | 0;
+  let rY = stageMember.rY | 0;
+  let rZ = stageMember.rZ | 0;
   if (customStageMember) {
-    x = customStageMember.x;
-    y = customStageMember.y;
-    z = customStageMember.z;
-    rX = customStageMember.rX;
-    rY = customStageMember.rY;
-    rZ = customStageMember.rZ;
+    x = customStageMember.x | 0;
+    y = customStageMember.y | 0;
+    z = customStageMember.z | 0;
+    rX = customStageMember.rX | 0;
+    rY = customStageMember.rY | 0;
+    rZ = customStageMember.rZ | 0;
   }
   if (customGroup) {
-    x = x + customGroup.x;
-    y = y + customGroup.y;
-    z = z + customGroup.z;
-    rX = customGroup.rX;
-    rY = customGroup.rY;
-    rZ = customGroup.rZ;
+    x = (x + customGroup.x) | 0;
+    y = (y + customGroup.y) | 0;
+    z = (z + customGroup.z) | 0;
+    rX = customGroup.rX | 0;
+    rY = customGroup.rY | 0;
+    rZ = customGroup.rZ | 0;
   } else {
-    x = x + group.x;
-    y = y + group.y;
-    z = z + group.z;
-    rX = group.rX;
-    rY = group.rY;
-    rZ = group.rZ;
+    x = (x + group.x) | 0;
+    y = (y + group.y) | 0;
+    z = (z + group.z) | 0;
+    rX = group.rX | 0;
+    rY = group.rY | 0;
+    rZ = group.rZ | 0;
   }
-  x = x + track.x;
-  y = y + track.y;
-  z = z + track.z;
-  rX = track.rX;
-  rY = track.rY;
-  rZ = track.rZ;
+  x = (x + track.x) | 0;
+  y = (y + track.y) | 0;
+  z = (z + track.z) | 0;
+  rX = track.rX | 0;
+  rY = track.rY | 0;
+  rZ = track.rZ | 0;
 
   return {
     x,

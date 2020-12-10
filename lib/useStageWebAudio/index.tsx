@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IAnalyserNode, IAudioContext, IAudioNode, IGainNode } from 'standardized-audio-context';
+import { IAnalyserNode, IAudioContext, IGainNode } from 'standardized-audio-context';
 
 import {
   useAudioConsumers,
@@ -9,6 +9,7 @@ import {
   useCustomGroups,
   useCustomStageMembers,
   useGroups,
+  useStage,
   useStageMembersRaw,
 } from '../use-digital-stage';
 import useAudioContext from './../useAudioContext';
@@ -33,7 +34,6 @@ export interface TrackAudioNode {
     element?: HTMLAudioElement;
     gainNode: IGainNode<IAudioContext>;
     analyserNode: IAnalyserNode<IAudioContext>;
-    splitterNode: IAudioNode<IAudioContext>;
     pannerNode: TreeDimensionPannerNode;
   };
 }
@@ -65,6 +65,7 @@ const StageWebAudioProvider = (props: {
 
   // Incoming states from stage
   const stageId = useCurrentStageId();
+  const stage = useStage(stageId);
   const groups = useGroups();
   const customGroups = useCustomGroups();
   const stageMembers = useStageMembersRaw();
@@ -162,7 +163,10 @@ const StageWebAudioProvider = (props: {
                   prev[item._id].gainNodeL.gain.setValueAtTime(0, audioContext.currentTime);
                   prev[item._id].gainNodeR.gain.setValueAtTime(0, audioContext.currentTime);
                 }
-              } else if (prev[item._id].gainNodeL.gain.value !== customItem.volume) {
+              } else if (
+                customItem.volume &&
+                prev[item._id].gainNodeL.gain.value !== customItem.volume
+              ) {
                 prev[item._id].gainNodeL.gain.setValueAtTime(
                   customItem.volume,
                   audioContext.currentTime
@@ -178,7 +182,7 @@ const StageWebAudioProvider = (props: {
                   prev[item._id].gainNodeL.gain.setValueAtTime(0, audioContext.currentTime);
                   prev[item._id].gainNodeR.gain.setValueAtTime(0, audioContext.currentTime);
                 }
-              } else if (prev[item._id].gainNodeL.gain.value !== item.volume) {
+              } else if (item.volume && prev[item._id].gainNodeL.gain.value !== item.volume) {
                 prev[item._id].gainNodeL.gain.setValueAtTime(item.volume, audioContext.currentTime);
                 prev[item._id].gainNodeR.gain.setValueAtTime(item.volume, audioContext.currentTime);
               }
@@ -271,7 +275,10 @@ const StageWebAudioProvider = (props: {
                     prev[item._id].gainNodeL.gain.setValueAtTime(0, audioContext.currentTime);
                     prev[item._id].gainNodeR.gain.setValueAtTime(0, audioContext.currentTime);
                   }
-                } else if (prev[item._id].gainNodeL.gain.value !== customItem.volume) {
+                } else if (
+                  customItem.volume &&
+                  prev[item._id].gainNodeL.gain.value !== customItem.volume
+                ) {
                   prev[item._id].gainNodeL.gain.setValueAtTime(
                     customItem.volume,
                     audioContext.currentTime
@@ -287,7 +294,7 @@ const StageWebAudioProvider = (props: {
                     prev[item._id].gainNodeL.gain.setValueAtTime(0, audioContext.currentTime);
                     prev[item._id].gainNodeR.gain.setValueAtTime(0, audioContext.currentTime);
                   }
-                } else if (prev[item._id].gainNodeL.gain.value !== item.volume) {
+                } else if (item.volume && prev[item._id].gainNodeL.gain.value !== item.volume) {
                   prev[item._id].gainNodeL.gain.setValueAtTime(
                     item.volume,
                     audioContext.currentTime
@@ -338,7 +345,6 @@ const StageWebAudioProvider = (props: {
                 reportCleanup('Removing deprecated producer node ' + id);
                 previous[id].gainNode.disconnect();
                 previous[id].analyserNode.disconnect();
-                previous[id].splitterNode.disconnect();
                 previous[id].pannerNode.disconnect();
               } else {
                 prev[id] = previous[id];
@@ -356,33 +362,28 @@ const StageWebAudioProvider = (props: {
               let analyserNode;
               let sourceNode;
               let pannerNode;
-              let splitterNode;
               let element;
               if (!prev[item._id]) {
                 report('Creating producer node ' + id);
                 gainNode = audioContext.createGain();
                 gainNode.gain.value = 1;
-                // gainNode.gain.setValueAtTime(item.volume, audioContext.currentTime);
                 analyserNode = audioContext.createAnalyser();
                 gainNode.connect(analyserNode);
                 pannerNode = new TreeDimensionPannerNode(audioContext);
                 gainNode.connect(pannerNode.getNode());
-                splitterNode = audioContext.createChannelSplitter(2);
-                pannerNode.connect(splitterNode);
-                splitterNode.connect(stageMemberNodes[item.stageMemberId].gainNodeL, 0, 0);
-                splitterNode.connect(stageMemberNodes[item.stageMemberId].gainNodeR, 0, 0);
+                pannerNode.connect(stageMemberNodes[item.stageMemberId].gainNodeL, 0, 0);
+                pannerNode.connect(stageMemberNodes[item.stageMemberId].gainNodeR, 0, 0);
               } else {
                 element = prev[item._id].element;
                 gainNode = prev[item._id].gainNode;
                 analyserNode = prev[item._id].analyserNode;
                 pannerNode = prev[item._id].pannerNode;
-                splitterNode = prev[item._id].splitterNode;
                 if (customItem) {
                   if (customItem.muted) {
                     if (gainNode.gain.value !== 0) {
                       gainNode.gain.setValueAtTime(0, audioContext.currentTime);
                     }
-                  } else if (gainNode.gain.value !== customItem.volume) {
+                  } else if (customItem.volume && gainNode.gain.value !== customItem.volume) {
                     gainNode.gain.setValueAtTime(customItem.volume, audioContext.currentTime);
                   }
                   // Calculate whole x, y, z using group, stage member and track information
@@ -408,28 +409,30 @@ const StageWebAudioProvider = (props: {
                     if (gainNode.gain.value !== 0) {
                       gainNode.gain.setValueAtTime(0, audioContext.currentTime);
                     }
-                  } else if (gainNode.gain.value !== item.volume) {
+                  } else if (item.volume && gainNode.gain.value !== item.volume) {
                     gainNode.gain.setValueAtTime(item.volume, audioContext.currentTime);
                   }
-                  // Calculate whole x, y, z using group, stage member and track information
-                  const stageMember = stageMembers.byId[item.stageMemberId];
-                  const customStageMember = customStageMembers.byStageMember[stageMember._id]
-                    ? customStageMembers.byId[customStageMembers.byStageMember[stageMember._id]]
-                    : undefined;
-                  const group = groups.byId[stageMember.groupId];
-                  const customGroup = customGroups.byGroup[stageMember.groupId]
-                    ? customGroups.byId[customGroups.byGroup[stageMember.groupId]]
-                    : undefined;
-                  const params = calculate3DAudioParameters(
-                    group,
-                    customGroup,
-                    stageMember,
-                    customStageMember,
-                    item
-                  );
-                  pannerNode.setPosition(params.x, params.y, params.z);
-                  pannerNode.setOrientation(params.rX, params.rY, params.rZ);
                 }
+
+                // Calculate whole x, y, z using group, stage member and track information
+                const stageMember = stageMembers.byId[item.stageMemberId];
+                const customStageMember = customStageMembers.byStageMember[stageMember._id]
+                  ? customStageMembers.byId[customStageMembers.byStageMember[stageMember._id]]
+                  : undefined;
+                const group = groups.byId[stageMember.groupId];
+                const customGroup = customGroups.byGroup[stageMember.groupId]
+                  ? customGroups.byId[customGroups.byGroup[stageMember.groupId]]
+                  : undefined;
+                const params = calculate3DAudioParameters(
+                  group,
+                  customGroup,
+                  stageMember,
+                  customStageMember,
+                  item
+                );
+                pannerNode.setMaxDistance(Math.max(stage.width, stage.height));
+                pannerNode.setPosition(params.x, params.y, params.z);
+                pannerNode.setOrientation(params.rX, params.rY, params.rZ);
               }
               if (audioConsumers.byProducer[item._id]) {
                 if (!element || element.id !== audioConsumers.byProducer[item._id]) {
@@ -459,7 +462,6 @@ const StageWebAudioProvider = (props: {
                   analyserNode,
                   sourceNode,
                   pannerNode,
-                  splitterNode,
                   element,
                 },
               };
@@ -477,7 +479,6 @@ const StageWebAudioProvider = (props: {
           Object.keys(prev).forEach((id) => {
             prev[id].gainNode.disconnect();
             prev[id].analyserNode.disconnect();
-            prev[id].splitterNode.disconnect();
             prev[id].pannerNode.disconnect();
           });
         }
@@ -485,6 +486,7 @@ const StageWebAudioProvider = (props: {
       });
     }
   }, [
+    stage,
     stageMemberNodes,
     audioProducers,
     audioConsumers.byProducer,
