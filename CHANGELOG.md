@@ -1,3 +1,17 @@
+# [0.22.0](https://github.com/digital-stage/webclient/compare/v0.21.3...v0.22.0) (2020-12-10)
+
+
+### Bug Fixes
+
+* run prettier ([82fa8d3](https://github.com/digital-stage/webclient/commit/82fa8d3c67363cd35084a0fa4f860832da5da300))
+* space at stage view ([2708297](https://github.com/digital-stage/webclient/commit/2708297cb2233a8bfeae50bf65681d91cfddc765))
+
+
+### Features
+
+* add message wheen no group is in a stage ([3d3c45a](https://github.com/digital-stage/webclient/commit/3d3c45afd34543e5d89bb95c4f4106d0b8bf2f8a))
+* collapse when creating a new stage ([b73ab60](https://github.com/digital-stage/webclient/commit/b73ab606212a77fbdf48489ad8dcd237b9e58049))
+
 ## [0.21.3](https://github.com/digital-stage/webclient/compare/v0.21.2...v0.21.3) (2020-12-10)
 
 
