@@ -1,3 +1,11 @@
+## [0.21.3](https://github.com/digital-stage/webclient/compare/v0.21.2...v0.21.3) (2020-12-10)
+
+
+### Bug Fixes
+
+* race condition when server timed out ([7a2007c](https://github.com/digital-stage/webclient/commit/7a2007cd5ebb00380c535f30eb4964fdd8f5cb9f))
+* server reload could case infinite reconnect ([2f991da](https://github.com/digital-stage/webclient/commit/2f991da6558a8e3f57f75c30c84a7b95c640c6ea))
+
 ## [0.21.2](https://github.com/digital-stage/webclient/compare/v0.21.1...v0.21.2) (2020-12-09)
 
 
