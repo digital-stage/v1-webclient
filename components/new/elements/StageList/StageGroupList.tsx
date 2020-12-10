@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Flex, Button, IconButton, Heading } from 'theme-ui';
+import { jsx, Box, Flex, Button, IconButton, Heading, Text } from 'theme-ui';
 import { FaPlus, FaPen, FaTrash } from 'react-icons/fa';
 import InviteModal from './InviteModal';
 import ModifyGroupModal from './ModifyGroupModal';
@@ -40,7 +40,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
 
   return (
     <Box sx={{ bg: 'gray.5', mx: '-32px', px: '38px', py: 3 }}>
-      {groups.byStage[stage._id] &&
+      {groups.byStage[stage._id] && groups.byStage[stage._id].length > 0 ? (
         groups.byStage[stage._id].map((groupId) => {
           const group = groups.byId[groupId];
 
@@ -126,7 +126,13 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
               </Flex>
             </React.Fragment>
           );
-        })}
+        })
+      ) : (
+        <Text>
+          To invite users to a stage you need to create a group. Invited users can switch their
+          groups once they have been invited.
+        </Text>
+      )}
 
       {isAdmin && (
         <Flex my={2}>

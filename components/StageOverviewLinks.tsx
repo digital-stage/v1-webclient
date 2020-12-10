@@ -68,7 +68,7 @@ const StageOverviewLinks = (): JSX.Element => {
               }}
             >
               <FaArrowRight />
-            </Box>{' '}
+            </Box>
             Neue Teilnahme
           </Button>
         </Box>
