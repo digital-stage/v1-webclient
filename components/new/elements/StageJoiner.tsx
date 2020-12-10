@@ -20,11 +20,13 @@ const StageJoiner = (): JSX.Element => {
   const [retries, setRetries] = useState<number>(0);
   const [wrongPassword, setWrongPassword] = useState<boolean>();
   const [notFound, setNotFound] = useState<boolean>();
-  const passwordRef = useRef<HTMLInputElement>(null);
+  const [intPassword, setIntPassword] = useState<string>(password);
+  const passwordRef = useRef<HTMLInputElement>();
 
   const clear = useCallback(() => {
     setNotFound(false);
     setWrongPassword(false);
+    setRetries(0);
     reset();
   }, [reset]);
 
@@ -39,7 +41,7 @@ const StageJoiner = (): JSX.Element => {
           clear();
         })
         .catch((error) => {
-          if (error === 'Unauthorized') {
+          if (error === 'Invalid password') {
             setWrongPassword(true);
           } else {
             setNotFound(true);
@@ -59,6 +61,14 @@ const StageJoiner = (): JSX.Element => {
     }
   }, [ready, stageId, groupId, password, stageActions]);
 
+  const updatePassword = useCallback(() => {
+    if (passwordRef.current) {
+      console.log('UPDATE PASSWORD');
+      retryJoiningStage(stageId, groupId, passwordRef.current.value);
+    }
+    console.log('! PASSWORD');
+  }, [stageId, groupId, retryJoiningStage, passwordRef]);
+
   return (
     <>
       <Modal isOpen={notFound} onClose={() => setNotFound(false)}>
@@ -75,16 +85,17 @@ const StageJoiner = (): JSX.Element => {
           id="password"
           label="Password"
           name="password"
+          onChange={(e) => setIntPassword(e.currentTarget.value)}
           ref={passwordRef}
           type="password"
+          version="dark"
         />
         <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
           <Button onClick={() => clear()}>Abbrechen</Button>
           <Button
             onClick={() => {
-              const updatePassword = passwordRef.current.value;
-              setRetries((prevState) => prevState + 1);
-              retryJoiningStage(stageId, groupId, updatePassword);
+              setRetries((prev) => prev + 1);
+              retryJoiningStage(stageId, groupId, intPassword);
             }}
           >
             Erneut versuchen

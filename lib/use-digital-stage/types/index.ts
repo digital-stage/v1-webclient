@@ -23,6 +23,7 @@ import { Router } from './Router';
 import { SoundCard } from './SoundCard';
 import { Stage } from './Stage';
 import { StageMember } from './StageMember';
+import StageMemberCollectionWithUserData from './StageMemberCollectionWithUserData';
 import { StageMemberOvTrack } from './StageMemberOvTrack';
 import { StageMembersCollection } from './StageMembersCollection';
 import { StageMemberWithUserData } from './StageMemberWithUserData';
@@ -58,6 +59,7 @@ export type {
   StageMember,
   StageMembersCollection,
   StageMemberWithUserData,
+  StageMemberCollectionWithUserData,
   RemoteAudioProducer,
   RemoteAudioProducersCollection,
   RootReducer,

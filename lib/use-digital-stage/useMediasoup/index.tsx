@@ -156,11 +156,11 @@ const MediasoupProvider = (props: {
           .map((id) => videoConsumers.byId[id])
           .filter((consumer) => !videoProducers.byId[consumer.producerId]);
         producersWithoutConsumer.forEach((producer) => createConsumer(producer));
-        consumersWithoutProducer.forEach((consumer) => removeConsumer(consumer, 'audio'));
+        consumersWithoutProducer.forEach((consumer) => removeConsumer(consumer, 'video'));
       } else {
         videoConsumers.allIds
           .map((id) => videoConsumers.byId[id])
-          .forEach((consumer) => removeConsumer(consumer, 'audio'));
+          .forEach((consumer) => removeConsumer(consumer, 'video'));
       }
     }
     return undefined;

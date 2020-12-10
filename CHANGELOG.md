@@ -1,3 +1,24 @@
+## [0.21.2](https://github.com/digital-stage/webclient/compare/v0.21.1...v0.21.2) (2020-12-09)
+
+
+### Bug Fixes
+
+* joining a stage with password not possible ([dbf53b4](https://github.com/digital-stage/webclient/commit/dbf53b4911535c5946590b14e5aa9342c6b63e08))
+
+## [0.21.1](https://github.com/digital-stage/webclient/compare/v0.21.0...v0.21.1) (2020-12-09)
+
+
+### Bug Fixes
+
+* video is not removed when toggling video sharing ([07a6d16](https://github.com/digital-stage/webclient/commit/07a6d160d120ba562b31ac0fba93eb36c6a8aa09))
+
+# [0.21.0](https://github.com/digital-stage/webclient/compare/v0.20.20...v0.21.0) (2020-12-09)
+
+
+### Features
+
+* add new arrangement of groups and users ([80b0fe9](https://github.com/digital-stage/webclient/commit/80b0fe9cb5060c817bcf159023fcebd9ccdde8f6))
+
 ## [0.20.20](https://github.com/digital-stage/webclient/compare/v0.20.19...v0.20.20) (2020-12-08)
 
 
