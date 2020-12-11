@@ -2,17 +2,17 @@ import { Theme } from '@theme-ui/css';
 
 const theme: Theme = {
   colors: {
-    text: '#fff',
+    text: '#f4f4f4',
     background: '#1c1c1c',
-    primary: '#F20544',
-    secondary: '#2452CE',
-    tertiary: '#012340', // cambridge blue
+    primary: '#5779d9',
+    secondary: '#f20544',
+    tertiary: '#808080',
     muted: 'hsl(210,16%,68%)',
     accent: 'hsl(45, 100%, 50%)',
     danger: '#FA000099',
     dangerBg: '#9D131364',
     dangerUnderline: '#FA000099',
-    success: '#24A312',
+    success: '#41BD64',
     navigation: 'hsl(333, 50%, 8%)',
     modalBg: '#1c1c1c',
     backdropBg: '#000000B2',
@@ -92,28 +92,166 @@ const theme: Theme = {
     primary: {
       fontFamily: 'heading',
       fontSize: 0,
-      m: 2,
-      py: 2,
       px: 3,
-      border: '1px solid transparent',
-      borderColor: 'primary',
+      py: 0,
+      m: 1,
+      border: '2px solid primary',
       borderRadius: 'button',
       color: 'text',
       bg: 'primary',
       width: 'auto',
-      height: 'auto',
+      height: '32px',
+      boxShadow: '3px 3px 8px #00000026',
+      ':hover': {
+        bg: '#415CA7',
+      },
+      ':active': {
+        bg: '#6f92f8',
+      },
+      ':focus': {
+        border: '1px solid #3737f7',
+        outline: 0,
+      },
+      ':disabled': {
+        bg: '#5779D980',
+        boxShadow: 'none',
+      },
     },
     secondary: {
       variant: 'buttons.primary',
-      borderColor: 'secondary',
-      color: 'text',
-      bg: 'secondary',
+      border: '2px solid #5779d9',
+      bg: 'transparent',
+      ':hover': {
+        borderColor: '#415CA7',
+        bg: '#1212124D',
+      },
+      ':active': {
+        bg: '#5779d94D',
+        borderColor: '#6f92f8',
+      },
+      ':focus': {
+        borderColor: '#3737f7',
+        outline: 0,
+      },
+      ':disabled': {
+        bg: '#5779D980',
+        boxShadow: 'none',
+      },
     },
+    tertiary: {
+      variant: 'buttons.primary',
+      border: '2px solid #808080',
+      bg: 'transparent',
+      ':hover': {
+        borderColor: '#676767',
+        bg: '#1212124D',
+      },
+      ':active': {
+        bg: '#5779d94D',
+        borderColor: '#5779d9',
+      },
+      ':focus': {
+        borderColor: '#3737f7',
+        outline: 0,
+      },
+      ':disabled': {
+        borderColor: '#80808080',
+        boxShadow: 'none',
+      },
+    },
+    danger: {
+      variant: 'buttons.primary',
+      border: '2px solid primary',
+      bg: 'secondary',
+      ':hover': {
+        bg: '#b50030',
+      },
+      ':active': {
+        bg: '#fa406b',
+      },
+      ':focus': {
+        borderColor: '#3737f7',
+        outline: 0,
+      },
+      ':disabled': {
+        borderColor: '#f20544',
+        boxShadow: 'none',
+        opacity: '0.5',
+      },
+    },
+    icon: {
+      color: 'primary',
+      borderRadius: '50%',
+      p: 2,
+      ':hover': {
+        color: '#415CA7',
+        bg: 'gray.5',
+      },
+      ':active': {
+        color: '#6f92f8',
+        bg: 'gray.5',
+      },
+      ':focus': {
+        border: '1px solid #3737f7',
+        outline: 0,
+      },
+      ':disabled': {
+        bg: '#5779D980',
+        boxShadow: 'none',
+      },
+    },
+    close: {
+      color: 'gray.1',
+      borderRadius: '50%',
+      width: '32px',
+      height: '32px',
+      ':hover': {
+        bg: 'gray.2',
+        color: 'gray.3',
+      },
+      ':focus': {
+        border: '1px solid #3737f7',
+        bg: 'transparent',
+        outline: 0,
+      },
+    },
+    // primary: {
+    //   fontFamily: 'heading',
+    //   fontSize: 0,
+    //   m: 2,
+    //   py: 2,
+    //   px: 3,
+    //   border: '1px solid transparent',
+    //   borderColor: 'primary',
+    //   borderRadius: 'button',
+    //   color: 'text',
+    //   bg: 'primary',
+    //   width: 'auto',
+    //   height: 'auto',
+    // },
+    // secondary: {
+    //   variant: 'buttons.primary',
+    //   borderColor: 'secondary',
+    //   color: 'text',
+    //   bg: 'secondary',
+    // },
     white: {
       variant: 'buttons.primary',
       borderColor: 'text',
       color: 'background',
       bg: 'text',
+      height: 'auto',
+      p: 2,
+      ':hover': {
+        bg: 'text',
+      },
+      ':active': {
+        bg: 'text',
+      },
+      ':focus': {
+        border: '1px solid #3737f7',
+        outline: 0,
+      },
     },
     black: {
       variant: 'buttons.primary',
@@ -156,7 +294,7 @@ const theme: Theme = {
       border: 'none',
       m: 0,
       p: 0,
-      bg: 'secondary',
+      bg: 'primary',
       width: '48px',
       height: '48px',
       color: 'text',
@@ -206,7 +344,7 @@ const theme: Theme = {
       transition: 'border 1s ease-out',
       ':active,:visited': { color: 'text' },
       ':hover': {
-        borderBottomColor: 'primary',
+        borderBottomColor: 'secondary',
       },
     },
   },

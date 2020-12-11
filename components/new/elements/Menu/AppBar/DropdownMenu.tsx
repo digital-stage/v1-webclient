@@ -63,7 +63,7 @@ const DropdownMenu = ({ isOpen, onSelect }: Props): JSX.Element => {
         );
       })}
       <Box sx={{ mt: 3, textAlign: 'center' }}>
-        <Button variant="secondary" onClick={logout}>
+        <Button variant="primary" onClick={logout}>
           Ausloggen
         </Button>
       </Box>

@@ -28,7 +28,7 @@ const AuthPageLinks = (): JSX.Element => {
             variant="auth"
             href={item.uri}
             sx={{
-              borderBottomColor: pathname === item.uri && 'primary',
+              borderBottomColor: pathname === item.uri && 'secondary',
             }}
           >
             {item.label}

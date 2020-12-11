@@ -2,8 +2,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import React from 'react';
-import { MdClose } from 'react-icons/md';
-import { Box, IconButton, jsx } from 'theme-ui';
+import { Box, jsx, Close } from 'theme-ui';
 
 interface Props {
   onClose(): void;
@@ -54,9 +53,7 @@ const Modal = (props: Props): JSX.Element =>
             pt: 2,
           }}
         >
-          <IconButton onClick={props.onClose} style={{ cursor: 'pointer' }}>
-            <MdClose sx={{ color: props.variant === 'dark' && 'text' }} />
-          </IconButton>
+          <Close onClick={props.onClose} sx={{ color: props.variant === 'dark' && 'text' }} />
         </Box>
         <main>{props.children}</main>
       </Box>

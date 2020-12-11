@@ -32,7 +32,7 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
       <Text variant="subTitle" sx={{ pl: 3, color: 'text' }}>
         {group.name}
       </Text>
-      <Box sx={{ bg: 'primary', height: '2px', ml: 3, mr: 3 }}></Box>
+      <Box sx={{ bg: 'secondary', height: '2px', ml: 3, mr: 3 }}></Box>
       <Flex
         sx={{
           flexWrap: 'wrap',

@@ -47,7 +47,8 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
       />
       <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
         <Button
-          variant="black"
+          variant="tertiary"
+          sx={{ color: 'gray.5' }}
           onClick={() => {
             onClose();
             setMsg('');

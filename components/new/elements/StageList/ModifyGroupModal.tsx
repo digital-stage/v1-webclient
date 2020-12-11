@@ -58,7 +58,7 @@ const ModifyGroupModal = (props: {
             onBlur={formik.handleBlur}
           />
           <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
-            <Button variant="black" type="button" onClick={onClose}>
+            <Button variant="tertiary" sx={{ color: 'gray.5' }} type="button" onClick={onClose}>
               Abbrechen
             </Button>
             <Button disabled={!formik.isValid} type="submit">

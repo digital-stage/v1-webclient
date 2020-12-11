@@ -49,7 +49,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
               <Flex sx={{ justifyContent: 'space-between', flexWrap: 'wrap' }}>
                 <Flex sx={{ alignItems: 'center', my: 2 }}>
                   <Box
-                    bg="primary"
+                    bg="secondary"
                     sx={{
                       minWidth: 'group.width',
                       minHeight: 'group.height',
@@ -90,7 +90,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                   <Box>
                     {isAdmin && (
                       <Button
-                        variant="outline"
+                        variant="secondary"
                         onClick={() => {
                           setCurrentStage(stage);
                           setCurrentGroup(group);
@@ -101,7 +101,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                       </Button>
                     )}
                     <Button
-                      variant="secondary"
+                      variant="primary"
                       onClick={() => {
                         if (audioContext && !started) audioContext.resume();
                         if (
@@ -152,7 +152,9 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                 mr: [2, null, 3],
               }}
             >
-              <FaPlus />
+              <IconButton>
+                <FaPlus />
+              </IconButton>
             </Box>{' '}
             Neue Gruppe erstellen
           </Button>

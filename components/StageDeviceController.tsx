@@ -98,7 +98,7 @@ const StageDeviceController = (): JSX.Element => {
           <Button
             variant="circle"
             title="Bühne verlassen"
-            sx={{ bg: 'primary', color: 'text', mr: [3, 0] }}
+            sx={{ bg: 'secondary', color: 'text', mr: [3, 0] }}
           >
             <ImPhoneHangUp size="24px" />
           </Button>

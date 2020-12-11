@@ -48,7 +48,7 @@ const InviteModal = (props: {
         </Label>
       )}
       <Flex sx={{ justifyContent: 'space-between', py: 3 }}>
-        <Button variant="black" onClick={onClose}>
+        <Button variant="tertiary" sx={{ color: 'gray.5' }} onClick={onClose}>
           Schließen
         </Button>
         <CopyToClipboard

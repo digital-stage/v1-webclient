@@ -26,7 +26,7 @@ const CollapseHeader = (props: Props): JSX.Element => {
       }}
     >
       <Box sx={{ width: '100%' }}>{children}</Box>
-      <IconButton onClick={onClick} sx={{ color: 'secondary' }}>
+      <IconButton onClick={onClick}>
         {isOpen && id === collapseId ? <FaChevronDown /> : <FaChevronLeft />}
       </IconButton>
     </Flex>

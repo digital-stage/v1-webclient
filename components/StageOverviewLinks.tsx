@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Box, Flex, Button } from 'theme-ui';
+import { jsx, Box, Flex, Button, IconButton } from 'theme-ui';
 import { FaPlus, FaArrowRight } from 'react-icons/fa';
 import CreateStageModal from './new/elements/StageList/CreateStageModal';
 import JoinStageModal from './new/elements/StageList/JoinStageModal';
@@ -43,7 +43,9 @@ const StageOverviewLinks = (props: {
                 mr: [2, null, 3],
               }}
             >
-              <FaPlus />
+              <IconButton>
+                <FaPlus />
+              </IconButton>
             </Box>{' '}
             Neue Bühne erstellen
           </Button>
@@ -69,7 +71,9 @@ const StageOverviewLinks = (props: {
                 mr: [2, null, 3],
               }}
             >
-              <FaArrowRight />
+              <IconButton>
+                <FaArrowRight />
+              </IconButton>
             </Box>
             Neue Teilnahme
           </Button>
