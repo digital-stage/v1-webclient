@@ -53,7 +53,7 @@ const StageDeviceController = (): JSX.Element => {
       >
         {started || (
           <Button
-            variant="circle"
+            variant="function"
             onClick={() => {
               if (audioContext) audioContext.resume();
             }}
@@ -64,7 +64,7 @@ const StageDeviceController = (): JSX.Element => {
         )}
         {localDevice?.canVideo && (
           <Button
-            variant={!localDevice.sendVideo ? 'circleGray' : 'circle'}
+            variant={!localDevice.sendVideo ? 'functionTertiary' : 'function'}
             title={localDevice.sendVideo ? 'Kamera deaktivieren' : 'Kamera aktivieren'}
             onClick={() =>
               updateDevice(localDevice._id, {
@@ -78,7 +78,7 @@ const StageDeviceController = (): JSX.Element => {
         )}
         {localDevice?.canAudio && (
           <Button
-            variant={!localDevice.sendAudio ? 'circleGray' : 'circle'}
+            variant={!localDevice.sendAudio ? 'functionTertiary' : 'function'}
             title={localDevice.sendAudio ? 'Mikrofon deaktivieren' : 'Mikrofon aktivieren'}
             onClick={() =>
               updateDevice(localDevice._id, {
@@ -95,11 +95,7 @@ const StageDeviceController = (): JSX.Element => {
           </Button>
         )}
         <Link href="/leave">
-          <Button
-            variant="circle"
-            title="Bühne verlassen"
-            sx={{ bg: 'secondary', color: 'text', mr: [3, 0] }}
-          >
+          <Button variant="functionDanger" title="Bühne verlassen" sx={{ mr: [3, 0] }}>
             <ImPhoneHangUp size="24px" />
           </Button>
         </Link>

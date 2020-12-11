@@ -131,8 +131,8 @@ const ChannelStrip = (props: {
       <Flex sx={{ my: 3 }}>
         <Flex sx={{ flexDirection: 'column', mr: 3, alignItems: 'center' }}>
           <Button
-            variant={props.muted ? 'circle' : 'circleOutlined'}
-            sx={{ width: '33px', height: '33px' }}
+            variant={props.muted ? 'primary' : 'tertiary'}
+            sx={{ borderRadius: '50%', width: '32px', height: '32px', p: 0 }}
             onClick={handleMuteClicked}
           >
             M
@@ -142,13 +142,13 @@ const ChannelStrip = (props: {
         {props.customVolume ? (
           <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
             <Button
-              variant="circleOutlined"
-              sx={{ width: '33px', height: '33px' }}
+              variant="tertiary"
+              sx={{ borderRadius: '50%', width: '32px', height: '32px', p: 0 }}
               onClick={() => {
                 if (props.onCustomVolumeReset) props.onCustomVolumeReset();
               }}
             >
-              <FaHeadphonesAlt />
+              <FaHeadphonesAlt sx={{ width: '16px', height: '16px' }} />
             </Button>
             <Text>Monitor</Text>
           </Flex>
@@ -156,11 +156,11 @@ const ChannelStrip = (props: {
           props.isAdmin && (
             <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
               <Button
-                variant="circleWhite"
-                sx={{ width: '33px', height: '33px' }}
+                variant="white"
+                sx={{ borderRadius: '50%', width: '32px', height: '32px', py: 2, px: 0 }}
                 onClick={addCustom}
               >
-                <IoMdSync />
+                <IoMdSync sx={{ width: '16px', height: '16px' }} />
               </Button>
               <Text>Sync</Text>
             </Flex>

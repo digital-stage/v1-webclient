@@ -66,6 +66,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                   {isAdmin && (
                     <Box>
                       <IconButton
+                        variant="tertiaryIcon"
                         aria-label="Gruppe bearbeiten"
                         onClick={() => {
                           setCurrentStage(stage);
@@ -76,6 +77,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
                         <FaPen />
                       </IconButton>
                       <IconButton
+                        variant="tertiaryIcon"
                         aria-label="Gruppe entfernen"
                         onClick={() => {
                           setGroupId(group._id);

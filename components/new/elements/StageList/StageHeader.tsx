@@ -38,6 +38,7 @@ const StageHeader = (props: { stage: Stage }): JSX.Element => {
         <Box sx={{ color: 'secondary' }}>
           {isAdmin && (
             <IconButton
+              variant="tertiaryIcon"
               aria-label="Bühne bearbeiten"
               onClick={() => {
                 setCurrentStage(stage);
@@ -48,6 +49,7 @@ const StageHeader = (props: { stage: Stage }): JSX.Element => {
             </IconButton>
           )}
           <IconButton
+            variant="tertiaryIcon"
             aria-label={isAdmin ? 'Bühne entfernen' : 'Bühne verlassen'}
             onClick={() => {
               setStageId(stage._id);

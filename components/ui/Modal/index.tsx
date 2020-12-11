@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Box, Flex } from 'theme-ui';
-import { MdClose } from 'react-icons/md';
+import { Box, Flex, Close } from 'theme-ui';
 
 const ModalHeader = () => {
   return <Box></Box>;
@@ -137,7 +136,7 @@ const Modal = (props: {
             }}
             onClick={handleCloseIconClick}
           >
-            <MdClose size={32} />
+            <Close />
           </Box>
         </Box>
       </Flex>

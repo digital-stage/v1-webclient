@@ -200,6 +200,28 @@ const theme: Theme = {
         boxShadow: 'none',
       },
     },
+    tertiaryIcon: {
+      variant: 'buttons.tertiary',
+      border: 0,
+      borderRadius: '50%',
+      color: '#808080',
+      p: 2,
+      ':hover': {
+        bg: '#121212',
+      },
+      ':active': {
+        bg: '#5779d94D',
+        border: '1px solid #5779d9',
+      },
+      ':focus': {
+        border: '1px solid #3737f7',
+        outline: 0,
+      },
+      ':disabled': {
+        border: '1px solid #80808080',
+        boxShadow: 'none',
+      },
+    },
     close: {
       color: 'gray.1',
       borderRadius: '50%',
@@ -215,49 +237,104 @@ const theme: Theme = {
         outline: 0,
       },
     },
-    // primary: {
-    //   fontFamily: 'heading',
-    //   fontSize: 0,
-    //   m: 2,
-    //   py: 2,
-    //   px: 3,
-    //   border: '1px solid transparent',
-    //   borderColor: 'primary',
-    //   borderRadius: 'button',
-    //   color: 'text',
-    //   bg: 'primary',
-    //   width: 'auto',
-    //   height: 'auto',
-    // },
-    // secondary: {
-    //   variant: 'buttons.primary',
-    //   borderColor: 'secondary',
-    //   color: 'text',
-    //   bg: 'secondary',
-    // },
-    white: {
+    function: {
       variant: 'buttons.primary',
-      borderColor: 'text',
-      color: 'background',
-      bg: 'text',
-      height: 'auto',
-      p: 2,
+      width: '48px',
+      height: '48px',
+      bg: 'primary',
+      color: 'text',
+      m: 0,
+      p: 0,
+      borderRadius: '50%',
       ':hover': {
-        bg: 'text',
+        bg: '#4561b1',
       },
       ':active': {
-        bg: 'text',
+        bg: '#6f92f8',
       },
       ':focus': {
         border: '1px solid #3737f7',
         outline: 0,
       },
+      ':disabled': {
+        boxShadow: 'none',
+        opacity: '0.5',
+      },
     },
-    black: {
+    functionDanger: {
+      variant: 'buttons.function',
+      bg: 'secondary',
+      ':hover': {
+        bg: '#b50030',
+      },
+      ':active': {
+        bg: '#fa406b',
+      },
+      ':focus': {
+        border: '1px solid #3737f7',
+        outline: 0,
+      },
+      ':disabled': {
+        boxShadow: 'none',
+        opacity: '0.5',
+      },
+    },
+    functionTertiary: {
+      variant: 'buttons.function',
+      bg: 'gray.2',
+      ':hover': {
+        borderColor: '#676767',
+        bg: 'gray.3',
+      },
+      ':active': {
+        bg: '#5779d94D',
+        borderColor: '#5779d9',
+      },
+      ':focus': {
+        border: '1px solid #3737f7',
+        outline: 0,
+      },
+      ':disabled': {
+        boxShadow: 'none',
+        opacity: '0.5',
+      },
+    },
+    togglePrimaryOn: {
       variant: 'buttons.primary',
+      width: '32px',
+      height: '32px',
       color: 'text',
-      borderColor: 'background',
-      bg: 'background',
+      m: 0,
+      p: 0,
+    },
+    togglePrimaryOf: {
+      variant: 'buttons.primary',
+      width: '32px',
+      height: '32px',
+      color: 'text',
+      m: 0,
+      p: 0,
+    },
+    white: {
+      variant: 'buttons.primary',
+      border: '1px solid #f4f4f4',
+      borderColor: 'text',
+      color: 'background',
+      bg: 'text',
+      height: 'auto',
+      py: 1,
+      px: 3,
+      ':hover': {
+        bg: '#b7b7b7',
+      },
+      ':active': {
+        bg: '#bec6dc',
+      },
+      ':focus': {
+        bg: 'text',
+        border: '1px solid #3737f7',
+        outline: 0,
+      },
     },
     outline: {
       variant: 'buttons.primary',
@@ -289,6 +366,10 @@ const theme: Theme = {
       m: 0,
       p: 0,
       cursor: 'pointer',
+      ':focus': {
+        border: 0,
+        outline: 0,
+      },
     },
     circle: {
       border: 'none',
@@ -299,6 +380,9 @@ const theme: Theme = {
       height: '48px',
       color: 'text',
       borderRadius: '50%',
+      ':focus': {
+        outline: 0,
+      },
     },
     circleGray: {
       border: 'none',
@@ -309,6 +393,10 @@ const theme: Theme = {
       height: '48px',
       color: 'text',
       borderRadius: '32px',
+      ':focus': {
+        border: '1px solid #3737f7',
+        outline: 0,
+      },
     },
     circleWhite: {
       border: 'none',
