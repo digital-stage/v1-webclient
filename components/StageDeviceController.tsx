@@ -100,7 +100,11 @@ const StageDeviceController = (): JSX.Element => {
           </Button>
         </Link>
         <Box sx={{ display: ['block', 'none'] }}>
-          <Button variant="circleGray" title="Settings" onClick={() => setMobileSideBarOpen(true)}>
+          <Button
+            variant="functionTertiary"
+            title="Settings"
+            onClick={() => setMobileSideBarOpen(true)}
+          >
             <BsThreeDotsVertical size="24px" />
           </Button>
         </Box>

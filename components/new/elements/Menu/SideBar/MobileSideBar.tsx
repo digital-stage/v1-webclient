@@ -14,8 +14,8 @@ const MobileSideBar = ({ isOpen, onSelect }: Props): JSX.Element => {
     <Box
       sx={{
         position: 'fixed',
-        top: '-150px',
-        left: '0px',
+        top: '-110px',
+        left: '-25px',
         width: 'auto',
         height: 'auto',
         bg: 'gray.3',
@@ -31,7 +31,6 @@ const MobileSideBar = ({ isOpen, onSelect }: Props): JSX.Element => {
           return (
             <Flex
               key={i}
-              py={2}
               sx={{
                 justifyContent: 'center',
                 alignContent: 'center',
@@ -45,7 +44,7 @@ const MobileSideBar = ({ isOpen, onSelect }: Props): JSX.Element => {
               }}
             >
               {item.icon}
-              <Text variant="title" sx={{ color: 'text' }} ml={2}>
+              <Text variant="title" sx={{ color: 'text' }}>
                 {item.label}
               </Text>
             </Flex>

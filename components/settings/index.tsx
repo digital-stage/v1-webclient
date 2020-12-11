@@ -80,7 +80,7 @@ const SettingsModal = (props: {
             position: 'relative',
             overflowY: 'scroll',
             '::-webkit-scrollbar': {
-              width: '15px',
+              width: '5px',
               bg: 'transparent',
             },
             '::-webkit-scrollbar-track': {
@@ -89,7 +89,6 @@ const SettingsModal = (props: {
             '::-webkit-scrollbar-thumb': {
               bg: 'gray.3',
               borderRadius: 'card',
-              border: 'solid 3px #282828',
             },
           }}
         >
@@ -98,7 +97,7 @@ const SettingsModal = (props: {
               position: 'absolute',
               top: 0,
               left: 0,
-              width: '100%',
+              width: '95%',
             }}
           >
             {SettingsModalItems.map((item) => {
