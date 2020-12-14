@@ -55,6 +55,8 @@ const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIco
                 isDirector: !props.stageMember.isDirector,
               })
             }
+            variant={stageMember.isDirector ? 'primary' : 'tertiary'}
+            sx={{ border: '50%', width: '32px', height: '32px', p: 0 }}
           >
             {stageMember.isDirector ? <BsArrowsAngleContract /> : <BsArrowsAngleExpand />}
           </IconButton>
