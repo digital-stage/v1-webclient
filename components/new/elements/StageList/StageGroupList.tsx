@@ -39,7 +39,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
   const isAdmin = stage.admins.indexOf(userId) !== -1;
 
   return (
-    <Box sx={{ bg: 'gray.5', mx: '-32px', px: '38px', py: 3 }}>
+    <Box sx={{ bg: 'gray.6', mx: '-32px', px: '38px', py: 3 }}>
       {groups.byStage[stage._id] && groups.byStage[stage._id].length > 0 ? (
         groups.byStage[stage._id].map((groupId) => {
           const group = groups.byId[groupId];

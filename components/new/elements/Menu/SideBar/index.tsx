@@ -53,7 +53,7 @@ const SideBar = (): JSX.Element => {
         //TODO: @htw please check, settings a pointer cursor to the hole element leads to
         // bad UX, so I commented it out and gave the single elements a pointer cursor
         //cursor: 'pointer',
-        bg: 'gray.6',
+        bg: 'gray.7',
         minHeight: '100vh',
         justifyContent: 'space-between',
         alignItems: 'center',

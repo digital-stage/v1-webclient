@@ -29,7 +29,7 @@ const Modal = (props: Props): JSX.Element =>
       <Box
         sx={{
           position: 'fixed',
-          bg: props.variant === 'dark' ? 'gray.4' : 'text',
+          bg: props.variant === 'dark' ? 'gray.4' : 'gray.0',
           padding: 3,
           pl: props.type === 'settings' ? 0 : 3,
           width:
@@ -40,7 +40,7 @@ const Modal = (props: Props): JSX.Element =>
           //height: props.type === 'settings' ? 'calc(100vh - 150px)' : 'auto',
           top: '50%',
           left: '50%',
-          boxShadow: '0px 3px 6px #000000BC',
+          boxShadow: 'default',
           borderRadius: '18px',
           transform: 'translate(-50%,-50%)',
           transition: 'all .6s ease-in-out',

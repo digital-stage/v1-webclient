@@ -55,7 +55,7 @@ const StageListView = (): JSX.Element => {
               <CollapseBody isOpen={openCollapse} id={stage._id} collapseId={collapseId}>
                 <StageGroupList stage={stage} />
               </CollapseBody>
-              <Divider sx={{ color: 'gray.2' }} />
+              <Divider sx={{ color: 'gray.3' }} />
             </Collapse>
           ))}
       </Flex>

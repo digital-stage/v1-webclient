@@ -115,8 +115,8 @@ const Modal = (props: {
         <Box
           sx={{
             position: 'relative',
-            bg: 'modalBg',
-            borderRadius: '18px',
+            bg: 'gray.4',
+            borderRadius: 'card',
             boxShadow: 'default',
             ...dimension,
           }}

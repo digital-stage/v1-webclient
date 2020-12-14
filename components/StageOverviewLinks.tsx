@@ -20,7 +20,7 @@ const StageOverviewLinks = (props: {
           width: '100%',
           mt: '-16px',
           borderBottom: '1px solid transparent',
-          borderBottomColor: 'gray.2',
+          borderBottomColor: 'gray.3',
         }}
       >
         <Box

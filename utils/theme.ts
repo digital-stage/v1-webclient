@@ -17,7 +17,7 @@ const theme: Theme = {
     dangerUnderline: '#A41318',
     success: '#41BD64',
     navigation: 'hsl(333, 50%, 8%)',
-    modalBg: '#1c1c1c',
+    modalBg: '#00000080',
     backdropBg: '#000000B2',
     online: '#00FF3C',
     transparentGray: '#b3b3b39e',
@@ -25,7 +25,7 @@ const theme: Theme = {
     textfieldDark: '#12121226',
     label: '#9A9A9A',
     labelDark: '#29292999',
-    gray: ['#D1D1D1', '#B3B3B3', '#828282', '#535353', '#282828', '#181818', '#101010', '#000000'],
+    gray: ['#F4F4F4', '#9A9A9A', '#808080', '#676767', '#393939', '#292929', '#1F1F1F', '#121212'],
   },
   fonts: {
     body: "'Open Sans', Verdana, sans-serif",
@@ -68,7 +68,7 @@ const theme: Theme = {
     },
   },
   shadows: {
-    default: '0px 23px 17px #00000052',
+    default: '0px 16px 20px #00000040',
   },
   text: {
     default: {

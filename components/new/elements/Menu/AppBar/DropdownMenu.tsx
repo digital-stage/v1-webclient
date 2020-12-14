@@ -22,7 +22,7 @@ const DropdownMenu = ({ isOpen, onSelect }: Props): JSX.Element => {
     <Box
       sx={{
         position: 'fixed',
-        bg: 'gray.5',
+        bg: 'gray.4',
         width: 'auto',
         height: 'auto',
         top: '58px',

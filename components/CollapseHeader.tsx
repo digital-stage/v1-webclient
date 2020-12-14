@@ -19,7 +19,7 @@ const CollapseHeader = (props: Props): JSX.Element => {
     <Flex
       sx={{
         width: '100%',
-        bg: 'background',
+        bg: 'gray.7',
         alignItems: 'center',
         justifyContent: 'space-between',
         px: 3,

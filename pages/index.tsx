@@ -6,7 +6,6 @@ import { Heading, jsx } from 'theme-ui';
 import Container, { Size } from '../components/Container';
 import Layout from '../components/Layout';
 import StageListView from '../components/new/elements/StageList';
-import StagePane from '../components/new/panes/StagePane';
 import PageSpinner from '../components/PageSpinner';
 import StageDeviceController from '../components/StageDeviceController';
 import { useAuth } from '../lib/useAuth';
@@ -27,8 +26,6 @@ const Index = (): JSX.Element => {
         <Layout sidebar={!!stageId} stage={stage}>
           {stageId ? (
             <React.Fragment>
-              {/* <StagePane /> */}
-              {/* test new arrangment of groups */}
               <StageView />
               <StageDeviceController />
             </React.Fragment>

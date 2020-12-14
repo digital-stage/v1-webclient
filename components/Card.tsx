@@ -20,7 +20,7 @@ const Card = (props: {
   return (
     <Box
       sx={{
-        bg: white ? 'text' : 'background',
+        bg: white ? 'text' : 'gray.7',
         boxShadow: 'default',
         width: '100%',
         maxWidth: size === 'auth' ? 'container.tiny' : maxWidth,
