@@ -1,3 +1,10 @@
+## [0.22.2](https://github.com/digital-stage/webclient/compare/v0.22.1...v0.22.2) (2020-12-14)
+
+
+### Bug Fixes
+
+* director toggle button style ([a5486db](https://github.com/digital-stage/webclient/commit/a5486db51dfdb6cdf882109f83b3864c4a0c9f38))
+
 ## [0.22.1](https://github.com/digital-stage/webclient/compare/v0.22.0...v0.22.1) (2020-12-11)
 
 
