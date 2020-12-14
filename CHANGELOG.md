@@ -1,3 +1,10 @@
+## [0.22.1](https://github.com/digital-stage/webclient/compare/v0.22.0...v0.22.1) (2020-12-11)
+
+
+### Bug Fixes
+
+* mobile menu and scroll width at settings ([a229c72](https://github.com/digital-stage/webclient/commit/a229c720945f46eb8b30192d580a81c204cde8f4))
+
 # [0.22.0](https://github.com/digital-stage/webclient/compare/v0.21.3...v0.22.0) (2020-12-10)
 
 
