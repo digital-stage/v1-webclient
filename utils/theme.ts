@@ -5,19 +5,26 @@ const theme: Theme = {
     text: '#f4f4f4',
     background: '#1c1c1c',
     primary: '#5779d9',
+    primary1: '#6F92F8',
+    primaryHover: '#415ca7',
+    primaryFocus: '3737F7',
     secondary: '#f20544',
     tertiary: '#808080',
     muted: 'hsl(210,16%,68%)',
     accent: 'hsl(45, 100%, 50%)',
     danger: '#FA000099',
-    dangerBg: '#9D131364',
-    dangerUnderline: '#FA000099',
+    dangerBg: '#9D131366',
+    dangerUnderline: '#A41318',
     success: '#41BD64',
     navigation: 'hsl(333, 50%, 8%)',
     modalBg: '#1c1c1c',
     backdropBg: '#000000B2',
     online: '#00FF3C',
     transparentGray: '#b3b3b39e',
+    textfield: '#292929',
+    textfieldDark: '#12121226',
+    label: '#9A9A9A',
+    labelDark: '#29292999',
     gray: ['#D1D1D1', '#B3B3B3', '#828282', '#535353', '#282828', '#181818', '#101010', '#000000'],
   },
   fonts: {
@@ -103,13 +110,13 @@ const theme: Theme = {
       height: '32px',
       boxShadow: '3px 3px 8px #00000026',
       ':hover': {
-        bg: '#415CA7',
+        bg: 'primaryHover',
       },
       ':active': {
         bg: '#6f92f8',
       },
       ':focus': {
-        border: '1px solid #3737f7',
+        border: '1px solid #3737F7',
         outline: 0,
       },
       ':disabled': {
@@ -122,7 +129,7 @@ const theme: Theme = {
       border: '2px solid #5779d9',
       bg: 'transparent',
       ':hover': {
-        borderColor: '#415CA7',
+        borderColor: 'primaryHover',
         bg: '#1212124D',
       },
       ':active': {
@@ -130,7 +137,7 @@ const theme: Theme = {
         borderColor: '#6f92f8',
       },
       ':focus': {
-        borderColor: '#3737f7',
+        borderColor: '#3737F7',
         outline: 0,
       },
       ':disabled': {
@@ -151,7 +158,7 @@ const theme: Theme = {
         borderColor: '#5779d9',
       },
       ':focus': {
-        borderColor: '#3737f7',
+        borderColor: '#3737F7',
         outline: 0,
       },
       ':disabled': {
@@ -170,7 +177,7 @@ const theme: Theme = {
         bg: '#fa406b',
       },
       ':focus': {
-        borderColor: '#3737f7',
+        borderColor: '#3737F7',
         outline: 0,
       },
       ':disabled': {
@@ -184,7 +191,7 @@ const theme: Theme = {
       borderRadius: '50%',
       p: 2,
       ':hover': {
-        color: '#415CA7',
+        color: 'primaryHover',
         bg: 'gray.5',
       },
       ':active': {
@@ -192,7 +199,7 @@ const theme: Theme = {
         bg: 'gray.5',
       },
       ':focus': {
-        border: '1px solid #3737f7',
+        border: '1px solid #3737F7',
         outline: 0,
       },
       ':disabled': {
@@ -214,7 +221,7 @@ const theme: Theme = {
         border: '1px solid #5779d9',
       },
       ':focus': {
-        border: '1px solid #3737f7',
+        border: '1px solid #3737F7',
         outline: 0,
       },
       ':disabled': {
@@ -232,7 +239,7 @@ const theme: Theme = {
         color: 'gray.3',
       },
       ':focus': {
-        border: '1px solid #3737f7',
+        border: '1px solid #3737F7',
         bg: 'transparent',
         outline: 0,
       },
@@ -253,7 +260,7 @@ const theme: Theme = {
         bg: '#6f92f8',
       },
       ':focus': {
-        border: '1px solid #3737f7',
+        border: '1px solid #3737F7',
         outline: 0,
       },
       ':disabled': {
@@ -271,7 +278,7 @@ const theme: Theme = {
         bg: '#fa406b',
       },
       ':focus': {
-        border: '1px solid #3737f7',
+        border: '1px solid #3737F7',
         outline: 0,
       },
       ':disabled': {
@@ -291,7 +298,7 @@ const theme: Theme = {
         borderColor: '#5779d9',
       },
       ':focus': {
-        border: '1px solid #3737f7',
+        border: '1px solid #3737F7',
         outline: 0,
       },
       ':disabled': {
@@ -332,7 +339,7 @@ const theme: Theme = {
       },
       ':focus': {
         bg: 'text',
-        border: '1px solid #3737f7',
+        border: '1px solid #3737F7',
         outline: 0,
       },
     },
@@ -394,7 +401,7 @@ const theme: Theme = {
       color: 'text',
       borderRadius: '32px',
       ':focus': {
-        border: '1px solid #3737f7',
+        border: '1px solid #3737F7',
         outline: 0,
       },
     },

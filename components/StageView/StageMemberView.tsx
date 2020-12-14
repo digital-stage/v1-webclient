@@ -50,7 +50,6 @@ const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIco
 
         {isAdmin && (
           <IconButton
-            variant="tertiaryIcon"
             onClick={() =>
               updateStageMember(stageMember._id, {
                 isDirector: !props.stageMember.isDirector,
