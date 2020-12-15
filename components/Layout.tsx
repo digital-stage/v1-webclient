@@ -65,7 +65,7 @@ const Layout = ({ children, sidebar, auth, stage }: Props): JSX.Element => {
               height: '72px',
               py: 4,
               px: [5, 7],
-              bg: !sidebar ? 'transparent' : 'background',
+              bg: !sidebar ? 'transparent' : '#1c1c1c',
             }}
           >
             {sidebar || (
@@ -93,7 +93,7 @@ const Layout = ({ children, sidebar, auth, stage }: Props): JSX.Element => {
           <Box
             sx={{
               minHeight: 'calc(100vh - 72px)',
-              bg: sidebar && 'background',
+              bg: sidebar && '#1c1c1c',
             }}
           >
             {children}

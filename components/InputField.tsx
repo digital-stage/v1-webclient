@@ -33,10 +33,11 @@ const InputField = ({ id, label, name, error, version, type, ...rest }: Props): 
           borderBottomColor: error ? 'dangerUnderline' : 'primaryHover',
         },
         ':focus': {
-          borderBottom: error ? '1px solid dangerUnderline' : '1px solid primary1',
+          borderBottom: error ? '1px solid dangerUnderline' : '1px solid primaryActive',
         },
         ':active': {
-          borderBottom: error ? '3px solid dangerUnderline' : '3px solid #3737F7',
+          borderBottom: error ? '3px solid dangerUnderline' : '3px solid transparent',
+          borderColor: 'primaryFocus',
         },
       }}
     >

@@ -3,12 +3,17 @@ import { Theme } from '@theme-ui/css';
 const theme: Theme = {
   colors: {
     text: '#f4f4f4',
-    background: '#1c1c1c',
-    primary: '#5779d9',
-    primary1: '#6F92F8',
-    primaryHover: '#415ca7',
-    primaryFocus: '3737F7',
-    secondary: '#f20544',
+    background: '#121212',
+    backgroundTransparent: '#1212124D',
+    primary: '#5779D9',
+    primaryActive: '#6F92F8',
+    primaryHover: '#415CA7',
+    primaryFocus: '#3737F7',
+    primaryDisabled: '#5779D980',
+    primaryTransparent: '#5779d94D',
+    secondary: '#F20544',
+    secondaryHover: '#b50030',
+    secondaryActive: '#fa406b',
     tertiary: '#808080',
     muted: 'hsl(210,16%,68%)',
     accent: 'hsl(45, 100%, 50%)',
@@ -69,6 +74,7 @@ const theme: Theme = {
   },
   shadows: {
     default: '0px 16px 20px #00000040',
+    button: '3px 3px 8px #00000026',
   },
   text: {
     default: {
@@ -102,63 +108,65 @@ const theme: Theme = {
       px: 4,
       py: 0,
       m: 3,
-      border: '2px solid primary',
+      border: '1px solid transparent',
       borderRadius: 'button',
       color: 'text',
       bg: 'primary',
       width: 'auto',
       height: '32px',
-      boxShadow: '3px 3px 8px #00000026',
+      boxShadow: 'button',
       ':hover': {
         bg: 'primaryHover',
       },
       ':active': {
-        bg: '#6f92f8',
+        bg: 'primaryActive',
       },
       ':focus': {
-        border: '1px solid #3737F7',
+        borderColor: 'primaryFocus',
         outline: 0,
       },
       ':disabled': {
-        bg: '#5779D980',
+        bg: 'primaryDisabled',
         boxShadow: 'none',
       },
     },
     secondary: {
       variant: 'buttons.primary',
-      border: '2px solid #5779d9',
+      border: '2px solid transparent',
+      borderColor: 'primary',
       bg: 'transparent',
       ':hover': {
         borderColor: 'primaryHover',
         bg: '#1212124D',
       },
       ':active': {
-        bg: '#5779d94D',
-        borderColor: '#6f92f8',
+        bg: 'primaryTransparent',
+        borderColor: 'primaryActive',
       },
       ':focus': {
-        borderColor: '#3737F7',
+        borderColor: 'primaryFocus',
         outline: 0,
       },
       ':disabled': {
-        bg: '#5779D980',
+        bg: 'primaryDisabled',
         boxShadow: 'none',
       },
     },
     tertiary: {
       variant: 'buttons.primary',
-      border: '2px solid #808080',
+      border: '2px solid transparent',
+      borderColor: 'tertiary',
       bg: 'transparent',
       ':hover': {
-        borderColor: '#676767',
-        bg: '#1212124D',
+        borderColor: 'gray.3',
+        bg: 'backgroundTransparent',
       },
       ':active': {
-        bg: '#5779d94D',
-        borderColor: '#5779d9',
+        bg: 'primaryTransparent',
+        borderColor: 'primary',
       },
       ':focus': {
-        borderColor: '#3737F7',
+        borderColor: 'primaryFocus',
         outline: 0,
       },
       ':disabled': {
@@ -171,17 +179,17 @@ const theme: Theme = {
       border: '2px solid primary',
       bg: 'secondary',
       ':hover': {
-        bg: '#b50030',
+        bg: 'secondaryHover',
       },
       ':active': {
-        bg: '#fa406b',
+        bg: 'secondaryActive',
       },
       ':focus': {
-        borderColor: '#3737F7',
+        borderColor: 'primaryFocus',
         outline: 0,
       },
       ':disabled': {
-        borderColor: '#f20544',
+        borderColor: 'secondary',
         boxShadow: 'none',
         opacity: '0.5',
       },
@@ -189,39 +197,41 @@ const theme: Theme = {
     icon: {
       color: 'primary',
       borderRadius: '50%',
+      border: '1px solid transparent',
       p: 3,
       ':hover': {
         color: 'primaryHover',
         bg: 'gray.5',
       },
       ':active': {
-        color: '#6f92f8',
+        color: 'primaryActive',
         bg: 'gray.5',
       },
       ':focus': {
-        border: '1px solid #3737F7',
+        borderColor: 'primaryFocus',
         outline: 0,
       },
       ':disabled': {
-        bg: '#5779D980',
+        bg: 'primaryDisabled',
         boxShadow: 'none',
       },
     },
     tertiaryIcon: {
       variant: 'buttons.tertiary',
-      border: 0,
+      border: '1px solid transparent',
+      borderColor: 'transparent',
       borderRadius: '50%',
-      color: '#808080',
+      color: 'tertiary',
       p: 3,
       ':hover': {
-        bg: '#121212',
+        bg: 'gray.5',
       },
       ':active': {
-        bg: '#5779d94D',
-        border: '1px solid #5779d9',
+        bg: 'primaryTransparent',
+        borderColor: 'primary',
       },
       ':focus': {
-        border: '1px solid #3737F7',
+        borderColor: 'primaryFocus',
         outline: 0,
       },
       ':disabled': {
@@ -239,7 +249,8 @@ const theme: Theme = {
         color: 'gray.3',
       },
       ':focus': {
-        border: '1px solid #3737F7',
+        border: '1px solid transparent',
+        borderColor: 'primaryFocus',
         bg: 'transparent',
         outline: 0,
       },
@@ -254,13 +265,13 @@ const theme: Theme = {
       p: 0,
       borderRadius: '50%',
       ':hover': {
-        bg: '#4561b1',
+        bg: 'primaryHover',
       },
       ':active': {
-        bg: '#6f92f8',
+        bg: 'primaryActive',
       },
       ':focus': {
-        border: '1px solid #3737F7',
+        borderColor: 'primaryFocus',
         outline: 0,
       },
       ':disabled': {
@@ -272,13 +283,13 @@ const theme: Theme = {
       variant: 'buttons.function',
       bg: 'secondary',
       ':hover': {
-        bg: '#b50030',
+        bg: 'secondaryHover',
       },
       ':active': {
-        bg: '#fa406b',
+        bg: 'secondaryActive',
       },
       ':focus': {
-        border: '1px solid #3737F7',
+        borderColor: 'primaryFocus',
         outline: 0,
       },
       ':disabled': {
@@ -290,15 +301,15 @@ const theme: Theme = {
       variant: 'buttons.function',
       bg: 'gray.2',
       ':hover': {
-        borderColor: '#676767',
+        borderColor: 'gray.3',
         bg: 'gray.3',
       },
       ':active': {
-        bg: '#5779d94D',
-        borderColor: '#5779d9',
+        bg: 'primaryTransparent',
+        borderColor: 'primary',
       },
       ':focus': {
-        border: '1px solid #3737F7',
+        borderColor: 'primaryFocus',
         outline: 0,
       },
       ':disabled': {
@@ -339,7 +350,7 @@ const theme: Theme = {
       },
       ':focus': {
         bg: 'text',
-        border: '1px solid #3737F7',
+        borderColor: 'primaryFocus',
         outline: 0,
       },
     },
@@ -401,7 +412,8 @@ const theme: Theme = {
       color: 'text',
       borderRadius: '32px',
       ':focus': {
-        border: '1px solid #3737F7',
+        border: '1px solid transparent',
+        borderColor: 'primaryFocus',
         outline: 0,
       },
     },
