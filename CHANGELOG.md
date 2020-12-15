@@ -1,3 +1,10 @@
+## [0.22.6](https://github.com/digital-stage/webclient/compare/v0.22.5...v0.22.6) (2020-12-15)
+
+
+### Bug Fixes
+
+* button color names ([ac92908](https://github.com/digital-stage/webclient/commit/ac92908d01503d59cc3be8a0a91879a26f82b2cb))
+
 ## [0.22.5](https://github.com/digital-stage/webclient/compare/v0.22.4...v0.22.5) (2020-12-15)
 
 
