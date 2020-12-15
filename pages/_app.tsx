@@ -4,7 +4,7 @@ import { AppProps } from 'next/app';
 import { ThemeProvider as ThemenProviderThemeUi } from 'theme-ui';
 import theme from '../utils/theme';
 import { AuthContextConsumer, AuthContextProvider } from '../lib/useAuth';
-import StageJoiner from '../components/new/elements/StageJoiner';
+import StageJoiner from '../components/global/StageJoiner';
 import { AudioContextProvider } from '../lib/useAudioContext';
 import { StageWebAudioProvider } from '../lib/useStageWebAudio';
 import { ErrorsConsumer } from '../lib/useErrors';

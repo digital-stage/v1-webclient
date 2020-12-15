@@ -2,7 +2,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { Button, Flex, jsx, Text } from 'theme-ui';
-import Modal from './new/elements/Modal';
+import Dialog from './ui/Dialog';
 
 interface IProps {
   onClose(): void;
@@ -11,7 +11,7 @@ interface IProps {
 }
 
 const ConfirmationModal = ({ isOpen, onClose, onConfirm }: IProps): JSX.Element => (
-  <Modal isOpen={isOpen} onClose={onClose}>
+  <Dialog isOpen={isOpen} onClose={onClose}>
     <Text sx={{ color: 'gray.7' }}>
       Bist Du sicher, dass die Daten dauerhaft gelöscht werden sollen?
     </Text>
@@ -23,7 +23,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm }: IProps): JSX.Element 
         Löschen
       </Button>
     </Flex>
-  </Modal>
+  </Dialog>
 );
 
 export default ConfirmationModal;

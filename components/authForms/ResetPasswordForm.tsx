@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { jsx, Box, Heading, Text, Flex, Button, Message } from 'theme-ui';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import InputField from '../InputField';
+import InputField from '../ui/InputField';
 import { useAuth } from '../../lib/useAuth';
 import translateError from './translateError';
 

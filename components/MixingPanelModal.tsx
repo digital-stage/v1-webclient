@@ -4,6 +4,7 @@ import { Box, Flex, Heading, jsx, Text } from 'theme-ui';
 import { useIsStageAdmin } from '../lib/use-digital-stage/hooks';
 import MixingPanel from './mixer/MixingPanel';
 import Modal from './ui/Modal';
+import React from 'react';
 
 interface IProps {
   isOpen: boolean;

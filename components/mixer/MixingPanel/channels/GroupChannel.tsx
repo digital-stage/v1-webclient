@@ -106,7 +106,7 @@ const GroupChannel = (props: { groupId: string }) => {
               )}
             </Flex>
           }
-          analyser={byGroup[groupId] ? byGroup[groupId].analyserNodeL : undefined}
+          analyser={byGroup && byGroup[groupId] ? byGroup[groupId].analyserNodeL : undefined}
           volume={group.volume}
           muted={group.muted}
           customVolume={customGroup ? customGroup.volume : undefined}

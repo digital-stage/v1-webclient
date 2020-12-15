@@ -4,7 +4,7 @@
 /** @jsxFrag React.Fragmen **/
 import React from 'react';
 import { Box, Heading, jsx, Text } from 'theme-ui';
-import SingleSelect from '../new/elements/SingleSelect';
+import SingleSelect from '../ui/SingleSelect';
 import { useLocalDevice, useRemoteDevices } from '../../lib/use-digital-stage/hooks';
 import useStageActions from '../../lib/use-digital-stage/useStageActions';
 

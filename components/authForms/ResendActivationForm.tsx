@@ -3,7 +3,7 @@ import { useAuth } from '../../lib/useAuth';
 import { Button, Message, Flex } from 'theme-ui';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import translateError from './translateError';
-import InputField from '../InputField';
+import InputField from '../ui/InputField';
 import * as Yup from 'yup';
 import { useRouter } from 'next/router';
 

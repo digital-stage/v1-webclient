@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { Heading, jsx } from 'theme-ui';
 import Layout from '../components/Layout';
-import Loading from '../components/new/elements/Loading';
+import Loading from '../components/global/Loading';
 import useStageActions from '../lib/use-digital-stage/useStageActions';
 import { useCurrentStageId, useSelector } from '../lib/use-digital-stage/hooks';
 

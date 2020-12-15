@@ -4,7 +4,7 @@ import React from 'react';
 import { jsx, Heading, Link } from 'theme-ui';
 import { useErrors } from '../lib/useErrors';
 import Layout from './Layout';
-import Card from './Card';
+import Card from './ui/Card';
 
 interface Props {
   children: React.ReactNode;

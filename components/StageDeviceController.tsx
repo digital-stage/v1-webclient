@@ -10,8 +10,9 @@ import { useLocalDevice } from '../lib/use-digital-stage/hooks';
 import useStageActions from '../lib/use-digital-stage/useStageActions';
 import useAudioContext from '../lib/useAudioContext';
 import MixingPanelModal from './MixingPanelModal';
-import MobileSideBar from './new/elements/Menu/SideBar/MobileSideBar';
+import MobileSideBar from './global/SideBar/MobileSideBar';
 import SettingsModal from './settings';
+import RoomModal from './RoomModal';
 
 const StageDeviceController = (): JSX.Element => {
   const localDevice = useLocalDevice();
@@ -21,6 +22,7 @@ const StageDeviceController = (): JSX.Element => {
   const [openSettings, setOpenSettings] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState<string>();
   const [openMixer, setOpenMixer] = React.useState<boolean>(false);
+  const [openRoom, setOpenRoom] = React.useState<boolean>(false);
   const node = React.useRef(null);
 
   const handleClick = (e) => {
@@ -112,12 +114,17 @@ const StageDeviceController = (): JSX.Element => {
           <MobileSideBar
             isOpen={openMobileSideBar}
             onSelect={(selected) => {
-              if (selected !== 'mixer') {
-                setSelected(selected);
-                setOpenSettings(true);
-                setMobileSideBarOpen(false);
-              } else if (selected === 'mixer') {
-                setOpenMixer(true);
+              switch (selected) {
+                case 'mixer':
+                  setOpenMixer(true);
+                  break;
+                case 'room':
+                  setOpenRoom(true);
+                  break;
+                default:
+                  setSelected(selected);
+                  setOpenSettings(true);
+                  setMobileSideBarOpen(false);
               }
             }}
           />
@@ -129,6 +136,7 @@ const StageDeviceController = (): JSX.Element => {
         selected={selected}
       />
       <MixingPanelModal isOpen={openMixer} onClose={() => setOpenMixer(!openMixer)} />
+      <RoomModal isOpen={openRoom} onClose={() => setOpenRoom((prev) => !prev)} />
     </Box>
   );
 };
