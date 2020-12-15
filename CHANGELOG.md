@@ -1,3 +1,10 @@
+## [0.22.4](https://github.com/digital-stage/webclient/compare/v0.22.3...v0.22.4) (2020-12-15)
+
+
+### Bug Fixes
+
+* spacing at group view ([0e05139](https://github.com/digital-stage/webclient/commit/0e051394b4d8eb868830bd1c40c2e982ba813a09))
+
 ## [0.22.3](https://github.com/digital-stage/webclient/compare/v0.22.2...v0.22.3) (2020-12-15)
 
 
