@@ -31,7 +31,9 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Heading variant="title">Bühne mit einem Link beitreten</Heading>
+      <Heading variant="title" pb={5}>
+        Bühne mit einem Link beitreten
+      </Heading>
       <Text variant="subTitle">
         Gib den Link ein, mit welchem Du einer Bühne beitreten möchtest
       </Text>
@@ -45,7 +47,7 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
         value={link}
         version="dark"
       />
-      <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
+      <Flex sx={{ justifyContent: 'center', pt: 7 }}>
         <Button
           variant="tertiary"
           sx={{ color: 'gray.5' }}

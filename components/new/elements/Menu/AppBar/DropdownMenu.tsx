@@ -27,17 +27,17 @@ const DropdownMenu = ({ isOpen, onSelect }: Props): JSX.Element => {
         height: 'auto',
         top: '58px',
         right: '20px',
-        p: 4,
+        p: 6,
         boxShadow: '0px 3px 6px #000000BC',
         borderRadius: 'card',
         zIndex: 120,
       }}
     >
-      <Text variant="title" sx={{ color: 'text', mb: 3 }}>
+      <Text variant="title" sx={{ color: 'text', mb: 4 }}>
         {user.name}
       </Text>
       {authUser ? (
-        <Text variant="subTitle" sx={{ color: 'text', mb: 3 }}>
+        <Text variant="subTitle" sx={{ color: 'text', mb: 4 }}>
           {authUser.email}
         </Text>
       ) : undefined}
@@ -47,7 +47,7 @@ const DropdownMenu = ({ isOpen, onSelect }: Props): JSX.Element => {
           <Flex
             key={i}
             sx={{
-              py: 2,
+              py: 3,
               alignItems: 'center',
               cursor: 'pointer',
               color: 'gray.1',
@@ -56,7 +56,7 @@ const DropdownMenu = ({ isOpen, onSelect }: Props): JSX.Element => {
             onClick={() => onSelect(item.href)}
           >
             {item.icon}
-            <Text variant="title" sx={{ color: 'gray.1', ':hover': { color: 'text' } }} ml={2}>
+            <Text variant="title" sx={{ color: 'gray.1', ':hover': { color: 'text' } }} ml={3}>
               {item.label}
             </Text>
           </Flex>

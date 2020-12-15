@@ -31,7 +31,7 @@ const Index = (): JSX.Element => {
             </React.Fragment>
           ) : (
             <Container size={Size.stage}>
-              <Heading as="h1" sx={{ ml: 3, mt: [4, 5] }}>
+              <Heading as="h1" sx={{ ml: 4, mt: [6, 7] }}>
                 Meine Bühnen
               </Heading>
               <StageListView />

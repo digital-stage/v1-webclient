@@ -84,9 +84,7 @@ const ForgetPasswordForm = (): JSX.Element => {
             />
             <Flex sx={{ justifyContent: 'center', my: 3 }}>
               <Link href="/account/login">
-                <Button as="a" variant="white" sx={{ cursor: 'pointer' }}>
-                  Abbrechen
-                </Button>
+                <Button variant="tertiary">Abbrechen</Button>
               </Link>
               <Button type="submit">Senden</Button>
             </Flex>

@@ -43,7 +43,7 @@ const theme: Theme = {
     heading: '1.125',
   },
   fontSizes: [14, 16, 18, 20, 24, 32, 48, 64, 72, 96],
-  space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
+  space: [0, 2, 4, 8, 12, 16, 24, 32, 48, 64],
   breakpoints: [600, 900, 1200, 1500].map((n) => `${n}px`),
   radii: {
     card: '18px',
@@ -99,9 +99,9 @@ const theme: Theme = {
     primary: {
       fontFamily: 'heading',
       fontSize: 0,
-      px: 3,
+      px: 4,
       py: 0,
-      m: 1,
+      m: 3,
       border: '2px solid primary',
       borderRadius: 'button',
       color: 'text',
@@ -189,7 +189,7 @@ const theme: Theme = {
     icon: {
       color: 'primary',
       borderRadius: '50%',
-      p: 2,
+      p: 3,
       ':hover': {
         color: 'primaryHover',
         bg: 'gray.5',
@@ -212,7 +212,7 @@ const theme: Theme = {
       border: 0,
       borderRadius: '50%',
       color: '#808080',
-      p: 2,
+      p: 3,
       ':hover': {
         bg: '#121212',
       },

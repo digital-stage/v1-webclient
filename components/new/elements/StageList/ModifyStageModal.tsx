@@ -101,7 +101,7 @@ const ModifyStageModal = (props: {
             version="dark"
             error={formik.errors.password && formik.touched.password}
           />
-          <Flex sx={{ justifyContent: 'space-between', py: 2 }}>
+          <Flex sx={{ justifyContent: 'center', pt: 7 }}>
             <Button variant="tertiary" sx={{ color: 'gray.5' }} type="button" onClick={onClose}>
               Abbrechen
             </Button>

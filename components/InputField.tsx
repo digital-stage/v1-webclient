@@ -23,8 +23,8 @@ const InputField = ({ id, label, name, error, version, type, ...rest }: Props): 
     <Box
       sx={{
         position: 'relative',
-        mt: 4,
-        height: '60px',
+        my: 5,
+        height: '64px',
         bg: error ? 'dangerBg' : version === 'dark' ? 'text' : 'textfield',
         borderBottom: '1px solid transparent',
         borderBottomColor: error ? 'dangerUnderline' : version === 'dark' ? 'background' : 'text',
@@ -47,8 +47,8 @@ const InputField = ({ id, label, name, error, version, type, ...rest }: Props): 
           fontFamily: 'body',
           fontWeight: 'heading',
           color: version === 'dark' ? 'labelDark' : 'label',
-          pl: 2,
-          pt: 2,
+          pl: 5,
+          pt: 5,
         }}
       >
         {label}
@@ -61,18 +61,19 @@ const InputField = ({ id, label, name, error, version, type, ...rest }: Props): 
         sx={{
           color: version === 'dark' ? 'background' : 'text',
           border: 'transparent',
-          borderBottom: '1px solid transparent',
+          borderBottom: 0,
           borderRadius: 0,
           width: type === 'password' ? 'calc(100% - 24px)' : '100%',
-          pl: 2,
+          pl: 5,
           ':active,:-webkit-autofill': {
             borderBottomColor: 'transparent',
             // ThemeUI color does not work on this prop thus white instead of text
             WebkitTextFillColor: version === 'dark' ? 'labelDark' : '#f4f4f4',
-            boxShadow:
-              version === 'dark'
-                ? '0 0 0px 1000px #12121226 inset'
-                : '0 0 0px 1000px #282828 inset',
+            boxShadow: error
+              ? '0 0 0px 1000px #4a1313 inset'
+              : version === 'dark'
+              ? '0 0 0px 1000px #12121226 inset'
+              : '0 0 0px 1000px #282828 inset',
           },
           'input:-internal-autofill-selected': {
             bg: error ? 'dangerBg' : version === 'dark' ? 'textfieldDark' : 'gray.6',
@@ -113,9 +114,10 @@ const InputField = ({ id, label, name, error, version, type, ...rest }: Props): 
                 fontSize: 10,
                 fontFamily: 'body',
                 fontWeight: 'heading',
-                color: '#f4f4f480',
-                pt: 1,
+                color: version === 'dark' ? 'labelDark' : '#f4f4f480',
+                py: 3,
                 float: 'right',
+                height: 'auto',
               }}
             >
               {msg}

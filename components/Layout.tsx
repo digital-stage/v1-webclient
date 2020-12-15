@@ -63,8 +63,8 @@ const Layout = ({ children, sidebar, auth, stage }: Props): JSX.Element => {
               alignItems: 'center',
               justifyContent: 'space-between',
               height: '72px',
-              py: 2,
-              px: [3, 4],
+              py: 4,
+              px: [5, 7],
               bg: !sidebar ? 'transparent' : 'background',
             }}
           >

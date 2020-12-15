@@ -34,7 +34,9 @@ const InviteModal = (props: {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Heading variant="title">Teilnehmer einladen</Heading>
+      <Heading variant="title" pb={5}>
+        Teilnehmer einladen
+      </Heading>
       {isCopied && <Message variant="success">Link in die Zwischenablage kopiert!</Message>}
 
       <InputField type="text" id="link" name="link" label="Link" value={link} version="dark" />
@@ -47,7 +49,7 @@ const InviteModal = (props: {
           Link mit einem Passwort versehen
         </Label>
       )}
-      <Flex sx={{ justifyContent: 'space-between', py: 3 }}>
+      <Flex sx={{ justifyContent: 'center', pt: 7 }}>
         <Button variant="tertiary" sx={{ color: 'gray.5' }} onClick={onClose}>
           Schließen
         </Button>

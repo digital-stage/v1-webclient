@@ -26,13 +26,13 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
             ? ['100%', '50%', '50%', '33%']
             : '100%',
         flexWrap: 'wrap',
-        p: 2,
+        p: 3,
       }}
     >
-      <Text variant="subTitle" sx={{ pl: 3, color: 'text' }}>
+      <Text variant="subTitle" sx={{ pl: 4, color: 'text' }}>
         {group.name}
       </Text>
-      <Box sx={{ bg: 'secondary', height: '2px', ml: 3, mr: 3 }}></Box>
+      <Box sx={{ bg: 'secondary', height: '2px', ml: 4, mr: 4 }}></Box>
       <Flex
         sx={{
           flexWrap: 'wrap',

@@ -29,7 +29,9 @@ const CreateGroupModal = (props: {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <Heading variant="title">Neue Gruppe erstellen</Heading>
+      <Heading variant="title" pb={5}>
+        Neue Gruppe erstellen
+      </Heading>
       <Text variant="subTitle">
         Nachdem Du die Gruppe erstellt hast, kannst Du über den Button &apos;Einladen&apos;
         Teilnehmer hinzufügen
@@ -55,7 +57,7 @@ const CreateGroupModal = (props: {
               version="dark"
               error={errors.name && touched.name}
             />
-            <Flex sx={{ justifyContent: 'space-between', py: 3 }}>
+            <Flex sx={{ justifyContent: 'center', pt: 7 }}>
               <Button variant="tertiary" sx={{ color: 'gray.5' }} onClick={onClose}>
                 Abbrechen
               </Button>

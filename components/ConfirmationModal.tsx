@@ -15,7 +15,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm }: IProps): JSX.Element 
     <Text sx={{ color: 'gray.7' }}>
       Bist Du sicher, dass die Daten dauerhaft gelöscht werden sollen?
     </Text>
-    <Flex sx={{ justifyContent: 'flex-end' }}>
+    <Flex sx={{ justifyContent: 'center', pt: 8 }}>
       <Button variant="tertiary" sx={{ color: 'gray.5' }} onClick={onClose}>
         Abbrechen
       </Button>

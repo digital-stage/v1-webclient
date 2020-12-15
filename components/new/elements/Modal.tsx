@@ -30,8 +30,8 @@ const Modal = (props: Props): JSX.Element =>
         sx={{
           position: 'fixed',
           bg: props.variant === 'dark' ? 'gray.4' : 'gray.0',
-          padding: 3,
-          pl: props.type === 'settings' ? 0 : 3,
+          p: 6,
+          pl: props.type === 'settings' ? 0 : 6,
           width:
             props.type === 'settings'
               ? ['container.tiny', 'container.small', 'container.stage', 'container.default']

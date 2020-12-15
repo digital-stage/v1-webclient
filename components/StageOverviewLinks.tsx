@@ -18,7 +18,7 @@ const StageOverviewLinks = (props: {
         sx={{
           flexDirection: ['column', 'row'],
           width: '100%',
-          mt: '-16px',
+          mt: '-24px',
           borderBottom: '1px solid transparent',
           borderBottomColor: 'gray.3',
         }}
@@ -28,8 +28,8 @@ const StageOverviewLinks = (props: {
             width: ['100%', '50%'],
             borderRight: '1px solid transparent',
             borderRightColor: [null, 'gray.3'],
-            py: 4,
-            px: 3,
+            py: 6,
+            px: 6,
             textAlign: 'center',
           }}
         >
@@ -39,7 +39,7 @@ const StageOverviewLinks = (props: {
               sx={{
                 color: 'secondary',
                 textAlign: 'center',
-                pt: 2,
+                pt: 6,
                 mr: [2, null, 3],
               }}
             >
@@ -54,7 +54,7 @@ const StageOverviewLinks = (props: {
         <Box
           sx={{
             width: ['100%', '50%'],
-            pt: [0, 4],
+            pt: [0, 6],
             pb: 4,
             px: 3,
             textAlign: 'center',

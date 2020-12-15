@@ -35,7 +35,7 @@ const SideBar = (): JSX.Element => {
           px: '1rem',
           outline: 'none',
           textAlign: 'center',
-          py: 2,
+          py: 3,
           cursor: 'pointer',
         }}
       >
@@ -47,7 +47,7 @@ const SideBar = (): JSX.Element => {
   return (
     <Flex
       role="menu"
-      py={3}
+      py={5}
       sx={{
         flexDirection: 'column',
         //TODO: @htw please check, settings a pointer cursor to the hole element leads to

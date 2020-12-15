@@ -20,7 +20,7 @@ const AuthPageContainer = (props: { children: React.ReactNode }): JSX.Element =>
     >
       <Box
         sx={{
-          mb: [4, null, 5],
+          mb: [5, null, 6],
         }}
       >
         <DigitalStageLogo single width={180} />

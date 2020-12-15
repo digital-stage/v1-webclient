@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../lib/useAuth';
-import { Button, Message } from 'theme-ui';
+import { Button, Message, Flex } from 'theme-ui';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import translateError from './translateError';
 import InputField from '../InputField';
@@ -60,7 +60,9 @@ const ResendActivationForm = (): JSX.Element => {
               autocomplete="email"
               error={errors.email && touched.email}
             />
-            <Button type="submit">Aktivierungs-Link zusenden</Button>
+            <Flex sx={{ justifyContent: 'center' }}>
+              <Button type="submit">Aktivierungs-Link zusenden</Button>
+            </Flex>
           </Form>
         )}
       </Formik>

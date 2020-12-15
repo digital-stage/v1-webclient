@@ -57,7 +57,7 @@ const StageDeviceController = (): JSX.Element => {
             onClick={() => {
               if (audioContext) audioContext.resume();
             }}
-            sx={{ mr: 3 }}
+            sx={{ mr: [5, 6] }}
           >
             <FaPlay size="16px" name="Start" />
           </Button>
@@ -71,7 +71,7 @@ const StageDeviceController = (): JSX.Element => {
                 sendVideo: !localDevice.sendVideo,
               })
             }
-            sx={{ mr: 3 }}
+            sx={{ mr: [5, 6] }}
           >
             {localDevice.sendVideo ? <FaVideo size="24px" /> : <FaVideoSlash size="24px" />}
           </Button>
@@ -85,7 +85,7 @@ const StageDeviceController = (): JSX.Element => {
                 sendAudio: !localDevice.sendAudio,
               })
             }
-            sx={{ mr: 3 }}
+            sx={{ mr: [5, 6] }}
           >
             {localDevice.sendAudio ? (
               <FaMicrophone size="24px" />
@@ -95,7 +95,7 @@ const StageDeviceController = (): JSX.Element => {
           </Button>
         )}
         <Link href="/leave">
-          <Button variant="functionDanger" title="Bühne verlassen" sx={{ mr: [3, 0] }}>
+          <Button variant="functionDanger" title="Bühne verlassen" sx={{ mr: [6, 0] }}>
             <ImPhoneHangUp size="24px" />
           </Button>
         </Link>

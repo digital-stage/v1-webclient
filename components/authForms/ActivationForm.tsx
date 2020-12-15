@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '../../lib/useAuth';
-import { Button, Message } from 'theme-ui';
+import { Button, Message, Flex } from 'theme-ui';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import translateError from './translateError';
 import InputField from '../InputField';
@@ -81,7 +81,9 @@ const ActivationForm = (props: { initialCode?: string }): JSX.Element => {
               name="code"
               error={errors.code && touched.code}
             />
-            <Button type="submit">Account aktivieren</Button>
+            <Flex sx={{ justifyContent: 'center' }}>
+              <Button type="submit">Account aktivieren</Button>
+            </Flex>
           </Form>
         )}
       </Formik>

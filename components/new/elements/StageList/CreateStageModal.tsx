@@ -164,7 +164,7 @@ const CreateStageModal = (props: {
             </Panel>
           </Accordion>
           */}
-            <Flex sx={{ justifyContent: 'space-between', py: 3 }}>
+            <Flex sx={{ justifyContent: 'center', pt: 7 }}>
               <Button variant="tertiary" sx={{ color: 'gray.5' }} type="button" onClick={onClose}>
                 Abbrechen
               </Button>
