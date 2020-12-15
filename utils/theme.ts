@@ -622,5 +622,10 @@ const theme: Theme = {
       mr: 3,
     },
   },
+  forms: {
+    checkbox: {
+      color: 'gray.5',
+    },
+  },
 };
 export default theme;

@@ -35,10 +35,10 @@ const ForgetPasswordForm = (): JSX.Element => {
   return (
     <Box>
       <Box sx={{ textAlign: 'left' }}>
-        <Heading as="h3" sx={{ my: 3, fontSize: 3 }}>
+        <Heading as="h3" sx={{ mb: 5, fontSize: 3 }}>
           Passwort zurücksetzen
         </Heading>
-        <Text>Gibt Deine E-Mail-Adresse ein, um Dein Passwort zurückzusetzen</Text>
+        <Text mb={2}>Gibt Deine E-Mail-Adresse ein, um Dein Passwort zurückzusetzen</Text>
       </Box>
       <Formik
         initialValues={{ email: '', repeatEmail: '' }}
@@ -82,7 +82,7 @@ const ForgetPasswordForm = (): JSX.Element => {
               type="text"
               error={errors.repeatEmail && touched.repeatEmail}
             />
-            <Flex sx={{ justifyContent: 'center', my: 3 }}>
+            <Flex sx={{ justifyContent: 'center', mt: 7 }}>
               <Link href="/account/login">
                 <Button variant="tertiary">Abbrechen</Button>
               </Link>

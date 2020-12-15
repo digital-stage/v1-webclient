@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import * as React from 'react';
 import Link from 'next/link';
-import { jsx, Box, Button, Flex, Label, Text, Message } from 'theme-ui';
+import { jsx, Box, Button, Flex, Label, Text, Message, Checkbox } from 'theme-ui';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../../lib/useAuth';
@@ -83,7 +83,7 @@ const SignInForm = (): JSX.Element => {
               error={errors.password && touched.password}
             />
             <Label sx={{ mt: 3 }}>
-              <Field type="checkbox" name="staySignedIn" />
+              <Field as={Checkbox} type="checkbox" name="staySignedIn" />
               <Text sx={{ fontSize: 14, ml: 2 }}>Angemeldet bleiben</Text>
             </Label>
             <Flex sx={{ justifyContent: 'center', my: 3 }}>

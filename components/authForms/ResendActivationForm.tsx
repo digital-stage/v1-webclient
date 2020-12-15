@@ -60,7 +60,7 @@ const ResendActivationForm = (): JSX.Element => {
               autocomplete="email"
               error={errors.email && touched.email}
             />
-            <Flex sx={{ justifyContent: 'center' }}>
+            <Flex sx={{ justifyContent: 'center', mt: 7 }}>
               <Button type="submit">Aktivierungs-Link zusenden</Button>
             </Flex>
           </Form>
