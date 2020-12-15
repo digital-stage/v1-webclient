@@ -22,7 +22,7 @@ const ConductorsView = (): JSX.Element => {
         }}
       >
         {conductors.map((conductor) => (
-          <StageMemberView key={conductor._id} stageMember={conductor} variant="conductor" />
+          <StageMemberView key={conductor._id} stageMember={conductor} />
         ))}
       </Box>
     );

@@ -38,6 +38,8 @@ const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIco
           bottom: '0px',
           left: '0px',
           bg: !withIcon ? 'transparentGray' : 'transparent',
+          p: isAdmin ? 0 : 3,
+          pl: 3,
         }}
       >
         <OnlineStatus online={stageMember.online} />
@@ -55,8 +57,8 @@ const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIco
                 isDirector: !props.stageMember.isDirector,
               })
             }
-            variant={stageMember.isDirector ? 'primary' : 'tertiary'}
-            sx={{ border: '50%', width: '32px', height: '32px', p: 0 }}
+            variant="tertiary"
+            sx={{ border: 0, width: '32px', height: '32px', p: 0, boxShadow: 'none', m: 2 }}
           >
             {stageMember.isDirector ? <BsArrowsAngleContract /> : <BsArrowsAngleExpand />}
           </IconButton>
@@ -68,10 +70,8 @@ const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIco
 
 const StageMemberView = ({
   stageMember,
-  variant,
 }: {
   stageMember: StageMemberWithUserData;
-  variant?: 'default' | 'conductor';
 }): JSX.Element => {
   const videoConsumers = useVideoConsumersByStageMember(stageMember._id);
 
@@ -82,9 +82,6 @@ const StageMemberView = ({
         backgroundImage: videoConsumers.length <= 0 && 'url("/images/user_background.svg")',
         height: '100%',
         width: '100%',
-        // height: variant === 'conductor' ? '100%' : '240px',
-        // width: variant === 'conductor' ? '100%' : '240px',
-        // m: 1,
       }}
     >
       {videoConsumers.length > 0 && (
