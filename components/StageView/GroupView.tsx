@@ -26,7 +26,7 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
             ? ['100%', '50%', '50%', '33%']
             : '100%',
         flexWrap: 'wrap',
-        p: 3,
+        p: 4,
       }}
     >
       <Text variant="subTitle" sx={{ pl: 4, color: 'text' }}>
@@ -38,7 +38,7 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
           flexWrap: 'wrap',
           bg: 'gray.7',
           borderRadius: 'card',
-          p: 2,
+          p: 3,
         }}
       >
         {stageMembers.map((stageMember) => (
