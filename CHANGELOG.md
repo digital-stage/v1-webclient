@@ -1,3 +1,10 @@
+## [0.22.5](https://github.com/digital-stage/webclient/compare/v0.22.4...v0.22.5) (2020-12-15)
+
+
+### Bug Fixes
+
+* spacing at stage member title ([98da125](https://github.com/digital-stage/webclient/commit/98da125c470e5d46b7ac5a68cf32982cf9eadf73))
+
 ## [0.22.4](https://github.com/digital-stage/webclient/compare/v0.22.3...v0.22.4) (2020-12-15)
 
 
