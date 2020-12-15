@@ -1,3 +1,10 @@
+## [0.22.3](https://github.com/digital-stage/webclient/compare/v0.22.2...v0.22.3) (2020-12-15)
+
+
+### Bug Fixes
+
+* spacing at forget pass and activation forms ([8ea795b](https://github.com/digital-stage/webclient/commit/8ea795b692e3fac332d03bd383906ac45f78f704))
+
 ## [0.22.2](https://github.com/digital-stage/webclient/compare/v0.22.1...v0.22.2) (2020-12-14)
 
 
