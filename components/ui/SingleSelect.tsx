@@ -17,12 +17,6 @@ const SingleSelect = (props: {
       onChange={props.onChange}
       defaultValue={selectedValue}
       sx={{
-        border: 0,
-        borderBottom: '1px solid white',
-        borderRadius: 0,
-        py: 3,
-        px: 2,
-        bg: 'gray.3',
         ...props.sx,
       }}
     >
