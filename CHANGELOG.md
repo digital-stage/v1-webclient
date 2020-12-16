@@ -1,3 +1,11 @@
+## [0.22.9](https://github.com/digital-stage/webclient/compare/v0.22.8...v0.22.9) (2020-12-16)
+
+
+### Bug Fixes
+
+* copy 3d positions when using mixing panel with customized settings ([00b9f67](https://github.com/digital-stage/webclient/commit/00b9f67360a54840ed390bf040c17aa38ac958c3))
+* copy 3d positions when using mixing panel with customized settings ([3f04a42](https://github.com/digital-stage/webclient/commit/3f04a428d17c4088c06ef7fec0efd09330d8e25b))
+
 ## [0.22.8](https://github.com/digital-stage/webclient/compare/v0.22.7...v0.22.8) (2020-12-15)
 
 
