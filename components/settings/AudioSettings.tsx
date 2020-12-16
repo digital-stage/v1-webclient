@@ -89,7 +89,7 @@ const AudioSettings = (): JSX.Element => {
 
   return (
     <Box>
-      <Heading mb={3}>Audiogeräte</Heading>
+      <Heading mb={5}>Audiogeräte</Heading>
       <SingleDeviceAudioSettings device={localDevice} updateDevice={updateDevice} />
       {remoteDevices && remoteDevices.length > 0 ? (
         <React.Fragment>

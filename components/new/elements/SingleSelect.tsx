@@ -13,18 +13,7 @@ const SingleSelect = (props: {
   const selectedValue = selected.length > 0 ? selected[0].label : null;
   return (
     <div>
-      <Select
-        onChange={props.onChange}
-        defaultValue={selectedValue}
-        sx={{
-          border: 0,
-          borderBottom: '1px solid white',
-          borderRadius: 0,
-          py: 3,
-          px: 2,
-          bg: 'gray.3',
-        }}
-      >
+      <Select onChange={props.onChange} defaultValue={selectedValue}>
         {props.options.length > 0
           ? props.options.map((option) => {
               return <option key={option.id}>{option.label}</option>;

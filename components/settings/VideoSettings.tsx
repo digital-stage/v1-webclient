@@ -15,7 +15,7 @@ const VideoSettings = (): JSX.Element => {
 
   return (
     <Box>
-      <Heading mb={3}>Videogeräte</Heading>
+      <Heading mb={5}>Videogeräte</Heading>
       <Text mb={3}>Lokale Geräte</Text>
       <SingleSelect
         options={localDevice.inputVideoDevices || []}

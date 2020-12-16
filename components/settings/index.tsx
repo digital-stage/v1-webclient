@@ -39,21 +39,23 @@ const SettingsModal = (props: {
         }}
       >
         <Box sx={{ width: '30%', display: ['none', 'block'] }}>
-          <Heading ml={3} mb={3}>
+          <Heading ml={6} mb={5}>
             Settings
           </Heading>
-          <Button onClick={refreshLocalDevice}>Refresh</Button>
+          <Button onClick={refreshLocalDevice} mb={5} ml={6}>
+            Refresh
+          </Button>
           {SettingsModalItems.map((item, i) => {
             return (
               <Flex
                 key={i}
-                py={2}
                 sx={{
                   alignItems: 'center',
                   cursor: 'pointer',
                   mr: 3,
-                  padding: 2,
-                  pl: 3,
+                  p: 3,
+                  pl: 6,
+                  py: 3,
                   bg: selected === item.href && 'gray.3',
                   borderRadius: selected === item.href && '0px 24px 24px 0px',
                   ':hover': {
@@ -64,7 +66,7 @@ const SettingsModal = (props: {
                 onClick={() => setSelected(item.href)}
               >
                 {item.icon}
-                <Text variant="title" sx={{ color: 'text' }} ml={2}>
+                <Text variant="title" sx={{ color: 'text' }} ml={3}>
                   {item.label}
                 </Text>
               </Flex>

@@ -638,6 +638,36 @@ const theme: Theme = {
     checkbox: {
       color: 'gray.5',
     },
+    select: {
+      fontFamily: 'body',
+      fontWeight: 'heading',
+      fontSize: 0,
+      height: '64px',
+      my: 5,
+      p: 5,
+      bg: 'gray.5',
+      border: 0,
+      borderBottom: '1px solid transparent',
+      borderColor: 'text',
+      borderRadius: 0,
+      ':hover': {
+        borderColor: 'primaryHover',
+        bg: 'gray.6',
+      },
+      ':focus': {
+        borderWidth: '3px',
+        borderColor: 'primaryFocus',
+        outline: 0,
+      },
+      'option:checked': {
+        color: 'primary',
+      },
+      ':disabled': {
+        bg: 'textfieldDark',
+        color: '#f4f4f44D',
+        borderColour: '#f4f4f44D',
+      },
+    },
   },
 };
 export default theme;

@@ -25,7 +25,7 @@ const Profile = (): JSX.Element => {
 
   return (
     <Box>
-      <Heading mb={3}>Profilverwaltung</Heading>
+      <Heading mb={5}>Profilverwaltung</Heading>
       <Text variant="subTitle" sx={{ color: 'text' }} mb={3}>
         {authUser.email}
       </Text>
