@@ -51,6 +51,9 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
       setCustomStageMember(stageMember._id, {
         volume,
         muted,
+        x: stageMember.x,
+        y: stageMember.y,
+        rZ: stageMember.rZ,
       });
     },
     [stageMember, setCustomStageMember]
@@ -118,8 +121,15 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
           muted={stageMember.muted}
           customVolume={customStageMember ? customStageMember.volume : undefined}
           customMuted={customStageMember ? customStageMember.muted : undefined}
-          analyser={
-            byStageMember[stageMemberId] ? byStageMember[stageMemberId].analyserNodeL : undefined
+          analyserL={
+            byStageMember && byStageMember[stageMemberId]
+              ? byStageMember[stageMemberId].analyserNodeL
+              : undefined
+          }
+          analyserR={
+            byStageMember && byStageMember[stageMemberId]
+              ? byStageMember[stageMemberId].analyserNodeR
+              : undefined
           }
           onVolumeChanged={handleVolumeChange}
           onCustomVolumeChanged={handleCustomVolumeChange}

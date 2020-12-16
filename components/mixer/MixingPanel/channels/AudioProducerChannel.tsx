@@ -94,8 +94,8 @@ const AudioProducerChannel = (props: { audioProducerId: string }) => {
                 <h5>Track</h5>
               </Flex>
             }
-            analyser={
-              byAudioProducer[audioProducerId]
+            analyserL={
+              byAudioProducer && byAudioProducer[audioProducerId]
                 ? byAudioProducer[audioProducerId].analyserNode
                 : undefined
             }

@@ -8,7 +8,7 @@ import { useStageActions } from '../../../../lib/use-digital-stage';
 import { Flex, Box, Button } from 'theme-ui';
 import ChannelStrip from '../../ChannelStrip';
 
-const GroupChannel = (props: { groupId: string }) => {
+const GroupChannel = (props: { groupId: string }): JSX.Element => {
   const { groupId } = props;
   const isAdmin = useIsStageAdmin();
   const group = useGroup(groupId);
@@ -106,7 +106,8 @@ const GroupChannel = (props: { groupId: string }) => {
               )}
             </Flex>
           }
-          analyser={byGroup && byGroup[groupId] ? byGroup[groupId].analyserNodeL : undefined}
+          analyserL={byGroup && byGroup[groupId] ? byGroup[groupId].analyserNodeL : undefined}
+          analyserR={byGroup && byGroup[groupId] ? byGroup[groupId].analyserNodeR : undefined}
           volume={group.volume}
           muted={group.muted}
           customVolume={customGroup ? customGroup.volume : undefined}

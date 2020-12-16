@@ -24,7 +24,8 @@ const GroupOnlyChannel = (props: { groupId: string }): JSX.Element => {
   return (
     <ChannelStrip
       addHeader={<Text mb={3}>{group.name}</Text>}
-      analyser={byGroup[groupId] ? byGroup[groupId].analyserNodeL : undefined}
+      analyserL={byGroup && byGroup[groupId] ? byGroup[groupId].analyserNodeL : undefined}
+      analyserR={byGroup && byGroup[groupId] ? byGroup[groupId].analyserNodeR : undefined}
       volume={group.volume}
       muted={group.muted}
       customVolume={customGroup ? customGroup.volume : undefined}
