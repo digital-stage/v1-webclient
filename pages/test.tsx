@@ -5,7 +5,7 @@ import { Check, Delete } from 'baseui/icon';
 import { DisplayMedium } from 'baseui/typography';
 import { Notification } from 'baseui/notification';
 import { KIND } from 'baseui/toast';
-import Container from '../components/Container';
+import Container from '../components/ui/Container';
 import { useLocalDevice } from '../lib/use-digital-stage/hooks';
 
 const Test = (): JSX.Element => {

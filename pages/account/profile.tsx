@@ -4,7 +4,7 @@ import * as React from 'react';
 import { jsx, Heading } from 'theme-ui';
 import { useAuth } from '../../lib/useAuth';
 import Layout from '../../components/Layout';
-import Container from '../../components/Container';
+import Container from '../../components/ui/Container';
 import { useCurrentUser } from '../../lib/use-digital-stage/hooks';
 
 const Profile = (): JSX.Element => {

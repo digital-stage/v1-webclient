@@ -5,7 +5,7 @@ import { jsx, Box, Button, Flex, Message } from 'theme-ui';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { useAuth } from '../../lib/useAuth';
-import InputField from '../InputField';
+import InputField from '../ui/InputField';
 import translateError from './translateError';
 
 interface Values {

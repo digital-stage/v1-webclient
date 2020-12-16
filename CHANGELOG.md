@@ -1,3 +1,17 @@
+## [0.22.8](https://github.com/digital-stage/webclient/compare/v0.22.7...v0.22.8) (2020-12-15)
+
+
+### Bug Fixes
+
+* added updated package lock ([3b6416a](https://github.com/digital-stage/webclient/commit/3b6416ad471c1576707f38f1abe00f1bbd64b340))
+
+## [0.22.7](https://github.com/digital-stage/webclient/compare/v0.22.6...v0.22.7) (2020-12-15)
+
+
+### Bug Fixes
+
+* spacing and text color ([ceeb1e9](https://github.com/digital-stage/webclient/commit/ceeb1e9a7763a913f45379d5064654ca83042fcb))
+
 ## [0.22.6](https://github.com/digital-stage/webclient/compare/v0.22.5...v0.22.6) (2020-12-15)
 
 

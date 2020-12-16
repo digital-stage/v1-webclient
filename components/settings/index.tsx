@@ -3,7 +3,7 @@
 /** @jsx jsx */
 import React, { useCallback } from 'react';
 import { jsx, Box, Flex, Text, Heading, Button } from 'theme-ui';
-import { SettingsModalItems } from '../new/elements/PageWrapperWithStage/MenuItems';
+import { SettingsModalItems } from '../global/PageWrapperWithStage/MenuItems';
 import useDigitalStage from '../../lib/use-digital-stage';
 import Modal from '../ui/Modal';
 

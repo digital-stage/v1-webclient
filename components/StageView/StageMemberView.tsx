@@ -9,9 +9,9 @@ import {
   useIsStageAdmin,
   useStageActions,
 } from '../../lib/use-digital-stage';
-import OnlineStatus from '../new/elements/OnlineStatus';
+import OnlineStatus from './OnlineStatus';
 import useVideoConsumersByStageMember from '../../lib/use-digital-stage/hooks/useVideoConsumersByStageMember';
-import VideoPlayer from '../VideoPlayer';
+import VideoPlayer from '../ui/VideoPlayer';
 
 const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIcon?: boolean }) => {
   const { stageMember, withIcon } = props;
