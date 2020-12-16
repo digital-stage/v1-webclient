@@ -1,3 +1,10 @@
+## [0.22.8](https://github.com/digital-stage/webclient/compare/v0.22.7...v0.22.8) (2020-12-15)
+
+
+### Bug Fixes
+
+* added updated package lock ([3b6416a](https://github.com/digital-stage/webclient/commit/3b6416ad471c1576707f38f1abe00f1bbd64b340))
+
 ## [0.22.7](https://github.com/digital-stage/webclient/compare/v0.22.6...v0.22.7) (2020-12-15)
 
 
