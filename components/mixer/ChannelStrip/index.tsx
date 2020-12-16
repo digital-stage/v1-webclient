@@ -11,7 +11,8 @@ import LevelMeter from './LevelMeter';
 
 const ChannelStrip = (props: {
   addHeader?: React.ReactNode;
-  analyser?: IAnalyserNode<IAudioContext>;
+  analyserL?: IAnalyserNode<IAudioContext>;
+  analyserR?: IAnalyserNode<IAudioContext>;
   isAdmin?: boolean;
   volume: number;
   muted: boolean;
@@ -117,14 +118,24 @@ const ChannelStrip = (props: {
             }
           />
         )}
-        {props.analyser ? (
+        {props.analyserL ? (
           <LevelMeter
             sx={{
               width: '10px',
               flexShrink: 1,
               height: '100%',
             }}
-            analyser={props.analyser}
+            analyser={props.analyserL}
+          />
+        ) : undefined}
+        {props.analyserR ? (
+          <LevelMeter
+            sx={{
+              width: '10px',
+              flexShrink: 1,
+              height: '100%',
+            }}
+            analyser={props.analyserR}
           />
         ) : undefined}
       </Flex>
