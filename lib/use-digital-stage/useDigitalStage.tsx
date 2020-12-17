@@ -40,8 +40,8 @@ const UseDigitalStageProvider = (props: {
   handleError: (error: Error) => void;
 }) => {
   const { children, token, handleError } = props;
-  const [ready, setReady] = useState<boolean>(!token);
   const { status, connect, disconnect } = useSocket();
+  const [ready, setReady] = useState<boolean>(!!token && status === Status.connected);
   const { updateDevice } = useStageActions();
   const localDevice = useLocalDevice();
 
