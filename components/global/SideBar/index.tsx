@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { Box, Flex, jsx, Link } from 'theme-ui';
+import { Box, Flex, jsx, Link, Heading } from 'theme-ui';
 import DigitalStageLogo from '../../DigitalStageLogo';
 import MixingPanelModal from '../../MixingPanelModal';
 import SettingsModal from '../../settings';
@@ -38,8 +38,6 @@ const SideBar = (): JSX.Element => {
           }
         }}
         sx={{
-          color: 'gray.1',
-          ':hover': { color: 'text' },
           px: '1rem',
           outline: 'none',
           textAlign: 'center',
@@ -47,7 +45,9 @@ const SideBar = (): JSX.Element => {
           cursor: 'pointer',
         }}
       >
-        {item.icon ? item.icon : item.label} {item.label}
+        <Heading variant="body" sx={{ color: 'text' }}>
+          {item.icon ? item.icon : item.label} {item.label}
+        </Heading>
       </Box>
     );
   };

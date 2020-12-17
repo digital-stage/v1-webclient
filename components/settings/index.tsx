@@ -66,7 +66,7 @@ const SettingsModal = (props: {
                 onClick={() => setSelected(item.href)}
               >
                 {item.icon}
-                <Text variant="title" sx={{ color: 'text' }} ml={3}>
+                <Text variant="h6" sx={{ color: 'text' }} ml={3}>
                   {item.label}
                 </Text>
               </Flex>

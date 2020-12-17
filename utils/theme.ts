@@ -47,7 +47,7 @@ const theme: Theme = {
     body: '1.5',
     heading: '1.125',
   },
-  fontSizes: [14, 16, 18, 20, 24, 32, 48, 64, 72, 96],
+  fontSizes: [12, 14, 18, 24, 32, 40],
   space: [0, 2, 4, 8, 12, 16, 24, 32, 48, 64],
   breakpoints: [600, 900, 1200, 1500].map((n) => `${n}px`),
   radii: {
@@ -80,6 +80,8 @@ const theme: Theme = {
     default: {
       color: 'text',
       fontSize: 1,
+      fontWeight: 'heading',
+      fontFamily: 'body',
     },
     hint: {
       fontSize: 0,
@@ -98,13 +100,45 @@ const theme: Theme = {
     subTitle: {
       color: 'background',
       fontSize: 0,
+      fontWeight: 'heading',
+      fontFamily: 'body',
       mt: 2,
+    },
+    h2: {
+      fontSize: 4,
+      fontFamily: 'heading',
+      fontWeight: 'heading',
+    },
+    h4: {
+      fontSize: 2,
+      fontFamily: 'heading',
+      fontWeight: 'heading',
+    },
+    h5: {
+      fontSize: 1,
+      fontFamily: 'heading',
+      fontWeight: 'heading',
+    },
+    h6: {
+      fontSize: 1,
+      fontFamily: 'body',
+      fontWeight: 'heading',
+    },
+    body: {
+      fontSize: 1,
+      fontFamily: 'body',
+      fontWeight: 'body',
+    },
+    bodySmall: {
+      fontSize: 0,
+      fontFamily: 'body',
+      fontWeight: 'heading',
     },
   },
   buttons: {
     primary: {
       fontFamily: 'heading',
-      fontSize: 0,
+      fontSize: 1,
       px: 4,
       py: 0,
       m: 3,
@@ -339,9 +373,7 @@ const theme: Theme = {
       borderColor: 'text',
       color: 'background',
       bg: 'text',
-      height: 'auto',
-      py: 1,
-      px: 3,
+      py: 'auto',
       ':hover': {
         bg: '#b7b7b7',
       },
@@ -441,8 +473,9 @@ const theme: Theme = {
   links: {
     auth: {
       fontFamily: 'heading',
-      fontSize: 3,
-      my: 2,
+      fontSize: 2,
+      mb: 5,
+      mx: 1,
       py: 3,
       px: 3,
       color: 'text',
@@ -640,8 +673,8 @@ const theme: Theme = {
     },
     select: {
       fontFamily: 'body',
-      fontWeight: 'heading',
-      fontSize: 0,
+      fontWeight: 'body',
+      fontSize: 1,
       height: '64px',
       my: 5,
       p: 5,

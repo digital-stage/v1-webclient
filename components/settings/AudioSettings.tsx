@@ -17,7 +17,9 @@ const SingleDeviceAudioSettings = (props: {
 
   return (
     <React.Fragment>
-      <Text mb={3}>Mikrofon</Text>
+      <Text mb={3} variant="h5">
+        Mikrofon
+      </Text>
       <SingleSelect
         options={device.inputAudioDevices || []}
         defaultValue={device.inputAudioDeviceId}
@@ -27,7 +29,9 @@ const SingleDeviceAudioSettings = (props: {
           })
         }
       />
-      <Text my={3}>Lautsprecher</Text>
+      <Text my={3} variant="h5">
+        Lautsprecher
+      </Text>
       <SingleSelect
         options={device.outputAudioDevices || []}
         defaultValue={device.outputAudioDeviceId}
@@ -93,7 +97,9 @@ const AudioSettings = (): JSX.Element => {
       <SingleDeviceAudioSettings device={localDevice} updateDevice={updateDevice} />
       {remoteDevices && remoteDevices.length > 0 ? (
         <React.Fragment>
-          <Text sx={{ my: 3 }}>Remote Audiogeräte</Text>
+          <Text sx={{ my: 4 }} variant="h4">
+            Remote Audiogeräte
+          </Text>
           {remoteDevices.map((device) => (
             <SingleDeviceAudioSettings
               key={device._id}

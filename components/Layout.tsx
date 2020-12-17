@@ -82,7 +82,7 @@ const Layout = ({ children, sidebar, auth, stage }: Props): JSX.Element => {
             )}
             {sidebar && stage && (
               <Box>
-                <Heading>{stage.name}</Heading>
+                <Heading variant="h2">{stage.name}</Heading>
               </Box>
             )}
             <div>

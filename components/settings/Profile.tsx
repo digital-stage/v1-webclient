@@ -49,7 +49,7 @@ const Profile = (): JSX.Element => {
               error={errors.name && touched.name}
             />
             <Flex sx={{ justifyContent: 'flex-end', my: 3 }}>
-              <Button variant="secondary" type="submit">
+              <Button variant="primary" type="submit">
                 Name aktualisieren
               </Button>
             </Flex>

@@ -25,7 +25,7 @@ const StageHeader = (props: { stage: Stage }): JSX.Element => {
         <Flex>
           <Avatar src="/images/diverse 5.svg" sx={{ my: 'auto', mr: 2 }} />
           <Flex sx={{ flexDirection: 'column' }}>
-            <Heading as="h3" sx={{ color: 'gray.0', flexBasis: 'max-content' }}>
+            <Heading variant="h4" sx={{ color: 'text', flexBasis: 'max-content' }}>
               {stage.name}
             </Heading>
             <Flex>

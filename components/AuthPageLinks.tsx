@@ -20,7 +20,7 @@ const AuthPageLinks = (): JSX.Element => {
   const { pathname } = useRouter();
 
   return (
-    <Flex sx={{ justifyContent: 'space-between' }}>
+    <Flex sx={{ justifyContent: 'center' }}>
       {navItems.map((item, idx) => (
         // eslint-disable-next-line react/no-array-index-key
         <NextLink key={idx} href={item.uri}>
@@ -29,6 +29,8 @@ const AuthPageLinks = (): JSX.Element => {
             href={item.uri}
             sx={{
               borderBottomColor: pathname === item.uri && 'secondary',
+              width: '50%',
+              textAlign: 'center',
             }}
           >
             {item.label}
