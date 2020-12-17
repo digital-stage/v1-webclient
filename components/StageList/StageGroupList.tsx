@@ -130,7 +130,7 @@ const StageGroupList = (props: { stage: Stage }): JSX.Element => {
           );
         })
       ) : (
-        <Text>
+        <Text variant="bodySmall">
           To invite users to a stage you need to create a group. Invited users can switch their
           groups once they have been invited.
         </Text>

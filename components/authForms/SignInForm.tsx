@@ -95,17 +95,13 @@ const SignInForm = (): JSX.Element => {
 
       <Flex sx={{ justifyContent: 'center', mt: 4, mb: 2 }}>
         <Link href="/account/forgot">
-          <Button as="a" variant="text">
-            Passwort vergessen?
-          </Button>
+          <Button variant="text">Passwort vergessen?</Button>
         </Link>
       </Flex>
 
       <Flex sx={{ justifyContent: 'center', mt: 4, mb: 2 }}>
         <Link href="/account/reactivate">
-          <Button as="a" variant="text">
-            Aktivierungslink erneut senden?
-          </Button>
+          <Button variant="text">Aktivierungslink erneut senden?</Button>
         </Link>
       </Flex>
     </Box>

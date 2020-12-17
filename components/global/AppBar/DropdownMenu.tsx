@@ -33,7 +33,7 @@ const DropdownMenu = ({ isOpen, onSelect }: Props): JSX.Element => {
         zIndex: 120,
       }}
     >
-      <Text variant="title" sx={{ color: 'text', mb: 4 }}>
+      <Text variant="h6" sx={{ color: 'text', mb: 4 }}>
         {user.name}
       </Text>
       {authUser ? (
@@ -55,7 +55,7 @@ const DropdownMenu = ({ isOpen, onSelect }: Props): JSX.Element => {
             onClick={() => onSelect(item.href)}
           >
             {item.icon}
-            <Text variant="title" sx={{ color: 'text' }} ml={3}>
+            <Text variant="h6" sx={{ color: 'text' }} ml={3}>
               {item.label}
             </Text>
           </Flex>
