@@ -1,3 +1,11 @@
+## [0.22.10](https://github.com/digital-stage/webclient/compare/v0.22.9...v0.22.10) (2020-12-16)
+
+
+### Bug Fixes
+
+* single select style and spacing at settings modal ([bbdf757](https://github.com/digital-stage/webclient/commit/bbdf757af5965d6b4479dc0b2f3ea62896007c58))
+* styling of single select ([4bf8788](https://github.com/digital-stage/webclient/commit/4bf8788b5177ade2b05f5fbeb7e420718d0820c5))
+
 ## [0.22.9](https://github.com/digital-stage/webclient/compare/v0.22.8...v0.22.9) (2020-12-16)
 
 
