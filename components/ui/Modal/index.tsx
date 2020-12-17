@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Flex, Close } from 'theme-ui';
 
-const ModalHeader = () => {
-  return <Box></Box>;
+const ModalHeader = (props: { children: React.ReactNode }): JSX.Element => {
+  const { children } = props;
+  return <Box>{children}</Box>;
 };
 const ModalBody = (props: { children: React.ReactNode }): JSX.Element => {
   const { children } = props;
@@ -19,8 +20,9 @@ const ModalBody = (props: { children: React.ReactNode }): JSX.Element => {
     </Box>
   );
 };
-const ModalFooter = () => {
-  return <Box></Box>;
+const ModalFooter = (props: { children: React.ReactNode }): JSX.Element => {
+  const { children } = props;
+  return <Box>{children}</Box>;
 };
 
 interface ModalDimension {
@@ -118,6 +120,7 @@ const Modal = (props: {
             bg: 'gray.4',
             borderRadius: 'card',
             boxShadow: 'default',
+            padding: '1rem',
             ...dimension,
           }}
         >
