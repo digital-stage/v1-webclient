@@ -58,7 +58,7 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
         flexDirection: 'row',
         minWidth: 'auto',
         bg: 'gray.6',
-        borderRadius:'card',
+        borderRadius: 'card',
         ml: 5,
       }}
     >
@@ -99,13 +99,13 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
                     {expanded ? (
                       <img src="/static/icons/chevron_left-white-18dp.svg" alt="collapse" />
                     ) : (
-                        <img src="/static/icons/chevron_right-white-18dp.svg" alt="expand" />
-                      )}
+                      <img src="/static/icons/chevron_right-white-18dp.svg" alt="expand" />
+                    )}
                   </Button>
                 </Box>
               ) : (
-                  <h3>{group.name}</h3>
-                )}
+                <h3>{group.name}</h3>
+              )}
             </Flex>
           }
           analyserL={byGroup && byGroup[groupId] ? byGroup[groupId].analyserNodeL : undefined}
@@ -137,7 +137,7 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
             {stageMemberIds.map((id, index) => (
               <Box
                 sx={{
-                  height: '100%'
+                  height: '100%',
                 }}
                 key={index}
               >

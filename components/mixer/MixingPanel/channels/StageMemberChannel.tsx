@@ -111,13 +111,13 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
                     {expanded ? (
                       <img src="/static/icons/chevron_left-white-18dp.svg" />
                     ) : (
-                        <img src="/static/icons/chevron_right-white-18dp.svg" />
-                      )}
+                      <img src="/static/icons/chevron_right-white-18dp.svg" />
+                    )}
                   </Button>
                 </Box>
               ) : (
-                  <h3>{stageMember.name}</h3>
-                )}
+                <h3>{stageMember.name}</h3>
+              )}
             </Flex>
           }
           volume={stageMember.volume}

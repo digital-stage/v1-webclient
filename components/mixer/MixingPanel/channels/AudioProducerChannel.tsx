@@ -19,8 +19,8 @@ const AudioProducerChannel = (props: { audioProducerId: string }) => {
   const customAudioProducer = useSelector<CustomRemoteAudioProducer>((state) =>
     state.customAudioProducers.byAudioProducer[props.audioProducerId]
       ? state.customAudioProducers.byId[
-      state.customAudioProducers.byAudioProducer[props.audioProducerId]
-      ]
+          state.customAudioProducers.byAudioProducer[props.audioProducerId]
+        ]
       : undefined
   );
 
