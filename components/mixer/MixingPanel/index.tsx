@@ -26,6 +26,7 @@ const MixingPanel = (): JSX.Element => {
         left: 0,
         bottom: 0,
         right: 0,
+        p:5,
         overflowX: 'scroll',
         overflowY: 'auto',
         '::-webkit-scrollbar': {

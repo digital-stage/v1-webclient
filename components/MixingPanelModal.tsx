@@ -22,12 +22,11 @@ const MixingPanelModal = ({ isOpen, onClose }: IProps): JSX.Element => {
           flexDirection: 'column',
           width: '100%',
           height: '100%',
-          padding: '2rem',
         }}
       >
-        <Heading>Master Audiomixer</Heading>
+        <Heading mb={5}>Master Audiomixer</Heading>
         {isAdmin ? (
-          <Text>
+          <Text mb={5}>
             Deine Mixereinstellungen werden für alle Nutzer in dieser Bühne verwendet und
             synchronisiert.
           </Text>

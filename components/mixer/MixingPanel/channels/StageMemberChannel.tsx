@@ -68,14 +68,17 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
       sx={{
         flexDirection: 'row',
         height: '100%',
+        bg: 'gray.5',
+        borderBottomRightRadius: 'card',
+        borderTopRightRadius: 'card',
       }}
     >
       <Box
         sx={{
-          paddingLeft: '1rem',
-          paddingRight: '1rem',
-          paddingTop: '2rem',
-          paddingBottom: '2rem',
+          py: 5,
+          bg: 'gray.6',
+          borderBottomRightRadius: 'card',
+          borderTopRightRadius: 'card',
           height: '100%',
         }}
       >
@@ -108,13 +111,13 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
                     {expanded ? (
                       <img src="/static/icons/chevron_left-white-18dp.svg" />
                     ) : (
-                      <img src="/static/icons/chevron_right-white-18dp.svg" />
-                    )}
+                        <img src="/static/icons/chevron_right-white-18dp.svg" />
+                      )}
                   </Button>
                 </Box>
               ) : (
-                <h3>{stageMember.name}</h3>
-              )}
+                  <h3>{stageMember.name}</h3>
+                )}
             </Flex>
           }
           volume={stageMember.volume}
@@ -152,8 +155,6 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
           <Flex
             sx={{
               flexDirection: 'row',
-              backgroundColor: 'rgba(100,100,130,1)',
-              borderRadius: '20px',
               height: '100%',
             }}
           >

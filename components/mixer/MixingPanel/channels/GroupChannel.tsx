@@ -54,17 +54,19 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
   return (
     <Flex
       sx={{
-        position: 'relative',
-        backgroundColor: '#1c1c1c',
+        // position: 'relative',
         flexDirection: 'row',
-        borderRadius: '20px',
         minWidth: 'auto',
+        bg: 'gray.6',
+        borderRadius:'card',
+        ml: 5,
       }}
     >
       <Box
         sx={{
-          paddingTop: '3rem',
-          paddingBottom: '3rem',
+          py: 5,
+          bg: 'gray.7',
+          borderRadius: 'card',
           height: '100%',
         }}
       >
@@ -75,7 +77,7 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
                 width: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                padding: '1rem',
+                p: 5,
               }}
             >
               {stageMemberIds.length > 0 ? (
@@ -97,13 +99,13 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
                     {expanded ? (
                       <img src="/static/icons/chevron_left-white-18dp.svg" alt="collapse" />
                     ) : (
-                      <img src="/static/icons/chevron_right-white-18dp.svg" alt="expand" />
-                    )}
+                        <img src="/static/icons/chevron_right-white-18dp.svg" alt="expand" />
+                      )}
                   </Button>
                 </Box>
               ) : (
-                <h3>{group.name}</h3>
-              )}
+                  <h3>{group.name}</h3>
+                )}
             </Flex>
           }
           analyserL={byGroup && byGroup[groupId] ? byGroup[groupId].analyserNodeL : undefined}
@@ -122,10 +124,6 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
       {expanded && (
         <Flex
           sx={{
-            paddingTop: '1rem',
-            paddingBottom: '1rem',
-            paddingLeft: '1rem',
-            paddingRight: '1rem',
             flexDirection: 'row',
             height: '100%',
           }}
@@ -133,15 +131,13 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
           <Flex
             sx={{
               flexDirection: 'row',
-              backgroundColor: 'rgba(130,100,130,1)',
-              borderRadius: '20px',
               height: '100%',
             }}
           >
             {stageMemberIds.map((id, index) => (
               <Box
                 sx={{
-                  height: '100%',
+                  height: '100%'
                 }}
                 key={index}
               >

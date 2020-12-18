@@ -46,9 +46,6 @@ const ChannelStrip = (props: {
         minWidth: '150px',
         flexDirection: 'column',
         justifyContent: 'center',
-        mx: 3,
-        bg: 'gray.7',
-        borderRadius: 'card',
         alignItems: 'center',
       }}
       className={props.className}

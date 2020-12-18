@@ -19,8 +19,8 @@ const AudioProducerChannel = (props: { audioProducerId: string }) => {
   const customAudioProducer = useSelector<CustomRemoteAudioProducer>((state) =>
     state.customAudioProducers.byAudioProducer[props.audioProducerId]
       ? state.customAudioProducers.byId[
-          state.customAudioProducers.byAudioProducer[props.audioProducerId]
-        ]
+      state.customAudioProducers.byAudioProducer[props.audioProducerId]
+      ]
       : undefined
   );
 
@@ -74,10 +74,6 @@ const AudioProducerChannel = (props: { audioProducerId: string }) => {
       >
         <Box
           sx={{
-            paddingLeft: '1rem',
-            paddingRight: '1rem',
-            paddingTop: '1rem',
-            paddingBottom: '1rem',
             height: '100%',
           }}
         >
@@ -88,7 +84,7 @@ const AudioProducerChannel = (props: { audioProducerId: string }) => {
                   width: '100%',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  padding: '1rem',
+                  px: '1rem',
                 }}
               >
                 <h5>Track</h5>
