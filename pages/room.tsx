@@ -96,8 +96,8 @@ const Room = (): JSX.Element => {
               stageMembers.forEach((stageMember) => {
                 updateStageMember(stageMember._id, {
                   x: 0,
-                  y: 0,
-                  rZ: 0,
+                  y: -1,
+                  rZ: 180,
                 });
               });
             } else {
