@@ -14,15 +14,19 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
   const stageMembers = useStageMembersByGroup(group._id);
   const stageId = useCurrentStageId();
   const groups = useGroupsByStage(stageId);
+  const onlineMembers = stageMembers.filter((member) => member.online);
+  const groupsWithMembers = groups.filter(
+    (group) => useStageMembersByGroup(group._id).filter((member) => member.online).length > 0
+  );
 
-  return stageMembers.length > 0 ? (
+  return onlineMembers.length > 0 ? (
     <Flex
       sx={{
         flexDirection: 'column',
         width:
-          groups.length === 2
+          groupsWithMembers.length === 2
             ? ['100%', '50%']
-            : groups.length >= 3
+            : groupsWithMembers.length >= 3
             ? ['100%', '50%', '50%', '33%']
             : '100%',
         flexWrap: 'wrap',
@@ -41,16 +45,17 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
           p: 3,
         }}
       >
-        {stageMembers.map((stageMember) => (
+        {onlineMembers.map((stageMember) => (
           <Flex
             key={stageMember._id}
             sx={{
-              width: stageMembers.length === 2 ? '100%' : stageMembers.length >= 2 ? '50%' : '100%',
+              width:
+                onlineMembers.length === 2 ? '100%' : onlineMembers.length >= 2 ? '50%' : '100%',
               height:
-                stageMembers.length === 2
+                onlineMembers.length === 2
                   ? 'calc((100vh - 190px) / 2)'
-                  : stageMembers.length >= 3
-                  ? `calc((100vh - 190px) / ${Math.round(stageMembers.length / 2)})`
+                  : onlineMembers.length >= 3
+                  ? `calc((100vh - 190px) / ${Math.round(onlineMembers.length / 2)})`
                   : 'calc(100vh - 190px)',
               p: '1px',
             }}
