@@ -56,6 +56,7 @@ const SettingsModal = (props: {
                   p: 3,
                   pl: 6,
                   py: 3,
+                  ml: -5,
                   bg: selected === item.href && 'gray.3',
                   borderRadius: selected === item.href && '0px 24px 24px 0px',
                   ':hover': {
