@@ -1,3 +1,12 @@
+## [0.22.12](https://github.com/digital-stage/webclient/compare/v0.22.11...v0.22.12) (2020-12-21)
+
+
+### Bug Fixes
+
+* mixer slider style ([3463584](https://github.com/digital-stage/webclient/commit/34635846e7c349b72ce93b62bcbce1c6a36132f6))
+* only show groups that have online users ([8c4758f](https://github.com/digital-stage/webclient/commit/8c4758f893b45947fbf20c405557551eaa3188ce))
+* space at settings modal ([6fae4b6](https://github.com/digital-stage/webclient/commit/6fae4b6152eb801220ec44b42e9c127608cfd71c))
+
 ## [0.22.11](https://github.com/digital-stage/webclient/compare/v0.22.10...v0.22.11) (2020-12-18)
 
 
