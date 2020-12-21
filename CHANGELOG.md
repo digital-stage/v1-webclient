@@ -1,3 +1,11 @@
+## [0.22.11](https://github.com/digital-stage/webclient/compare/v0.22.10...v0.22.11) (2020-12-18)
+
+
+### Bug Fixes
+
+* mixing panel collapse colors ([d84dd1a](https://github.com/digital-stage/webclient/commit/d84dd1abd01fa3ea566e6d6471f80adadc46912a))
+* run prettier ([213e122](https://github.com/digital-stage/webclient/commit/213e122ba5214e4c944815a68e5757f47d078c24))
+
 ## [0.22.10](https://github.com/digital-stage/webclient/compare/v0.22.9...v0.22.10) (2020-12-16)
 
 
