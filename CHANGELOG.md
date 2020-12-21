@@ -1,3 +1,10 @@
+## [0.22.13](https://github.com/digital-stage/webclient/compare/v0.22.12...v0.22.13) (2020-12-21)
+
+
+### Bug Fixes
+
+* 3d audio icon ([df066c9](https://github.com/digital-stage/webclient/commit/df066c968c1a64d426d043ceeb2b50abcd3598fb))
+
 ## [0.22.12](https://github.com/digital-stage/webclient/compare/v0.22.11...v0.22.12) (2020-12-21)
 
 
