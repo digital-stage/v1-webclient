@@ -7,7 +7,7 @@ import {
   useSelector,
   useStageActions,
 } from '../../../../lib/use-digital-stage';
-import { Flex, Box } from 'theme-ui';
+import { Flex, Box, Heading } from 'theme-ui';
 import ChannelStrip from '../../ChannelStrip';
 
 const AudioProducerChannel = (props: { audioProducerId: string }) => {
@@ -70,6 +70,7 @@ const AudioProducerChannel = (props: { audioProducerId: string }) => {
           display: 'flex',
           flexDirection: 'row',
           height: '100%',
+          p: 5,
         }}
       >
         <Box
@@ -84,10 +85,12 @@ const AudioProducerChannel = (props: { audioProducerId: string }) => {
                   width: '100%',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  px: '1rem',
+                  pb: 5,
                 }}
               >
-                <h5>Track</h5>
+                <Heading variant="h6" sx={{ mb: 5 }}>
+                  Track
+                </Heading>
               </Flex>
             }
             analyserL={

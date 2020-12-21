@@ -30,8 +30,8 @@ const VerticalSlider = (props: {
           <Box
             sx={{
               position: 'absolute',
-              top: '-400%',
-              left: props.alignLabel && props.alignLabel === 'left' ? '-800%' : undefined,
+              top: '-250%',
+              left: props.alignLabel && props.alignLabel === 'left' ? '-900%' : undefined,
               right: !props.alignLabel || props.alignLabel === 'right' ? '140%' : undefined,
             }}
           >
@@ -49,7 +49,7 @@ const VerticalSlider = (props: {
     <Flex
       className={props.className}
       sx={{
-        height: '100%',
+        height: '240px',
         flexDirection: 'column',
         alignItem: 'center',
         justifyContent: 'center',
@@ -74,7 +74,7 @@ const VerticalSlider = (props: {
                   style={{
                     ...markProps.style,
                     position: 'absolute',
-                    left: '-150%',
+                    right: '900%',
                     height: '4px',
                     width: '4px',
                     marginLeft: '0',
@@ -85,7 +85,7 @@ const VerticalSlider = (props: {
                         : 'rgba(255,255,255,0.2)',
                   }}
                 >
-                  <Text variant="subTitle">{renderSingleMark(index)}</Text>
+                  <Text variant="bodySmall">{renderSingleMark(index)}</Text>
                 </div>
               )
             : undefined
@@ -104,22 +104,23 @@ const VerticalSlider = (props: {
             <Box
               ref={trackProps.ref}
               sx={{
-                height: '100%',
-                width: '10px',
-                borderRadius: '24px',
-                backgroundImage: props.backgroundColor,
-                ':hover': {
-                  background: getTrackBackground({
-                    values: [props.value],
-                    colors: [
-                      `rgba(${props.color[0]},${props.color[1]},${props.color[2]},0.5)`,
-                      'transparent',
-                    ],
-                    min: props.min,
-                    max: props.max,
-                    direction: Direction.Up,
-                  }),
-                },
+                height: '240px',
+                width: '2px',
+                borderRadius: '2px',
+                bg: 'gray.3',
+                // backgroundImage: props.backgroundColor,
+                // ':hover': {
+                //   background: getTrackBackground({
+                //     values: [props.value],
+                //     colors: [
+                //       `rgba(${props.color[0]},${props.color[1]},${props.color[2]},0.5)`,
+                //       'transparent',
+                //     ],
+                //     min: props.min,
+                //     max: props.max,
+                //     direction: Direction.Up,
+                //   }),
+                // },
                 alignSelf: 'center',
               }}
             >
@@ -132,24 +133,57 @@ const VerticalSlider = (props: {
             {...thumbProps}
             style={{
               ...thumbProps.style,
-              width: '20px',
-              height: '40px',
-              borderRadius: '18px',
-              backgroundColor: props.trackColor ? props.trackColor : '#2452CE',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              outlineColor: solidColor,
-              boxShadow: '0px 1px 6px #AAA',
+              // width: '20px',
+              // height: '40px',
+              // borderRadius: '18px',
+              // backgroundColor: props.trackColor ? props.trackColor : '#2452CE',
+              // display: 'flex',
+              // justifyContent: 'center',
+              // alignItems: 'center',
+              // outlineColor: solidColor,
+              // boxShadow: '0px 1px 6px #AAA',
+              outline: 0,
             }}
           >
-            <Box
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25">
+              <g id="Gruppe_12351" data-name="Gruppe 12351" transform="translate(-7981 20853)">
+                <g
+                  id="Gruppe_12316"
+                  data-name="Gruppe 12316"
+                  transform="translate(7986 -20854.109)"
+                >
+                  <circle
+                    id="Ellipse_253"
+                    data-name="Ellipse 253"
+                    cx="12"
+                    cy="12"
+                    r="12"
+                    transform="translate(-5 1.109)"
+                    fill="#6f92f8"
+                  />
+                </g>
+                <g
+                  id="Gruppe_12317"
+                  data-name="Gruppe 12317"
+                  transform="translate(7985 -20847.109)"
+                >
+                  <path
+                    id="Pfad_10620"
+                    data-name="Pfad 10620"
+                    d="M24,12A12,12,0,0,1,0,12C.058,11.994,24.085,11.871,24,12Z"
+                    transform="translate(-4 -4.891)"
+                    fill="#415ca7"
+                  />
+                </g>
+              </g>
+            </svg>
+            {/* <Box
               sx={{
                 width: '16px',
                 height: '4px',
                 backgroundColor: isDragged ? solidColor : '#CCC',
               }}
-            />
+            /> */}
           </div>
         )}
       />

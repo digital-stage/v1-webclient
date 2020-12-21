@@ -2,7 +2,7 @@ import * as React from 'react';
 import useStageWebAudio from '../../../../lib/useStageWebAudio';
 import AudioProducerChannel from './AudioProducerChannel';
 import { useCallback } from 'react';
-import { Flex, Box } from 'theme-ui';
+import { Flex, Box, IconButton, Heading } from 'theme-ui';
 import {
   CustomStageMember,
   useIsStageAdmin,
@@ -10,8 +10,8 @@ import {
   useStageActions,
   useStageMember,
 } from '../../../../lib/use-digital-stage';
-import { Button } from 'theme-ui';
 import ChannelStrip from '../../ChannelStrip';
+import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 
 const StageMemberChannel = (props: { stageMemberId: string }) => {
   const { stageMemberId } = props;
@@ -75,7 +75,7 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
     >
       <Box
         sx={{
-          py: 5,
+          p: 5,
           bg: 'gray.6',
           borderBottomRightRadius: 'card',
           borderTopRightRadius: 'card',
@@ -89,34 +89,25 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
                 width: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                padding: '1rem',
               }}
             >
               {audioProducers.length > 0 ? (
-                <Box
+                <Flex
                   sx={{
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
                     alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    mb: 5,
                   }}
                   onClick={() => setExpanded((prev) => !prev)}
                 >
-                  <h5>{stageMember.name}</h5>
-                  <Button
-                    sx={{
-                      width: '100%',
-                    }}
-                  >
-                    {expanded ? (
-                      <img src="/static/icons/chevron_left-white-18dp.svg" />
-                    ) : (
-                      <img src="/static/icons/chevron_right-white-18dp.svg" />
-                    )}
-                  </Button>
-                </Box>
+                  <Heading variant="h6">{stageMember.name}</Heading>
+                  <IconButton>{expanded ? <BsChevronLeft /> : <BsChevronRight />}</IconButton>
+                </Flex>
               ) : (
-                <h3>{stageMember.name}</h3>
+                <Heading variant="h6" sx={{ mb: 5 }}>
+                  {stageMember.name}
+                </Heading>
               )}
             </Flex>
           }
@@ -146,10 +137,6 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
           sx={{
             flexDirection: 'row',
             height: '100%',
-            paddingLeft: '1rem',
-            paddingRight: '1rem',
-            paddingTop: '1rem',
-            paddingBottom: '1rem',
           }}
         >
           <Flex

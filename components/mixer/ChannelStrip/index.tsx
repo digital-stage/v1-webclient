@@ -84,7 +84,7 @@ const ChannelStrip = (props: {
               color={[255, 255, 255]}
               backgroundColor="linear-gradient(180deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%)"
               alignLabel="left"
-              trackColor="#2452CE"
+              trackColor="#2452CE\"
             />
             {props.customVolume ? (
               <LevelControlFader
@@ -93,7 +93,7 @@ const ChannelStrip = (props: {
                 onChanged={(value, muted) => {
                   if (props.onCustomVolumeChanged) props.onCustomVolumeChanged(value, muted);
                 }}
-                color={[255, 0, 0]}
+                color={[87, 121, 217]}
                 backgroundColor="linear-gradient(180deg,  #FE8080 0%, #FE8080 2%, #FE8080 2%, #FE8080 10%,  #2452CE 90%, #2452CE 100%)"
                 alignLabel="right"
                 trackColor="#fff"
@@ -107,7 +107,7 @@ const ChannelStrip = (props: {
             onChanged={(value, muted) => {
               if (props.onCustomVolumeChanged) props.onCustomVolumeChanged(value, muted);
             }}
-            color={props.customVolume ? [255, 0, 0] : [255, 255, 255]}
+            color={props.customVolume ? [103, 103, 103] : [255, 255, 255]}
             backgroundColor={
               props.customVolume
                 ? 'linear-gradient(180deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%)'
@@ -118,9 +118,10 @@ const ChannelStrip = (props: {
         {props.analyserL ? (
           <LevelMeter
             sx={{
-              width: '10px',
+              width: '4px',
+              // borderRadius:'2px',
               flexShrink: 1,
-              height: '100%',
+              height: '260px',
             }}
             analyser={props.analyserL}
           />
@@ -128,15 +129,16 @@ const ChannelStrip = (props: {
         {props.analyserR ? (
           <LevelMeter
             sx={{
-              width: '10px',
+              width: '4px',
+              // borderRadius:'2px',
               flexShrink: 1,
-              height: '100%',
+              height: '260px',
             }}
             analyser={props.analyserR}
           />
         ) : undefined}
       </Flex>
-      <Flex sx={{ my: 3 }}>
+      <Flex>
         <Flex sx={{ flexDirection: 'column', mr: 3, alignItems: 'center' }}>
           <Button
             variant={props.muted ? 'primary' : 'tertiary'}
@@ -145,7 +147,7 @@ const ChannelStrip = (props: {
           >
             M
           </Button>
-          <Text>Mute</Text>
+          {/* <Text>Mute</Text> */}
         </Flex>
         {props.customVolume ? (
           <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
@@ -158,19 +160,19 @@ const ChannelStrip = (props: {
             >
               <FaHeadphonesAlt sx={{ width: '16px', height: '16px' }} />
             </Button>
-            <Text>Monitor</Text>
+            {/* <Text>Monitor</Text> */}
           </Flex>
         ) : (
           props.isAdmin && (
             <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
               <Button
                 variant="white"
-                sx={{ borderRadius: '50%', width: '32px', height: '32px', py: 2, px: 0 }}
+                sx={{ borderRadius: '50%', width: '32px', height: '32px', px: 0 }}
                 onClick={addCustom}
               >
                 <IoMdSync sx={{ width: '16px', height: '16px' }} />
               </Button>
-              <Text>Sync</Text>
+              {/* <Text>Sync</Text> */}
             </Flex>
           )
         )}

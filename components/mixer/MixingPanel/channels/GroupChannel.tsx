@@ -5,8 +5,9 @@ import { useCallback } from 'react';
 import { useGroup, useIsStageAdmin, useSelector } from '../../../../lib/use-digital-stage/hooks';
 import { CustomGroup } from '../../../../lib/use-digital-stage/types';
 import { useStageActions } from '../../../../lib/use-digital-stage';
-import { Flex, Box, Button } from 'theme-ui';
+import { Flex, Box, IconButton, Heading } from 'theme-ui';
 import ChannelStrip from '../../ChannelStrip';
+import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 
 const GroupChannel = (props: { groupId: string }): JSX.Element => {
   const { groupId } = props;
@@ -60,11 +61,12 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
         bg: 'gray.6',
         borderRadius: 'card',
         ml: 5,
+        height: '400px',
       }}
     >
       <Box
         sx={{
-          py: 5,
+          p: 5,
           bg: 'gray.7',
           borderRadius: 'card',
           height: '100%',
@@ -77,34 +79,25 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
                 width: '100%',
                 justifyContent: 'center',
                 alignItems: 'center',
-                p: 5,
               }}
             >
               {stageMemberIds.length > 0 ? (
-                <Box
+                <Flex
                   sx={{
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
                     alignItems: 'center',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    mb: 5,
                   }}
                   onClick={() => setExpanded((prev) => !prev)}
                 >
-                  <h4>{group.name}</h4>
-                  <Button
-                    sx={{
-                      width: '100%',
-                    }}
-                  >
-                    {expanded ? (
-                      <img src="/static/icons/chevron_left-white-18dp.svg" alt="collapse" />
-                    ) : (
-                      <img src="/static/icons/chevron_right-white-18dp.svg" alt="expand" />
-                    )}
-                  </Button>
-                </Box>
+                  <Heading variant="h6">{group.name}</Heading>
+                  <IconButton>{expanded ? <BsChevronLeft /> : <BsChevronRight />}</IconButton>
+                </Flex>
               ) : (
-                <h3>{group.name}</h3>
+                <Heading variant="h6" sx={{ mb: 5 }}>
+                  {group.name}
+                </Heading>
               )}
             </Flex>
           }

@@ -40,16 +40,16 @@ const LevelMeter = (props: {
 
       if (props.vertical) {
         const gradient = context.createLinearGradient(0, 0, width, 0);
-        gradient.addColorStop(0, '#90EE90');
-        gradient.addColorStop(0.75, '#ffff00');
-        gradient.addColorStop(1, '#ff0000');
+        gradient.addColorStop(0, '#012340');
+        gradient.addColorStop(0.75, '#F20544');
+        gradient.addColorStop(1, '#F20544');
         context.fillStyle = gradient;
         context.fillRect(0, 0, average, height);
       } else {
         const gradient = context.createLinearGradient(0, 0, 0, height);
-        gradient.addColorStop(1, '#90EE90');
-        gradient.addColorStop(0.75, '#ffff00');
-        gradient.addColorStop(0, '#ff0000');
+        gradient.addColorStop(1, '#012340');
+        gradient.addColorStop(0.75, '#F20544');
+        gradient.addColorStop(0, '#F20544');
         context.fillStyle = gradient;
         context.fillRect(0, height - average, width, height);
       }
@@ -62,7 +62,7 @@ const LevelMeter = (props: {
       ref={canvasRef}
       sx={{
         width: '100%',
-        height: '100%',
+        height: '240px',
       }}
     />
   );
