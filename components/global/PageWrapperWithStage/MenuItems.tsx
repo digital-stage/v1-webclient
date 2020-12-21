@@ -1,6 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { FaBug, FaCog, FaUserAlt, FaVideo, FaVolumeUp, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaBug, FaCog, FaUserAlt, FaVideo, FaVolumeUp } from 'react-icons/fa';
+import { BiCube } from 'react-icons/bi';
 import { GoSettings } from 'react-icons/go';
 import { MdFeedback } from 'react-icons/md';
 import { jsx } from 'theme-ui';
@@ -32,8 +33,8 @@ export const CenteredNavItems: NavItem[] = [
     size: 'large',
   },
   {
-    label: '3D Audio',
-    icon: <FaMapMarkerAlt name="3daudio" />,
+    label: '3D Sound',
+    icon: <BiCube name="3daudio" />,
     href: 'room',
     content: null,
     size: 'large',

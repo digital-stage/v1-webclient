@@ -38,7 +38,6 @@ const SideBar = (): JSX.Element => {
           }
         }}
         sx={{
-          px: '1rem',
           outline: 'none',
           textAlign: 'center',
           py: 3,
@@ -46,7 +45,7 @@ const SideBar = (): JSX.Element => {
         }}
       >
         <Heading variant="body" sx={{ color: 'text' }}>
-          {item.icon ? item.icon : item.label} {item.label}
+          {item.icon ? item.icon : item.label} <br /> {item.label}
         </Heading>
       </Box>
     );
