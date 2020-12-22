@@ -140,7 +140,7 @@ const ChannelStrip = (props: {
               width: '6px',
               borderRadius: '2px',
               flexShrink: 1,
-              height: '260px',
+              height: '257px',
               position: 'absolute',
               right: '22px',
             }}
@@ -153,7 +153,7 @@ const ChannelStrip = (props: {
               width: '5px',
               borderRadius: '2px',
               flexShrink: 1,
-              height: '260px',
+              height: '257px',
               ml: -2,
             }}
             analyser={props.analyserR}
