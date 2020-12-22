@@ -1,3 +1,10 @@
+## [0.22.16](https://github.com/digital-stage/webclient/compare/v0.22.15...v0.22.16) (2020-12-22)
+
+
+### Bug Fixes
+
+* mixer modal full screen ([bf9d412](https://github.com/digital-stage/webclient/commit/bf9d4127b5e5857f3417a10851cbdc0efb56f493))
+
 ## [0.22.15](https://github.com/digital-stage/webclient/compare/v0.22.14...v0.22.15) (2020-12-22)
 
 
