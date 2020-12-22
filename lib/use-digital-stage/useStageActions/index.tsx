@@ -25,12 +25,12 @@ import {
 const d = debug('useStageActions');
 
 export interface TStageActionContext {
-  updateDevice(id: string, device: Partial<Device>): void;
+  updateDevice: (id: string, device: Partial<Device>) => void;
 
-  updateUser(name: string, avatarUrl?: string): void;
+  updateUser: (name: string, avatarUrl?: string) => void;
 
   // Always callable
-  createStage(
+  createStage: (
     name: string,
     password: string | null,
     width?: number,
@@ -38,60 +38,63 @@ export interface TStageActionContext {
     height?: number,
     reflection?: number,
     absorption?: number
-  ): void;
+  ) => void;
 
-  joinStage(stageId: string, groupId: string, password?: string): Promise<void>;
+  joinStage: (stageId: string, groupId: string, password?: string) => Promise<void>;
 
-  leaveStage(): void;
+  leaveStage: () => void;
 
-  leaveStageForGood(id: string): void;
+  leaveStageForGood: (id: string) => void;
 
   // Customized group
-  setCustomGroup(groupId: string, update: Partial<ThreeDimensionAudioProperties>): void;
+  setCustomGroup: (groupId: string, update: Partial<ThreeDimensionAudioProperties>) => void;
 
-  removeCustomGroup(customGroupId: string): void;
+  removeCustomGroup: (customGroupId: string) => void;
 
-  setCustomStageMember(stageMemberId: string, update: Partial<ThreeDimensionAudioProperties>): void;
+  setCustomStageMember: (
+    stageMemberId: string,
+    update: Partial<ThreeDimensionAudioProperties>
+  ) => void;
 
-  removeCustomStageMember(customStageMemberId: string): void;
+  removeCustomStageMember: (customStageMemberId: string) => void;
 
-  setCustomStageMemberAudio(
+  setCustomStageMemberAudio: (
     stageMemberAudioId: string,
     update: Partial<ThreeDimensionAudioProperties>
-  ): void;
+  ) => void;
 
-  removeCustomStageMemberAudio(customStageMemberAudioId: string): void;
+  removeCustomStageMemberAudio: (customStageMemberAudioId: string) => void;
 
-  setCustomStageMemberOv(
+  setCustomStageMemberOv: (
     stageMemberOvId: string,
     update: Partial<ThreeDimensionAudioProperties>
-  ): void;
+  ) => void;
 
-  removeCustomStageMemberOv(customStageMemberOvId: string): void;
+  removeCustomStageMemberOv: (customStageMemberOvId: string) => void;
 
   // Admin only
-  updateStage(id: string, stage: Partial<Stage>): void;
+  updateStage: (id: string, stage: Partial<Stage>) => void;
 
-  removeStage(id: string): void;
+  removeStage: (id: string) => void;
 
-  createGroup(stageId: string, name: string): void;
+  createGroup: (stageId: string, name: string) => void;
 
-  updateGroup(id: string, group: Partial<Group>): void;
+  updateGroup: (id: string, group: Partial<Group>) => void;
 
-  removeGroup(id: string): void;
+  removeGroup: (id: string) => void;
 
-  updateStageMember(
+  updateStageMember: (
     id: string,
     update: Partial<
       {
         isDirector: boolean;
       } & ThreeDimensionAudioProperties
     >
-  ): void;
+  ) => void;
 
-  updateStageMemberAudio(id: string, update: Partial<ThreeDimensionAudioProperties>): void;
+  updateStageMemberAudio: (id: string, update: Partial<ThreeDimensionAudioProperties>) => void;
 
-  updateStageMemberOv(id: string, update: Partial<ThreeDimensionAudioProperties>): void;
+  updateStageMemberOv: (id: string, update: Partial<ThreeDimensionAudioProperties>) => void;
 }
 
 const throwAddProviderError = () => {
@@ -128,8 +131,7 @@ const StageActionsProvider = (props: {
   handleError: (error: Error) => void;
 }): JSX.Element => {
   const { children, handleError } = props;
-  const socketAPI = useSocket();
-  const { socket } = socketAPI;
+  const { socket } = useSocket();
 
   const updateDevice = useCallback(
     (deviceId: string, device: Partial<Omit<Device, '_id'>>) => {
@@ -164,7 +166,7 @@ const StageActionsProvider = (props: {
   const createStage = useCallback(
     (
       name: string,
-      password: string,
+      password: string | null,
       width?: number,
       length?: number,
       height?: number,
@@ -175,7 +177,7 @@ const StageActionsProvider = (props: {
         d(`createStage(${name}, ...)`);
         const payload: AddStagePayload = {
           name,
-          password,
+          password: password || undefined,
           width: width || 25,
           length: length || 13,
           height: height || 7.5,
@@ -209,13 +211,13 @@ const StageActionsProvider = (props: {
   );
 
   const joinStage = useCallback(
-    (reqStageId: string, reqGroupId: string, password: string): Promise<void> => {
+    (reqStageId: string, reqGroupId: string, password?: string): Promise<void> => {
       if (socket) {
         d(`joinStage(${reqStageId}, ${reqGroupId}, ...)`);
         const payload: JoinStagePayload = {
           stageId: reqStageId,
           groupId: reqGroupId,
-          password: password || undefined,
+          password,
         };
         return new Promise<void>((resolve, reject) => {
           socket.emit(ClientStageEvents.JOIN_STAGE, payload, (joinError: Error) => {
@@ -294,7 +296,7 @@ const StageActionsProvider = (props: {
         socket.emit(ClientStageEvents.CHANGE_GROUP, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
-        // throw new Error("Socket connection wasn't ready");
+        throw new Error("Socket connection wasn't ready");
       }
     },
     [socket, handleError]
@@ -332,7 +334,7 @@ const StageActionsProvider = (props: {
         socket.emit(ClientStageEvents.CHANGE_STAGE_MEMBER, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
-        // throw new Error("Socket connection wasn't ready");
+        throw new Error("Socket connection wasn't ready");
       }
     },
     [socket, handleError]
@@ -383,7 +385,7 @@ const StageActionsProvider = (props: {
         socket.emit(ClientStageEvents.SET_CUSTOM_GROUP, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
-        // throw new Error("Socket connection wasn't ready");
+        throw new Error("Socket connection wasn't ready");
       }
     },
     [socket, handleError]
@@ -415,7 +417,7 @@ const StageActionsProvider = (props: {
         socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
-        // throw new Error("Socket connection wasn't ready");
+        throw new Error("Socket connection wasn't ready");
       }
     },
     [socket, handleError]

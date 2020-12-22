@@ -30,7 +30,7 @@ const useSocket = (): TSocketContext => React.useContext<TSocketContext>(SocketC
 
 const SocketProvider = (props: { children: React.ReactNode; apiUrl: string }): JSX.Element => {
   const { children, apiUrl } = props;
-  const [socket, setSocket] = useState<TeckosClient>();
+  const [socket, setSocket] = useState<TeckosClient | undefined>();
   const [status, setStatus] = useState<IStatus[keyof IStatus]>(Status.disconnected);
   const { registerHandler: registerSocketHandler } = useSocketToDispatch();
 

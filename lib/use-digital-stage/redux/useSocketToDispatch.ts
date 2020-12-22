@@ -19,6 +19,9 @@ import {
   StageMemberOvTrack,
   CustomRemoteAudioProducer,
   CustomRemoteOvTrack,
+  SoundCard,
+  TrackPreset,
+  Track,
 } from '../types';
 import useDispatch from './useDispatch';
 import allActions from './actions';
@@ -189,6 +192,63 @@ const useSocketToDispatch = (): TSocketToDispatch => {
       socket.on(ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_REMOVED, (payload: string) => {
         dispatch(allActions.stageActions.server.removeCustomOvTrack(payload));
       });
+
+      socket.on(ServerDeviceEvents.SOUND_CARD_ADDED, (payload: SoundCard) =>
+        dispatch({
+          type: ServerDeviceEvents.SOUND_CARD_ADDED,
+          payload,
+        })
+      );
+      socket.on(ServerDeviceEvents.SOUND_CARD_CHANGED, (payload: SoundCard) =>
+        dispatch({
+          type: ServerDeviceEvents.SOUND_CARD_CHANGED,
+          payload,
+        })
+      );
+      socket.on(ServerDeviceEvents.SOUND_CARD_REMOVED, (payload: string) =>
+        dispatch({
+          type: ServerDeviceEvents.SOUND_CARD_REMOVED,
+          payload,
+        })
+      );
+
+      socket.on(ServerDeviceEvents.TRACK_PRESET_ADDED, (payload: TrackPreset) =>
+        dispatch({
+          type: ServerDeviceEvents.TRACK_PRESET_ADDED,
+          payload,
+        })
+      );
+      socket.on(ServerDeviceEvents.TRACK_PRESET_CHANGED, (payload: TrackPreset) =>
+        dispatch({
+          type: ServerDeviceEvents.TRACK_PRESET_CHANGED,
+          payload,
+        })
+      );
+      socket.on(ServerDeviceEvents.TRACK_PRESET_REMOVED, (payload: string) =>
+        dispatch({
+          type: ServerDeviceEvents.TRACK_PRESET_REMOVED,
+          payload,
+        })
+      );
+
+      socket.on(ServerDeviceEvents.TRACK_ADDED, (payload: Track) =>
+        dispatch({
+          type: ServerDeviceEvents.TRACK_ADDED,
+          payload,
+        })
+      );
+      socket.on(ServerDeviceEvents.TRACK_CHANGED, (payload: Track) =>
+        dispatch({
+          type: ServerDeviceEvents.TRACK_CHANGED,
+          payload,
+        })
+      );
+      socket.on(ServerDeviceEvents.TRACK_REMOVED, (payload: string) =>
+        dispatch({
+          type: ServerDeviceEvents.TRACK_REMOVED,
+          payload,
+        })
+      );
     },
     [dispatch]
   );

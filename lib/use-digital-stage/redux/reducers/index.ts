@@ -13,6 +13,9 @@ import customAudioProducers from './customAudioProducers';
 import videoConsumers from './videoConsumers';
 import audioConsumers from './audioConsumers';
 import { RootReducer } from '../../types';
+import trackPresets from './trackPresets';
+import tracks from './tracks';
+import soundCards from './soundCards';
 
 export default combineReducers<RootReducer>({
   global,
@@ -28,4 +31,7 @@ export default combineReducers<RootReducer>({
   customAudioProducers,
   videoConsumers,
   audioConsumers,
+  tracks,
+  trackPresets,
+  soundCards,
 });

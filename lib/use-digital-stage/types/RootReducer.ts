@@ -10,6 +10,9 @@ import { RemoteVideoProducersCollection } from './RemoteVideoProducersCollection
 import { RemoteAudioProducersCollection } from './RemoteAudioProducersCollection';
 import { CustomRemoteAudioProducersCollection } from './CustomRemoteAudioProducersCollection';
 import { LocalConsumersCollection } from './LocalConsumersCollection';
+import { TrackCollection } from './TrackCollection';
+import { TrackPresetCollection } from './TrackPresetCollection';
+import { SoundCardCollection } from './SoundCardCollection';
 
 export interface RootReducer {
   global: GlobalStore;
@@ -25,4 +28,7 @@ export interface RootReducer {
   customAudioProducers: CustomRemoteAudioProducersCollection;
   videoConsumers: LocalConsumersCollection;
   audioConsumers: LocalConsumersCollection;
+  tracks: TrackCollection;
+  trackPresets: TrackPresetCollection;
+  soundCards: SoundCardCollection;
 }
