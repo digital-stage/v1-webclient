@@ -1,3 +1,11 @@
+## [0.22.14](https://github.com/digital-stage/webclient/compare/v0.22.13...v0.22.14) (2020-12-22)
+
+
+### Bug Fixes
+
+* run build ([12a0820](https://github.com/digital-stage/webclient/commit/12a08202166b10a7eef698efd91ec4d4037cebc3))
+* separate global and personal mixer ([6270d50](https://github.com/digital-stage/webclient/commit/6270d5079e49baaca2df1dc2669e7268ffc84d24))
+
 ## [0.22.13](https://github.com/digital-stage/webclient/compare/v0.22.12...v0.22.13) (2020-12-21)
 
 
