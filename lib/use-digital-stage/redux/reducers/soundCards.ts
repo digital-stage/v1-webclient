@@ -49,9 +49,8 @@ function soundCards(
         allIds: state.allIds.filter((id) => id !== removedId),
       };
     }
-
     default:
-      throw new Error();
+      return state;
   }
 }
 

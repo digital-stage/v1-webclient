@@ -78,7 +78,7 @@ function tracks(
       };
     }
     default:
-      throw new Error();
+      return state;
   }
 }
 

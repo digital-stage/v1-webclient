@@ -65,7 +65,7 @@ function trackPresets(
       };
     }
     default:
-      throw new Error();
+      return state;
   }
 }
 

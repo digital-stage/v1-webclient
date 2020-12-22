@@ -35,6 +35,7 @@ const useSocketToDispatch = (): TSocketToDispatch => {
   const dispatch = useDispatch();
   const registerHandler = useCallback(
     (socket: TeckosClient): void => {
+      socket.setMaxListeners(60);
       socket.on('disconnect', () => {
         // Cleanup
         dispatch(allActions.client.reset());
