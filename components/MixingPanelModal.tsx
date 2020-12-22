@@ -17,7 +17,7 @@ const MixingPanelModal = ({ isOpen, onClose }: IProps): JSX.Element => {
   const [globalMode, setGlobalMode] = React.useState<boolean>(!isAdmin);
 
   return (
-    <Modal open={isOpen} onClose={onClose} closeOnBackdropClicked={true}>
+    <Modal open={isOpen} onClose={onClose} closeOnBackdropClicked={true} size="full">
       <Flex
         sx={{
           flexDirection: 'column',

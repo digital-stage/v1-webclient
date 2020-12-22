@@ -47,7 +47,7 @@ const calculateDimensions = (size?: 'auto' | 'default' | 'full'): ModalDimension
     } else if (size === 'full') {
       return {
         width: '100%',
-        height: '100%',
+        height: 'calc(100% - 80px)',
       };
     }
   }
@@ -121,6 +121,9 @@ const Modal = (props: {
             borderRadius: 'card',
             boxShadow: 'default',
             padding: '1rem',
+            mt: size === 'full' && '72px',
+            ml: size === 'full' && '80px',
+            mr: size === 'full' && '30px',
             ...dimension,
           }}
         >
