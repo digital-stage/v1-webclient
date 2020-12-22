@@ -1,3 +1,10 @@
+## [0.22.15](https://github.com/digital-stage/webclient/compare/v0.22.14...v0.22.15) (2020-12-22)
+
+
+### Bug Fixes
+
+* lever meter height ([681a7c5](https://github.com/digital-stage/webclient/commit/681a7c5bfc88e84054a054873cb387519301625f))
+
 ## [0.22.14](https://github.com/digital-stage/webclient/compare/v0.22.13...v0.22.14) (2020-12-22)
 
 
