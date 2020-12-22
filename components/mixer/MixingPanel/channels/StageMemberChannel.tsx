@@ -13,8 +13,8 @@ import {
 import ChannelStrip from '../../ChannelStrip';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 
-const StageMemberChannel = (props: { stageMemberId: string }) => {
-  const { stageMemberId } = props;
+const StageMemberChannel = (props: { stageMemberId: string; globalMode: boolean }): JSX.Element => {
+  const { stageMemberId, globalMode } = props;
   const isAdmin: boolean = useIsStageAdmin();
   const stageMember = useStageMember(stageMemberId);
   const customStageMember = useSelector<CustomStageMember>((state) =>
@@ -80,6 +80,9 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
           borderBottomRightRadius: 'card',
           borderTopRightRadius: 'card',
           height: '100%',
+          width: '120px',
+          minWidth: '120px',
+          maxWidth: '120px',
         }}
       >
         <ChannelStrip
@@ -101,11 +104,13 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
                   }}
                   onClick={() => setExpanded((prev) => !prev)}
                 >
-                  <Heading variant="h6">{stageMember.name}</Heading>
-                  <IconButton>{expanded ? <BsChevronLeft /> : <BsChevronRight />}</IconButton>
+                  <Heading variant="bodySmall">{stageMember.name}</Heading>
+                  <Box sx={{ minWidth: '32px' }}>
+                    <IconButton>{expanded ? <BsChevronLeft /> : <BsChevronRight />}</IconButton>
+                  </Box>
                 </Flex>
               ) : (
-                <Heading variant="h6" sx={{ mb: 5 }}>
+                <Heading variant="bodySmall" sx={{ mb: 5 }}>
                   {stageMember.name}
                 </Heading>
               )}
@@ -129,6 +134,7 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
           onCustomVolumeChanged={handleCustomVolumeChange}
           onCustomVolumeReset={handleCustomVolumeReset}
           isAdmin={isAdmin}
+          globalMode={globalMode}
         />
       </Box>
 
@@ -152,7 +158,7 @@ const StageMemberChannel = (props: { stageMemberId: string }) => {
                 }}
                 key={index}
               >
-                <AudioProducerChannel key={id} audioProducerId={id} />
+                <AudioProducerChannel key={id} audioProducerId={id} globalMode={globalMode} />
               </Box>
             ))}
           </Flex>

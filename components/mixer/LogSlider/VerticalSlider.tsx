@@ -21,6 +21,7 @@ const VerticalSlider = (props: {
   alignLabel?: 'left' | 'right';
   backgroundColor: string;
   trackColor?: string;
+  disabled?: boolean;
 }): JSX.Element => {
   const renderSingleMark = useCallback(
     (index: number) => {
@@ -30,8 +31,8 @@ const VerticalSlider = (props: {
           <Box
             sx={{
               position: 'absolute',
-              top: '-250%',
-              left: props.alignLabel && props.alignLabel === 'left' ? '-900%' : undefined,
+              top: '-180%',
+              left: props.alignLabel && props.alignLabel === 'left' ? '-850%' : undefined,
               right: !props.alignLabel || props.alignLabel === 'right' ? '140%' : undefined,
             }}
           >
@@ -57,6 +58,7 @@ const VerticalSlider = (props: {
       }}
     >
       <Range
+        disabled={props.disabled}
         direction={Direction.Up}
         step={props.step}
         min={props.min}
@@ -143,6 +145,7 @@ const VerticalSlider = (props: {
               // outlineColor: solidColor,
               // boxShadow: '0px 1px 6px #AAA',
               outline: 0,
+              position: 'absolute',
             }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25">

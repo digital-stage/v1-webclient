@@ -14,6 +14,7 @@ interface IProps {
 
 const MixingPanelModal = ({ isOpen, onClose }: IProps): JSX.Element => {
   const isAdmin = useIsStageAdmin();
+  const [globalMode, setGlobalMode] = React.useState<boolean>(!isAdmin);
 
   return (
     <Modal open={isOpen} onClose={onClose} closeOnBackdropClicked={true}>
@@ -24,13 +25,46 @@ const MixingPanelModal = ({ isOpen, onClose }: IProps): JSX.Element => {
           height: '100%',
         }}
       >
-        <Heading mb={5}>Master Audiomixer</Heading>
-        {isAdmin ? (
-          <Text mb={5}>
-            Deine Mixereinstellungen werden für alle Nutzer in dieser Bühne verwendet und
-            synchronisiert.
-          </Text>
-        ) : undefined}
+        <Flex mb={5}>
+          <Heading
+            variant="tab"
+            sx={{
+              mr: 5,
+              color: !globalMode && 'text',
+              borderColor: !globalMode && 'primary',
+              cursor: 'pointer',
+            }}
+            onClick={() => setGlobalMode(false)}
+          >
+            Personal
+          </Heading>
+          <Heading
+            variant="tab"
+            sx={{
+              mr: 5,
+              color: globalMode && 'text',
+              borderColor: globalMode && 'primary',
+              cursor: 'pointer',
+            }}
+            onClick={() => setGlobalMode(true)}
+          >
+            Global
+          </Heading>
+        </Flex>
+        {globalMode ? (
+          isAdmin ? (
+            <Text mb={5}>
+              Deine Einstellungen werden für alle Nutzer in dieser Bühne verwendet und
+              synchronisiert.
+            </Text>
+          ) : (
+            <Text mb={5}>
+              Deine Einstellungen werden vom Bühnen Besitzer gesteuert und synchronisiert.
+            </Text>
+          )
+        ) : (
+          <Text mb={5}>Deine Einstellungen gelten nur für Dich persönlich.</Text>
+        )}
         <Box
           sx={{
             position: 'relative',
@@ -50,7 +84,7 @@ const MixingPanelModal = ({ isOpen, onClose }: IProps): JSX.Element => {
             },
           }}
         >
-          <MixingPanel />
+          <MixingPanel globalMode={globalMode} />
         </Box>
       </Flex>
     </Modal>

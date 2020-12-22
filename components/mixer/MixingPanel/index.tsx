@@ -7,7 +7,7 @@ import GroupChannel from './channels/GroupChannel';
  * The mixing panel shows all available volume controls for an active stage
  * @constructor
  */
-const MixingPanel = (): JSX.Element => {
+const MixingPanel = (props: { globalMode: boolean }): JSX.Element => {
   const groupIds = useSelector<string[]>((state) =>
     state.global.stageId && state.groups.byStage[state.global.stageId]
       ? state.groups.byStage[state.global.stageId]
@@ -43,7 +43,7 @@ const MixingPanel = (): JSX.Element => {
       }}
     >
       {groupIds.map((id) => (
-        <GroupChannel key={id} groupId={id} />
+        <GroupChannel key={id} groupId={id} globalMode={props.globalMode} />
       ))}
     </Flex>
   );

@@ -12,8 +12,18 @@ const LevelControlFader = (props: {
   alignLabel?: 'left' | 'right';
   backgroundColor: string;
   trackColor?: string;
+  disabled?: boolean;
 }): JSX.Element => {
-  const { volume, onChanged, muted, color, alignLabel, backgroundColor, trackColor } = props;
+  const {
+    volume,
+    onChanged,
+    muted,
+    color,
+    alignLabel,
+    backgroundColor,
+    trackColor,
+    disabled,
+  } = props;
   const [value, setValue] = React.useState<number>(volume);
 
   React.useEffect(() => {
@@ -69,6 +79,7 @@ const LevelControlFader = (props: {
         alignLabel={alignLabel}
         backgroundColor={backgroundColor}
         trackColor={trackColor}
+        disabled={disabled}
       />
     </Flex>
   );

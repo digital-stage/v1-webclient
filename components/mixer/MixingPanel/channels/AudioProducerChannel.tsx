@@ -10,8 +10,11 @@ import {
 import { Flex, Box, Heading } from 'theme-ui';
 import ChannelStrip from '../../ChannelStrip';
 
-const AudioProducerChannel = (props: { audioProducerId: string }) => {
-  const { audioProducerId } = props;
+const AudioProducerChannel = (props: {
+  audioProducerId: string;
+  globalMode: boolean;
+}): JSX.Element => {
+  const { audioProducerId, globalMode } = props;
   const isAdmin: boolean = useIsStageAdmin();
   const audioProducer = useSelector<RemoteAudioProducer>(
     (state) => state.audioProducers.byId[props.audioProducerId]
@@ -65,17 +68,14 @@ const AudioProducerChannel = (props: { audioProducerId: string }) => {
         height: '100%',
       }}
     >
-      <Flex
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          height: '100%',
-          p: 5,
-        }}
-      >
+      <Flex>
         <Box
           sx={{
             height: '100%',
+            p: 5,
+            width: '120px',
+            minWidth: '120px',
+            maxWidth: '120px',
           }}
         >
           <ChannelStrip
@@ -88,7 +88,7 @@ const AudioProducerChannel = (props: { audioProducerId: string }) => {
                   pb: 5,
                 }}
               >
-                <Heading variant="h6" sx={{ mb: 5 }}>
+                <Heading variant="bodySmall" sx={{ mb: 5 }}>
                   Track
                 </Heading>
               </Flex>
@@ -106,6 +106,7 @@ const AudioProducerChannel = (props: { audioProducerId: string }) => {
             onCustomVolumeChanged={handleCustomVolumeChange}
             onCustomVolumeReset={handleCustomVolumeReset}
             isAdmin={isAdmin}
+            globalMode={globalMode}
           />
         </Box>
       </Flex>

@@ -9,8 +9,8 @@ import { Flex, Box, IconButton, Heading } from 'theme-ui';
 import ChannelStrip from '../../ChannelStrip';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 
-const GroupChannel = (props: { groupId: string }): JSX.Element => {
-  const { groupId } = props;
+const GroupChannel = (props: { groupId: string; globalMode: boolean }): JSX.Element => {
+  const { groupId, globalMode } = props;
   const isAdmin = useIsStageAdmin();
   const group = useGroup(groupId);
   const customGroup = useSelector<CustomGroup>((state) =>
@@ -55,13 +55,12 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
   return (
     <Flex
       sx={{
-        // position: 'relative',
         flexDirection: 'row',
-        minWidth: 'auto',
         bg: 'gray.6',
         borderRadius: 'card',
         ml: 5,
         height: '400px',
+        opacity: !isAdmin && globalMode ? '0.5' : '1',
       }}
     >
       <Box
@@ -70,6 +69,9 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
           bg: 'gray.7',
           borderRadius: 'card',
           height: '100%',
+          width: '120px',
+          minWidth: '120px',
+          maxWidth: '120px',
         }}
       >
         <ChannelStrip
@@ -91,11 +93,13 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
                   }}
                   onClick={() => setExpanded((prev) => !prev)}
                 >
-                  <Heading variant="h6">{group.name}</Heading>
-                  <IconButton>{expanded ? <BsChevronLeft /> : <BsChevronRight />}</IconButton>
+                  <Heading variant="bodySmall">{group.name}</Heading>
+                  <Box sx={{ minWidth: '32px' }}>
+                    <IconButton>{expanded ? <BsChevronLeft /> : <BsChevronRight />}</IconButton>
+                  </Box>
                 </Flex>
               ) : (
-                <Heading variant="h6" sx={{ mb: 5 }}>
+                <Heading variant="bodySmall" sx={{ mb: 5 }}>
                   {group.name}
                 </Heading>
               )}
@@ -111,6 +115,7 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
           onCustomVolumeChanged={handleCustomVolumeChange}
           onCustomVolumeReset={handleCustomVolumeReset}
           isAdmin={isAdmin}
+          globalMode={globalMode}
         />
       </Box>
 
@@ -134,7 +139,7 @@ const GroupChannel = (props: { groupId: string }): JSX.Element => {
                 }}
                 key={index}
               >
-                <StageMemberChannel key={id} stageMemberId={id} />
+                <StageMemberChannel key={id} stageMemberId={id} globalMode={globalMode} />
               </Box>
             ))}
           </Flex>

@@ -41,6 +41,7 @@ const LogSlider = (props: {
   alignLabel?: 'left' | 'right';
   backgroundColor: string;
   trackColor?: string;
+  disabled: boolean;
 }): JSX.Element => {
   const [value, setValue] = useState<number>();
   const [dbValue, setDbValue] = useState<number>(props.volume);
@@ -117,9 +118,17 @@ const LogSlider = (props: {
         const value = MAX - index * STEP;
         const large: boolean = value === MIN || value === MAX || value === NULL_VALUE;
         if (large) {
-          return <Text>{formatDbMeasure(convertRangeToDbMeasure(convertLinearToLog(value)))}</Text>;
+          return (
+            <Text
+              variant="bodySmall"
+              sx={{ color: `rgb(${props.color[0]},${props.color[1]},${props.color[2]})` }}
+            >
+              {formatDbMeasure(convertRangeToDbMeasure(convertLinearToLog(value)))}
+            </Text>
+          );
         }
       }}
+      disabled={props.disabled}
     />
   );
 };

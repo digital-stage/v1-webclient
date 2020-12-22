@@ -134,6 +134,23 @@ const theme: Theme = {
       fontFamily: 'body',
       fontWeight: 'heading',
     },
+    tab: {
+      variant: 'text.h4',
+      borderBottom: '1px solid transparent',
+      color: 'gray.1',
+      ':hover': {
+        borderColor: 'primaryHover',
+        color: 'primaryHover',
+      },
+      ':active': {
+        borderColor: 'primary',
+        color: 'primary',
+      },
+      ':focus': {
+        borderColor: 'primaryFocus',
+        color: 'text',
+      },
+    },
   },
   buttons: {
     primary: {
