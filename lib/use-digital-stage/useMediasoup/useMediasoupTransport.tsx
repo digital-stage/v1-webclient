@@ -35,16 +35,17 @@ const debugCleanup = debugEffect.extend('cleanup');
 const TIMEOUT_MS = 5000;
 
 const useMediasoupTransport = (options: {
-  standaloneRouterUrl?: string;
   routerDistributorUrl?: string;
+  standaloneRouterUrl?: string;
 }): {
   ready: boolean;
+  router?: Router;
   consume: (producer: RemoteVideoProducer | RemoteAudioProducer) => Promise<LocalConsumer>;
   stopConsuming: (consumer: LocalConsumer) => Promise<LocalConsumer>;
   produce: (track: MediaStreamTrack) => Promise<LocalProducer>;
   stopProducing: (producer: LocalProducer) => Promise<LocalProducer>;
 } => {
-  const { standaloneRouterUrl, routerDistributorUrl } = options;
+  const { routerDistributorUrl } = options;
   // Connection to router
   const [ready, setReady] = useState<boolean>(false);
   const [router, setRouter] = useState<Router>();
@@ -82,11 +83,11 @@ const useMediasoupTransport = (options: {
    */
   useEffect(() => {
     debugEffect('router');
-    if (router || standaloneRouterUrl) {
-      const url = router
-        ? `${router.wsPrefix}://${router.url}:${router.port}${router.path ? `/${router.path}` : ''}`
-        : (standaloneRouterUrl as string);
-      trace(`Connecting to ${url}`);
+    if (router) {
+      const url = `${router.wsPrefix}://${router.url}:${router.port}${
+        router.path ? `/${router.path}` : ''
+      }`;
+      trace(`Connecting to ${router.url}`);
       const conn = new TeckosClient(url);
       conn.on('connect_error', (error) => {
         err(error);
@@ -95,7 +96,7 @@ const useMediasoupTransport = (options: {
         err(error);
       });
       conn.on('connect', () => {
-        trace(`Connected to router ${url} via socket communication`);
+        trace(`Connected to router ${router.url} via socket communication`);
         setRouterConnection(conn);
       });
 
@@ -108,7 +109,7 @@ const useMediasoupTransport = (options: {
       };
     }
     return undefined;
-  }, [router, standaloneRouterUrl]);
+  }, [router]);
 
   useEffect(() => {
     debugEffect('routerConnection');
@@ -293,7 +294,7 @@ const useMediasoupTransport = (options: {
       }
       throw new Error(`Connection is not ready`);
     },
-    [routerConnection, mediasoupDevice, sendTransport, serverConnection, router]
+    [routerConnection, router, mediasoupDevice, sendTransport, serverConnection]
   );
 
   const stopProducing = useCallback(
@@ -351,6 +352,7 @@ const useMediasoupTransport = (options: {
 
   return {
     ready,
+    router,
     consume,
     stopConsuming,
     produce,
