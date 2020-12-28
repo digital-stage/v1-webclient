@@ -1,3 +1,10 @@
+## [0.22.21](https://github.com/digital-stage/webclient/compare/v0.22.20...v0.22.21) (2020-12-28)
+
+
+### Bug Fixes
+
+* server spec ([7b024b6](https://github.com/digital-stage/webclient/commit/7b024b6054712f36dad7deefe64780cf05525a4d))
+
 ## [0.22.20](https://github.com/digital-stage/webclient/compare/v0.22.19...v0.22.20) (2020-12-28)
 
 
