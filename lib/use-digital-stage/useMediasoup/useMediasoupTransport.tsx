@@ -34,16 +34,17 @@ const debugCleanup = debugEffect.extend('cleanup');
 
 const TIMEOUT_MS = 5000;
 
-const useMediasoupTransport = (
-  routerDistUrl: string
-): {
+const useMediasoupTransport = (options: {
+  standaloneRouterUrl?: string;
+  routerDistributorUrl?: string;
+}): {
   ready: boolean;
-  router?: Router;
   consume: (producer: RemoteVideoProducer | RemoteAudioProducer) => Promise<LocalConsumer>;
   stopConsuming: (consumer: LocalConsumer) => Promise<LocalConsumer>;
   produce: (track: MediaStreamTrack) => Promise<LocalProducer>;
   stopProducing: (producer: LocalProducer) => Promise<LocalProducer>;
 } => {
+  const { standaloneRouterUrl, routerDistributorUrl } = options;
   // Connection to router
   const [ready, setReady] = useState<boolean>(false);
   const [router, setRouter] = useState<Router>();
@@ -59,9 +60,9 @@ const useMediasoupTransport = (
    */
   useEffect(() => {
     debugEffect('serverConnection routerDistUrl');
-    if (serverConnection && routerDistUrl) {
-      trace(`Using ${routerDistUrl}`);
-      getFastestRouter(routerDistUrl)
+    if (serverConnection && routerDistributorUrl) {
+      trace(`Using ${routerDistributorUrl}`);
+      getFastestRouter(routerDistributorUrl)
         .then((fastestRouter) => {
           trace(`Fastest router is ${fastestRouter.url}`);
           return setRouter(fastestRouter);
@@ -74,18 +75,18 @@ const useMediasoupTransport = (
       };
     }
     return undefined;
-  }, [serverConnection, routerDistUrl]);
+  }, [serverConnection, routerDistributorUrl]);
 
   /**
    * HANDLE ROUTER CONNECTION
    */
   useEffect(() => {
     debugEffect('router');
-    if (router) {
-      const url = `${router.wsPrefix}://${router.url}:${router.port}${
-        router.path ? `/${router.path}` : ''
-      }`;
-      trace(`Connecting to ${router.url}`);
+    if (router || standaloneRouterUrl) {
+      const url = router
+        ? `${router.wsPrefix}://${router.url}:${router.port}${router.path ? `/${router.path}` : ''}`
+        : (standaloneRouterUrl as string);
+      trace(`Connecting to ${url}`);
       const conn = new TeckosClient(url);
       conn.on('connect_error', (error) => {
         err(error);
@@ -94,7 +95,7 @@ const useMediasoupTransport = (
         err(error);
       });
       conn.on('connect', () => {
-        trace(`Connected to router ${router.url} via socket communication`);
+        trace(`Connected to router ${url} via socket communication`);
         setRouterConnection(conn);
       });
 
@@ -107,7 +108,7 @@ const useMediasoupTransport = (
       };
     }
     return undefined;
-  }, [router]);
+  }, [router, standaloneRouterUrl]);
 
   useEffect(() => {
     debugEffect('routerConnection');
@@ -250,7 +251,7 @@ const useMediasoupTransport = (
   const produce = useCallback(
     (track: MediaStreamTrack): Promise<LocalProducer> => {
       if (!track) throw new Error('Track is undefined');
-      if (serverConnection && routerConnection && mediasoupDevice && sendTransport && router) {
+      if (serverConnection && routerConnection && mediasoupDevice && sendTransport) {
         return createProducer(sendTransport, track)
           .then((producer) => {
             if (producer.paused) {
@@ -270,7 +271,6 @@ const useMediasoupTransport = (
                     ? ClientDeviceEvents.ADD_VIDEO_PRODUCER
                     : ClientDeviceEvents.ADD_AUDIO_PRODUCER,
                   {
-                    routerId: router._id,
                     routerProducerId: producer.id,
                   } as AddAudioProducerPayload,
                   (error: string | null, globalProducer: GlobalProducer) => {
@@ -292,7 +292,7 @@ const useMediasoupTransport = (
       }
       throw new Error(`Connection is not ready`);
     },
-    [routerConnection, router, mediasoupDevice, sendTransport, serverConnection]
+    [routerConnection, mediasoupDevice, sendTransport, serverConnection]
   );
 
   const stopProducing = useCallback(
@@ -350,7 +350,6 @@ const useMediasoupTransport = (
 
   return {
     ready,
-    router,
     consume,
     stopConsuming,
     produce,
