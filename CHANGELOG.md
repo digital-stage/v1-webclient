@@ -1,3 +1,10 @@
+## [0.22.17](https://github.com/digital-stage/webclient/compare/v0.22.16...v0.22.17) (2020-12-22)
+
+
+### Bug Fixes
+
+* max listener restriction ([6c5b2fe](https://github.com/digital-stage/webclient/commit/6c5b2fe70aef4ac3ba170ad02a94a019b42c18f6))
+
 ## [0.22.16](https://github.com/digital-stage/webclient/compare/v0.22.15...v0.22.16) (2020-12-22)
 
 
