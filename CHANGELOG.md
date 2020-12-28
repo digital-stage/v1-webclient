@@ -1,3 +1,10 @@
+## [0.22.20](https://github.com/digital-stage/webclient/compare/v0.22.19...v0.22.20) (2020-12-28)
+
+
+### Bug Fixes
+
+* router distributor not working ([b398eba](https://github.com/digital-stage/webclient/commit/b398eba3fb8c283ccca7e79f868ff594a26489a6))
+
 ## [0.22.19](https://github.com/digital-stage/webclient/compare/v0.22.18...v0.22.19) (2020-12-28)
 
 
