@@ -1,3 +1,10 @@
+## [0.22.19](https://github.com/digital-stage/webclient/compare/v0.22.18...v0.22.19) (2020-12-28)
+
+
+### Bug Fixes
+
+* router distributor blocking video ([1731b4c](https://github.com/digital-stage/webclient/commit/1731b4cbe47bdb9811cc663de754fef6d57ab984))
+
 ## [0.22.18](https://github.com/digital-stage/webclient/compare/v0.22.17...v0.22.18) (2020-12-28)
 
 
