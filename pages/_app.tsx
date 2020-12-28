@@ -41,8 +41,12 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                 {({ token }) => (
                   <DigitalStageProvider
                     apiUrl={process.env.NEXT_PUBLIC_API_URL}
-                    routerDistributorUrl={process.env.NEXT_PUBLIC_ROUTERS_URL}
-                    standaloneRouterUrl={process.env.NEXT_PUBLIC_ROUTER_URL}
+                    routerDistributorUrl={process.env.NEXT_PUBLIC_ROUTER_DISTRIBUTOR_URL}
+                    standaloneRouterUrl={
+                      process.env.NEXT_PUBLIC_ROUTER_DISTRIBUTOR_URL
+                        ? undefined
+                        : process.env.NEXT_PUBLIC_ROUTER_URL
+                    }
                     token={token}
                     addErrorHandler={reportError}
                   >

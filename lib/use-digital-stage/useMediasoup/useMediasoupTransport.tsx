@@ -251,7 +251,7 @@ const useMediasoupTransport = (options: {
   const produce = useCallback(
     (track: MediaStreamTrack): Promise<LocalProducer> => {
       if (!track) throw new Error('Track is undefined');
-      if (serverConnection && routerConnection && mediasoupDevice && sendTransport) {
+      if (serverConnection && routerConnection && mediasoupDevice && sendTransport && router) {
         return createProducer(sendTransport, track)
           .then((producer) => {
             if (producer.paused) {
@@ -271,6 +271,7 @@ const useMediasoupTransport = (options: {
                     ? ClientDeviceEvents.ADD_VIDEO_PRODUCER
                     : ClientDeviceEvents.ADD_AUDIO_PRODUCER,
                   {
+                    routerId: router._id,
                     routerProducerId: producer.id,
                   } as AddAudioProducerPayload,
                   (error: string | null, globalProducer: GlobalProducer) => {
@@ -292,7 +293,7 @@ const useMediasoupTransport = (options: {
       }
       throw new Error(`Connection is not ready`);
     },
-    [routerConnection, mediasoupDevice, sendTransport, serverConnection]
+    [routerConnection, mediasoupDevice, sendTransport, serverConnection, router]
   );
 
   const stopProducing = useCallback(
