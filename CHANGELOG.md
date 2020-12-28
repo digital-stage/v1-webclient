@@ -1,3 +1,11 @@
+## [0.22.18](https://github.com/digital-stage/webclient/compare/v0.22.17...v0.22.18) (2020-12-28)
+
+
+### Bug Fixes
+
+* fallback to DO ([7026fb8](https://github.com/digital-stage/webclient/commit/7026fb82831df3582ba46268c4503f9446985133))
+* use DO ([417072b](https://github.com/digital-stage/webclient/commit/417072b449d701fc0eccfb5e69783bce9251517b))
+
 ## [0.22.17](https://github.com/digital-stage/webclient/compare/v0.22.16...v0.22.17) (2020-12-22)
 
 
