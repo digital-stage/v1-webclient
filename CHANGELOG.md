@@ -1,3 +1,10 @@
+## [0.22.22](https://github.com/digital-stage/webclient/compare/v0.22.21...v0.22.22) (2021-01-04)
+
+
+### Bug Fixes
+
+* azure connection details ([6970b58](https://github.com/digital-stage/webclient/commit/6970b586bd50566aa008de577f908b6061eb265d))
+
 ## [0.22.21](https://github.com/digital-stage/webclient/compare/v0.22.20...v0.22.21) (2020-12-28)
 
 
