@@ -1,3 +1,10 @@
+## [0.22.25](https://github.com/digital-stage/webclient/compare/v0.22.24...v0.22.25) (2021-01-04)
+
+
+### Bug Fixes
+
+* azure config ([43e7874](https://github.com/digital-stage/webclient/commit/43e7874dc67c226eb23ab2af711eea73554f9f0b))
+
 ## [0.22.24](https://github.com/digital-stage/webclient/compare/v0.22.23...v0.22.24) (2021-01-04)
 
 
