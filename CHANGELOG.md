@@ -1,3 +1,10 @@
+## [0.22.24](https://github.com/digital-stage/webclient/compare/v0.22.23...v0.22.24) (2021-01-04)
+
+
+### Bug Fixes
+
+* switched to azure router ([ede28b4](https://github.com/digital-stage/webclient/commit/ede28b49e56e95e7b1175a37e6c7b95d0a472dcc))
+
 ## [0.22.23](https://github.com/digital-stage/webclient/compare/v0.22.22...v0.22.23) (2021-01-04)
 
 
