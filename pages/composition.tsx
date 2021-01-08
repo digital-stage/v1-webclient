@@ -4,7 +4,6 @@ import { Flex, jsx, Box } from 'theme-ui';
 import React, { useState } from 'react';
 import Controller, { Group } from '../example/Controller';
 import VideoPlayer from '../example/VideoPlayer';
-import { group } from 'console';
 
 const Composition = (): JSX.Element => {
   const [groups, setGroups] = useState<Group[]>([]);
