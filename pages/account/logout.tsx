@@ -4,8 +4,8 @@ import * as React from 'react';
 import { jsx, Heading } from 'theme-ui';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/useAuth';
-import Layout from '../../components/Layout';
-import Container from '../../components/ui/Container';
+import AuthLayout from '../../digitalstage-ui/layout/AuthLayout';
+import Panel, { WhitePanel } from '../../digitalstage-ui/elements/surface/Panel';
 
 const Logout = (): JSX.Element => {
   const router = useRouter();
@@ -21,11 +21,11 @@ const Logout = (): JSX.Element => {
 
   return (
     loggedOut && (
-      <Layout auth>
-        <Container>
+      <AuthLayout>
+        <Panel>
           <Heading>Abgemeldet!</Heading>
-        </Container>
-      </Layout>
+        </Panel>
+      </AuthLayout>
     )
   );
 };

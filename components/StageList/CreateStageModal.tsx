@@ -5,7 +5,7 @@ import { jsx, Button, Flex, Heading } from 'theme-ui';
 import * as Yup from 'yup';
 import { Field, Form, Formik } from 'formik';
 import Dialog from '../ui/Dialog';
-import InputField from '../ui/InputField';
+import Input from '../../digitalstage-ui/elements/input/Input';
 import useStageActions from '../../lib/use-digital-stage/useStageActions';
 
 interface Values {
@@ -70,7 +70,7 @@ const CreateStageModal = (props: {
         {({ errors, touched }) => (
           <Form>
             <Field
-              as={InputField}
+              as={Input}
               type="text"
               name="name"
               id="name"
@@ -79,7 +79,7 @@ const CreateStageModal = (props: {
               error={errors.name && touched.name}
             />
             <Field
-              as={InputField}
+              as={Input}
               required={false}
               type="text"
               name="password"

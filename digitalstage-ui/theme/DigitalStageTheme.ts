@@ -1,6 +1,6 @@
 import { Theme } from '@theme-ui/css';
 
-const theme: Theme = {
+const DigitalStageTheme: Theme = {
   colors: {
     text: '#f4f4f4',
     background: '#121212',
@@ -168,6 +168,7 @@ const theme: Theme = {
       boxShadow: 'button',
       ':hover': {
         bg: 'primaryHover',
+        cursor: 'pointer',
       },
       ':active': {
         bg: 'primaryActive',
@@ -189,6 +190,7 @@ const theme: Theme = {
       ':hover': {
         borderColor: 'primaryHover',
         bg: '#1212124D',
+        cursor: 'pointer',
       },
       ':active': {
         bg: 'primaryTransparent',
@@ -211,6 +213,7 @@ const theme: Theme = {
       ':hover': {
         borderColor: 'gray.3',
         bg: 'backgroundTransparent',
+        cursor: 'pointer',
       },
       ':active': {
         bg: 'primaryTransparent',
@@ -231,6 +234,7 @@ const theme: Theme = {
       bg: 'secondary',
       ':hover': {
         bg: 'secondaryHover',
+        cursor: 'pointer',
       },
       ':active': {
         bg: 'secondaryActive',
@@ -253,6 +257,7 @@ const theme: Theme = {
       ':hover': {
         color: 'primaryHover',
         bg: 'gray.5',
+        cursor: 'pointer',
       },
       ':active': {
         color: 'primaryActive',
@@ -276,6 +281,7 @@ const theme: Theme = {
       p: 3,
       ':hover': {
         bg: 'gray.5',
+        cursor: 'pointer',
       },
       ':active': {
         bg: 'primaryTransparent',
@@ -298,6 +304,7 @@ const theme: Theme = {
       ':hover': {
         bg: 'gray.2',
         color: 'gray.3',
+        cursor: 'pointer',
       },
       ':focus': {
         border: '1px solid transparent',
@@ -317,6 +324,7 @@ const theme: Theme = {
       borderRadius: '50%',
       ':hover': {
         bg: 'primaryHover',
+        cursor: 'pointer',
       },
       ':active': {
         bg: 'primaryActive',
@@ -335,6 +343,7 @@ const theme: Theme = {
       bg: 'secondary',
       ':hover': {
         bg: 'secondaryHover',
+        cursor: 'pointer',
       },
       ':active': {
         bg: 'secondaryActive',
@@ -354,6 +363,7 @@ const theme: Theme = {
       ':hover': {
         borderColor: 'gray.3',
         bg: 'gray.3',
+        cursor: 'pointer',
       },
       ':active': {
         bg: 'primaryTransparent',
@@ -393,6 +403,7 @@ const theme: Theme = {
       py: 'auto',
       ':hover': {
         bg: '#b7b7b7',
+        cursor: 'pointer',
       },
       ':active': {
         bg: '#bec6dc',
@@ -502,6 +513,7 @@ const theme: Theme = {
       ':active,:visited': { color: 'text' },
       ':hover': {
         borderBottomColor: 'secondary',
+        cursor: 'pointer',
       },
     },
   },
@@ -647,6 +659,7 @@ const theme: Theme = {
         borderColor: 'background',
         color: 'primary',
         transition: '1s ease-in all',
+        cursor: 'pointer',
       },
       ':active, &.active': {
         color: ['navigation', null, 'navigation'],
@@ -720,4 +733,4 @@ const theme: Theme = {
     },
   },
 };
-export default theme;
+export default DigitalStageTheme;

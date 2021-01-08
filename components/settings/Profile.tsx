@@ -5,7 +5,7 @@ import { Box, Button, Flex, Heading, jsx, Text } from 'theme-ui';
 import * as Yup from 'yup';
 import useStageActions from '../../lib/use-digital-stage/useStageActions';
 import { useAuth } from '../../lib/useAuth';
-import InputField from '../ui/InputField';
+import Input from '../../digitalstage-ui/elements/input/Input';
 import { useCurrentUser } from '../../lib/use-digital-stage/hooks';
 interface Values {
   name: string;
@@ -41,7 +41,7 @@ const Profile = (): JSX.Element => {
         {({ errors, touched }) => (
           <Form>
             <Field
-              as={InputField}
+              as={Input}
               id="name"
               label="Name"
               name="name"

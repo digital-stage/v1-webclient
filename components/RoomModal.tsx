@@ -13,7 +13,7 @@ import Editor from './room';
 import { Box, Button, Flex, jsx, Message, Select, Text } from 'theme-ui';
 import Modal from './ui/Modal';
 import SingleSelect from './ui/SingleSelect';
-import theme from '../utils/theme';
+import digitalStageTheme from '../digitalstage-ui/theme/DigitalStageTheme';
 
 const RoomModal = (props: { isOpen: boolean; onClose(): void }): JSX.Element => {
   const { isOpen, onClose } = props;
@@ -138,7 +138,7 @@ const RoomModal = (props: { isOpen: boolean; onClose(): void }): JSX.Element => 
                 flexGrow: 1,
                 width: '100%',
                 borderRadius: '18px',
-                backgroundColor: theme.colors.modalBg,
+                backgroundColor: digitalStageTheme.colors.modalBg,
               }}
               elements={stageMembers.map((stageMember) => {
                 if (!globalMode && customStageMembers.byStageMember[stageMember._id]) {

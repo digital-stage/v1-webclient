@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/useAuth';
-import Layout from '../../components/Layout';
-import AuthPageContainer from '../../components/AuthPageContainer';
-import ForgetPasswordForm from '../../components/authForms/ForgetPasswordForm';
+import ForgetPasswordForm from '../../components/auth/forms/ForgetPasswordForm';
+import AuthPanel from '../../components/auth/AuthPanel';
+import AuthLayout from '../../digitalstage-ui/layout/AuthLayout';
 
 const SignUp = (): JSX.Element => {
   const router = useRouter();
@@ -14,11 +14,11 @@ const SignUp = (): JSX.Element => {
   }
 
   return (
-    <Layout auth>
-      <AuthPageContainer>
+    <AuthLayout>
+      <AuthPanel>
         <ForgetPasswordForm />
-      </AuthPageContainer>
-    </Layout>
+      </AuthPanel>
+    </AuthLayout>
   );
 };
 

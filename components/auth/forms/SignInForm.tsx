@@ -5,9 +5,10 @@ import Link from 'next/link';
 import { jsx, Box, Button, Flex, Label, Text, Message, Checkbox } from 'theme-ui';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { useAuth } from '../../lib/useAuth';
-import InputField from '../ui/InputField';
-import translateError from './translateError';
+import { useAuth } from '../../../lib/useAuth';
+import Input from '../../../digitalstage-ui/elements/input/Input';
+import translateError from '../translateError';
+import { useIntl } from 'react-intl';
 
 export interface Values {
   email: string;
@@ -23,6 +24,8 @@ export interface IError {
 
 const SignInForm = (): JSX.Element => {
   const { signInWithEmailAndPassword } = useAuth();
+  const { formatMessage } = useIntl();
+  const f = (id) => formatMessage({ id });
 
   const [message, setMessage] = React.useState<{
     type: 'danger' | 'warning' | 'info' | 'sucess';
@@ -30,10 +33,8 @@ const SignInForm = (): JSX.Element => {
   }>();
 
   const SignInSchema = Yup.object().shape({
-    email: Yup.string()
-      .email('Bitte eine valide E-Mail-Adresse eingeben')
-      .required('E-Mail-Adresse wird benötigt'),
-    password: Yup.string().required('Das Passwort ist notwendig'),
+    email: Yup.string().email(f('enterValidEmail')).required(f('emailRequired')),
+    password: Yup.string().required(f('passwordRequired')),
   });
 
   return (
@@ -65,18 +66,18 @@ const SignInForm = (): JSX.Element => {
             {message && <Message variant={message.type}>{message.content}</Message>}
 
             <Field
-              as={InputField}
+              as={Input}
               id="email"
-              label="E-Mail-Adresse"
+              label={f('emailAddress')}
               type="text"
               name="email"
               autocomplete="email"
               error={errors.email && touched.email}
             />
             <Field
-              as={InputField}
+              as={Input}
               id="password"
-              label="Passwort"
+              label={f('password')}
               name="password"
               type="password"
               autocomplete="current-password"
@@ -84,10 +85,10 @@ const SignInForm = (): JSX.Element => {
             />
             <Label sx={{ mt: 3 }}>
               <Field as={Checkbox} type="checkbox" name="staySignedIn" />
-              <Text sx={{ fontSize: 14, ml: 2 }}>Angemeldet bleiben</Text>
+              <Text sx={{ fontSize: 14, ml: 2 }}>{f('staySignedIn')}</Text>
             </Label>
             <Flex sx={{ justifyContent: 'center', my: 3 }}>
-              <Button type="submit">Einloggen</Button>
+              <Button type="submit">{f('doLogin')}</Button>
             </Flex>
           </Form>
         )}
@@ -95,13 +96,13 @@ const SignInForm = (): JSX.Element => {
 
       <Flex sx={{ justifyContent: 'center', mt: 4, mb: 2 }}>
         <Link href="/account/forgot">
-          <Button variant="text">Passwort vergessen?</Button>
+          <Button variant="text">{f('forgotPassword')}</Button>
         </Link>
       </Flex>
 
       <Flex sx={{ justifyContent: 'center', mt: 4, mb: 2 }}>
         <Link href="/account/reactivate">
-          <Button variant="text">Aktivierungslink erneut senden?</Button>
+          <Button variant="text">{f('resendActivationLink')}</Button>
         </Link>
       </Flex>
     </Box>

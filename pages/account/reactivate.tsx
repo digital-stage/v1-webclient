@@ -1,15 +1,15 @@
-import ResendActivationForm from '../../components/authForms/ResendActivationForm';
+import ResendActivationForm from '../../components/auth/forms/ResendActivationForm';
 import React from 'react';
-import Layout from '../../components/Layout';
-import AuthPageContainer from '../../components/AuthPageContainer';
+import AuthLayout from '../../digitalstage-ui/layout/AuthLayout';
+import AuthPanel from '../../components/auth/AuthPanel';
 
 const Reactivate = (): JSX.Element => {
   return (
-    <Layout auth>
-      <AuthPageContainer>
+    <AuthLayout>
+      <AuthPanel>
         <ResendActivationForm />
-      </AuthPageContainer>
-    </Layout>
+      </AuthPanel>
+    </AuthLayout>
   );
 };
 export default Reactivate;

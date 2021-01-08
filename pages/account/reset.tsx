@@ -3,10 +3,10 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { jsx, Message } from 'theme-ui';
-import ResetPasswordForm from '../../components/authForms/ResetPasswordForm';
-import AuthPageContainer from '../../components/AuthPageContainer';
-import Layout from '../../components/Layout';
+import ResetPasswordForm from '../../components/auth/forms/ResetPasswordForm';
 import { useAuth } from '../../lib/useAuth';
+import AuthLayout from '../../digitalstage-ui/layout/AuthLayout';
+import AuthPanel from '../../components/auth/AuthPanel';
 
 const Reset = (): JSX.Element => {
   const router = useRouter();
@@ -32,12 +32,12 @@ const Reset = (): JSX.Element => {
   }, [router]);
 
   return (
-    <Layout auth>
-      <AuthPageContainer>
+    <AuthLayout>
+      <AuthPanel>
         {msg.state && <Message variant={msg.type}>{msg.kids}</Message>}
         <ResetPasswordForm resetToken={singleToken} />
-      </AuthPageContainer>
-    </Layout>
+      </AuthPanel>
+    </AuthLayout>
   );
 };
 

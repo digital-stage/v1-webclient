@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flex, Button, Heading, Text, Message } from 'theme-ui';
 import Dialog from '../ui/Dialog';
-import InputField from '../ui/InputField';
+import Input from '../../digitalstage-ui/elements/input/Input';
 import { useRouter } from 'next/router';
 
 const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.Element => {
@@ -38,7 +38,7 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
         Gib den Link ein, mit welchem Du einer Bühne beitreten möchtest
       </Text>
       {msg && <Message variant="danger">{msg}</Message>}
-      <InputField
+      <Input
         type="text"
         id="link"
         name="link"
