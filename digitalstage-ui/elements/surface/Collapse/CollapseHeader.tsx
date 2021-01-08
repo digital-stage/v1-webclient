@@ -3,7 +3,7 @@
 import React from 'react';
 import { jsx, Flex, Box } from 'theme-ui';
 import { FaChevronDown, FaChevronLeft } from 'react-icons/fa';
-import IconButton from '../digitalstage-ui/elements/input/IconButton';
+import IconButton from '../../input/IconButton';
 
 interface Props {
   children: React.ReactNode;

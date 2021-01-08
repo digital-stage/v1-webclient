@@ -1,6 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import { ErrorMessage } from 'formik';
 import { Box, Input as ThemeUiInput, jsx, Label, Text } from 'theme-ui';
 import { BsFillEyeFill, BsEyeSlashFill } from 'react-icons/bs';
@@ -15,6 +15,10 @@ interface Props extends React.ComponentProps<'input'> {
 
 const Input = ({ id, label, name, error, version, type, ...rest }: Props): JSX.Element => {
   const [inputType, setInputType] = React.useState<string>(type);
+
+  const resetDisabledSelectOptionColor: CSSProperties = {
+    WebkitTextFillColor: version === 'dark' ? 'labelDark' : '#f4f4f4',
+  };
 
   return (
     <Box>
@@ -61,7 +65,7 @@ const Input = ({ id, label, name, error, version, type, ...rest }: Props): JSX.E
           {...rest}
           sx={{
             color: version === 'dark' ? 'background' : 'text',
-            border: 'transparent',
+            borderColor: 'transparent',
             borderBottom: 0,
             borderRadius: 0,
             width: '100%',
@@ -70,9 +74,9 @@ const Input = ({ id, label, name, error, version, type, ...rest }: Props): JSX.E
             pr: type === 'password' ? 40 : 5,
             pb: 5,
             ':active,:-webkit-autofill': {
+              ...resetDisabledSelectOptionColor,
               borderBottomColor: 'transparent',
               // ThemeUI color does not work on this prop thus white instead of text
-              WebkitTextFillColor: version === 'dark' ? 'labelDark' : '#f4f4f4',
               boxShadow: error
                 ? '0 0 0px 1000px #4a1313 inset'
                 : version === 'dark'

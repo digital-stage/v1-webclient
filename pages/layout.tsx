@@ -1,3 +1,5 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Box, Button, Flex, jsx } from 'theme-ui';
 import { useCurrentStageId, useLocalDevice } from '../lib/use-digital-stage/hooks';
@@ -73,7 +75,7 @@ const ModalContext = createContext<TModalContext>({
 const Sidebar = (): JSX.Element => {
   const { setModal } = useContext(ModalContext);
   return (
-    <Box
+    <Flex
       sx={{
         display: ['none', 'flex'],
         flexGrow: 0,
@@ -83,7 +85,7 @@ const Sidebar = (): JSX.Element => {
         backgroundColor: 'red',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        alignItem: 'center',
+        alignItems: 'center',
       }}
     >
       <Box
@@ -133,7 +135,7 @@ const Sidebar = (): JSX.Element => {
       >
         BOTTOM
       </Box>
-    </Box>
+    </Flex>
   );
 };
 

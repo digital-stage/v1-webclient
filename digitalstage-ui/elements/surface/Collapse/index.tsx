@@ -3,6 +3,8 @@
 /** @jsx jsx */
 import React from 'react';
 import { jsx, Flex } from 'theme-ui';
+import CollapseHeader from './CollapseHeader';
+import CollapseBody from './CollapseBody';
 
 interface Props {
   children: React.ReactNode;
@@ -20,5 +22,7 @@ const Collapse = ({ children, id }: Props): JSX.Element => (
     {children}
   </Flex>
 );
+
+export { CollapseBody, CollapseHeader };
 
 export default Collapse;
