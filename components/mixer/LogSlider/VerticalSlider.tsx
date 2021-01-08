@@ -47,12 +47,12 @@ const VerticalSlider = (props: {
 
   const solidColor = `rgba(${props.color[0]},${props.color[1]},${props.color[2]},0.6)`;
   return (
-    <Flex
+    <Box
       className={props.className}
       sx={{
         height: '240px',
         flexDirection: 'column',
-        alignItem: 'center',
+        alignItems: 'center',
         justifyContent: 'center',
         boxSizing: 'border-box',
       }}
@@ -190,7 +190,7 @@ const VerticalSlider = (props: {
           </div>
         )}
       />
-    </Flex>
+    </Box>
   );
 };
 export default VerticalSlider;

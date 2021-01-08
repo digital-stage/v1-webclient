@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/useAuth';
-import Layout from '../../components/Layout';
-import AuthPageContainer from '../../components/AuthPageContainer';
-import AuthPageLinks from '../../components/AuthPageLinks';
-import SignUpForm from '../../components/authForms/SignUpForm';
+import AuthNavigation from '../../components/auth/AuthNavigation';
+import SignUpForm from '../../components/auth/forms/SignUpForm';
+import AuthLayout from '../../digitalstage-ui/layout/AuthLayout';
+import AuthPanel from '../../components/auth/AuthPanel';
 
 const SignUp = (): JSX.Element => {
   const router = useRouter();
@@ -20,12 +20,12 @@ const SignUp = (): JSX.Element => {
   }
 
   return (
-    <Layout auth>
-      <AuthPageContainer>
-        <AuthPageLinks />
+    <AuthLayout>
+      <AuthPanel>
+        <AuthNavigation />
         <SignUpForm />
-      </AuthPageContainer>
-    </Layout>
+      </AuthPanel>
+    </AuthLayout>
   );
 };
 

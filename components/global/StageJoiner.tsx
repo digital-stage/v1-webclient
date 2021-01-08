@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Button, Flex, Heading } from 'theme-ui';
-import InputField from '../ui/InputField';
+import Input from '../../digitalstage-ui/elements/input/Input';
 import Dialog from '../ui/Dialog';
 import useStageActions from '../../lib/use-digital-stage/useStageActions';
 import { useSelector } from '../../lib/use-digital-stage/hooks';
@@ -81,7 +81,7 @@ const StageJoiner = (): JSX.Element => {
         <Heading variant="title">
           {retries === 0 ? 'Passwort notwendig' : 'Falsches Passwort'}
         </Heading>
-        <InputField
+        <Input
           id="password"
           label="Password"
           name="password"

@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head';
 import { AppProps } from 'next/app';
 import { ThemeProvider as ThemenProviderThemeUi } from 'theme-ui';
-import theme from '../utils/theme';
+import DigitalStageTheme from '../digitalstage-ui/theme/DigitalStageTheme';
 import { AuthContextConsumer, AuthContextProvider } from '../lib/useAuth';
 import StageJoiner from '../components/global/StageJoiner';
 import { AudioContextProvider } from '../lib/useAudioContext';
@@ -12,6 +12,9 @@ import ErrorHandler from '../components/ErrorHandler';
 import { DigitalStageProvider } from '../lib/use-digital-stage';
 import { StageJoinerProvider } from '../lib/useStageJoiner';
 import useAudioOutput from '../lib/useAudioOutput';
+import { useRouter } from 'next/router';
+import * as locales from '../content/locale';
+import { IntlProvider } from 'react-intl';
 
 const AudioOutputSwitcher = () => {
   useAudioOutput();
@@ -19,6 +22,11 @@ const AudioOutputSwitcher = () => {
 };
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
+  const router = useRouter();
+  const { locale, defaultLocale } = router;
+  const localeCopy = locales[locale];
+  const messages = localeCopy['default'];
+
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
@@ -33,41 +41,43 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
 
-      <ThemenProviderThemeUi theme={theme}>
-        <ErrorsConsumer>
-          {({ reportError }) => (
-            <AuthContextProvider>
-              <AuthContextConsumer>
-                {({ token }) => (
-                  <DigitalStageProvider
-                    apiUrl={process.env.NEXT_PUBLIC_API_URL}
-                    routerDistributorUrl={process.env.NEXT_PUBLIC_ROUTER_DISTRIBUTOR_URL}
-                    standaloneRouterUrl={
-                      process.env.NEXT_PUBLIC_ROUTER_DISTRIBUTOR_URL
-                        ? undefined
-                        : process.env.NEXT_PUBLIC_ROUTER_URL
-                    }
-                    token={token}
-                    addErrorHandler={reportError}
-                  >
-                    <AudioContextProvider>
-                      <StageWebAudioProvider handleError={reportError}>
-                        <StageJoinerProvider>
-                          <ErrorHandler>
-                            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                            <Component {...pageProps} />
-                            <StageJoiner />
-                            <AudioOutputSwitcher />
-                          </ErrorHandler>
-                        </StageJoinerProvider>
-                      </StageWebAudioProvider>
-                    </AudioContextProvider>
-                  </DigitalStageProvider>
-                )}
-              </AuthContextConsumer>
-            </AuthContextProvider>
-          )}
-        </ErrorsConsumer>
+      <ThemenProviderThemeUi theme={DigitalStageTheme}>
+        <IntlProvider locale={locale} defaultLocale={defaultLocale} messages={messages}>
+          <ErrorsConsumer>
+            {({ reportError }) => (
+              <AuthContextProvider>
+                <AuthContextConsumer>
+                  {({ token }) => (
+                    <DigitalStageProvider
+                      apiUrl={process.env.NEXT_PUBLIC_API_URL}
+                      routerDistributorUrl={process.env.NEXT_PUBLIC_ROUTER_DISTRIBUTOR_URL}
+                      standaloneRouterUrl={
+                        process.env.NEXT_PUBLIC_ROUTER_DISTRIBUTOR_URL
+                          ? undefined
+                          : process.env.NEXT_PUBLIC_ROUTER_URL
+                      }
+                      token={token}
+                      addErrorHandler={reportError}
+                    >
+                      <AudioContextProvider>
+                        <StageWebAudioProvider handleError={reportError}>
+                          <StageJoinerProvider>
+                            <ErrorHandler>
+                              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                              <Component {...pageProps} />
+                              <StageJoiner />
+                              <AudioOutputSwitcher />
+                            </ErrorHandler>
+                          </StageJoinerProvider>
+                        </StageWebAudioProvider>
+                      </AudioContextProvider>
+                    </DigitalStageProvider>
+                  )}
+                </AuthContextConsumer>
+              </AuthContextProvider>
+            )}
+          </ErrorsConsumer>
+        </IntlProvider>
       </ThemenProviderThemeUi>
     </>
   );

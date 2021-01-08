@@ -4,9 +4,10 @@ import * as React from 'react';
 import { jsx, Box, Button, Flex, Message } from 'theme-ui';
 import { Formik, Form, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { useAuth } from '../../lib/useAuth';
-import InputField from '../ui/InputField';
-import translateError from './translateError';
+import { useAuth } from '../../../lib/useAuth';
+import Input from '../../../digitalstage-ui/elements/input/Input';
+import translateError from '../translateError';
+import { useIntl } from 'react-intl';
 
 interface Values {
   email: string;
@@ -17,6 +18,8 @@ interface Values {
 
 const SignUpForm = (): JSX.Element => {
   const { createUserWithEmailAndPassword } = useAuth();
+  const { formatMessage } = useIntl();
+  const f = (id) => formatMessage({ id });
 
   const [message, setMessage] = React.useState<{
     type: 'danger' | 'warning' | 'info' | 'success';
@@ -24,23 +27,18 @@ const SignUpForm = (): JSX.Element => {
   }>();
 
   const SignUpSchema = Yup.object().shape({
-    email: Yup.string()
-      .email('Bitte eine valide E-Mail-Adresse eingeben.')
-      .required('E-Mail-Adresse wird benötigt'),
+    email: Yup.string().email(f('enterValidEmail')).required(f('emailRequired')),
     name: Yup.string()
-      .min(2, 'Der Name ist kurz')
-      .max(70, 'Der Name ist zu lang')
-      .required('Der Name ist notwendig'),
+      .min(2, f('nameTooShort'))
+      .max(70, f('nameTooLong'))
+      .required(f('nameRequired')),
     password: Yup.string()
-      .min(8, 'Das Passwort muss eine Mindestlänge von 8 Zeichen haben')
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
-        'Das Passwort muss folgendes beinhalten: mindestens eine Zahl, ein kleiner und ein großer Buchstabe sowie insgesamt eine Länge von 8 Zeichen haben'
-      )
-      .required('Passwort wird benötigt'),
+      .min(8, f('passwordMinLength'))
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/, f('passwordFormat'))
+      .required(f('passwordRequired')),
     passwordRepeat: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Die Passwörter müssen identisch sein')
-      .required('Die Passwortwiederholung wird benötigt'),
+      .oneOf([Yup.ref('password'), null], f('passwordMismatch'))
+      .required(f('passwordConfirmRequired')),
   });
 
   return (
@@ -60,7 +58,7 @@ const SignUpForm = (): JSX.Element => {
               resetForm(null);
               return setMessage({
                 type: 'success',
-                content: 'Prüfe Dein Postfach! Wir haben Dir einen Aktivierungslink gesendet.',
+                content: f('activationLinkSent'),
               });
             })
             .catch((err) =>
@@ -76,40 +74,40 @@ const SignUpForm = (): JSX.Element => {
             {message && <Message variant={message.type}>{message.content}</Message>}
 
             <Field
-              as={InputField}
+              as={Input}
               id="email"
               type="text"
-              label="E-Mail-Adresse"
+              label={f('emailAddress')}
               name="email"
               error={errors.email && touched.email}
             />
 
             <Field
-              as={InputField}
+              as={Input}
               id="name"
-              label="Name"
+              label={f('name')}
               name="name"
               type="text"
               error={errors.name && touched.name}
             />
             <Field
-              as={InputField}
+              as={Input}
               id="password"
-              label="Passwort"
+              label={f('password')}
               name="password"
               type="password"
               error={errors.password && touched.password}
             />
             <Field
-              as={InputField}
+              as={Input}
               id="passwordRepeat"
-              label="Passwort Wiederholung"
+              label={f('repeatPassword')}
               type="password"
               name="passwordRepeat"
               error={errors.passwordRepeat && touched.passwordRepeat}
             />
             <Flex sx={{ justifyContent: 'center', my: 3 }}>
-              <Button type="submit">Registrierung</Button>
+              <Button type="submit">{f('doSignUp')}</Button>
             </Flex>
           </Form>
         )}

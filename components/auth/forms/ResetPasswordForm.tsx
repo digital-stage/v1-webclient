@@ -5,9 +5,9 @@ import { useRouter } from 'next/router';
 import { jsx, Box, Heading, Text, Flex, Button, Message } from 'theme-ui';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import InputField from '../ui/InputField';
-import { useAuth } from '../../lib/useAuth';
-import translateError from './translateError';
+import Input from '../../../digitalstage-ui/elements/input/Input';
+import { useAuth } from '../../../lib/useAuth';
+import translateError from '../translateError';
 
 interface Values {
   password?: string;
@@ -80,7 +80,7 @@ export default function ResetPasswordForm({ resetToken }: Props): JSX.Element {
             {msg.state && <Message variant={msg.type}>{msg.kids}</Message>}
 
             <Field
-              as={InputField}
+              as={Input}
               id="password"
               label="Password"
               name="password"
@@ -88,7 +88,7 @@ export default function ResetPasswordForm({ resetToken }: Props): JSX.Element {
               error={errors.password && touched.password}
             />
             <Field
-              as={InputField}
+              as={Input}
               id="repeatPassword"
               label="Repeat Password"
               type="password"

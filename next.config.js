@@ -4,5 +4,9 @@ module.exports = {
         config.externals['styletron-server'] = 'styletron-server'
 
         return config
+    },
+    i18n: {
+        locales: ['de', 'en'],
+        defaultLocale: 'de',
     }
 }

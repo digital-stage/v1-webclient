@@ -5,7 +5,7 @@ import { jsx, Flex, Button, Heading } from 'theme-ui';
 import { useFormik, FormikProvider, Field } from 'formik';
 import * as Yup from 'yup';
 import Dialog from '../ui/Dialog';
-import InputField from '../ui/InputField';
+import Input from '../../digitalstage-ui/elements/input/Input';
 import { Stage } from '../../lib/use-digital-stage/types';
 import useStageActions from '../../lib/use-digital-stage/useStageActions';
 
@@ -84,7 +84,7 @@ const ModifyStageModal = (props: {
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
           <Field
-            as={InputField}
+            as={Input}
             type="text"
             name="name"
             id="name"
@@ -93,7 +93,7 @@ const ModifyStageModal = (props: {
             error={formik.errors.name && formik.touched.name}
           />
           <Field
-            as={InputField}
+            as={Input}
             type="text"
             name="password"
             id="password"

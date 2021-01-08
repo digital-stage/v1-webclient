@@ -5,7 +5,7 @@ import { jsx, Flex, Button, Text, Heading } from 'theme-ui';
 import { Field, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import Dialog from '../ui/Dialog';
-import InputField from '../ui/InputField';
+import Input from '../../digitalstage-ui/elements/input/Input';
 import useStageActions from '../../lib/use-digital-stage/useStageActions';
 import { Group } from '../../lib/use-digital-stage/types';
 
@@ -46,7 +46,7 @@ const ModifyGroupModal = (props: {
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
           <Field
-            as={InputField}
+            as={Input}
             type="text"
             name="name"
             id="name"

@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import React from 'react';
-import ActivationForm from '../../components/authForms/ActivationForm';
-import Layout from '../../components/Layout';
-import AuthPageContainer from '../../components/AuthPageContainer';
+import ActivationForm from '../../components/auth/forms/ActivationForm';
+import AuthLayout from '../../digitalstage-ui/layout/AuthLayout';
+import AuthPanel from '../../components/auth/AuthPanel';
 
 const Activate = (): JSX.Element => {
   const { query } = useRouter();
@@ -10,11 +10,11 @@ const Activate = (): JSX.Element => {
   const initialCode = Array.isArray(query.code) ? query.code[0] : query.code;
 
   return (
-    <Layout auth>
-      <AuthPageContainer>
+    <AuthLayout>
+      <AuthPanel>
         <ActivationForm initialCode={initialCode} />
-      </AuthPageContainer>
-    </Layout>
+      </AuthPanel>
+    </AuthLayout>
   );
 };
 

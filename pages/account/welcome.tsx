@@ -7,6 +7,8 @@ import { jsx, Button, Flex, Heading, Text } from 'theme-ui';
 import DigitalStageLogo from '../../components/DigitalStageLogo';
 import { useAuth } from '../../lib/useAuth';
 import Layout from '../../components/Layout';
+import Logo from '../../digitalstage-ui/elements/Logo';
+import { WhiteButton } from '../../digitalstage-ui/elements/input/Button';
 
 const Welcome = (): JSX.Element => {
   const router = useRouter();
@@ -29,7 +31,7 @@ const Welcome = (): JSX.Element => {
         }}
       >
         <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
-          <DigitalStageLogo single icon width={80} />
+          <Logo width={80} />
 
           <Heading as="h3" m={3}>
             Deine digitale Bühne für Kunst-, <br />
@@ -42,9 +44,7 @@ const Welcome = (): JSX.Element => {
           </Heading>
 
           <Link href="/account/login">
-            <Button as="a" variant="white" sx={{ cursor: 'pointer' }}>
-              Starten
-            </Button>
+            <WhiteButton as="a">Starten</WhiteButton>
           </Link>
 
           <Text sx={{ my: 2, textAlign: 'center' }}>

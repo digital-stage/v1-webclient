@@ -1,19 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useAuth } from '../../lib/useAuth';
+import { useAuth } from '../../../lib/useAuth';
 import { Button, Message, Flex } from 'theme-ui';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
-import translateError from './translateError';
-import InputField from '../ui/InputField';
+import translateError from '../translateError';
+import Input from '../../../digitalstage-ui/elements/input/Input';
 import * as Yup from 'yup';
 import { useRouter } from 'next/router';
+import { useIntl } from 'react-intl';
 
 export interface Values {
   code: string;
 }
-
-const Schema = Yup.object().shape({
-  code: Yup.string().length(40).required('Aktivierungscode wird benötigt'),
-});
 
 const ActivationForm = (props: { initialCode?: string }): JSX.Element => {
   const { initialCode } = props;
@@ -23,6 +20,8 @@ const ActivationForm = (props: { initialCode?: string }): JSX.Element => {
     content: string;
   }>();
   const { loading, user, activate } = useAuth();
+  const { formatMessage } = useIntl();
+  const f = (id) => formatMessage({ id });
 
   const handleActivation = useCallback(
     (code: string) => {
@@ -31,7 +30,7 @@ const ActivationForm = (props: { initialCode?: string }): JSX.Element => {
         .then(() => {
           setMessage({
             type: 'success',
-            content: 'Account erfolgreich aktiviert',
+            content: f('accountActivated'),
           });
           setTimeout(() => {
             push('/');
@@ -66,7 +65,9 @@ const ActivationForm = (props: { initialCode?: string }): JSX.Element => {
         initialValues={{
           code: '',
         }}
-        validationSchema={Schema}
+        validationSchema={Yup.object().shape({
+          code: Yup.string().length(40).required(f('activationCodeRequired')),
+        })}
         onSubmit={(values: Values, { resetForm }: FormikHelpers<Values>) => {
           return handleActivation(values.code).then(() => resetForm(null));
         }}
@@ -74,15 +75,15 @@ const ActivationForm = (props: { initialCode?: string }): JSX.Element => {
         {({ errors, touched }) => (
           <Form>
             <Field
-              as={InputField}
+              as={Input}
               id="code"
-              label="Aktivierungscode"
+              label={f('activationCode')}
               type="text"
               name="code"
               error={errors.code && touched.code}
             />
             <Flex sx={{ justifyContent: 'center' }}>
-              <Button type="submit">Account aktivieren</Button>
+              <Button type="submit">{f('activateAccount')}</Button>
             </Flex>
           </Form>
         )}

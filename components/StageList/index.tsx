@@ -4,12 +4,13 @@ import * as React from 'react';
 import { jsx, Divider, Flex } from 'theme-ui';
 import Card from '../ui/Card';
 import StageOverviewLinks from '../StageOverviewLinks';
-import Collapse from '../Collapse';
-import CollapseHeader from '../CollapseHeader';
-import CollapseBody from '../CollapseBody';
 import StageHeader from './StageHeader';
 import StageGroupList from './StageGroupList';
 import { useStages } from '../../lib/use-digital-stage/hooks';
+import Collapse, {
+  CollapseBody,
+  CollapseHeader,
+} from '../../digitalstage-ui/elements/surface/Collapse';
 
 /**  TODO: WORK in PROGRESS POC */
 

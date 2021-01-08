@@ -5,7 +5,7 @@ import { Button, Flex, Heading, jsx, Text } from 'theme-ui';
 import * as Yup from 'yup';
 import { Stage } from '../../lib/use-digital-stage/types';
 import useStageActions from '../../lib/use-digital-stage/useStageActions';
-import InputField from '../ui/InputField';
+import Input from '../../digitalstage-ui/elements/input/Input';
 import Dialog from '../ui/Dialog';
 
 interface Values {
@@ -49,7 +49,7 @@ const CreateGroupModal = (props: {
         {({ errors, touched }) => (
           <Form>
             <Field
-              as={InputField}
+              as={Input}
               type="text"
               name="name"
               id="name"

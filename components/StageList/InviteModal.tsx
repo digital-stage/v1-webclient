@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Flex, Button, Heading, Message, Checkbox, Label } from 'theme-ui';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import Dialog from '../ui/Dialog';
-import InputField from '../ui/InputField';
+import Input from '../../digitalstage-ui/elements/input/Input';
 import { Group, Stage } from '../../lib/use-digital-stage/types';
 
 const InviteModal = (props: {
@@ -39,7 +39,7 @@ const InviteModal = (props: {
       </Heading>
       {isCopied && <Message variant="success">Link in die Zwischenablage kopiert!</Message>}
 
-      <InputField type="text" id="link" name="link" label="Link" value={link} version="dark" />
+      <Input type="text" id="link" name="link" label="Link" value={link} version="dark" />
       {stage.password && (
         <Label sx={{ color: 'background', mt: 3 }}>
           <Checkbox
