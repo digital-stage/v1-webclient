@@ -5,7 +5,7 @@ import * as React from 'react';
 import { Heading, jsx } from 'theme-ui';
 import Container, { Size } from '../components/ui/Container';
 import Layout from '../components/Layout';
-import StageListView from '../components/StageList';
+import StageListView from '../components/stages/StagesList';
 import PageSpinner from '../components/PageSpinner';
 import StageDeviceController from '../components/StageDeviceController';
 import { useAuth } from '../lib/useAuth';

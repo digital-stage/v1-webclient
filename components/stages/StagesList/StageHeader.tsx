@@ -4,12 +4,12 @@ import * as React from 'react';
 import { jsx, Box, Flex, IconButton, Heading, Avatar, Text } from 'theme-ui';
 import { FaPen, FaTrash, FaDoorOpen } from 'react-icons/fa';
 import ModifyStageModal from './ModifyStageModal';
-import useStageActions from '../../lib/use-digital-stage/useStageActions';
-import { Stage } from '../../lib/use-digital-stage/types';
-import { useCurrentUser } from '../../lib/use-digital-stage/hooks';
-import ConfirmationModal from '../ConfirmationModal';
+import useStageActions from '../../../lib/use-digital-stage/useStageActions';
+import { Stage } from '../../../lib/use-digital-stage/types';
+import { useCurrentUser } from '../../../lib/use-digital-stage/hooks';
+import ConfirmationModal from './ConfirmationModal';
 
-const StageHeader = (props: { stage: Stage }): JSX.Element => {
+const StageHeader = (props: { onTitleClicked?: () => void; stage: Stage }): JSX.Element => {
   const { removeStage, leaveStageForGood } = useStageActions();
   const [currentStage, setCurrentStage] = React.useState<Stage>();
   const { _id: userId } = useCurrentUser();
@@ -24,7 +24,7 @@ const StageHeader = (props: { stage: Stage }): JSX.Element => {
       <Flex sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
         <Flex>
           <Avatar src="/images/diverse 5.svg" sx={{ my: 'auto', mr: 2 }} />
-          <Flex sx={{ flexDirection: 'column' }}>
+          <Flex onClick={props.onTitleClicked} sx={{ flexDirection: 'column', cursor: 'pointer' }}>
             <Heading variant="h4" sx={{ color: 'text', flexBasis: 'max-content' }}>
               {stage.name}
             </Heading>

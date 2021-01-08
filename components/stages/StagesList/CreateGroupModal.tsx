@@ -3,10 +3,10 @@
 import { Field, Form, Formik } from 'formik';
 import { Button, Flex, Heading, jsx, Text } from 'theme-ui';
 import * as Yup from 'yup';
-import { Stage } from '../../lib/use-digital-stage/types';
-import useStageActions from '../../lib/use-digital-stage/useStageActions';
-import Input from '../../digitalstage-ui/elements/input/Input';
-import Dialog from '../ui/Dialog';
+import { Stage } from '../../../lib/use-digital-stage/types';
+import useStageActions from '../../../lib/use-digital-stage/useStageActions';
+import Input from '../../../digitalstage-ui/elements/input/Input';
+import { LightDialog } from '../../../digitalstage-ui/elements/surface/Dialog';
 
 interface Values {
   name: string;
@@ -28,7 +28,7 @@ const CreateGroupModal = (props: {
   });
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose}>
+    <LightDialog size="dialog" closable open={isOpen} onClose={onClose}>
       <Heading variant="title" pb={5}>
         Neue Gruppe erstellen
       </Heading>
@@ -66,7 +66,7 @@ const CreateGroupModal = (props: {
           </Form>
         )}
       </Formik>
-    </Dialog>
+    </LightDialog>
   );
 };
 

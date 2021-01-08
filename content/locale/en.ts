@@ -45,5 +45,6 @@ const en = {
   activateAccount: 'Account aktivieren',
   accountActivated: 'Account erfolgreich aktiviert',
   activationCodeRequired: 'Aktivierungscode wird benötigt',
+  myStages: 'My stages',
 };
 export default en;

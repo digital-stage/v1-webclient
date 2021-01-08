@@ -1,3 +1,5 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import {
   useCurrentStageId,
   useCustomStageMembers,
@@ -11,9 +13,9 @@ import React, { useState } from 'react';
 import RoomElement from './room/RoomElement';
 import Editor from './room';
 import { Box, Button, Flex, jsx, Message, Select, Text } from 'theme-ui';
-import Modal from './ui/Modal';
 import SingleSelect from './ui/SingleSelect';
 import digitalStageTheme from '../digitalstage-ui/theme/DigitalStageTheme';
+import Modal from '../digitalstage-ui/elements/surface/Modal';
 
 const RoomModal = (props: { isOpen: boolean; onClose(): void }): JSX.Element => {
   const { isOpen, onClose } = props;
@@ -30,7 +32,7 @@ const RoomModal = (props: { isOpen: boolean; onClose(): void }): JSX.Element => 
 
   if (stage) {
     return (
-      <Modal size="full" open={isOpen} onClose={onClose} closeOnBackdropClicked={true}>
+      <Modal size="full" open={isOpen} onClose={onClose} closable={true}>
         <Box
           sx={{
             width: '100%',

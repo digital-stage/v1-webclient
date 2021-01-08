@@ -11,12 +11,12 @@ import {
   useCurrentStageId,
   useCurrentUser,
   useGroups,
-} from '../../lib/use-digital-stage/hooks';
-import { Group, Stage } from '../../lib/use-digital-stage/types';
-import useStageActions from '../../lib/use-digital-stage/useStageActions';
-import useStageJoiner from '../../lib/useStageJoiner';
-import useAudioContext from '../../lib/useAudioContext';
-import ConfirmationModal from '../ConfirmationModal';
+} from '../../../lib/use-digital-stage/hooks';
+import { Group, Stage } from '../../../lib/use-digital-stage/types';
+import useStageActions from '../../../lib/use-digital-stage/useStageActions';
+import useStageJoiner from '../../../lib/useStageJoiner';
+import useAudioContext from '../../../lib/useAudioContext';
+import ConfirmationModal from './ConfirmationModal';
 
 const StageGroupList = (props: { stage: Stage }): JSX.Element => {
   const groups = useGroups();

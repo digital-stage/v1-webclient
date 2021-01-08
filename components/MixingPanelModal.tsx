@@ -3,8 +3,8 @@
 import { Box, Flex, Heading, jsx, Text } from 'theme-ui';
 import { useIsStageAdmin } from '../lib/use-digital-stage/hooks';
 import MixingPanel from './mixer/MixingPanel';
-import Modal from './ui/Modal';
 import React from 'react';
+import Modal from '../digitalstage-ui/elements/surface/Modal';
 
 interface IProps {
   isOpen: boolean;
@@ -17,7 +17,7 @@ const MixingPanelModal = ({ isOpen, onClose }: IProps): JSX.Element => {
   const [globalMode, setGlobalMode] = React.useState<boolean>(!isAdmin);
 
   return (
-    <Modal open={isOpen} onClose={onClose} closeOnBackdropClicked={true} size="full">
+    <Modal open={isOpen} onClose={onClose} closable={true} size="full">
       <Flex
         sx={{
           flexDirection: 'column',

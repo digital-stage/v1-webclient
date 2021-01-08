@@ -1,13 +1,13 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Flex, Button, Text, Heading } from 'theme-ui';
+import { jsx, Flex, Button, Heading } from 'theme-ui';
 import { Field, FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
-import Dialog from '../ui/Dialog';
-import Input from '../../digitalstage-ui/elements/input/Input';
-import useStageActions from '../../lib/use-digital-stage/useStageActions';
-import { Group } from '../../lib/use-digital-stage/types';
+import Input from '../../../digitalstage-ui/elements/input/Input';
+import useStageActions from '../../../lib/use-digital-stage/useStageActions';
+import { Group } from '../../../lib/use-digital-stage/types';
+import { LightDialog } from '../../../digitalstage-ui/elements/surface/Dialog';
 
 const Schema = Yup.object().shape({
   name: Yup.string()
@@ -41,7 +41,7 @@ const ModifyGroupModal = (props: {
   }, [group]);
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose}>
+    <LightDialog size="dialog" closable open={isOpen} onClose={onClose}>
       <Heading variant="title">Gruppenname ändern</Heading>
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
@@ -67,7 +67,7 @@ const ModifyGroupModal = (props: {
           </Flex>
         </form>
       </FormikProvider>
-    </Dialog>
+    </LightDialog>
   );
 };
 

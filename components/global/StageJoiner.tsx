@@ -1,10 +1,10 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Button, Flex, Heading } from 'theme-ui';
 import Input from '../../digitalstage-ui/elements/input/Input';
-import Dialog from '../ui/Dialog';
 import useStageActions from '../../lib/use-digital-stage/useStageActions';
 import { useSelector } from '../../lib/use-digital-stage/hooks';
 import useStageJoiner from '../../lib/useStageJoiner';
+import { LightDialog } from '../../digitalstage-ui/elements/surface/Dialog';
 
 /**
  * The StageJoiner is a usually hidden component,
@@ -71,13 +71,13 @@ const StageJoiner = (): JSX.Element => {
 
   return (
     <>
-      <Dialog isOpen={notFound} onClose={() => setNotFound(false)}>
+      <LightDialog open={notFound} onClose={() => setNotFound(false)}>
         <Heading variant="title">Bühne nicht gefunden</Heading>
         <Flex sx={{ justifyContent: 'flex-end', py: 2 }}>
           <Button onClick={() => setNotFound(false)}>Ok</Button>
         </Flex>
-      </Dialog>
-      <Dialog isOpen={wrongPassword} onClose={() => clear()}>
+      </LightDialog>
+      <LightDialog open={wrongPassword} onClose={() => clear()}>
         <Heading variant="title">
           {retries === 0 ? 'Passwort notwendig' : 'Falsches Passwort'}
         </Heading>
@@ -101,7 +101,7 @@ const StageJoiner = (): JSX.Element => {
             Erneut versuchen
           </Button>
         </Flex>
-      </Dialog>
+      </LightDialog>
     </>
   );
 };

@@ -48,5 +48,6 @@ const de = {
   delete: 'Löschen',
   send: 'Senden',
   cancel: 'Abbrechen',
+  myStages: 'Meine Bühnen',
 };
 export default de;

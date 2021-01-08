@@ -206,6 +206,7 @@ const DigitalStageTheme: Theme = {
       },
     },
     tertiary: {
+      color: 'background',
       variant: 'buttons.primary',
       border: '2px solid transparent',
       borderColor: 'tertiary',

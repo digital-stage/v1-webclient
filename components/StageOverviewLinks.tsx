@@ -3,8 +3,8 @@
 import * as React from 'react';
 import { jsx, Box, Flex, Button, IconButton } from 'theme-ui';
 import { FaPlus, FaArrowRight } from 'react-icons/fa';
-import CreateStageModal from './StageList/CreateStageModal';
-import JoinStageModal from './StageList/JoinStageModal';
+import CreateStageModal from './stages/StagesList/CreateStageModal';
+import JoinStageModal from './stages/StagesList/JoinStageModal';
 
 const StageOverviewLinks = (props: {
   setStageCreated(stageCreated: boolean): void;

@@ -5,7 +5,7 @@ import React, { useCallback } from 'react';
 import { jsx, Box, Flex, Text, Heading, Button } from 'theme-ui';
 import { SettingsModalItems } from '../global/PageWrapperWithStage/MenuItems';
 import useDigitalStage from '../../lib/use-digital-stage';
-import Modal from '../ui/Modal';
+import Modal from '../../digitalstage-ui/elements/surface/Modal';
 
 const SettingsModal = (props: {
   isOpen: boolean;
@@ -28,7 +28,7 @@ const SettingsModal = (props: {
   }, [refreshLocalDeviceInt]);
 
   return (
-    <Modal open={props.isOpen} onClose={props.onClose} closeOnBackdropClicked={true}>
+    <Modal open={props.isOpen} onClose={props.onClose} closable={true}>
       <Flex
         sx={{
           position: 'relative',

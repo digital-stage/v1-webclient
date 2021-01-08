@@ -2,15 +2,14 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx, Divider, Flex } from 'theme-ui';
-import Card from '../ui/Card';
-import StageOverviewLinks from '../StageOverviewLinks';
+import StageOverviewLinks from '../../StageOverviewLinks';
 import StageHeader from './StageHeader';
 import StageGroupList from './StageGroupList';
-import { useStages } from '../../lib/use-digital-stage/hooks';
+import { useStages } from '../../../lib/use-digital-stage/hooks';
 import Collapse, {
   CollapseBody,
   CollapseHeader,
-} from '../../digitalstage-ui/elements/surface/Collapse';
+} from '../../../digitalstage-ui/elements/surface/Collapse';
 
 /**  TODO: WORK in PROGRESS POC */
 
@@ -34,7 +33,12 @@ const StageListView = (): JSX.Element => {
   }, [stages]);
 
   return (
-    <Card mt={5}>
+    <Flex
+      sx={{
+        p: 24,
+        flexDirection: 'column',
+      }}
+    >
       <StageOverviewLinks setStageCreated={(stageCreated) => setStageCreated(stageCreated)} />
       {/**  TODO: WORK in PROGRESS */}
       <Flex sx={{ flexDirection: 'column' }}>
@@ -51,7 +55,13 @@ const StageListView = (): JSX.Element => {
                 id={stage._id}
                 collapseId={collapseId}
               >
-                <StageHeader stage={stage} />
+                <StageHeader
+                  onTitleClicked={() => {
+                    setOpenCollapse(!openCollapse);
+                    setCollapseId(stage._id);
+                  }}
+                  stage={stage}
+                />
               </CollapseHeader>
               <CollapseBody isOpen={openCollapse} id={stage._id} collapseId={collapseId}>
                 <StageGroupList stage={stage} />
@@ -60,7 +70,7 @@ const StageListView = (): JSX.Element => {
             </Collapse>
           ))}
       </Flex>
-    </Card>
+    </Flex>
   );
 };
 

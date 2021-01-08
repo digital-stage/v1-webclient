@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { WhiteButton } from '../elements/input/Button';
 
-const AuthLayout = (props: { children: React.ReactNode; projectName?: string }): JSX.Element => {
+const StagesLayout = (props: { children: React.ReactNode; projectName?: string }): JSX.Element => {
   const { children, projectName } = props;
   const { pathname } = useRouter();
 
@@ -30,19 +30,29 @@ const AuthLayout = (props: { children: React.ReactNode; projectName?: string }):
           py: 4,
         }}
       >
-        <Box
+        <Flex
           sx={{
+            width: '100%',
+            alignItems: 'center',
             mb: [5, null, 6],
+            py: 4,
+            px: [5, 7],
           }}
         >
-          <Logo alt={projectName} width={180} full />
-        </Box>
+          <Flex
+            sx={{
+              maxWidth: '',
+            }}
+          >
+            <Logo alt={projectName} width={110} full />
+          </Flex>
+        </Flex>
         {children}
       </Flex>
       <Flex
         sx={{
           position: ['relative', 'fixed'],
-          top: [undefined, '1rem'],
+          top: [undefined, '3rem'],
           right: [undefined, '1rem'],
           width: ['100%', 'auto'],
           justifyContent: ['center', undefined],
@@ -59,4 +69,4 @@ const AuthLayout = (props: { children: React.ReactNode; projectName?: string }):
     </Flex>
   );
 };
-export default AuthLayout;
+export default StagesLayout;

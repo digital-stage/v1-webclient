@@ -24,7 +24,7 @@ const TertiaryButton = (
     as?: React.ElementType;
   }
 ): JSX.Element => {
-  return <ThemeUiButton variant="tertiary" {...props} />;
+  return <ThemeUiButton sx={{ color: 'background' }} variant="tertiary" {...props} />;
 };
 
 const WhiteButton = (

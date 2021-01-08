@@ -1,8 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
 import { AppProps } from 'next/app';
-import { ThemeProvider as ThemenProviderThemeUi } from 'theme-ui';
-import DigitalStageTheme from '../digitalstage-ui/theme/DigitalStageTheme';
 import { AuthContextConsumer, AuthContextProvider } from '../lib/useAuth';
 import StageJoiner from '../components/global/StageJoiner';
 import { AudioContextProvider } from '../lib/useAudioContext';
@@ -15,6 +13,7 @@ import useAudioOutput from '../lib/useAudioOutput';
 import { useRouter } from 'next/router';
 import * as locales from '../content/locale';
 import { IntlProvider } from 'react-intl';
+import ThemeProvider from '../digitalstage-ui/ThemeProvider';
 
 const AudioOutputSwitcher = () => {
   useAudioOutput();
@@ -41,7 +40,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
 
-      <ThemenProviderThemeUi theme={DigitalStageTheme}>
+      <ThemeProvider>
         <IntlProvider locale={locale} defaultLocale={defaultLocale} messages={messages}>
           <ErrorsConsumer>
             {({ reportError }) => (
@@ -78,7 +77,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
             )}
           </ErrorsConsumer>
         </IntlProvider>
-      </ThemenProviderThemeUi>
+      </ThemeProvider>
     </>
   );
 };

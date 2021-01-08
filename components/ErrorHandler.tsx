@@ -4,7 +4,7 @@ import React from 'react';
 import { jsx, Heading, Link } from 'theme-ui';
 import { useErrors } from '../lib/useErrors';
 import Layout from './Layout';
-import Card from './ui/Card';
+import AuthPanel from './auth/AuthPanel';
 
 interface Props {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ const ErrorHandler = ({ children }: Props): JSX.Element => {
     errors.forEach((error) => console.error(error));
     return (
       <Layout>
-        <Card size="auth">
+        <AuthPanel>
           Es tut uns leid, aber der
           <Heading sx={{ my: 4 }}> Service steht derzeit nicht zur Verfügung.</Heading> Aktuelle
           Neuigkeiten erfahren Sie auf unserer {` `}
@@ -25,7 +25,7 @@ const ErrorHandler = ({ children }: Props): JSX.Element => {
             Website
           </Link>
           {errors.map((error) => error.message)}
-        </Card>
+        </AuthPanel>
       </Layout>
     );
   }

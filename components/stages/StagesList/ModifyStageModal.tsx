@@ -4,10 +4,10 @@ import * as React from 'react';
 import { jsx, Flex, Button, Heading } from 'theme-ui';
 import { useFormik, FormikProvider, Field } from 'formik';
 import * as Yup from 'yup';
-import Dialog from '../ui/Dialog';
-import Input from '../../digitalstage-ui/elements/input/Input';
-import { Stage } from '../../lib/use-digital-stage/types';
-import useStageActions from '../../lib/use-digital-stage/useStageActions';
+import Input from '../../../digitalstage-ui/elements/input/Input';
+import { Stage } from '../../../lib/use-digital-stage/types';
+import useStageActions from '../../../lib/use-digital-stage/useStageActions';
+import { LightDialog } from '../../../digitalstage-ui/elements/surface/Dialog';
 
 const Schema = Yup.object().shape({
   name: Yup.string()
@@ -79,7 +79,7 @@ const ModifyStageModal = (props: {
   }, [stage]);
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose}>
+    <LightDialog size="dialog" closable open={isOpen} onClose={onClose}>
       <Heading variant="title">Bühne bearbeiten</Heading>
       <FormikProvider value={formik}>
         <form onSubmit={formik.handleSubmit}>
@@ -109,7 +109,7 @@ const ModifyStageModal = (props: {
           </Flex>
         </form>
       </FormikProvider>
-    </Dialog>
+    </LightDialog>
   );
 };
 

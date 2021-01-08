@@ -1,8 +1,8 @@
 import React from 'react';
-import { Flex, Button, Heading, Text, Message } from 'theme-ui';
-import Dialog from '../ui/Dialog';
-import Input from '../../digitalstage-ui/elements/input/Input';
+import { Flex, Button, Heading, Text, Message, jsx } from 'theme-ui';
+import Input from '../../../digitalstage-ui/elements/input/Input';
 import { useRouter } from 'next/router';
+import { LightDialog } from '../../../digitalstage-ui/elements/surface/Dialog';
 
 const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.Element => {
   const { isOpen, onClose } = props;
@@ -30,7 +30,7 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
   };
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose}>
+    <LightDialog size="dialog" closable open={isOpen} onClose={onClose}>
       <Heading variant="title" pb={5}>
         Bühne mit einem Link beitreten
       </Heading>
@@ -62,7 +62,7 @@ const JoinStageModal = (props: { isOpen?: boolean; onClose?: () => void }): JSX.
           Beitreten
         </Button>
       </Flex>
-    </Dialog>
+    </LightDialog>
   );
 };
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Flex, Button, Heading, Message, Checkbox, Label } from 'theme-ui';
+import { Flex, Button, Heading, Message, Checkbox, Label, jsx } from 'theme-ui';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import Dialog from '../ui/Dialog';
-import Input from '../../digitalstage-ui/elements/input/Input';
-import { Group, Stage } from '../../lib/use-digital-stage/types';
+import Input from '../../../digitalstage-ui/elements/input/Input';
+import { Group, Stage } from '../../../lib/use-digital-stage/types';
+import { LightDialog } from '../../../digitalstage-ui/elements/surface/Dialog';
 
 const InviteModal = (props: {
   stage: Stage;
@@ -33,7 +33,7 @@ const InviteModal = (props: {
   }
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose}>
+    <LightDialog size="dialog" closable open={isOpen} onClose={onClose}>
       <Heading variant="title" pb={5}>
         Teilnehmer einladen
       </Heading>
@@ -62,7 +62,7 @@ const InviteModal = (props: {
           <Button autoFocus>Link kopieren</Button>
         </CopyToClipboard>
       </Flex>
-    </Dialog>
+    </LightDialog>
   );
 };
 
