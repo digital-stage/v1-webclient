@@ -1,3 +1,11 @@
+## [0.22.26](https://github.com/digital-stage/webclient/compare/v0.22.25...v0.22.26) (2021-01-08)
+
+
+### Bug Fixes
+
+* added production env again, since vercel seems depending to it ([f5c35d9](https://github.com/digital-stage/webclient/commit/f5c35d96bc9bd999070118f64b97b82247544ff0))
+* i18n domain handling ([869acef](https://github.com/digital-stage/webclient/commit/869acef419ea6adcfc455f63b1fb575763ff4b67))
+
 ## [0.22.25](https://github.com/digital-stage/webclient/compare/v0.22.24...v0.22.25) (2021-01-04)
 
 
