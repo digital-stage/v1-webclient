@@ -17,6 +17,18 @@ const VideoPlayer = (props: {
     }
   }, [video, videoRef]);
 
-  return <video sx={sx} className={className} ref={videoRef} autoPlay={true} muted={true} />;
+  return (
+    <video
+      sx={{
+        ...sx,
+        objectFit: 'cover',
+        transform: 'scale(-1, 1)',
+      }}
+      className={className}
+      ref={videoRef}
+      autoPlay={true}
+      muted={true}
+    />
+  );
 };
 export default VideoPlayer;
