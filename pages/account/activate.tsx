@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 import ActivationForm from '../../components/auth/forms/ActivationForm';
-import AuthLayout from '../../digitalstage-ui/layout/AuthLayout';
+import AuthLayout from '../../components/global/layout/AuthLayout';
 import AuthPanel from '../../components/auth/AuthPanel';
 
 const Activate = (): JSX.Element => {

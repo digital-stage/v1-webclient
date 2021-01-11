@@ -4,8 +4,8 @@
 import React, { useCallback } from 'react';
 import { jsx, Box, Flex, Text, Heading, Button } from 'theme-ui';
 import { SettingsModalItems } from '../global/PageWrapperWithStage/MenuItems';
-import useDigitalStage from '../../lib/use-digital-stage';
-import Modal from '../../digitalstage-ui/elements/surface/Modal';
+import useDigitalStage from '../../../lib/use-digital-stage';
+import Modal from '../../../digitalstage-ui/elements/surface/Modal';
 
 const SettingsModal = (props: {
   isOpen: boolean;

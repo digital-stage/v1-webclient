@@ -5,8 +5,8 @@ import { Box, Heading, jsx, Link } from 'theme-ui';
 import { Stage } from '../lib/use-digital-stage';
 import { useAuth } from '../lib/useAuth';
 import DigitalStageLogo from './DigitalStageLogo';
-import TopNavigation from './global/AppBar';
-import SideNavigation from './global/SideBar';
+import TopNavigation from './old/global/AppBar';
+import SideNavigation from './old/global/SideBar';
 import PageSpinner from './PageSpinner';
 
 interface Props {

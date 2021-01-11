@@ -3,7 +3,7 @@
 import React from 'react';
 import { jsx, Flex, Box } from 'theme-ui';
 import { FaChevronDown, FaChevronLeft } from 'react-icons/fa';
-import IconButton from '../../input/IconButton';
+import PrimaryIconButton from '../../input/IconButton';
 
 interface Props {
   children: React.ReactNode;
@@ -29,9 +29,9 @@ const CollapseHeader = (props: Props): JSX.Element => {
       }}
     >
       <Box sx={{ width: '100%' }}>{children}</Box>
-      <IconButton onClick={onClick}>
+      <PrimaryIconButton onClick={onClick}>
         {isOpen && id === collapseId ? <FaChevronDown /> : <FaChevronLeft />}
-      </IconButton>
+      </PrimaryIconButton>
     </Flex>
   );
 };

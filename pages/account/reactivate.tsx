@@ -1,6 +1,6 @@
 import ResendActivationForm from '../../components/auth/forms/ResendActivationForm';
 import React from 'react';
-import AuthLayout from '../../digitalstage-ui/layout/AuthLayout';
+import AuthLayout from '../../components/global/layout/AuthLayout';
 import AuthPanel from '../../components/auth/AuthPanel';
 
 const Reactivate = (): JSX.Element => {

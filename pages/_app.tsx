@@ -14,6 +14,8 @@ import { useRouter } from 'next/router';
 import * as locales from '../content/locale';
 import { IntlProvider } from 'react-intl';
 import ThemeProvider from '../digitalstage-ui/ThemeProvider';
+import { ColorProvider } from '../lib/useColors';
+import './../digitalstage-ui/transitions.css';
 
 const AudioOutputSwitcher = () => {
   useAudioOutput();
@@ -41,42 +43,44 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       </Head>
 
       <ThemeProvider>
-        <IntlProvider locale={locale} defaultLocale={defaultLocale} messages={messages}>
-          <ErrorsConsumer>
-            {({ reportError }) => (
-              <AuthContextProvider>
-                <AuthContextConsumer>
-                  {({ token }) => (
-                    <DigitalStageProvider
-                      apiUrl={process.env.NEXT_PUBLIC_API_URL}
-                      routerDistributorUrl={process.env.NEXT_PUBLIC_ROUTER_DISTRIBUTOR_URL}
-                      standaloneRouterUrl={
-                        process.env.NEXT_PUBLIC_ROUTER_DISTRIBUTOR_URL
-                          ? undefined
-                          : process.env.NEXT_PUBLIC_ROUTER_URL
-                      }
-                      token={token}
-                      addErrorHandler={reportError}
-                    >
-                      <AudioContextProvider>
-                        <StageWebAudioProvider handleError={reportError}>
-                          <StageJoinerProvider>
-                            <ErrorHandler>
-                              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                              <Component {...pageProps} />
-                              <StageJoiner />
-                              <AudioOutputSwitcher />
-                            </ErrorHandler>
-                          </StageJoinerProvider>
-                        </StageWebAudioProvider>
-                      </AudioContextProvider>
-                    </DigitalStageProvider>
-                  )}
-                </AuthContextConsumer>
-              </AuthContextProvider>
-            )}
-          </ErrorsConsumer>
-        </IntlProvider>
+        <ColorProvider>
+          <IntlProvider locale={locale} defaultLocale={defaultLocale} messages={messages}>
+            <ErrorsConsumer>
+              {({ reportError }) => (
+                <AuthContextProvider>
+                  <AuthContextConsumer>
+                    {({ token }) => (
+                      <DigitalStageProvider
+                        apiUrl={process.env.NEXT_PUBLIC_API_URL}
+                        routerDistributorUrl={process.env.NEXT_PUBLIC_ROUTER_DISTRIBUTOR_URL}
+                        standaloneRouterUrl={
+                          process.env.NEXT_PUBLIC_ROUTER_DISTRIBUTOR_URL
+                            ? undefined
+                            : process.env.NEXT_PUBLIC_ROUTER_URL
+                        }
+                        token={token}
+                        addErrorHandler={reportError}
+                      >
+                        <AudioContextProvider>
+                          <StageWebAudioProvider handleError={reportError}>
+                            <StageJoinerProvider>
+                              <ErrorHandler>
+                                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                                <Component {...pageProps} />
+                                <StageJoiner />
+                                <AudioOutputSwitcher />
+                              </ErrorHandler>
+                            </StageJoinerProvider>
+                          </StageWebAudioProvider>
+                        </AudioContextProvider>
+                      </DigitalStageProvider>
+                    )}
+                  </AuthContextConsumer>
+                </AuthContextProvider>
+              )}
+            </ErrorsConsumer>
+          </IntlProvider>
+        </ColorProvider>
       </ThemeProvider>
     </>
   );

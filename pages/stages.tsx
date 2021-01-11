@@ -3,11 +3,12 @@
 import { useAuth } from '../lib/useAuth';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import StagesLayout from '../digitalstage-ui/layout/StagesLayout';
+import StagesLayout from '../components/global/layout/StagesLayout';
 import StageListView from '../components/stages/StagesList';
 import { Flex, Heading, jsx } from 'theme-ui';
 import StagesPanel from '../components/stages/StagesPanel';
 import { useIntl } from 'react-intl';
+import Layout from '../components/global/layout/Layout';
 
 const Stages = (): JSX.Element => {
   const router = useRouter();
@@ -22,7 +23,7 @@ const Stages = (): JSX.Element => {
   }, [loading, user]);
 
   return (
-    <StagesLayout>
+    <Layout>
       <Flex
         sx={{
           width: '100%',
@@ -38,7 +39,7 @@ const Stages = (): JSX.Element => {
           <StageListView />
         </StagesPanel>
       </Flex>
-    </StagesLayout>
+    </Layout>
   );
 };
 export default Stages;

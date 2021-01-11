@@ -1,11 +1,13 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx, Flex, Box } from 'theme-ui';
+import { jsx, Flex } from 'theme-ui';
 import React from 'react';
-import Logo from '../elements/Logo';
+import Logo from '../../../digitalstage-ui/elements/Logo';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { WhiteButton } from '../elements/input/Button';
+import { WhiteButton } from '../../../digitalstage-ui/elements/input/Button';
+import ProfileMenu from '../navigation/ProfileMenu';
+import DeviceController from '../DeviceController';
 
 const StagesLayout = (props: { children: React.ReactNode; projectName?: string }): JSX.Element => {
   const { children, projectName } = props;
@@ -39,21 +41,15 @@ const StagesLayout = (props: { children: React.ReactNode; projectName?: string }
             px: [5, 7],
           }}
         >
-          <Flex
-            sx={{
-              maxWidth: '',
-            }}
-          >
-            <Logo alt={projectName} width={110} full />
-          </Flex>
+          <Logo alt={projectName} width={110} full />
         </Flex>
         {children}
       </Flex>
       <Flex
         sx={{
           position: ['relative', 'fixed'],
-          top: [undefined, '3rem'],
-          right: [undefined, '1rem'],
+          top: [undefined, '1rem'],
+          right: [undefined, '4rem'],
           width: ['100%', 'auto'],
           justifyContent: ['center', undefined],
           pb: [5, undefined],
@@ -66,6 +62,10 @@ const StagesLayout = (props: { children: React.ReactNode; projectName?: string }
           <WhiteButton as="a">EN</WhiteButton>
         </Link>
       </Flex>
+
+      <ProfileMenu />
+
+      <DeviceController />
     </Flex>
   );
 };

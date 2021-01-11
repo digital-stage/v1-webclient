@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/useAuth';
 import AuthNavigation from '../../components/auth/AuthNavigation';
 import SignInForm from '../../components/auth/forms/SignInForm';
-import AuthLayout from '../../digitalstage-ui/layout/AuthLayout';
+import AuthLayout from '../../components/global/layout/AuthLayout';
 import AuthPanel from '../../components/auth/AuthPanel';
 
 const LoginScreen = (): JSX.Element => {

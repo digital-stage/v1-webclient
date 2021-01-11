@@ -2,10 +2,10 @@
 /** @jsx jsx */
 import { jsx, Flex, Box } from 'theme-ui';
 import React from 'react';
-import Logo from '../elements/Logo';
+import Logo from '../../../digitalstage-ui/elements/Logo';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { WhiteButton } from '../elements/input/Button';
+import { WhiteButton } from '../../../digitalstage-ui/elements/input/Button';
 
 const AuthLayout = (props: { children: React.ReactNode; projectName?: string }): JSX.Element => {
   const { children, projectName } = props;

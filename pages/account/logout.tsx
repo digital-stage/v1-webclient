@@ -4,7 +4,7 @@ import * as React from 'react';
 import { jsx, Heading } from 'theme-ui';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/useAuth';
-import AuthLayout from '../../digitalstage-ui/layout/AuthLayout';
+import AuthLayout from '../../components/global/layout/AuthLayout';
 import Panel, { WhitePanel } from '../../digitalstage-ui/elements/surface/Panel';
 
 const Logout = (): JSX.Element => {

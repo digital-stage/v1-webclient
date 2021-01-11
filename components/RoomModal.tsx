@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 import RoomElement from './room/RoomElement';
 import Editor from './room';
 import { Box, Button, Flex, jsx, Message, Select, Text } from 'theme-ui';
-import SingleSelect from './ui/SingleSelect';
+import SingleSelect from './old/ui/SingleSelect';
 import digitalStageTheme from '../digitalstage-ui/theme/DigitalStageTheme';
 import Modal from '../digitalstage-ui/elements/surface/Modal';
 

@@ -2,12 +2,12 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { Box, Flex, jsx, Link, Heading } from 'theme-ui';
-import DigitalStageLogo from '../../DigitalStageLogo';
-import MixingPanelModal from '../../MixingPanelModal';
+import DigitalStageLogo from '../../../DigitalStageLogo';
+import MixingPanelModal from '../../../MixingPanelModal';
 import SettingsModal from '../../settings';
 import { CenteredNavItems, LowerNavItems } from '../PageWrapperWithStage/MenuItems';
 import NavItem from '../NavItem';
-import RoomModal from '../../RoomModal';
+import RoomModal from '../../../RoomModal';
 
 const SideBar = (): JSX.Element => {
   const [selected, setSelected] = React.useState<string>();

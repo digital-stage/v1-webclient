@@ -2,50 +2,34 @@
 /** @jsx jsx */
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { Heading, jsx } from 'theme-ui';
-import Container, { Size } from '../components/ui/Container';
+import { jsx } from 'theme-ui';
 import Layout from '../components/Layout';
-import StageListView from '../components/stages/StagesList';
 import PageSpinner from '../components/PageSpinner';
-import StageDeviceController from '../components/StageDeviceController';
 import { useAuth } from '../lib/useAuth';
-import { useCurrentStageId, useStage } from '../lib/use-digital-stage/hooks';
-import StageView from '../components/StageView';
+import { useCurrentStageId } from '../lib/use-digital-stage/hooks';
+import AuthLayout from '../components/global/layout/AuthLayout';
 
 const Index = (): JSX.Element => {
   const router = useRouter();
   const { loading, user } = useAuth();
   const stageId = useCurrentStageId();
-  const stage = useStage(stageId);
 
   if (!loading) {
     if (!user) {
       router.push('/account/welcome');
     } else {
-      return (
-        <Layout sidebar={!!stageId} stage={stage}>
-          {stageId ? (
-            <React.Fragment>
-              <StageView />
-              <StageDeviceController />
-            </React.Fragment>
-          ) : (
-            <Container size={Size.stage}>
-              <Heading as="h1" sx={{ ml: 4, mt: [6, 7] }}>
-                Meine Bühnen
-              </Heading>
-              <StageListView />
-            </Container>
-          )}
-        </Layout>
-      );
+      if (stageId) {
+        router.push('/stage');
+      } else {
+        router.push('/stages');
+      }
     }
   }
 
   return (
-    <Layout>
+    <AuthLayout>
       <PageSpinner />
-    </Layout>
+    </AuthLayout>
   );
 };
 

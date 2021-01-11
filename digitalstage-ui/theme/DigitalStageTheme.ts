@@ -134,6 +134,11 @@ const DigitalStageTheme: Theme = {
       fontFamily: 'body',
       fontWeight: 'heading',
     },
+    micro: {
+      fontSize: 0,
+      fontFamily: 'body',
+      fontWeight: 'heading',
+    },
     tab: {
       variant: 'text.h4',
       borderBottom: '1px solid transparent',
@@ -152,6 +157,7 @@ const DigitalStageTheme: Theme = {
       },
     },
   },
+  /* Buttons */
   buttons: {
     primary: {
       fontFamily: 'heading',
@@ -250,6 +256,7 @@ const DigitalStageTheme: Theme = {
         opacity: '0.5',
       },
     },
+    /* FLOATING BUTTON - Icon single function */
     icon: {
       color: 'primary',
       borderRadius: '50%',
@@ -273,7 +280,7 @@ const DigitalStageTheme: Theme = {
         boxShadow: 'none',
       },
     },
-    tertiaryIcon: {
+    iconTertiary: {
       variant: 'buttons.tertiary',
       border: '1px solid transparent',
       borderColor: 'transparent',
@@ -297,29 +304,55 @@ const DigitalStageTheme: Theme = {
         boxShadow: 'none',
       },
     },
-    close: {
-      color: 'gray.1',
-      borderRadius: '50%',
-      width: '32px',
-      height: '32px',
+    iconDanger: {
+      variant: 'buttons.function',
+      bg: 'secondary',
       ':hover': {
-        bg: 'gray.2',
-        color: 'gray.3',
+        bg: 'secondaryHover',
         cursor: 'pointer',
       },
+      ':active': {
+        bg: 'secondaryActive',
+      },
       ':focus': {
-        border: '1px solid transparent',
         borderColor: 'primaryFocus',
-        bg: 'transparent',
         outline: 0,
       },
+      ':disabled': {
+        boxShadow: 'none',
+        opacity: '0.5',
+      },
     },
+    /* FLOATING BUTTON - Icon toggle function */
+
     function: {
+      variant: 'buttons.primary',
+      bg: 'tertiary',
+      width: '48px',
+      height: '48px',
+      m: 0,
+      p: 0,
+      borderRadius: '50%',
+      ':hover': {
+        bg: 'primaryHover',
+        cursor: 'pointer',
+      },
+      ':active': {
+        bg: 'primaryActive',
+      },
+      ':focus': {
+        borderColor: 'primaryFocus',
+        outline: 0,
+      },
+      ':disabled': {
+        boxShadow: 'none',
+        opacity: '0.5',
+      },
+    },
+    functionToggled: {
       variant: 'buttons.primary',
       width: '48px',
       height: '48px',
-      bg: 'primary',
-      color: 'text',
       m: 0,
       p: 0,
       borderRadius: '50%',
@@ -358,6 +391,25 @@ const DigitalStageTheme: Theme = {
         opacity: '0.5',
       },
     },
+    functionDangerToggled: {
+      variant: 'buttons.function',
+      bg: 'secondary',
+      ':hover': {
+        bg: 'secondaryHover',
+        cursor: 'pointer',
+      },
+      ':active': {
+        bg: 'secondaryActive',
+      },
+      ':focus': {
+        borderColor: 'primaryFocus',
+        outline: 0,
+      },
+      ':disabled': {
+        boxShadow: 'none',
+        opacity: '0.5',
+      },
+    },
     functionTertiary: {
       variant: 'buttons.function',
       bg: 'gray.2',
@@ -377,6 +429,45 @@ const DigitalStageTheme: Theme = {
       ':disabled': {
         boxShadow: 'none',
         opacity: '0.5',
+      },
+    },
+    functionTertiaryToggled: {
+      variant: 'buttons.function',
+      bg: 'gray.2',
+      ':hover': {
+        borderColor: 'gray.3',
+        bg: 'gray.3',
+        cursor: 'pointer',
+      },
+      ':active': {
+        bg: 'primaryTransparent',
+        borderColor: 'primary',
+      },
+      ':focus': {
+        borderColor: 'primaryFocus',
+        outline: 0,
+      },
+      ':disabled': {
+        boxShadow: 'none',
+        opacity: '0.5',
+      },
+    },
+    /* DEPREACTED? */
+    close: {
+      color: 'gray.1',
+      borderRadius: '50%',
+      width: '32px',
+      height: '32px',
+      ':hover': {
+        bg: 'gray.2',
+        color: 'gray.3',
+        cursor: 'pointer',
+      },
+      ':focus': {
+        border: '1px solid transparent',
+        borderColor: 'primaryFocus',
+        bg: 'transparent',
+        outline: 0,
       },
     },
     togglePrimaryOn: {

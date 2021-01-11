@@ -3,10 +3,10 @@
 import { Field, Form, Formik } from 'formik';
 import { Box, Button, Flex, Heading, jsx, Text } from 'theme-ui';
 import * as Yup from 'yup';
-import useStageActions from '../../lib/use-digital-stage/useStageActions';
-import { useAuth } from '../../lib/useAuth';
-import Input from '../../digitalstage-ui/elements/input/Input';
-import { useCurrentUser } from '../../lib/use-digital-stage/hooks';
+import useStageActions from '../../../lib/use-digital-stage/useStageActions';
+import { useAuth } from '../../../lib/useAuth';
+import Input from '../../../digitalstage-ui/elements/input/Input';
+import { useCurrentUser } from '../../../lib/use-digital-stage/hooks';
 interface Values {
   name: string;
 }

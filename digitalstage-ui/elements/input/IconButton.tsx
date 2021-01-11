@@ -3,18 +3,29 @@
 import { jsx, IconButton as ThemeUiIconButton } from 'theme-ui';
 import * as React from 'react';
 
-const PrimaryIconButton = (props: React.ComponentPropsWithRef<'button'>): JSX.Element => {
-  return <ThemeUiIconButton variant="primary" {...props} />;
+const PrimaryIconButton = (
+  props: React.ComponentPropsWithRef<'button'> & {
+    as?: React.ElementType;
+  }
+): JSX.Element => {
+  return <ThemeUiIconButton variant="icon" {...props} />;
+};
+const TertiaryIconButton = (
+  props: React.ComponentPropsWithRef<'button'> & {
+    as?: React.ElementType;
+  }
+): JSX.Element => {
+  return <ThemeUiIconButton variant="iconTertiary" {...props} />;
 };
 
-const SecondaryIconButton = (props: React.ComponentPropsWithRef<'button'>): JSX.Element => {
-  return <ThemeUiIconButton variant="secondary" {...props} />;
+const DangerIconButton = (
+  props: React.ComponentPropsWithRef<'button'> & {
+    as?: React.ElementType;
+  }
+): JSX.Element => {
+  return <ThemeUiIconButton variant="iconDanger" {...props} />;
 };
 
-const TertiaryIconButton = (props: React.ComponentPropsWithRef<'button'>): JSX.Element => {
-  return <ThemeUiIconButton variant="tertiary" {...props} />;
-};
-
-export { PrimaryIconButton, SecondaryIconButton, TertiaryIconButton };
+export { DangerIconButton, PrimaryIconButton, TertiaryIconButton };
 
 export default PrimaryIconButton;

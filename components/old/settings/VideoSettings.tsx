@@ -5,8 +5,8 @@
 import React from 'react';
 import { Box, Heading, jsx, Text } from 'theme-ui';
 import SingleSelect from '../ui/SingleSelect';
-import { useLocalDevice, useRemoteDevices } from '../../lib/use-digital-stage/hooks';
-import useStageActions from '../../lib/use-digital-stage/useStageActions';
+import { useLocalDevice, useRemoteDevices } from '../../../lib/use-digital-stage/hooks';
+import useStageActions from '../../../lib/use-digital-stage/useStageActions';
 
 const VideoSettings = (): JSX.Element => {
   const localDevice = useLocalDevice();

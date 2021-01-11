@@ -1,7 +1,8 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import React from 'react';
-import { jsx, Flex, SxStyleProp } from 'theme-ui';
+import { jsx, Flex, SxStyleProp, css } from 'theme-ui';
+import { Interpolation } from '@emotion/serialize';
 
 const baseSx = {
   boxShadow: 'default',
@@ -20,6 +21,23 @@ const WhitePanel = (props: { children: React.ReactNode }): JSX.Element => {
       sx={{
         ...baseSx,
         flexDirection: 'column',
+        bg: 'white',
+      }}
+    >
+      {children}
+    </Flex>
+  );
+};
+
+const LightPanel = (props: { children: React.ReactNode }): JSX.Element => {
+  const { children } = props;
+
+  return (
+    <Flex
+      sx={{
+        ...baseSx,
+        flexDirection: 'column',
+        bg: 'gray.4',
       }}
     >
       {children}
@@ -35,6 +53,7 @@ const DarkPanel = (props: { children: React.ReactNode }): JSX.Element => {
       sx={{
         ...baseSx,
         flexDirection: 'column',
+        bg: 'gray.7',
       }}
     >
       {children}
@@ -45,10 +64,10 @@ const DarkPanel = (props: { children: React.ReactNode }): JSX.Element => {
 const DefaultPanel = (
   props: React.ComponentProps<'div'> & {
     children: React.ReactNode;
-    sx?: SxStyleProp;
+    styles?: Interpolation;
   }
 ): JSX.Element => {
-  const { children, sx } = props;
+  const { children, styles } = props;
 
   return (
     <Flex
@@ -57,13 +76,13 @@ const DefaultPanel = (
         ...baseSx,
         flexDirection: 'column',
         bg: 'gray.7',
-        ...sx,
       }}
+      css={css(styles)}
     >
       {children}
     </Flex>
   );
 };
 
-export { DarkPanel, WhitePanel };
+export { DarkPanel, LightPanel, WhitePanel };
 export default DefaultPanel;

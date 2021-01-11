@@ -15,47 +15,46 @@ const Composition = (): JSX.Element => {
       const handleResize = () => {
         const rect = wrapperRef.current.getBoundingClientRect();
         setSize(rect);
-      }
+      };
       wrapperRef.current.addEventListener('resize', handleResize);
       handleResize();
       return () => {
         if (wrapperRef.current) wrapperRef.current.removeEventListener('resize', handleResize);
       };
     }
-  }, [wrapperRef, groups])
+  }, [wrapperRef, groups]);
 
   const participantWidth = (participants: number): string => {
     let width = `${size.width / groups.length}px`;
     if (participants >= 2) {
-      width = `${(size.width / groups.length) / 2}px`
+      width = `${size.width / groups.length / 2}px`;
     } else {
-      width = `${size.width / groups.length}px`
+      width = `${size.width / groups.length}px`;
     }
-    return width
-  }
+    return width;
+  };
 
   const participantHeight = (participants: number): string => {
     let height = '100%';
     if (participants >= 3) {
-      height = `${groupHeight() / Math.round(participants / 2)}px`
+      height = `${groupHeight() / Math.round(participants / 2)}px`;
     } else {
-      height = '100%'
+      height = '100%';
     }
-    return height
-  }
+    return height;
+  };
 
   const groupHeight = (): number => {
     let height = size.height;
-    const participantLength: Array<number> = groups.map(group => group.participants.length)
-    const isEqual: boolean = participantLength.every((val, i, arr) => val === arr[0])
+    const participantLength: Array<number> = groups.map((group) => group.participants.length);
+    const isEqual: boolean = participantLength.every((val, i, arr) => val === arr[0]);
     if (isEqual) {
-      height = size.height / groups.length
+      height = size.height / groups.length;
     } else {
       //TODO calculate height if gorups have diff number of participants
     }
     return height;
-  }
-
+  };
 
   return (
     <Box>
@@ -74,35 +73,36 @@ const Composition = (): JSX.Element => {
             <Flex
               sx={{
                 flexWrap: 'wrap',
-                width: '100%'
+                width: '100%',
               }}
             >
               {group.participants.map((participant, index) => {
-                return <Flex
-                  key={index}
-                  sx={{
-                    width: participantWidth(group.participants.length),
-                    minWidth: participantWidth(group.participants.length),
-                    height: participantHeight(group.participants.length),
-                    border: '1px solid green'
-                  }}
-                >
-                  {participant.hasVideo && (
-                    <VideoPlayer
-                      sx={{
-                        position: 'absolute',
-                        width: participantWidth(group.participants.length),
-                        height: participantHeight(group.participants.length),
-                      }}
-                      video={participant.video}
-                    />
-                  )}
-                </Flex>
+                return (
+                  <Flex
+                    key={index}
+                    sx={{
+                      width: participantWidth(group.participants.length),
+                      minWidth: participantWidth(group.participants.length),
+                      height: participantHeight(group.participants.length),
+                      border: '1px solid green',
+                    }}
+                  >
+                    {participant.hasVideo && (
+                      <VideoPlayer
+                        sx={{
+                          position: 'absolute',
+                          width: participantWidth(group.participants.length),
+                          height: participantHeight(group.participants.length),
+                        }}
+                        video={participant.video}
+                      />
+                    )}
+                  </Flex>
+                );
               })}
             </Flex>
           </Flex>
         ))}
-
       </Flex>
       <Controller groups={groups} setGroups={setGroups} />
     </Box>

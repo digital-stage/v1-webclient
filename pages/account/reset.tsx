@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { jsx, Message } from 'theme-ui';
 import ResetPasswordForm from '../../components/auth/forms/ResetPasswordForm';
 import { useAuth } from '../../lib/useAuth';
-import AuthLayout from '../../digitalstage-ui/layout/AuthLayout';
+import AuthLayout from '../../components/global/layout/AuthLayout';
 import AuthPanel from '../../components/auth/AuthPanel';
 
 const Reset = (): JSX.Element => {

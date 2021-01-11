@@ -17,7 +17,7 @@ import useStageActions from '../lib/use-digital-stage/useStageActions';
 import Link from 'next/link';
 import { ImPhoneHangUp } from 'react-icons/im';
 import { BsThreeDotsVertical } from 'react-icons/bs';
-import Modal from '../components/ui/Modal';
+import Modal from '../components/old/ui/Modal';
 import DigitalStageLogo from '../components/DigitalStageLogo';
 import { GoSettings } from 'react-icons/go';
 

@@ -2,8 +2,8 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { Box, Button, Divider, Flex, jsx, Text } from 'theme-ui';
-import { useCurrentUser } from '../../../lib/use-digital-stage/hooks';
-import { useAuth } from '../../../lib/useAuth';
+import { useCurrentUser } from '../../../../lib/use-digital-stage/hooks';
+import { useAuth } from '../../../../lib/useAuth';
 import { AppBarItems } from '../PageWrapperWithStage/MenuItems';
 
 interface Props {

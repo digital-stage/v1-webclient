@@ -10,8 +10,8 @@ import { useLocalDevice } from '../lib/use-digital-stage/hooks';
 import useStageActions from '../lib/use-digital-stage/useStageActions';
 import useAudioContext from '../lib/useAudioContext';
 import MixingPanelModal from './MixingPanelModal';
-import MobileSideBar from './global/SideBar/MobileSideBar';
-import SettingsModal from './settings';
+import MobileSideBar from './old/global/SideBar/MobileSideBar';
+import SettingsModal from './old/settings';
 import RoomModal from './RoomModal';
 
 const StageDeviceController = (): JSX.Element => {

@@ -7,7 +7,7 @@ const de = {
   stage: 'Bühne',
   mixer: 'Mischpult',
   room: '3D Audio',
-  devices: 'Einstellungen',
+  devices: 'Meine Geräte',
   feedback: 'Problem melden',
   login: 'Login',
   signUp: 'Registrierung',
@@ -49,5 +49,7 @@ const de = {
   send: 'Senden',
   cancel: 'Abbrechen',
   myStages: 'Meine Bühnen',
+  settings: 'Einstellungen',
+  profile: 'Benutzerprofil',
 };
 export default de;
