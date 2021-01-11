@@ -1,3 +1,16 @@
+# [0.23.0](https://github.com/digital-stage/webclient/compare/v0.22.26...v0.23.0) (2021-01-11)
+
+
+### Bug Fixes
+
+* remove import ([6d074b0](https://github.com/digital-stage/webclient/commit/6d074b0d673ebbafe4481b67afb4b60075f8cd8e))
+
+
+### Features
+
+* wip example video component ([d7a2ec1](https://github.com/digital-stage/webclient/commit/d7a2ec10edd358c67baea9e324bd985b4d85237f))
+* wip example video component groups and participants ([27b8a71](https://github.com/digital-stage/webclient/commit/27b8a71fff41fc98a35c2e0aac55a3706393c5cf))
+
 ## [0.22.26](https://github.com/digital-stage/webclient/compare/v0.22.25...v0.22.26) (2021-01-08)
 
 
