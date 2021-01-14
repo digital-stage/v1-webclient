@@ -24,28 +24,14 @@ const Composition = (): JSX.Element => {
     }
   }, [wrapperRef, groups]);
 
-  const isEven = (n) => {
-    return n % 2 == 0;
-  };
 
   const participantWidth = (participants: number, mobile?: boolean): string => {
     const mobileWidth = mobile ? size.width : size.width / groups.length;
     let width = `${mobileWidth}px`;
-    switch (true) {
-      case participants >= 12:
-        width = `${mobileWidth / 5}px`;
-        break;
-      case participants >= 9:
-        width = `${mobileWidth / 4}px`;
-        break;
-      case participants >= 6:
-        width = `${mobileWidth / 3}px`;
-        break;
-      case participants >= 2:
-        width = `${mobileWidth / 2}px`;
-        break;
-      default:
-        width = `${mobileWidth}px`;
+    let divider = 2;
+    for (let i = 2; i <= participants; i = i * 2) {
+      width = `${mobileWidth / divider}px`;
+      divider++;
     }
     return width;
   };
@@ -53,37 +39,15 @@ const Composition = (): JSX.Element => {
   const participantHeight = (participants: number, mobile?: boolean): string => {
     const mobileHeight = !mobile ? size.height : size.height / groups.length;
     let height = `${mobileHeight}px`;
-    switch (true) {
-      case participants >= 12:
-        height = `${mobileHeight / Math.round(participants / 4)}px`;
-        break;
-      case participants >= 6:
-        height = `${mobileHeight / Math.floor(participants / 3)}px`;
-        break;
-      case participants >= 3:
-        height = `${mobileHeight / 2}px`;
-        break;
-      default:
-        height = `${mobileHeight}px`;
+    let divider = 2
+    let step = 1;
+    for (let i = 3; i <= participants; i = i + step) {
+      height = `${mobileHeight / divider}px`;
+      divider++;
+      step += 3;
     }
     return height;
   };
-
-  // const groupHeight = (): number => {
-  //   let height = size.height;
-  //   const participantLength: Array<number> = groups.map(group => group.participants.length)
-  //   const isEqual: boolean = participantLength.every((val, i, arr) => val === arr[0])
-  //   const longestGroupId = Math.max(...groups.map(o => { return o.participants.length; }));
-  //   console.log(longestGroupId)
-  //   if (isEqual) {
-  //     height = size.height / groups.length;
-  //   } else {
-  //     console.log(groups);
-  //     height = size.height / groups.length;
-  //     //TODO calculate height if gorups have diff number of participants
-  //   }
-  //   return height;
-  // }
 
   return (
     <Box>
