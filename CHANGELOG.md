@@ -1,3 +1,15 @@
+# [0.24.0](https://github.com/digital-stage/webclient/compare/v0.23.0...v0.24.0) (2021-01-14)
+
+
+### Bug Fixes
+
+* run prettier ([cd944ce](https://github.com/digital-stage/webclient/commit/cd944cef7f8caee203f10e2225130a4c7bebcf4c))
+
+
+### Features
+
+* calcuate width and height of each participant ([4bbdbd6](https://github.com/digital-stage/webclient/commit/4bbdbd65c78b221e7c258bc8cb05c8ebb321eabc))
+
 # [0.23.0](https://github.com/digital-stage/webclient/compare/v0.22.26...v0.23.0) (2021-01-11)
 
 
