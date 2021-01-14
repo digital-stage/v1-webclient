@@ -24,7 +24,6 @@ const Composition = (): JSX.Element => {
     }
   }, [wrapperRef, groups]);
 
-
   const participantWidth = (participants: number, mobile?: boolean): string => {
     const mobileWidth = mobile ? size.width : size.width / groups.length;
     let width = `${mobileWidth}px`;
@@ -39,7 +38,7 @@ const Composition = (): JSX.Element => {
   const participantHeight = (participants: number, mobile?: boolean): string => {
     const mobileHeight = !mobile ? size.height : size.height / groups.length;
     let height = `${mobileHeight}px`;
-    let divider = 2
+    let divider = 2;
     let step = 1;
     for (let i = 3; i <= participants; i = i + step) {
       height = `${mobileHeight / divider}px`;
