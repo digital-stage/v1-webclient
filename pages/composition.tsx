@@ -24,12 +24,11 @@ const Composition = (): JSX.Element => {
     }
   }, [wrapperRef, groups]);
 
-  const participantWidth = (participants: number, mobile?: boolean): string => {
-    const mobileWidth = mobile ? size.width : size.width / groups.length;
-    let width = `${mobileWidth}px`;
+  const participantWidth = (participants: number, group: Group): string => {
+    let width = `${groupWidth(group)}px`;
     let divider = 2;
     for (let i = 2; i <= participants; i = i * 2) {
-      width = `${mobileWidth / divider}px`;
+      width = `${groupWidth(group) / divider}px`;
       divider++;
     }
     return width;
@@ -87,8 +86,8 @@ const Composition = (): JSX.Element => {
                     key={index}
                     sx={{
                       width: [
-                        participantWidth(group.participants.length, true),
-                        participantWidth(group.participants.length, false),
+                        participantWidth(group.participants.length, group),
+                        participantWidth(group.participants.length, group),
                       ],
                       height: [
                         participantHeight(group.participants.length, true),
@@ -102,8 +101,8 @@ const Composition = (): JSX.Element => {
                         sx={{
                           position: 'absolute',
                           width: [
-                            participantWidth(group.participants.length, true),
-                            participantWidth(group.participants.length, false),
+                            participantWidth(group.participants.length, group),
+                            participantWidth(group.participants.length, group),
                           ],
                           height: [
                             participantHeight(group.participants.length, true),
