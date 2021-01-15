@@ -48,6 +48,21 @@ const Composition = (): JSX.Element => {
     return height;
   };
 
+  const groupWidth = (group: Group) => {
+    let width: number;
+    const moreThenTen = groups.filter((group) => group.participants.length >= 10).length;
+    if (moreThenTen <= 0 || moreThenTen === groups.length) width = size.width / groups.length;
+    else if (group.participants.length >= 10)
+      width = size.width / groups.length + (size.width / groups.length) * 0.1;
+    else
+      width =
+        size.width / groups.length -
+        (size.width / groups.length) * (moreThenTen * (0.1 / (groups.length - moreThenTen)));
+
+
+    return width;
+  };
+
   return (
     <Box>
       <Flex sx={{ width: '100vw', height: '100vh', flexWrap: 'wrap' }} ref={wrapperRef}>
@@ -55,9 +70,7 @@ const Composition = (): JSX.Element => {
           <Flex
             key={index}
             sx={{
-              width: [`${size.width}px`, `${size.width / groups.length}px`],
-              minWidth: [`${size.width}px`, `${size.width / groups.length}px`],
-              maxWidth: [size.width, `${size.width / groups.length}px`],
+              width: ['100vh', `${groupWidth(group)}px`],
               height: [`${size.height / groups.length}px`, '100vh'],
               // border: '1px solid red',
             }}
@@ -81,7 +94,7 @@ const Composition = (): JSX.Element => {
                         participantHeight(group.participants.length, true),
                         participantHeight(group.participants.length, false),
                       ],
-                      // border: '1px solid green'
+                      // border: '1px solid blue'
                     }}
                   >
                     {participant.hasVideo && (

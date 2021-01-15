@@ -21,8 +21,8 @@ const VideoPlayer = (props: {
     <video
       sx={{
         ...sx,
-        objectFit: 'cover',
-        transform: 'scale(-1, 1)',
+        // objectFit: 'cover',
+        // transform: 'scale(-1, 1)',
       }}
       className={className}
       ref={videoRef}
