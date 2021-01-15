@@ -58,7 +58,6 @@ const Composition = (): JSX.Element => {
         size.width / groups.length -
         (size.width / groups.length) * (moreThenTen * (0.1 / (groups.length - moreThenTen)));
 
-
     return width;
   };
 
