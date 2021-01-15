@@ -1,3 +1,16 @@
+# [0.25.0](https://github.com/digital-stage/webclient/compare/v0.24.0...v0.25.0) (2021-01-15)
+
+
+### Bug Fixes
+
+* run prettier ([0b70dbd](https://github.com/digital-stage/webclient/commit/0b70dbdb14376e77dd6d346b5b8ad546ed90ab27))
+* width of groups ([e564706](https://github.com/digital-stage/webclient/commit/e564706bfc8c9f539491bbfccf2ff03483f3dfed))
+
+
+### Features
+
+* calculate width of groups ([7e6218e](https://github.com/digital-stage/webclient/commit/7e6218e3cca80e6fbbcc62586afbd103a23925de))
+
 # [0.24.0](https://github.com/digital-stage/webclient/compare/v0.23.0...v0.24.0) (2021-01-14)
 
 
