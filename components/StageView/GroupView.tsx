@@ -27,7 +27,7 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
           groupsWithMembers.length === 2
             ? ['100%', '50%']
             : groupsWithMembers.length >= 3
-            ? ['100%', '50%', '50%', '33%']
+            ? ['100%', '50%', '33%', '25%']
             : '100%',
         flexWrap: 'wrap',
         p: 4,
