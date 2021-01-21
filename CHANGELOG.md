@@ -1,3 +1,10 @@
+## [0.25.1](https://github.com/digital-stage/webclient/compare/v0.25.0...v0.25.1) (2021-01-21)
+
+
+### Bug Fixes
+
+* groups per row ([d2b663b](https://github.com/digital-stage/webclient/commit/d2b663b2cc19bbe25a51e427a957d07a938fdd59))
+
 # [0.25.0](https://github.com/digital-stage/webclient/compare/v0.24.0...v0.25.0) (2021-01-15)
 
 
