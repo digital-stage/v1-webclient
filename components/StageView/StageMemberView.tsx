@@ -7,11 +7,14 @@ import { HiUserCircle } from 'react-icons/hi';
 import {
   StageMemberWithUserData,
   useIsStageAdmin,
+  useSelector,
   useStageActions,
 } from '../../lib/use-digital-stage';
 import OnlineStatus from './OnlineStatus';
 import useVideoConsumersByStageMember from '../../lib/use-digital-stage/hooks/useVideoConsumersByStageMember';
 import VideoPlayer from '../../digitalstage-ui/elements/media/VideoPlayer';
+import { useEffect, useState } from 'react';
+import { VscMirror } from 'react-icons/vsc';
 
 const StageMemberTitle = (props: { stageMember: StageMemberWithUserData; withIcon?: boolean }) => {
   const { stageMember, withIcon } = props;
@@ -74,6 +77,14 @@ const StageMemberView = ({
   stageMember: StageMemberWithUserData;
 }): JSX.Element => {
   const videoConsumers = useVideoConsumersByStageMember(stageMember._id);
+  const userId = useSelector<string>((state) => state.global.userId);
+  const [mirrored, setMirrored] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (userId && userId === stageMember.userId) {
+      setMirrored(true);
+    }
+  }, [stageMember, userId]);
 
   return (
     <Box
@@ -85,8 +96,23 @@ const StageMemberView = ({
       }}
     >
       {videoConsumers.length > 0 && (
-        <VideoPlayer sx={{ position: 'relative' }} consumers={videoConsumers} />
+        <VideoPlayer sx={{ position: 'relative' }} consumers={videoConsumers} mirrored={mirrored} />
       )}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+        }}
+      >
+        <IconButton
+          onClick={() => setMirrored((prev) => !prev)}
+          variant={mirrored ? 'white' : 'tertiary'}
+          sx={{ border: 0, width: '32px', height: '32px', p: 0, boxShadow: 'none', m: 2 }}
+        >
+          <VscMirror />
+        </IconButton>
+      </Box>
       <StageMemberTitle stageMember={stageMember} withIcon={videoConsumers.length <= 0} />
     </Box>
   );
