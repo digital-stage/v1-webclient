@@ -1,3 +1,48 @@
+## [0.25.1](https://github.com/digital-stage/webclient/compare/v0.25.0...v0.25.1) (2021-01-21)
+
+
+### Bug Fixes
+
+* groups per row ([d2b663b](https://github.com/digital-stage/webclient/commit/d2b663b2cc19bbe25a51e427a957d07a938fdd59))
+
+# [0.25.0](https://github.com/digital-stage/webclient/compare/v0.24.0...v0.25.0) (2021-01-15)
+
+
+### Bug Fixes
+
+* run prettier ([0b70dbd](https://github.com/digital-stage/webclient/commit/0b70dbdb14376e77dd6d346b5b8ad546ed90ab27))
+* width of groups ([e564706](https://github.com/digital-stage/webclient/commit/e564706bfc8c9f539491bbfccf2ff03483f3dfed))
+
+
+### Features
+
+* calculate width of groups ([7e6218e](https://github.com/digital-stage/webclient/commit/7e6218e3cca80e6fbbcc62586afbd103a23925de))
+
+# [0.24.0](https://github.com/digital-stage/webclient/compare/v0.23.0...v0.24.0) (2021-01-14)
+
+
+### Bug Fixes
+
+* run prettier ([cd944ce](https://github.com/digital-stage/webclient/commit/cd944cef7f8caee203f10e2225130a4c7bebcf4c))
+
+
+### Features
+
+* calcuate width and height of each participant ([4bbdbd6](https://github.com/digital-stage/webclient/commit/4bbdbd65c78b221e7c258bc8cb05c8ebb321eabc))
+
+# [0.23.0](https://github.com/digital-stage/webclient/compare/v0.22.26...v0.23.0) (2021-01-11)
+
+
+### Bug Fixes
+
+* remove import ([6d074b0](https://github.com/digital-stage/webclient/commit/6d074b0d673ebbafe4481b67afb4b60075f8cd8e))
+
+
+### Features
+
+* wip example video component ([d7a2ec1](https://github.com/digital-stage/webclient/commit/d7a2ec10edd358c67baea9e324bd985b4d85237f))
+* wip example video component groups and participants ([27b8a71](https://github.com/digital-stage/webclient/commit/27b8a71fff41fc98a35c2e0aac55a3706393c5cf))
+
 ## [0.22.26](https://github.com/digital-stage/webclient/compare/v0.22.25...v0.22.26) (2021-01-08)
 
 
