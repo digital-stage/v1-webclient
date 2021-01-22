@@ -5,8 +5,13 @@ import { jsx, Flex } from 'theme-ui';
 import { useEffect, useRef, useState } from 'react';
 import { LocalConsumer } from '../../../../lib/use-digital-stage/types';
 
-const SingleVideoPlayer = (props: { track: MediaStreamTrack; width: string; height: string }) => {
-  const { track, width, height } = props;
+const SingleVideoPlayer = (props: {
+  track: MediaStreamTrack;
+  width: string;
+  height: string;
+  mirrored?: boolean;
+}) => {
+  const { track, width, height, mirrored } = props;
   const ref = useRef<HTMLVideoElement>();
 
   useEffect(() => {
@@ -21,7 +26,7 @@ const SingleVideoPlayer = (props: { track: MediaStreamTrack; width: string; heig
         width: width,
         height: height,
         objectFit: 'cover',
-        transform: 'scale(-1, 1)',
+        transform: mirrored ? 'scale(-1, 1)' : undefined,
       }}
       muted={true}
       playsInline={true}
@@ -31,8 +36,8 @@ const SingleVideoPlayer = (props: { track: MediaStreamTrack; width: string; heig
   );
 };
 
-const VideoPlayer = (props: { consumers: LocalConsumer[] }): JSX.Element => {
-  const { consumers } = props;
+const VideoPlayer = (props: { consumers: LocalConsumer[]; mirrored?: boolean }): JSX.Element => {
+  const { consumers, mirrored } = props;
   const wrapperRef = useRef<HTMLDivElement>();
   const [size, setSize] = useState<DOMRect>();
   const [width, setWidth] = useState<string>('100%');
@@ -90,6 +95,7 @@ const VideoPlayer = (props: { consumers: LocalConsumer[] }): JSX.Element => {
           width={width}
           height={height}
           track={consumer.consumer.track}
+          mirrored={mirrored}
         />
       ))}
     </Flex>
