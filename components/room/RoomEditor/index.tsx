@@ -54,6 +54,7 @@ const RoomEditor = (props: {
         width: '100%',
         height: '100%',
         overflow: 'scroll',
+        bg: 'gray.6',
         ...sx,
       }}
       className={className}

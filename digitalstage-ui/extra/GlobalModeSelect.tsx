@@ -1,10 +1,10 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Link, Flex, SxStyleProp, Heading } from 'theme-ui';
+import { jsx, Link, Flex, SxStyleProp } from 'theme-ui';
 import { useIntl } from 'react-intl';
 
-const RoomModeSelect = (props: {
+const GlobalModeSelect = (props: {
   global: boolean;
   onChange: (global: boolean) => void;
   sx?: SxStyleProp;
@@ -46,4 +46,4 @@ const RoomModeSelect = (props: {
   );
 };
 
-export default RoomModeSelect;
+export default GlobalModeSelect;

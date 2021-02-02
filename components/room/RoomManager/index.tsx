@@ -11,7 +11,7 @@ import RoomEditor, { RoomElement } from '../RoomEditor';
 import React, { useState } from 'react';
 import { Box, Button, Flex, Select, Text } from 'theme-ui';
 import { useIntl } from 'react-intl';
-import RoomModeSelect from '../RoomModeSelect';
+import GlobalModeSelect from '../../../digitalstage-ui/extra/GlobalModeSelect';
 
 const RoomManager = (): JSX.Element => {
   const { updateStageMember, setCustomStageMember, removeCustomStageMember } = useStageActions();
@@ -39,7 +39,7 @@ const RoomManager = (): JSX.Element => {
       >
         {isStageAdmin ? (
           <React.Fragment>
-            <RoomModeSelect
+            <GlobalModeSelect
               sx={{
                 display: ['none', 'flex'],
                 flexGrow: 0,

@@ -1,7 +1,7 @@
 import React from 'react';
-import { jsx, Flex } from 'theme-ui';
 import { useRouter } from 'next/router';
 import useDigitalStage, { useSelector } from '../lib/use-digital-stage';
+import MixingPanel from '../components/mixer/MixingPanel';
 
 const Mixer = (): JSX.Element => {
   const router = useRouter();
@@ -12,6 +12,6 @@ const Mixer = (): JSX.Element => {
     router.push('/');
   }
 
-  return <Flex>MIXER</Flex>;
+  return <MixingPanel />;
 };
 export default Mixer;
