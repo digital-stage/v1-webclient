@@ -3,10 +3,9 @@
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { Heading, jsx } from 'theme-ui';
-import Layout from '../components/Layout';
-import Loading from '../components/old/global/Loading';
 import useStageActions from '../lib/use-digital-stage/useStageActions';
 import { useCurrentStageId, useSelector } from '../lib/use-digital-stage/hooks';
+import LoadingOverlay from '../components/global/LoadingOverlay';
 
 const Leave = (): JSX.Element => {
   const router = useRouter();
@@ -22,11 +21,9 @@ const Leave = (): JSX.Element => {
   }, [ready, stageId]);
 
   return (
-    <Layout>
-      <Loading>
-        <Heading as="h1">Bühne verlassen ...</Heading>
-      </Loading>
-    </Layout>
+    <LoadingOverlay>
+      <Heading as="h1">Bühne verlassen ...</Heading>
+    </LoadingOverlay>
   );
 };
 export default Leave;

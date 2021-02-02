@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/useAuth';
-import ForgetPasswordForm from '../../components/auth/forms/ForgetPasswordForm';
-import AuthPanel from '../../components/auth/AuthPanel';
-import AuthLayout from '../../components/global/layout/AuthLayout';
+import ForgetPasswordForm from '../../components/account/forms/ForgetPasswordForm';
+import AuthPanel from '../../components/account/AuthPanel';
+import AuthLayout from '../../components/layout/AuthLayout';
 
-const SignUp = (): JSX.Element => {
+const Forgot = (): JSX.Element => {
   const router = useRouter();
   const { user } = useAuth();
 
@@ -14,12 +14,11 @@ const SignUp = (): JSX.Element => {
   }
 
   return (
-    <AuthLayout>
-      <AuthPanel>
-        <ForgetPasswordForm />
-      </AuthPanel>
-    </AuthLayout>
+    <AuthPanel>
+      <ForgetPasswordForm />
+    </AuthPanel>
   );
 };
+Forgot.Layout = AuthLayout;
 
-export default SignUp;
+export default Forgot;

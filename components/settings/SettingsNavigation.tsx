@@ -25,6 +25,18 @@ const SettingsNavigation = (): JSX.Element => {
           {f('profile')}
         </Link>
       </NextLink>
+      <NextLink href="/settings/device">
+        <Link
+          variant="auth"
+          sx={{
+            borderBottomColor: pathname === '/settings/device' && 'secondary',
+            width: '50%',
+            textAlign: 'center',
+          }}
+        >
+          {f('device')}
+        </Link>
+      </NextLink>
       <NextLink href="/settings/devices">
         <Link
           variant="auth"

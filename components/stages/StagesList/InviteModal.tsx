@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Flex, Button, Heading, Message, Checkbox, Label, jsx } from 'theme-ui';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import Input from '../../../digitalstage-ui/elements/input/Input';
+import Input from '../../../digitalstage-ui/extra/Input';
 import { Group, Stage } from '../../../lib/use-digital-stage/types';
-import { LightDialog } from '../../../digitalstage-ui/elements/surface/Dialog';
+import { LightDialog } from '../../../digitalstage-ui/extra/Dialog';
 
 const InviteModal = (props: {
   stage: Stage;

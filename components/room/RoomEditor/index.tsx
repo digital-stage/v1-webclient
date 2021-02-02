@@ -8,7 +8,7 @@ import { Box, SxStyleProp } from 'theme-ui';
 const FACTOR = 100.0;
 const BOUNDING_BUFFER = 42;
 
-const RoomManager = (props: {
+const RoomEditor = (props: {
   width: number;
   height: number;
   elements: RoomElement[];
@@ -64,6 +64,9 @@ const RoomManager = (props: {
           position: 'absolute',
           top: 0,
           left: 0,
+          backgroundPosition: 'center center',
+          backgroundAttachment: 'fixed',
+          background: "url('/static/images/room-bg.svg')",
         }}
       >
         <KonvaStage
@@ -131,4 +134,7 @@ const RoomManager = (props: {
     </Box>
   );
 };
-export default RoomManager;
+
+export { CustomShape };
+export type { RoomElement };
+export default RoomEditor;

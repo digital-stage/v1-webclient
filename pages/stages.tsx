@@ -3,12 +3,12 @@
 import { useAuth } from '../lib/useAuth';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import StagesLayout from '../components/global/layout/StagesLayout';
 import StageListView from '../components/stages/StagesList';
 import { Flex, Heading, jsx } from 'theme-ui';
 import StagesPanel from '../components/stages/StagesPanel';
 import { useIntl } from 'react-intl';
-import Layout from '../components/global/layout/Layout';
+import StagesLayout from '../components/layout/StagesLayout';
+import { useSelector } from '../lib/use-digital-stage';
 
 const Stages = (): JSX.Element => {
   const router = useRouter();
@@ -23,23 +23,23 @@ const Stages = (): JSX.Element => {
   }, [loading, user]);
 
   return (
-    <Layout>
-      <Flex
-        sx={{
-          width: '100%',
-          flexDirection: 'column',
-          maxWidth: 'container.stage',
-        }}
-      >
-        <Heading as="h1" sx={{ ml: 4, mt: [6, 7] }}>
-          {f('myStages')}
-        </Heading>
+    <Flex
+      sx={{
+        width: '100%',
+        flexDirection: 'column',
+        maxWidth: 'container.stage',
+      }}
+    >
+      <Heading as="h1" sx={{ ml: 4, mt: [6, 7] }}>
+        {f('myStages')}
+      </Heading>
 
-        <StagesPanel>
-          <StageListView />
-        </StagesPanel>
-      </Flex>
-    </Layout>
+      <StagesPanel>
+        <StageListView />
+      </StagesPanel>
+    </Flex>
   );
 };
+
+Stages.Layout = StagesLayout;
 export default Stages;

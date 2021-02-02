@@ -6,7 +6,6 @@ import StageJoiner from '../components/global/StageJoiner';
 import { AudioContextProvider } from '../lib/useAudioContext';
 import { StageWebAudioProvider } from '../lib/useStageWebAudio';
 import { ErrorsConsumer } from '../lib/useErrors';
-import ErrorHandler from '../components/ErrorHandler';
 import { DigitalStageProvider } from '../lib/use-digital-stage';
 import { StageJoinerProvider } from '../lib/useStageJoiner';
 import useAudioOutput from '../lib/useAudioOutput';
@@ -16,17 +15,26 @@ import { IntlProvider } from 'react-intl';
 import ThemeProvider from '../digitalstage-ui/ThemeProvider';
 import { ColorProvider } from '../lib/useColors';
 import './../digitalstage-ui/transitions.css';
+import MainLayout from '../components/layout/MainLayout';
+import { NextComponentType, NextPageContext } from 'next/dist/next-server/lib/utils';
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextComponentType<NextPageContext, any> & {
+    Layout: React.FunctionComponent;
+  };
+};
 
 const AudioOutputSwitcher = () => {
   useAudioOutput();
   return null;
 };
 
-const MyApp = ({ Component, pageProps }: AppProps) => {
+const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   const router = useRouter();
   const { locale, defaultLocale } = router;
   const localeCopy = locales[locale];
   const messages = localeCopy['default'];
+  const CustomLayout = Component.Layout ? Component.Layout : React.Fragment;
 
   React.useEffect(() => {
     // Remove the server-side injected CSS.
@@ -64,12 +72,14 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
                         <AudioContextProvider>
                           <StageWebAudioProvider handleError={reportError}>
                             <StageJoinerProvider>
-                              <ErrorHandler>
-                                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                                <Component {...pageProps} />
-                                <StageJoiner />
-                                <AudioOutputSwitcher />
-                              </ErrorHandler>
+                              <MainLayout>
+                                <CustomLayout>
+                                  {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                                  <Component {...pageProps} />
+                                  <StageJoiner />
+                                </CustomLayout>
+                              </MainLayout>
+                              <AudioOutputSwitcher />
                             </StageJoinerProvider>
                           </StageWebAudioProvider>
                         </AudioContextProvider>

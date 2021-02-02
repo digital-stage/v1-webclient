@@ -1,9 +1,8 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import React from 'react';
-import { jsx, Flex, Box } from 'theme-ui';
+import { jsx, Flex, Box, IconButton } from 'theme-ui';
 import { FaChevronDown, FaChevronLeft } from 'react-icons/fa';
-import PrimaryIconButton from '../../input/IconButton';
 
 interface Props {
   children: React.ReactNode;
@@ -29,9 +28,9 @@ const CollapseHeader = (props: Props): JSX.Element => {
       }}
     >
       <Box sx={{ width: '100%' }}>{children}</Box>
-      <PrimaryIconButton onClick={onClick}>
+      <IconButton variant="iconPrimary" onClick={onClick}>
         {isOpen && id === collapseId ? <FaChevronDown /> : <FaChevronLeft />}
-      </PrimaryIconButton>
+      </IconButton>
     </Flex>
   );
 };

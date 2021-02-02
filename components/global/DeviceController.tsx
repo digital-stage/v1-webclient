@@ -2,15 +2,13 @@
 /** @jsx jsx */
 import Link from 'next/link';
 import React, { Fragment } from 'react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
 import { FaMicrophone, FaMicrophoneSlash, FaVideo, FaVideoSlash } from 'react-icons/fa';
 import { ImPhoneHangUp } from 'react-icons/im';
-import { Box, Button, Flex, jsx } from 'theme-ui';
+import { Box, Button, Flex, IconButton, jsx } from 'theme-ui';
 import { useLocalDevice, useSelector } from '../../lib/use-digital-stage/hooks';
 import { useStageActions } from '../../lib/use-digital-stage';
-import PlaybackStarter from './PlaybackStarter';
-import { DangerIconButton } from '../../digitalstage-ui/elements/input/IconButton';
-import PrimaryToggleButton from '../../digitalstage-ui/elements/input/ToggleButton';
+import PlaybackOverlay from './PlaybackOverlay';
+import PrimaryToggleButton from '../../digitalstage-ui/extra/ToggleButton';
 
 const DeviceController = (): JSX.Element => {
   const localDevice = useLocalDevice();
@@ -63,32 +61,13 @@ const DeviceController = (): JSX.Element => {
         )}
         {stageId && (
           <Link href="/leave">
-            <DangerIconButton title="Bühne verlassen" sx={{ mr: [6, 0] }}>
+            <IconButton variant="iconDanger" title="Bühne verlassen" sx={{ mr: [6, 0] }}>
               <ImPhoneHangUp size="24px" />
-            </DangerIconButton>
-          </Link>
-        )}
-        {stageId ? (
-          <Box
-            sx={{
-              display: ['block', 'none'],
-            }}
-          >
-            <Link href="/settings">
-              <Button variant="functionTertiary" title="Settings">
-                <BsThreeDotsVertical size="24px" />
-              </Button>
-            </Link>
-          </Box>
-        ) : (
-          <Link href="/settings">
-            <Button variant="functionTertiary" title="Settings">
-              <BsThreeDotsVertical size="24px" />
-            </Button>
+            </IconButton>
           </Link>
         )}
       </Flex>
-      <PlaybackStarter />
+      <PlaybackOverlay />
     </Fragment>
   );
 };

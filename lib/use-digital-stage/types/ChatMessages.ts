@@ -1,8 +1,8 @@
-import { Device } from './Device';
-
-export interface DevicesCollection {
-  byId: {
-    [id: string]: Device;
-  };
-  allIds: string[];
+export interface ChatMessage {
+  userId: string;
+  stageMemberId: string;
+  message: string;
+  time: number;
 }
+
+export type ChatMessages = ChatMessage[];

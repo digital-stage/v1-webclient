@@ -41,6 +41,7 @@ const ModalConstruction = (props: ModalProps): JSX.Element => {
             width: '100vw',
             height: '100vh',
             overflow: 'auto',
+            zIndex: '9999',
           }}
         >
           <Flex

@@ -45,6 +45,8 @@ const en = {
   activateAccount: 'Account aktivieren',
   accountActivated: 'Account erfolgreich aktiviert',
   activationCodeRequired: 'Aktivierungscode wird benötigt',
+  switchToGerman: 'Auf Deutsch wechseln',
   myStages: 'My stages',
+  backToStages: 'Go back to my stages',
 };
 export default en;

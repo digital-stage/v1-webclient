@@ -29,8 +29,8 @@ const WhitePanel = (props: { children: React.ReactNode }): JSX.Element => {
   );
 };
 
-const LightPanel = (props: { children: React.ReactNode }): JSX.Element => {
-  const { children } = props;
+const LightPanel = (props: { children: React.ReactNode; sx?: SxStyleProp }): JSX.Element => {
+  const { children, sx } = props;
 
   return (
     <Flex
@@ -38,6 +38,7 @@ const LightPanel = (props: { children: React.ReactNode }): JSX.Element => {
         ...baseSx,
         flexDirection: 'column',
         bg: 'gray.4',
+        ...sx,
       }}
     >
       {children}

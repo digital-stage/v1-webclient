@@ -1,19 +1,20 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { Box, css, jsx } from 'theme-ui';
+import { Box, css, Flex, jsx } from 'theme-ui';
 import { FaUser } from 'react-icons/fa';
-import React, { useState } from 'react';
+import React from 'react';
 import { Interpolation } from '@emotion/serialize';
-import { LightPanel } from '../../surface/Panel';
-import PrimaryIconButton from '../../input/IconButton';
-import PrimaryToggleButton from '../../input/ToggleButton';
+import { LightPanel } from '../Panel';
+import PrimaryToggleButton from '../ToggleButton';
 
 const OverlayMenu = (props: {
+  open: boolean;
+  onOpen: () => void;
+  onClose: () => void;
   styles?: Interpolation;
   children: React.ReactNode | React.ReactNodeArray;
 }): JSX.Element => {
-  const { styles, children } = props;
-  const [open, setOpen] = useState<boolean>(false);
+  const { styles, children, open, onClose, onOpen } = props;
 
   return (
     <Box
@@ -28,22 +29,38 @@ const OverlayMenu = (props: {
           width: '32px',
           height: '32px',
         }}
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={open ? onClose : onOpen}
         toggled={open}
       >
         <FaUser />
       </PrimaryToggleButton>
       {open && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '100%',
-            right: 0,
-          }}
-          role="menu"
-        >
-          <LightPanel>{children}</LightPanel>
-        </Box>
+        <React.Fragment>
+          <Flex
+            onClick={onClose}
+            sx={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              display: 'block',
+              width: '100%',
+              zIndex: -1,
+              bg: 'modalBg',
+            }}
+          />
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '100%',
+              right: 0,
+            }}
+            role="menu"
+          >
+            <LightPanel>{children}</LightPanel>
+          </Box>
+        </React.Fragment>
       )}
     </Box>
   );

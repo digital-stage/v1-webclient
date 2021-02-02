@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { jsx, Flex } from 'theme-ui';
 import { useEffect, useRef, useState } from 'react';
-import { LocalConsumer } from '../../../../lib/use-digital-stage/types';
+import { LocalConsumer } from '../../../lib/use-digital-stage/types';
 
 const SingleVideoPlayer = (props: {
   track: MediaStreamTrack;

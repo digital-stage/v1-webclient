@@ -1,3 +1,4 @@
+import { ChatMessages } from './ChatMessages';
 import { CustomGroup } from './CustomGroup';
 import { CustomGroupsCollection } from './CustomGroupsCollection';
 import { CustomRemoteAudioProducer } from './CustomRemoteAudioProducer';
@@ -36,6 +37,7 @@ import { UsersCollection } from './UsersCollection';
 import { WebRTCDevice } from './WebRTCDevice';
 
 export type {
+  ChatMessages,
   CustomGroup,
   CustomGroupsCollection,
   CustomStageMember,

@@ -1,48 +1,49 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import * as React from 'react';
-import { jsx, Link, Flex } from 'theme-ui';
-import NextLink from 'next/link';
+import { jsx, Link, Flex, SxStyleProp, Heading } from 'theme-ui';
 import { useIntl } from 'react-intl';
 
-const RoomNavigation = (
-    props: {
-        global: boolean;
-        onChange: (global: boolean) => void;
-    }
-): JSX.Element => {
-    const {onNavigation} = props;
+const RoomModeSelect = (props: {
+  global: boolean;
+  onChange: (global: boolean) => void;
+  sx?: SxStyleProp;
+}): JSX.Element => {
+  const { global, onChange, sx } = props;
   const { formatMessage } = useIntl();
   const f = (id) => formatMessage({ id });
 
   return (
-    <Flex sx={{ justifyContent: 'center' }}>
-      <NextLink href="/account/login">
-        <Link
-          variant="auth"
-          sx={{
-            borderBottomColor: pathname === '/account/login' && 'secondary',
-            width: '50%',
-            textAlign: 'center',
-          }}
-        >
-          {f('login')}
-        </Link>
-      </NextLink>
-      <NextLink href="/account/signup">
-        <Link
-          variant="auth"
-          sx={{
-            borderBottomColor: pathname === '/account/signup' && 'secondary',
-            width: '50%',
-            textAlign: 'center',
-          }}
-        >
-          {f('signUp')}
-        </Link>
-      </NextLink>
+    <Flex
+      sx={{
+        ...sx,
+      }}
+    >
+      <Link
+        variant="tab"
+        sx={{
+          display: 'flex',
+          borderBottomColor: !global && 'primary',
+          textAlign: 'center',
+          minWidth: 'auto',
+          px: 8,
+        }}
+        onClick={() => onChange(false)}
+      >
+        {f('monitor')}
+      </Link>
+      <Link
+        variant="tab"
+        sx={{
+          borderBottomColor: global && 'primary',
+          textAlign: 'center',
+        }}
+        onClick={() => onChange(true)}
+      >
+        {f('global')}
+      </Link>
     </Flex>
   );
 };
 
-export default RoomNavigation;
+export default RoomModeSelect;

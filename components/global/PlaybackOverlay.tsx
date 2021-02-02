@@ -6,7 +6,7 @@ import useAudioContext from '../../lib/useAudioContext';
 import { FaPlay } from 'react-icons/fa';
 import { Button, Flex, jsx } from 'theme-ui';
 
-const PlaybackStarter = (): JSX.Element => {
+const PlaybackOverlay = (): JSX.Element => {
   const { user } = useAuth();
   const { audioContext, started } = useAudioContext();
 
@@ -31,10 +31,10 @@ const PlaybackStarter = (): JSX.Element => {
           cursor: 'pointer',
         }}
       >
-          <FaPlay size="128px" name="Start" />
+        <FaPlay size="128px" name="Start" />
       </Flex>
     );
   }
   return null;
 };
-export default PlaybackStarter;
+export default PlaybackOverlay;

@@ -2,16 +2,10 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx, Divider, Flex } from 'theme-ui';
-import StageOverviewLinks from '../../StageOverviewLinks';
 import StageHeader from './StageHeader';
 import StageGroupList from './StageGroupList';
 import { useStages } from '../../../lib/use-digital-stage/hooks';
-import Collapse, {
-  CollapseBody,
-  CollapseHeader,
-} from '../../../digitalstage-ui/elements/surface/Collapse';
-
-/**  TODO: WORK in PROGRESS POC */
+import Collapse, { CollapseBody, CollapseHeader } from '../../../digitalstage-ui/extra/Collapse';
 
 const StageListView = (): JSX.Element => {
   const stages = useStages();
@@ -39,8 +33,6 @@ const StageListView = (): JSX.Element => {
         flexDirection: 'column',
       }}
     >
-      <StageOverviewLinks setStageCreated={(stageCreated) => setStageCreated(stageCreated)} />
-      {/**  TODO: WORK in PROGRESS */}
       <Flex sx={{ flexDirection: 'column' }}>
         {stages.allIds
           .map((id) => stages.byId[id])

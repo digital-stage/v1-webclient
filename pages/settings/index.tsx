@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
-import AuthLayout from '../../components/global/layout/AuthLayout';
-import PageSpinner from '../../components/PageSpinner';
 import React from 'react';
+import LoadingOverlay from '../../components/global/LoadingOverlay';
+import MainLayout from '../../components/layout/MainLayout';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function RedirectPage(): JSX.Element {
@@ -12,11 +12,7 @@ function RedirectPage(): JSX.Element {
     return null;
   }
 
-  return (
-    <AuthLayout>
-      <PageSpinner />
-    </AuthLayout>
-  );
+  return <LoadingOverlay />;
 }
 
 RedirectPage.getInitialProps = (ctx) => {

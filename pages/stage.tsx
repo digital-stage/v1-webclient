@@ -1,7 +1,16 @@
-import StageLayout from '../components/global/layout/StageLayout';
 import React from 'react';
+import { useRouter } from 'next/router';
+import { useSelector } from '../lib/use-digital-stage';
 
-const StagePage = (): JSX.Element => {
-  return <StageLayout>STAGE</StageLayout>;
+const Stage = (): JSX.Element => {
+  const router = useRouter();
+  const ready = useSelector<boolean>((state) => state.global.ready);
+  const isInsideStage = useSelector<boolean>((state) => !!state.global.stageId);
+
+  if (ready && !isInsideStage) {
+    router.replace('/');
+  }
+
+  return <div>STAGE</div>;
 };
-export default StagePage;
+export default Stage;

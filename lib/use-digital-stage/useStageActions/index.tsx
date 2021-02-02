@@ -16,6 +16,7 @@ import {
   RemoveCustomStageMemberAudioPayload,
   RemoveCustomStageMemberOvPayload,
   RemoveCustomStageMemberPayload,
+  SendChatMessagePayload,
   SetCustomGroupPayload,
   SetCustomStageMemberAudioPayload,
   SetCustomStageMemberOvPayload,
@@ -95,6 +96,8 @@ export interface TStageActionContext {
   updateStageMemberAudio: (id: string, update: Partial<ThreeDimensionAudioProperties>) => void;
 
   updateStageMemberOv: (id: string, update: Partial<ThreeDimensionAudioProperties>) => void;
+
+  sendChatMessage: (message: string) => void;
 }
 
 const throwAddProviderError = () => {
@@ -124,6 +127,7 @@ const StageActionContext = React.createContext<TStageActionContext>({
   updateStageMemberAudio: throwAddProviderError,
   updateStageMemberOv: throwAddProviderError,
   updateUser: throwAddProviderError,
+  sendChatMessage: throwAddProviderError,
 });
 
 const StageActionsProvider = (props: {
@@ -499,6 +503,20 @@ const StageActionsProvider = (props: {
     [socket, handleError]
   );
 
+  const sendChatMessage = useCallback(
+    (message: string) => {
+      if (socket) {
+        d(`sendChatMessage(${message}, ...)`);
+        const payload: SendChatMessagePayload = message;
+        socket.emit(ClientStageEvents.SEND_MESSAGE, payload);
+      } else {
+        handleError(new Error("Socket connection wasn't ready"));
+        throw new Error("Socket connection wasn't ready");
+      }
+    },
+    [socket, handleError]
+  );
+
   return (
     <StageActionContext.Provider
       value={{
@@ -524,6 +542,7 @@ const StageActionsProvider = (props: {
         updateStageMemberAudio,
         updateStageMemberOv,
         leaveStageForGood,
+        sendChatMessage,
       }}
     >
       {children}

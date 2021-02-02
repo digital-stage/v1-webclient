@@ -1,10 +1,9 @@
 /* eslint-disable react/destructuring-assignment */
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { Flex, jsx, Text } from 'theme-ui';
-import { DangerButton, TertiaryButton } from '../../../digitalstage-ui/elements/input/Button';
+import { Button, Flex, jsx, Text } from 'theme-ui';
 import { useIntl } from 'react-intl';
-import { LightDialog } from '../../../digitalstage-ui/elements/surface/Dialog';
+import { LightDialog } from '../../../digitalstage-ui/extra/Dialog';
 
 interface IProps {
   onClose(): void;
@@ -22,8 +21,12 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm }: IProps): JSX.Element 
     <LightDialog size="dialog" closable open={isOpen} onClose={onClose}>
       <Text sx={{ color: 'gray.7' }}>{f('confirmDelete')}</Text>
       <Flex sx={{ justifyContent: 'center', pt: 8 }}>
-        <TertiaryButton onClick={onClose}>{f('cancel')}</TertiaryButton>
-        <DangerButton onClick={onConfirm}>{f('delete')}</DangerButton>
+        <Button variant="tertiary" onClick={onClose}>
+          {f('cancel')}
+        </Button>
+        <Button variant="danger" onClick={onConfirm}>
+          {f('delete')}
+        </Button>
       </Flex>
     </LightDialog>
   );

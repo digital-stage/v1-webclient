@@ -1,13 +1,13 @@
 import React from 'react';
-import StagesLayout from '../../components/global/layout/StagesLayout';
-import SettingsPanel from '../../components/settings/SettingsPanel';
+import SettingsLayout from '../../components/layout/SettingsLayout';
+import SettingsNavigation from '../../components/settings/SettingsNavigation';
 
 const DeviceSettings = (): JSX.Element => {
   return (
-    <StagesLayout>
-      <SettingsPanel />
+    <SettingsLayout>
+      <SettingsNavigation />
       DEVICES
-    </StagesLayout>
+    </SettingsLayout>
   );
 };
 export default DeviceSettings;

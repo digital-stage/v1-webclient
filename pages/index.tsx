@@ -2,12 +2,11 @@
 /** @jsx jsx */
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { jsx } from 'theme-ui';
-import Layout from '../components/Layout';
-import PageSpinner from '../components/PageSpinner';
 import { useAuth } from '../lib/useAuth';
 import { useCurrentStageId } from '../lib/use-digital-stage/hooks';
-import AuthLayout from '../components/global/layout/AuthLayout';
+import AuthLayout from '../components/layout/AuthLayout';
+import { jsx } from 'theme-ui';
+import LoadingOverlay from '../components/global/LoadingOverlay';
 
 const Index = (): JSX.Element => {
   const router = useRouter();
@@ -26,11 +25,7 @@ const Index = (): JSX.Element => {
     }
   }
 
-  return (
-    <AuthLayout>
-      <PageSpinner />
-    </AuthLayout>
-  );
+  return <LoadingOverlay />;
 };
 
 export default Index;

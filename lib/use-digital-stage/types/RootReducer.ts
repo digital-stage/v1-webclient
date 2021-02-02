@@ -13,6 +13,7 @@ import { LocalConsumersCollection } from './LocalConsumersCollection';
 import { TrackCollection } from './TrackCollection';
 import { TrackPresetCollection } from './TrackPresetCollection';
 import { SoundCardCollection } from './SoundCardCollection';
+import { ChatMessages } from './ChatMessages';
 
 export interface RootReducer {
   global: GlobalStore;
@@ -31,4 +32,5 @@ export interface RootReducer {
   tracks: TrackCollection;
   trackPresets: TrackPresetCollection;
   soundCards: SoundCardCollection;
+  chatMessages: ChatMessages;
 }

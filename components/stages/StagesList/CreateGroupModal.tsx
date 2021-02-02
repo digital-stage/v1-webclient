@@ -5,8 +5,8 @@ import { Button, Flex, Heading, jsx, Text } from 'theme-ui';
 import * as Yup from 'yup';
 import { Stage } from '../../../lib/use-digital-stage/types';
 import useStageActions from '../../../lib/use-digital-stage/useStageActions';
-import Input from '../../../digitalstage-ui/elements/input/Input';
-import { LightDialog } from '../../../digitalstage-ui/elements/surface/Dialog';
+import Input from '../../../digitalstage-ui/extra/Input';
+import { LightDialog } from '../../../digitalstage-ui/extra/Dialog';
 
 interface Values {
   name: string;

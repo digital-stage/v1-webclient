@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import * as React from 'react';
 import { jsx } from 'theme-ui';
-import Panel from '../../digitalstage-ui/elements/surface/Panel';
+import Panel from '../../digitalstage-ui/extra/Panel';
 
 const StagesPanel = (props: React.ComponentProps<'div'>): JSX.Element => {
   const { children } = props;
