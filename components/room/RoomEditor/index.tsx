@@ -15,10 +15,9 @@ const RoomEditor = (props: {
   onChange?: (element: RoomElement) => void;
   onSelected?: (element: RoomElement) => void;
   onDeselected?: () => void;
-  className?: string;
   sx?: SxStyleProp;
 }): JSX.Element => {
-  const { sx, elements, width, height, onChange, onSelected, onDeselected, className } = props;
+  const { sx, elements, width, height, onChange, onSelected, onDeselected } = props;
   const [selected, setSelected] = useState<RoomElement>(undefined);
   const fullWidth: number = width * FACTOR;
   const fullHeight: number = height * FACTOR;
@@ -57,7 +56,6 @@ const RoomEditor = (props: {
         bg: 'gray.6',
         ...sx,
       }}
-      className={className}
       ref={wrapperRef}
     >
       <Box

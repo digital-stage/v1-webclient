@@ -4,18 +4,16 @@ import React from 'react';
 import { useAuth } from '../../lib/useAuth';
 import useAudioContext from '../../lib/useAudioContext';
 import { FaPlay } from 'react-icons/fa';
-import { Button, Flex, jsx } from 'theme-ui';
+import { Flex, jsx } from 'theme-ui';
 
 const PlaybackOverlay = (): JSX.Element => {
   const { user } = useAuth();
-  const { audioContext, started } = useAudioContext();
+  const { started, start } = useAudioContext();
 
   if (user && !started) {
     return (
       <Flex
-        onClick={() => {
-          if (audioContext) audioContext.resume();
-        }}
+        onClick={start}
         sx={{
           position: 'fixed',
           top: 0,

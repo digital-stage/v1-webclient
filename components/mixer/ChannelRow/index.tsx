@@ -1,32 +1,138 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx, Text, Flex } from 'theme-ui';
-import { ThreeDimensionAudioProperties } from '../../../lib/use-digital-stage/types';
-import { IAnalyserNode, IAudioContext } from 'standardized-audio-context';
-import HSLColor from '../../../lib/useColors/HSLColor';
+import {Flex, Heading, IconButton, jsx, SxStyleProp} from 'theme-ui';
+import React, {useState} from "react";
+import {BiChevronLeft, BiChevronRight} from 'react-icons/bi';
+import {ThreeDimensionAudioProperties} from "../../../lib/use-digital-stage";
+import useColors from "../../../lib/useColors";
+import ChannelStrip from "../ChannelStrip";
+import {IAnalyserNode, IAudioContext} from "standardized-audio-context";
 
 const ChannelRow = (props: {
-  name: string;
-  values: ThreeDimensionAudioProperties;
-  analyserL?: IAnalyserNode<IAudioContext>;
-  analyserR?: IAnalyserNode<IAudioContext>;
+    id: string;
+    channel: ThreeDimensionAudioProperties;
+    onChange: (volume: number, muted: boolean) => void;
+    name: string;
+    icon?: React.ReactNode;
+    children?: React.ReactNode;
+    global?: boolean;
+    resettable?: boolean;
+    onReset?: () => void;
+    analyserL?: IAnalyserNode<IAudioContext>;
+    analyserR?: IAnalyserNode<IAudioContext>;
+    colorized?: boolean;
+    sx?: SxStyleProp;
 
-  color?: HSLColor;
-  isLastChild?: boolean;
-
-  numChildLayers?: number;
-
-  onChange: (volume: number, muted: boolean) => void;
-
-  reset?: boolean;
-  onReset?: () => void;
-
-  children?: React.ReactNode;
-
-  className?: string;
-
-  inactive?: boolean;
+    isLastChild?: boolean;
 }): JSX.Element => {
-  return <Flex></Flex>;
+    const {
+        sx,
+        id,
+        channel,
+        name,
+        icon,
+        onChange,
+        children,
+        resettable,
+        onReset,
+        global,
+        analyserL,
+        analyserR,
+        colorized
+    } = props;
+    const color = useColors(id);
+    const [collapsed, setCollapsed] = useState<boolean>(false);
+
+    const hasChildren = React.Children.count(children) > 0;
+
+    return (
+        <Flex
+            sx={{
+                flexDirection: 'row',
+                bg: 'gray.7',
+                border: colorized && "1px solid " + color?.toProperty(),
+                borderRadius: 'card',
+                p: 4
+            }}
+        >
+            <Flex
+                sx={{
+                    flexDirection: 'column',
+                    ...sx,
+                }}
+            >
+                <Flex
+                    onClick={(e) => {
+                        e.preventDefault();
+                        if (hasChildren)
+                            setCollapsed(prev => !prev);
+                    }}
+                    sx={{
+                        pl: 7,
+                        pr: !hasChildren && 7,
+                        alignItems: 'center',
+                        userSelect: 'none',
+                        cursor: 'pointer',
+                        flexGrow: 0
+                    }}
+                >
+                    {icon
+                        ? <Flex
+                            sx={{
+                                borderRadius: '50%',
+                                backgroundColor: colorized && color?.toProperty()
+                            }}>{icon}</Flex>
+                        : (
+                            <Heading
+                                variant="h4"
+                            >
+                                {name}
+                            </Heading>
+                        )}
+
+                    {hasChildren && (
+                        <IconButton
+                            variant='icon'
+                        >
+                            {collapsed ? <BiChevronLeft size="24px"/> : <BiChevronRight size={24}/>}
+                        </IconButton>
+                    )}
+                </Flex>
+                {icon && (
+                    <Heading
+                        sx={{
+                            width: '100%',
+                            flexGrow: 1,
+                            py: 5,
+                            color: resettable
+                                ? global
+                                    ? 'gray.1'
+                                    : 'primary'
+                                : 'gray.3'
+                        }}
+                        variant="body"
+                    >
+                        {name}
+                    </Heading>
+                )}
+                <ChannelStrip
+                    muted={channel.muted}
+                    volume={channel.volume}
+                    analyserL={analyserL}
+                    analyserR={analyserR}
+                    onVolumeChanged={onChange}
+                    onReset={onReset}
+                    resettable={resettable}
+                    global={global}
+                />
+            </Flex>
+
+            {collapsed && (
+                <Flex>
+                    {children}
+                </Flex>
+            )}
+        </Flex>
+    );
 };
 export default ChannelRow;

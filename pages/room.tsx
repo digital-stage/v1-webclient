@@ -19,7 +19,6 @@ const Room = (): JSX.Element => {
         width: '100%',
         height: '100%',
         p: [0, 4],
-        pt: [0, 9],
         pb: [0, 10],
       }}
     >

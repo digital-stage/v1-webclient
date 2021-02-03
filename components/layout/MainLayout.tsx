@@ -90,8 +90,7 @@ const MainLayout = (props: { children: React.ReactNode }): JSX.Element => {
               sx={{
                 flexDirection: 'column',
                 minHeight: '100vh',
-                overflowX: 'hidden',
-                overflowY: 'auto',
+                overflow: 'auto',
                 flexGrow: 1,
               }}
             >

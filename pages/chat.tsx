@@ -1,15 +1,18 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { Box, Flex, jsx } from 'theme-ui';
+import {Box, Flex, Heading, jsx} from 'theme-ui';
 import StageChat from '../components/chat/StageChat';
 import useDigitalStage, { useSelector } from '../lib/use-digital-stage';
 import { useRouter } from 'next/router';
 import React from 'react';
+import {useIntl} from "react-intl";
 
 const Chat = (): JSX.Element => {
   const router = useRouter();
   const ready = useSelector<boolean>((state) => state.global.ready);
   const isInsideStage = useSelector<boolean>((state) => !!state.global.stageId);
+  const { formatMessage } = useIntl();
+    const f = (id) => formatMessage({ id });
 
   if (ready && !isInsideStage) {
     router.replace('/');
@@ -21,7 +24,6 @@ const Chat = (): JSX.Element => {
         width: '100%',
         height: '100%',
         p: 4,
-        pt: 9,
         pb: 10,
       }}
     >
@@ -36,6 +38,15 @@ const Chat = (): JSX.Element => {
           flexDirection: 'column',
         }}
       >
+          <Heading
+              variant="h4"
+              sx={{
+                  pt: 2,
+                  pb: 4
+              }}
+          >
+              {f('chat')}
+          </Heading>
         <StageChat />
       </Flex>
     </Box>

@@ -18,7 +18,7 @@ const MixingPanel = (): JSX.Element => {
       sx={{
         flexDirection: 'column',
         width: '100%',
-        height: '100%',
+        height: '100%'
       }}
     >
       {isStageAdmin && (
@@ -46,21 +46,6 @@ const MixingPanel = (): JSX.Element => {
           padding: 0,
         }}
       >
-        <Flex
-          sx={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            overflowX: 'scroll',
-            overflowY: 'scroll',
-            margin: 0,
-            padding: 0,
-          }}
-        >
           <Flex
             sx={{
               display: 'flex',
@@ -68,16 +53,12 @@ const MixingPanel = (): JSX.Element => {
               flexDirection: 'row',
               alignItems: 'stretch',
               justifyContent: 'flex-start',
-              flexWrap: ['nowrap', 'wrap'],
-              height: '100%',
-              minHeight: '400px',
-              maxHeight: '600px',
+              flexWrap: ['nowrap', 'wrap']
             }}
           >
             <VariableMixingPanel global={globalMode} />
           </Flex>
         </Flex>
-      </Flex>
     </Flex>
   );
 };

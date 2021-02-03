@@ -36,6 +36,7 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   const messages = localeCopy['default'];
   const CustomLayout = Component.Layout ? Component.Layout : React.Fragment;
 
+  /*
   React.useEffect(() => {
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
@@ -43,6 +44,7 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
+   */
 
   return (
     <>

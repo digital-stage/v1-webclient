@@ -275,6 +275,11 @@ const DigitalStageTheme: Theme = {
         boxShadow: 'none',
       },
     },
+    iconPrimary: {
+      variant: 'buttons.icon',
+      color: 'text',
+      bg: 'primary'
+    },
     iconTertiary: {
       variant: 'buttons.tertiary',
       border: '1px solid transparent',
