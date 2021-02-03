@@ -1,97 +1,126 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import {jsx, Text, Flex, SxStyleProp, IconButton} from 'theme-ui';
-import {IAnalyserNode, IAudioContext} from 'standardized-audio-context';
-import HSLColor from '../../../lib/useColors/HSLColor';
+import React, {useState} from "react";
+import {Flex, Heading, SxStyleProp, jsx, IconButton} from "theme-ui";
 import VolumeSlider from "../VolumeSlider";
-import {useCallback, useEffect, useState} from "react";
-import {BiReset, BiVolumeMute} from "react-icons/bi";
+import {ThreeDimensionAudioProperties} from "../../../lib/use-digital-stage";
+import {IAnalyserNode, IAudioContext} from "standardized-audio-context";
+import {BiChevronLeft, BiChevronRight} from "react-icons/bi";
+
+const CHANNEL_PADDING_REM = .2;
 
 const ChannelStrip = (props: {
-    volume: number;
-    muted: boolean;
-    onVolumeChanged: (volume: number, muted: boolean) => void;
+    children?: React.ReactNode,
+    name: string,
+    elevation?: number,
+    sx?: SxStyleProp,
+    initialCollapse?: boolean,
+    icon?: React.ReactNode,
+
+    channel: ThreeDimensionAudioProperties;
+    onChange: (volume: number, muted: boolean) => void;
+    global?: boolean;
 
     resettable?: boolean;
-    global?: boolean;
     onReset?: () => void;
-
     analyserL?: IAnalyserNode<IAudioContext>;
     analyserR?: IAnalyserNode<IAudioContext>;
-
-    sx?: SxStyleProp;
 }): JSX.Element => {
-    const {volume, muted, onVolumeChanged, resettable, onReset, sx, analyserL, analyserR, global} = props;
-    const [value, setValue] = useState<number>();
-
-    useEffect(() => {
-        setValue(volume);
-    }, [volume])
-
-    const handleChange = useCallback((value) => {
-        setValue(value);
-    }, []);
-
-    const handleFinalChange = useCallback((value) => {
-        setValue(value);
-        onVolumeChanged(value, muted);
-    }, [onVolumeChanged, muted])
-
-    const handleMute = useCallback(() => {
-        onVolumeChanged(value, !muted);
-    }, [onVolumeChanged, muted, value]);
-
+    const {children, name, elevation, sx, initialCollapse, icon} = props;
+    const [collapsed, setCollapsed] = useState<boolean>(initialCollapse);
+    const hasChildren = React.Children.count(children) > 0;
     return (
         <Flex
             sx={{
-                width: '100%',
-                flexDirection: 'column',
-                alignItems: 'center',
+                flexDirection: 'row',
+                flexWrap: 'nowrap',
+                justifyContent: 'flex-start',
+                alignItems: 'stretch',
+                borderRadius: 'card',
+                minHeight: '100%',
                 ...sx
             }}
         >
-            <VolumeSlider
-                min={0}
-                middle={1}
-                max={4}
-                value={value}
-                onChange={handleChange}
-                onFinalChange={handleFinalChange}
-                analyserL={analyserL}
-                analyserR={analyserR}
-                color={resettable
-                    ? global
-                        ? '#9A9A9A'
-                        : '#6f92f8'
-                    : '#393939'}
-            />
             <Flex
-            sx={{
-
-            }}
+                sx={{
+                    width: '200px',
+                    flexDirection: 'column',
+                    padding: elevation * CHANNEL_PADDING_REM * 2 + "rem",
+                }}
             >
-                <IconButton
-                    sx={{
-                        flexGrow: 0
-                    }}
-                    variant={muted ? "iconPrimary" : "iconTertiary"}
-                    onClick={handleMute}
-                >
-                    <BiVolumeMute/>
-                </IconButton>
-
-                <IconButton
-                    sx={{
-                        flexGrow: 0
-                    }}
-                    variant="iconTertiary"
-                    onClick={onReset}
-                    disabled={!resettable}
-                >
-                    <BiReset/>
-                </IconButton>
+                {icon ? (
+                    <React.Fragment>
+                        <Flex
+                            sx={{
+                                width: '100%',
+                                flexGrow: 0,
+                                cursor: hasChildren && "pointer"
+                            }}
+                            onClick={() => hasChildren && setCollapsed(prev => !prev)}
+                        >
+                            {icon}
+                            {hasChildren && (
+                                <IconButton
+                                    variant='icon'
+                                >
+                                    {collapsed ? <BiChevronLeft size="24px"/> : <BiChevronRight size={24}/>}
+                                </IconButton>
+                            )}
+                        </Flex>
+                        <Heading
+                            variant="h4"
+                            sx={{
+                                flexGrow: 1,
+                                py: 4,
+                            }}
+                        >
+                            {name}
+                        </Heading>
+                    </React.Fragment>
+                ) : (
+                    <Flex
+                        sx={{
+                            width: '100%',
+                            flexGrow: 0,
+                            cursor: hasChildren && "pointer"
+                        }}
+                        onClick={() => hasChildren && setCollapsed(prev => !prev)}
+                    >
+                        <Heading
+                            variant="h4"
+                            sx={{
+                                flexGrow: 1,
+                                py: 4,
+                            }}
+                        >
+                            {name}
+                        </Heading>
+                        {hasChildren && (
+                            <IconButton
+                                variant='icon'
+                            >
+                                {collapsed ? <BiChevronLeft size="24px"/> : <BiChevronRight size={24}/>}
+                            </IconButton>
+                        )}
+                    </Flex>
+                )}
+                <Flex sx={{
+                    justifySelf: 'flex-end',
+                }}>
+                    <VolumeSlider min={0} middle={1} max={4} value={2} onChange={() => {
+                    }} color={"#fff"}/>
+                </Flex>
             </Flex>
+            {hasChildren && collapsed && (
+                <Flex
+                    sx={{
+                        padding: elevation * CHANNEL_PADDING_REM + "rem",
+                    }}
+                >
+                    {children}
+                </Flex>
+            )}
         </Flex>
-    );
-};
+    )
+}
 export default ChannelStrip;

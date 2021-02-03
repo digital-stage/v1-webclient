@@ -12,7 +12,8 @@ import {
     useUsers,
 } from '../../../lib/use-digital-stage';
 import React from 'react';
-import ChannelRow from "../ChannelRow";
+import ChannelRow from "../old/ChannelRow";
+import useColors from "../../../lib/useColors";
 
 const VariableMixingPanel = (props: { global: boolean }): JSX.Element => {
     const {global} = props;
@@ -28,6 +29,8 @@ const VariableMixingPanel = (props: { global: boolean }): JSX.Element => {
         updateGroup,
         updateStageMemberAudio,
     } = useStageActions();
+
+    const getColor = useColors();
 
     // For groups
     const groups = useSelector((state) => {
@@ -67,13 +70,12 @@ const VariableMixingPanel = (props: { global: boolean }): JSX.Element => {
                     >
                         <ChannelRow
                             key={group._id}
-                            id={group._id}
                             name={group.name}
                             icon={<img src="/static/images/group.svg"/>}
                             channel={global
                                 ? group
                                 : customGroup || group}
-                            colorized={true}
+                            color={getColor(group._id).toProperty()}
                             global={global}
                             resettable={(global && (group.volume !== 1 || group.muted)) || !!customGroup}
                             onReset={() => {
@@ -102,7 +104,6 @@ const VariableMixingPanel = (props: { global: boolean }): JSX.Element => {
 
                                 return (
                                     <ChannelRow
-                                        id={stageMember._id}
                                         key={stageMember._id}
                                         icon={<img src="/static/images/avatar.svg"/>}
                                         isLastChild={index === (arr.length - 1)}
@@ -135,7 +136,6 @@ const VariableMixingPanel = (props: { global: boolean }): JSX.Element => {
 
                                             return (
                                                 <ChannelRow
-                                                    id={audioProducer._id}
                                                     key={audioProducer._id}
                                                     icon={<img src="/static/images/track.svg"/>}
                                                     isLastChild={index === (arr.length - 1)}

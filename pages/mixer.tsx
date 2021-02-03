@@ -1,42 +1,10 @@
 import React from 'react';
 import {useRouter} from 'next/router';
 import useDigitalStage, {useSelector} from '../lib/use-digital-stage';
-import MixingPanel from '../components/mixer/MixingPanel';
-import {Box, Flex, Heading} from "theme-ui";
+import {Box, Flex, Heading, jsx} from "theme-ui";
+import ChannelRow from '../components/mixer/ChannelRow';
+import ChannelStrip from '../components/mixer/ChannelStrip';
 
-const ChannelStrip = (props: {children: React.ReactNode}): JSX.Element => {
-    const {children} = props;
-    return (
-        <Flex
-        sx={{
-            width: '500px',
-            border: '1px solid red',
-        }}
-        >
-            {children}
-        </Flex>
-    )
-}
-
-const ChannelRow = (props: {children: React.ReactNode}): JSX.Element => {
-    const {children} = props;
-    return (
-        <Flex
-            sx={{
-                flexDirection: 'row',
-                flexWrap: ['nowrap', 'wrap'],
-                justifyContent: 'flex-start',
-                alignItems: 'stretch',
-                flexGrow: 1,
-                height: '100%',
-                minHeight: '400px',
-                maxHeight: '600px',
-            }}
-        >
-            {children}
-        </Flex>
-    )
-}
 
 const Mixer = (): JSX.Element => {
     const router = useRouter();
@@ -50,102 +18,161 @@ const Mixer = (): JSX.Element => {
     return (
         <Box
             sx={{
-                minHeight: '100%',
-                p: 4
+                display: 'inline-block',
+                p: [0, 4],
+                minHeight: '100vh',
+                minWidth: '100%',
             }}
-        >ERROR
-            <Box
+        >
+            <Flex
                 sx={{
+                    flexDirection: 'column',
+                    position: 'relative',
                     boxShadow: ['none', 'default'],
                     borderRadius: ['none', 'card'],
                     bg: 'gray.4',
-                    p: 4,
+                    p: [0, 4],
+                    minHeight: '100vh',
                     minWidth: '100%',
-                    minHeight: '100%',
+                    maxHeight: ['100%', 'inherit']
                 }}
             >
-                <Heading>
+                <Heading sx={{
+                    flexGrow: 0
+                }}>
                     BLA
                 </Heading>
 
-                <Box
-                    sx={{
-                        height: '3000px',
-                        width: '4000px',
-                        backgroundColor: 'blue',
-                    }}>
-                    HALLO
-                </Box>
-
-                <Flex
-                sx={{
-                    position: 'relative',
-                    whiteSpace: 'nowrap',
+                <Flex sx={{
                     flexGrow: 1,
-                }}
-                >
-                    <Box
-                    sx={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        width: '100%',
-                        height: '100%',
-                        overflow: 'scroll',
-                        backgroundColor: 'red'
-                    }}
+                    flexWrap: ['nowrap', 'wrap'],
+                    flexDirection: 'row',
+                    alignItems: ['center'],
+                    justifyContent: ['center', 'flex-start'],
+                    height: ['100%', 'auto']
+                }}>
+                    <Flex
+                        sx={{
+                            minWidth: ['auto', '100%']
+                        }}
+                    >
+                        <ChannelRow
+                            sx={{
+                                backgroundColor: '#121212',
+                                border: '1px solid red',
+                            }}
+                        >
+                            <ChannelStrip
+                                name="Group 1"
+                                elevation={4}
+                                initialCollapse={window && window.innerWidth > 900}
+                            >
+                                <ChannelRow sx={{backgroundColor: '#1f1f1f'}}>
+                                    <ChannelStrip name="Member" elevation={2}/>
+                                    <ChannelStrip name="Member" elevation={2}/>
+                                    <ChannelStrip name="Member" elevation={2}/>
+                                    <ChannelStrip
+                                        name="Member"
+                                        elevation={2}>
+                                        <ChannelRow sx={{backgroundColor: '#292929'}}>
+                                            <ChannelStrip name="Track" elevation={1}/>
+                                            <ChannelStrip name="Track" elevation={1}/>
+                                            <ChannelStrip name="Track" elevation={1}/>
+                                            <ChannelStrip name="Track" elevation={1}/>
+                                            <ChannelStrip name="Track" elevation={1}/>
+                                        </ChannelRow>
+                                    </ChannelStrip>
+                                    <ChannelStrip name="Member" elevation={2}/>
+                                    <ChannelStrip name="Member" elevation={2}/>
+
+                                    <ChannelStrip
+                                        name="Member"
+                                        elevation={2}>
+                                        <ChannelRow sx={{backgroundColor: '#292929'}}>
+                                            <ChannelStrip name="Track" elevation={1}/>
+                                            <ChannelStrip name="Track" elevation={1}/>
+                                            <ChannelStrip name="Track" elevation={1}/>
+                                        </ChannelRow>
+                                    </ChannelStrip>
+
+                                </ChannelRow>
+                            </ChannelStrip>
+                        </ChannelRow>
+                    </Flex>
+
+                    <Flex
+                        sx={{
+                            minWidth: ['auto', '100%']
+                        }}
                     >
                         <ChannelRow>
-                            <ChannelStrip>
-                                ROW
+                            <ChannelStrip
+                                name="Group 2"
+                                elevation={3}
+                                initialCollapse={window && window.innerWidth > 900}
+                                sx={{
+                                    backgroundColor: 'blue',
+                                    border: '1px solid blue'
+                                }}
+                            >
+                                <ChannelStrip name="Member" elevation={2}/>
+                                <ChannelStrip name="Member" elevation={2}/>
+                                <ChannelStrip name="Member" elevation={2}/>
+                                <ChannelStrip
+                                    name="Member"
+                                    elevation={2}>
+                                    <ChannelStrip name="Track" elevation={1}/>
+                                    <ChannelStrip name="Track" elevation={1}/>
+                                    <ChannelStrip name="Track" elevation={1}/>
+                                    <ChannelStrip name="Track" elevation={1}/>
+                                    <ChannelStrip name="Track" elevation={1}/>
+                                </ChannelStrip>
+                                <ChannelStrip name="Member" elevation={2}/>
+                                <ChannelStrip name="Member" elevation={2}/>
+                                <ChannelStrip
+                                    name="Member"
+                                    elevation={2}>
+                                    <ChannelStrip name="Track" elevation={1}/>
+                                    <ChannelStrip name="Track" elevation={1}/>
+                                </ChannelStrip>
                             </ChannelStrip>
-
-                            <ChannelStrip>
-                                ROW
-                            </ChannelStrip>
-
-                            <ChannelStrip>
-                                ROW
-                            </ChannelStrip>
-
-
-
-                            <ChannelStrip>
-                                ROW
-                            </ChannelStrip>
-
-
-
-                            <ChannelStrip>
-                                ROW
-                            </ChannelStrip>
-
-
-
-                            <ChannelStrip>
-                                ROW
-                            </ChannelStrip>
-
-
-
-                            <ChannelStrip>
-                                ROW
-                            </ChannelStrip>
-
-
-
-                            <ChannelStrip>
-                                ROW
-                            </ChannelStrip>
-
                         </ChannelRow>
-
-                    </Box>
-
+                    </Flex>
+                    <Flex
+                        sx={{
+                        minWidth: ['auto', '100%']
+                    }}
+                        >
+                        <ChannelRow>
+                            <ChannelStrip
+                                name="Group 3"
+                                elevation={3}
+                            >
+                                <ChannelStrip name="Member" elevation={2}/>
+                                <ChannelStrip name="Member" elevation={2}/>
+                                <ChannelStrip name="Member" elevation={2}/>
+                                <ChannelStrip
+                                    name="Member"
+                                    elevation={2}>
+                                    <ChannelStrip name="Track" elevation={1}/>
+                                    <ChannelStrip name="Track" elevation={1}/>
+                                    <ChannelStrip name="Track" elevation={1}/>
+                                    <ChannelStrip name="Track" elevation={1}/>
+                                    <ChannelStrip name="Track" elevation={1}/>
+                                </ChannelStrip>
+                                <ChannelStrip name="Member" elevation={2}/>
+                                <ChannelStrip name="Member" elevation={2}/>
+                                <ChannelStrip
+                                    name="Member"
+                                    elevation={2}>
+                                    <ChannelStrip name="Track" elevation={1}/>
+                                    <ChannelStrip name="Track" elevation={1}/>
+                                </ChannelStrip>
+                            </ChannelStrip>
+                        </ChannelRow>
+                    </Flex>
                 </Flex>
-            </Box>
+            </Flex>
         </Box>
     );
 };

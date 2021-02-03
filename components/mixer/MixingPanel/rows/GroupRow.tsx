@@ -4,7 +4,7 @@ import {Flex, Heading, IconButton, jsx} from 'theme-ui';
 import useStageWebAudio from '../../../../lib/useStageWebAudio';
 import useColors from '../../../../lib/useColors';
 import {CustomGroup, Group} from '../../../../lib/use-digital-stage';
-import ChannelStrip from "../../ChannelStrip";
+import ChannelStrip from "../../old/ChannelStrip";
 import React, {useState} from "react";
 import {BiChevronLeft, BiChevronRight} from 'react-icons/bi';
 

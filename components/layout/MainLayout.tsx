@@ -1,6 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx, Flex, Button } from 'theme-ui';
+import { jsx, Flex, Button, Box } from 'theme-ui';
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -86,16 +86,15 @@ const MainLayout = (props: { children: React.ReactNode }): JSX.Element => {
             >
               <SideBar />
             </Flex>
-            <Flex
+            <Box
               sx={{
-                flexDirection: 'column',
                 minHeight: '100vh',
                 overflow: 'auto',
                 flexGrow: 1,
               }}
             >
               {children}
-            </Flex>
+            </Box>
           </Flex>
 
           {!isInsideStage && (
