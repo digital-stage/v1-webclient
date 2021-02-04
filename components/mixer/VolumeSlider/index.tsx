@@ -174,14 +174,24 @@ const VolumeSlider = (props: {
                     >
                         <div
                             style={{
+                                display: 'flex',
+
                                 position: 'relative',
                                 width: '5px',
                                 height: '100%',
                                 backgroundColor: color,
                             }}
                         >
-                            {analyserL && <LevelMeter analyser={analyserL}/>}
-                            {analyserR && <LevelMeter analyser={analyserR}/>}
+                            {analyserL
+                                ? analyserR
+                                    ? (
+                                        <React.Fragment>
+                                            <LevelMeter sx={{width: '50%', height: '100%'}} analyser={analyserL}/>
+                                            <LevelMeter sx={{width: '50%', height: '100%'}} analyser={analyserR}/>
+                                        </React.Fragment>
+                                    )
+                                    : <LevelMeter sx={{width: '100%', height: '100%'}} analyser={analyserL}/>
+                                : undefined}
                         </div>
                         {children}
                     </div>

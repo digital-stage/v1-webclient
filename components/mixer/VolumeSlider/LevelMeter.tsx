@@ -1,6 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import { jsx } from 'theme-ui';
+import {jsx, SxStyleProp} from 'theme-ui';
 import React, { CanvasHTMLAttributes, useRef } from 'react';
 import { IAnalyserNode, IAudioContext } from 'standardized-audio-context';
 import useAnimationFrame from '../../../lib/useAnimationFrame';
@@ -18,9 +18,10 @@ function getAverageVolume(array: Uint8Array): number {
 const LevelMeter = (
   props: CanvasHTMLAttributes<HTMLCanvasElement> & {
     analyser: IAnalyserNode<IAudioContext>;
+    sx?: SxStyleProp
   }
 ): JSX.Element => {
-  const { analyser, ...rest } = props;
+  const { analyser, sx, ...rest } = props;
   const canvasRef = useRef<HTMLCanvasElement>();
 
   useAnimationFrame(() => {
@@ -35,21 +36,19 @@ const LevelMeter = (
 
       context.clearRect(0, 0, width, height);
 
-      const gradient = context.createLinearGradient(0, 0, width, 0);
-      gradient.addColorStop(0, '#012340');
-      gradient.addColorStop(1, '#F20544');
+      const gradient = context.createLinearGradient(0, 0, 0, height);
+      gradient.addColorStop(1, '#012340');
+      gradient.addColorStop(0.75, '#F20544');
+      gradient.addColorStop(0, '#F20544');
       context.fillStyle = gradient;
-      context.fillRect(0, 0, average, height);
+      context.fillRect(0, height - average, width, height);
     }
   });
 
   return (
     <canvas
       {...rest}
-      sx={{
-        width: '100%',
-        height: '100%',
-      }}
+      sx={sx}
       ref={canvasRef}
     />
   );

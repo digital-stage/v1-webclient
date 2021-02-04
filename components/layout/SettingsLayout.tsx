@@ -54,7 +54,29 @@ const SettingsLayout = (props: { children: React.ReactNode }): JSX.Element => {
           </Button>
         </Link>
       )}
+        <Flex
+            sx={{
+                width: '100%',
+                height: '100%',
+                p: [0, 4],
+                pb: [0, 10],
+            }}
+        >
+            <Flex
+                sx={{
+                    boxShadow: ['none', 'default'],
+                    borderRadius: ['none', 'card'],
+                    bg: 'gray.4',
+                    py: [0, 4],
+                    px: [0, 4],
+                    width: '100%',
+                    height: '100%',
+                    flexDirection: 'column',
+                }}
+            >
       {children}
+            </Flex>
+        </Flex>
     </Flex>
   );
 };

@@ -7,6 +7,7 @@ const de = {
   stage: 'Bühne',
   mixer: 'Mischpult',
   room: '3D Audio',
+  group: 'Gruppe',
   device: 'Dieser Webclient',
   devices: 'Meine Geräte',
   stages: 'Meine Bühnen',
@@ -75,5 +76,9 @@ const de = {
   monitorDescription: 'Diese Einstellungen gelten nur für Dich',
   reset: 'Auswahl zurücksetzen',
   resetAll: 'Alle zurücksetzen',
+  resetCustomMix: 'Auf globale Werte zurücksetzen',
+  resetGlobalMix: 'Auf Standardwerte zurücksetzen',
+  unmute: 'Stummschaltung aufheben',
+  mute: 'Stumm schalten'
 };
 export default de;
