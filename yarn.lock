@@ -1509,10 +1509,15 @@
   resolved "https://registry.npmjs.org/@types/minimist/-/minimist-1.2.1.tgz"
   integrity sha512-fZQQafSREFyuZcdWFAExYjBiCL7AUCdgsk80iO0q4yihYYdcIiH28CcuPTGFgLOCC8RlW49GSQxdHwZP+I7CNg==
 
-"@types/node@*", "@types/node@>= 8", "@types/node@^14.14.22":
+"@types/node@*", "@types/node@>= 8":
   version "14.14.22"
   resolved "https://registry.npmjs.org/@types/node/-/node-14.14.22.tgz"
   integrity sha512-g+f/qj/cNcqKkc3tFqlXOYjrmZA+jNBiDzbP3kH+B+otKFqAdPgVTGP1IeKRdMml/aE69as5S4FqtxAbl+LaMw==
+
+"@types/node@^14.14.25":
+  version "14.14.25"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.25.tgz#15967a7b577ff81383f9b888aa6705d43fbbae93"
+  integrity sha512-EPpXLOVqDvisVxtlbvzfyqSsFeQxltFbluZNRndIb8tr9KiBnYNLzrc1N3pyKUCww2RNrfHDViqDWWE1LCJQtQ==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -8869,10 +8874,10 @@ react-icons@^4.1.0:
   resolved "https://registry.npmjs.org/react-icons/-/react-icons-4.1.0.tgz"
   integrity sha512-FCXBg1JbbR0vWALXIxmFAfozHdVIJmmwCD81Jk0EKOt7Ax4AdBNcaRkWhR0NaKy9ugJgoY3fFvo0PHpte55pXg==
 
-react-intl@^5.12.0:
-  version "5.12.0"
-  resolved "https://registry.npmjs.org/react-intl/-/react-intl-5.12.0.tgz"
-  integrity sha512-SWIt2+OFEGR8XjqDYpOBQLKVN3cR+1eJZGlHIAlZWw/562YE4OkXyFlK7e/Gk9KHS4xl9FwCBD7FScjfcDvm0g==
+react-intl@^5.12.1:
+  version "5.12.1"
+  resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-5.12.1.tgz#8f254ecafa3a2ca19b019929c6cbdb8bddc5c25e"
+  integrity sha512-EfXjt8eGcVrQMon9AkDBC6guyDIsPHLs9QfCcgpXyGaWPpKNY0ivtEF9UDN4D+LhyuYgqv9lFeGR2XVSpLz+xw==
   dependencies:
     "@formatjs/ecma402-abstract" "1.5.2"
     "@formatjs/intl" "1.6.6"
