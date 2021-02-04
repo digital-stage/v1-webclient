@@ -26,6 +26,7 @@ import {
 import useDispatch from './useDispatch';
 import allActions from './actions';
 import { InitialStagePackage } from './actions/stageActions';
+import { ChatMessage } from '../types/ChatMessages';
 
 export interface TSocketToDispatch {
   registerHandler(socket: ITeckosClient): void;
@@ -77,6 +78,10 @@ const useSocketToDispatch = (): TSocketToDispatch => {
 
       socket.on(ServerStageEvents.REMOTE_USER_REMOVED, (payload: string) => {
         dispatch(allActions.stageActions.server.removeRemoteUser(payload));
+      });
+
+      socket.on(ServerStageEvents.MESSAGE_SENT, (payload: ChatMessage) => {
+        dispatch(allActions.stageActions.server.messageSent(payload));
       });
 
       socket.on(ServerStageEvents.STAGE_ADDED, (payload: Stage) => {

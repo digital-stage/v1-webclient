@@ -3,10 +3,10 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { jsx, Message } from 'theme-ui';
-import ResetPasswordForm from '../../components/auth/forms/ResetPasswordForm';
+import ResetPasswordForm from '../../components/account/forms/ResetPasswordForm';
 import { useAuth } from '../../lib/useAuth';
-import AuthLayout from '../../digitalstage-ui/layout/AuthLayout';
-import AuthPanel from '../../components/auth/AuthPanel';
+import AuthLayout from '../../components/layout/AuthLayout';
+import AuthPanel from '../../components/account/AuthPanel';
 
 const Reset = (): JSX.Element => {
   const router = useRouter();

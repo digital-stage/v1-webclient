@@ -16,6 +16,7 @@ import { RootReducer } from '../../types';
 import trackPresets from './trackPresets';
 import tracks from './tracks';
 import soundCards from './soundCards';
+import chatMessages from './chatMessages';
 
 export default combineReducers<RootReducer>({
   global,
@@ -34,4 +35,5 @@ export default combineReducers<RootReducer>({
   tracks,
   trackPresets,
   soundCards,
+  chatMessages,
 });

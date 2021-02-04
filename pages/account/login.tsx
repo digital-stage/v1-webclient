@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../lib/useAuth';
-import AuthNavigation from '../../components/auth/AuthNavigation';
-import SignInForm from '../../components/auth/forms/SignInForm';
-import AuthLayout from '../../digitalstage-ui/layout/AuthLayout';
-import AuthPanel from '../../components/auth/AuthPanel';
+import AuthNavigation from '../../components/account/AuthNavigation';
+import SignInForm from '../../components/account/forms/SignInForm';
+import AuthLayout from '../../components/layout/AuthLayout';
+import AuthPanel from '../../components/account/AuthPanel';
 
-const LoginScreen = (): JSX.Element => {
+const Login = (): JSX.Element => {
   const router = useRouter();
   const { user } = useAuth();
 
@@ -20,12 +20,13 @@ const LoginScreen = (): JSX.Element => {
   }
 
   return (
-    <AuthLayout>
-      <AuthPanel>
-        <AuthNavigation />
-        <SignInForm />
-      </AuthPanel>
-    </AuthLayout>
+    <AuthPanel>
+      <AuthNavigation />
+      <SignInForm />
+    </AuthPanel>
   );
 };
-export default LoginScreen;
+
+Login.Layout = AuthLayout;
+
+export default Login;

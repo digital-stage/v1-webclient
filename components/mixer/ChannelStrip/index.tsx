@@ -1,219 +1,214 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-/** @jsxFrag React.Fragment */
-import React, { useCallback } from 'react';
-import { jsx, Box, Flex, IconButton } from 'theme-ui';
-import { FaHeadphonesAlt, FaMicrophone, FaMicrophoneSlash } from 'react-icons/fa';
-import { AiOutlineSync } from 'react-icons/ai';
-import { IoMdSync } from 'react-icons/io';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Flex, Heading, SxStyleProp, jsx, IconButton } from 'theme-ui';
+import VolumeSlider from '../VolumeSlider';
+import { ThreeDimensionAudioProperties } from '../../../lib/use-digital-stage';
 import { IAnalyserNode, IAudioContext } from 'standardized-audio-context';
-import LevelControlFader from './LevelControlFader';
-import LevelMeter from './LevelMeter';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { BiReset, BiVolumeMute } from 'react-icons/bi';
+import { useIntl } from 'react-intl';
+
+const CHANNEL_PADDING_REM = 0.2;
 
 const ChannelStrip = (props: {
-  addHeader?: React.ReactNode;
+  children?: React.ReactNode;
+  name: string;
+  elevation?: number;
+  sx?: SxStyleProp;
+  initialCollapse?: boolean;
+  icon?: React.ReactNode;
+
+  channel: ThreeDimensionAudioProperties;
+  onChange: (volume: number, muted: boolean) => void;
+  global?: boolean;
+
+  resettable?: boolean;
+  onReset?: () => void;
   analyserL?: IAnalyserNode<IAudioContext>;
   analyserR?: IAnalyserNode<IAudioContext>;
-  isAdmin?: boolean;
-  volume: number;
-  muted: boolean;
-  customVolume?: number;
-  customMuted?: boolean;
-  onVolumeChanged: (volume: number, muted: boolean) => void;
-  onCustomVolumeChanged: (volume: number, muted: boolean) => void;
-  onCustomVolumeReset: () => void;
-  className?: string;
-  globalMode?: boolean;
 }): JSX.Element => {
-  const addCustom = useCallback(() => {
-    if (props.onCustomVolumeChanged) props.onCustomVolumeChanged(props.volume, props.muted);
-  }, [props.volume, props.muted]);
+  const {
+    children,
+    name,
+    elevation,
+    sx,
+    initialCollapse,
+    icon,
+    channel,
+    onChange,
+    global,
+    resettable,
+    onReset,
+    analyserL,
+    analyserR,
+  } = props;
+  const [collapsed, setCollapsed] = useState<boolean>(initialCollapse);
+  const [muted, setMuted] = useState<boolean>();
+  const [value, setValue] = useState<number>();
+  const [hasChildren, setHasChildren] = useState<boolean>(false);
+  const { formatMessage } = useIntl();
+  const f = (id) => formatMessage({ id });
 
-  const addSync = useCallback(
-    (volume, muted) => {
-      if (props.onVolumeChanged) props.onVolumeChanged(volume, muted);
+  useEffect(() => {
+    setHasChildren(React.Children.count(children) > 0);
+  }, [children]);
+
+  useEffect(() => {
+    if (channel) {
+      setValue(channel.volume);
+      setMuted(channel.muted);
+    }
+  }, [channel]);
+
+  const handleChange = useCallback((value) => {
+    setValue(value);
+  }, []);
+
+  const handleFinalChange = useCallback(
+    (value) => {
+      setValue(value);
+      onChange(value, channel.muted);
     },
-    [props.volume, props.muted]
+    [onChange, channel]
   );
 
-  const handleMuteClicked = React.useCallback(() => {
-    addSync(props.volume, !props.muted);
-  }, [props.volume, props.muted]);
+  const handleMute = useCallback(() => {
+    onChange(value, !channel.muted);
+  }, [onChange, channel, value]);
 
   return (
     <Flex
       sx={{
-        height: '100%',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
+        borderRadius: 'card',
+        minHeight: '100%',
+        ...sx,
       }}
-      className={props.className}
     >
-      {props.addHeader && (
-        <Box
-          sx={{
-            width: '100%',
-            flexShrink: 0,
-            flexGrow: 0,
-          }}
-        >
-          {props.addHeader}
-        </Box>
-      )}
-
       <Flex
         sx={{
-          width: '100%',
-          flexShrink: 0,
-          flexGrow: 1,
-          height: '1px',
-          minHeight: '100px',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          position: 'relative',
+          width: '140px',
+          flexDirection: 'column',
+          padding: elevation * CHANNEL_PADDING_REM * 2 + 'rem',
         }}
       >
-        {/* {props.isAdmin ? ( */}
-        <React.Fragment>
-          {
-            props.globalMode ? (
-              <LevelControlFader
-                volume={props.volume}
-                muted={props.muted}
-                onChanged={(value, muted) => {
-                  if (props.onVolumeChanged) props.onVolumeChanged(value, muted);
-                }}
-                color={[154, 154, 154]}
-                backgroundColor="linear-gradient(180deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%)"
-                alignLabel="left"
-                trackColor="#2452CE"
-                disabled={!props.isAdmin && props.globalMode}
-              />
-            ) : (
-              // props.customVolume ? (
-              <LevelControlFader
-                volume={props.customVolume || props.volume}
-                muted={props.customMuted}
-                onChanged={(value, muted) => {
-                  if (props.onCustomVolumeChanged) props.onCustomVolumeChanged(value, muted);
-                }}
-                color={props.customVolume ? [87, 121, 217] : [154, 154, 154]}
-                backgroundColor="linear-gradient(180deg,  #FE8080 0%, #FE8080 2%, #FE8080 2%, #FE8080 10%,  #2452CE 90%, #2452CE 100%)"
-                alignLabel="right"
-                trackColor="#fff"
-              />
-            )
-            // ) : undefined
-          }
-        </React.Fragment>
-        {/* ) : ( */}
-        {/* props.globalMode ? <LevelControlFader
-              volume={props.volume}
-              muted={props.muted}
-              onChanged={(value, muted) => {
-                if (props.onVolumeChanged) props.onVolumeChanged(value, muted);
+        <Flex
+          sx={{
+            width: '100%',
+            alignItems: 'center',
+            cursor: hasChildren && 'pointer',
+          }}
+          onClick={() => {
+            console.log(React.Children.count(children));
+            setCollapsed((prev) => !prev);
+          }}
+        >
+          {icon ? (
+            <Flex
+              sx={{
+                width: '50%',
+                marginLeft: '25%',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
-              color={[255, 0, 0]}
-              backgroundColor="linear-gradient(180deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%)"
-              alignLabel="left"
-              trackColor="#2452CE\"
-            />
-              :
-              <LevelControlFader
-                volume={props.customVolume || props.volume}
-                muted={props.muted || props.customMuted}
-                onChanged={(value, muted) => {
-                  if (props.onCustomVolumeChanged) props.onCustomVolumeChanged(value, muted);
-                }}
-                color={props.customVolume ? [0, 0, 255] : [0, 0, 0]}
-                backgroundColor={
-                  props.customVolume
-                    ? 'linear-gradient(180deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%)'
-                    : 'linear-gradient(180deg,  #FE8080 0%, #FE8080 2%, #FE8080 2%, #FE8080 10%,  #FE8080 50%, #012340 100%)'
-                }
-              /> */}
-        {/* )} */}
-        {props.analyserL ? (
-          <LevelMeter
-            sx={{
-              width: '6px',
-              borderRadius: '2px',
-              flexShrink: 1,
-              height: '257px',
-              position: 'absolute',
-              right: '22px',
-            }}
-            analyser={props.analyserL}
-          />
-        ) : undefined}
-        {props.analyserR ? (
-          <LevelMeter
-            sx={{
-              width: '5px',
-              borderRadius: '2px',
-              flexShrink: 1,
-              height: '257px',
-              ml: -2,
-            }}
-            analyser={props.analyserR}
-          />
-        ) : undefined}
-      </Flex>
-      <Flex>
-        <Flex sx={{ flexDirection: 'row', alignItems: 'center' }}>
-          {props.globalMode && (
-            <IconButton
-              variant={!props.muted ? 'primary' : 'tertiary'}
-              sx={{ borderRadius: '50%', width: '32px', height: '32px', p: 0 }}
-              onClick={handleMuteClicked}
-              disabled={!props.isAdmin && props.globalMode}
-              title={!props.muted && 'Mute'}
             >
-              {!props.muted ? <FaMicrophone size="16px" /> : <FaMicrophoneSlash size="16px" />}
-            </IconButton>
+              {icon}
+            </Flex>
+          ) : (
+            <Heading
+              variant="h4"
+              sx={{
+                flexGrow: 1,
+              }}
+            >
+              {name}
+            </Heading>
           )}
-          {!props.globalMode && (
+          {hasChildren && (
             <IconButton
-              variant={!props.customVolume ? 'primary' : 'tertiary'}
-              sx={{ borderRadius: '50%', width: '32px', height: '32px', p: 0 }}
-              onClick={() => {
-                if (props.onCustomVolumeReset) props.onCustomVolumeReset();
+              sx={{
+                flexGrow: 0,
               }}
-              title={props.customVolume && 'Sync'}
+              variant="icon"
             >
-              <AiOutlineSync size="16px" />
+              {collapsed ? <FaChevronLeft size="32px" /> : <FaChevronRight size="32px" />}
             </IconButton>
           )}
         </Flex>
-        {/* {props.customVolume ? (
-          <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
-            <Button
-              variant="tertiary"
-              sx={{ borderRadius: '50%', width: '32px', height: '32px', p: 0 }}
-              onClick={() => {
-                if (props.onCustomVolumeReset) props.onCustomVolumeReset();
+
+        {icon && (
+          <Heading
+            variant="h4"
+            sx={{
+              py: 4,
+            }}
+          >
+            {name}
+          </Heading>
+        )}
+
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            flexGrow: 1,
+            pt: 4,
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+          }}
+        >
+          <VolumeSlider
+            min={0}
+            middle={1}
+            max={4}
+            value={value}
+            onChange={handleChange}
+            onFinalChange={handleFinalChange}
+            analyserL={analyserL}
+            analyserR={analyserR}
+            color={resettable ? (global ? '#9A9A9A' : '#6f92f8') : '#393939'}
+          />
+          <Flex sx={{}}>
+            <IconButton
+              sx={{
+                flexGrow: 0,
               }}
+              aria-label={f(muted ? 'unmute' : 'mute')}
+              title={f(muted ? 'unmute' : 'mute')}
+              variant={muted ? 'iconPrimary' : 'iconTertiary'}
+              onClick={handleMute}
+              aria-pressed={muted}
             >
-              <FaHeadphonesAlt sx={{ width: '16px', height: '16px' }} />
-            </Button>
-            {/* <Text>Monitor</Text> */}
-        {/* </Flex>
-        ) : (
-            props.isAdmin && (
-              <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
-                <Button
-                  variant="white"
-                  sx={{ borderRadius: '50%', width: '32px', height: '32px', px: 0 }}
-                  onClick={addCustom}
-                >
-                  <IoMdSync sx={{ width: '16px', height: '16px' }} />
-                </Button>
-                <Text>Sync</Text>
-              </Flex>
-            )
-          )}  */}
+              <BiVolumeMute />
+            </IconButton>
+
+            <IconButton
+              sx={{
+                flexGrow: 0,
+              }}
+              aria-label={f(global ? 'resetGlobalMix' : 'resetCustomMix')}
+              title={f(global ? 'resetGlobalMix' : 'resetCustomMix')}
+              variant="iconTertiary"
+              onClick={onReset}
+              disabled={!resettable}
+            >
+              <BiReset />
+            </IconButton>
+          </Flex>
+        </Flex>
       </Flex>
+      {hasChildren && collapsed && (
+        <Flex
+          sx={{
+            padding: elevation * CHANNEL_PADDING_REM + 'rem',
+          }}
+        >
+          {children}
+        </Flex>
+      )}
     </Flex>
   );
 };

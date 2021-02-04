@@ -148,8 +148,13 @@ export const getVideoTracks = (inputVideoDeviceId?: string): Promise<MediaStream
       video: inputVideoDeviceId
         ? {
             deviceId: inputVideoDeviceId,
+            width: { max: 640 },
+            height: { max: 640 },
           }
-        : true,
+        : {
+            width: { max: 640 },
+            height: { max: 640 },
+          },
     })
     .then((stream) => stream.getVideoTracks());
 };

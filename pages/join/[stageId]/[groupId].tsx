@@ -1,10 +1,10 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Flex, Heading, jsx } from 'theme-ui';
-import Layout from '../../../components/Layout';
 import useStageJoiner from '../../../lib/useStageJoiner';
+import LoadingOverlay from '../../../components/global/LoadingOverlay';
 
 const Join = (): JSX.Element => {
   const router = useRouter();
@@ -30,11 +30,19 @@ const Join = (): JSX.Element => {
   }, [router.query]);
 
   return (
-    <Layout>
-      <Flex sx={{ width: '100%', height: '100vh', alignItems: 'center', justifyContent: 'center' }}>
+    <Flex
+      sx={{
+        background:
+          'transparent linear-gradient(221deg, #F20544 0%, #F00544 2%, #F20544 2%, #F20544 10%, #721542 50%, #012340 100%) 0% 0% no-repeat padding-box',
+        backgroundAttachment: 'fixed',
+        minHeight: '100vh',
+        flexDirection: 'column',
+      }}
+    >
+      <LoadingOverlay>
         <Heading>Lade ...</Heading>
-      </Flex>
-    </Layout>
+      </LoadingOverlay>
+    </Flex>
   );
 };
 

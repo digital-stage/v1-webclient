@@ -14,6 +14,7 @@ import {
   LocalConsumer,
 } from '../../types';
 import AdditionalReducerTypes from './AdditionalReducerTypes';
+import { ChatMessage } from '../../types/ChatMessages';
 
 export interface StagePackage {
   users: User[];
@@ -34,6 +35,13 @@ export interface InitialStagePackage extends StagePackage {
   stageId: string;
   groupId: string;
 }
+
+const messageSent = (message: ChatMessage) => {
+  return {
+    type: ServerStageEvents.MESSAGE_SENT,
+    payload: message,
+  };
+};
 
 const addRemoteUser = (user: User) => {
   return {
@@ -270,6 +278,7 @@ const removeAudioConsumer = (audioConsumerId: string) => {
 };
 
 const server = {
+  messageSent,
   addRemoteUser,
   changeRemoteUser,
   removeRemoteUser,
