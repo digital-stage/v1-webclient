@@ -1,11 +1,7 @@
 import React from 'react';
-import SettingsNavigation from './SettingsNavigation';
 
-const SettingsPanel = (): JSX.Element => {
-  return (
-    <div>
-      <SettingsNavigation />
-    </div>
-  );
+const SettingsPanel = (props: { children: React.ReactNode }): JSX.Element => {
+  const { children } = props;
+  return <div>{children}</div>;
 };
 export default SettingsPanel;

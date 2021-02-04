@@ -16,7 +16,7 @@ interface Values {
 }
 
 const ForgetPasswordForm = (): JSX.Element => {
-  const { requestPasswordReset } = useAuth();
+  const { requestPasswordReset, user } = useAuth();
   const { formatMessage } = useIntl();
   const f = (id) => formatMessage({ id });
 
@@ -74,6 +74,7 @@ const ForgetPasswordForm = (): JSX.Element => {
               name="email"
               type="text"
               error={errors.email && touched.email}
+              value={user && user.email}
             />
             <Field
               as={Input}
@@ -82,6 +83,7 @@ const ForgetPasswordForm = (): JSX.Element => {
               name="repeatEmail"
               type="text"
               error={errors.repeatEmail && touched.repeatEmail}
+              value={user && user.email}
             />
             <Flex sx={{ justifyContent: 'center', mt: 5, flexWrap: 'wrap' }}>
               <Link href="/account/login">

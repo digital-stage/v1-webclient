@@ -1,7 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import React from 'react';
-import { jsx, Flex, Text, Heading, Button, Grid, Box } from 'theme-ui';
+import { jsx, Flex, Text, Heading, Button, Grid, Box, Link as ThemeLink } from 'theme-ui';
 import * as Yup from 'yup';
 import SettingsLayout from '../../components/layout/SettingsLayout';
 import { useIntl } from 'react-intl';
@@ -19,7 +19,7 @@ interface Values {
 }
 
 const ProfileSettings = (): JSX.Element => {
-  const { user: authUser } = useAuth();
+  const { user: authUser, logout } = useAuth();
   const user = useCurrentUser();
   const { updateUser } = useStageActions();
   const { pathname, locale } = useRouter();
@@ -34,7 +34,6 @@ const ProfileSettings = (): JSX.Element => {
     return (
       <SettingsLayout>
         <SettingsNavigation />
-        <Heading mb={5}>{f('manageProfile')}</Heading>
         <Formik
           initialValues={{
             name: user.name,
@@ -50,16 +49,12 @@ const ProfileSettings = (): JSX.Element => {
                 sx={{
                   py: 3,
                   px: 5,
+                  alignItems: 'center',
                 }}
-                columns={['1fr 2fr']}
+                gap={6}
+                columns={['1fr', '1fr 2fr']}
               >
-                <Flex
-                  sx={{
-                    alignItems: 'center',
-                  }}
-                >
-                  {f('language')}
-                </Flex>
+                <Heading variant="h5">{f('language')}</Heading>
                 <Flex
                   sx={{
                     alignItems: 'flex-start',
@@ -75,35 +70,39 @@ const ProfileSettings = (): JSX.Element => {
                     </Link>
                   )}
                 </Flex>
-                <Flex
-                  sx={{
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  {f('email')}
-                </Flex>
+
+                <Heading variant="h5">{f('email')}</Heading>
                 <Text>{authUser.email}</Text>
-                <Flex
-                  sx={{
-                    alignItems: 'flex-start',
-                  }}
-                >
-                  {f('name')}
+
+                <Heading variant="h5">{f('name')}</Heading>
+                <Flex sx={{ alignItems: 'center' }}>
+                  <Field
+                    as={Input}
+                    sx={{
+                      flexGrow: 1,
+                    }}
+                    id="name"
+                    label={f('name')}
+                    name="name"
+                    type="text"
+                    error={errors.name && touched.name}
+                  />
+                  <Button sx={{ flexGrow: 0 }} variant="primary" type="submit">
+                    {f('save')}
+                  </Button>
                 </Flex>
-                <Field
-                  as={Input}
-                  id="name"
-                  label={f('name')}
-                  name="name"
-                  type="text"
-                  error={errors.name && touched.name}
-                />
+
+                <Box></Box>
+                <Flex sx={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+                  <Button mb={4} variant="danger" onClick={logout}>
+                    {f('signOut')}
+                  </Button>
+
+                  <Link href="/account/forgot">
+                    <ThemeLink as="a">{f('resetPassword')}</ThemeLink>
+                  </Link>
+                </Flex>
               </Grid>
-              <Flex sx={{ justifyContent: 'flex-end', my: 3 }}>
-                <Button variant="primary" type="submit">
-                  {f('save')}
-                </Button>
-              </Flex>
             </Form>
           )}
         </Formik>

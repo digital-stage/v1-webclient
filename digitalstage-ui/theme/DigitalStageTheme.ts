@@ -278,7 +278,7 @@ const DigitalStageTheme: Theme = {
     iconPrimary: {
       variant: 'buttons.icon',
       color: 'text',
-      bg: 'primary'
+      bg: 'primary',
     },
     iconTertiary: {
       variant: 'buttons.tertiary',
@@ -699,6 +699,9 @@ const DigitalStageTheme: Theme = {
           lineHeight: '2rem',
           color: 'background',
         },
+      },
+      a: {
+        cursor: 'pointer',
       },
       p: {
         mb: '1rem',

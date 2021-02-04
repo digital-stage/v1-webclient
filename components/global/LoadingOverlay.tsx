@@ -17,9 +17,7 @@ const LoadingOverlay = (props: { children?: React.ReactNode }): JSX.Element => (
       flexDirection: 'column',
     }}
   >
-    <Spinner
-        sx={{ color: 'text' }}
-    />
+    <Spinner sx={{ color: 'text' }} />
     {props.children}
   </Flex>
 );

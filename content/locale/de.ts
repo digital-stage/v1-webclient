@@ -79,6 +79,12 @@ const de = {
   resetCustomMix: 'Auf globale Werte zurücksetzen',
   resetGlobalMix: 'Auf Standardwerte zurücksetzen',
   unmute: 'Stummschaltung aufheben',
-  mute: 'Stumm schalten'
+  mute: 'Stumm schalten',
+  microphone: 'Mikrofon',
+  speaker: 'Lautsprecher / Kopfhörer',
+  additionalOptions: 'Zusätzliche Optionen',
+  echoCancellation: 'Feedback aktiv unterdrücken',
+  autoGainControl: 'Eingangspegel automatisch festlegen',
+  noiseSuppression: 'Hintergrundgeräusche unterdrücken',
 };
 export default de;
