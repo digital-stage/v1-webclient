@@ -1,3 +1,10 @@
+## [0.25.3](https://github.com/digital-stage/webclient/compare/v0.25.2...v0.25.3) (2021-02-04)
+
+
+### Bug Fixes
+
+* lock files ([1515066](https://github.com/digital-stage/webclient/commit/1515066fe18a0fa6e280dedf54c9de68c93a519e))
+
 ## [0.25.2](https://github.com/digital-stage/webclient/compare/v0.25.1...v0.25.2) (2021-02-04)
 
 
