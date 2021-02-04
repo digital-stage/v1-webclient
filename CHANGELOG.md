@@ -1,3 +1,11 @@
+## [0.25.2](https://github.com/digital-stage/webclient/compare/v0.25.1...v0.25.2) (2021-02-04)
+
+
+### Bug Fixes
+
+* replaced css modals with portals ([73a55c9](https://github.com/digital-stage/webclient/commit/73a55c9acb0042c178aa8340ee7547d2f0860f0f))
+* updated production env ([3943c52](https://github.com/digital-stage/webclient/commit/3943c52c038256920fddbab3721491c861086e77))
+
 ## [0.25.1](https://github.com/digital-stage/webclient/compare/v0.25.0...v0.25.1) (2021-01-21)
 
 
