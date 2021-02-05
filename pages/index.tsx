@@ -7,16 +7,18 @@ import { useCurrentStageId } from '../lib/use-digital-stage/hooks';
 import AuthLayout from '../components/layout/AuthLayout';
 import { jsx } from 'theme-ui';
 import LoadingOverlay from '../components/global/LoadingOverlay';
+import useDigitalStage from '../lib/use-digital-stage';
 
 const Index = (): JSX.Element => {
   const router = useRouter();
   const { loading, user } = useAuth();
   const stageId = useCurrentStageId();
+  const { ready } = useDigitalStage();
 
   if (!loading) {
     if (!user) {
       router.push('/account/welcome');
-    } else {
+    } else if (ready) {
       if (stageId) {
         router.push('/stage');
       } else {

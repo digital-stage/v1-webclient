@@ -86,5 +86,6 @@ const de = {
   echoCancellation: 'Feedback aktiv unterdrücken',
   autoGainControl: 'Eingangspegel automatisch festlegen',
   noiseSuppression: 'Hintergrundgeräusche unterdrücken',
+  videoDevice: 'Webcam',
 };
 export default de;

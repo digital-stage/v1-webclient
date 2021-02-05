@@ -25,18 +25,26 @@ const DeviceSettings = (): JSX.Element => {
     <SettingsLayout>
       <SettingsPanel>
         <SettingsNavigation />
-
         {localDevice && (
           <React.Fragment>
             <Grid
               sx={{
                 py: 3,
-                px: 5,
                 alignItems: 'center',
               }}
               gap={6}
               columns={['1fr', '1fr 2fr']}
             >
+              <Heading variant="h5">{f('videoDevice')}</Heading>
+              <SingleSelect
+                options={localDevice.inputVideoDevices || []}
+                defaultValue={localDevice.inputVideoDeviceId}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  updateDevice(localDevice._id, {
+                    inputVideoDeviceId: localDevice.inputVideoDevices[e.target.selectedIndex].id,
+                  })
+                }
+              />
               <Heading variant="h5">{f('microphone')}</Heading>
               <SingleSelect
                 options={localDevice.inputAudioDevices || []}

@@ -2,7 +2,7 @@
 /** @jsx jsx */
 import React, { CSSProperties } from 'react';
 import { ErrorMessage } from 'formik';
-import { Box, Input as ThemeUiInput, jsx, Label, Text } from 'theme-ui';
+import { Box, Input as ThemeUiInput, jsx, Label, SxStyleProp, Text } from 'theme-ui';
 import { BsFillEyeFill, BsEyeSlashFill } from 'react-icons/bs';
 
 interface Props extends React.ComponentProps<'input'> {
@@ -10,6 +10,7 @@ interface Props extends React.ComponentProps<'input'> {
   name: string;
   error?: string;
   version?: string;
+  sx?: SxStyleProp;
   ref?: React.Ref<HTMLInputElement>;
 }
 

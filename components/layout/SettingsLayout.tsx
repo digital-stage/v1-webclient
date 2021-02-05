@@ -25,6 +25,7 @@ const SettingsLayout = (props: { children: React.ReactNode }): JSX.Element => {
         width: '100%',
         flexDirection: 'column',
         alignItems: 'center',
+        maxWidth: '800px',
         px: 3,
         py: 4,
       }}
