@@ -1,3 +1,11 @@
+## [0.25.4](https://github.com/digital-stage/webclient/compare/v0.25.3...v0.25.4) (2021-02-05)
+
+
+### Bug Fixes
+
+* disable user-scalable ([c531288](https://github.com/digital-stage/webclient/commit/c5312883a78831f2909e7c97c9be823f329aa894))
+* prettier ([8ddcc28](https://github.com/digital-stage/webclient/commit/8ddcc289798c695f78edae1dd74db5a34f2d0d96))
+
 ## [0.25.3](https://github.com/digital-stage/webclient/compare/v0.25.2...v0.25.3) (2021-02-04)
 
 
