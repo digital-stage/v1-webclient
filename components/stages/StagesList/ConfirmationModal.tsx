@@ -21,7 +21,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm }: IProps): JSX.Element 
     <LightDialog size="dialog" closable open={isOpen} onClose={onClose}>
       <Text sx={{ color: 'gray.7' }}>{f('confirmDelete')}</Text>
       <Flex sx={{ justifyContent: 'center', pt: 8 }}>
-        <Button variant="tertiary" onClick={onClose}>
+        <Button variant="tertiary" sx={{ color: 'gray.5' }} onClick={onClose}>
           {f('cancel')}
         </Button>
         <Button variant="danger" onClick={onConfirm}>

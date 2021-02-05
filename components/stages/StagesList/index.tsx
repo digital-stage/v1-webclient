@@ -6,6 +6,7 @@ import StageHeader from './StageHeader';
 import StageGroupList from './StageGroupList';
 import { useStages } from '../../../lib/use-digital-stage/hooks';
 import Collapse, { CollapseBody, CollapseHeader } from '../../../digitalstage-ui/extra/Collapse';
+import ActionBar from './ActionBar';
 
 const StageListView = (): JSX.Element => {
   const stages = useStages();
@@ -33,6 +34,7 @@ const StageListView = (): JSX.Element => {
         flexDirection: 'column',
       }}
     >
+      <ActionBar setStageCreated={(stageCreated) => setStageCreated(stageCreated)} />
       <Flex sx={{ flexDirection: 'column' }}>
         {stages.allIds
           .map((id) => stages.byId[id])
