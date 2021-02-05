@@ -4,7 +4,7 @@ import React from 'react';
 import SettingsLayout from '../../components/layout/SettingsLayout';
 import SettingsNavigation from '../../components/settings/SettingsNavigation';
 import SettingsPanel from '../../components/settings/SettingsPanel';
-import { Box, Checkbox, Divider, Grid, Heading, jsx, Label } from 'theme-ui';
+import { Box, Button, Checkbox, Divider, Grid, Heading, jsx, Label, Text } from 'theme-ui';
 import useDigitalStage, {
   Device,
   useLocalDevice,
@@ -16,14 +16,16 @@ import { useIntl } from 'react-intl';
 
 const DeviceSettings = (): JSX.Element => {
   const { refreshLocalDevice } = useDigitalStage();
-  const localDevice = useLocalDevice();
+  const localDevice = useSelector<Device>(
+    (state) => state.global.localDeviceId && state.devices.byId[state.global.localDeviceId]
+  );
   const { updateDevice } = useStageActions();
   const { formatMessage } = useIntl();
   const f = (id) => formatMessage({ id });
 
   return (
     <SettingsLayout>
-      <SettingsPanel>
+      <SettingsPanel sx={{ pb: 8 }}>
         <SettingsNavigation />
         {localDevice && (
           <React.Fragment>
@@ -109,7 +111,12 @@ const DeviceSettings = (): JSX.Element => {
             </Grid>
           </React.Fragment>
         )}
-        <Divider sx={{ color: 'text' }} />
+        <Text variant="body" py={4}>
+          {f('refreshDeviceDescription')}
+        </Text>
+        <Button variant="primary" mb={7} onClick={refreshLocalDevice}>
+          {f('refreshDevice')}
+        </Button>
       </SettingsPanel>
     </SettingsLayout>
   );

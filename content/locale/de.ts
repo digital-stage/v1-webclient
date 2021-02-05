@@ -87,5 +87,10 @@ const de = {
   autoGainControl: 'Eingangspegel automatisch festlegen',
   noiseSuppression: 'Hintergrundgeräusche unterdrücken',
   videoDevice: 'Webcam',
+  webClient: 'Webclient',
+  nativeClient: 'Nativer Client',
+  refreshDeviceDescription:
+    'Klicke auf den folgenden Button, um die Ein- und Ausgangskanäle neu zu scannen:',
+  refreshDevice: 'Gerät aktualisieren',
 };
 export default de;
