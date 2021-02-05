@@ -1,3 +1,10 @@
+## [0.25.5](https://github.com/digital-stage/webclient/compare/v0.25.4...v0.25.5) (2021-02-05)
+
+
+### Bug Fixes
+
+* added create stage buttons ([d8fed05](https://github.com/digital-stage/webclient/commit/d8fed05866a91e8c952369b7a8518de8306e5102))
+
 ## [0.25.4](https://github.com/digital-stage/webclient/compare/v0.25.3...v0.25.4) (2021-02-05)
 
 
