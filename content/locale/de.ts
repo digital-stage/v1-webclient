@@ -93,12 +93,14 @@ const de = {
     'Klicke auf den folgenden Button, um die Ein- und Ausgangskanäle neu zu scannen:',
   refreshDevice: 'Gerät aktualisieren',
   clientDownload: 'PC-Version herunterladen',
-  clientDownloadDesc: 'Bitte beachte: momentan ist die PC-Version nur für MacOS verfügbar. Die folgende Anleitung ist somit nicht für Windows Systeme geeignet!',
+  clientDownloadDesc:
+    'Bitte beachte: momentan ist die PC-Version nur für MacOS verfügbar. Die folgende Anleitung ist somit nicht für Windows Systeme geeignet!',
   macOS: 'Für MacOS',
   here: 'hier',
   downloadJackAudio: 'Lade und installiere JACK Audio ',
   downloadClient: 'Lade und installiere unsere Digital Stage PC-Version ',
-  clientAdditionalInstructions: 'Bitte stelle nun immer sicher, dass die Digital Stage PC-Version bereits gestartet wurde, bevor Du live.digital-stage.org betrittst',
+  clientAdditionalInstructions:
+    'Bitte stelle nun immer sicher, dass die Digital Stage PC-Version bereits gestartet wurde, bevor Du live.digital-stage.org betrittst',
   needDetailedInstruction: 'Brauchst Du eine detaillierte Anleitung?',
   macOSInstallVideo: 'Hier findest Du ein Video zur Installation der PC-Version auf MacOS',
 };
