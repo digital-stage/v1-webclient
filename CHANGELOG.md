@@ -1,3 +1,10 @@
+## [0.25.6](https://github.com/digital-stage/webclient/compare/v0.25.5...v0.25.6) (2021-02-11)
+
+
+### Bug Fixes
+
+* prettier ([011aead](https://github.com/digital-stage/webclient/commit/011aeadc450caed0a19f18af5f45716c2e1c648e))
+
 ## [0.25.5](https://github.com/digital-stage/webclient/compare/v0.25.4...v0.25.5) (2021-02-05)
 
 
