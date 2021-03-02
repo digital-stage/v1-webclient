@@ -4,6 +4,7 @@ import { CustomGroupsCollection } from './CustomGroupsCollection';
 import { CustomRemoteAudioProducer } from './CustomRemoteAudioProducer';
 import { CustomRemoteAudioProducersCollection } from './CustomRemoteAudioProducersCollection';
 import { CustomRemoteOvTrack } from './CustomRemoteOvTrack';
+import { CustomRemoteOvTrackCollection } from './CustomRemoteOvTrackCollection';
 import { CustomStageMember } from './CustomStageMember';
 import { CustomStageMembersCollection } from './CustomStageMembersCollection';
 import { Device } from './Device';
@@ -17,6 +18,8 @@ import { LocalConsumersCollection } from './LocalConsumersCollection';
 import { LocalProducer } from './LocalProducer';
 import { RemoteAudioProducer } from './RemoteAudioProducer';
 import { RemoteAudioProducersCollection } from './RemoteAudioProducersCollection';
+import { RemoteOvTrack } from './RemoteOvTrack';
+import { RemoteOvTrackCollection } from './RemoteOvTrackCollection';
 import { RemoteVideoProducer } from './RemoteVideoProducer';
 import { RemoteVideoProducersCollection } from './RemoteVideoProducersCollection';
 import { RootReducer } from './RootReducer';
@@ -25,13 +28,10 @@ import { SoundCard } from './SoundCard';
 import { Stage } from './Stage';
 import { StageMember } from './StageMember';
 import StageMemberCollectionWithUserData from './StageMemberCollectionWithUserData';
-import { StageMemberOvTrack } from './StageMemberOvTrack';
 import { StageMembersCollection } from './StageMembersCollection';
 import { StageMemberWithUserData } from './StageMemberWithUserData';
 import { StagesCollection } from './StagesCollection';
 import { ThreeDimensionAudioProperties } from './ThreeDimensionAudioProperty';
-import { Track } from './Track';
-import { TrackPreset } from './TrackPreset';
 import { User } from './User';
 import { UsersCollection } from './UsersCollection';
 import { WebRTCDevice } from './WebRTCDevice';
@@ -45,6 +45,7 @@ export type {
   CustomRemoteAudioProducer,
   CustomRemoteAudioProducersCollection,
   CustomRemoteOvTrack,
+  CustomRemoteOvTrackCollection,
   Device,
   DevicesCollection,
   Group,
@@ -65,12 +66,11 @@ export type {
   RemoteAudioProducer,
   RemoteAudioProducersCollection,
   RootReducer,
-  StageMemberOvTrack,
+  RemoteOvTrack,
+  RemoteOvTrackCollection,
   RemoteVideoProducer,
   RemoteVideoProducersCollection,
   ThreeDimensionAudioProperties,
-  Track,
-  TrackPreset,
   User,
   UsersCollection,
   WebRTCDevice,

@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux';
-import stageActions, { InitialStagePackage } from './stageActions';
+import stageActions from './stageActions';
 import deviceActions from './deviceActions';
 import {
   ServerDeviceEvents,
@@ -9,6 +9,7 @@ import {
 } from '../../global/SocketEvents';
 import { User } from '../../types';
 import AdditionalReducerTypes from './AdditionalReducerTypes';
+import { InitialStagePackage } from '../../types/InitialStagePackage';
 
 export interface ReducerAction extends AnyAction {
   type:

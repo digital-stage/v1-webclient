@@ -112,7 +112,8 @@ const VolumeSlider = (props: {
         flexDirection: 'column',
         alignItems: alignLabel === 'right' ? 'flex-start' : 'flex-end',
         width: '60px',
-        height: '251px',
+        minHeight: '251px',
+        height: '100%',
         ...sx,
       }}
     >

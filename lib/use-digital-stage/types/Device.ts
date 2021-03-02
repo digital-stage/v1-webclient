@@ -1,8 +1,9 @@
 import { WebRTCDevice } from './WebRTCDevice';
+import {DeviceId, SoundCardId, UserId, WebRTCDeviceId} from "./IdTypes";
 
 export interface Device {
-  _id: string;
-  userId: string;
+  _id: DeviceId;
+  userId: UserId;
   online: boolean;
   mac?: string;
   name: string;
@@ -16,27 +17,35 @@ export interface Device {
 
   // WebRTC video device
   inputVideoDevices: WebRTCDevice[];
-  inputVideoDeviceId?: string;
+  inputVideoDeviceId?: WebRTCDeviceId;
 
   // WebRTC audio device
   inputAudioDevices: WebRTCDevice[];
-  inputAudioDeviceId?: string;
+  inputAudioDeviceId?: WebRTCDeviceId;
   outputAudioDevices: WebRTCDevice[];
-  outputAudioDeviceId?: string;
+  outputAudioDeviceId?: WebRTCDeviceId;
 
   // WebRTC options
   echoCancellation?: boolean;
   autoGainControl?: boolean;
   noiseSuppression?: boolean;
 
-  // OV SoundCards
-  soundCardIds: string[]; // refers to all available sound devices
-  soundCardId?: string; // active sound device
-
   // Optional for ov-based clients
-  senderJitter: number;
-  receiverJitter: number;
+  receiverType: "ortf" | "hrtf";
+  senderJitter?: number;
+  receiverJitter?: number;
+  p2p: boolean;
+  reverbReverb: boolean;
+  reverbGain: number;
+  renderISM: boolean;
+  rawMode: boolean;
+  egoGain: number;
 
   // Optimizations for performance
   server: string;
+
+
+  // OV SoundCards
+  soundCardIds: SoundCardId[];
+  soundCardId?: SoundCardId;
 }

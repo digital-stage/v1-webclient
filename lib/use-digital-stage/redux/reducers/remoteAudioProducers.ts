@@ -1,39 +1,39 @@
 import omit from 'lodash/omit';
 import without from 'lodash/without';
 import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents';
-import { RemoteVideoProducer, RemoteVideoProducersCollection } from '../../types';
+import { RemoteAudioProducer, RemoteAudioProducersCollection } from '../../types';
+import { InitialStagePackage } from '../../types/InitialStagePackage';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
-import { InitialStagePackage } from '../actions/stageActions';
 import upsert from '../utils/upsert';
 
-const addVideoProducer = (
-  state: RemoteVideoProducersCollection,
-  videoProducer: RemoteVideoProducer
-): RemoteVideoProducersCollection => {
+const addAudioProducer = (
+  state: RemoteAudioProducersCollection,
+  audioProducer: RemoteAudioProducer
+): RemoteAudioProducersCollection => {
   return {
     ...state,
     byId: {
       ...state.byId,
-      [videoProducer._id]: videoProducer,
+      [audioProducer._id]: audioProducer,
     },
     byStageMember: {
       ...state.byStageMember,
-      [videoProducer.stageMemberId]: state.byStageMember[videoProducer.stageMemberId]
-        ? [...state.byStageMember[videoProducer.stageMemberId], videoProducer._id]
-        : [videoProducer._id],
+      [audioProducer.stageMemberId]: state.byStageMember[audioProducer.stageMemberId]
+        ? [...state.byStageMember[audioProducer.stageMemberId], audioProducer._id]
+        : [audioProducer._id],
     },
     byStage: {
       ...state.byStage,
-      [videoProducer.stageId]: state.byStage[videoProducer.stageId]
-        ? [...state.byStage[videoProducer.stageId], videoProducer._id]
-        : [videoProducer._id],
+      [audioProducer.stageId]: state.byStage[audioProducer.stageId]
+        ? [...state.byStage[audioProducer.stageId], audioProducer._id]
+        : [audioProducer._id],
     },
-    allIds: upsert<string>(state.allIds, videoProducer._id),
+    allIds: upsert<string>(state.allIds, audioProducer._id),
   };
 };
 
-function reduceVideoProducers(
-  state: RemoteVideoProducersCollection = {
+function reduceAudioProducer(
+  state: RemoteAudioProducersCollection = {
     byId: {},
     byStageMember: {},
     byStage: {},
@@ -43,7 +43,7 @@ function reduceVideoProducers(
     type: string;
     payload: any;
   }
-): RemoteVideoProducersCollection {
+): RemoteAudioProducersCollection {
   switch (action.type) {
     case ServerGlobalEvents.STAGE_LEFT:
     case AdditionalReducerTypes.RESET: {
@@ -55,19 +55,19 @@ function reduceVideoProducers(
       };
     }
     case ServerGlobalEvents.STAGE_JOINED: {
-      const { videoProducers } = action.payload as InitialStagePackage;
+      const { remoteAudioProducers } = action.payload as InitialStagePackage;
       let updatedState = { ...state };
-      if (videoProducers)
-        videoProducers.forEach((videoProducer) => {
-          updatedState = addVideoProducer(updatedState, videoProducer);
+      if (remoteAudioProducers)
+        remoteAudioProducers.forEach((audioProducer) => {
+          updatedState = addAudioProducer(updatedState, audioProducer);
         });
       return updatedState;
     }
-    case ServerStageEvents.STAGE_MEMBER_VIDEO_ADDED: {
-      const videoProducer = action.payload as RemoteVideoProducer;
-      return addVideoProducer(state, videoProducer);
+    case ServerStageEvents.STAGE_MEMBER_AUDIO_ADDED: {
+      const audioProducer = action.payload as RemoteAudioProducer;
+      return addAudioProducer(state, audioProducer);
     }
-    case ServerStageEvents.STAGE_MEMBER_VIDEO_CHANGED: {
+    case ServerStageEvents.STAGE_MEMBER_AUDIO_CHANGED: {
       return {
         ...state,
         byId: {
@@ -79,7 +79,7 @@ function reduceVideoProducers(
         },
       };
     }
-    case ServerStageEvents.STAGE_MEMBER_VIDEO_REMOVED: {
+    case ServerStageEvents.STAGE_MEMBER_AUDIO_REMOVED: {
       const id = action.payload as string;
       if (!state.byId[id]) {
         return state;
@@ -104,4 +104,4 @@ function reduceVideoProducers(
   }
 }
 
-export default reduceVideoProducers;
+export default reduceAudioProducer;

@@ -3,7 +3,7 @@ import without from 'lodash/without';
 import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents';
 import { CustomGroup, CustomGroupsCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
-import { InitialStagePackage } from '../actions/stageActions';
+import { InitialStagePackage } from '../../types/InitialStagePackage';
 import upsert from '../utils/upsert';
 
 const addCustomGroup = (

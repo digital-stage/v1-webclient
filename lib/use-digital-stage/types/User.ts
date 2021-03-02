@@ -1,11 +1,13 @@
+import {StageId, StageMemberId, UserId} from "./IdTypes";
+
 export interface User {
-  _id: string;
+  _id: UserId;
   uid?: string;
 
   // SETTINGS
   name: string;
   avatarUrl?: string;
 
-  stageId?: string; // <--- RELATION
-  stageMemberId?: string; // <--- RELATION
+  stageId?: StageId; // <--- RELATION
+  stageMemberId?: StageMemberId; // <--- RELATION
 }

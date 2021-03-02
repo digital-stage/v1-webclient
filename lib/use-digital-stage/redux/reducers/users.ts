@@ -3,7 +3,7 @@ import without from 'lodash/without';
 import { ServerGlobalEvents, ServerStageEvents, ServerUserEvents } from '../../global/SocketEvents';
 import { User, UsersCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
-import { InitialStagePackage } from '../actions/stageActions';
+import { InitialStagePackage } from '../../types/InitialStagePackage';
 import upsert from '../utils/upsert';
 
 const addUser = (state: UsersCollection, user: User): UsersCollection => {

@@ -7,16 +7,17 @@ import groups from './groups';
 import customGroups from './customGroups';
 import stageMembers from './stageMembers';
 import customStageMembers from './customStageMembers';
-import videoProducers from './videoProducers';
-import audioProducers from './audioProducers';
-import customAudioProducers from './customAudioProducers';
+import videoProducers from './remoteVideoProducers';
+import audioProducers from './remoteAudioProducers';
+import customAudioProducers from './customRemoteAudioProducers';
 import videoConsumers from './videoConsumers';
 import audioConsumers from './audioConsumers';
 import { RootReducer } from '../../types';
-import trackPresets from './trackPresets';
-import tracks from './tracks';
 import soundCards from './soundCards';
 import chatMessages from './chatMessages';
+import ovTracks from "./ovTracks";
+import customRemoteOvTracks from "./customRemoteOvTracks";
+import remoteOvTracks from "./remoteOvTracks";
 
 export default combineReducers<RootReducer>({
   global,
@@ -32,8 +33,9 @@ export default combineReducers<RootReducer>({
   customAudioProducers,
   videoConsumers,
   audioConsumers,
-  tracks,
-  trackPresets,
+  ovTracks,
+  remoteOvTracks,
+  customRemoteOvTracks,
   soundCards,
   chatMessages,
 });

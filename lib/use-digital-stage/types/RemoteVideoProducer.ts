@@ -1,11 +1,13 @@
+import {GlobalVideoProducerId, RemoteVideoProducerId, StageId, StageMemberId, UserId} from "./IdTypes";
+
 export interface RemoteVideoProducer {
-  _id: string;
-  stageMemberId: string; // <-- RELATION
-  globalProducerId: string; // <-- RELATION
+  _id: RemoteVideoProducerId;
+  stageMemberId: StageMemberId; // <-- RELATION
+  globalProducerId: GlobalVideoProducerId; // <-- RELATION
 
   online: boolean;
 
   // Optimizations for performance
-  userId: string;
-  stageId: string;
+  userId: UserId;
+  stageId: StageId;
 }

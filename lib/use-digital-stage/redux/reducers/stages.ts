@@ -3,7 +3,7 @@ import without from 'lodash/without';
 import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents';
 import { Stage, StagesCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
-import { InitialStagePackage } from '../actions/stageActions';
+import { InitialStagePackage } from '../../types/InitialStagePackage';
 import upsert from '../utils/upsert';
 
 const addStage = (state: StagesCollection, stage: Stage): StagesCollection => {

@@ -1,13 +1,15 @@
 /**
  *
  */
-export interface GlobalProducer {
-  _id: string;
-  deviceId: string; // <-- RELATION
+import {DeviceId, GlobalProducerId, RouterId, RouterProducerId, UserId} from "./IdTypes";
 
-  routerId: string;
-  routerProducerId: string;
+export interface GlobalProducer {
+  _id: GlobalProducerId;
+  deviceId: DeviceId; // <-- RELATION
+
+  routerId: RouterId;
+  routerProducerId: RouterProducerId;
 
   // Optimizations for performance
-  userId: string;
+  userId: UserId;
 }

@@ -5,7 +5,7 @@ import {
 } from '../../global/SocketEvents';
 import { GlobalStore } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
-import { InitialStagePackage } from '../actions/stageActions';
+import { InitialStagePackage } from '../../types/InitialStagePackage';
 
 function global(
   state: GlobalStore = {

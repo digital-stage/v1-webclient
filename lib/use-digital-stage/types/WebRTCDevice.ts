@@ -1,4 +1,6 @@
+import {WebRTCDeviceId} from "./IdTypes";
+
 export interface WebRTCDevice {
-  id: string;
+  id: WebRTCDeviceId;
   label: string;
 }

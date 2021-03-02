@@ -3,7 +3,6 @@ import SettingsLayout from '../../components/layout/SettingsLayout';
 import SettingsNavigation from '../../components/settings/SettingsNavigation';
 import useDevices from '../../lib/use-digital-stage/hooks/useDevices';
 import { useSelector, useStageActions } from '../../lib/use-digital-stage';
-import Panel, { DarkPanel } from '../../digitalstage-ui/extra/Panel';
 import { Flex, Heading } from '@theme-ui/components';
 import { useIntl } from 'react-intl';
 import { Box, Checkbox, Grid, jsx, Label } from 'theme-ui';

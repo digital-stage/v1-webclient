@@ -5,7 +5,7 @@ import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents
 import upsert from '../utils/upsert';
 import { StageMember, StageMembersCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
-import { InitialStagePackage } from '../actions/stageActions';
+import { InitialStagePackage } from '../../types/InitialStagePackage';
 
 const err = debug('redux:error');
 

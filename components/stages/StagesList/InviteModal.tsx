@@ -20,7 +20,7 @@ const InviteModal = (props: {
     setCopied(false);
     if (stage && group) {
       const port: string = window.location.port ? `:${window.location.port}` : '';
-      let generatedLink = `${window.location.protocol}/${window.location.hostname}${port}/join/${stage._id}/${group._id}`;
+      let generatedLink = `${window.location.protocol}//${window.location.hostname}${port}/join/${stage._id}/${group._id}`;
       if (stage.password && includePassword) {
         generatedLink += `?password=${stage.password}`;
       }

@@ -2,8 +2,8 @@ import omit from 'lodash/omit';
 import without from 'lodash/without';
 import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents';
 import { CustomRemoteAudioProducer, CustomRemoteAudioProducersCollection } from '../../types';
+import { InitialStagePackage } from '../../types/InitialStagePackage';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
-import { InitialStagePackage } from '../actions/stageActions';
 import upsert from '../utils/upsert';
 
 const addCustomAudioProducer = (
@@ -18,7 +18,7 @@ const addCustomAudioProducer = (
     },
     byAudioProducer: {
       ...state.byAudioProducer,
-      [customAudioProducer.stageMemberAudioProducerId]: customAudioProducer._id,
+      [customAudioProducer.remoteAudioProducerId]: customAudioProducer._id,
     },
     allIds: upsert<string>(state.allIds, customAudioProducer._id),
   };
@@ -45,10 +45,10 @@ function reduceCustomAudioProducers(
       };
     }
     case ServerGlobalEvents.STAGE_JOINED: {
-      const { customAudioProducers } = action.payload as InitialStagePackage;
+      const { customRemoteAudioProducers } = action.payload as InitialStagePackage;
       let updatedState = { ...state };
-      if (customAudioProducers)
-        customAudioProducers.forEach((customAudioProducer) => {
+      if (customRemoteAudioProducers)
+        customRemoteAudioProducers.forEach((customAudioProducer) => {
           updatedState = addCustomAudioProducer(updatedState, customAudioProducer);
         });
       return updatedState;
@@ -71,11 +71,11 @@ function reduceCustomAudioProducers(
     }
     case ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_REMOVED: {
       const id = action.payload as string;
-      const { stageMemberAudioProducerId } = state.byId[id];
+      const { remoteAudioProducerId } = state.byId[id];
       return {
         ...state,
         byId: omit(state.byId, id),
-        byAudioProducer: omit(state.byAudioProducer, stageMemberAudioProducerId),
+        byAudioProducer: omit(state.byAudioProducer, remoteAudioProducerId),
         allIds: without<string>(state.allIds, id),
       };
     }

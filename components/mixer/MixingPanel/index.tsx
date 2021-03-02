@@ -15,7 +15,6 @@ import {
   useUsers,
 } from '../../../lib/use-digital-stage/hooks';
 import { useStageActions } from '../../../lib/use-digital-stage';
-import useColors from '../../../lib/useColors';
 import ChannelStrip from '../ChannelStrip';
 import useStageWebAudio from '../../../lib/useStageWebAudio';
 
@@ -36,8 +35,6 @@ const MixingPanel = (): JSX.Element => {
     updateGroup,
     updateStageMemberAudio,
   } = useStageActions();
-
-  const getColor = useColors();
 
   // For groups
   const groups = useSelector((state) => {
@@ -92,14 +89,13 @@ const MixingPanel = (): JSX.Element => {
             ? customGroups.byId[customGroups.byGroup[group._id]]
             : undefined;
 
-          const color = getColor(group._id)?.toProperty();
-
           return (
             <Flex
               key={group._id}
               sx={{
                 minWidth: ['auto', '100%'],
                 pt: [0, 4],
+                maxHeight: ['initial', '500px'],
               }}
             >
               <Flex
@@ -108,7 +104,7 @@ const MixingPanel = (): JSX.Element => {
                   backgroundColor: '#121212',
                   borderStyle: 'solid',
                   borderWidth: '3px',
-                  borderColor: color,
+                  borderColor: group.color,
                   borderRadius: 'card',
                   boxShadow: '0px 3px 6px #00000040',
                   minHeight: ['450px', 'auto'],
@@ -120,7 +116,7 @@ const MixingPanel = (): JSX.Element => {
                   icon={
                     <Box
                       sx={{
-                        backgroundColor: color,
+                        backgroundColor: group.color,
                         borderRadius: '50%',
                         width: '32px',
                         height: '32px',
@@ -167,7 +163,7 @@ const MixingPanel = (): JSX.Element => {
                     >
                       {stageMembers.byGroup[group._id]
                         .map((id) => stageMembers.byId[id])
-                        .map((stageMember, index, arr) => {
+                        .map((stageMember) => {
                           const user = users.byId[stageMember.userId];
                           const customStageMember = customStageMembers.byStageMember[
                             stageMember._id
@@ -239,7 +235,7 @@ const MixingPanel = (): JSX.Element => {
                                           key={audioProducer._id}
                                           name="Webtrack"
                                           elevation={1}
-                                          icon={<img src="/static/images/track.svg" />}
+                                          icon={<img alt="Audio Track" src="/static/images/track.svg" />}
                                           channel={
                                             globalMode
                                               ? audioProducer

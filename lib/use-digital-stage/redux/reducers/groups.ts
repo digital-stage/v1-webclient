@@ -4,7 +4,7 @@ import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents
 import upsert from '../utils/upsert';
 import { Group, GroupsCollection } from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
-import { InitialStagePackage } from '../actions/stageActions';
+import { InitialStagePackage } from '../../types/InitialStagePackage';
 
 const addGroup = (state: GroupsCollection, group: Group): GroupsCollection => {
   return {

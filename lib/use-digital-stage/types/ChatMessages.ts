@@ -1,6 +1,8 @@
+import {StageMemberId, UserId} from "./IdTypes";
+
 export interface ChatMessage {
-  userId: string;
-  stageMemberId: string;
+  userId: UserId;
+  stageMemberId: StageMemberId;
   message: string;
   time: number;
 }

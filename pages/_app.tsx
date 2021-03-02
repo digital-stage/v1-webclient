@@ -13,7 +13,6 @@ import { useRouter } from 'next/router';
 import * as locales from '../content/locale';
 import { IntlProvider } from 'react-intl';
 import ThemeProvider from '../digitalstage-ui/ThemeProvider';
-import { ColorProvider } from '../lib/useColors';
 import './../digitalstage-ui/transitions.css';
 import MainLayout from '../components/layout/MainLayout';
 import { NextComponentType, NextPageContext } from 'next/dist/next-server/lib/utils';
@@ -56,7 +55,6 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
       </Head>
 
       <ThemeProvider>
-        <ColorProvider>
           <IntlProvider locale={locale} defaultLocale={defaultLocale} messages={messages}>
             <ErrorsConsumer>
               {({ reportError }) => (
@@ -95,7 +93,6 @@ const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
               )}
             </ErrorsConsumer>
           </IntlProvider>
-        </ColorProvider>
       </ThemeProvider>
     </>
   );

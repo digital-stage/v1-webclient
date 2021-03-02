@@ -9,7 +9,6 @@ import {
   useStageMembersByGroup,
 } from '../../lib/use-digital-stage/hooks';
 import StageMemberView from './StageMemberView';
-import useColors from '../../lib/useColors';
 
 const GroupView = ({ group }: { group: Group }): JSX.Element => {
   const stageMembers = useStageMembersByGroup(group._id);
@@ -19,8 +18,6 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
   const groupsWithMembers = groups.filter(
     (group) => useStageMembersByGroup(group._id).filter((member) => member.online).length > 0
   );
-  const getColor = useColors();
-  const color = getColor(group._id)?.toProperty();
 
   return onlineMembers.length > 0 ? (
     <Flex
@@ -47,7 +44,7 @@ const GroupView = ({ group }: { group: Group }): JSX.Element => {
       </Text>
       <Box
         sx={{
-          backgroundColor: color,
+          backgroundColor: group.color,
           height: '2px',
           ml: 4,
           mr: 4,

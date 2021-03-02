@@ -1,5 +1,7 @@
+import {RouterId} from "./IdTypes";
+
 export interface Router {
-  _id: string;
+  _id: RouterId;
   wsPrefix: string;
   restPrefix: string;
   url: string;
@@ -7,6 +9,9 @@ export interface Router {
   ipv4: string;
   ipv6: string;
   port: number;
-  availableSlots: number;
-  userId: string;
+  availableRTCSlots: number;
+  availableOVSlots: number;
+
+  // Optimizations for performance and redundancy
+  server?: string;
 }

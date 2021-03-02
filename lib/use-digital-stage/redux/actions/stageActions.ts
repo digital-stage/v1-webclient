@@ -9,32 +9,12 @@ import {
   RemoteVideoProducer,
   CustomRemoteAudioProducer,
   RemoteAudioProducer,
-  StageMemberOvTrack,
+  RemoteOvTrack,
   CustomRemoteOvTrack,
   LocalConsumer,
 } from '../../types';
 import AdditionalReducerTypes from './AdditionalReducerTypes';
 import { ChatMessage } from '../../types/ChatMessages';
-
-export interface StagePackage {
-  users: User[];
-
-  stage?: Stage;
-  groups?: Group[];
-  stageMembers: StageMember[];
-  customGroups: CustomGroup[];
-  customStageMembers: CustomStageMember[];
-  videoProducers: RemoteVideoProducer[];
-  audioProducers: RemoteAudioProducer[];
-  customAudioProducers: CustomRemoteAudioProducer[];
-  ovTracks: StageMemberOvTrack[];
-  customOvTracks: CustomRemoteOvTrack[];
-}
-
-export interface InitialStagePackage extends StagePackage {
-  stageId: string;
-  groupId: string;
-}
 
 const messageSent = (message: ChatMessage) => {
   return {
@@ -213,13 +193,13 @@ const removeCustomAudioProducer = (customAudioProducerId: string) => {
   };
 };
 
-const addOvTrack = (track: StageMemberOvTrack) => {
+const addOvTrack = (track: RemoteOvTrack) => {
   return {
     type: ServerStageEvents.STAGE_MEMBER_OV_ADDED,
     payload: track,
   };
 };
-const changeOvTrack = (track: Partial<StageMemberOvTrack>) => {
+const changeOvTrack = (track: Partial<RemoteOvTrack>) => {
   return {
     type: ServerStageEvents.STAGE_MEMBER_OV_CHANGED,
     payload: track,

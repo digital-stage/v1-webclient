@@ -16,17 +16,16 @@ import {
   CustomStageMember,
   RemoteVideoProducer,
   RemoteAudioProducer,
-  StageMemberOvTrack,
+  RemoteOvTrack,
   CustomRemoteAudioProducer,
   CustomRemoteOvTrack,
   SoundCard,
-  TrackPreset,
-  Track,
 } from '../types';
 import useDispatch from './useDispatch';
 import allActions from './actions';
-import { InitialStagePackage } from './actions/stageActions';
 import { ChatMessage } from '../types/ChatMessages';
+import {InitialStagePackage} from "../types/InitialStagePackage";
+import {OvTrack} from "../types/OvTrack";
 
 export interface TSocketToDispatch {
   registerHandler(socket: ITeckosClient): void;
@@ -176,10 +175,10 @@ const useSocketToDispatch = (): TSocketToDispatch => {
         dispatch(allActions.stageActions.server.removeCustomAudioProducer(payload));
       });
 
-      socket.on(ServerStageEvents.STAGE_MEMBER_OV_ADDED, (payload: StageMemberOvTrack) => {
+      socket.on(ServerStageEvents.STAGE_MEMBER_OV_ADDED, (payload: RemoteOvTrack) => {
         dispatch(allActions.stageActions.server.addOvTrack(payload));
       });
-      socket.on(ServerStageEvents.STAGE_MEMBER_OV_CHANGED, (payload: StageMemberOvTrack) => {
+      socket.on(ServerStageEvents.STAGE_MEMBER_OV_CHANGED, (payload: RemoteOvTrack) => {
         dispatch(allActions.stageActions.server.changeOvTrack(payload));
       });
       socket.on(ServerStageEvents.STAGE_MEMBER_OV_REMOVED, (payload: string) => {
@@ -218,32 +217,13 @@ const useSocketToDispatch = (): TSocketToDispatch => {
         })
       );
 
-      socket.on(ServerDeviceEvents.TRACK_PRESET_ADDED, (payload: TrackPreset) =>
-        dispatch({
-          type: ServerDeviceEvents.TRACK_PRESET_ADDED,
-          payload,
-        })
-      );
-      socket.on(ServerDeviceEvents.TRACK_PRESET_CHANGED, (payload: TrackPreset) =>
-        dispatch({
-          type: ServerDeviceEvents.TRACK_PRESET_CHANGED,
-          payload,
-        })
-      );
-      socket.on(ServerDeviceEvents.TRACK_PRESET_REMOVED, (payload: string) =>
-        dispatch({
-          type: ServerDeviceEvents.TRACK_PRESET_REMOVED,
-          payload,
-        })
-      );
-
-      socket.on(ServerDeviceEvents.TRACK_ADDED, (payload: Track) =>
+      socket.on(ServerDeviceEvents.TRACK_ADDED, (payload: OvTrack) =>
         dispatch({
           type: ServerDeviceEvents.TRACK_ADDED,
           payload,
         })
       );
-      socket.on(ServerDeviceEvents.TRACK_CHANGED, (payload: Track) =>
+      socket.on(ServerDeviceEvents.TRACK_CHANGED, (payload: OvTrack) =>
         dispatch({
           type: ServerDeviceEvents.TRACK_CHANGED,
           payload,

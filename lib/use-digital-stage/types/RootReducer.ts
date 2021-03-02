@@ -10,10 +10,11 @@ import { RemoteVideoProducersCollection } from './RemoteVideoProducersCollection
 import { RemoteAudioProducersCollection } from './RemoteAudioProducersCollection';
 import { CustomRemoteAudioProducersCollection } from './CustomRemoteAudioProducersCollection';
 import { LocalConsumersCollection } from './LocalConsumersCollection';
-import { TrackCollection } from './TrackCollection';
-import { TrackPresetCollection } from './TrackPresetCollection';
 import { SoundCardCollection } from './SoundCardCollection';
 import { ChatMessages } from './ChatMessages';
+import {CustomRemoteOvTrackCollection} from "./CustomRemoteOvTrackCollection";
+import {RemoteOvTrackCollection} from "./RemoteOvTrackCollection";
+import {OvTrackCollection} from "./OvTrackCollection";
 
 export interface RootReducer {
   global: GlobalStore;
@@ -29,8 +30,9 @@ export interface RootReducer {
   customAudioProducers: CustomRemoteAudioProducersCollection;
   videoConsumers: LocalConsumersCollection;
   audioConsumers: LocalConsumersCollection;
-  tracks: TrackCollection;
-  trackPresets: TrackPresetCollection;
+  ovTracks: OvTrackCollection;
+  remoteOvTracks: RemoteOvTrackCollection;
+  customRemoteOvTracks: CustomRemoteOvTrackCollection;
   soundCards: SoundCardCollection;
   chatMessages: ChatMessages;
 }
