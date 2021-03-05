@@ -54,7 +54,7 @@
     "konva": "^7.2.5",
     "lodash": "^4.17.21",
     "mediasoup-client": "^3.6.29",
-    "next": "10.0.7",
+    "next": "10.0.8",
     "next-redux-wrapper": "^6.0.2",
     "normalizr": "^3.6.1",
     "react": "17.0.1",
@@ -105,6 +105,6 @@
     "pretty-quick": "^3.1.0",
     "semantic-release": "^17.4.1",
     "start-server-and-test": "^1.12.0",
-    "typescript": "^4.2.2"
+    "typescript": "^4.2.3"
   }
 }
