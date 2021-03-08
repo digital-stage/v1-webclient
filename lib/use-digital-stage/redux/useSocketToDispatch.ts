@@ -39,7 +39,7 @@ const useSocketToDispatch = (): TSocketToDispatch => {
     const dispatch = useDispatch();
     const registerHandler = useCallback(
         (socket: TeckosClient): void => {
-            socket.setMaxListeners(60);
+            socket.setMaxListeners(70);
             socket.on('disconnect', () => {
                 // Cleanup
                 dispatch(allActions.client.reset());
@@ -247,7 +247,6 @@ const useSocketToDispatch = (): TSocketToDispatch => {
                 dispatch(allActions.stageActions.server.removeCustomOvTrackPosition(payload));
             });
 
-
             socket.on(ServerDeviceEvents.SOUND_CARD_ADDED, (payload: SoundCard) =>
                 dispatch({
                     type: ServerDeviceEvents.SOUND_CARD_ADDED,
@@ -267,6 +266,7 @@ const useSocketToDispatch = (): TSocketToDispatch => {
                 })
             );
 
+            /*
             socket.on(ServerDeviceEvents.TRACK_ADDED, (payload: OvTrack) =>
                 dispatch({
                     type: ServerDeviceEvents.TRACK_ADDED,
@@ -279,12 +279,13 @@ const useSocketToDispatch = (): TSocketToDispatch => {
                     payload,
                 })
             );
+            console.log("AFTER GROUP... BEFORE CUSTOM");
             socket.on(ServerDeviceEvents.TRACK_REMOVED, (payload: string) =>
                 dispatch({
                     type: ServerDeviceEvents.TRACK_REMOVED,
                     payload,
                 })
-            );
+            );*/
         },
         [dispatch]
     );

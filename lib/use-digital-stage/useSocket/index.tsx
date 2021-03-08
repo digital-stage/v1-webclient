@@ -54,6 +54,7 @@ const SocketProvider = (props: { children: React.ReactNode; apiUrl: string }): J
             );
             d('Attaching handler to socket');
             registerSocketHandler(nSocket);
+            d('Attached handler to socket');
             nSocket.on('disconnect', () => {
               d('Disconnected');
               setStatus(Status.connecting);
@@ -71,6 +72,7 @@ const SocketProvider = (props: { children: React.ReactNode; apiUrl: string }): J
               setStatus(Status.connected);
               resolve(nSocket);
             });
+            d('Connecting...');
             nSocket.connect();
           } else {
             reject(new Error('Already connected'));

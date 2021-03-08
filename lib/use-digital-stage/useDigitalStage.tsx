@@ -78,7 +78,10 @@ const UseDigitalStageProvider = (props: {
         getInitialDevice()
           .then((initialDevice) => connect(token, initialDevice))
           .then(() => setReady(true))
-          .catch((connError) => handleError(connError));
+          .catch((connError) => {
+            d(connError);
+            handleError(connError)
+          });
       }
     } else if (status === Status.connected) {
       trace('No token, disconnecting...');
