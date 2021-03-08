@@ -44,7 +44,7 @@ function reduceStageMembers(
   }
 ): StageMembersCollection {
   switch (action.type) {
-    case ServerGlobalEvents.STAGE_LEFT:
+    case ServerStageEvents.STAGE_LEFT:
     case AdditionalReducerTypes.RESET: {
       return {
         byId: {},
@@ -53,7 +53,7 @@ function reduceStageMembers(
         allIds: [],
       };
     }
-    case ServerGlobalEvents.STAGE_JOINED: {
+    case ServerStageEvents.STAGE_JOINED: {
       const { stageMembers } = action.payload as InitialStagePackage;
       let state = { ...prev };
       if (stageMembers)

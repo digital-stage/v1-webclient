@@ -1,17 +1,17 @@
 import {
-  CustomGroup,
-  CustomStageMember,
+  CustomGroupPosition,
+  CustomStageMemberPosition,
   Group,
   StageMember,
-  ThreeDimensionAudioProperties,
 } from '../use-digital-stage';
+import ThreeDimensionProperties from "../use-digital-stage/types/ThreeDimensionProperties";
 
 const calculate3DAudioParameters = (
   group: Group,
-  customGroup: CustomGroup | undefined,
+  customGroup: CustomGroupPosition | undefined,
   stageMember: StageMember,
-  customStageMember: CustomStageMember | undefined,
-  track: ThreeDimensionAudioProperties
+  customStageMember: CustomStageMemberPosition | undefined,
+  track: ThreeDimensionProperties
 ): {
   x: number;
   y: number;

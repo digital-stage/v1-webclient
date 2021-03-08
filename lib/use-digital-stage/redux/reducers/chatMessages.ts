@@ -10,7 +10,7 @@ function chatMessages(
   }
 ): ChatMessages {
   switch (action.type) {
-    case ServerGlobalEvents.STAGE_LEFT:
+    case ServerStageEvents.STAGE_LEFT:
     case AdditionalReducerTypes.RESET: {
       return [];
     }

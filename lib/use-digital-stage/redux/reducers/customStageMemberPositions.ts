@@ -1,15 +1,15 @@
 import omit from 'lodash/omit';
 import without from 'lodash/without';
-import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents';
-import { CustomStageMember, CustomStageMembersCollection } from '../../types';
+import {  ServerStageEvents } from '../../global/SocketEvents';
+import {CustomStageMemberPosition, CustomStageMemberPositionCollection} from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 import { InitialStagePackage } from '../../types/InitialStagePackage';
 import upsert from '../utils/upsert';
 
-const addCustomStageMember = (
-  state: CustomStageMembersCollection,
-  customStageMember: CustomStageMember
-): CustomStageMembersCollection => {
+const addCustomStageMemberPosition = (
+  state: CustomStageMemberPositionCollection,
+  customStageMember: CustomStageMemberPosition
+): CustomStageMemberPositionCollection => {
   return {
     ...state,
     byId: {
@@ -24,8 +24,8 @@ const addCustomStageMember = (
   };
 };
 
-function reduceCustomStageMembers(
-  state: CustomStageMembersCollection = {
+function reduceCustomStageMemberPositions(
+  state: CustomStageMemberPositionCollection = {
     byId: {},
     byStageMember: {},
     allIds: [],
@@ -34,9 +34,9 @@ function reduceCustomStageMembers(
     type: string;
     payload: any;
   }
-): CustomStageMembersCollection {
+): CustomStageMemberPositionCollection {
   switch (action.type) {
-    case ServerGlobalEvents.STAGE_LEFT:
+    case ServerStageEvents.STAGE_LEFT:
     case AdditionalReducerTypes.RESET: {
       return {
         byId: {},
@@ -44,20 +44,20 @@ function reduceCustomStageMembers(
         allIds: [],
       };
     }
-    case ServerGlobalEvents.STAGE_JOINED: {
-      const { customStageMembers } = action.payload as InitialStagePackage;
+    case ServerStageEvents.STAGE_JOINED: {
+      const { customStageMemberPositions } = action.payload as InitialStagePackage;
       let updatedState = { ...state };
-      if (customStageMembers)
-        customStageMembers.forEach((customStageMember) => {
-          updatedState = addCustomStageMember(updatedState, customStageMember);
+      if (customStageMemberPositions)
+        customStageMemberPositions.forEach((customStageMember) => {
+          updatedState = addCustomStageMemberPosition(updatedState, customStageMember);
         });
       return updatedState;
     }
-    case ServerStageEvents.CUSTOM_STAGE_MEMBER_ADDED: {
-      const customStageMember = action.payload as CustomStageMember;
-      return addCustomStageMember(state, customStageMember);
+    case ServerStageEvents.CUSTOM_STAGE_MEMBER_POSITION_ADDED: {
+      const customStageMember = action.payload as CustomStageMemberPosition;
+      return addCustomStageMemberPosition(state, customStageMember);
     }
-    case ServerStageEvents.CUSTOM_STAGE_MEMBER_CHANGED: {
+    case ServerStageEvents.CUSTOM_STAGE_MEMBER_POSITION_CHANGED: {
       return {
         ...state,
         byId: {
@@ -69,7 +69,7 @@ function reduceCustomStageMembers(
         },
       };
     }
-    case ServerStageEvents.CUSTOM_STAGE_MEMBER_REMOVED: {
+    case ServerStageEvents.CUSTOM_STAGE_MEMBER_POSITION_REMOVED: {
       const id = action.payload as string;
       if (state.byId[id]) {
         // TODO: Investigate the necessarity for this if
@@ -88,4 +88,4 @@ function reduceCustomStageMembers(
   }
 }
 
-export default reduceCustomStageMembers;
+export default reduceCustomStageMemberPositions;

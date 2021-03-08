@@ -40,7 +40,7 @@ function reduceGroups(
         allIds: [],
       };
     }
-    case ServerGlobalEvents.STAGE_JOINED: {
+    case ServerStageEvents.STAGE_JOINED: {
       const { groups } = action.payload as InitialStagePackage;
       let state = { ...prev };
       if (groups)

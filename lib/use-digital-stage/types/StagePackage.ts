@@ -1,26 +1,34 @@
-import {User} from "./User";
-import {Stage} from "./Stage";
-import {Group} from "./Group";
-import {StageMember} from "./StageMember";
-import {CustomGroup} from "./CustomGroup";
-import {CustomStageMember} from "./CustomStageMember";
-import {RemoteVideoProducer} from "./RemoteVideoProducer";
-import {RemoteAudioProducer} from "./RemoteAudioProducer";
-import {CustomRemoteAudioProducer} from "./CustomRemoteAudioProducer";
-import {RemoteOvTrack} from "./RemoteOvTrack";
-import {CustomRemoteOvTrack} from "./CustomRemoteOvTrack";
+import { User } from "./User";
+import { Stage } from "./Stage";
+import { Group } from "./Group";
+import { StageMember } from "./StageMember";
+import { CustomStageMemberVolume } from "./CustomStageMemberVolume";
+import { RemoteVideoProducer } from "./RemoteVideoProducer";
+import { RemoteAudioProducer } from "./RemoteAudioProducer";
+import { CustomRemoteAudioProducerVolume } from "./CustomRemoteAudioProducerVolume";
+import { RemoteOvTrack } from "./RemoteOvTrack";
+import { CustomRemoteOvTrackPosition } from "./CustomRemoteOvTrackPosition";
+import { CustomGroupVolume } from "./CustomGroupVolume";
+import { CustomGroupPosition } from "./CustomGroupPosition";
+import { CustomStageMemberPosition } from "./CustomStageMemberPosition";
+import { CustomRemoteAudioProducerPosition } from "./CustomRemoteAudioProducerPosition";
+import { CustomRemoteOvTrackVolume } from "./CustomRemoteOvTrackVolume";
 
 export interface StagePackage {
-    users: User[];
+  users: User[];
 
-    stage?: Stage;
-    groups?: Group[];
-    stageMembers: StageMember[];
-    customGroups: CustomGroup[];
-    customStageMembers: CustomStageMember[];
-    remoteVideoProducers: RemoteVideoProducer[];
-    remoteAudioProducers: RemoteAudioProducer[];
-    customRemoteAudioProducers: CustomRemoteAudioProducer[];
-    remoteOvTracks: RemoteOvTrack[];
-    customRemoteOvTracks: CustomRemoteOvTrack[];
+  stage?: Stage;
+  groups?: Group[];
+  stageMembers: StageMember[];
+  customGroupVolumes: CustomGroupVolume[];
+  customGroupPositions: CustomGroupPosition[];
+  customStageMemberVolumes: CustomStageMemberVolume[];
+  customStageMemberPositions: CustomStageMemberPosition[];
+  remoteVideoProducers: RemoteVideoProducer[];
+  remoteAudioProducers: RemoteAudioProducer[];
+  customRemoteAudioProducerVolumes: CustomRemoteAudioProducerVolume[];
+  customRemoteAudioProducerPositions: CustomRemoteAudioProducerPosition[];
+  remoteOvTracks: RemoteOvTrack[];
+  customRemoteOvTrackVolumes: CustomRemoteOvTrackVolume[];
+  customRemoteOvTrackPositions: CustomRemoteOvTrackPosition[];
 }

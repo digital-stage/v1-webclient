@@ -1,6 +1,6 @@
 import {
   ServerDeviceEvents,
-  ServerGlobalEvents,
+  ServerGlobalEvents, ServerStageEvents,
   ServerUserEvents,
 } from '../../global/SocketEvents';
 import { GlobalStore } from '../../types';
@@ -33,7 +33,7 @@ function global(
         ...state,
         ready: true,
       };
-    case ServerGlobalEvents.STAGE_JOINED: {
+    case ServerStageEvents.STAGE_JOINED: {
       const { stageId, groupId } = action.payload as InitialStagePackage;
       return {
         ...state,
@@ -41,7 +41,7 @@ function global(
         groupId,
       };
     }
-    case ServerGlobalEvents.STAGE_LEFT:
+    case ServerStageEvents.STAGE_LEFT:
       return {
         ...state,
         stageId: undefined,

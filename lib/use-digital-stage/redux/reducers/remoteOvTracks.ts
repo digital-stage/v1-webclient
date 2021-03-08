@@ -45,7 +45,7 @@ function remoteOvTracks(
     }
 ): RemoteOvTrackCollection {
     switch (action.type) {
-        case ServerGlobalEvents.STAGE_LEFT:
+        case ServerStageEvents.STAGE_LEFT:
         case AdditionalReducerTypes.RESET: {
             return {
                 byId: {},
@@ -54,7 +54,7 @@ function remoteOvTracks(
                 allIds: [],
             };
         }
-        case ServerGlobalEvents.STAGE_JOINED: {
+        case ServerStageEvents.STAGE_JOINED: {
             const { remoteOvTracks } = action.payload as InitialStagePackage;
             let updatedState = { ...state };
             if (remoteOvTracks)

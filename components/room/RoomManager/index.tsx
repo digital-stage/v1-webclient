@@ -1,6 +1,6 @@
 import {
-  useCurrentStageId,
-  useCustomStageMembers,
+  useCurrentStageId, useCustomStageMemberPositions,
+  useCustomStageMemberVolumes,
   useIsStageAdmin,
   useStage,
   useStageActions,
@@ -14,12 +14,12 @@ import { useIntl } from 'react-intl';
 import GlobalModeSelect from '../../../digitalstage-ui/extra/GlobalModeSelect';
 
 const RoomManager = (): JSX.Element => {
-  const { updateStageMember, setCustomStageMember, removeCustomStageMember } = useStageActions();
+  const { updateStageMember, setCustomStageMemberPosition, removeCustomStageMemberPosition } = useStageActions();
   const stageId = useCurrentStageId();
   const isStageAdmin = useIsStageAdmin();
   const stage = useStage(stageId);
   const stageMembers = useStageMembersByStage(stageId);
-  const customStageMembers = useCustomStageMembers();
+  const customStageMembers = useCustomStageMemberPositions();
   const image = useImage('/static/icons/room-member.svg', 96, 96);
   const customImage = useImage('/static/icons/room-member-custom.svg', 96, 96);
   const [selected, setSelected] = useState<RoomElement>(undefined);
@@ -110,7 +110,7 @@ const RoomManager = (): JSX.Element => {
                   rZ: element.rZ,
                 });
               } else {
-                setCustomStageMember(element._id, {
+                setCustomStageMemberPosition(element._id, {
                   x: element.x,
                   y: element.y,
                   rZ: element.rZ,
@@ -139,7 +139,7 @@ const RoomManager = (): JSX.Element => {
                 });
               } else {
                 customStageMembers.allIds.forEach((id) => {
-                  removeCustomStageMember(id);
+                  removeCustomStageMemberPosition(id);
                 });
               }
             }}
@@ -165,7 +165,7 @@ const RoomManager = (): JSX.Element => {
                     if (customStageMembers.byStageMember[selected._id]) {
                       const customStageMember =
                         customStageMembers.byId[customStageMembers.byStageMember[selected._id]];
-                      removeCustomStageMember(customStageMember._id);
+                      removeCustomStageMemberPosition(customStageMember._id);
                     }
                   }
                 }
@@ -273,7 +273,7 @@ const RoomManager = (): JSX.Element => {
                   rZ: element.rZ,
                 });
               } else {
-                setCustomStageMember(element._id, {
+                setCustomStageMemberPosition(element._id, {
                   x: element.x,
                   y: element.y,
                   rZ: element.rZ,

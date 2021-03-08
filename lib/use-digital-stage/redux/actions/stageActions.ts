@@ -4,14 +4,18 @@ import {
   User,
   Group,
   StageMember,
-  CustomStageMember,
-  CustomGroup,
   RemoteVideoProducer,
-  CustomRemoteAudioProducer,
   RemoteAudioProducer,
   RemoteOvTrack,
-  CustomRemoteOvTrack,
   LocalConsumer,
+  CustomGroupPosition,
+  CustomGroupVolume,
+  CustomStageMemberVolume,
+  CustomStageMemberPosition,
+  CustomRemoteAudioProducerVolume,
+  CustomRemoteAudioProducerPosition,
+  CustomRemoteOvTrackVolume,
+  CustomRemoteOvTrackPosition,
 } from '../../types';
 import AdditionalReducerTypes from './AdditionalReducerTypes';
 import { ChatMessage } from '../../types/ChatMessages';
@@ -27,6 +31,7 @@ const addRemoteUser = (user: User) => {
   return {
     type: ServerStageEvents.REMOTE_USER_ADDED,
     payload: user,
+
   };
 };
 const changeRemoteUser = (user: Partial<User>) => {
@@ -79,21 +84,39 @@ const removeGroup = (groupId: string) => {
   };
 };
 
-const addCustomGroup = (group: CustomGroup) => {
+const addCustomGroupVolume = (group: CustomGroupVolume) => {
   return {
-    type: ServerStageEvents.CUSTOM_GROUP_ADDED,
+    type: ServerStageEvents.CUSTOM_GROUP_VOLUME_ADDED,
     payload: group,
   };
 };
-const changeCustomGroup = (group: Partial<CustomGroup>) => {
+const changeCustomGroupVolume = (group: Partial<CustomGroupVolume>) => {
   return {
-    type: ServerStageEvents.CUSTOM_GROUP_CHANGED,
+    type: ServerStageEvents.CUSTOM_GROUP_VOLUME_CHANGED,
     payload: group,
   };
 };
-const removeCustomGroup = (groupId: string) => {
+const removeCustomGroupVolume = (groupId: string) => {
   return {
-    type: ServerStageEvents.CUSTOM_GROUP_REMOVED,
+    type: ServerStageEvents.CUSTOM_GROUP_VOLUME_REMOVED,
+    payload: groupId,
+  };
+};
+const addCustomGroupPosition = (group: CustomGroupPosition) => {
+  return {
+    type: ServerStageEvents.CUSTOM_GROUP_POSITION_ADDED,
+    payload: group,
+  };
+};
+const changeCustomGroupPosition = (group: Partial<CustomGroupPosition>) => {
+  return {
+    type: ServerStageEvents.CUSTOM_GROUP_POSITION_CHANGED,
+    payload: group,
+  };
+};
+const removeCustomGroupPosition = (groupId: string) => {
+  return {
+    type: ServerStageEvents.CUSTOM_GROUP_POSITION_REMOVED,
     payload: groupId,
   };
 };
@@ -117,21 +140,39 @@ const removeStageMember = (stageMemberId: string) => {
   };
 };
 
-const addCustomStageMember = (stageMember: CustomStageMember) => {
+const addCustomStageMemberVolume = (stageMember: CustomStageMemberVolume) => {
   return {
-    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_ADDED,
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_VOLUME_ADDED,
     payload: stageMember,
   };
 };
-const changeCustomStageMember = (stageMember: Partial<CustomStageMember>) => {
+const changeCustomStageMemberVolume = (stageMember: Partial<CustomStageMemberVolume>) => {
   return {
-    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_CHANGED,
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_VOLUME_CHANGED,
     payload: stageMember,
   };
 };
-const removeCustomStageMember = (customStageMemberId: string) => {
+const removeCustomStageMemberVolume = (customStageMemberId: string) => {
   return {
-    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_REMOVED,
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_VOLUME_REMOVED,
+    payload: customStageMemberId,
+  };
+};
+const addCustomStageMemberPosition = (stageMember: CustomStageMemberPosition) => {
+  return {
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_POSITION_ADDED,
+    payload: stageMember,
+  };
+};
+const changeCustomStageMemberPosition = (stageMember: Partial<CustomStageMemberPosition>) => {
+  return {
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_POSITION_CHANGED,
+    payload: stageMember,
+  };
+};
+const removeCustomStageMemberPosition = (customStageMemberId: string) => {
+  return {
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_POSITION_REMOVED,
     payload: customStageMemberId,
   };
 };
@@ -174,21 +215,39 @@ const removeAudioProducer = (audioProducerId: string) => {
   };
 };
 
-const addCustomAudioProducer = (customAudioProducer: CustomRemoteAudioProducer) => {
+const addCustomAudioProducerVolume = (customAudioProducer: CustomRemoteAudioProducerVolume) => {
   return {
-    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_ADDED,
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_VOLUME_ADDED,
     payload: customAudioProducer,
   };
 };
-const changeCustomAudioProducer = (customAudioProducer: Partial<CustomRemoteAudioProducer>) => {
+const changeCustomAudioProducerVolume = (customAudioProducer: Partial<CustomRemoteAudioProducerVolume>) => {
   return {
-    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_CHANGED,
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_VOLUME_CHANGED,
     payload: customAudioProducer,
   };
 };
-const removeCustomAudioProducer = (customAudioProducerId: string) => {
+const removeCustomAudioProducerVolume = (customAudioProducerId: string) => {
   return {
-    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_REMOVED,
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_VOLUME_REMOVED,
+    payload: customAudioProducerId,
+  };
+};
+const addCustomAudioProducerPosition = (customAudioProducer: CustomRemoteAudioProducerPosition) => {
+  return {
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_POSITION_ADDED,
+    payload: customAudioProducer,
+  };
+};
+const changeCustomAudioProducerPosition = (customAudioProducer: Partial<CustomRemoteAudioProducerPosition>) => {
+  return {
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_POSITION_CHANGED,
+    payload: customAudioProducer,
+  };
+};
+const removeCustomAudioProducerPosition = (customAudioProducerId: string) => {
+  return {
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_AUDIO_POSITION_REMOVED,
     payload: customAudioProducerId,
   };
 };
@@ -212,21 +271,39 @@ const removeOvTrack = (trackId: string) => {
   };
 };
 
-const addCustomOvTrack = (customOvTrack: CustomRemoteOvTrack) => {
+const addCustomOvTrackVolume = (customOvTrack: CustomRemoteOvTrackVolume) => {
   return {
-    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_ADDED,
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_VOLUME_ADDED,
     payload: customOvTrack,
   };
 };
-const changeCustomOvTrack = (customOvTrack: Partial<CustomRemoteOvTrack>) => {
+const changeCustomOvTrackVolume = (customOvTrack: Partial<CustomRemoteOvTrackVolume>) => {
   return {
-    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_CHANGED,
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_VOLUME_CHANGED,
     payload: customOvTrack,
   };
 };
-const removeCustomOvTrack = (customOvTrackId: string) => {
+const removeCustomOvTrackVolume = (customOvTrackId: string) => {
   return {
-    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_REMOVED,
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_VOLUME_REMOVED,
+    payload: customOvTrackId,
+  };
+};
+const addCustomOvTrackPosition = (customOvTrack: CustomRemoteOvTrackPosition) => {
+  return {
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_POSITION_ADDED,
+    payload: customOvTrack,
+  };
+};
+const changeCustomOvTrackPosition = (customOvTrack: Partial<CustomRemoteOvTrackPosition>) => {
+  return {
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_POSITION_CHANGED,
+    payload: customOvTrack,
+  };
+};
+const removeCustomOvTrackPosition = (customOvTrackId: string) => {
+  return {
+    type: ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_POSITION_REMOVED,
     payload: customOvTrackId,
   };
 };
@@ -268,30 +345,42 @@ const server = {
   addGroup,
   changeGroup,
   removeGroup,
-  addCustomGroup,
-  changeCustomGroup,
-  removeCustomGroup,
+  addCustomGroupVolume,
+  changeCustomGroupVolume,
+  removeCustomGroupVolume,
+  addCustomGroupPosition,
+  changeCustomGroupPosition,
+  removeCustomGroupPosition,
   addStageMember,
   changeStageMember,
   removeStageMember,
-  addCustomStageMember,
-  changeCustomStageMember,
-  removeCustomStageMember,
+  addCustomStageMemberVolume,
+  changeCustomStageMemberVolume,
+  removeCustomStageMemberVolume,
+  addCustomStageMemberPosition,
+  changeCustomStageMemberPosition,
+  removeCustomStageMemberPosition,
   addVideoProducer,
   changeVideoProducer,
   removeVideoProducer,
   addAudioProducer,
   changeAudioProducer,
   removeAudioProducer,
-  addCustomAudioProducer,
-  changeCustomAudioProducer,
-  removeCustomAudioProducer,
+  addCustomAudioProducerVolume,
+  changeCustomAudioProducerVolume,
+  removeCustomAudioProducerVolume,
+  addCustomAudioProducerPosition,
+  changeCustomAudioProducerPosition,
+  removeCustomAudioProducerPosition,
   addOvTrack,
   changeOvTrack,
   removeOvTrack,
-  addCustomOvTrack,
-  changeCustomOvTrack,
-  removeCustomOvTrack,
+  addCustomOvTrackVolume,
+  changeCustomOvTrackVolume,
+  removeCustomOvTrackVolume,
+  addCustomOvTrackPosition,
+  changeCustomOvTrackPosition,
+  removeCustomOvTrackPosition,
 };
 const client = {
   addVideoConsumer,

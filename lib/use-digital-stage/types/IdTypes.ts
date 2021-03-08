@@ -1,3 +1,4 @@
+
 export type StageId = string;
 export type GroupId = string;
 export type UserId = string;
@@ -19,4 +20,5 @@ export type RemoteAudioProducerId = string;
 export type RemoteOvTrackId = string;
 export type CustomRemoteAudioProducerId = string;
 export type CustomRemoteOvTrackId = string;
+
 export type GlobalProducerId = string;

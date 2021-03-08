@@ -5,9 +5,9 @@ import {
   useAudioConsumers,
   useAudioProducers,
   useCurrentStageId,
-  useCustomAudioProducers,
-  useCustomGroups,
-  useCustomStageMembers,
+  useCustomAudioProducerPositions, useCustomAudioProducerVolumes,
+  useCustomGroupPositions, useCustomGroupVolumes, useCustomStageMemberPositions,
+  useCustomStageMemberVolumes,
   useGroups,
   useStage,
   useStageMembersRaw,
@@ -16,6 +16,7 @@ import useAudioContext from './../useAudioContext';
 import TreeDimensionPannerNode from './TreeDimensionPannerNode';
 import { calculate3DAudioParameters } from './utils';
 import debug from 'debug';
+import customGroupPositions from "../use-digital-stage/redux/reducers/customGroupPositions";
 
 const report = debug('useStageWebAudio');
 const reportCleanup = report.extend('cleanup');
@@ -67,11 +68,14 @@ const StageWebAudioProvider = (props: {
   const stageId = useCurrentStageId();
   const stage = useStage(stageId);
   const groups = useGroups();
-  const customGroups = useCustomGroups();
+  const customGroupVolumes = useCustomGroupVolumes();
+  const customGroupPositions = useCustomGroupPositions();
   const stageMembers = useStageMembersRaw();
-  const customStageMembers = useCustomStageMembers();
+  const customStageMemberVolumes = useCustomStageMemberVolumes();
+  const customStageMemberPositions = useCustomStageMemberPositions();
   const audioProducers = useAudioProducers();
-  const customAudioProducers = useCustomAudioProducers();
+  const customAudioProducerPositions = useCustomAudioProducerPositions();
+  const customAudioProducerVolumes = useCustomAudioProducerVolumes();
   const audioConsumers = useAudioConsumers();
 
   /**
@@ -126,8 +130,8 @@ const StageWebAudioProvider = (props: {
 
           return groups.byStage[stageId].reduce((items, id) => {
             const item = groups.byId[id];
-            const customItem = customGroups.byGroup[item._id]
-              ? customGroups.byId[customGroups.byGroup[item._id]]
+            const customItem = customGroupVolumes.byGroup[item._id]
+              ? customGroupVolumes.byId[customGroupVolumes.byGroup[item._id]]
               : undefined;
             if (!prev[id]) {
               report('Creating group node ' + id);
@@ -211,7 +215,7 @@ const StageWebAudioProvider = (props: {
         return undefined;
       });
     }
-  }, [destinationNodes, stageId, groups, customGroups, handleError]);
+  }, [destinationNodes, stageId, groups, customGroupVolumes, handleError]);
 
   useEffect(() => {
     if (groupNodes && stageId && stageMembers.byStage[stageId] && handleError) {
@@ -236,8 +240,8 @@ const StageWebAudioProvider = (props: {
 
           return stageMembers.byStage[stageId].reduce((items, id) => {
             const item = stageMembers.byId[id];
-            const customItem = customStageMembers.byStageMember[item._id]
-              ? customStageMembers.byId[customStageMembers.byStageMember[item._id]]
+            const customItem = customStageMemberVolumes.byStageMember[item._id]
+              ? customStageMemberVolumes.byId[customStageMemberVolumes.byStageMember[item._id]]
               : undefined;
             if (groupNodes[item.groupId]) {
               const audioContext = groupNodes[item.groupId].gainNodeL.context;
@@ -330,7 +334,7 @@ const StageWebAudioProvider = (props: {
         return undefined;
       });
     }
-  }, [groupNodes, stageId, groupNodes, stageMembers, customStageMembers, handleError]);
+  }, [groupNodes, stageId, groupNodes, stageMembers, customStageMemberVolumes, handleError]);
 
   useEffect(() => {
     if (stageMemberNodes && stageId && audioProducers.byStage[stageId] && handleError) {
@@ -353,9 +357,12 @@ const StageWebAudioProvider = (props: {
           }
           return audioProducers.byStage[stageId].reduce((items, id) => {
             const item = audioProducers.byId[id];
-            const customItem = customAudioProducers.byAudioProducer[item._id]
-              ? customAudioProducers.byId[customAudioProducers.byAudioProducer[item._id]]
+            const customItemVolume = customAudioProducerVolumes.byAudioProducer[item._id]
+              ? customAudioProducerVolumes.byId[customAudioProducerVolumes.byAudioProducer[item._id]]
               : undefined;
+            const customItemPosition = customAudioProducerPositions.byAudioProducer[item._id]
+                ? customAudioProducerPositions.byId[customAudioProducerPositions.byAudioProducer[item._id]]
+                : undefined;
             if (stageMemberNodes[item.stageMemberId]) {
               const audioContext = stageMemberNodes[item.stageMemberId].gainNodeL.context;
               let gainNode;
@@ -378,29 +385,29 @@ const StageWebAudioProvider = (props: {
                 gainNode = prev[item._id].gainNode;
                 analyserNode = prev[item._id].analyserNode;
                 pannerNode = prev[item._id].pannerNode;
-                if (customItem) {
-                  if (customItem.muted) {
+                if (customItemVolume) {
+                  if (customItemVolume.muted) {
                     if (gainNode.gain.value !== 0) {
                       gainNode.gain.setValueAtTime(0, audioContext.currentTime);
                     }
-                  } else if (customItem.volume && gainNode.gain.value !== customItem.volume) {
-                    gainNode.gain.setValueAtTime(customItem.volume, audioContext.currentTime);
+                  } else if (customItemVolume.volume && gainNode.gain.value !== customItemVolume.volume) {
+                    gainNode.gain.setValueAtTime(customItemVolume.volume, audioContext.currentTime);
                   }
                   // Calculate whole x, y, z using group, stage member and track information
                   const stageMember = stageMembers.byId[item.stageMemberId];
-                  const customStageMember = customStageMembers.byStageMember[stageMember._id]
-                    ? customStageMembers.byId[customStageMembers.byStageMember[stageMember._id]]
+                  const customStageMember = customStageMemberPositions.byStageMember[stageMember._id]
+                    ? customStageMemberPositions.byId[customStageMemberPositions.byStageMember[stageMember._id]]
                     : undefined;
                   const group = groups.byId[stageMember.groupId];
-                  const customGroup = customGroups.byGroup[stageMember.groupId]
-                    ? customGroups.byId[customGroups.byGroup[stageMember.groupId]]
+                  const customGroup = customGroupPositions.byGroup[stageMember.groupId]
+                    ? customGroupPositions.byId[customGroupPositions.byGroup[stageMember.groupId]]
                     : undefined;
                   const params = calculate3DAudioParameters(
                     group,
                     customGroup,
                     stageMember,
                     customStageMember,
-                    customItem
+                    customItemPosition
                   );
                   pannerNode.setPosition(params.x, params.y, params.z);
                   pannerNode.setOrientation(params.rX, params.rY, params.rZ);
@@ -416,12 +423,12 @@ const StageWebAudioProvider = (props: {
 
                 // Calculate whole x, y, z using group, stage member and track information
                 const stageMember = stageMembers.byId[item.stageMemberId];
-                const customStageMember = customStageMembers.byStageMember[stageMember._id]
-                  ? customStageMembers.byId[customStageMembers.byStageMember[stageMember._id]]
+                const customStageMember = customStageMemberPositions.byStageMember[stageMember._id]
+                  ? customStageMemberPositions.byId[customStageMemberPositions.byStageMember[stageMember._id]]
                   : undefined;
                 const group = groups.byId[stageMember.groupId];
-                const customGroup = customGroups.byGroup[stageMember.groupId]
-                  ? customGroups.byId[customGroups.byGroup[stageMember.groupId]]
+                const customGroup = customGroupPositions.byGroup[stageMember.groupId]
+                  ? customGroupPositions.byId[customGroupPositions.byGroup[stageMember.groupId]]
                   : undefined;
                 const params = calculate3DAudioParameters(
                   group,
@@ -490,7 +497,8 @@ const StageWebAudioProvider = (props: {
     stageMemberNodes,
     audioProducers,
     audioConsumers.byProducer,
-    customAudioProducers,
+    customAudioProducerPositions,
+    customAudioProducerVolumes,
     handleError,
   ]);
 

@@ -1,20 +1,24 @@
 import { GlobalStore } from './GlobalStore';
 import { DevicesCollection } from './DevicesCollection';
 import { GroupsCollection } from './GroupsCollection';
-import { CustomGroupsCollection } from './CustomGroupsCollection';
 import { StageMembersCollection } from './StageMembersCollection';
 import { StagesCollection } from './StagesCollection';
 import { UsersCollection } from './UsersCollection';
-import { CustomStageMembersCollection } from './CustomStageMembersCollection';
 import { RemoteVideoProducersCollection } from './RemoteVideoProducersCollection';
 import { RemoteAudioProducersCollection } from './RemoteAudioProducersCollection';
-import { CustomRemoteAudioProducersCollection } from './CustomRemoteAudioProducersCollection';
 import { LocalConsumersCollection } from './LocalConsumersCollection';
 import { SoundCardCollection } from './SoundCardCollection';
 import { ChatMessages } from './ChatMessages';
-import {CustomRemoteOvTrackCollection} from "./CustomRemoteOvTrackCollection";
 import {RemoteOvTrackCollection} from "./RemoteOvTrackCollection";
 import {OvTrackCollection} from "./OvTrackCollection";
+import {CustomGroupVolumeCollection} from "./CustomGroupVolumeCollection";
+import {CustomStageMemberVolumeCollection} from "./CustomStageMemberVolumeCollection";
+import {CustomRemoteAudioProducerVolumeCollection} from "./CustomRemoteAudioProducerVolumeCollection";
+import {CustomRemoteAudioProducerPositionCollection} from "./CustomRemoteAudioProducerPositionCollection";
+import {CustomGroupPositionCollection} from "./CustomGroupPositionCollection";
+import {CustomStageMemberPositionCollection} from "./CustomStageMemberPositionCollection";
+import {CustomRemoteOvTrackPositionCollection} from "./CustomRemoteOvTrackPositionCollection";
+import {CustomRemoteOvTrackVolumeCollection} from "./CustomRemoteOvTrackVolumeCollection";
 
 export interface RootReducer {
   global: GlobalStore;
@@ -22,17 +26,21 @@ export interface RootReducer {
   users: UsersCollection;
   stages: StagesCollection;
   groups: GroupsCollection;
-  customGroups: CustomGroupsCollection;
+  customGroupVolumes: CustomGroupVolumeCollection;
+  customGroupPositions: CustomGroupPositionCollection;
   stageMembers: StageMembersCollection;
-  customStageMembers: CustomStageMembersCollection;
+  customStageMemberVolumes: CustomStageMemberVolumeCollection;
+  customStageMemberPositions: CustomStageMemberPositionCollection;
   videoProducers: RemoteVideoProducersCollection;
   audioProducers: RemoteAudioProducersCollection;
-  customAudioProducers: CustomRemoteAudioProducersCollection;
+  customRemoteAudioProducerVolumes: CustomRemoteAudioProducerVolumeCollection;
+  customRemoteAudioProducerPositions: CustomRemoteAudioProducerPositionCollection;
   videoConsumers: LocalConsumersCollection;
   audioConsumers: LocalConsumersCollection;
   ovTracks: OvTrackCollection;
   remoteOvTracks: RemoteOvTrackCollection;
-  customRemoteOvTracks: CustomRemoteOvTrackCollection;
+  customRemoteOvTrackVolumes: CustomRemoteOvTrackVolumeCollection;
+  customRemoteOvTrackPositions: CustomRemoteOvTrackPositionCollection;
   soundCards: SoundCardCollection;
   chatMessages: ChatMessages;
 }

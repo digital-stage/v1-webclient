@@ -45,7 +45,7 @@ function reduceVideoProducers(
   }
 ): RemoteVideoProducersCollection {
   switch (action.type) {
-    case ServerGlobalEvents.STAGE_LEFT:
+    case ServerStageEvents.STAGE_LEFT:
     case AdditionalReducerTypes.RESET: {
       return {
         byId: {},
@@ -54,7 +54,7 @@ function reduceVideoProducers(
         allIds: [],
       };
     }
-    case ServerGlobalEvents.STAGE_JOINED: {
+    case ServerStageEvents.STAGE_JOINED: {
       const { remoteVideoProducers } = action.payload as InitialStagePackage;
       let updatedState = { ...state };
       if (remoteVideoProducers)

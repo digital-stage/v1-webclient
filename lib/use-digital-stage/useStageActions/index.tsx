@@ -4,24 +4,26 @@ import { Device, Stage, Group, ThreeDimensionAudioProperties } from '../types';
 import useSocket from '../useSocket';
 import { ClientDeviceEvents, ClientStageEvents, ClientUserEvents } from '../global/SocketEvents';
 import {
-  AddGroupPayload,
-  AddStagePayload,
-  ChangeGroupPayload,
-  ChangeStageMemberAudioProducerPayload,
-  ChangeStageMemberOvTrackPayload,
-  ChangeStageMemberPayload,
-  ChangeStagePayload,
-  JoinStagePayload,
-  RemoveCustomGroupPayload,
-  RemoveCustomStageMemberAudioPayload,
-  RemoveCustomStageMemberOvPayload,
-  RemoveCustomStageMemberPayload,
-  SendChatMessagePayload,
-  SetCustomGroupPayload,
-  SetCustomStageMemberAudioPayload,
-  SetCustomStageMemberOvPayload,
-  SetCustomStageMemberPayload,
+    AddGroupPayload,
+    AddStagePayload,
+    ChangeGroupPayload,
+    ChangeStageMemberAudioProducerPayload,
+    ChangeStageMemberOvTrackPayload,
+    ChangeStageMemberPayload,
+    ChangeStagePayload,
+    JoinStagePayload,
+    RemoveCustomGroupVolumePayload,
+    RemoveCustomRemoteAudioVolumePayload, RemoveCustomRemoteOvVolumePayload,
+    RemoveCustomStageMemberPositionPayload,
+    RemoveCustomStageMemberVolumePayload,
+    SendChatMessagePayload,
+    SetCustomGroupVolumePayload,
+    SetCustomRemoteAudioVolumePayload,
+    SetCustomRemoteOvVolumePayload,
+    SetCustomStageMemberPositionPayload,
+    SetCustomStageMemberVolumePayload,
 } from '../global/SocketPayloads';
+import ThreeDimensionProperties from "../types/ThreeDimensionProperties";
 
 const d = debug('useStageActions');
 
@@ -48,30 +50,37 @@ export interface TStageActionContext {
   leaveStageForGood: (id: string) => void;
 
   // Customized group
-  setCustomGroup: (groupId: string, update: Partial<ThreeDimensionAudioProperties>) => void;
+  setCustomGroupVolume: (groupId: string, update: {volume?: number; muted?: boolean}) => void;
 
-  removeCustomGroup: (customGroupId: string) => void;
+  removeCustomGroupVolume: (customGroupId: string) => void;
 
-  setCustomStageMember: (
+  setCustomStageMemberPosition: (
     stageMemberId: string,
-    update: Partial<ThreeDimensionAudioProperties>
+    update: Partial<ThreeDimensionProperties>
   ) => void;
 
-  removeCustomStageMember: (customStageMemberId: string) => void;
+  removeCustomStageMemberPosition: (customStageMemberId: string) => void;
 
-  setCustomStageMemberAudio: (
+    setCustomStageMemberVolume: (
+        stageMemberId: string,
+        update: {volume?: number; muted?: boolean}
+    ) => void;
+
+    removeCustomStageMemberVolume: (customStageMemberId: string) => void;
+
+  setCustomStageMemberAudioVolume: (
     stageMemberAudioId: string,
-    update: Partial<ThreeDimensionAudioProperties>
+    update: {volume?: number; muted?: boolean}
   ) => void;
 
-  removeCustomStageMemberAudio: (customStageMemberAudioId: string) => void;
+  removeCustomStageMemberAudioVolume: (customStageMemberAudioId: string) => void;
 
-  setCustomStageMemberOv: (
+  setCustomStageMemberOvVolume: (
     stageMemberOvId: string,
-    update: Partial<ThreeDimensionAudioProperties>
+    update: {volume?: number; muted?: boolean}
   ) => void;
 
-  removeCustomStageMemberOv: (customStageMemberOvId: string) => void;
+  removeCustomStageMemberOvVolume: (customStageMemberOvId: string) => void;
 
   // Admin only
   updateStage: (id: string, stage: Partial<Stage>) => void;
@@ -110,16 +119,18 @@ const StageActionContext = React.createContext<TStageActionContext>({
   joinStage: throwAddProviderError,
   leaveStage: throwAddProviderError,
   leaveStageForGood: throwAddProviderError,
-  removeCustomGroup: throwAddProviderError,
-  removeCustomStageMember: throwAddProviderError,
-  removeCustomStageMemberAudio: throwAddProviderError,
-  removeCustomStageMemberOv: throwAddProviderError,
+  removeCustomGroupVolume: throwAddProviderError,
+  removeCustomStageMemberVolume: throwAddProviderError,
+    removeCustomStageMemberPosition: throwAddProviderError,
+  removeCustomStageMemberAudioVolume: throwAddProviderError,
+  removeCustomStageMemberOvVolume: throwAddProviderError,
   removeGroup: throwAddProviderError,
   removeStage: throwAddProviderError,
-  setCustomGroup: throwAddProviderError,
-  setCustomStageMember: throwAddProviderError,
-  setCustomStageMemberAudio: throwAddProviderError,
-  setCustomStageMemberOv: throwAddProviderError,
+  setCustomGroupVolume: throwAddProviderError,
+    setCustomStageMemberPosition: throwAddProviderError,
+  setCustomStageMemberVolume: throwAddProviderError,
+  setCustomStageMemberAudioVolume: throwAddProviderError,
+  setCustomStageMemberOvVolume: throwAddProviderError,
   updateDevice: throwAddProviderError,
   updateGroup: throwAddProviderError,
   updateStage: throwAddProviderError,
@@ -378,15 +389,15 @@ const StageActionsProvider = (props: {
     [socket, handleError]
   );
 
-  const setCustomGroup = useCallback(
-    (groupId: string, update: Partial<ThreeDimensionAudioProperties>) => {
+  const setCustomGroupVolume = useCallback(
+    (groupId: string, update: {volume?: number; muted?: boolean}) => {
       if (socket) {
-        d(`setCustomGroup(${groupId}, ...)`);
-        const payload: SetCustomGroupPayload = {
+        d(`setCustomGroupVolume(${groupId}, ...)`);
+        const payload: SetCustomGroupVolumePayload = {
           groupId,
-          update,
+          update
         };
-        socket.emit(ClientStageEvents.SET_CUSTOM_GROUP, payload);
+        socket.emit(ClientStageEvents.SET_CUSTOM_GROUP_VOLUME, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
         throw new Error("Socket connection wasn't ready");
@@ -395,12 +406,12 @@ const StageActionsProvider = (props: {
     [socket, handleError]
   );
 
-  const removeCustomGroup = useCallback(
+  const removeCustomGroupVolume = useCallback(
     (id: string) => {
       if (socket) {
-        d(`removeCustomGroup(${id}, ...)`);
-        const payload: RemoveCustomGroupPayload = id;
-        socket.emit(ClientStageEvents.REMOVE_CUSTOM_GROUP, payload);
+        d(`removeCustomGroupVolume(${id}, ...)`);
+        const payload: RemoveCustomGroupVolumePayload = id;
+        socket.emit(ClientStageEvents.REMOVE_CUSTOM_GROUP_VOLUME, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
         throw new Error("Socket connection wasn't ready");
@@ -409,16 +420,15 @@ const StageActionsProvider = (props: {
     [socket, handleError]
   );
 
-  const setCustomStageMember = useCallback(
-    (stageMemberId: string, update: Partial<ThreeDimensionAudioProperties>) => {
+  const setCustomStageMemberPosition = useCallback(
+    (stageMemberId: string, update: Partial<ThreeDimensionProperties>) => {
       if (socket) {
-        d(`setCustomStageMember(${stageMemberId}, ...)`);
-        d(update);
-        const payload: SetCustomStageMemberPayload = {
+        d(`setCustomStageMemberPosition(${stageMemberId}, ...)`);
+        const payload: SetCustomStageMemberPositionPayload = {
           stageMemberId,
-          update,
+            update
         };
-        socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER, payload);
+        socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER_POSITION, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
         throw new Error("Socket connection wasn't ready");
@@ -427,12 +437,12 @@ const StageActionsProvider = (props: {
     [socket, handleError]
   );
 
-  const removeCustomStageMember = useCallback(
+  const removeCustomStageMemberPosition = useCallback(
     (id: string) => {
       if (socket) {
-        d(`removeCustomStageMember(${id}, ...)`);
-        const payload: RemoveCustomStageMemberPayload = id;
-        socket.emit(ClientStageEvents.REMOVE_CUSTOM_STAGE_MEMBER, payload);
+        d(`removeCustomStageMemberPosition(${id}, ...)`);
+        const payload: RemoveCustomStageMemberPositionPayload = id;
+        socket.emit(ClientStageEvents.REMOVE_CUSTOM_STAGE_MEMBER_POSITION, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
         throw new Error("Socket connection wasn't ready");
@@ -440,16 +450,46 @@ const StageActionsProvider = (props: {
     },
     [socket, handleError]
   );
+    const setCustomStageMemberVolume = useCallback(
+        (stageMemberId: string, update: {volume?: number; muted?: boolean}) => {
+            if (socket) {
+                d(`setCustomStageMemberVolume(${stageMemberId}, ...)`);
+                const payload: SetCustomStageMemberVolumePayload = {
+                    stageMemberId,
+                    update
+                };
+                socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER_VOLUME, payload);
+            } else {
+                handleError(new Error("Socket connection wasn't ready"));
+                throw new Error("Socket connection wasn't ready");
+            }
+        },
+        [socket, handleError]
+    );
 
-  const setCustomStageMemberAudio = useCallback(
-    (stageMemberAudioId: string, update: Partial<ThreeDimensionAudioProperties>) => {
+    const removeCustomStageMemberVolume = useCallback(
+        (id: string) => {
+            if (socket) {
+                d(`removeCustomStageMemberVolume(${id}, ...)`);
+                const payload: RemoveCustomStageMemberVolumePayload = id;
+                socket.emit(ClientStageEvents.REMOVE_CUSTOM_STAGE_MEMBER_VOLUME, payload);
+            } else {
+                handleError(new Error("Socket connection wasn't ready"));
+                throw new Error("Socket connection wasn't ready");
+            }
+        },
+        [socket, handleError]
+    );
+
+  const setCustomStageMemberAudioVolume = useCallback(
+    (remoteAudioProducerId: string, update: {volume?: number, muted?: boolean}) => {
       if (socket) {
-        d(`setCustomStageMemberAudio(${stageMemberAudioId}, ...)`);
-        const payload: SetCustomStageMemberAudioPayload = {
-          stageMemberAudioId,
-          update,
+        d(`setCustomStageMemberAudioVolume(${remoteAudioProducerId}, ...)`);
+        const payload: SetCustomRemoteAudioVolumePayload = {
+          remoteAudioProducerId,
+            update
         };
-        socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER_AUDIO, payload);
+        socket.emit(ClientStageEvents.SET_CUSTOM_REMOTE_AUDIO_VOLUME, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
         throw new Error("Socket connection wasn't ready");
@@ -458,12 +498,12 @@ const StageActionsProvider = (props: {
     [socket, handleError]
   );
 
-  const removeCustomStageMemberAudio = useCallback(
+  const removeCustomStageMemberAudioVolume = useCallback(
     (id: string) => {
       if (socket) {
-        d(`removeCustomStageMemberAudio(${id}, ...)`);
-        const payload: RemoveCustomStageMemberAudioPayload = id;
-        socket.emit(ClientStageEvents.REMOVE_CUSTOM_STAGE_MEMBER_AUDIO, payload);
+        d(`removeCustomStageMemberAudioVolume(${id}, ...)`);
+        const payload: RemoveCustomRemoteAudioVolumePayload = id;
+        socket.emit(ClientStageEvents.REMOVE_CUSTOM_REMOTE_AUDIO_VOLUME, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
         throw new Error("Socket connection wasn't ready");
@@ -472,15 +512,15 @@ const StageActionsProvider = (props: {
     [socket, handleError]
   );
 
-  const setCustomStageMemberOv = useCallback(
-    (stageMemberOvTrackId: string, update: Partial<ThreeDimensionAudioProperties>) => {
+  const setCustomStageMemberOvVolume = useCallback(
+    (remoteOvTrackId: string, update: {volume?: number; position?: boolean;}) => {
       if (socket) {
-        d(`setCustomStageMemberOv(${stageMemberOvTrackId}, ...)`);
-        const payload: SetCustomStageMemberOvPayload = {
-          stageMemberOvTrackId,
-          update,
+        d(`setCustomStageMemberOvVolume(${remoteOvTrackId}, ...)`);
+        const payload: SetCustomRemoteOvVolumePayload = {
+          remoteOvTrackId,
+            update
         };
-        socket.emit(ClientStageEvents.SET_CUSTOM_STAGE_MEMBER_OV, payload);
+        socket.emit(ClientStageEvents.SET_CUSTOM_REMOTE_OV_VOLUME, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
         throw new Error("Socket connection wasn't ready");
@@ -489,12 +529,12 @@ const StageActionsProvider = (props: {
     [socket, handleError]
   );
 
-  const removeCustomStageMemberOv = useCallback(
+  const removeCustomStageMemberOvVolume = useCallback(
     (id: string) => {
       if (socket) {
-        d(`removeCustomStageMemberOv(${id}, ...)`);
-        const payload: RemoveCustomStageMemberOvPayload = id;
-        socket.emit(ClientStageEvents.REMOVE_CUSTOM_STAGE_MEMBER_OV, payload);
+        d(`removeCustomStageMemberOvVolume(${id}, ...)`);
+        const payload: RemoveCustomRemoteOvVolumePayload = id;
+        socket.emit(ClientStageEvents.REMOVE_CUSTOM_REMOTE_OV_VOLUME, payload);
       } else {
         handleError(new Error("Socket connection wasn't ready"));
         throw new Error("Socket connection wasn't ready");
@@ -531,14 +571,16 @@ const StageActionsProvider = (props: {
         updateGroup,
         removeGroup,
         updateStageMember,
-        setCustomGroup,
-        removeCustomGroup,
-        setCustomStageMember,
-        removeCustomStageMember,
-        setCustomStageMemberAudio,
-        removeCustomStageMemberAudio,
-        setCustomStageMemberOv,
-        removeCustomStageMemberOv,
+        setCustomGroupVolume,
+        removeCustomGroupVolume,
+        setCustomStageMemberVolume,
+        removeCustomStageMemberVolume,
+          setCustomStageMemberPosition,
+          removeCustomStageMemberPosition,
+        setCustomStageMemberAudioVolume,
+        removeCustomStageMemberAudioVolume,
+        setCustomStageMemberOvVolume,
+        removeCustomStageMemberOvVolume,
         updateStageMemberAudio,
         updateStageMemberOv,
         leaveStageForGood,

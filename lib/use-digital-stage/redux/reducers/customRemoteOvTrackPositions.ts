@@ -1,18 +1,18 @@
 import omit from 'lodash/omit';
 import without from 'lodash/without';
-import {ServerGlobalEvents, ServerStageEvents} from '../../global/SocketEvents';
+import {ServerStageEvents} from '../../global/SocketEvents';
 import {
-    CustomRemoteOvTrack,
-    CustomRemoteOvTrackCollection
+    CustomRemoteOvTrackPosition,
+    CustomRemoteOvTrackPositionCollection
 } from '../../types';
 import { InitialStagePackage } from '../../types/InitialStagePackage';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 import upsert from '../utils/upsert';
 
-const addCustomRemoteOvTrack = (
-    state: CustomRemoteOvTrackCollection,
-    remoteCustomOvTrack: CustomRemoteOvTrack
-): CustomRemoteOvTrackCollection => {
+const addCustomRemoteOvTrackPosition = (
+    state: CustomRemoteOvTrackPositionCollection,
+    remoteCustomOvTrack: CustomRemoteOvTrackPosition
+): CustomRemoteOvTrackPositionCollection => {
     return {
         ...state,
         byId: {
@@ -27,8 +27,8 @@ const addCustomRemoteOvTrack = (
     };
 };
 
-function customRemoteOvTracks(
-    state: CustomRemoteOvTrackCollection = {
+function customRemoteOvTrackPositions(
+    state: CustomRemoteOvTrackPositionCollection = {
         byId: {},
         byRemoteOvTrack: {},
         allIds: [],
@@ -37,9 +37,9 @@ function customRemoteOvTracks(
         type: string;
         payload: any;
     }
-): CustomRemoteOvTrackCollection {
+): CustomRemoteOvTrackPositionCollection {
     switch (action.type) {
-        case ServerGlobalEvents.STAGE_LEFT:
+        case ServerStageEvents.STAGE_LEFT:
         case AdditionalReducerTypes.RESET: {
             return {
                 byId: {},
@@ -47,20 +47,20 @@ function customRemoteOvTracks(
                 allIds: [],
             };
         }
-        case ServerGlobalEvents.STAGE_JOINED: {
-            const {customRemoteOvTracks} = action.payload as InitialStagePackage;
+        case ServerStageEvents.STAGE_JOINED: {
+            const {customRemoteOvTrackPositions} = action.payload as InitialStagePackage;
             let updatedState = {...state};
-            if (customRemoteOvTracks)
-                customRemoteOvTracks.forEach((customOvTrack) => {
-                    updatedState = addCustomRemoteOvTrack(updatedState, customOvTrack);
+            if (customRemoteOvTrackPositions)
+                customRemoteOvTrackPositions.forEach((customOvTrack) => {
+                    updatedState = addCustomRemoteOvTrackPosition(updatedState, customOvTrack);
                 });
             return updatedState;
         }
-        case ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_ADDED: {
-            const customRemoteOvTrack = action.payload as CustomRemoteOvTrack;
-            return addCustomRemoteOvTrack(state, customRemoteOvTrack);
+        case ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_POSITION_ADDED: {
+            const customRemoteOvTrack = action.payload as CustomRemoteOvTrackPosition;
+            return addCustomRemoteOvTrackPosition(state, customRemoteOvTrack);
         }
-        case ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_CHANGED: {
+        case ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_POSITION_CHANGED: {
             return {
                 ...state,
                 byId: {
@@ -72,7 +72,7 @@ function customRemoteOvTracks(
                 },
             };
         }
-        case ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_REMOVED: {
+        case ServerStageEvents.CUSTOM_STAGE_MEMBER_OV_POSITION_REMOVED: {
             const id = action.payload as string;
             const {remoteOvTrackId} = state.byId[id];
             return {
@@ -87,4 +87,4 @@ function customRemoteOvTracks(
     }
 }
 
-export default customRemoteOvTracks;
+export default customRemoteOvTrackPositions;

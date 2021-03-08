@@ -6,15 +6,15 @@ import { useIntl } from 'react-intl';
 import GlobalModeSelect from '../../../digitalstage-ui/extra/GlobalModeSelect';
 import {
   useAudioProducers,
-  useCustomAudioProducers,
-  useCustomGroups,
-  useCustomStageMembers,
+  useCustomAudioProducerPositions,
+  useCustomGroupPositions,
+  useCustomStageMemberVolumes,
   useIsStageAdmin,
   useSelector,
   useStageMembers,
   useUsers,
 } from '../../../lib/use-digital-stage/hooks';
-import { useStageActions } from '../../../lib/use-digital-stage';
+import {useCustomAudioProducerVolumes, useCustomGroupVolumes, useStageActions} from '../../../lib/use-digital-stage';
 import ChannelStrip from '../ChannelStrip';
 import useStageWebAudio from '../../../lib/useStageWebAudio';
 
@@ -25,12 +25,12 @@ const MixingPanel = (): JSX.Element => {
   const f = (id) => formatMessage({ id });
 
   const {
-    setCustomGroup,
-    setCustomStageMember,
-    setCustomStageMemberAudio,
-    removeCustomGroup,
-    removeCustomStageMember,
-    removeCustomStageMemberAudio,
+    setCustomGroupVolume,
+    setCustomStageMemberVolume,
+    setCustomStageMemberAudioVolume,
+    removeCustomGroupVolume,
+    removeCustomStageMemberVolume,
+    removeCustomStageMemberAudioVolume,
     updateStageMember,
     updateGroup,
     updateStageMemberAudio,
@@ -43,16 +43,16 @@ const MixingPanel = (): JSX.Element => {
     }
     return [];
   });
-  const customGroups = useCustomGroups();
+  const customGroups = useCustomGroupVolumes();
 
   // For stage members
   const users = useUsers();
   const stageMembers = useStageMembers();
-  const customStageMembers = useCustomStageMembers();
+  const customStageMembers = useCustomStageMemberVolumes();
 
   // For audio producers
   const audioProducers = useAudioProducers();
-  const customAudioProducers = useCustomAudioProducers();
+  const customAudioProducers = useCustomAudioProducerVolumes();
 
   const { byGroup, byStageMember, byAudioProducer } = useStageWebAudio();
 
@@ -136,14 +136,14 @@ const MixingPanel = (): JSX.Element => {
                         muted: false,
                       });
                     } else if (customGroup) {
-                      removeCustomGroup(customGroup._id);
+                      removeCustomGroupVolume(customGroup._id);
                     }
                   }}
                   onChange={(volume, muted) => {
                     if (globalMode) {
                       updateGroup(group._id, { volume, muted });
                     } else {
-                      setCustomGroup(group._id, { volume, muted });
+                      setCustomGroupVolume(group._id, { volume, muted });
                     }
                   }}
                   analyserL={
@@ -191,12 +191,12 @@ const MixingPanel = (): JSX.Element => {
                                     muted: false,
                                   });
                                 } else if (customStageMember) {
-                                  removeCustomStageMember(customStageMember._id);
+                                  removeCustomStageMemberVolume(customStageMember._id);
                                 }
                               }}
                               onChange={(volume, muted) => {
                                 if (!globalMode) {
-                                  setCustomStageMember(stageMember._id, { volume, muted });
+                                  setCustomStageMemberVolume(stageMember._id, { volume, muted });
                                 } else {
                                   updateStageMember(stageMember._id, { volume, muted });
                                 }
@@ -255,12 +255,12 @@ const MixingPanel = (): JSX.Element => {
                                                 muted: false,
                                               });
                                             } else if (customAudioProducer) {
-                                              removeCustomStageMemberAudio(customAudioProducer._id);
+                                              removeCustomStageMemberAudioVolume(customAudioProducer._id);
                                             }
                                           }}
                                           onChange={(volume, muted) => {
                                             if (!globalMode) {
-                                              setCustomStageMemberAudio(audioProducer._id, {
+                                              setCustomStageMemberAudioVolume(audioProducer._id, {
                                                 volume,
                                                 muted,
                                               });

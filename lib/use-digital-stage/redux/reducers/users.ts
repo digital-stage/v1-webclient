@@ -34,7 +34,7 @@ function reduceUsers(
         allIds: [],
       };
     }
-    case ServerGlobalEvents.STAGE_JOINED: {
+    case ServerStageEvents.STAGE_JOINED: {
       const { users } = action.payload as InitialStagePackage;
       let updated = { ...state };
       if (users)

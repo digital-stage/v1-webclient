@@ -4,20 +4,24 @@ import devices from './devices';
 import users from './users';
 import stages from './stages';
 import groups from './groups';
-import customGroups from './customGroups';
 import stageMembers from './stageMembers';
-import customStageMembers from './customStageMembers';
 import videoProducers from './remoteVideoProducers';
 import audioProducers from './remoteAudioProducers';
-import customAudioProducers from './customRemoteAudioProducers';
 import videoConsumers from './videoConsumers';
 import audioConsumers from './audioConsumers';
 import { RootReducer } from '../../types';
 import soundCards from './soundCards';
 import chatMessages from './chatMessages';
 import ovTracks from "./ovTracks";
-import customRemoteOvTracks from "./customRemoteOvTracks";
 import remoteOvTracks from "./remoteOvTracks";
+import customRemoteOvTrackPositions from "./customRemoteOvTrackPositions";
+import customRemoteOvTrackVolumes from "./customRemoteOvTrackVolumes";
+import customStageMemberPositions from "./customStageMemberPositions";
+import customGroupVolumes from "./customGroupVolumes";
+import customGroupPositions from "./customGroupPositions";
+import customStageMemberVolumes from "./customStageMemberVolumes";
+import customRemoteAudioProducerVolumes from "./customRemoteAudioProducerVolumes";
+import customRemoteAudioProducerPositions from "./customRemoteAudioProducerPositions";
 
 export default combineReducers<RootReducer>({
   global,
@@ -25,17 +29,21 @@ export default combineReducers<RootReducer>({
   users,
   stages,
   groups,
-  customGroups,
+  customGroupVolumes,
+  customGroupPositions,
   stageMembers,
-  customStageMembers,
+  customStageMemberVolumes,
+  customStageMemberPositions,
   videoProducers,
   audioProducers,
-  customAudioProducers,
+  customRemoteAudioProducerVolumes,
+  customRemoteAudioProducerPositions,
   videoConsumers,
   audioConsumers,
   ovTracks,
   remoteOvTracks,
-  customRemoteOvTracks,
+  customRemoteOvTrackVolumes,
+  customRemoteOvTrackPositions,
   soundCards,
   chatMessages,
 });

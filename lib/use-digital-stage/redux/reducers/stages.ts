@@ -34,7 +34,7 @@ function reduceStages(
         allIds: [],
       };
     }
-    case ServerGlobalEvents.STAGE_JOINED: {
+    case ServerStageEvents.STAGE_JOINED: {
       const { stage } = action.payload as InitialStagePackage;
       if (stage) return addStage(state, stage);
       return state;

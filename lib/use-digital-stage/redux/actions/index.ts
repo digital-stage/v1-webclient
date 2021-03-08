@@ -41,13 +41,13 @@ const setReady = () => {
 
 const handleStageJoined = (payload: InitialStagePackage) => {
   return {
-    type: ServerGlobalEvents.STAGE_JOINED,
+    type: ServerStageEvents.STAGE_JOINED,
     payload,
   };
 };
 const handleStageLeft = () => {
   return {
-    type: ServerGlobalEvents.STAGE_LEFT,
+    type: ServerStageEvents.STAGE_LEFT,
   };
 };
 

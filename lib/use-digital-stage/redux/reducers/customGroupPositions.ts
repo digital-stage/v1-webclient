@@ -1,15 +1,15 @@
 import omit from 'lodash/omit';
 import without from 'lodash/without';
-import { ServerGlobalEvents, ServerStageEvents } from '../../global/SocketEvents';
-import { CustomGroup, CustomGroupsCollection } from '../../types';
+import { ServerStageEvents } from '../../global/SocketEvents';
+import {CustomGroupPosition, CustomGroupPositionCollection} from '../../types';
 import AdditionalReducerTypes from '../actions/AdditionalReducerTypes';
 import { InitialStagePackage } from '../../types/InitialStagePackage';
 import upsert from '../utils/upsert';
 
-const addCustomGroup = (
-  state: CustomGroupsCollection,
-  customGroup: CustomGroup
-): CustomGroupsCollection => {
+const addCustomGroupPosition = (
+  state: CustomGroupPositionCollection,
+  customGroup: CustomGroupPosition
+): CustomGroupPositionCollection => {
   return {
     ...state,
     byId: {
@@ -24,8 +24,8 @@ const addCustomGroup = (
   };
 };
 
-function reduceCustomGroups(
-  state: CustomGroupsCollection = {
+function reduceCustomGroupPositions(
+  state: CustomGroupPositionCollection = {
     byId: {},
     byGroup: {},
     allIds: [],
@@ -34,9 +34,9 @@ function reduceCustomGroups(
     type: string;
     payload: any;
   }
-): CustomGroupsCollection {
+): CustomGroupPositionCollection {
   switch (action.type) {
-    case ServerGlobalEvents.STAGE_LEFT:
+    case ServerStageEvents.STAGE_LEFT:
     case AdditionalReducerTypes.RESET: {
       return {
         byId: {},
@@ -44,20 +44,20 @@ function reduceCustomGroups(
         allIds: [],
       };
     }
-    case ServerGlobalEvents.STAGE_JOINED: {
-      const { customGroups } = action.payload as InitialStagePackage;
+    case ServerStageEvents.STAGE_JOINED: {
+      const { customGroupPositions } = action.payload as InitialStagePackage;
       let updatedState = { ...state };
-      if (customGroups)
-        customGroups.forEach((customGroup) => {
-          updatedState = addCustomGroup(updatedState, customGroup);
+      if (customGroupPositions)
+        customGroupPositions.forEach((customGroup) => {
+          updatedState = addCustomGroupPosition(updatedState, customGroup);
         });
       return updatedState;
     }
-    case ServerStageEvents.CUSTOM_GROUP_ADDED: {
-      const customGroup = action.payload as CustomGroup;
-      return addCustomGroup(state, customGroup);
+    case ServerStageEvents.CUSTOM_GROUP_POSITION_ADDED: {
+      const customGroup = action.payload as CustomGroupPosition;
+      return addCustomGroupPosition(state, customGroup);
     }
-    case ServerStageEvents.CUSTOM_GROUP_CHANGED: {
+    case ServerStageEvents.CUSTOM_GROUP_POSITION_CHANGED: {
       return {
         ...state,
         byId: {
@@ -69,7 +69,7 @@ function reduceCustomGroups(
         },
       };
     }
-    case ServerStageEvents.CUSTOM_GROUP_REMOVED: {
+    case ServerStageEvents.CUSTOM_GROUP_POSITION_REMOVED: {
       const id = action.payload as string;
       if (state.byId[id]) {
         // TODO: Why is the line above necessary?
@@ -88,4 +88,4 @@ function reduceCustomGroups(
   }
 }
 
-export default reduceCustomGroups;
+export default reduceCustomGroupPositions;

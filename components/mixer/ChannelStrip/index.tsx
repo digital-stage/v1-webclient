@@ -19,7 +19,7 @@ const ChannelStrip = (props: {
   initialCollapse?: boolean;
   icon?: React.ReactNode;
 
-  channel: ThreeDimensionAudioProperties;
+  channel: {volume: number, muted: boolean};
   onChange: (volume: number, muted: boolean) => void;
   global?: boolean;
 
